@@ -1,0 +1,24 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## r216 | relnev | 2003-04-06 23:59:20 +0200 (So, 06 Apr 2003) | 2 lines
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: replaced FixedMul with one from Dan that optimizes better.
+
+@DPATCH@
+diff -urNad rott-1.0+dfsg~/watcom.c rott-1.0+dfsg/watcom.c
+--- rott-1.0+dfsg~/watcom.c	2008-01-09 13:52:28.000000000 +0100
++++ rott-1.0+dfsg/watcom.c	2008-01-10 09:21:39.000000000 +0100
+@@ -9,11 +9,8 @@
+ 
+ fixed FixedMul(fixed a, fixed b)
+ {
+-	__int64 x = a;
+-	__int64 y = b;
+-	__int64 z = x * y + 0x8000;
+-	
+-	return (z >> 16) & 0xffffffff;
++	__int64 scratch1 = (__int64) a * (__int64) b + (__int64) 0x8000;
++	return (scratch1 >> 16) & 0xffffffff;
+ }
+ 
+ fixed FixedMulShift(fixed a, fixed b, fixed shift)

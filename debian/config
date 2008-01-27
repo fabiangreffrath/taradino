@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+db_input high rott/shareware || true
+db_go

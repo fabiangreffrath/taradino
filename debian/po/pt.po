@@ -1,0 +1,42 @@
+# Portuguese translation for rott's debconf messages.
+# Copyright (C) 2007
+# This file is distributed under the same license as the rott package.
+# Ricardo Silva <ardoric@gmail.com>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: rott\n"
+"Report-Msgid-Bugs-To: fabian@debian-unofficial.org\n"
+"POT-Creation-Date: 2007-05-08 09:41+0200\n"
+"PO-Revision-Date: 2007-05-08 09:53+0100\n"
+"Last-Translator: Ricardo Silva <ardoric@gmail.com>\n"
+"Language-Team: Portuguese <traduz@debianpt.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid "Download shareware data files?"
+msgstr "Obter os ficheiros de dados shareware?"
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid ""
+"The Rise of the Triad game requires additional data files which are not "
+"available under a free license and cannot be distributed by Debian. You may "
+"choose to automatically download the shareware data files from the Internet "
+"and install them on the system now."
+msgstr ""
+"O jogo Rise of the Triad necessita de ficheiros adicionais com dados que não "
+"estão disponíveis numa licença livre e não podem ser distribuídos pela "
+"Debian. Pode escolher obtê-los automaticamente da Internet e instalá-los "
+"agora no seu sistema."
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid "The installation will require about 15 MB of free disk space."
+msgstr "A instalação vai precisar de cerca de 15 MB de disco livre."

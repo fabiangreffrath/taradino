@@ -1,0 +1,3 @@
+?package(rott):needs="X11" section="Games/Action"\
+  title="ROTT" longtitle="Rise of the Triad -- The HUNT Begins"\
+  command="/usr/games/rott -fullscreen" icon="/usr/share/pixmaps/rott.xpm"

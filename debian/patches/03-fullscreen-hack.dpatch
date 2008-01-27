@@ -1,0 +1,317 @@
+#!/bin/sh /usr/share/dpatch/dpatch-run
+## 1.0-fullscreen-patch.patch from Gentoo <http://bugs.gentoo.org/attachment.cgi?id=51614>
+
+@DPATCH@
+diff -urNad rott-1.0+dfsg~/modexlib.c rott-1.0+dfsg/modexlib.c
+--- rott-1.0+dfsg~/modexlib.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/modexlib.c	2008-01-10 09:16:33.000000000 +0100
+@@ -39,6 +39,7 @@
+ #include "memcheck.h"
+ #include "rt_util.h"
+ 
++#define FULLSCREENHACK   // !New!
+ 
+ // GLOBAL VARIABLES
+ 
+@@ -403,7 +404,9 @@
+ ====================
+ */
+ static SDL_Surface *sdl_surface = NULL;
+-static SDL_Surface *sdl_backbuf = NULL;
++#ifdef FULLSCREENHACK    // [!New!
++static byte *backbuf = NULL; // Game drawing will happen here
++#endif                   // !New!]
+ 
+ void GraphicsMode ( void )
+ {
+@@ -422,7 +425,12 @@
+ 
+     SDL_WM_SetCaption ("Rise of the Triad", "ROTT");
+     SDL_ShowCursor (0);
+-    sdl_surface = SDL_SetVideoMode (320, 200, 8, flags);
++#ifdef FULLSCREENHACK    // [!New!
++    sdl_surface = SDL_SetVideoMode (640, 480, 8, flags);
++	backbuf = SafeMalloc(320*200);
++#else                    // !New!]
++	sdl_surface = SDL_SetVideoMode (320, 200, 8, flags);
++#endif
+     
+ 	if (sdl_surface == NULL)
+ 	{
+@@ -448,6 +456,12 @@
+ 		
+ 		SDL_QuitSubSystem (SDL_INIT_VIDEO);
+ 	}
++#ifdef FULLSCREENHACK    // [!New!
++	if(backbuf != NULL) {
++		SafeFree(backbuf);
++		backbuf = NULL;
++	}
++#endif                   // !New!]
+ }
+ 
+ /*
+@@ -502,9 +516,15 @@
+ 
+     screensize=MAXSCREENHEIGHT*MAXSCREENWIDTH;
+ 
++#ifdef FULLSCREENHACK    // [!New!
++    page1start=(int)backbuf;
++    page2start=(int)backbuf;
++    page3start=(int)backbuf;
++#else                    // !New!]
+     page1start=(int)sdl_surface->pixels;
+     page2start=(int)sdl_surface->pixels;
+-    page3start=(int)sdl_surface->pixels;
++    page3start=(int)sdl_surface->pixels;	
++#endif                   // !New!
+     displayofs = page1start;
+     bufferofs = page2start;
+     XFlipPage ();
+@@ -633,7 +653,11 @@
+   VGAMAPMASK(15);
+   memset((byte *)(0xa000<<4),color,0x10000);
+ #else
++#ifdef FULLSCREENHACK    // [!New!
++  memset (backbuf, color, 320*200);
++#else                    // !New!]
+   memset (sdl_surface->pixels, color, MAXSCREENWIDTH*MAXSCREENHEIGHT);
++#endif                   // !New!
+ #endif
+ }
+ 
+@@ -649,11 +673,79 @@
+ {
+ }
+ 
++#ifdef FULLSCREENHACK    // [!New!
++/* This scales a 320x200 image to 640x400 in good ol' DOS fashion.
++ * This code has been optimized to the max, because it's used a lot.
++ * This version is about 2.5 times as fast as the trivial implementation. */
++/*void copyFullScreen(char* source, char* dest)
++{
++	int i, j, inRow, outRow1, outRow2;
++	for(j = 0; j < 200; j++) {
++		inRow = ylookup[j];
++		outRow1 = (j<<1)*640;
++		outRow2 = ((j<<1)+1)*640;
++		for(i = 0; i < 320; i++) {
++			dest[outRow2+(i<<1)+1] = dest[outRow2+(i<<1)] =
++			dest[outRow1+(i<<1)+1] = dest[outRow1+(i<<1)] = source[inRow+i];
++		}
++	}
++}*/
++// The same as above but for scaling 320x200 to 640x480 so the aspect
++// ratio is right.
++void copyFullScreen(char* source, char* dest)
++{
++	int i, j, inRow, outRow1, outRow2, outRow3;
++	for(j = 0; j < 40; j++) {
++		inRow = 1600*j;
++		outRow1 = 7680*j;
++		outRow2 = outRow1+640;
++		for(i = 0; i < 320; i++) {
++			dest[outRow2+(i<<1)+1] = dest[outRow2+(i<<1)] =
++			dest[outRow1+(i<<1)+1] = dest[outRow1+(i<<1)] = source[inRow+i];
++		}
++		inRow += 320;
++		outRow1 += 1280;
++		outRow2 += 1280;
++		outRow3 = outRow2+640;
++		for(i = 0; i < 320; i++) {
++			dest[outRow3+(i<<1)+1] = dest[outRow3+(i<<1)] =
++			dest[outRow2+(i<<1)+1] = dest[outRow2+(i<<1)] =
++			dest[outRow1+(i<<1)+1] = dest[outRow1+(i<<1)] = source[inRow+i];
++		}
++		inRow += 320;
++		outRow1 += 1920;
++		outRow2 += 1920;
++		for(i = 0; i < 320; i++) {
++			dest[outRow2+(i<<1)+1] = dest[outRow2+(i<<1)] =
++			dest[outRow1+(i<<1)+1] = dest[outRow1+(i<<1)] = source[inRow+i];
++		}
++		inRow += 320;
++		outRow1 += 1280;
++		outRow2 += 1280;
++		outRow3 = outRow2+640;
++		for(i = 0; i < 320; i++) {
++			dest[outRow3+(i<<1)+1] = dest[outRow3+(i<<1)] =
++			dest[outRow2+(i<<1)+1] = dest[outRow2+(i<<1)] =
++			dest[outRow1+(i<<1)+1] = dest[outRow1+(i<<1)] = source[inRow+i];
++		}
++		inRow += 320;
++		outRow1 += 1920;
++		outRow2 += 1920;
++		for(i = 0; i < 320; i++) {
++			dest[outRow2+(i<<1)+1] = dest[outRow2+(i<<1)] =
++			dest[outRow1+(i<<1)+1] = dest[outRow1+(i<<1)] = source[inRow+i];
++		}
++	}
++}
++#endif                   // !New!]
+ 
+ /* C version of rt_vh_a.asm */
+ 
+ void VH_UpdateScreen (void)
+ {
++#ifdef FULLSCREENHACK    // [!New!
++	copyFullScreen(backbuf, (char*)sdl_surface->pixels);
++#endif                   // !New!]
+ 	SDL_UpdateRect (SDL_GetVideoSurface (), 0, 0, 0, 0);
+ }
+ 
+@@ -681,6 +773,9 @@
+    if (bufferofs > page3start)
+       bufferofs = page1start;
+ #else
++#ifdef FULLSCREENHACK    // [!New!
++   copyFullScreen(backbuf, (char*)sdl_surface->pixels); // !New!
++#endif                   // !New!]
+    SDL_UpdateRect (sdl_surface, 0, 0, 0, 0);
+ #endif
+ }
+diff -urNad rott-1.0+dfsg~/rt_in.c rott-1.0+dfsg/rt_in.c
+--- rott-1.0+dfsg~/rt_in.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_in.c	2008-01-10 09:16:33.000000000 +0100
+@@ -268,7 +268,7 @@
+  *                  surface's current flags are used.
+  *  @return non-zero on success, zero on failure.
+  */
+-static int attempt_fullscreen_toggle(SDL_Surface **surface, Uint32 *flags)
++int attempt_fullscreen_toggle(SDL_Surface **surface, Uint32 *flags)
+ {
+     long framesize = 0;
+     void *pixels = NULL;
+diff -urNad rott-1.0+dfsg~/rt_main.c rott-1.0+dfsg/rt_main.c
+--- rott-1.0+dfsg~/rt_main.c	2008-01-10 09:16:32.000000000 +0100
++++ rott-1.0+dfsg/rt_main.c	2008-01-10 09:16:33.000000000 +0100
+@@ -115,9 +115,8 @@
+ boolean TILESTATS               = false;
+ boolean HUD                     = false;
+ boolean IS8250                  = false;
+-
+-boolean dopefish;
+-
++boolean dopefish		= false;
++boolean FullScreen		= false;
+ boolean newlevel = false;
+ boolean infopause;
+ boolean SOUNDSETUP=false;
+@@ -157,7 +156,7 @@
+ void PlayTurboGame( void );
+ void Init_Tables (void);
+ void CheckRemoteRidicule ( int scancode );
+-
++extern int attempt_fullscreen_toggle(SDL_Surface **surface, Uint32 *flags);
+ #ifndef DOS
+ extern void crash_print (int);
+ extern int setup_homedir (void);
+@@ -376,6 +375,15 @@
+ 
+    BATTLE_SetOptions( &BATTLE_Options[ battle_StandAloneGame ] );
+ 
++   if (FullScreen)
++     {
++     SDL_Surface *surface = SDL_GetVideoSurface();
++     if (surface != NULL)
++       {
++       Uint32 sdl_flags = surface->flags;
++       attempt_fullscreen_toggle(&surface, &sdl_flags);
++       } 
++     }
+    if (turbo || tedlevel)
+ 		{
+       if (modemgame == true)
+@@ -516,9 +524,10 @@
+ {
+    char *PStrings[] = {"TEDLEVEL","NOWAIT","NOSOUND","NOW",
+                        "TRANSPORT","DOPEFISH","SCREENSHOTS",
+-                       "MONO","MAPSTATS","TILESTATS","VER","net",
++                       "MONO","MAPSTATS","TILESTATS","VER","FULLSCREEN","net",
+                        "PAUSE","SOUNDSETUP","WARP","IS8250","ENABLEVR",
+-                       "TIMELIMIT","MAXTIMELIMIT","NOECHO","DEMOEXIT","QUIET",NULL};
++                       "TIMELIMIT","MAXTIMELIMIT","NOECHO","DEMOEXIT","QUIET",
++		       NULL};
+    int i,n;
+ 
+    infopause=false;
+@@ -565,6 +574,7 @@
+       printf ("   CYBERMAN   - Enable check for Cyberman.\n");
+       printf ("   ASSASSIN   - Enable check for Wingman Assassin.\n");
+       printf ("   VER        - Version number.\n");
++      printf ("   FULLSCREEN - Enable Full Screen video mode.\n");
+       printf ("   MAPSTATS   - Dump Map statistics to ERROR.\n");
+       printf ("   TILESTATS  - Dump Tile statistics to ERROR.\n");
+       printf ("   MONO       - Enable mono-monitor support.\n");
+@@ -608,7 +618,7 @@
+          MenuFixup ();
+          break;
+ #endif
+-       case 1:
++	 case 1:
+          NoWait = true;
+          break;
+ 		 case 2:
+@@ -662,6 +672,9 @@
+          exit (0);
+          break;
+        case 11:
++         FullScreen = true;
++	 break;
++       case 12:
+          InitROTTNET();
+ 		   numplayers = rottcom->numplayers;
+          if (numplayers>MAXPLAYERS)
+@@ -681,24 +694,24 @@
+                printf("MODEM GAME\n");
+             }
+          break;
+-       case 12:
++       case 13:
+          infopause=true;
+          break;
+-       case 13:
++       case 14:
+           SOUNDSETUP = true;
+           break;
+-       case 14:
++       case 15:
+           startlevel = (ParseNum(_argv[i + 1])-1);
+           break;
+-       case 15:
++       case 16:
+           IS8250 = true;
+           break;
+-       case 16:
++       case 17:
+           vrenabled = true;
+           if (!quiet)
+              printf("Virtual Reality Mode enabled\n");
+           break;
+-       case 17:
++       case 18:
+           timelimitenabled = true;
+           timelimit = ParseNum(_argv[i + 1]);
+           if (!quiet)
+@@ -706,17 +719,17 @@
+           timelimit *= VBLCOUNTER;
+           break;
+ 
+-       case 18:
++       case 19:
+           maxtimelimit = ParseNum(_argv[i + 1]);
+           maxtimelimit *= VBLCOUNTER;
+           break;
+-       case 19:
++       case 20:
+           noecho = true;
+           break;
+-       case 20:
++       case 21:
+           demoexit = true;
+           break;
+-       case 21:
++       case 22:
+           quiet = true;
+           break;
+       }

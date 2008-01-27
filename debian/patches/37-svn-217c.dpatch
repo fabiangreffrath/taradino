@@ -1,0 +1,20 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## r217 | theoddone33 | 2003-06-26 04:05:15 +0200 (Do, 26 Jun 2003) | 3 lines
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Add some fixes from "DrLex" on the 3drealms forums.
+## DP: Fixes some endianness problems as well as the save bug VS.NET complains about
+
+@DPATCH@
+diff -urNad rott-1.0+dfsg~/fx_man.c rott-1.0+dfsg/fx_man.c
+--- rott-1.0+dfsg~/fx_man.c	2008-01-10 09:21:54.000000000 +0100
++++ rott-1.0+dfsg/fx_man.c	2008-01-10 09:21:55.000000000 +0100
+@@ -412,7 +412,7 @@
+         return(FX_Error);
+     } // if
+ 
+-    audio_format = (samplebits == 8) ? AUDIO_U8 : AUDIO_S16;
++    audio_format = (samplebits == 8) ? AUDIO_U8 : AUDIO_S16SYS;
+     if (Mix_OpenAudio(mixrate, audio_format, numchannels, 256) < 0)
+     {
+         setErrorMessage(SDL_GetError());

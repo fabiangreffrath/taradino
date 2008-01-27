@@ -1,0 +1,22 @@
+Source: rott
+Section: contrib/games
+Priority: optional
+Maintainer: Fabian Greffrath <fabian@debian-unofficial.org>
+Build-Depends: cdbs, debhelper (>= 5), dpatch, libsdl1.2-dev, libsdl-mixer1.2-dev
+Standards-Version: 3.7.3
+Homepage: http://icculus.org/rott/
+
+Package: rott
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, wget, unzip
+Suggests: freepats, timidity
+Description: Rise of the Triad -- The HUNT Begins
+ Rise of the Triad is a high quality, fast scrolling first-person perspective
+ 3D action game. It includes a lot of destructive enemies, an arsenal of
+ weapons from simple pistols to missile launchers, life-preserving armor, traps
+ and ambushes galore.
+ .
+ WARNING: Rise of the Triad features wanton and gratuitous violence.
+ .
+ This package contains no data files but can install the shareware data files
+ from the Internet.

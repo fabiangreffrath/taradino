@@ -1,0 +1,24 @@
+#!/bin/sh
+
+set -e
+
+SHAREDIR="/usr/share/games/rott"
+DOCDIR="/usr/share/doc/rott"
+
+case "$1" in
+	remove|deconfigure)
+		rm -rf ${SHAREDIR}/* ${DOCDIR}/vendor.doc
+	;;
+
+	upgrade|failed-upgrade)
+	;;
+
+	*)
+		echo "prerm called with unknown argument \`$1'" >&2
+		exit 1
+	;;
+esac
+
+#DEBHELPER#
+
+exit 0

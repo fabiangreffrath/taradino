@@ -1,0 +1,78 @@
+#!/bin/sh /usr/share/dpatch/dpatch-run
+## 1.0-custom-datapath.patch from Gentoo, modified
+
+@DPATCH@
+diff -urNad rott-1.0+dfsg~/Makefile rott-1.0+dfsg/Makefile
+--- rott-1.0+dfsg~/Makefile	2008-01-09 13:52:32.000000000 +0100
++++ rott-1.0+dfsg/Makefile	2008-01-10 09:15:27.000000000 +0100
+@@ -47,7 +47,7 @@
+ 
+ 
+ CC = gcc
+-CFLAGS = -g $(SDL_CFLAGS) -DUSE_SDL=1 -DPLATFORM_UNIX=1 -W -Wall -Wno-unused $(EXTRACFLAGS)
++CFLAGS = -g $(SDL_CFLAGS) -DUSE_SDL=1 -DPLATFORM_UNIX=1 -W -Wall -Wno-unused $(EXTRACFLAGS) -DDATADIR=\"/usr/share/games/rott/\"
+ LDLIBS = $(SDL_LDFLAGS) -lSDL -lSDL_mixer $(EXTRALDFLAGS) -Wl,-E
+ 
+ all: rott
+diff -urNad rott-1.0+dfsg~/_rt_ted.h rott-1.0+dfsg/_rt_ted.h
+--- rott-1.0+dfsg~/_rt_ted.h	2008-01-09 13:52:32.000000000 +0100
++++ rott-1.0+dfsg/_rt_ted.h	2008-01-10 09:15:27.000000000 +0100
+@@ -84,17 +84,17 @@
+ #define  MAXSILLYSTRINGS 32
+ 
+ #if (SHAREWARE==0)
+-   #define  STANDARDGAMELEVELS   ("DARKWAR.RTL")
++   #define  STANDARDGAMELEVELS   (DATADIR "DARKWAR.RTL")
+    #if (SUPERROTT==1)
+-       #define  STANDARDBATTLELEVELS ("ROTTCD.RTC")
++       #define  STANDARDBATTLELEVELS (DATADIR "ROTTCD.RTC")
+    #elif (SITELICENSE==1)
+-       #define  STANDARDBATTLELEVELS ("ROTTSITE.RTC")
++       #define  STANDARDBATTLELEVELS (DATADIR "ROTTSITE.RTC")
+    #else
+-       #define  STANDARDBATTLELEVELS ("DARKWAR.RTC")
++       #define  STANDARDBATTLELEVELS (DATADIR "DARKWAR.RTC")
+    #endif
+ #else
+-   #define  STANDARDGAMELEVELS   ("HUNTBGIN.RTL")
+-   #define  STANDARDBATTLELEVELS ("HUNTBGIN.RTC")
++   #define  STANDARDGAMELEVELS   (DATADIR "HUNTBGIN.RTL")
++   #define  STANDARDBATTLELEVELS (DATADIR "HUNTBGIN.RTC")
+ #endif
+ 
+ 
+diff -urNad rott-1.0+dfsg~/rt_main.c rott-1.0+dfsg/rt_main.c
+--- rott-1.0+dfsg~/rt_main.c	2008-01-09 13:52:32.000000000 +0100
++++ rott-1.0+dfsg/rt_main.c	2008-01-10 09:15:27.000000000 +0100
+@@ -88,6 +88,10 @@
+ //MED
+ #include "memcheck.h"
+ 
++#ifndef DATADIR
++#define DATADIR	("")
++#endif
++
+ volatile int    oldtime;
+ volatile int    gametime;
+ 
+@@ -763,9 +767,9 @@
+    // Normal ROTT wads
+ 
+ #if (SHAREWARE)
+-   newargs [argnum++] = "huntbgin.wad";
++   newargs [argnum++] = DATADIR "HUNTBGIN.WAD";
+ #else
+-   newargs [argnum++] = "darkwar.wad";
++   newargs [argnum++] = DATADIR "DARKWAR.WAD";
+ #endif
+ 
+ //   newargs [argnum++] = "credits.wad";
+@@ -785,7 +789,7 @@
+       }
+    else
+       {
+-      newargs [argnum++] = "remote1.rts";
++      newargs [argnum++] = DATADIR "REMOTE1.RTS";
+       }
+ 
+    newargs [argnum++] = NULL;

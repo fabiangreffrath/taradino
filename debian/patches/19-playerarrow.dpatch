@@ -1,0 +1,62 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 19-playerarrow.dpatch by Michael Karcher
+## <debian@mkarcher.dialup.fu-berlin.de>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Modify DrawMap_PlayerArrow to avoid a off-by-one bug trying to
+## DP: access scanline 201.
+
+@DPATCH@
+diff -urNad rott-1.0+dfsg~/rt_map.c rott-1.0+dfsg/rt_map.c
+--- rott-1.0+dfsg~/rt_map.c	2008-01-09 13:52:29.000000000 +0100
++++ rott-1.0+dfsg/rt_map.c	2008-01-10 09:19:34.000000000 +0100
+@@ -394,26 +394,40 @@
+ =======================
+ */
+ 
++/* Indices: mapscale, reduced coordinate */
++static const int arrowscale[4][5] =
++{{ 1,17,32,47,63},  /* Mapscale 0: 64 pixels/sprite */
++ { 1, 9,16,23,31},  /* Mapscale 1: 32 pixels/sprite */
++ { 1, 5, 8,11,15},  /* Mapscale 2: 16 pixels/sprite */
++ { 1, 3, 4, 5, 7}}; /* Mapscale 3:  8 pixels/sprite */
++
+ void DrawMap_PlayerArrow (int x, int y, int dir)
+ {
+    int i;
+-
++   
+    x*=tilesize;
+    y*=tilesize;
+ 
++   /* You can't draw a 4x4 arrow */
++   if(mapscale == 4)
++   {
++     VL_Bar(x+1,y+1,2,2,244);
++     return;
++   }
++
+    for (i=0;i<6;i++)
+       {
+-      VL_DrawLine ((arrows[dir][i].x<<(4-mapscale))+x,
+-                   (arrows[dir][i].y<<(4-mapscale))+y,
+-                   (arrows[dir][i+1].x<<(4-mapscale))+x,
+-                   (arrows[dir][i+1].y<<(4-mapscale))+y,
++      VL_DrawLine (arrowscale[mapscale][arrows[dir][i].x]+x,
++                   arrowscale[mapscale][arrows[dir][i].y]+y,
++                   arrowscale[mapscale][arrows[dir][i+1].x]+x,
++                   arrowscale[mapscale][arrows[dir][i+1].y]+y,
+                    244
+                   );
+       }
+-   VL_DrawLine (  (arrows[dir][6].x<<(4-mapscale))+x,
+-                  (arrows[dir][6].y<<(4-mapscale))+y,
+-                  (arrows[dir][0].x<<(4-mapscale))+x,
+-                  (arrows[dir][0].y<<(4-mapscale))+y,
++   VL_DrawLine (  arrowscale[mapscale][arrows[dir][6].x]+x,
++                  arrowscale[mapscale][arrows[dir][6].y]+y,
++                  arrowscale[mapscale][arrows[dir][0].x]+x,
++                  arrowscale[mapscale][arrows[dir][0].y]+y,
+                   244
+                );
+ }

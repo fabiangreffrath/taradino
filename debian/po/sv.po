@@ -1,0 +1,35 @@
+# Swedish translation for rott debconf template.
+# Copyright (C) 2007 Free Software Foundation, Inc.
+# This file is distributed under the same license as the rott package.
+# Daniel Nylander <po@danielnylander.se>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: rott\n"
+"Report-Msgid-Bugs-To: fabian@debian-unofficial.org\n"
+"POT-Creation-Date: 2007-05-08 09:41+0200\n"
+"PO-Revision-Date: 2007-05-08 09:47+0100\n"
+"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
+"Language-Team: Swedish <debian-l10n-swedish@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid "Download shareware data files?"
+msgstr "Hämta datafiler från sharewareversionen?"
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid "The Rise of the Triad game requires additional data files which are not available under a free license and cannot be distributed by Debian. You may choose to automatically download the shareware data files from the Internet and install them on the system now."
+msgstr "Rise of the Triad kräver ytterligare datafiler som inte finns tillgängliga under en fri licens och kan därför inte distribueras av Debian. Du kan välja att automatiskt hämta ner datafilerna från sharewareversionen från Internet och installera dem på ditt system."
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid "The installation will require about 15 MB of free disk space."
+msgstr "Installationen kräver ungefär 15 MB ledigt utrymme på din hårddisk."
+

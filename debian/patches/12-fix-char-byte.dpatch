@@ -1,0 +1,165 @@
+#!/bin/sh /usr/share/dpatch/dpatch-run
+## 12-fix-char-byte.dpatch by Michael Karcher
+## <debian@mkarcher.dialup.fu-berlin.de>
+##
+## DP: Makes signed/unsigned chars more consistent to suppress compiler
+## DP: warnings. No functional change.
+
+@DPATCH@
+diff -urNad rott-1.0+dfsg~/_rt_menu.h rott-1.0+dfsg/_rt_menu.h
+--- rott-1.0+dfsg~/_rt_menu.h	2008-01-09 13:52:30.000000000 +0100
++++ rott-1.0+dfsg/_rt_menu.h	2008-01-10 09:17:58.000000000 +0100
+@@ -194,7 +194,7 @@
+ //
+ //******************************************************************************
+ 
+-static byte *ScanNames[] =    // Scan code names with single chars
++static char *ScanNames[] =    // Scan code names with single chars
+ {
+    "?","?","1","2","3","4","5","6","7","8","9","0","-","+","?","?",
+    "Q","W","E","R","T","Y","U","I","O","P","[","]","|","?","A","S",
+@@ -215,7 +215,7 @@
+    0x50, 0x4b, 0x4d, 0x00
+ };
+ 
+-static byte *ExtScanNames[] = // Names corresponding to ExtScanCodes
++static char *ExtScanNames[] = // Names corresponding to ExtScanCodes
+ {
+    "Esc","BkSp","Tab","Ctrl","Space","CapLk","F1","F2","F3","F4",
+    "F5","F6","F7","F8","F9","F10","F11","F12","SclLk","Enter","Shift",
+@@ -232,7 +232,7 @@
+ 
+ void MouseSensitivity (void);
+ void DoThreshold (void);
+-byte * IN_GetScanName (ScanCode scan);
++char * IN_GetScanName (ScanCode scan);
+ void DisplayInfo (int which);
+ 
+ void PrintLSEntry (int w);
+diff -urNad rott-1.0+dfsg~/fx_man.c rott-1.0+dfsg/fx_man.c
+--- rott-1.0+dfsg~/fx_man.c	2008-01-09 13:52:30.000000000 +0100
++++ rott-1.0+dfsg/fx_man.c	2008-01-10 09:17:58.000000000 +0100
+@@ -1068,7 +1068,7 @@
+ static int music_initialized = 0;
+ static int music_context = 0;
+ static int music_loopflag = MUSIC_PlayOnce;
+-static char *music_songdata = NULL;
++static byte *music_songdata = NULL;
+ static Mix_Music *music_musicchunk = NULL;
+ 
+ int MUSIC_Init(int SoundCard, int Address)
+diff -urNad rott-1.0+dfsg~/rt_build.c rott-1.0+dfsg/rt_build.c
+--- rott-1.0+dfsg~/rt_build.c	2008-01-09 13:52:30.000000000 +0100
++++ rott-1.0+dfsg/rt_build.c	2008-01-10 09:17:58.000000000 +0100
+@@ -235,7 +235,7 @@
+ void   DrawPlanePosts (void)
+ {
+    int height;
+-   char * buf;
++   byte * buf;
+    byte * shape;
+    int lastwall=-2;
+    int plane;
+diff -urNad rott-1.0+dfsg~/rt_draw.c rott-1.0+dfsg/rt_draw.c
+--- rott-1.0+dfsg~/rt_draw.c	2008-01-10 09:17:57.000000000 +0100
++++ rott-1.0+dfsg/rt_draw.c	2008-01-10 09:17:58.000000000 +0100
+@@ -1920,7 +1920,7 @@
+ 
+ void   DrawWalls (void)
+ {
+-   char * buf;
++   byte * buf;
+    int plane;
+    wallcast_t * post;
+ 
+diff -urNad rott-1.0+dfsg~/rt_menu.c rott-1.0+dfsg/rt_menu.c
+--- rott-1.0+dfsg~/rt_menu.c	2008-01-09 13:52:30.000000000 +0100
++++ rott-1.0+dfsg/rt_menu.c	2008-01-10 09:17:58.000000000 +0100
+@@ -4902,9 +4902,9 @@
+ //
+ //******************************************************************************
+ 
+-byte * IN_GetScanName (ScanCode scan)
++char * IN_GetScanName (ScanCode scan)
+ {
+-   byte     **p;
++   char     **p;
+    ScanCode *s;
+ 
+    for (s = ExtScanCodes, p = ExtScanNames; *s; p++, s++)
+diff -urNad rott-1.0+dfsg~/rt_sound.c rott-1.0+dfsg/rt_sound.c
+--- rott-1.0+dfsg~/rt_sound.c	2008-01-10 09:17:57.000000000 +0100
++++ rott-1.0+dfsg/rt_sound.c	2008-01-10 09:17:58.000000000 +0100
+@@ -378,12 +378,12 @@
+ #ifdef DOS
+    if ( *snd == 'C' )
+       {
+-      voice = FX_PlayVOC3D( snd, pitch, angle, distance,
++      voice = FX_PlayVOC3D( (char*)snd, pitch, angle, distance,
+          sounds[sndnum].priority, (unsigned long) sndnum );
+       }
+    else
+       {
+-      voice = FX_PlayWAV3D( snd, pitch, angle, distance,
++      voice = FX_PlayWAV3D( (char*)snd, pitch, angle, distance,
+          sounds[sndnum].priority, (unsigned long) sndnum );
+       }
+ #else
+@@ -393,13 +393,13 @@
+  */
+    if ( *snd == 'C' )
+       {
+-      voice = FX_PlayVOC3D_ROTT( snd, W_LumpLength(SoundNumber(sndnum)),
++      voice = FX_PlayVOC3D_ROTT( (char*)snd, W_LumpLength(SoundNumber(sndnum)),
+          pitch, angle, distance,
+          sounds[sndnum].priority, (unsigned long) sndnum );
+       }
+    else
+       {
+-      voice = FX_PlayWAV3D_ROTT( snd, W_LumpLength(SoundNumber(sndnum)),
++      voice = FX_PlayWAV3D_ROTT( (char*)snd, W_LumpLength(SoundNumber(sndnum)),
+          pitch, angle, distance,
+          sounds[sndnum].priority, (unsigned long) sndnum );
+       }
+diff -urNad rott-1.0+dfsg~/rt_util.c rott-1.0+dfsg/rt_util.c
+--- rott-1.0+dfsg~/rt_util.c	2008-01-10 09:17:57.000000000 +0100
++++ rott-1.0+dfsg/rt_util.c	2008-01-10 09:17:58.000000000 +0100
+@@ -1318,7 +1318,7 @@
+ #endif
+ }
+ 
+-void SetPalette ( char * pal )
++void SetPalette ( byte * pal )
+ {
+    VL_SetPalette (pal);
+ }
+@@ -1607,7 +1607,7 @@
+ =================
+ */
+ 
+-void UL_printf (byte *str)
++void UL_printf (char *str)
+ {
+ #ifdef DOS
+    byte *s;
+diff -urNad rott-1.0+dfsg~/rt_util.h rott-1.0+dfsg/rt_util.h
+--- rott-1.0+dfsg~/rt_util.h	2008-01-10 09:17:57.000000000 +0100
++++ rott-1.0+dfsg/rt_util.h	2008-01-10 09:17:58.000000000 +0100
+@@ -90,7 +90,7 @@
+ int   atan2_appx(int,int);
+ int   FindDistance(int ix, int iy);
+ int   Find_3D_Distance(int ix, int iy, int iz);
+-void  SetPalette ( char * pal );
++void  SetPalette ( byte * pal );
+ void  SetaPalette ( byte * pal );
+ void  FindEGAColors ( void );
+ void  VL_FillPalette (int red, int green, int blue);
+@@ -98,7 +98,7 @@
+ void  VL_GetColor  (int color, int *red, int *green, int *blue);
+ void  VL_SetPalette (byte *palette);
+ void  VL_GetPalette (byte *palette);
+-void  UL_printf (byte *str);
++void  UL_printf (char *str);
+ void  VL_NormalizePalette (byte *palette);
+ void  MapDebug (char *error, ...);
+ void  OpenMapDebug ( void );

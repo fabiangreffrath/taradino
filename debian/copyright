@@ -1,0 +1,44 @@
+This package was debianized by Fabian Greffrath <fabian@debian-unofficial.org> on
+Mon,  1 May 2006 00:00:00 +0100.
+
+It was downloaded from <http://icculus.org/rott/>.
+
+Copyright Holders:
+
+	Apogee Software, Ltd. (all files, except rott/byteordr.c and rott/byteordr.h)
+	James R. Dose (rott/fx_man.h, rott/music.h, rott/sndcards.h, rott/task_man.h)
+	John R. Hall (rott/byteordr.c, rott/byteordr.h)
+	Jim Kent (rott/fli_def.h, rott/fli_main.c, rott/fli_main.h, rott/fli_type.h, rott/fli_util.c, rott/fli_util.h)
+	Spacetec IMC Corporation (rott/rt_spbal.c, rott/sbconfig.c)
+
+License:
+
+	Copyright (C) 1992 Jim Kent
+	Copyright (C) 1994 James R. Dose
+	Copyright (C) 1994-1995 Apogee Software, Ltd.
+	Copyright (C) 1995 Spacetec IMC Corporation
+	Copyright (C) 2002 John R. Hall
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+	See the GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+On Debian systems, the complete text of the GNU General Public License
+can be found in the `/usr/share/common-licenses/GPL' file.
+
+After installation the licensing terms of the shareware data can be found in
+`/usr/share/doc/rott/vendor.doc'.
+
+The Debian packaging is (C) 2006-2008, Fabian Greffrath <fabian@debian-unofficial.org> and
+is licensed under the GPL, see `/usr/share/common-licenses/GPL'.

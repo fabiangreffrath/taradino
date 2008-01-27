@@ -1,0 +1,74 @@
+#!/bin/sh
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+SHAREDIR="/usr/share/games/rott"
+SHAREZIP="1rott13.zip"
+SHAREURL="ftp://ftp.3drealms.com/share"
+SHAREMD5="0fafd6b629eab80278fc726e31f9cf41"
+DOCDIR="/usr/share/doc/rott"
+
+SUCCESS=0
+COUNTER=0
+MAXCOUNT=3
+
+case "$1" in
+	configure)
+		# Have we read the question already?
+		db_fget rott/shareware seen
+		if [ "$RET" = "false" ]; then
+			exit
+		fi
+
+		# Do we want to download the shareware zip file?
+		db_get rott/shareware
+		if [ "$RET" = "true" ]; then
+
+			# Repeat until we succeed (or reach MAXCOUNT)
+			while [ $SUCCESS -eq 0 -a $COUNTER -lt $MAXCOUNT ]; do
+
+				# Increase counter
+				COUNTER=$(($COUNTER+1))
+
+				# Download the shareware zip file in case it's not already there
+				if [ ! -e ${SHAREDIR}/${SHAREZIP} ]; then
+					wget --progress=dot --directory-prefix ${SHAREDIR} -c ${SHAREURL}/${SHAREZIP} || \
+					echo "rott: Download of shareware data files failed!" >&2
+				fi
+
+				# Check zip file integrity, then install
+				if [ "$(md5sum $SHAREDIR/$SHAREZIP | cut -f1 -d' ')" = "$SHAREMD5" ]; then
+					unzip -o ${SHAREDIR}/${SHAREZIP} -d ${SHAREDIR} > /dev/null && \
+					unzip -o ${SHAREDIR}/ROTTSW13.SHR -d ${SHAREDIR} > /dev/null && \
+					rm -f ${SHAREDIR}/ROTTSW13.SHR ${SHAREDIR}/INSTALL.EXE ${SHAREDIR}/FILE_ID.DIZ && \
+					ln -sf ${SHAREDIR}/VENDOR.DOC ${DOCDIR}/vendor.doc && \
+					SUCCESS=1
+				else
+					# File integrity check failed, delete the crap
+					echo "rott: File integrity check failed!" >&2
+					rm -rf ${SHAREDIR}/*
+				fi
+			done
+
+			# Unsuccessful?
+			if [ $SUCCESS -eq 0 ]; then
+				echo "rott: Installation of shareware data files failed!" >&2
+				exit 1
+			fi
+		fi
+	;;
+
+	abort-upgrade|abort-remove|abort-deconfigure)
+	;;
+
+	*)
+		echo "postinst called with unknown argument \`$1'" >&2
+		exit 1
+	;;
+esac
+
+#DEBHELPER#
+
+exit 0

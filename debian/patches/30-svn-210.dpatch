@@ -1,0 +1,28 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## r210 | relnev | 2003-01-10 05:31:51 +0100 (Fr, 10 Jan 2003) | 2 lines
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: implemented missing UL_ChangeDirectory
+
+@DPATCH@
+diff -urNad rott-1.0+dfsg~/rt_util.c rott-1.0+dfsg/rt_util.c
+--- rott-1.0+dfsg~/rt_util.c	2008-01-10 09:20:30.000000000 +0100
++++ rott-1.0+dfsg/rt_util.c	2008-01-10 09:20:30.000000000 +0100
+@@ -1854,9 +1854,15 @@
+ 
+    return (true);
+ #else
+-	STUB_FUNCTION;
++	if (!*path) {
++		return true;
++	}
+ 	
+-	return false;
++	if (chdir (path) == -1) {
++	         return (false);
++	}
++	
++	return true;
+ #endif
+ }
+ 

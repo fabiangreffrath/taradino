@@ -1,0 +1,170 @@
+rott (1.0+dfsg-2) unstable; urgency=low
+
+  * debian/patches/01-custom-datapath.dpatch,
+    debian/patches/13-improve-makefile.dpatch:
+    + Changed DATADIR back to "/usr/share/games/rott/".
+
+ -- Fabian Greffrath <fabian@debian-unofficial.org>  Sun, 27 Jan 2008 20:00:00 +0100
+
+rott (1.0+dfsg-1) unstable; urgency=low
+
+  * Rebuilt source tarball.
+    + Removed sourceless binary files:
+      - rott/audio_wf.lib
+      - rott/spball.lib
+    + Moved documentation into the rott/ directory.
+    + Packaged only the rott/ directory.
+    + See README.Debian.
+
+  * debian/changelog:
+    + Rephrased previous changelog entry.
+  * debian/control:
+    + Added Build-Depends on cdbs.
+    + Bumped Standards-Version to 3.7.3.
+  * debian/docs, debian/patches/*:
+    + Adjusted to new source directory structure.
+  * debian/install, debian/README.Debian:
+    + Added.
+  * debian/rules:
+    + Converted Debian packaging to CDBS.
+  * debian/lintian/rott:
+    + Added to override 'package-contains-empty-directory'.
+  * debian/patches/11-new-fix32.dpatch:
+    + Improved to build on big-endian architectures.
+  * debian/pixmaps/rott.xpm:
+    + Posterized to 34 colors.
+  * debian/po/fi.po:
+    + Added Finnish translation of the debconf templates (Closes: #456953).
+
+ -- Fabian Greffrath <fabian@debian-unofficial.org>  Fri, 11 Jan 2008 17:00:00 +0100
+
+rott (1.0-5) unstable; urgency=low
+
+  * debian/control:
+    + Added 'Homepage:' control field.
+    + Added 'Suggests: freepats, timidity' for music playback.
+  * debian/rules:
+    + Pass CFLAGS over to $(MAKE).
+    + Patch before clean, unpatch after clean.
+    + Do not manually remove 'rott/rott' anymore (see patch #13).
+  * debian/manpage/rott.6:
+    + Removed description of soundsetup option (see patch #21).
+
+  * debian/patches/10-32bitisms.dpatch:
+    + Dropped in favour of a series of patches courtesy of Michael Karcher
+     <debian@mkarcher.dialup.fu-berlin.de>:
+  * debian/patches/11-new-fix32.dpatch:
+    + Fixes assumptions about sizes of integral types. Important for
+      64 bit architectures (see patch #14).
+  * debian/patches/12-fix-char-byte.dpatch:
+    + Makes signed/unsigned chars more consistent to suppress compiler
+      warnings. No functional change.
+  * debian/patches/13-improve-makefile.dpatch:
+    + Makes CFLAGS overridable and removes executable on clean.
+  * debian/patches/14-fix-modex-ptr.dpatch:
+    + Cleans up use of integers instead of pointers to hold the base
+      address of the frame buffer (see patch #11, Closes: #419035).
+  * debian/patches/16-fix-random-actors.dpatch:
+    + Fix direction of random opponents.
+  * debian/patches/17-no-newline-in-addmessage.dpatch:
+    + Remove unsupported newlines from game messages. Important unless
+      signed character fix from 18-fix-drawichar is applied.
+   (+ Applied instead of upstream SVN commit 220.)
+  * debian/patches/18-fix-drawichar.dpatch:
+    + Fix cast for indexing an array with a character.
+  * debian/patches/19-playerarrow.dpatch:
+    + Modify DrawMap_PlayerArrow to avoid a off-by-one bug trying to
+      access scanline 201.
+  * debian/patches/20-printf-no-long.dpatch:
+    + Change tons of printf format strings to not use the "l" modifier
+      when printing "int" or even "byte" variables.
+    + Also add gcc's format attribute to printf-like functions and
+      make Error() a noreturn function.
+  * debian/patches/21-no-soundsetup.dpatch:
+    + Disable sound setup except on DOS.
+
+  * Applied another series of patches from upstream SVN:
+  * debian/patches/30-svn-210.dpatch:
+    + Implement missing UL_ChangeDirectory.
+  * debian/patches/31-svn-211.dpatch:
+    + Add keyboard updates.
+  * debian/patches/33-svn-213.dpatch:
+    + Add some missing include guards.
+  * debian/patches/35-svn-215ab.dpatch:
+    + Sparc fixes from Damian M Gryski <dgryski@uwaterloo.ca>.
+    + Force `size' to be a multiple of 4 in Z_Malloc
+      to prevent unaligned access (SIGBUS).
+    + Prevent SIGBUS in ConvertStringToPasswordString.
+  * debian/patches/36-svn-216.dpatch:
+    + Replace FixedMul with one from Dan that optimizes better.
+  * debian/patches/37-svn-217c.dpatch:
+    + Change AUDIO_S16 to AUDIO_S16SYS in rott/fx_man.c.
+  * debian/patches/39-svn-219.dpatch:
+    + Another attempt at restoring the original EKG mode.
+  * debian/patches/41-svn-221.dpatch:
+    + Fix an incorrect array access.
+   (+ Applied instead of Michael Karcher's patch #15.)
+
+ -- Fabian Greffrath <fabian@debian-unofficial.org>  Sat, 29 Nov 2007 09:45:00 +0200
+
+rott (1.0-4) unstable; urgency=low
+
+  * debian/patches/10-32bitisms.dpatch:
+    + New patch to lower the severity of #419035.
+      Thanks, Dmitry V. Rutsky <circuit-breaker@yandex.ru>!
+    + ROTT no longer crashes on start on AMD64.
+    + Remaining issues: Sound works, but music is just a loud humming.
+      Loading a game produces a segfault.
+  * debian/menu:
+    + Adjusted to the new menu structure.
+
+ -- Fabian Greffrath <fabian@debian-unofficial.org>  Sat,  1 Sep 2007 09:39:00 +0200
+
+rott (1.0-3) unstable; urgency=low
+
+  [ Christian Perrier ]
+  * Debconf templates and debian/control reviewed by the debian-l10n-
+    english team as part of the Smith review project. Closes: #422184
+  * Debconf translation updates:
+    - Swedish. Closes: #422779,#420259
+    - Czech. Closes: #422810
+    - Galician. Closes: #422832
+    - Portuguese. Closes: #422903
+    - Tamil. Closes: #423077
+    - Russian. Closes: #423225
+    - French. Closes: #423491
+    - Brazilian Portuguese. Closes: #425587
+    - Dutch. Closes: #425709
+    - German. Closes: #425892
+
+  [ Fabian Greffrath ]
+  * debian/control:
+    + Fixed indentation of Homepage line.
+  * debian/rules:
+    + Do not change directories, call MAKE with optional -C instead.
+  * debian/patches/01-custom-datapath.dpatch:
+    + Added ifdef for DATADIR.
+  * debian/po/fr.po:
+    + s/root/rott/ .
+  * Thanks to Christian Perrier <bubulle@debian.org> and all translators!
+
+ -- Fabian Greffrath <fabian@debian-unofficial.org>  Tue, 29 May 2007 13:04:29 +0200
+
+rott (1.0-2) unstable; urgency=low
+
+  * debian/postinst:
+    + Fixed bashism (Closes: #418695).
+  * debian/patches/05-big.endian-fix-dpatch:
+    + New patch: Fixes sprite errors on powerpc (Closes: #418698).
+      Thanks, Filippo Giunchedi <filippo@debian.org>!
+  * debian/patches/06-touchplate-fix.dpatch:
+    + New patch: Fixes crashes when stepping on some touchplates.
+
+ -- Fabian Greffrath <fabian@debian-unofficial.org>  Fri, 13 Apr 2007 00:00:00 +0100
+
+rott (1.0-1) unstable; urgency=low
+
+  * Initial release (Closes: #412063).
+  * Removed CVS directory from source tarball (thanks lintian).
+
+ -- Fabian Greffrath <fabian@debian-unofficial.org>  Mon,  1 May 2006 00:00:00 +0100

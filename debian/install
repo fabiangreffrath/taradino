@@ -1,0 +1,3 @@
+rott			/usr/games/
+debian/pixmaps/rott.xpm	/usr/share/pixmaps/
+debian/lintian/rott	/usr/share/lintian/overrides/

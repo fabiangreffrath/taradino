@@ -1,0 +1,1142 @@
+#!/bin/sh /usr/share/dpatch/dpatch-run
+## 11-new-fix32.dpatch by Michael Karcher
+## <debian@mkarcher.dialup.fu-berlin.de>
+##
+## DP: Fixes assumptions about sizes of integral types. Important for
+## DP: 64 bit architectures
+
+@DPATCH@
+diff -urNad rott-1.0+dfsg~/_rt_ted.h rott-1.0+dfsg/_rt_ted.h
+--- rott-1.0+dfsg~/_rt_ted.h	2008-01-10 09:17:42.000000000 +0100
++++ rott-1.0+dfsg/_rt_ted.h	2008-01-10 09:17:43.000000000 +0100
+@@ -43,18 +43,18 @@
+ 
+ typedef struct
+ {
+-        short   RLEWtag;
+-        long            headeroffsets[100];
+-        byte            tileinfo[1];
++        int16_t   RLEWtag;
++        int32_t   headeroffsets[100];
++        byte      tileinfo[1];
+ } mapfiletype;
+ 
+ 
+ typedef struct
+ {
+-		  long            planestart[3];
+-        word  planelength[3];
+-        word  width,height;
+-        char            name[16];
++        int32_t planestart[3];
++        word    planelength[3];
++        word    width,height;
++        char    name[16];
+ } maptype;
+ 
+ #define ActorIsPushWall(xx,yy)   ((actorat[xx][yy])&&(((objtype *)actorat[xx][yy])->which==PWALL) )
+diff -urNad rott-1.0+dfsg~/_w_wad.h rott-1.0+dfsg/_w_wad.h
+--- rott-1.0+dfsg~/_w_wad.h	2008-01-09 13:52:30.000000000 +0100
++++ rott-1.0+dfsg/_w_wad.h	2008-01-10 09:17:43.000000000 +0100
+@@ -61,15 +61,15 @@
+ typedef struct
+ {
+         char            identification[4];              // should be IWAD
+-        int             numlumps;
+-        int             infotableofs;
++        int32_t         numlumps;
++        int32_t         infotableofs;
+ } wadinfo_t;
+ 
+ 
+ typedef struct
+ {
+-        int             filepos;
+-        int             size;
++        int32_t         filepos;
++        int32_t         size;
+         char            name[8];
+ } filelump_t;
+ 
+diff -urNad rott-1.0+dfsg~/fli_type.h rott-1.0+dfsg/fli_type.h
+--- rott-1.0+dfsg~/fli_type.h	2008-01-09 13:52:30.000000000 +0100
++++ rott-1.0+dfsg/fli_type.h	2008-01-10 09:17:43.000000000 +0100
+@@ -28,12 +28,14 @@
+ #ifndef TYPES_H		/* Prevent file from being included twice. */
+ #define TYPES_H
+ 
+-typedef signed char Char;		/* Signed 8 bits. */
+-typedef unsigned char Uchar;	/* Unsigned 8 bits. */
+-typedef short Short;			/* Signed 16 bits please. */
+-typedef unsigned short Ushort;	/* Unsigned 16 bits please. */
+-typedef long Long;				/* Signed 32 bits. */
+-typedef unsigned long Ulong;	/* Unsigned 32 bits. */
++#include <stdint.h>
++
++typedef int8_t Char;		/* Signed 8 bits. */
++typedef uint8_t Uchar;	/* Unsigned 8 bits. */
++typedef int16_t Short;			/* Signed 16 bits please. */
++typedef uint16_t Ushort;	/* Unsigned 16 bits please. */
++typedef int32_t Long;				/* Signed 32 bits. */
++typedef uint32_t Ulong;	/* Unsigned 32 bits. */
+ 
+ typedef int Boolean;			/* TRUE or FALSE value. */
+ typedef int ErrCode;			/* ErrXXX or Success. */
+diff -urNad rott-1.0+dfsg~/lumpy.h rott-1.0+dfsg/lumpy.h
+--- rott-1.0+dfsg~/lumpy.h	2008-01-09 13:52:30.000000000 +0100
++++ rott-1.0+dfsg/lumpy.h	2008-01-10 09:17:43.000000000 +0100
+@@ -37,104 +37,104 @@
+ 
+ typedef struct
+ {
+-   short     width,height;
+-   short     orgx,orgy;
++   int16_t   width,height;
++   int16_t   orgx,orgy;
+    byte     data;
+ } lpic_t;
+ 
+ #define CONVERT_ENDIAN_lpic_t(lp)            \
+     {                                        \
+-        SwapIntelShort(&lp->width);          \
+-        SwapIntelShort(&lp->height);         \
+-        SwapIntelShort(&lp->orgx);           \
+-        SwapIntelShort(&lp->orgy);           \
++        SwapIntel16(&lp->width);          \
++        SwapIntel16(&lp->height);         \
++        SwapIntel16(&lp->orgx);           \
++        SwapIntel16(&lp->orgy);           \
+     }
+     
+ typedef struct
+ {
+ 	short height;
+    char  width[256];
+-   short charofs[256];
++   int16_t charofs[256];
+    byte  data;       // as much as required
+ } font_t;
+ 
+ #define CONVERT_ENDIAN_font_t(fp)            \
+     {                                        \
+         int i;                               \
+-        SwapIntelShort(&fp->height);         \
++        SwapIntel16(&fp->height);         \
+         for (i = 0; i < 256; i++) {          \
+-            SwapIntelShort(&fp->charofs[i]); \
++            SwapIntel16(&fp->charofs[i]); \
+         }                                    \
+     }
+ 
+ typedef struct
+ {
+-   short width;
+-   short height;
++   int16_t width;
++   int16_t height;
+    byte palette[768];
+    byte data;
+ } lbm_t;
+ 
+ #define CONVERT_ENDIAN_lbm_t(lp)             \
+     {                                        \
+-        SwapIntelShort(&lp->width);          \
+-        SwapIntelShort(&lp->height);         \
++        SwapIntel16(&lp->width);          \
++        SwapIntel16(&lp->height);         \
+     }
+  
+ typedef struct
+ {
+-   short          origsize;         // the orig size of "grabbed" gfx
+-   short          width;            // bounding box size
+-   short          height;
+-   short          leftoffset;       // pixels to the left of origin
+-   short          topoffset;        // pixels above the origin
++   int16_t        origsize;         // the orig size of "grabbed" gfx
++   int16_t        width;            // bounding box size
++   int16_t        height;
++   int16_t        leftoffset;       // pixels to the left of origin
++   int16_t        topoffset;        // pixels above the origin
+    unsigned short collumnofs[320];  // only [width] used, the [0] is &collumnofs[width]
+ } patch_t;
+ 
+ #define CONVERT_ENDIAN_patch_t(pp)           \
+     {                                        \
+         int i;                               \
+-        SwapIntelShort(&pp->origsize);       \
+-        SwapIntelShort(&pp->width);          \
+-        SwapIntelShort(&pp->height);         \
+-        SwapIntelShort(&pp->leftoffset);     \
+-        SwapIntelShort(&pp->topoffset);      \
++        SwapIntel16(&pp->origsize);       \
++        SwapIntel16(&pp->width);          \
++        SwapIntel16(&pp->height);         \
++        SwapIntel16(&pp->leftoffset);     \
++        SwapIntel16(&pp->topoffset);      \
+         for (i = 0; i < pp->width; i++) {          \
+-            SwapIntelShort((short*)&pp->collumnofs[i]); \
++            SwapIntel16((short*)&pp->collumnofs[i]); \
+         }                                    \
+     }
+ 
+ typedef struct
+ {
+-   short origsize;         // the orig size of "grabbed" gfx
+-   short width;            // bounding box size
+-   short height;
+-   short leftoffset;       // pixels to the left of origin
+-   short topoffset;        // pixels above the origin
+-   short translevel;
+-   short collumnofs[320];  // only [width] used, the [0] is &collumnofs[width]
++   int16_t origsize;         // the orig size of "grabbed" gfx
++   int16_t width;            // bounding box size
++   int16_t height;
++   int16_t leftoffset;       // pixels to the left of origin
++   int16_t topoffset;        // pixels above the origin
++   int16_t translevel;
++   int16_t collumnofs[320];  // only [width] used, the [0] is &collumnofs[width]
+ } transpatch_t;
+ 
+ #define CONVERT_ENDIAN_transpatch_t(pp)      \
+     {                                        \
+         int i;                               \
+-        SwapIntelShort(&pp->origsize);       \
+-        SwapIntelShort(&pp->width);          \
+-        SwapIntelShort(&pp->height);         \
+-        SwapIntelShort(&pp->leftoffset);     \
+-        SwapIntelShort(&pp->topoffset);      \
+-        SwapIntelShort(&pp->translevel);     \
++        SwapIntel16(&pp->origsize);       \
++        SwapIntel16(&pp->width);          \
++        SwapIntel16(&pp->height);         \
++        SwapIntel16(&pp->leftoffset);     \
++        SwapIntel16(&pp->topoffset);      \
++        SwapIntel16(&pp->translevel);     \
+         for (i = 0; i < pp->width; i++) {          \
+-            SwapIntelShort((short*)&pp->collumnofs[i]); \
++            SwapIntel16((short*)&pp->collumnofs[i]); \
+         }                                    \
+     }
+ 
+ typedef struct
+ {
+    byte  color;
+-   short height;
++   int16_t height;
+    char  width[256];
+-   short charofs[256];
++   int16_t charofs[256];
+    byte  pal[0x300];
+    byte  data;       // as much as required
+ } cfont_t;
+@@ -142,9 +142,9 @@
+ #define CONVERT_ENDIAN_cfont_t(pp)           \
+     {                                        \
+         int i;                               \
+-        SwapIntelShort(&pp->height);         \
++        SwapIntel16(&pp->height);         \
+         for (i = 0; i < 256; i++) {          \
+-            SwapIntelShort(&pp->charofs[i]); \
++            SwapIntel16(&pp->charofs[i]); \
+         }                                    \
+     }
+ 
+diff -urNad rott-1.0+dfsg~/rt_actor.c rott-1.0+dfsg/rt_actor.c
+--- rott-1.0+dfsg~/rt_actor.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_actor.c	2008-01-10 09:17:43.000000000 +0100
+@@ -19,6 +19,7 @@
+ */
+ 
+ 
++#include <stdint.h>
+ #include <string.h>
+ #include <stdlib.h>
+ #include "rt_def.h"
+@@ -1001,7 +1002,7 @@
+ 
+  for(i=0;i<MAXSTATES;i++)
+    {
+-   tstate = (unsigned)(statetable[i]);
++   tstate = (uintptr_t)(statetable[i]);
+    if (tstate < MINSTATE)
+       MINSTATE = tstate;
+ 
+@@ -1009,7 +1010,7 @@
+       MAXSTATE = tstate;
+    if (statetable[i]!=NULL)
+       {
+-      tfunct = (unsigned)(statetable[i]->think);
++      tfunct = (uintptr_t)(statetable[i]->think);
+       if (tfunct < MINFUNCTION)
+          MINFUNCTION = tfunct;
+ 
+@@ -1023,8 +1024,8 @@
+ {
+  unsigned tstate,tfunct;
+ 
+-  tstate = (unsigned)(ob->state);
+-  tfunct = (unsigned)(ob->state->think);
++  tstate = (uintptr_t)(ob->state);
++  tfunct = (uintptr_t)(ob->state->think);
+ 
+  if ((tfunct < MINFUNCTION) || (tfunct > MAXFUNCTION) ||
+ 	  (tstate < MINSTATE) || (tstate > MAXSTATE))
+@@ -10059,7 +10060,7 @@
+ 		 if (ob->hitpoints <= 0)
+ 			{objtype*column = (objtype*)(ob->whatever);
+ 
+-          EnableObject((int)column);
++          EnableObject((intptr_t)column);
+ 			 ob->whatever = NULL;
+ 
+ 			 KillActor(ob);
+@@ -10424,7 +10425,7 @@
+         {
+         objtype*column = (objtype*)(ob->whatever);
+ 
+-        EnableObject((int)column);
++        EnableObject((intptr_t)column);
+         ob->whatever = NULL;
+ 
+         KillActor(ob);
+@@ -10654,7 +10655,7 @@
+             {touchplatetype *tplate;
+ 
+              for(tplate=touchplate[tempstat->linked_to];tplate;tplate = tplate->nextaction)
+-                if (tplate->whichobj == (int)(tempstat))
++                if (tplate->whichobj == (intptr_t)(tempstat))
+                    RemoveTouchplateAction(tplate,tempstat->linked_to);
+             }
+ 
+@@ -10870,7 +10871,7 @@
+        (tempstat->itemnumber == stat_tntcrate)
+       )
+       {
+-      tempstat->linked_to = (int)(LASTSTAT);
++      tempstat->linked_to = (intptr_t)(LASTSTAT);
+       tempstat->flags |= FL_RESPAWN;
+       }
+ 
+@@ -10891,7 +10892,7 @@
+ 
+ 
+ 
+-void EnableObject(int object)
++void EnableObject(intptr_t object)
+    {
+    objtype* ob;
+    int i,gasicon;
+@@ -10942,7 +10943,7 @@
+       }
+    }
+ 
+-void DisableObject(int object)
++void DisableObject(intptr_t object)
+ {objtype*ob;
+ 
+  ob = (objtype*)object;
+diff -urNad rott-1.0+dfsg~/rt_actor.h rott-1.0+dfsg/rt_actor.h
+--- rott-1.0+dfsg~/rt_actor.h	2008-01-10 09:17:42.000000000 +0100
++++ rott-1.0+dfsg/rt_actor.h	2008-01-10 09:17:43.000000000 +0100
+@@ -357,8 +357,8 @@
+ void     A_Drain(objtype*ob);
+ void     T_Explosion(objtype*ob);
+ void     T_MoveColumn(objtype*);
+-void     EnableObject(int object);
+-void     DisableObject(int);
++void     EnableObject(intptr_t object);
++void     DisableObject(intptr_t object);
+ 
+ void     T_Collide(objtype*);
+ void  Collision(objtype*ob,objtype *attacker,int hitmomentumx,int hitmomentumy);
+diff -urNad rott-1.0+dfsg~/rt_def.h rott-1.0+dfsg/rt_def.h
+--- rott-1.0+dfsg~/rt_def.h	2008-01-10 09:17:42.000000000 +0100
++++ rott-1.0+dfsg/rt_def.h	2008-01-10 09:17:43.000000000 +0100
+@@ -22,6 +22,7 @@
+ 
+ 
+ // RT_DEF.H Zee big one
++#include <stdint.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -301,9 +302,9 @@
+ 
+ 
+ typedef unsigned char           byte;
+-typedef unsigned short int      word;
+-typedef unsigned long           longword;
+-typedef long fixed;
++typedef uint16_t                word;
++typedef uint32_t                longword;
++typedef int32_t fixed;
+ 
+ 
+ //////////////////////////////////////////////////////////////////////////
+diff -urNad rott-1.0+dfsg~/rt_door.c rott-1.0+dfsg/rt_door.c
+--- rott-1.0+dfsg~/rt_door.c	2008-01-10 09:17:42.000000000 +0100
++++ rott-1.0+dfsg/rt_door.c	2008-01-10 09:17:43.000000000 +0100
+@@ -94,7 +94,7 @@
+ 
+ // Local Variables
+ 
+-static void (*touchactions[NUMTOUCHPLATEACTIONS])(int) =
++static void (*touchactions[NUMTOUCHPLATEACTIONS])(intptr_t) =
+ 						 {ActivatePushWall,
+ 						  ActivateMoveWall,
+ 						  LinkedOpenDoor,
+@@ -315,7 +315,7 @@
+ }
+ 
+ 
+-int GetIndexForAction(void (*action)(int))
++int GetIndexForAction(void (*action)(intptr_t))
+ {int i;
+ 
+  for(i=0;i<NUMTOUCHPLATEACTIONS;i++)
+@@ -486,10 +486,10 @@
+ 	temp->complete = dummy.complete;
+ 
+ 	if (dummy.whichobj & FL_TACT)
+-	  temp->whichobj = (int)(objlist[dummy.whichobj & ~FL_TACT]);
++	  temp->whichobj = (intptr_t)(objlist[dummy.whichobj & ~FL_TACT]);
+ 
+ 	else if (dummy.whichobj & FL_TSTAT)
+-	  temp->whichobj = (int)(GetStatForIndex(dummy.whichobj & ~FL_TSTAT));
++	  temp->whichobj = (intptr_t)(GetStatForIndex(dummy.whichobj & ~FL_TSTAT));
+ 	else
+ 	  temp->whichobj = dummy.whichobj;
+ 	if (dummy.actionindex != -1)
+@@ -613,7 +613,7 @@
+ 
+ 
+ 
+-void  Link_To_Touchplate(word touchlocx, word touchlocy, void (*maction)(int), void (*swapaction)(int), int wobj, int delaytime)
++void  Link_To_Touchplate(word touchlocx, word touchlocy, void (*maction)(intptr_t), void (*swapaction)(intptr_t), intptr_t wobj, int delaytime)
+ {touchplatetype *temp;
+  int index;
+ 
+@@ -640,7 +640,7 @@
+ 
+ 
+ 
+-void ClockLink (void (*saction)(int), void (*eaction)(int), int wobj,int whichclock)
++void ClockLink (void (*saction)(intptr_t), void (*eaction)(intptr_t), intptr_t wobj,int whichclock)
+ {touchplatetype*temp;
+ 
+ 
+@@ -731,7 +731,7 @@
+    touchplatetype *temp;
+    int i,touchcomplete,j;
+    int playeron;
+-   void (*tempact)(int);
++   void (*tempact)(intptr_t);
+    boolean wallmessage,doormessage,columnmessage;
+ 
+    for(i=0;i<lasttouch;i++)
+@@ -1790,7 +1790,7 @@
+ =====================
+ */
+ 
+-void LinkedOpenDoor (int door)
++void LinkedOpenDoor (intptr_t door)
+ {
+    UtilizeDoor(door,OpenDoor);
+ }
+@@ -1803,7 +1803,7 @@
+ =====================
+ */
+ 
+-void LinkedCloseDoor (int door)
++void LinkedCloseDoor (intptr_t door)
+ {
+    if (DoorReadyToClose(door)==true)
+       UtilizeDoor(door,CloseDoor);
+@@ -3478,7 +3478,7 @@
+ =====================
+ */
+ 
+-void ActivatePushWall (int pwall)
++void ActivatePushWall (intptr_t pwall)
+ {
+    pwallobj_t * pw;
+ 
+@@ -3509,7 +3509,7 @@
+ =====================
+ */
+ 
+-void ActivateMoveWall (int pwall)
++void ActivateMoveWall (intptr_t pwall)
+ {
+    pwallobj_t * pw;
+ 
+diff -urNad rott-1.0+dfsg~/rt_door.h rott-1.0+dfsg/rt_door.h
+--- rott-1.0+dfsg~/rt_door.h	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_door.h	2008-01-10 09:17:43.000000000 +0100
+@@ -20,6 +20,8 @@
+ #ifndef _rt_door_public
+ #define _rt_door_public
+ 
++#include <stdint.h>
++
+ //***************************************************************************
+ //
+ //   RT_DOOR.C - doors
+@@ -124,11 +126,11 @@
+ } pwallobj_t;
+ 
+ typedef struct tplate
+-{ void (*action)(int);
+-  void (*swapaction)(int);
++{ void (*action)(intptr_t);
++  void (*swapaction)(intptr_t);
+   struct tplate * nextaction;
+   struct tplate * prevaction;
+-  int whichobj;
++  intptr_t whichobj;
+   byte tictime;
+   byte ticcount;
+   byte triggered;
+@@ -213,9 +215,9 @@
+ 
+ 
+ int  PlatformHeight(int,int);
+-void Link_To_Touchplate(word, word, void (*)(int), void (*)(int),int, int);
++void Link_To_Touchplate(word, word, void (*)(intptr_t), void (*)(intptr_t),intptr_t, int);
+ void TriggerStuff(void);
+-void ClockLink(void (*)(int),void(*)(int),int,int);
++void ClockLink(void (*)(intptr_t),void(*)(intptr_t),intptr_t,int);
+ void RecursiveConnect(int);
+ void ConnectAreas(void);
+ void InitAreas(void);
+@@ -234,8 +236,8 @@
+ void WallPushing (int pwall);
+ void PushWall (int pwall, int dir);
+ void OperatePushWall (int pwall, int dir, boolean localplayer );
+-void ActivatePushWall (int pwall);
+-void ActivateMoveWall (int pwall);
++void ActivatePushWall (intptr_t pwall);
++void ActivateMoveWall (intptr_t pwall);
+ int  UpdateMaskedWall (int num);
+ 
+ void FixDoorAreaNumbers ( void );
+@@ -262,8 +264,8 @@
+ void LoadElevators(byte * buffer,int size);
+ 
+ void MakeWideDoorVisible ( int doornum );
+-void LinkedCloseDoor (int door);
+-void LinkedOpenDoor (int door);
++void LinkedCloseDoor (intptr_t door);
++void LinkedOpenDoor (intptr_t door);
+ int IsWall (int tilex, int tiley);
+ int IsDoor (int tilex, int tiley);
+ int IsMaskedWall (int tilex, int tiley);
+diff -urNad rott-1.0+dfsg~/rt_draw.c rott-1.0+dfsg/rt_draw.c
+--- rott-1.0+dfsg~/rt_draw.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_draw.c	2008-01-10 09:17:43.000000000 +0100
+@@ -99,8 +99,8 @@
+ // math tables
+ //
+ 
+-short   tantable[FINEANGLES];
+-long    sintable[FINEANGLES+FINEANGLEQUAD+1],
++int16_t    tantable[FINEANGLES];
++fixed      sintable[FINEANGLES+FINEANGLEQUAD+1],
+ 		  *costable = sintable+(FINEANGLES/4);
+ 
+ //
+@@ -200,7 +200,7 @@
+ {
+   byte * table;
+   byte * ptr;
+-  long  length;
++  int32_t  length;
+   int   i;
+ 
+ //
+@@ -214,60 +214,60 @@
+ // get size of first table
+ //
+ 
+-   memcpy(&length,ptr,sizeof(int));
+-   SwapIntelLong(&length);
++   memcpy(&length,ptr,sizeof(int32_t));
++   SwapIntel32(&length);
+    
+ //
+ // skip first table
+ //
+ 
+-   ptr+=(length+1)*sizeof(int);
++   ptr+=(length+1)*sizeof(int32_t);
+ 
+ //
+ // get size of sin/cos table
+ //
+ 
+-   memcpy(&length,ptr,sizeof(int));
+-   SwapIntelLong(&length);
+-   ptr+=sizeof(int);
++   memcpy(&length,ptr,sizeof(int32_t));
++   SwapIntel32(&length);
++   ptr+=sizeof(int32_t);
+    
+ //
+ // get sin/cos table
+ //
+-   memcpy(&sintable[0],ptr,length*sizeof(long));
+-   SwapIntelLongArray(&sintable[0], length);
+-   ptr+=(length)*sizeof(int);
++   memcpy(&sintable[0],ptr,length*sizeof(fixed));
++   SwapIntel32Array(&sintable[0], length);
++   ptr+=(length)*sizeof(fixed);
+ 
+ //
+ // get size of tangent table
+ //
+ 
+-   memcpy(&length,ptr,sizeof(int));
+-   SwapIntelLong(&length);
+-   ptr+=sizeof(int);
++   memcpy(&length,ptr,sizeof(int32_t));
++   SwapIntel32(&length);
++   ptr+=sizeof(int32_t);
+ 
+ //
+ // get tangent table
+ //
+-   memcpy(tantable,ptr,length*sizeof(short));
+-   SwapIntelShortArray(tantable, length);
+-   ptr+=(length)*sizeof(short);
++   memcpy(tantable,ptr,length*sizeof(int16_t));
++   SwapIntel16Array(tantable, length);
++   ptr+=(length)*sizeof(int16_t);
+ 
+ //
+ // get size of gamma table
+ //
+ 
+-   memcpy(&length,ptr,sizeof(int));
+-   SwapIntelLong(&length);
+-   ptr+=sizeof(int);
++   memcpy(&length,ptr,sizeof(int32_t));
++   SwapIntel32(&length);
++   ptr+=sizeof(int32_t);
+ 
+ //
+ // get gamma table
+ //
+-   memcpy(&gammatable[0],ptr,length*sizeof(byte));
++   memcpy(&gammatable[0],ptr,length);
+    table=W_CacheLumpName("tables",PU_CACHE, CvtNull, 1);
+ 
+-   costable = (fixed *)&(sintable[FINEANGLES/4]);
++   costable = &(sintable[FINEANGLES/4]);
+ 
+    wstart=W_GetNumForName("WALLSTRT");
+ #if (SHAREWARE==0)
+diff -urNad rott-1.0+dfsg~/rt_draw.h rott-1.0+dfsg/rt_draw.h
+--- rott-1.0+dfsg~/rt_draw.h	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_draw.h	2008-01-10 09:17:43.000000000 +0100
+@@ -58,7 +58,7 @@
+ //
+ // math tables
+ //
+-extern short    tantable[FINEANGLES];
++extern int16_t  tantable[FINEANGLES];
+ extern fixed    sintable[FINEANGLES+FINEANGLEQUAD+1];
+ extern fixed    *costable;
+ 
+diff -urNad rott-1.0+dfsg~/rt_stat.c rott-1.0+dfsg/rt_stat.c
+--- rott-1.0+dfsg~/rt_stat.c	2008-01-10 09:17:42.000000000 +0100
++++ rott-1.0+dfsg/rt_stat.c	2008-01-10 09:17:43.000000000 +0100
+@@ -397,7 +397,7 @@
+ }
+ 
+ 
+-void ActivateLight(int light)
++void ActivateLight(intptr_t light)
+ {statobj_t*tstat;
+ 
+  tstat = (statobj_t*)light;
+@@ -409,7 +409,7 @@
+ }
+ 
+ 
+-void DeactivateLight(int light)
++void DeactivateLight(intptr_t light)
+ {statobj_t*tstat;
+ 
+  tstat = (statobj_t*)light;
+diff -urNad rott-1.0+dfsg~/rt_stat.h rott-1.0+dfsg/rt_stat.h
+--- rott-1.0+dfsg~/rt_stat.h	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_stat.h	2008-01-10 09:17:43.000000000 +0100
+@@ -25,6 +25,7 @@
+ #ifndef _rt_stat_public
+ #define _rt_stat_public
+ 
++#include <stdint.h>
+ #include "rt_ted.h"
+ 
+ #define MAXSWITCHES     64
+@@ -151,7 +152,7 @@
+ 		  short int         whichstat;
+ 		  short int         areanumber;
+ 
+-		  int               linked_to;
++		  intptr_t          linked_to;
+ 		  struct statstruct *statnext;
+ 		  struct statstruct *statprev;
+ 		  struct statstruct *nextactive;
+@@ -167,7 +168,7 @@
+ 		  int               spawnz;
+ 		  struct respstruct *next;
+ 		  struct respstruct *prev;
+-        int linked_to;
++        intptr_t linked_to;
+ 
+ } respawn_t;
+ 
+@@ -205,8 +206,8 @@
+ void Set_NewZ_to_MapValue(fixed*,int,const char*,int,int);
+ void RemoveFromFreeStaticList(statobj_t*);
+ void CheckCriticalStatics(void);
+-void ActivateLight(int);
+-void DeactivateLight(int);
++void ActivateLight(intptr_t);
++void DeactivateLight(intptr_t);
+ void TurnOnLight(int,int);
+ void TurnOffLight(int,int);
+ void MakeStatActive(statobj_t*);
+diff -urNad rott-1.0+dfsg~/rt_ted.c rott-1.0+dfsg/rt_ted.c
+--- rott-1.0+dfsg~/rt_ted.c	2008-01-10 09:17:42.000000000 +0100
++++ rott-1.0+dfsg/rt_ted.c	2008-01-10 09:17:43.000000000 +0100
+@@ -1293,7 +1293,7 @@
+         //
+         do
+         {
+-					 value = IntelShort(*source++);
++                value = Intel16(*source++);
+                 if (value != rlewtag)
+                 //
+ 					 // uncompressed
+@@ -1304,8 +1304,8 @@
+                 //
+                 // compressed string
+                 //
+-                        count = IntelShort(*source++);
+-                        value = IntelShort(*source++);
++                        count = Intel16(*source++);
++                        value = Intel16(*source++);
+                         for (i=1;i<=count;i++)
+                                 *dest++ = value;
+ 					 }
+@@ -1328,7 +1328,7 @@
+    {
+    int  filehandle;
+    char RTLSignature[ 4 ];
+-   unsigned long RTLVersion;
++   uint32_t RTLVersion;
+ 
+    filehandle = SafeOpenRead( filename );
+ 
+@@ -1347,7 +1347,7 @@
+    // Check the version number
+    //
+    SafeRead( filehandle, &RTLVersion, sizeof( RTLVersion ) );
+-   SwapIntelLong(&RTLVersion);
++   SwapIntel32U(&RTLVersion);
+    if ( RTLVersion > RTL_VERSION )
+       {
+       Error(
+@@ -1394,12 +1394,12 @@
+       SEEK_SET );
+    SafeRead( filehandle, &RTLMap, sizeof( RTLMap ) );
+ 
+-    SwapIntelLong((long *)&RTLMap.used);
+-    SwapIntelLong((long *)&RTLMap.CRC);
+-    SwapIntelLong((long *)&RTLMap.RLEWtag);
+-    SwapIntelLong((long *)&RTLMap.MapSpecials);
+-    SwapIntelLongArray((long *)&RTLMap.planestart, NUMPLANES);
+-    SwapIntelLongArray((long *)&RTLMap.planelength, NUMPLANES);
++    SwapIntel32U(&RTLMap.used);
++    SwapIntel32U(&RTLMap.CRC);
++    SwapIntel32U(&RTLMap.RLEWtag);
++    SwapIntel32U(&RTLMap.MapSpecials);
++    SwapIntel32UArray(RTLMap.planestart, NUMPLANES);
++    SwapIntel32UArray(RTLMap.planelength, NUMPLANES);
+ 
+    if ( !RTLMap.used )
+       {
+@@ -1731,10 +1731,7 @@
+    // fix structure alignment
+    tinf = ( void * )( ( word * )tinf - 1 );
+ 
+-   for( i = 0 ; i < 100 ; i++ )
+-      {
+-      tinf->headeroffsets[ i ] = IntelLong( tinf->headeroffsets[ i ] );
+-      }
++   SwapIntel32Array(tinf->headeroffsets,100);
+ 
+    //
+    // open the data file
+@@ -1759,12 +1756,12 @@
+ 
+    for( i = 0 ; i < 3; i++ )
+       {
+-      mapheader.planestart[ i ]  = IntelLong( mapheader.planestart[ i ] );
+-      mapheader.planelength[ i ] = IntelShort( mapheader.planelength[ i ] );
++      mapheader.planestart[ i ]  = Intel16( mapheader.planestart[ i ] );
++      mapheader.planelength[ i ] = Intel32U( mapheader.planelength[ i ] );
+       }
+ 
+-   mapheader.width  = IntelShort( mapheader.width );
+-   mapheader.height = IntelShort( mapheader.height );
++   mapheader.width  = Intel16U( mapheader.width );
++   mapheader.height = Intel16U( mapheader.height );
+ 
+    mapwidth  = mapheader.width;
+    mapheight = mapheader.height;
+@@ -3567,7 +3564,7 @@
+ 
+ 
+ void LinkActor (objtype *ob,int tilex,int tiley,
+-                void (*action)(int),void (*swapaction)(int)
++                void (*action)(intptr_t),void (*swapaction)(intptr_t)
+                )
+    {
+ 	word  touchx,touchy;
+@@ -3584,7 +3581,7 @@
+       if ((clockx == tilex) && (clocky == tiley))
+          {
+          clocklinked = 1;
+-         ClockLink(EnableObject,DisableObject,(int)ob,k);
++         ClockLink(EnableObject,DisableObject,(intptr_t)ob,k);
+          }
+       }
+ 
+@@ -3611,9 +3608,9 @@
+ 
+ 
+          if (tswitch && (tswitch->flags & FL_ON))
+-            Link_To_Touchplate(touchx,touchy,swapaction,action,(int)ob,0);
++            Link_To_Touchplate(touchx,touchy,swapaction,action,(intptr_t)ob,0);
+          else
+-            Link_To_Touchplate(touchx,touchy,action,swapaction,(int)ob,0);
++            Link_To_Touchplate(touchx,touchy,action,swapaction,(intptr_t)ob,0);
+          if (ob->obclass == gasgrateobj)
+             {
+             ob->temp1 = touchx;
+@@ -3644,7 +3641,7 @@
+    {
+    int   i,j,linked;
+ 	word   *map,tile;
+-	void (*action)(int),(*swapaction)(int);
++	void (*action)(intptr_t),(*swapaction)(intptr_t);
+ 
+ 
+    map = mapplanes[1];
+@@ -4050,7 +4047,7 @@
+ 							 if (!(tswitch->flags & FL_ON))
+ 								{sprites[i][j]->shapenum --;
+ 								 if (touchindices[touchx][touchy])
+-									 {Link_To_Touchplate(touchx,touchy,ActivateLight,DeactivateLight,(int)(sprites[i][j]),0);
++									 {Link_To_Touchplate(touchx,touchy,ActivateLight,DeactivateLight,(intptr_t)(sprites[i][j]),0);
+ 									  sprites[i][j]->linked_to = touchindices[touchx][touchy]-1;
+ 									 }
+ 								 else
+@@ -4058,7 +4055,7 @@
+ 								}
+ 							 else
+ 								{if (touchindices[touchx][touchy])
+-									 {Link_To_Touchplate(touchx,touchy,DeactivateLight,ActivateLight,(int)(sprites[i][j]),0);
++									 {Link_To_Touchplate(touchx,touchy,DeactivateLight,ActivateLight,(intptr_t)(sprites[i][j]),0);
+ 									  sprites[i][j]->linked_to = touchindices[touchx][touchy]-1;
+ 									 }
+ 								 else
+@@ -4068,7 +4065,7 @@
+ 							}
+ 					  else
+ 						 {if (touchindices[touchx][touchy])
+-							 {Link_To_Touchplate(touchx,touchy,DeactivateLight,ActivateLight,(int)(sprites[i][j]),0);
++							 {Link_To_Touchplate(touchx,touchy,DeactivateLight,ActivateLight,(intptr_t)(sprites[i][j]),0);
+ 							  sprites[i][j]->linked_to = touchindices[touchx][touchy]-1;
+ 							 }
+ 						  else
+diff -urNad rott-1.0+dfsg~/rt_ted.h rott-1.0+dfsg/rt_ted.h
+--- rott-1.0+dfsg~/rt_ted.h	2008-01-10 09:17:42.000000000 +0100
++++ rott-1.0+dfsg/rt_ted.h	2008-01-10 09:17:43.000000000 +0100
+@@ -90,12 +90,12 @@
+ 
+ typedef struct
+    {
+-   unsigned used;
+-   unsigned CRC;
+-   unsigned RLEWtag;
+-   unsigned MapSpecials;
+-   unsigned planestart[ NUMPLANES ];
+-   unsigned planelength[ NUMPLANES ];
++   uint32_t used;
++   uint32_t CRC;
++   uint32_t RLEWtag;
++   uint32_t MapSpecials;
++   uint32_t planestart[ NUMPLANES ];
++   uint32_t planelength[ NUMPLANES ];
+    char     Name[ ALLOCATEDLEVELNAMELENGTH ];
+    } RTLMAP;
+ 
+diff -urNad rott-1.0+dfsg~/rt_util.c rott-1.0+dfsg/rt_util.c
+--- rott-1.0+dfsg~/rt_util.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_util.c	2008-01-10 09:17:43.000000000 +0100
+@@ -1144,78 +1144,81 @@
+ 
+ 
+ #if (BYTE_ORDER == LITTLE_ENDIAN)
+-#define KeepShort IntelShort
+-#define SwapShort MotoShort
+-#define KeepLong IntelLong
+-#define SwapLong MotoLong
++#define Keep16 Intel16
++#define Swap16 Moto16
++#define Keep32 Intel32
++#define Swap32 Moto32
+ #else
+-#define KeepShort MotoShort
+-#define SwapShort IntelShort
+-#define KeepLong MotoLong
+-#define SwapLong IntelLong
++#define Keep16 Moto16
++#define Swap16 Intel16
++#define Keep32 Moto32
++#define Swap32 Intel32
+ #endif
+ 
+-short	SwapShort (short l)
++int16_t	Swap16 (int16_t l)
+ {
++	uint16_t ul = l;
+ 	byte	b1,b2;
+ 
+-	b1 = l&255;
+-	b2 = (l>>8)&255;
++	b1 = ul&255;
++	b2 = (ul>>8)&255;
+ 
+ 	return (b1<<8) + b2;
+ }
+ 
+-short	KeepShort (short l)
++int16_t	Keep16 (int16_t l)
+ {
+ 	return l;
+ }
+ 
+ 
+-long	SwapLong (long l)
++int32_t	Swap32 (int32_t l)
+ {
++	/* signed right shifts are implementation defined */
++	const uint32_t ul = l;
+ 	byte	b1,b2,b3,b4;
+ 
+-	b1 = l&255;
+-	b2 = (l>>8)&255;
+-	b3 = (l>>16)&255;
+-	b4 = (l>>24)&255;
++	b1 = ul&255;
++	b2 = (ul>>8)&255;
++	b3 = (ul>>16)&255;
++	b4 = (ul>>24)&255;
+ 
+ 	return ((long)b1<<24) + ((long)b2<<16) + ((long)b3<<8) + b4;
+ }
+ 
+-long	KeepLong (long l)
++int32_t	Keep32 (int32_t l)
+ {
+ 	return l;
+ }
+ 
+ 
+-#undef KeepShort
+-#undef KeepLong
+-#undef SwapShort
+-#undef SwapLong
++#undef Keep16
++#undef Keep32
++#undef Swap16
++#undef Swap32
+ 
+-void SwapIntelLong(long *l)
++void SwapIntel32(int32_t *l)
+ {
+-    *l = IntelLong(*l);
++    *l = Intel32(*l);
+ }
+ 
+-void SwapIntelShort(short *s)
++void SwapIntel16(int16_t *s)
+ {
+-    *s = IntelShort(*s);
++    *s = Intel16(*s);
+ }
+ 
+-void SwapIntelLongArray(long *l, int num)
++void SwapIntel32Array(int32_t *l, int num)
+ {
+     while (num--) {
+-        SwapIntelLong(l);
++        SwapIntel32(l);
+         l++;
+     }
+ }
+ 
+-void SwapIntelShortArray(short *s, int num)
++void SwapIntel16Array(int16_t *s, int num)
+ {
+     while (num--) {
+-        SwapIntelShort(s);
++        SwapIntel16(s);
+         s++;
+     }
+ }
+diff -urNad rott-1.0+dfsg~/rt_util.h rott-1.0+dfsg/rt_util.h
+--- rott-1.0+dfsg~/rt_util.h	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_util.h	2008-01-10 09:17:43.000000000 +0100
+@@ -65,14 +65,26 @@
+ void  ExtractFileBase (char *path, char *dest);
+ long  ParseHex (char *hex);
+ long  ParseNum (char *str);
+-short MotoShort (short l);
+-short IntelShort (short l);
+-long  MotoLong (long l);
+-long  IntelLong (long l);
+-void  SwapIntelLong (long *l);
+-void  SwapIntelShort(short *s);
+-void  SwapIntelLongArray (long *l, int num);
+-void  SwapIntelShortArray (short *s, int num);
++int16_t Moto16 (int16_t l);
++int16_t Intel16 (int16_t l);
++int32_t Moto32 (int32_t l);
++int32_t Intel32 (int32_t l);
++static inline uint16_t Intel16U (uint16_t s) 
++{ return Intel16(s); }
++static inline uint32_t Intel32U (uint32_t l)
++{ return Intel32(l); }
++void  SwapIntel32 (int32_t *l);
++void  SwapIntel16 (int16_t *s);
++void  SwapIntel32Array (int32_t *l, int num);
++void  SwapIntel16Array (int16_t *s, int num);
++static inline void SwapIntel16U (uint16_t * s)
++{ SwapIntel16((int16_t*)s); }
++static inline void SwapIntel32U (uint32_t * l)
++{ SwapIntel32((int32_t*)l); }
++static inline void SwapIntel16UArray (uint16_t * s, int num) 
++{ SwapIntel16Array((int16_t*)s,num); }
++static inline void SwapIntel32UArray (uint32_t * l, int num)
++{ SwapIntel32Array((int32_t*)l,num); }
+ int   US_CheckParm (char *parm, char **strings);
+ byte  BestColor (int r, int g, int b, byte *palette);
+ int   atan2_appx(int,int);
+diff -urNad rott-1.0+dfsg~/rt_view.c rott-1.0+dfsg/rt_view.c
+--- rott-1.0+dfsg~/rt_view.c	2008-01-10 09:17:42.000000000 +0100
++++ rott-1.0+dfsg/rt_view.c	2008-01-10 09:17:43.000000000 +0100
+@@ -218,13 +218,13 @@
+ 
+ void CalcProjection ( void )
+ {
+-    int   i;
+-    int   frac;
+-    long  intang;
+-    byte * table;
+-    byte * ptr;
+-    int   length;
+-    int  * pangle;
++    int       i;
++    int       frac;
++    int32_t   intang;
++    byte    * table;
++    byte    * ptr;
++    int32_t   length;
++    int32_t * pangle;
+ 
+ 
+ 
+@@ -245,18 +245,18 @@
+ // get size of table
+ //
+ 
+-   memcpy(&length,ptr,sizeof(int));
+-   SwapIntelLong((long *)&length);
+-   ptr+=sizeof(int);
+-   pangle=SafeMalloc(length*sizeof(int));
+-   memcpy(pangle,ptr,length*sizeof(int));
++   memcpy(&length,ptr,sizeof(int32_t));
++   SwapIntel32(&length);
++   ptr+=sizeof(int32_t);
++   pangle=SafeMalloc(length*sizeof(int32_t));
++   memcpy(pangle,ptr,length*sizeof(int32_t));
+ 
+    frac=((length*65536/centerx))>>1;
+    for (i=0;i<centerx;i++)
+       {
+       // start 1/2 pixel over, so viewangle bisects two middle pixels
+       intang=pangle[frac>>16];
+-      SwapIntelLong(&intang);
++      SwapIntel32(&intang);
+       pixelangle[centerx-1-i] =(short) intang;
+       pixelangle[centerx+i] =(short) -intang;
+       frac+=(length*65536/centerx);
+@@ -447,7 +447,7 @@
+ 	lump = W_GetNumForName("colormap");
+ 	length = W_LumpLength (lump) + 255;
+ 	colormap = SafeMalloc (length);
+-	colormap = (byte *)( ((int)colormap + 255)&~0xff);
++	colormap = (byte *)( ((intptr_t)colormap + 255)&~0xff);
+ 	W_ReadLump (lump,colormap);
+ 
+ // Fix fire colors in colormap
+@@ -461,7 +461,7 @@
+ 	lump = W_GetNumForName("specmaps");
+ 	length = W_LumpLength (lump+1) + 255;
+ 	redmap = SafeMalloc (length);
+-	redmap = (byte *)( ((int)redmap + 255)&~0xff);
++	redmap = (byte *)( ((intptr_t)redmap + 255)&~0xff);
+ 	W_ReadLump (lump+1,redmap);
+    greenmap = redmap+(16*256);
+ 
+@@ -474,7 +474,7 @@
+          {
+ 	      length = W_LumpLength (lump+i) + 255;
+ 	      playermaps[i] = SafeMalloc (length);
+-	      playermaps[i] = (byte *)( ((int)playermaps[i] + 255)&~0xff);
++	      playermaps[i] = (byte *)( ((intptr_t)playermaps[i] + 255)&~0xff);
+ 	      W_ReadLump (lump+i,playermaps[i]);
+          }
+       }
+diff -urNad rott-1.0+dfsg~/w_wad.c rott-1.0+dfsg/w_wad.c
+--- rott-1.0+dfsg~/w_wad.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/w_wad.c	2008-01-10 09:17:43.000000000 +0100
+@@ -125,8 +125,8 @@
+                 read (handle, &header, sizeof(header));
+                 if (strncmp(header.identification,"IWAD",4))
+                         Error ("Wad file %s doesn't have IWAD id\n",filename);
+-                header.numlumps = IntelLong(LONG(header.numlumps));
+-                header.infotableofs = IntelLong(LONG(header.infotableofs));
++                header.numlumps = Intel32(LONG(header.numlumps));
++                header.infotableofs = Intel32(LONG(header.infotableofs));
+                 length = header.numlumps*sizeof(filelump_t);
+                 fileinfo = alloca (length);
+                 if (!fileinfo)
+@@ -148,8 +148,8 @@
+ 
+         for (i=startlump ; i<(unsigned int)numlumps ; i++,lump_p++, fileinfo++)
+         {
+-                fileinfo->filepos = IntelLong(LONG(fileinfo->filepos));
+-                fileinfo->size = IntelLong(LONG(fileinfo->size));
++                fileinfo->filepos = Intel32(LONG(fileinfo->filepos));
++                fileinfo->size = Intel32(LONG(fileinfo->size));
+                 lump_p->handle = handle;
+                 lump_p->position = LONG(fileinfo->filepos);
+                 lump_p->size = LONG(fileinfo->size);

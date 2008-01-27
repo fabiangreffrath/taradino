@@ -1,0 +1,984 @@
+#!/bin/sh /usr/share/dpatch/dpatch-run
+## Closes: #418698.
+
+@DPATCH@
+diff -urNad rott-1.0+dfsg~/_rt_ted.h rott-1.0+dfsg/_rt_ted.h
+--- rott-1.0+dfsg~/_rt_ted.h	2008-01-10 09:17:00.000000000 +0100
++++ rott-1.0+dfsg/_rt_ted.h	2008-01-10 09:17:01.000000000 +0100
+@@ -36,6 +36,7 @@
+ {
+ 	int  lump;
+ 	int  cachelevel;
++	int  type; // To make precaching possible on big endian machines
+ } cachetype;
+ 
+ //========================================
+diff -urNad rott-1.0+dfsg~/byteordr.c rott-1.0+dfsg/byteordr.c
+--- rott-1.0+dfsg~/byteordr.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/byteordr.c	2008-01-10 09:17:01.000000000 +0100
+@@ -52,7 +52,33 @@
+     Debug("No-op endian converter on %p.\n", lmp);
+ }
+ 
+-void CvtFixme(void *lmp, int num)
++// Returns converter for the designated type
++converter_t CvtForType(int type)
+ {
+-    Debug("FIXME endian converter on %p.\n", lmp);
++  switch(type) {
++    case cache_pic_t:
++      return Cvt_pic_t;
++      break;
++    case cache_lpic_t:
++      return Cvt_lpic_t;
++      break;
++    case cache_font_t:
++      return Cvt_font_t;
++      break;
++    case cache_lbm_t:
++      return Cvt_lbm_t;
++      break;
++    case cache_patch_t:
++      return Cvt_patch_t;
++      break;
++    case cache_transpatch_t:
++      return Cvt_transpatch_t;
++      break;
++    case cache_cfont_t:
++      return Cvt_cfont_t;
++      break;
++    default:
++      return CvtNull;
++      break;
++  }
+ }
+diff -urNad rott-1.0+dfsg~/byteordr.h rott-1.0+dfsg/byteordr.h
+--- rott-1.0+dfsg~/byteordr.h	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/byteordr.h	2008-01-10 09:17:01.000000000 +0100
+@@ -35,4 +35,4 @@
+ DECLARE_CONVERTER(transpatch_t);
+ DECLARE_CONVERTER(cfont_t);
+ void CvtNull(void *lmp, int num);
+-void CvtFixme(void *lmp, int num);
++converter_t CvtForType(int type);
+diff -urNad rott-1.0+dfsg~/cin_efct.c rott-1.0+dfsg/cin_efct.c
+--- rott-1.0+dfsg~/cin_efct.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/cin_efct.c	2008-01-10 09:17:01.000000000 +0100
+@@ -329,7 +329,7 @@
+ {
+    if (flic->usefile==false)
+       {
+-      W_CacheLumpName(flic->name,PU_CACHE, CvtFixme, 1);
++      W_CacheLumpName(flic->name,PU_CACHE, CvtNull, 1);
+       }
+ }
+ 
+@@ -511,7 +511,7 @@
+ */
+ void PrecacheBack ( backevent * back )
+ {
+-   W_CacheLumpName( back->name, PU_CACHE, CvtFixme, 1);
++   W_CacheLumpName( back->name, PU_CACHE, CvtNull, 1);
+ }
+ 
+ 
+@@ -614,7 +614,7 @@
+ {
+    byte * pal;
+ 
+-   pal=W_CacheLumpName(event->name,PU_CACHE, CvtFixme, 1);
++   pal=W_CacheLumpName(event->name,PU_CACHE, CvtNull, 1);
+    XFlipPage ();
+    CinematicSetPalette (pal);
+ }
+@@ -629,7 +629,7 @@
+ 
+ void PrecachePalette (paletteevent * event)
+ {
+-   W_CacheLumpName(event->name,PU_CACHE, CvtFixme, 1);
++   W_CacheLumpName(event->name,PU_CACHE, CvtNull, 1);
+ }
+ 
+ 
+diff -urNad rott-1.0+dfsg~/rt_def.h rott-1.0+dfsg/rt_def.h
+--- rott-1.0+dfsg~/rt_def.h	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_def.h	2008-01-10 09:17:01.000000000 +0100
+@@ -443,6 +443,18 @@
+ 		  ex_battledone
+ } exit_t;
+ 
++// Types for cache lumps (for endian converters)
++enum    {
++	cache_other,
++	cache_pic_t,
++	cache_lpic_t,
++	cache_font_t,
++	cache_lbm_t,
++	cache_patch_t,
++	cache_transpatch_t,
++	cache_cfont_t
++};
++
+ ////////////////////////////////////////////////////////////////////////////
+ 
+ /////////////////      GLOBAL STRUCTURE TYPES     //////////////////////////
+diff -urNad rott-1.0+dfsg~/rt_door.c rott-1.0+dfsg/rt_door.c
+--- rott-1.0+dfsg~/rt_door.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_door.c	2008-01-10 09:17:01.000000000 +0100
+@@ -1369,8 +1369,8 @@
+    if ((lock>0) && (lock<5))
+       lastdoorobj->sidepic    = W_GetNumForName("lock1")+lock-1;
+ 
+-   PreCacheLump(lastdoorobj->sidepic,PU_CACHEWALLS);
+-   PreCacheLump(lastdoorobj->alttexture,PU_CACHEWALLS);
++   PreCacheLump(lastdoorobj->sidepic,PU_CACHEWALLS,cache_pic_t);
++   PreCacheLump(lastdoorobj->alttexture,PU_CACHEWALLS,cache_pic_t);
+ 
+ 	if (lastdoorobj->vertical==true)
+ 	{
+@@ -1395,8 +1395,9 @@
+          lastdoorobj->flags|=DF_MULTI;
+ 	}
+ 
+-   for (i=0;i<9;i++)
+-      PreCacheLump(lastdoorobj->texture+i,PU_CACHEWALLS);
++   PreCacheLump(lastdoorobj->texture,PU_CACHEWALLS,cache_pic_t);
++   for (i=1;i<9;i++) // only first texture is pic_t!
++      PreCacheLump(lastdoorobj->texture+i,PU_CACHEWALLS,cache_patch_t);
+ 	doornum++;
+ 	lastdoorobj++;
+ 	if (doornum==MAXDOORS)
+@@ -2580,20 +2581,20 @@
+ 
+       for (i=1;i<AMW_NUMFRAMES;i++)
+          {
+-         PreCacheLump(lastmaskobj->bottomtexture+i,PU_CACHEWALLS);
++         PreCacheLump(lastmaskobj->bottomtexture+i,PU_CACHEWALLS,cache_transpatch_t);
+          }
+       SD_PreCacheSound(SD_GLASSBREAKSND);
+ 		}
+    if (sidepic==true)
+       {
+-      PreCacheLump(lastmaskobj->sidepic,PU_CACHEWALLS);
++      PreCacheLump(lastmaskobj->sidepic,PU_CACHEWALLS,cache_pic_t);
+       }
+    if (lastmaskobj->bottomtexture>=0)
+-      PreCacheLump(lastmaskobj->bottomtexture,PU_CACHEWALLS);
++      PreCacheLump(lastmaskobj->bottomtexture,PU_CACHEWALLS,cache_transpatch_t);
+    if (lastmaskobj->toptexture>=0)
+-      PreCacheLump(lastmaskobj->toptexture,PU_CACHEWALLS);
++      PreCacheLump(lastmaskobj->toptexture,PU_CACHEWALLS,cache_patch_t);
+    if (lastmaskobj->midtexture>=0)
+-      PreCacheLump(lastmaskobj->midtexture,PU_CACHEWALLS);
++      PreCacheLump(lastmaskobj->midtexture,PU_CACHEWALLS,cache_patch_t);
+ 	maskednum++;
+ 	lastmaskobj++;
+ 	if (maskednum==MAXMASKED)
+@@ -3347,7 +3348,7 @@
+ 
+ 	lastpwallobj->texture = texture;
+    if (!texture&0x1000)
+-	   PreCacheLump(texture,PU_CACHEWALLS);
++	   PreCacheLump(texture,PU_CACHEWALLS,cache_pic_t);
+    lastpwallobj->areanumber = GetAreaNumber(tilex,tiley,lastpwallobj->dir);
+ 
+    MAPSPOT (tilex, tiley, 0)=(word)(lastpwallobj->areanumber+AREATILE);
+@@ -4200,13 +4201,19 @@
+ 
+   for (i=0;i<maskednum;i++)
+      {
+-     byte flags;
++     // Yet another endianness problem: the flags are stored in different byte
++     // order depending on the platform. This is bad, but I guess not many people
++     // will exchange game files anyway.
++     // Worse is that the original code here checked for the first byte of each
++     // flag, which only makes sense on little endian platforms. This can be
++     // fixed elegantly by using bit masks.
++     word flags; // used to be a byte
+ 
+      mw=maskobjlist[i];
+      size=sizeof(mw->flags);
+      memcpy(&flags,bufptr,size);
+      bufptr+=size;
+-     if (flags!=mw->flags)
++     if ((flags&0x00FF)!=(mw->flags&0x00FF)) // only check the 8 LSBs.
+         UpdateMaskedWall(i);
+      if (mw->flags&MW_SWITCHON)
+         mw->toptexture--;
+diff -urNad rott-1.0+dfsg~/rt_game.c rott-1.0+dfsg/rt_game.c
+--- rott-1.0+dfsg~/rt_game.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_game.c	2008-01-10 09:17:01.000000000 +0100
+@@ -4974,6 +4974,9 @@
+ 	DoLoadGameAction ();
+ 	SetupGameLevel();
+ 
++	// This prevents a nasty glitch when loading some saved games
++	PreCacheGroup(W_GetNumForName("BULLETHO"),W_GetNumForName("ALTBHO"),cache_transpatch_t);	
++	
+ 	// Door Tag
+ 
+ 	size=4;
+diff -urNad rott-1.0+dfsg~/rt_main.c rott-1.0+dfsg/rt_main.c
+--- rott-1.0+dfsg~/rt_main.c	2008-01-10 09:17:00.000000000 +0100
++++ rott-1.0+dfsg/rt_main.c	2008-01-10 09:17:01.000000000 +0100
+@@ -1000,8 +1000,9 @@
+                   I_Delay(30);
+                   SD_Play (SD_ACTORSQUISHSND);
+                   tempbuf=bufferofs;
+-                  bufferofs=displayofs;
++                  bufferofs=page1start; // fixed, was displayofs
+                   DrawNormalSprite(320-94,200-41,W_GetNumForName("rsac"));
++						VW_UpdateScreen(); // fixed, was missing
+                   bufferofs=tempbuf;
+                   I_Delay(30);
+ 
+@@ -1307,9 +1308,10 @@
+                MenuFadeIn();
+ 
+                WaitKeyUp();
++               IN_ClearKeysDown(); // Fixed by Lex!
+                LastScan = 0;
+                while (!LastScan)
+-                  ;
++                   IN_UpdateKeyboard(); // Fixed by Lex!
+                LastScan=0;
+                }
+ #endif
+diff -urNad rott-1.0+dfsg~/rt_scale.c rott-1.0+dfsg/rt_scale.c
+--- rott-1.0+dfsg~/rt_scale.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_scale.c	2008-01-10 09:17:01.000000000 +0100
+@@ -1030,7 +1030,7 @@
+    shadingtable=colormap+(1<<12);
+ 	centeryclipped=y;
+ 	xcent=x;
+-	shape=W_CacheLumpNum(shapenum,PU_CACHE, Cvt_transpatch_t, 1);
++	shape=W_CacheLumpNum(shapenum,PU_CACHE, Cvt_patch_t, 1); // was transpatch, fixed
+ 	p=(patch_t *)shape;
+ 	tp=(transpatch_t *)shape;
+ 
+diff -urNad rott-1.0+dfsg~/rt_sound.c rott-1.0+dfsg/rt_sound.c
+--- rott-1.0+dfsg~/rt_sound.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_sound.c	2008-01-10 09:17:01.000000000 +0100
+@@ -127,7 +127,7 @@
+    if (sounds[sndnum].count>0)
+       return;
+    else
+-      W_CacheLumpNum(SoundNumber(sndnum),PU_CACHE, CvtFixme, 1);
++      W_CacheLumpNum(SoundNumber(sndnum),PU_CACHE, CvtNull, 1);
+ }
+ 
+ #if 0
+@@ -862,7 +862,7 @@
+    if ( SD_SoundOkay ( num ) == false )
+       return;
+ 
+-   PreCacheLump(SoundNumber(num),PU_CACHESOUNDS+sounds[num].priority);
++   PreCacheLump(SoundNumber(num),PU_CACHESOUNDS+sounds[num].priority,cache_other);
+ }
+ 
+ //***************************************************************************
+@@ -1171,8 +1171,8 @@
+ 
+    lump = W_GetNumForName(rottsongs[num].lumpname);
+    size = W_LumpLength(lump);
+-   
+-   currentsong=W_CacheLumpNum(lump,PU_STATIC, CvtFixme, 1);
++
++   currentsong=W_CacheLumpNum(lump,PU_STATIC, CvtNull, 1);
+ 
+ #ifdef PLATFORM_DOS
+    if (rottsongs[num].loopflag == loop_yes)
+@@ -1203,7 +1203,7 @@
+    MUSIC_StopSong ();
+    if (currentsong)
+       {
+-      W_CacheLumpName(rottsongs[lastsongnumber].lumpname,PU_CACHE, CvtFixme, 1);
++      W_CacheLumpName(rottsongs[lastsongnumber].lumpname,PU_CACHE, CvtNull, 1);
+       currentsong=0;
+       }
+ }
+diff -urNad rott-1.0+dfsg~/rt_stat.c rott-1.0+dfsg/rt_stat.c
+--- rott-1.0+dfsg~/rt_stat.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_stat.c	2008-01-10 09:17:01.000000000 +0100
+@@ -627,12 +627,12 @@
+ 
+    if (DoPanicMapping()==true)
+       {
+-      PreCacheLump(aw->basetexture,PU_CACHEWALLS);
++      PreCacheLump(aw->basetexture,PU_CACHEWALLS,cache_pic_t);
+       }
+    else
+       {
+       for (i=aw->basetexture;i<aw->basetexture+animwallsinfo[which].numanims;i++)
+-         PreCacheLump(i,PU_CACHEWALLS);
++         PreCacheLump(i,PU_CACHEWALLS,cache_pic_t);
+       }
+ }
+ 
+@@ -846,29 +846,33 @@
+    int z,start,stop;
+    int female=0,black=0;
+ 
+-   PreCacheLump(temp->shapenum+shapestart,PU_CACHESPRITES);
++   if (temp->itemnumber != stat_bullethole &&
++       ((temp->itemnumber < stat_touch1) || (temp->itemnumber > stat_touch4)))
++      PreCacheLump(temp->shapenum+shapestart,PU_CACHESPRITES,cache_patch_t);
++   else
++      PreCacheLump(temp->shapenum+shapestart,PU_CACHESPRITES,cache_transpatch_t);
+    for (z=0;z<temp->numanims;z++)
+-      PreCacheLump(temp->shapenum+shapestart+z,PU_CACHESPRITES);
++      PreCacheLump(temp->shapenum+shapestart+z,PU_CACHESPRITES,cache_patch_t);
+ 
+    if (temp->flags & FL_ROTATING)
+       {
+       for (z=1;z<8;z++)
+-         PreCacheLump(temp->shapenum+shapestart+z,PU_CACHESPRITES);
++         PreCacheLump(temp->shapenum+shapestart+z,PU_CACHESPRITES,cache_patch_t);
+       }
+ 
+    if (temp->flags & FL_WOODEN)
+       {
+       start = W_GetNumForName("WFRAG1");
+       stop = W_GetNumForName("WFRAG14");
+-      PreCacheGroup(start,stop);
++      PreCacheGroup(start,stop,cache_patch_t);
+       }
+ 
+    if (temp->flags & FL_METALLIC)
+       {
+-      PreCacheLump(W_GetNumForName("MSHARDS"),PU_CACHESPRITES);
++      PreCacheLump(W_GetNumForName("MSHARDS"),PU_CACHESPRITES,cache_patch_t);
+       start = W_GetNumForName("ROBODIE1");
+       stop = W_GetNumForName("ROBODEAD");
+-      PreCacheGroup(start,stop);
++      PreCacheGroup(start,stop,cache_patch_t);
+       }
+ 
+    female = ((locplayerstate->player == 1) || (locplayerstate->player == 3));
+@@ -890,7 +894,7 @@
+       stop = W_GetNumForName("MPIST13");
+ 		}
+ 
+-   PreCacheGroup(start,stop);
++   PreCacheGroup(start,stop,cache_patch_t);
+ 
+    switch (temp->itemnumber)
+       {
+@@ -899,18 +903,18 @@
+       case stat_pedsilverkey:
+       case stat_pedironkey:
+       case stat_pedcrystalkey:
+-         PreCacheLump(W_GetNumForName("PEDESTA"),PU_CACHESPRITES);
++         PreCacheLump(W_GetNumForName("PEDESTA"),PU_CACHESPRITES,cache_patch_t);
+          break;
+ 
+       case stat_bat:
+          start = W_GetNumForName("EXBAT1");
+          stop = W_GetNumForName("EXBAT7");
+-         PreCacheGroup(start,stop);
++         PreCacheGroup(start,stop,cache_patch_t);
+          break;
+       case stat_knifestatue:
+          start = W_GetNumForName("KNIFE1");
+          stop = W_GetNumForName("KNIFE10");
+-         PreCacheGroup(start,stop);
++         PreCacheGroup(start,stop,cache_patch_t);
+          break;
+       case stat_twopistol:
+          if (female)
+@@ -928,64 +932,66 @@
+             start = W_GetNumForName("RMPIST1");
+             stop = W_GetNumForName("LMPIST3");
+             }
+-         PreCacheGroup(start,stop);
++         PreCacheGroup(start,stop,cache_patch_t);
+          break;
+       case stat_mp40:
+          start = W_GetNumForName("MP401");
+          stop = W_GetNumForName("MP403");
+-         PreCacheGroup(start,stop);
++         PreCacheGroup(start,stop,cache_patch_t);
+          break;
+       case stat_bazooka:
+          start = W_GetNumForName("BAZOOKA1");
+          stop = W_GetNumForName("BAZOOKA4");
+-         PreCacheGroup(start,stop);
++         PreCacheGroup(start,stop,cache_patch_t);
+          break;
+       case stat_firebomb:
+          start = W_GetNumForName("FBOMB1");
+          stop = W_GetNumForName("FBOMB4");
+-         PreCacheGroup(start,stop);
++         PreCacheGroup(start,stop,cache_patch_t);
+          break;
+       case stat_heatseeker:
+          start = W_GetNumForName("HSEEK1");
+          stop = W_GetNumForName("HSEEK4");
+-         PreCacheGroup(start,stop);
++         PreCacheGroup(start,stop,cache_patch_t);
+          break;
+       case stat_drunkmissile:
+          start = W_GetNumForName("DRUNK1");
+          stop = W_GetNumForName("DRUNK4");
+-         PreCacheGroup(start,stop);
++         PreCacheGroup(start,stop,cache_patch_t);
+          break;
+       case stat_firewall:
+          start = W_GetNumForName("FIREW1");
+          stop = W_GetNumForName("FIREW3");
+-         PreCacheGroup(start,stop);
++         PreCacheGroup(start,stop,cache_patch_t);
+          break;
+       case stat_splitmissile:
+          start = W_GetNumForName("SPLIT1");
+          stop = W_GetNumForName("SPLIT4");
+-         PreCacheGroup(start,stop);
++         PreCacheGroup(start,stop,cache_patch_t);
+          break;
+       case stat_kes:
+          start = W_GetNumForName("KES1");
+          stop = W_GetNumForName("KES6");
+-         PreCacheGroup(start,stop);
++         PreCacheGroup(start,stop,cache_patch_t);
+          break;
+       case stat_godmode:
+          start = W_GetNumForName("GODHAND1");
+          stop = W_GetNumForName("GODHAND8");
+-         PreCacheGroup(start,stop);
++         PreCacheGroup(start,stop,cache_patch_t);
+ 
+          PreCacheGroup(W_GetNumForName("VAPO1"),
+-                       W_GetNumForName("LITSOUL"));
++                       W_GetNumForName("LITSOUL"),
++                       cache_patch_t);
+ 
+          PreCacheGroup(W_GetNumForName("GODFIRE1"),
+-                       W_GetNumForName("GODFIRE4"));
++                       W_GetNumForName("GODFIRE4"),
++                       cache_patch_t);
+ 
+          break;
+       case stat_dogmode:
+          start = W_GetNumForName("DOGNOSE1");
+          stop = W_GetNumForName("DOGPAW4");
+-         PreCacheGroup(start,stop);
++         PreCacheGroup(start,stop,cache_patch_t);
+          break;
+ 
+       default:
+diff -urNad rott-1.0+dfsg~/rt_ted.c rott-1.0+dfsg/rt_ted.c
+--- rott-1.0+dfsg~/rt_ted.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_ted.c	2008-01-10 09:17:01.000000000 +0100
+@@ -258,7 +258,7 @@
+ =
+ ======================
+ */
+-void PreCacheLump( int lump, int level )
++void PreCacheLump( int lump, int level, int type ) // added type
+ {
+    int i;
+ 
+@@ -275,7 +275,8 @@
+       if (cachelist[i].lump==lump)
+          return;
+    cachelist[cacheindex].lump=lump;
+-   cachelist[cacheindex++].cachelevel=level;
++   cachelist[cacheindex].cachelevel=level;
++   cachelist[cacheindex++].type=type;
+    if (cacheindex==MAXPRECACHE)
+       Error("MaxPreCache reached\n");
+ }
+@@ -290,7 +291,7 @@
+ =
+ ======================
+ */
+-void PreCacheGroup( int start, int end )
++void PreCacheGroup( int start, int end, int type ) // added type
+ {
+ 	int i;
+    int j;
+@@ -319,7 +320,8 @@
+       if (found==0)
+          {
+          cachelist[cacheindex].lump=j;
+-         cachelist[cacheindex++].cachelevel=PU_CACHEACTORS;
++         cachelist[cacheindex].cachelevel=PU_CACHEACTORS;
++         cachelist[cacheindex++].type=type;
+ 
+          if (cacheindex==MAXPRECACHE)
+             Error("MaxPreCache reached\n");
+@@ -349,7 +351,7 @@
+ 		 {pstate = &PLAYERSTATE[i];
+         start=W_GetNumForName("CASSHO11")+(pstate->player*REMOTEOFFSET);
+         end  =W_GetNumForName("CASWDEAD")+(pstate->player*REMOTEOFFSET);
+-		  PreCacheGroup(start,end);
++		  PreCacheGroup(start,end,cache_patch_t);
+ 		 }
+ 	 }
+ }
+@@ -465,10 +467,10 @@
+ 
+ 			start=W_GetNumForName("OBBOLO1");
+          end  =W_GetNumForName("OBBOLO4");
+-			PreCacheGroup(start,end);
++			PreCacheGroup(start,end,cache_patch_t);
+ 			start=W_GetNumForName("NET1");
+ 			end  =W_GetNumForName("NET4");
+-			PreCacheGroup(start,end);
++			PreCacheGroup(start,end,cache_patch_t);
+ 
+ 			start = SD_OVERP1SEESND;
+ 			end = SD_OVERPDIESND;
+@@ -543,7 +545,7 @@
+ 
+ 			start=W_GetNumForName("TEGREN1");
+ 			end  =W_GetNumForName("TGRENF6");
+-			PreCacheGroup(start,end);
++			PreCacheGroup(start,end,cache_patch_t);
+ 			start=W_GetNumForName("TRISHOO1");
+ 			end  =W_GetNumForName("TRIWDEAD");
+ 			//end  =W_GetNumForName("TRIUSE28");
+@@ -569,7 +571,7 @@
+ 
+          start = W_GetNumForName("MONFIRE1");
+          end = W_GetNumForName("MONFIRE4");
+-         PreCacheGroup(start,end);
++         PreCacheGroup(start,end,cache_patch_t);
+ 
+ 
+          if (IS_ALTERNATE_ACTOR(new))
+@@ -619,7 +621,7 @@
+ 
+ 			start=W_GetNumForName("MINE1");
+ 			end  =W_GetNumForName("MINE4");
+-			PreCacheGroup(start,end);
++			PreCacheGroup(start,end,cache_patch_t);
+ 			start=W_GetNumForName("HSIT1");
+ 			end  =W_GetNumForName("HDOPE8");
+ 			break;
+@@ -632,7 +634,7 @@
+ 
+ 			start=W_GetNumForName("LIGNING1");
+ 			end  =W_GetNumForName("FSPARK4");
+-			PreCacheGroup(start,end);
++			PreCacheGroup(start,end,cache_patch_t);
+ 			start=W_GetNumForName("TOMS1");
+ 			end  =W_GetNumForName("TOHRH8");
+ 			break;
+@@ -667,7 +669,7 @@
+ 
+ 			start=W_GetNumForName("GUNEMP1");
+ 			end  =W_GetNumForName("GUNEMPF8");
+-			PreCacheGroup(start,end);
++			PreCacheGroup(start,end,cache_patch_t);
+ 			start=W_GetNumForName("GRISE11");
+ 			end  =W_GetNumForName("GDEAD2");
+ 			break;
+@@ -675,7 +677,7 @@
+ 		case wallopobj:
+ 			start=W_GetNumForName("BSTAR1");
+ 			end  =W_GetNumForName("BSTAR4");
+-			PreCacheGroup(start,end);
++			PreCacheGroup(start,end,cache_patch_t);
+ 			start=W_GetNumForName("BCRAFT1");
+ 			end  =W_GetNumForName("BCRAFT16");
+ 			break;
+@@ -824,7 +826,7 @@
+ 			break;
+ 		}
+    if ((start>=0) && (end>=0))
+-      PreCacheGroup(start,end);
++      PreCacheGroup(start,end,cache_patch_t);
+ }
+ 
+ 
+@@ -862,7 +864,7 @@
+    // cache in bullet hole graphics
+    start=W_GetNumForName("BULLETHO");
+    end=W_GetNumForName("ALTBHO");
+-	PreCacheGroup(start,end);
++	PreCacheGroup(start,end,cache_transpatch_t);
+ 
+ 
+    // cache in explosions
+@@ -871,24 +873,24 @@
+       {
+       start=W_GetNumForName("EXPLOS1");
+       end  =W_GetNumForName("EXPLOS20");
+-      PreCacheGroup(start,end);
++      PreCacheGroup(start,end,cache_patch_t);
+       }
+    else
+       {
+       start=W_GetNumForName("EXPLOS1");
+       end  =W_GetNumForName("GREXP25");
+-      PreCacheGroup(start,end);
++      PreCacheGroup(start,end,cache_patch_t);
+       }
+ 
+ 	// cache in misc player sprites
+ 	start=W_GetNumForName("BLOODS1");
+ 	end  =W_GetNumForName("PLATFRM5");
+-	PreCacheGroup(start,end);
++	PreCacheGroup(start,end,cache_patch_t);
+ 
+    // cache in missile smoke
+ 	start=W_GetNumForName("MISSMO11");
+ 	end  =W_GetNumForName("MISSMO14");
+-   PreCacheGroup(start,end);
++   PreCacheGroup(start,end,cache_patch_t);
+ 
+ #if (DEVELOPMENT == 1)
+ 	// cache in all weapon sounds
+@@ -898,26 +900,28 @@
+ #if (SHAREWARE == 0)
+    start=W_GetNumForName("KNIFE1");
+    end  =W_GetNumForName("DOGPAW4");
+-   PreCacheGroup(start,end);
++   PreCacheGroup(start,end,cache_patch_t);
+ 	// cache in kinetic sphere
+    start=W_GetNumForName("KSPHERE1");
+ 	end  =W_GetNumForName("KSPHERE4");
+-   PreCacheGroup(start,end);
++   PreCacheGroup(start,end,cache_patch_t);
+ 
+ #else
+    start=W_GetNumForName("MPIST11");
+    end  =W_GetNumForName("GODHAND8");
+-   PreCacheGroup(start,end);
++   PreCacheGroup(start,end,cache_patch_t);
+ #endif
+ 
+ 
+    // cache in god mode stuff
+ 
+ 	PreCacheGroup(W_GetNumForName("VAPO1"),
+-	              W_GetNumForName("LITSOUL"));
++	              W_GetNumForName("LITSOUL"),
++	              cache_patch_t);
+ 
+ 	PreCacheGroup(W_GetNumForName("GODFIRE1"),
+-					  W_GetNumForName("GODFIRE4"));
++					  W_GetNumForName("GODFIRE4"),
++					  cache_patch_t);
+ 
+ 
+ #endif
+@@ -926,17 +930,17 @@
+    // cache in rubble
+    start=W_GetNumForName("RUBBLE1");
+ 	end  =W_GetNumForName("RUBBLE10");
+-   PreCacheGroup(start,end);
++   PreCacheGroup(start,end,cache_patch_t);
+ 
+    // cache in guts
+    start=W_GetNumForName("GUTS1");
+    end  =W_GetNumForName("GUTS12");
+-   PreCacheGroup(start,end);
++   PreCacheGroup(start,end,cache_patch_t);
+ 
+    // cache in player missile
+    start=W_GetNumForName("BJMISS1");
+ 	end  =W_GetNumForName("BJMISS16");
+-   PreCacheGroup(start,end);
++   PreCacheGroup(start,end,cache_patch_t);
+ 
+    if (gamestate.violence >= vl_high)
+       {                                  // cache in all gibs
+@@ -950,7 +954,7 @@
+          start = W_GetNumForName("PART1");
+          end = W_GetNumForName("GEYE3");
+          }
+-      PreCacheGroup(start,end);
++      PreCacheGroup(start,end,cache_patch_t);
+       }
+ }
+ 
+@@ -1141,13 +1145,6 @@
+    int ticdelay;
+    unsigned tempbuf;
+ 
+-#if defined(PLATFORM_MACOSX)
+-#warning "Precaching is disabled. Fix."
+-// Precaching confuses the byteswapping code, since we have
+-// no simple way of knowing the type of each resource.
+-    return;
+-#endif
+-
+    if (CachingStarted==false)
+       {
+       if (loadedgame==false)
+@@ -1168,11 +1165,11 @@
+       total=0;
+ 
+       tempbuf=bufferofs;
+-      bufferofs=displayofs;
++      bufferofs=page1start; // fixed, was displayofs
+       ticdelay=CACHETICDELAY;
+       for (i=1;i<cacheindex;i++)
+ 			{
+-         dummy=W_CacheLumpNum(cachelist[i].lump,cachelist[i].cachelevel, CvtFixme, 1);
++         dummy=W_CacheLumpNum(cachelist[i].lump,cachelist[i].cachelevel, CvtForType(cachelist[i].type), 1);
+          total+=W_LumpLength(cachelist[i].lump);
+          newheap=Z_UsedHeap();
+ 			currentmem=(newheap*MAXLEDS)/maxheapsize;
+@@ -1182,6 +1179,7 @@
+                               PRECACHEBARY+PRECACHELED1Y,
+                               W_GetNumForName ("led1"));
+             lastmem++;
++				VW_UpdateScreen (); // was missing, fixed
+             }
+          currentcache=(i*MAXLEDS)/(cacheindex+1);
+          while (lastcache<=currentcache)
+@@ -1201,6 +1199,7 @@
+                   }
+                ticdelay=CACHETICDELAY;
+                }
++				VW_UpdateScreen (); // was missing, fixed
+             }
+          }
+       bufferofs=tempbuf;
+@@ -1255,7 +1254,7 @@
+       {
+       for (i=1;i<cacheindex;i++)
+          {
+-			dummy=W_CacheLumpNum(cachelist[i].lump,cachelist[i].cachelevel, CvtNull, 1);
++			dummy=W_CacheLumpNum(cachelist[i].lump,cachelist[i].cachelevel, CvtForType(cachelist[i].type), 1);
+          DoLoadGameAction ();
+          }
+       ShutdownPreCache ();
+@@ -1886,9 +1885,9 @@
+ 
+ #define InitWall(lump,index,newx,newy)      \
+    {                                        \
+-   PreCacheLump(lump,PU_CACHEWALLS);        \
+-   if (W_LumpLength(lump) == 0)             \
+-      Error("%s being used in shareware at %ld %ld",   \
++   PreCacheLump(lump,PU_CACHEWALLS,cache_pic_t);  \
++   if (W_LumpLength(lump) == 0)                   \
++      Error("%s being used in shareware at %ld %ld",  \
+       W_GetNameForNum(lump),newx,newy);               \
+    actorat[newx][newy]= &walls[index];      \
+    tempwall = (wall_t*)actorat[newx][newy]; \
+@@ -1963,10 +1962,10 @@
+          if ((tile > 75) && (tile <= 79))
+             {
+             lump = tilemap[i][j] = GetLumpForTile(tile);
+-            PreCacheLump(lump,PU_CACHEWALLS);
+-            PreCacheLump(elevatorstart+5,PU_CACHEWALLS);
+-            PreCacheLump(elevatorstart+6,PU_CACHEWALLS);
+-            PreCacheLump(elevatorstart+7,PU_CACHEWALLS);
++            PreCacheLump(lump,PU_CACHEWALLS,cache_pic_t);
++            PreCacheLump(elevatorstart+5,PU_CACHEWALLS,cache_pic_t);
++            PreCacheLump(elevatorstart+6,PU_CACHEWALLS,cache_pic_t);
++            PreCacheLump(elevatorstart+7,PU_CACHEWALLS,cache_pic_t);
+             tilemap[i][j]|=0x2000;
+             if (MAPSPOT(i,j,2)==0)
+                MAPSPOT(i,j,2)=21;
+@@ -6564,7 +6563,8 @@
+ 
+ 
+ 					PreCacheGroup(W_GetNumForName("EXBAT1"),
+-									  W_GetNumForName("EXBAT7"));
++									  W_GetNumForName("EXBAT7"),
++									  cache_patch_t);
+ 
+ 
+ 
+@@ -6574,9 +6574,11 @@
+ 					break;
+ 				case 47:
+ 					PreCacheGroup(W_GetNumForName("KNIFE1"),
+-									  W_GetNumForName("KNIFE10"));
++									  W_GetNumForName("KNIFE10"),
++									  cache_patch_t);
+ 					PreCacheGroup(W_GetNumForName("ESTATUE1"),
+-									  W_GetNumForName("ESTATUE8"));
++									  W_GetNumForName("ESTATUE8"),
++									  cache_patch_t);
+ 
+ 						SpawnStatic(i,j,tile-23,spawnz);
+ 					break;
+@@ -6586,15 +6588,18 @@
+ 
+                if ((locplayerstate->player == 1) || (locplayerstate->player == 3))
+ 					  PreCacheGroup(W_GetNumForName("RFPIST1"),
+-										 W_GetNumForName("LFPIST3"));
++										 W_GetNumForName("LFPIST3"),
++										 cache_patch_t);
+ 
+                else if (locplayerstate->player == 2)
+ 					  PreCacheGroup(W_GetNumForName("RBMPIST1"),
+-										 W_GetNumForName("LBMPIST3"));
++										 W_GetNumForName("LBMPIST3"),
++										 cache_patch_t);
+ 
+ 					else
+ 					  PreCacheGroup(W_GetNumForName("RMPIST1"),
+-										 W_GetNumForName("LMPIST3"));
++										 W_GetNumForName("LMPIST3"),
++										 cache_patch_t);
+ 
+                SpawnStatic(i,j,tile-23,spawnz);
+ 
+@@ -6603,7 +6608,8 @@
+ 
+ 					SD_PreCacheSound(SD_ATKMP40SND);
+ 					PreCacheGroup(W_GetNumForName("MP401"),
+-									  W_GetNumForName("MP403"));
++									  W_GetNumForName("MP403"),
++									  cache_patch_t);
+ 						SpawnStatic(i,j,tile-23,spawnz);
+ 					break;
+ 
+@@ -6612,7 +6618,8 @@
+ 					SD_PreCacheSound(SD_MISSILEFLYSND);
+ 					SD_PreCacheSound(SD_BAZOOKAFIRESND);
+ 					PreCacheGroup(W_GetNumForName("BAZOOKA1"),
+-									  W_GetNumForName("BAZOOKA4"));
++									  W_GetNumForName("BAZOOKA4"),
++									  cache_patch_t);
+ 						SpawnStatic(i,j,tile-23,spawnz);
+ 					if (loadedgame == false)
+ 						gamestate.missiletotal ++;
+@@ -6624,7 +6631,8 @@
+ 					SD_PreCacheSound(SD_MISSILEFLYSND);
+ 					SD_PreCacheSound(SD_FIREBOMBFIRESND);
+ 					PreCacheGroup(W_GetNumForName("FBOMB1"),
+-									  W_GetNumForName("FBOMB4"));
++									  W_GetNumForName("FBOMB4"),
++									  cache_patch_t);
+ 						SpawnStatic(i,j,tile-23,spawnz);
+ 					if (loadedgame == false)
+ 						gamestate.missiletotal ++;
+@@ -6634,7 +6642,8 @@
+ 					SD_PreCacheSound(SD_MISSILEFLYSND);
+ 					SD_PreCacheSound(SD_HEATSEEKFIRESND);
+ 					PreCacheGroup(W_GetNumForName("HSEEK1"),
+-									  W_GetNumForName("HSEEK4"));
++									  W_GetNumForName("HSEEK4"),
++									  cache_patch_t);
+ 						SpawnStatic(i,j,tile-23,spawnz);
+ 					if (loadedgame == false)
+ 						gamestate.missiletotal ++;
+@@ -6644,7 +6653,8 @@
+ 					SD_PreCacheSound(SD_MISSILEFLYSND);
+ 					SD_PreCacheSound(SD_DRUNKFIRESND);
+ 					PreCacheGroup(W_GetNumForName("DRUNK1"),
+-									  W_GetNumForName("DRUNK4"));
++									  W_GetNumForName("DRUNK4"),
++									  cache_patch_t);
+ 						SpawnStatic(i,j,tile-23,spawnz);
+ 					if (loadedgame == false)
+ 						gamestate.missiletotal ++;
+@@ -6655,11 +6665,14 @@
+ 					SD_PreCacheSound(SD_FLAMEWALLFIRESND);
+ 					SD_PreCacheSound(SD_FLAMEWALLSND);
+ 					PreCacheGroup(W_GetNumForName("FIREW1"),
+-									  W_GetNumForName("FIREW3"));
++									  W_GetNumForName("FIREW3"),
++									  cache_patch_t);
+ 					PreCacheGroup(W_GetNumForName("FWALL1"),
+-									  W_GetNumForName("FWALL15"));
++									  W_GetNumForName("FWALL15"),
++									  cache_patch_t);
+ 					PreCacheGroup(W_GetNumForName("SKEL1"),
+-									  W_GetNumForName("SKEL48"));
++									  W_GetNumForName("SKEL48"),
++									  cache_patch_t);
+ 						SpawnStatic(i,j,tile-23,spawnz);
+ 					if (loadedgame == false)
+ 						gamestate.missiletotal ++;
+@@ -6673,7 +6686,8 @@
+ 					SD_PreCacheSound(SD_SPLITFIRESND);
+ 					SD_PreCacheSound(SD_SPLITSND);
+ 					PreCacheGroup(W_GetNumForName("SPLIT1"),
+-									  W_GetNumForName("SPLIT4"));
++									  W_GetNumForName("SPLIT4"),
++									  cache_patch_t);
+ 						SpawnStatic(i,j,tile-23,spawnz);
+ 					if (loadedgame == false)
+ 						gamestate.missiletotal ++;
+@@ -6691,9 +6705,11 @@
+ 					SD_PreCacheSound(SD_GRAVBUILDSND);
+ 
+ 					PreCacheGroup(W_GetNumForName("KES1"),
+-									  W_GetNumForName("KES6"));
++									  W_GetNumForName("KES6"),
++									  cache_patch_t);
+ 					PreCacheGroup(W_GetNumForName("KSPHERE1"),
+-									  W_GetNumForName("KSPHERE4"));
++									  W_GetNumForName("KSPHERE4"),
++									  cache_patch_t);
+ 						SpawnStatic(i,j,tile-23,spawnz);
+ 					if (loadedgame == false)
+ 						gamestate.missiletotal ++;
+@@ -6793,13 +6809,16 @@
+ 
+ 
+ 					PreCacheGroup(W_GetNumForName("GODHAND1"),
+-									  W_GetNumForName("GODHAND8"));
++									  W_GetNumForName("GODHAND8"),
++									  cache_patch_t);
+ 
+ 					PreCacheGroup(W_GetNumForName("VAPO1"),
+-									  W_GetNumForName("LITSOUL"));
++									  W_GetNumForName("LITSOUL"),
++									  cache_patch_t);
+ 
+ 					PreCacheGroup(W_GetNumForName("GODFIRE1"),
+-									  W_GetNumForName("GODFIRE4"));
++									  W_GetNumForName("GODFIRE4"),
++									  cache_patch_t);
+ 
+ 						SpawnStatic(i,j,stat_godmode,spawnz);
+ 					if (loadedgame == false)
+@@ -6821,7 +6840,8 @@
+ 
+ 
+ 					PreCacheGroup(W_GetNumForName("DOGNOSE1"),
+-									  W_GetNumForName("DOGPAW4"));
++									  W_GetNumForName("DOGPAW4"),
++									  cache_patch_t);
+ 						SpawnStatic(i,j,stat_dogmode,spawnz);
+ 					if (loadedgame == false)
+ 						gamestate.supertotal ++;
+diff -urNad rott-1.0+dfsg~/rt_ted.h rott-1.0+dfsg/rt_ted.h
+--- rott-1.0+dfsg~/rt_ted.h	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_ted.h	2008-01-10 09:17:01.000000000 +0100
+@@ -138,12 +138,12 @@
+ extern char LevelName[80];
+ extern boolean ISRTL;
+ 
+-void PreCacheGroup(int,int);
++void PreCacheGroup(int,int,int); // added type
+ void AssignTeams(void);
+ void LoadTedMap( const char *extension, int mapnum );
+ void SetupGameLevel(void);
+ void ScanInfoPlane(void);
+-void PreCacheLump( int lump, int level );
++void PreCacheLump( int lump, int level, int type ); // added type
+ void SetupGameLevelAgain (void);
+ void ScanInfoPlaneAgain (void);
+ void PreCacheActor( int actor, int which );
+diff -urNad rott-1.0+dfsg~/rt_view.c rott-1.0+dfsg/rt_view.c
+--- rott-1.0+dfsg~/rt_view.c	2008-01-09 13:52:31.000000000 +0100
++++ rott-1.0+dfsg/rt_view.c	2008-01-10 09:17:01.000000000 +0100
+@@ -238,7 +238,7 @@
+ 
+ //Hey, isn't this stuff already loaded in?
+ //Why don't we make this a lump?
+-   table=W_CacheLumpName("tables",PU_STATIC, CvtFixme, 1);
++   table=W_CacheLumpName("tables",PU_STATIC, CvtNull, 1);
+    ptr=table;
+ 
+ //
+@@ -261,7 +261,7 @@
+       pixelangle[centerx+i] =(short) -intang;
+       frac+=(length*65536/centerx);
+       }
+-   table=W_CacheLumpName("tables",PU_CACHE, CvtFixme, 1);
++   table=W_CacheLumpName("tables",PU_CACHE, CvtNull, 1);
+    SafeFree(pangle);
+ }
+ 

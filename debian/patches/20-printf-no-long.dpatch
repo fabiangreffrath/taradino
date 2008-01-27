@@ -1,0 +1,1408 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 20-printf-no-long.dpatch by Michael Karcher
+## <debian@mkarcher.dialup.fu-berlin.de>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Change tons of printf format strings to not use the "l" modifier
+## DP: when printing "int" or even "byte" variables.
+## DP: Also add gcc's format attribute to printf-like functions and
+## DP: make Error() a noreturn function.
+
+@DPATCH@
+diff -urNad rott-1.0+dfsg~/fx_man.c rott-1.0+dfsg/fx_man.c
+--- rott-1.0+dfsg~/fx_man.c	2008-01-10 09:19:48.000000000 +0100
++++ rott-1.0+dfsg/fx_man.c	2008-01-10 09:19:49.000000000 +0100
+@@ -141,6 +141,7 @@
+ //  go to the file that is specified in that variable. Otherwise, they
+ //  are ignored for the expense of the function call. If DUKESND_DEBUG is
+ //  set to "-" (without the quotes), then the output goes to stdout.
++static void snddebug(const char *fmt, ...) __attribute__((format(printf,1,2)));
+ static void snddebug(const char *fmt, ...)
+ {
+     va_list ap;
+@@ -159,6 +160,7 @@
+ 
+ // FIXME: Consolidate this code.
+ // Same as snddebug(), but a different tag is put on each line.
++static void musdebug(const char *fmt, ...) __attribute__((format(printf,1,2)));
+ static void musdebug(const char *fmt, ...)
+ {
+     va_list ap;
+diff -urNad rott-1.0+dfsg~/myprint.h rott-1.0+dfsg/myprint.h
+--- rott-1.0+dfsg~/myprint.h	2008-01-09 13:52:29.000000000 +0100
++++ rott-1.0+dfsg/myprint.h	2008-01-10 09:19:49.000000000 +0100
+@@ -38,6 +38,6 @@
+ int  printstring( char *string );
+ int  printnum( int number );
+ int  printunsigned( unsigned long number, int radix );
+-int  myprintf( char *fmt, ... );
++int  myprintf( char *fmt, ... ) __attribute__((format(printf,1,2)));
+ 
+ #endif
+diff -urNad rott-1.0+dfsg~/rt_com.c rott-1.0+dfsg/rt_com.c
+--- rott-1.0+dfsg~/rt_com.c	2008-01-09 13:52:29.000000000 +0100
++++ rott-1.0+dfsg/rt_com.c	2008-01-10 09:19:49.000000000 +0100
+@@ -247,7 +247,7 @@
+       if (crc!=sentcrc)
+          {
+          badpacket=1;
+-         SoftError("BADPKT at %ld\n",GetTicCount());
++         SoftError("BADPKT at %d\n",GetTicCount());
+          }
+       if (networkgame==false)
+          {
+diff -urNad rott-1.0+dfsg~/rt_door.c rott-1.0+dfsg/rt_door.c
+--- rott-1.0+dfsg~/rt_door.c	2008-01-10 09:19:48.000000000 +0100
++++ rott-1.0+dfsg/rt_door.c	2008-01-10 09:19:49.000000000 +0100
+@@ -476,7 +476,7 @@
+   {memcpy(&dummy,buffer,sizeof(saved_touch_type));
+ 	temp = (touchplatetype*)Z_LevelMalloc(sizeof(touchplatetype),PU_LEVELSTRUCT,NULL);
+ 	if (!temp)
+-		Error("LoadTouchplates: Failed on allocation of touchplates %ld of %ld",i,savedactions);
++		Error("LoadTouchplates: Failed on allocation of touchplates %d of %d",i,savedactions);
+ 	memset(temp,0,sizeof(*temp));
+ 
+ 	temp->tictime = dummy.tictime;
+@@ -1189,7 +1189,7 @@
+ 
+    doorobjlist[doornum]=(doorobj_t*)Z_LevelMalloc(sizeof(doorobj_t),PU_LEVELSTRUCT,NULL);
+    if (!doorobjlist[doornum])
+-      Error("SpawnDoor: Failed on allocation of door %ld ",doornum);
++      Error("SpawnDoor: Failed on allocation of door %d ",doornum);
+    memset(doorobjlist[doornum],0,sizeof(doorobj_t));
+    lastdoorobj=doorobjlist[doornum];
+ 
+@@ -1530,7 +1530,7 @@
+          else if (lt)
+ 				MAPSPOT(tilex,tiley,0) = MAPSPOT(tilex-1,tiley,0);
+ 			else
+-				Error("FixDoors: Couldn't fix up area at x=%ld y=%ld\n",tilex,tiley);
++				Error("FixDoors: Couldn't fix up area at x=%d y=%d\n",tilex,tiley);
+ 			}
+ 		else
+ 			{
+@@ -1539,7 +1539,7 @@
+          else if (up)
+ 				MAPSPOT(tilex,tiley,0) = MAPSPOT(tilex,tiley-1,0);
+ 			else
+-				Error("FixDoors: Couldn't fix up area at x=%ld y=%ld\n",tilex,tiley);
++				Error("FixDoors: Couldn't fix up area at x=%d y=%d\n",tilex,tiley);
+ 			}
+       if (IsDoorLinked(i))
+          UtilizeDoor(i,LockLinkedDoor);
+@@ -2648,7 +2648,7 @@
+ 			else if (dn)
+ 				MAPSPOT(tilex,tiley,0) = MAPSPOT(tilex,tiley+1,0);
+ 			else
+-				Error("FixMaskedWalls: Couldn't fix up area at x=%ld y=%ld\n",tilex,tiley);
++				Error("FixMaskedWalls: Couldn't fix up area at x=%d y=%d\n",tilex,tiley);
+ 			}
+ 		else
+ 			{
+@@ -2661,7 +2661,7 @@
+ 			else if (lt)
+ 				MAPSPOT(tilex,tiley,0) = MAPSPOT(tilex-1,tiley,0);
+ 			else
+-				Error("FixMaskedWalls: Couldn't fix up area at x=%ld y=%ld\n",tilex,tiley);
++				Error("FixMaskedWalls: Couldn't fix up area at x=%d y=%d\n",tilex,tiley);
+ 			}
+ 		maskobjlist[i]->areanumber = MAPSPOT(tilex,tiley,0)-AREATILE;
+ 		if ((maskobjlist[i]->areanumber <0) || (maskobjlist[i]->areanumber > NUMAREAS))
+@@ -3305,7 +3305,7 @@
+ 	else if (rt)
+ 		return rt;
+ 	else
+-		Error("Cannot find an area number for tile at x=%ld y=%ld\n",tilex,tiley);
++		Error("Cannot find an area number for tile at x=%d y=%d\n",tilex,tiley);
+ 	return -1;
+ }
+ 
+@@ -3907,7 +3907,7 @@
+             VW_UpdateScreen ();
+             I_Delay (2000);
+             }
+-			Error ("PushWall Attempting to escape off the edge of the map\nIt is located at x=%ld y=%ld\nI'm Free!!!!\n",
++			Error ("PushWall Attempting to escape off the edge of the map\nIt is located at x=%d y=%d\nI'm Free!!!!\n",
+ 					  pw->tilex, pw->tiley);
+ 			}
+ 		}
+@@ -4033,7 +4033,7 @@
+ 
+   num=sz/unitsize;
+   if (pwallnum!=num)
+-     Error("Different number of Push Walls when trying to load a game\npwallnum=%ld num=%ld",pwallnum,num);
++     Error("Different number of Push Walls when trying to load a game\npwallnum=%d num=%d",pwallnum,num);
+ 
+   for (i=0;i<pwallnum;i++)
+      {
+@@ -4197,7 +4197,7 @@
+ 
+   num=sz/unitsize;
+   if (maskednum!=num)
+-     Error("Different number of Masked Walls when trying to load a game\nmaskednum=%ld num=%ld",maskednum,num);
++     Error("Different number of Masked Walls when trying to load a game\nmaskednum=%d num=%d",maskednum,num);
+ 
+   for (i=0;i<maskednum;i++)
+      {
+@@ -4319,7 +4319,7 @@
+ 
+    num=size/unitsize;
+    if (doornum!=num)
+-      Error("Different number of Doors when trying to load a game\ndoornum=%ld num=%ld",doornum,num);
++      Error("Different number of Doors when trying to load a game\ndoornum=%d num=%d",doornum,num);
+ 
+    for (door = 0; door < doornum; door++)
+    {
+diff -urNad rott-1.0+dfsg~/rt_draw.c rott-1.0+dfsg/rt_draw.c
+--- rott-1.0+dfsg~/rt_draw.c	2008-01-10 09:19:48.000000000 +0100
++++ rott-1.0+dfsg/rt_draw.c	2008-01-10 09:19:49.000000000 +0100
+@@ -1442,7 +1442,7 @@
+ #endif
+ 
+ 		 default:
+-         Error("Illegal weapon value = %ld\n",locplayerstate->weapon);
++         Error("Illegal weapon value = %d\n",locplayerstate->weapon);
+          break;
+ 		}
+ 	 }
+@@ -2232,7 +2232,7 @@
+       else
+          viewangle = player->angle;
+       if ((viewangle<0) && (viewangle>=FINEANGLES))
+-         Error ("View angle out of range = %ld\n",viewangle);
++         Error ("View angle out of range = %d\n",viewangle);
+       viewx = player->x;
+       viewy = player->y;
+       pheight = player->z + locplayerstate->playerheight + locplayerstate->heightoffset;
+diff -urNad rott-1.0+dfsg~/rt_error.c rott-1.0+dfsg/rt_error.c
+--- rott-1.0+dfsg~/rt_error.c	2008-01-09 13:52:29.000000000 +0100
++++ rott-1.0+dfsg/rt_error.c	2008-01-10 09:19:49.000000000 +0100
+@@ -121,7 +121,7 @@
+ //
+ //******************************************************************************
+ 
+-void UL_UserMessage (int x, int y, char *str, ...)
++void UL_UserMessage (int x, int y, char *str, ...) __attribute__((format(printf,3,4)))
+ {
+    va_list strptr;
+    char buf[128];
+diff -urNad rott-1.0+dfsg~/rt_floor.c rott-1.0+dfsg/rt_floor.c
+--- rott-1.0+dfsg~/rt_floor.c	2008-01-09 13:52:29.000000000 +0100
++++ rott-1.0+dfsg/rt_floor.c	2008-01-10 09:19:49.000000000 +0100
+@@ -346,7 +346,7 @@
+          lump=W_GetNumForName("FLRCL16\0");
+          break;
+       default:
+-         Error("Illegal Floor/Ceiling Tile = %ld\n",num);
++         Error("Illegal Floor/Ceiling Tile = %d\n",num);
+          break;
+       }
+    return lump;
+@@ -406,7 +406,7 @@
+     word crud;
+ 	 sky = (MAPSPOT(1,0,0) - 233);
+     if ((sky<1) || (sky>6))
+-       Error("Illegal Sky Tile = %ld\n",sky);
++       Error("Illegal Sky Tile = %d\n",sky);
+     ceilingnum=1;
+ 	 crud=(word)MAPSPOT(1,0,1);
+ 	 if ((crud>=90) && (crud<=97))
+@@ -414,7 +414,7 @@
+     else if ((crud>=450) && (crud<=457))
+ 		 horizonheight=crud-450+9;
+ 	 else
+-       Error("You must specify a valid horizon height sprite icon over the sky at (2,0) on map %ld\n",gamestate.mapon);
++       Error("You must specify a valid horizon height sprite icon over the sky at (2,0) on map %d\n",gamestate.mapon);
+ 
+     // Check for lightnign icon
+ 
+diff -urNad rott-1.0+dfsg~/rt_game.c rott-1.0+dfsg/rt_game.c
+--- rott-1.0+dfsg~/rt_game.c	2008-01-10 09:19:48.000000000 +0100
++++ rott-1.0+dfsg/rt_game.c	2008-01-10 09:19:49.000000000 +0100
+@@ -4580,7 +4580,7 @@
+    int myticcount;
+    
+ 	if (num > 15 || num < 0)
+-		Error("Illegal Saved game value=%ld\n",num);
++		Error("Illegal Saved game value=%d\n",num);
+ 
+    //
+    // Save Alternate Game Level information for reloading game
+@@ -4902,7 +4902,7 @@
+         int myticcount;
+ 
+ 	if (num>15 || num<0)
+-		Error("Illegal Load game value=%ld\n",num);
++		Error("Illegal Load game value=%d\n",num);
+ 
+ 	// Create the proper file name
+ 
+@@ -5254,7 +5254,7 @@
+    int    size;
+ 
+    if (num>15 || num<0)
+-      Error("Illegal Load game value=%ld\n",num);
++      Error("Illegal Load game value=%d\n",num);
+ 
+    // Create the proper file name
+ 
+@@ -5296,7 +5296,7 @@
+    int    size;
+ 
+    if (num>15 || num<0)
+-      Error("Illegal Load game value=%ld\n",num);
++      Error("Illegal Load game value=%d\n",num);
+ 
+    // Create the proper file name
+ 
+diff -urNad rott-1.0+dfsg~/rt_map.c rott-1.0+dfsg/rt_map.c
+--- rott-1.0+dfsg~/rt_map.c	2008-01-10 09:19:49.000000000 +0100
++++ rott-1.0+dfsg/rt_map.c	2008-01-10 09:19:49.000000000 +0100
+@@ -574,7 +574,7 @@
+                      DrawMap_Actor(i,j,a);
+                      break;
+                   default:
+-                     SoftError("Unable to resolve actorat at x=%ld y=%ld which=%ld\n",mapx,mapy,a->which);
++                     SoftError("Unable to resolve actorat at x=%d y=%d which=%d\n",mapx,mapy,a->which);
+                      break;
+                   }
+                }
+@@ -743,7 +743,7 @@
+                         *(buf)=egacolor[MAP_SPRITECOLOR];
+                      break;
+                   default:
+-                     SoftError("Unable to resolve actorat at x=%ld y=%ld which=%ld\n",mapx,mapy,a->which);
++                     SoftError("Unable to resolve actorat at x=%d y=%d which=%d\n",mapx,mapy,a->which);
+                      break;
+                   }
+                }
+diff -urNad rott-1.0+dfsg~/rt_net.c rott-1.0+dfsg/rt_net.c
+--- rott-1.0+dfsg~/rt_net.c	2008-01-09 13:52:29.000000000 +0100
++++ rott-1.0+dfsg/rt_net.c	2008-01-10 09:19:49.000000000 +0100
+@@ -504,7 +504,7 @@
+    if (modemgame==true)
+       {
+       controlupdatetime=controlsynctime+(VBLCOUNTER*2);
+-      SoftError("Controls started at %ld\n",controlupdatetime);
++      SoftError("Controls started at %d\n",controlupdatetime);
+       }
+    else if (demoplayback || demorecord)
+       {
+@@ -1083,7 +1083,7 @@
+          size=sizeof(MoveType)+sizeof(COM_SoundType);
+          break;
+       default:
+-         Error("Unhandled packet type in GetPacketSize type=%ld",((MoveType *)pkt)->type);
++         Error("Unhandled packet type in GetPacketSize type=%d",((MoveType *)pkt)->type);
+          break;
+       }
+ 
+@@ -1216,7 +1216,7 @@
+ 
+    if (pkt->time!=time)
+       {
+-      Error( "CLIENT: Could not find packet to resend\ntime=%ld packettime=%ld controlupdatetime=%ld\n",
++      Error( "CLIENT: Could not find packet to resend\ntime=%d packettime=%d controlupdatetime=%d\n",
+              time, pkt->time, controlupdatetime);
+       }
+    else
+@@ -1290,7 +1290,7 @@
+ 
+    if (serverpkt->time!=time)
+       {
+-      Error( "SERVER: Could not find packet to resend\ntime=%ld packettime=%ld serverupdatetime=%ld\n",
++      Error( "SERVER: Could not find packet to resend\ntime=%d packettime=%d serverupdatetime=%d\n",
+              time, serverpkt->time,serverupdatetime);
+       }
+    else
+@@ -1361,18 +1361,18 @@
+    request=(COM_RequestType * )pkt;
+    time=request->time;
+ 
+-   ComError( "RESEND request received at %ld\n packet time=%ld dest=%ld numpackets=%ld\n",
++   ComError( "RESEND request received at %d\n packet time=%d dest=%d numpackets=%d\n",
+              GetTicCount(), time, dest, request->numpackets);
+ 
+    if (IsServer==true)
+       {
+       if ((dest==server) && (standalone==false))
+          Error("Trying to resend packets to client on top of server\n");
+-      ComError( "RESEND SERVER serverupdatetime=%ld\n",serverupdatetime);
++      ComError( "RESEND SERVER serverupdatetime=%d\n",serverupdatetime);
+       if (IsServerCommandReady ( time ) == true)
+          ResendServerPackets(time,dest,request->numpackets);
+       else
+-         ComError( "RESEND SERVER time=%ld is not ready\n",time);
++         ComError( "RESEND SERVER time=%d is not ready\n",time);
+       }
+    else
+       {
+@@ -1395,7 +1395,7 @@
+ 
+    fix=(COM_FixupType *)pkt;
+ 
+-   ComError( "Fixup received at %ld, time=%ld numpackets=%ld\n", GetTicCount(), fix->time, fix->numpackets);
++   ComError( "Fixup received at %d, time=%d numpackets=%d\n", GetTicCount(), fix->time, fix->numpackets);
+ #if 0
+    if (networkgame==false)
+       FixingPackets=false;
+@@ -1412,7 +1412,7 @@
+          {
+          if (ClientCommandStatus(src, time)!=cs_fixing)
+             {
+-            ComError("Server Received fixup with no bad packet time=%ld from %ld\n",time,src);
++            ComError("Server Received fixup with no bad packet time=%d from %d\n",time,src);
+             }
+          else
+             {
+@@ -1424,7 +1424,7 @@
+          {
+          if (ServerCommandStatus(time)!=cs_fixing)
+             {
+-            ComError("Client Received fixup with no bad packet time=%ld from %ld\n",time,src);
++            ComError("Client Received fixup with no bad packet time=%d from %d\n",time,src);
+             }
+          else
+             {
+@@ -1472,7 +1472,7 @@
+          }
+       if (oldpolltime>lastsynccheck)
+          {
+-         Error("Missed a player sync check time=%ld\n",oldpolltime);
++         Error("Missed a player sync check time=%d\n",oldpolltime);
+          }
+       }
+ }
+@@ -1512,40 +1512,40 @@
+       }
+    if (sync->randomindex!=PlayerSync[0].randomindex)
+       {
+-      Error("Player %ld is unsynced localindex=%ld remoteindex=%ld\n"
+-            "Unsynced Player x=%x y=%x a=%ld z=%ld name=%s\n",
++      Error("Player %d is unsynced localindex=%d remoteindex=%d\n"
++            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
+              src, PlayerSync[0].randomindex, sync->randomindex,
+              PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
+              PlayerSync[src].z,PLAYERSTATE[src].codename);
+       }
+    if (sync->x!=PlayerSync[src].x)
+       {
+-      Error("Player %ld is unsynced local x=%ld remote x=%ld\n"
+-            "Unsynced Player x=%x y=%x a=%ld z=%ld name=%s\n",
++      Error("Player %d is unsynced local x=%d remote x=%d\n"
++            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
+              src,PlayerSync[src].x,sync->x,
+              PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
+              PlayerSync[src].z,PLAYERSTATE[src].codename);
+       }
+    if (sync->y!=PlayerSync[src].y)
+       {
+-      Error("Player %ld is unsynced local y=%ld remote y=%ld\n"
+-            "Unsynced Player x=%x y=%x a=%ld z=%ld name=%s\n",
++      Error("Player %d is unsynced local y=%d remote y=%d\n"
++            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
+              src,PlayerSync[src].y,sync->y,
+              PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
+              PlayerSync[src].z,PLAYERSTATE[src].codename);
+       }
+    if (sync->z!=PlayerSync[src].z)
+       {
+-      Error("Player %ld is unsynced local z=%ld remote z=%ld\n"
+-            "Unsynced Player x=%x y=%x a=%ld z=%ld name=%s\n",
++      Error("Player %d is unsynced local z=%d remote z=%d\n"
++            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
+              src,PlayerSync[src].z,sync->z,
+              PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
+              PlayerSync[src].z,PLAYERSTATE[src].codename);
+       }
+    if (sync->angle!=PlayerSync[src].angle)
+       {
+-      Error("Player %ld is unsynced local angle=%ld remote angle=%ld\n"
+-            "Unsynced Player x=%x y=%x a=%ld z=%ld name=%s\n",
++      Error("Player %d is unsynced local angle=%d remote angle=%d\n"
++            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
+              src,PlayerSync[src].angle,sync->angle,
+              PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
+              PlayerSync[src].z,PLAYERSTATE[src].codename);
+@@ -1772,7 +1772,7 @@
+          break;
+ 
+       default:
+-         Error("ProcessPacket: Unknown packet type=%ld\n",((MoveType *)pkt)->type);
++         Error("ProcessPacket: Unknown packet type=%d\n",((MoveType *)pkt)->type);
+       }
+ }
+ 
+@@ -1835,7 +1835,7 @@
+ 
+    if (src!=server)
+       {
+-      Error("Received server packet from non-server src=%ld\n",src);
++      Error("Received server packet from non-server src=%d\n",src);
+       }
+ 
+    serverpkt=(COM_ServerHeaderType *)pkt;
+@@ -1854,7 +1854,7 @@
+          {
+          RequestPacket ( LastCommandTime[src] , src , numpackets );
+ 
+-         ComError("AddServerPacket: Request packet time=%ld lct=%ld numpackets=%ld\n",
++         ComError("AddServerPacket: Request packet time=%d lct=%d numpackets=%d\n",
+                   serverpkt->time, LastCommandTime[src], numpackets
+                  );
+          }
+@@ -1900,7 +1900,7 @@
+          ProcessSoundAndDeltaPacket(packet, src);
+          break;
+       default:
+-         Error("AddClientPacket: Unknown packet type = %ld\n",packet->type);
++         Error("AddClientPacket: Unknown packet type = %d\n",packet->type);
+       }
+ }
+ 
+@@ -1969,7 +1969,7 @@
+             {
+             RequestPacket ( LastCommandTime[src] , src , numpackets );
+ 
+-            ComError("AddPacket: Request packet time=%ld lct=%ld numpackets=%ld\n",
++            ComError("AddPacket: Request packet time=%d lct=%d numpackets=%d\n",
+                      packet->time, LastCommandTime[src], numpackets
+                      );
+             }
+@@ -2568,7 +2568,7 @@
+             {
+             ProcessPlayerCommand (num);
+             if (demoplayback||demorecord) {
+-               SoftError("x=%4lx y=%4lx a=%4lx time=%5ld\n",player->x,player->y,player->angle,oldpolltime);
++               SoftError("x=%4x y=%4x a=%4x time=%5d\n",player->x,player->y,player->angle,oldpolltime);
+ 	    }
+             break;
+             }
+@@ -2587,7 +2587,7 @@
+ 
+          if (GetTicCount()>savetime)
+             {
+-            SoftError("Client timeout oldpolltime=%ld\n",oldpolltime);
++            SoftError("Client timeout oldpolltime=%d\n",oldpolltime);
+             if (IsServer==false)
+                RequestPacket(oldpolltime, server, controldivisor);
+             if (networkgame==true)
+@@ -2686,7 +2686,7 @@
+    pstate->topspeed=MaxSpeedForCharacter(pstate);
+ 
+    if (demoplayback||demorecord) {
+-      SoftError("  dmx=%4lx dmy=%4lx da=%4lx time=%5ld\n",pstate->dmomx,pstate->dmomy,pstate->angle>>11,oldpolltime);
++      SoftError("  dmx=%4x dmy=%4x da=%4x time=%5d\n",pstate->dmomx,pstate->dmomy,pstate->angle>>11,oldpolltime);
+    }
+ #if 0
+ #if (DEVELOPMENT == 1)
+@@ -3247,7 +3247,7 @@
+ {
+    DemoType * dtime;
+ 
+-   SoftError("Demo command recorded at %ld\n",controlupdatetime);
++   SoftError("Demo command recorded at %d\n",controlupdatetime);
+    dtime=(DemoType *)demoptr;
+    dtime->time = controlupdatetime;
+    dtime->momx = (controlbuf[0]>>1);
+@@ -3274,7 +3274,7 @@
+    // get info from demo buffer
+    //
+ 
+-   SoftError("Demo command played at %ld\n",controlupdatetime);
++   SoftError("Demo command played at %d\n",controlupdatetime);
+    if (demoplayback==true)
+       {
+       dtime=(DemoType *)demoptr;
+diff -urNad rott-1.0+dfsg~/rt_playr.c rott-1.0+dfsg/rt_playr.c
+--- rott-1.0+dfsg~/rt_playr.c	2008-01-10 09:19:48.000000000 +0100
++++ rott-1.0+dfsg/rt_playr.c	2008-01-10 09:19:49.000000000 +0100
+@@ -610,7 +610,7 @@
+ 
+ 	if ((x<=0) || (y<=0))
+       {
+-      SoftError("SpawnGunSmoke: xy below angle=%ld\n",angle);
++      SoftError("SpawnGunSmoke: xy below angle=%d\n",angle);
+       return;
+       }
+ 
+@@ -688,7 +688,7 @@
+    NewState(new,&s_bloodspurt1);
+ 
+    if ((new->x<=0) || (new->y<=0))
+-	   Error("SpawnBlood: bad x,y obj->obclass=%ld\n",ob->obclass);
++	   Error("SpawnBlood: bad x,y obj->obclass=%d\n",ob->obclass);
+    }
+ 
+ void  SpawnMetalSparks(objtype * ob, int angle)
+@@ -718,7 +718,7 @@
+ 	else
+ 	 SD_PlaySoundRTP(SD_RICOCHET3SND,new->x,new->y);
+ 	if ((new->x<=0) || (new->y<=0))
+-	   Error("SpawnMetalSparks: bad x,y obj->obclass=%ld\n",ob->obclass);
++	   Error("SpawnMetalSparks: bad x,y obj->obclass=%d\n",ob->obclass);
+ }
+ 
+ /*
+diff -urNad rott-1.0+dfsg~/rt_rand.c rott-1.0+dfsg/rt_rand.c
+--- rott-1.0+dfsg~/rt_rand.c	2008-01-09 13:52:29.000000000 +0100
++++ rott-1.0+dfsg/rt_rand.c	2008-01-10 09:19:49.000000000 +0100
+@@ -73,7 +73,7 @@
+ {
+    rndindex=i;
+ //#if (DEVELOPMENT == 1)
+-   SoftError("RNG index set at %ld\n",i);
++   SoftError("RNG index set at %d\n",i);
+ //#endif
+ }
+ 
+@@ -98,7 +98,7 @@
+ int   GameRNG ( char * string, int val )
+ {
+    rndindex = (rndindex+1)&(SIZE_OF_RANDOM_TABLE-1);
+-   SoftError("RNG - num=%3ld called from=%s val=%ld\n",RandomTable[rndindex],string,val);
++   SoftError("RNG - num=%3d called from=%s val=%d\n",RandomTable[rndindex],string,val);
+    return RandomTable[rndindex];
+ }
+ #else
+diff -urNad rott-1.0+dfsg~/rt_scale.c rott-1.0+dfsg/rt_scale.c
+--- rott-1.0+dfsg~/rt_scale.c	2008-01-10 09:19:48.000000000 +0100
++++ rott-1.0+dfsg/rt_scale.c	2008-01-10 09:19:49.000000000 +0100
+@@ -1299,9 +1299,9 @@
+    p = (patch_t *)shape;
+ 
+    if (((x-p->leftoffset)<0) || ((x-p->leftoffset+p->width)>320))
+-      Error ("DrawNormalSprite: x is out of range x=%ld\n",x-p->leftoffset+p->width);
++      Error ("DrawNormalSprite: x is out of range x=%d\n",x-p->leftoffset+p->width);
+    if (((y-p->topoffset)<0) || ((y-p->topoffset+p->height)>200))
+-      Error ("DrawNormalSprite: y is out of range y=%ld\n",y-p->topoffset+p->height);
++      Error ("DrawNormalSprite: y is out of range y=%d\n",y-p->topoffset+p->height);
+ 
+    startx=x-p->leftoffset;
+    buffer = (byte*)bufferofs+ylookup[y-p->topoffset];
+diff -urNad rott-1.0+dfsg~/rt_stat.c rott-1.0+dfsg/rt_stat.c
+--- rott-1.0+dfsg~/rt_stat.c	2008-01-10 09:19:48.000000000 +0100
++++ rott-1.0+dfsg/rt_stat.c	2008-01-10 09:19:49.000000000 +0100
+@@ -1027,7 +1027,7 @@
+ 	{
+ 	temp = (statobj_t*)Z_LevelMalloc(sizeof(statobj_t),PU_LEVELSTRUCT,NULL);
+ 	if (!temp)
+-		Error("LoadStatics: Failed on allocation of static %ld of %ld",i,stcount);
++		Error("LoadStatics: Failed on allocation of static %d of %d",i,stcount);
+ 	memset(temp,0,sizeof(*temp));
+ 	memcpy(&(dummy.x),buffer,sizeof(saved_stat_type));
+ 	temp->whichstat = statcount++;
+@@ -1100,7 +1100,7 @@
+    else
+       {
+       if (z>levelheight)
+-         Error ("You specified a height of %lx for the %s at tilex=%ld tiley=%ld when\n the level is only %ld high\n",
++         Error ("You specified a height of %x for the %s at tilex=%d tiley=%d when\n the level is only %d high\n",
+                  zoffset,errorstr,tilex,tiley,levelheight);
+       else
+          *newz = nominalheight-(z<<6)-(zf<<2);
+@@ -1234,7 +1234,7 @@
+ 	  temp->areanumber = MAPSPOT(tilex,tiley,0)-AREATILE;
+ 	  temp->linked_to = -1;
+ 	  if ((temp->areanumber<=0) || (temp->areanumber>NUMAREAS))
+-		  Error ("Sprite at x=%ld y=%ld type=%ld has an illegal areanumber\n",tilex,tiley,mtype);
++		  Error ("Sprite at x=%d y=%d type=%d has an illegal areanumber\n",tilex,tiley,mtype);
+      if ( mtype == stat_mine )
+         {
+         temp->z = nominalheight;
+@@ -1930,5 +1930,5 @@
+ 	new->speed = 0;
+ 	new->flags = (FL_NEVERMARK|FL_ABP);
+ 	if ((new->x<=0) || (new->y<=0))
+-	   Error("SpawnStaticDamage: bad x,y itemnumber=%ld\n",stat->itemnumber);
++	   Error("SpawnStaticDamage: bad x,y itemnumber=%d\n",stat->itemnumber);
+ }
+diff -urNad rott-1.0+dfsg~/rt_str.h rott-1.0+dfsg/rt_str.h
+--- rott-1.0+dfsg~/rt_str.h	2008-01-09 13:52:29.000000000 +0100
++++ rott-1.0+dfsg/rt_str.h	2008-01-10 09:19:49.000000000 +0100
+@@ -78,7 +78,7 @@
+ void VWB_DrawPropString  (const char *string);
+ void VW_MeasurePropString (const char *string, int *width, int *height);
+ 
+-void US_MeasureStr (int *width, int *height, const char * s, ...);
++void US_MeasureStr (int *width, int *height, const char * s, ...) __attribute__((format(printf,3,4)));
+ 
+ void VW_DrawPropString (const char *string);
+ 
+diff -urNad rott-1.0+dfsg~/rt_ted.c rott-1.0+dfsg/rt_ted.c
+--- rott-1.0+dfsg~/rt_ted.c	2008-01-10 09:19:48.000000000 +0100
++++ rott-1.0+dfsg/rt_ted.c	2008-01-10 09:19:49.000000000 +0100
+@@ -1263,8 +1263,8 @@
+       {
+       OpenMapDebug();
+ 
+-      MapDebug("Map Number %ld\n",gamestate.mapon);
+-      MapDebug("sizeoflevel=%ld\n",Z_UsedLevelHeap());
++      MapDebug("Map Number %d\n",gamestate.mapon);
++      MapDebug("sizeoflevel=%d\n",Z_UsedLevelHeap());
+       }
+ #if (PRECACHETEST == 1)
+    SoftError("<<<<<<<<<<<<<<<<<<<<<<<Precaching done\n");
+@@ -1658,7 +1658,7 @@
+ void GetAlternateMapInfo (mapfileinfo_t * mapinfo, AlternateInformation *info)
+ {
+    if (UL_ChangeDirectory (info->path) == false)
+-      Error ("ERROR : Can't change to alternate directory %s!\n");
++      Error ("ERROR : Can't change to alternate directory %s!\n", info->path);
+ 
+    GetMapFileInfo (mapinfo, info->file);
+ 
+@@ -1801,7 +1801,7 @@
+ 
+    if ( close( maphandle ) )
+       {
+-      Error( "Error closing Ted file Error #%ld", errno );
++      Error( "Error closing Ted file Error #%d", errno );
+       }
+    }
+ 
+@@ -1884,8 +1884,8 @@
+    {                                        \
+    PreCacheLump(lump,PU_CACHEWALLS,cache_pic_t);  \
+    if (W_LumpLength(lump) == 0)                   \
+-      Error("%s being used in shareware at %ld %ld",  \
+-      W_GetNameForNum(lump),newx,newy);               \
++      Error("%s being used in shareware at %d %d",\
++      W_GetNameForNum(lump),newx,newy);           \
+    actorat[newx][newy]= &walls[index];      \
+    tempwall = (wall_t*)actorat[newx][newy]; \
+    tempwall->which = WALL;                  \
+@@ -2765,7 +2765,7 @@
+                      SpawnMaskedWall(i,j,mw_platform7,MW_ABOVEPASSABLE);
+                      break;
+                   default:
+-                     Error ("Illegal Maskedwall platform value at x=%ld y=%ld\n",i,j);
++                     Error ("Illegal Maskedwall platform value at x=%d y=%d\n",i,j);
+                      break;
+ 						}
+ #if 0
+@@ -2782,7 +2782,7 @@
+ #endif
+                }
+             else
+-               Error("You have what appears to be a platform ontop\n a wall at x=%ld y=%ld\n",i,j);
++               Error("You have what appears to be a platform ontop\n a wall at x=%d y=%d\n",i,j);
+             }
+          }
+ }
+@@ -2886,7 +2886,7 @@
+                   temp=tilemap[i][j]&0x1fff;
+ 			         tilemap[i][j] = pwallnum;
+ 			         if (MAPSPOT(i,j,2))
+-                     Error("You cannot link a pushwall which has no direction associated\n with it at x=%ld y=%ld\n",i,j);
++                     Error("You cannot link a pushwall which has no direction associated\n with it at x=%d y=%d\n",i,j);
+ 						else
+ 			            SpawnPushWall(i,j,0,temp,nodir,0);
+ 			         }
+@@ -2947,7 +2947,7 @@
+    for (i=0;i<pwallnum;i++)
+       if ( (pwallobjlist[i]->tilex==tx) && (pwallobjlist[i]->tiley==ty))
+          return i;
+-   Error ("Could not find a push wall at x=%ld y=%ld\n",tx,ty);
++   Error ("Could not find a push wall at x=%d y=%d\n",tx,ty);
+    return -1;
+ }
+ 
+@@ -2998,7 +2998,7 @@
+ 								Link_To_Touchplate(touchx,touchy,ActivatePushWall,NULL,GetPushWallNumber(i,j),0);
+                         }
+ 				         else
+-				            Error("tried to link a pushwall at x=%ld y=%ld to a non-existent touchplate\n",i,j);
++				            Error("tried to link a pushwall at x=%d y=%d to a non-existent touchplate\n",i,j);
+ 			            }
+ 			         }
+ 		         break;
+@@ -3008,7 +3008,7 @@
+ 		            {
+ 			         if (MAPSPOT(i,j,2))
+ 			            {
+-                     Error("You shouldn't be linking a nondirectional-push wall at x=%ld y=%ld\n",i,j);
++                     Error("You shouldn't be linking a nondirectional-push wall at x=%d y=%d\n",i,j);
+                      }
+                   }
+                break;
+@@ -3033,7 +3033,7 @@
+ 								Link_To_Touchplate(touchx,touchy,ActivateMoveWall,NULL,GetPushWallNumber(i,j),0);
+                         }
+ 				         else
+-				            Error("tried to link a turbomovewall at x=%ld y=%ld to a non-existent touchplate\n",i,j);
++				            Error("tried to link a turbomovewall at x=%d y=%d to a non-existent touchplate\n",i,j);
+                      }
+                   }
+ 		         break;
+@@ -3059,7 +3059,7 @@
+ 								Link_To_Touchplate(touchx,touchy,ActivateMoveWall,NULL,GetPushWallNumber(i,j),0);
+                         }
+ 				         else
+-				            Error("tried to link a movewall at x=%ld y=%ld to a non-existent touchplate\n",i,j);
++				            Error("tried to link a movewall at x=%d y=%d to a non-existent touchplate\n",i,j);
+                      }
+                   }
+ 		         break;
+@@ -3279,7 +3279,7 @@
+    for (i=0;i<doornum;i++)
+       if ( (doorobjlist[i]->tilex==tx) && (doorobjlist[i]->tiley==ty))
+          return i;
+-   Error ("Could not find a door at x=%ld y=%ld\n",tx,ty);
++   Error ("Could not find a door at x=%d y=%d\n",tx,ty);
+    return -1;
+ }
+ 
+@@ -3348,7 +3348,7 @@
+                                             LinkedOpenDoor, doornumber, 0);
+                   }
+                   else
+-                     Error ("tried to link a door at x=%ld y=%ld to a non-existent touchplate",i,j);
++                     Error ("tried to link a door at x=%d y=%d to a non-existent touchplate",i,j);
+                }
+             }
+          }
+@@ -3390,7 +3390,7 @@
+      *y=yy-1;
+      return;
+      }
+-  Error ("Could not find an end time for a clock linked item\nat x=%ld y=%ld\n",*x,*y);
++  Error ("Could not find an end time for a clock linked item\nat x=%d y=%d\n",*x,*y);
+ }
+ 
+ 
+@@ -3618,7 +3618,7 @@
+             }
+          }
+       else
+-         Error("tried to link an object at x=%ld y=%ld to a non-existent touchplate supposedly at x=%ld y=%ld",tilex,tiley,touchx,touchy);
++         Error("tried to link an object at x=%d y=%d to a non-existent touchplate supposedly at x=%d y=%d",tilex,tiley,touchx,touchy);
+       }
+ 
+    if (tilemap[tilex][tiley])
+@@ -4051,7 +4051,7 @@
+ 									  sprites[i][j]->linked_to = touchindices[touchx][touchy]-1;
+ 									 }
+ 								 else
+-									 Error("tried to link a light at x=%ld y=%ld to a non-existent touchplate",i,j);
++									 Error("tried to link a light at x=%d y=%d to a non-existent touchplate",i,j);
+ 								}
+ 							 else
+ 								{if (touchindices[touchx][touchy])
+@@ -4059,7 +4059,7 @@
+ 									  sprites[i][j]->linked_to = touchindices[touchx][touchy]-1;
+ 									 }
+ 								 else
+-									 Error("tried to link a light at x=%ld y=%ld to a non-existent touchplate",i,j);
++									 Error("tried to link a light at x=%d y=%d to a non-existent touchplate",i,j);
+ 								 sprites[i][j]->flags |= FL_LIGHTON;
+ 								}
+ 							}
+@@ -4069,7 +4069,7 @@
+ 							  sprites[i][j]->linked_to = touchindices[touchx][touchy]-1;
+ 							 }
+ 						  else
+-							 Error("tried to link a light at x=%ld y=%ld to a non-existent touchplate",i,j);
++							 Error("tried to link a light at x=%d y=%d to a non-existent touchplate",i,j);
+ 						  sprites[i][j]->flags |= FL_LIGHTON;
+ 						 }
+ 
+@@ -4101,31 +4101,31 @@
+    OpenMapDebug();
+ 
+    total=0;
+-   MapDebug("MAP STATS Map Number %ld\n",gamestate.mapon);
++   MapDebug("MAP STATS Map Number %d\n",gamestate.mapon);
+    MapDebug("=======================\n");
+    size=pwallnum*sizeof(pwallobj_t);
+    total+=size;
+-   MapDebug("Number of PushWalls   : %4ld size = %6ld\n",pwallnum,size);
++   MapDebug("Number of PushWalls   : %4d size = %6d\n",pwallnum,size);
+    size=maskednum*sizeof(maskedwallobj_t);
+    total+=size;
+-   MapDebug("Number of MaskedWalls : %4ld size = %6ld\n",maskednum,size);
++   MapDebug("Number of MaskedWalls : %4d size = %6d\n",maskednum,size);
+    size=doornum*sizeof(doorobj_t);
+    total+=size;
+-   MapDebug("Number of Doors       : %4ld size = %6ld\n",doornum,size);
++   MapDebug("Number of Doors       : %4d size = %6d\n",doornum,size);
+    size=lasttouch*sizeof(touchplatetype);
+    total+=size;
+-   MapDebug("Number of TouchPlates : %4ld size = %6ld\n",lasttouch,size);
++   MapDebug("Number of TouchPlates : %4d size = %6d\n",lasttouch,size);
+    size=_numelevators*sizeof(elevator_t);
+    total+=size;
+-   MapDebug("Number of Elevators   : %4ld size = %6ld\n",_numelevators,size);
++   MapDebug("Number of Elevators   : %4d size = %6d\n",_numelevators,size);
+    size=statcount*sizeof(statobj_t);
+    total+=size;
+-   MapDebug("Number of Sprites     : %4ld size = %6ld\n",statcount,size);
++   MapDebug("Number of Sprites     : %4d size = %6d\n",statcount,size);
+    size=objcount*sizeof(objtype);
+    total+=size;
+-   MapDebug("Number of Actors      : %4ld size = %6ld\n",objcount,size);
+-   MapDebug("Number of Clocks      : %4ld\n",numclocks);
+-   MapDebug("\nTotal size of level : %6ld\n",total);
++   MapDebug("Number of Actors      : %4d size = %6d\n",objcount,size);
++   MapDebug("Number of Clocks      : %4d\n",numclocks);
++   MapDebug("\nTotal size of level : %6d\n",total);
+ }
+ 
+ 
+@@ -4398,7 +4398,7 @@
+ 
+    OpenMapDebug();
+ 
+-   MapDebug("TILE STATS Map Number %ld\n",gamestate.mapon);
++   MapDebug("TILE STATS Map Number %d\n",gamestate.mapon);
+    MapDebug("=======================\n\n");
+ 
+ 
+@@ -4437,7 +4437,7 @@
+    MapDebug("-----------------------\n");
+    for (i=0;i<1000;i++)
+      if (tally[i]!=0)
+-        MapDebug("  %4ld    %4ld\n",i,tally[i]);
++        MapDebug("  %4d    %4d\n",i,tally[i]);
+ 
+ // Doors
+    memset(tally,0,sizeof(tally));
+@@ -4458,7 +4458,7 @@
+    MapDebug("-----------------------\n");
+    for (i=0;i<1000;i++)
+      if (tally[i]!=0)
+-        MapDebug("  %4ld    %4ld\n",i,tally[i]);
++        MapDebug("  %4d    %4d\n",i,tally[i]);
+ 
+ // MaskedWalls
+    memset(tally,0,sizeof(tally));
+@@ -4480,7 +4480,7 @@
+    MapDebug("-----------------------\n");
+    for (i=0;i<1000;i++)
+      if (tally[i]!=0)
+-        MapDebug("  %4ld    %4ld\n",i,tally[i]);
++        MapDebug("  %4d    %4d\n",i,tally[i]);
+ // Platforms
+    memset(tally,0,sizeof(tally));
+    MapDebug("=======================\n");
+@@ -4500,7 +4500,7 @@
+    MapDebug("-----------------------\n");
+    for (i=0;i<1000;i++)
+      if (tally[i]!=0)
+-        MapDebug("  %4ld    %4ld\n",i,tally[i]);
++        MapDebug("  %4d    %4d\n",i,tally[i]);
+ 
+ // Actors
+    memset(tally,0,sizeof(tally));
+@@ -4527,9 +4527,9 @@
+       hardtotal+=tally[i];
+    MapDebug("\nLowGuards\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("EasyTotal=%4ld\n",easytotal);
+-   MapDebug("HardTotal=%4ld\n",hardtotal);
+-   MapDebug("    Total=%4ld\n",easytotal+hardtotal);
++   MapDebug("EasyTotal=%4d\n",easytotal);
++   MapDebug("HardTotal=%4d\n",hardtotal);
++   MapDebug("    Total=%4d\n",easytotal+hardtotal);
+ 
+ // Sneaky Low Guards
+    easytotal=0;
+@@ -4540,9 +4540,9 @@
+       hardtotal+=tally[i];
+    MapDebug("\nSneakyLowGuards\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("EasyTotal=%4ld\n",easytotal);
+-   MapDebug("HardTotal=%4ld\n",hardtotal);
+-   MapDebug("    Total=%4ld\n",easytotal+hardtotal);
++   MapDebug("EasyTotal=%4d\n",easytotal);
++   MapDebug("HardTotal=%4d\n",hardtotal);
++   MapDebug("    Total=%4d\n",easytotal+hardtotal);
+ 
+ // High Guards
+    easytotal=0;
+@@ -4553,9 +4553,9 @@
+       hardtotal+=tally[i];
+    MapDebug("\nHighGuards\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("EasyTotal=%4ld\n",easytotal);
+-   MapDebug("HardTotal=%4ld\n",hardtotal);
+-   MapDebug("    Total=%4ld\n",easytotal+hardtotal);
++   MapDebug("EasyTotal=%4d\n",easytotal);
++   MapDebug("HardTotal=%4d\n",hardtotal);
++   MapDebug("    Total=%4d\n",easytotal+hardtotal);
+ 
+ // OverPatrol Guards
+    easytotal=0;
+@@ -4566,9 +4566,9 @@
+       hardtotal+=tally[i];
+    MapDebug("\nOverPatrolGuards\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("EasyTotal=%4ld\n",easytotal);
+-   MapDebug("HardTotal=%4ld\n",hardtotal);
+-   MapDebug("    Total=%4ld\n",easytotal+hardtotal);
++   MapDebug("EasyTotal=%4d\n",easytotal);
++   MapDebug("HardTotal=%4d\n",hardtotal);
++   MapDebug("    Total=%4d\n",easytotal+hardtotal);
+ 
+ // Strike Guards
+    easytotal=0;
+@@ -4579,9 +4579,9 @@
+       hardtotal+=tally[i];
+    MapDebug("\nStrikeGuards\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("EasyTotal=%4ld\n",easytotal);
+-   MapDebug("HardTotal=%4ld\n",hardtotal);
+-   MapDebug("    Total=%4ld\n",easytotal+hardtotal);
++   MapDebug("EasyTotal=%4d\n",easytotal);
++   MapDebug("HardTotal=%4d\n",hardtotal);
++   MapDebug("    Total=%4d\n",easytotal+hardtotal);
+ 
+ // TriadEnforcer Guards
+    easytotal=0;
+@@ -4592,9 +4592,9 @@
+       hardtotal+=tally[i];
+    MapDebug("\nTriadEnforcer Guards\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("EasyTotal=%4ld\n",easytotal);
+-   MapDebug("HardTotal=%4ld\n",hardtotal);
+-   MapDebug("    Total=%4ld\n",easytotal+hardtotal);
++   MapDebug("EasyTotal=%4d\n",easytotal);
++   MapDebug("HardTotal=%4d\n",hardtotal);
++   MapDebug("    Total=%4d\n",easytotal+hardtotal);
+ 
+ // Lightning Guards
+    easytotal=0;
+@@ -4605,9 +4605,9 @@
+       hardtotal+=tally[i];
+    MapDebug("\nLightningGuards\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("EasyTotal=%4ld\n",easytotal);
+-   MapDebug("HardTotal=%4ld\n",hardtotal);
+-   MapDebug("    Total=%4ld\n",easytotal+hardtotal);
++   MapDebug("EasyTotal=%4d\n",easytotal);
++   MapDebug("HardTotal=%4d\n",hardtotal);
++   MapDebug("    Total=%4d\n",easytotal+hardtotal);
+ 
+ // Random Actors
+    easytotal=0;
+@@ -4616,7 +4616,7 @@
+       easytotal+=tally[i];
+    MapDebug("\nRandom Actors\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Total=%4ld\n",easytotal);
++   MapDebug("    Total=%4d\n",easytotal);
+ 
+ // Monks
+    easytotal=0;
+@@ -4627,9 +4627,9 @@
+       hardtotal+=tally[i];
+    MapDebug("\nMonks\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("EasyTotal=%4ld\n",easytotal);
+-   MapDebug("HardTotal=%4ld\n",hardtotal);
+-   MapDebug("    Total=%4ld\n",easytotal+hardtotal);
++   MapDebug("EasyTotal=%4d\n",easytotal);
++   MapDebug("HardTotal=%4d\n",hardtotal);
++   MapDebug("    Total=%4d\n",easytotal+hardtotal);
+ 
+ // Fire Monks
+    easytotal=0;
+@@ -4640,9 +4640,9 @@
+       hardtotal+=tally[i];
+    MapDebug("\nFire Monks\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("EasyTotal=%4ld\n",easytotal);
+-   MapDebug("HardTotal=%4ld\n",hardtotal);
+-   MapDebug("    Total=%4ld\n",easytotal+hardtotal);
++   MapDebug("EasyTotal=%4d\n",easytotal);
++   MapDebug("HardTotal=%4d\n",hardtotal);
++   MapDebug("    Total=%4d\n",easytotal+hardtotal);
+ 
+ // Robo Guards
+    easytotal=0;
+@@ -4653,9 +4653,9 @@
+       hardtotal+=tally[i];
+    MapDebug("\nRoboGuards\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("EasyTotal=%4ld\n",easytotal);
+-   MapDebug("HardTotal=%4ld\n",hardtotal);
+-   MapDebug("    Total=%4ld\n",easytotal+hardtotal);
++   MapDebug("EasyTotal=%4d\n",easytotal);
++   MapDebug("HardTotal=%4d\n",hardtotal);
++   MapDebug("    Total=%4d\n",easytotal+hardtotal);
+ 
+ // Ballistikrafts
+    easytotal=0;
+@@ -4666,9 +4666,9 @@
+       hardtotal+=tally[i];
+    MapDebug("\nBallistikrafts\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("EasyTotal=%4ld\n",easytotal);
+-   MapDebug("HardTotal=%4ld\n",hardtotal);
+-   MapDebug("    Total=%4ld\n",easytotal+hardtotal);
++   MapDebug("EasyTotal=%4d\n",easytotal);
++   MapDebug("HardTotal=%4d\n",hardtotal);
++   MapDebug("    Total=%4d\n",easytotal+hardtotal);
+ 
+ // Boulders
+    easytotal=0;
+@@ -4679,8 +4679,8 @@
+       hardtotal+=tally[i];
+    MapDebug("\nBoulders\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("Boulders=%4ld\n",easytotal);
+-   MapDebug("BoulderHoles=%4ld\n",hardtotal);
++   MapDebug("Boulders=%4d\n",easytotal);
++   MapDebug("BoulderHoles=%4d\n",hardtotal);
+ 
+ // PushColumns
+    easytotal=0;
+@@ -4697,7 +4697,7 @@
+       easytotal+=tally[i];
+    MapDebug("\nPushColumns\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Total=%4ld\n",easytotal);
++   MapDebug("    Total=%4d\n",easytotal);
+ 
+ // Gun Emplacements
+    easytotal=0;
+@@ -4708,9 +4708,9 @@
+       hardtotal+=tally[i];
+    MapDebug("\nGun Emplacements\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("EasyTotal=%4ld\n",easytotal);
+-   MapDebug("HardTotal=%4ld\n",hardtotal);
+-   MapDebug("    Total=%4ld\n",easytotal+hardtotal);
++   MapDebug("EasyTotal=%4d\n",easytotal);
++   MapDebug("HardTotal=%4d\n",hardtotal);
++   MapDebug("    Total=%4d\n",easytotal+hardtotal);
+ 
+ // 4-way guns
+    easytotal=0;
+@@ -4721,49 +4721,49 @@
+       hardtotal+=tally[i];
+    MapDebug("\n4-way guns\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("EasyTotal=%4ld\n",easytotal);
+-   MapDebug("HardTotal=%4ld\n",hardtotal);
+-   MapDebug("    Total=%4ld\n",easytotal+hardtotal);
++   MapDebug("EasyTotal=%4d\n",easytotal);
++   MapDebug("HardTotal=%4d\n",hardtotal);
++   MapDebug("    Total=%4d\n",easytotal+hardtotal);
+ 
+ // Stabbers from above
+    MapDebug("\nStabbers from above\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Total=%4ld\n",tally[412]);
++   MapDebug("    Total=%4d\n",tally[412]);
+ 
+ // Stabbers from below
+    MapDebug("\nStabbers from below\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Total=%4ld\n",tally[430]);
++   MapDebug("    Total=%4d\n",tally[430]);
+ 
+ // Crushing pillar from above
+    MapDebug("\nCrushing pillar from above\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Total=%4ld\n",tally[413]);
++   MapDebug("    Total=%4d\n",tally[413]);
+ 
+ // Crushing pillar from below
+    MapDebug("\nCrushing pillar from below\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Total=%4ld\n",tally[431]);
++   MapDebug("    Total=%4d\n",tally[431]);
+ 
+ // Above Spinner
+    MapDebug("\nAbove Spinner\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Total=%4ld\n",tally[156]);
++   MapDebug("    Total=%4d\n",tally[156]);
+ 
+ // Ground Spinner
+    MapDebug("\nGround Spinner\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Total=%4ld\n",tally[174]);
++   MapDebug("    Total=%4d\n",tally[174]);
+ 
+ // Spinner from above
+    MapDebug("\nSpinner from above\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Total=%4ld\n",tally[157]);
++   MapDebug("    Total=%4d\n",tally[157]);
+ 
+ // Spinner from below
+    MapDebug("\nSpinner from below\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Total=%4ld\n",tally[175]);
++   MapDebug("    Total=%4d\n",tally[175]);
+ 
+ // Bosses
+    easytotal=0;
+@@ -4771,12 +4771,12 @@
+       easytotal+=tally[i];
+    MapDebug("\nBosses\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Total=%4ld\n",easytotal);
++   MapDebug("    Total=%4d\n",easytotal);
+ 
+ // Spring Boards
+    MapDebug("\nSpring Boards\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Total=%4ld\n",tally[193]);
++   MapDebug("    Total=%4d\n",tally[193]);
+ 
+ // Above FlameJets
+    easytotal=0;
+@@ -4787,8 +4787,8 @@
+       hardtotal+=tally[i];
+    MapDebug("\nFlameJets\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Above=%4ld\n",easytotal);
+-   MapDebug("   Ground=%4ld\n",hardtotal);
++   MapDebug("    Above=%4d\n",easytotal);
++   MapDebug("   Ground=%4d\n",hardtotal);
+ 
+ // Fire Chutes
+    easytotal=0;
+@@ -4796,7 +4796,7 @@
+       easytotal+=tally[i];
+    MapDebug("\nFireChutes\n");
+    MapDebug("-----------------------\n");
+-   MapDebug("    Total=%4ld\n",easytotal);
++   MapDebug("    Total=%4d\n",easytotal);
+ 
+ // Sprites
+    MapDebug("=======================\n");
+@@ -4806,22 +4806,22 @@
+    MapDebug("-----------------------\n");
+    for (i=1;i<=72;i++)
+       if (tally[i]!=0)
+-         MapDebug("  %4ld    %4ld\n",i,tally[i]);
++         MapDebug("  %4d    %4d\n",i,tally[i]);
+    for (i=210;i<=210;i++)
+       if (tally[i]!=0)
+-         MapDebug("  %4ld    %4ld\n",i,tally[i]);
++         MapDebug("  %4d    %4d\n",i,tally[i]);
+    for (i=228;i<=233;i++)
+       if (tally[i]!=0)
+-         MapDebug("  %4ld    %4ld\n",i,tally[i]);
++         MapDebug("  %4d    %4d\n",i,tally[i]);
+    for (i=246;i<=255;i++)
+       if (tally[i]!=0)
+-         MapDebug("  %4ld    %4ld\n",i,tally[i]);
++         MapDebug("  %4d    %4d\n",i,tally[i]);
+    for (i=260;i<=273;i++)
+       if (tally[i]!=0)
+-         MapDebug("  %4ld    %4ld\n",i,tally[i]);
++         MapDebug("  %4d    %4d\n",i,tally[i]);
+    for (i=282;i<=284;i++)
+       if (tally[i]!=0)
+-         MapDebug("  %4ld    %4ld\n",i,tally[i]);
++         MapDebug("  %4d    %4d\n",i,tally[i]);
+ }
+ 
+ //***************************************************************************
+@@ -5738,7 +5738,7 @@
+ 		nominalheight = maxheight-32;
+ 		}
+ 	else
+-		Error("You must specify a valid height sprite icon at (2,0) on map %ld\n",gamestate.mapon);
++		Error("You must specify a valid height sprite icon at (2,0) on map %d\n",gamestate.mapon);
+ 
+ /*
+    if ( ( BATTLEMODE ) && ( !gamestate.BattleOptions.SpawnDangers ) )
+@@ -6828,7 +6828,7 @@
+ 				case 253:
+ 
+                #if (SHAREWARE == 1)
+-                  Error("DogMode Power up in shareware at x=%ld y=%ld\n",i,j);
++                  Error("DogMode Power up in shareware at x=%d y=%d\n",i,j);
+                #endif
+ 
+                SD_PreCacheSoundGroup(SD_DOGMODEPANTSND,SD_DOGMODELICKSND);
+@@ -6952,7 +6952,7 @@
+       else if (ActorIsSpring(x+(dx*count),y+(dy*count)))
+          d=0;
+       else
+-         Error("Cannot find a spring board around a ramp ascension near x=%ld y=%ld\n",x,y);
++         Error("Cannot find a spring board around a ramp ascension near x=%d y=%d\n",x,y);
+ 
+       hc=((maxheight+20)<<16)/(count+1);
+       h=hc<<1;
+@@ -6984,7 +6984,7 @@
+                while (StaticUndefined(x+count,y))
+                   count++;
+                if (count<3)
+-                  Error ("Are You kidding me? You are trying to loft <3 sprites in an arc??? \n x=%ld y=%ld\n",x,y);
++                  Error ("Are You kidding me? You are trying to loft <3 sprites in an arc??? \n x=%d y=%d\n",x,y);
+                RaiseSprites(x,y,count,1);
+                }
+             else if (StaticUndefined(x,y+1))
+@@ -6993,11 +6993,11 @@
+                while (StaticUndefined(x,y+count))
+                   count++;
+                if (count<3)
+-                  Error ("Are You kidding me? You are trying to loft <3 sprites??? \n x=%ld y=%ld\n",x,y);
++                  Error ("Are You kidding me? You are trying to loft <3 sprites??? \n x=%d y=%d\n",x,y);
+                RaiseSprites(x,y,count,0);
+                }
+             else
+-               Error ("Sprite Lofter is confused around x=%ld y=%ld\n",x,y);
++               Error ("Sprite Lofter is confused around x=%d y=%d\n",x,y);
+             }
+          }
+       }
+diff -urNad rott-1.0+dfsg~/rt_util.c rott-1.0+dfsg/rt_util.c
+--- rott-1.0+dfsg~/rt_util.c	2008-01-10 09:19:48.000000000 +0100
++++ rott-1.0+dfsg/rt_util.c	2008-01-10 09:19:49.000000000 +0100
+@@ -333,7 +333,7 @@
+ 
+    inerror++;
+    if (inerror > 1)
+-      return;
++      abort();
+ 
+ 
+ 	SetTextMode ();
+diff -urNad rott-1.0+dfsg~/rt_util.h rott-1.0+dfsg/rt_util.h
+--- rott-1.0+dfsg~/rt_util.h	2008-01-10 09:19:48.000000000 +0100
++++ rott-1.0+dfsg/rt_util.h	2008-01-10 09:19:49.000000000 +0100
+@@ -44,7 +44,7 @@
+ void  GetPalette(char * pal);
+ void  ClearGraphicsScreen( void );
+ void  ClearBuffer( char * buf, int size );
+-void  Error (char *error, ...);
++void  Error (char *error, ...) __attribute__((noreturn,format(printf,1,2)));
+ void  StartupSoftError ( void );
+ void  ShutdownSoftError ( void );
+ int   CheckParm (char *check);
+@@ -100,7 +100,7 @@
+ void  VL_GetPalette (byte *palette);
+ void  UL_printf (char *str);
+ void  VL_NormalizePalette (byte *palette);
+-void  MapDebug (char *error, ...);
++void  MapDebug (char *error, ...) __attribute__((format(printf,1,2)));
+ void  OpenMapDebug ( void );
+ void  UL_ColorBox (int x, int y, int w, int h, int color);
+ 
+@@ -161,11 +161,11 @@
+ 
+ #if (SOFTERROR==1)
+ 
+-void  SoftwareError (char *error, ...);
++void  SoftwareError (char *error, ...) __attribute__((format(printf,1,2)));
+ #define SoftError  SoftwareError
+ 
+ #else
+-void  SoftwareError (char *error, ...);
++void  SoftwareError (char *error, ...) __attribute__((format(printf,1,2)));
+ //#define SoftError  SoftwareError
+ 
+ #define SoftError  if (1) {} else SoftwareError
+@@ -176,12 +176,12 @@
+ 
+ #if (DEBUG==1)
+ 
+-void  DebugError (char *error, ...);
++void  DebugError (char *error, ...) __attribute__((format(printf,1,2)));
+ #define Debug  DebugError
+ 
+ #else
+ 
+-void  DebugError (char *error, ...);
++void  DebugError (char *error, ...) __attribute__((format(printf,1,2)));
+ #define Debug  DebugError
+ //#define Debug
+ 
+diff -urNad rott-1.0+dfsg~/rt_view.c rott-1.0+dfsg/rt_view.c
+--- rott-1.0+dfsg~/rt_view.c	2008-01-10 09:19:48.000000000 +0100
++++ rott-1.0+dfsg/rt_view.c	2008-01-10 09:19:49.000000000 +0100
+@@ -287,7 +287,7 @@
+    int topy;
+ 
+    if ((size<0) || (size>=MAXVIEWSIZES))
+-      Error("Illegal screen size = %ld\n",size);
++      Error("Illegal screen size = %d\n",size);
+ 
+    viewwidth  = viewsizes[ size << 1 ];         // must be divisable by 16
+    viewheight = viewsizes[ ( size << 1 ) + 1 ]; // must be even
+@@ -508,7 +508,7 @@
+ 	if (((word)MAPSPOT(2,0,1)>=104) && ((word)MAPSPOT(2,0,1)<=105))
+ 		fog=(word)MAPSPOT(2,0,1)-104;
+ 	else
+-		Error ("There is no Fog icon on map %ld\n",gamestate.mapon);
++		Error ("There is no Fog icon on map %d\n",gamestate.mapon);
+ 	if ((word)MAPSPOT(3,0,1)==139)
+       {
+       if (fog==0)
+@@ -518,14 +518,14 @@
+          memset (lights,0,MAPSIZE*MAPSIZE*(sizeof(unsigned long)));
+          }
+       else
+-		   Error("You cannot use light sourcing on a level with fog on map %ld\n",gamestate.mapon);
++		   Error("You cannot use light sourcing on a level with fog on map %d\n",gamestate.mapon);
+       }
+ 	else if ((word)MAPSPOT(3,0,1))
+-		Error("You must use the lightsource icon or nothing at all at (3,0) in plane 1 on map %ld\n",gamestate.mapon);
++		Error("You must use the lightsource icon or nothing at all at (3,0) in plane 1 on map %d\n",gamestate.mapon);
+    if (((word)MAPSPOT(2,0,0)>=LIGHTLEVELBASE) && ((word)MAPSPOT(2,0,0)<=LIGHTLEVELEND))
+       glevel=(MAPSPOT(2,0,0)-LIGHTLEVELBASE);
+ 	else
+-		Error("You must specify a valid darkness level icon at (2,0) on map %ld\n",gamestate.mapon);
++		Error("You must specify a valid darkness level icon at (2,0) on map %d\n",gamestate.mapon);
+ 
+    SetLightLevels ( glevel );
+ 
+diff -urNad rott-1.0+dfsg~/w_wad.c rott-1.0+dfsg/w_wad.c
+--- rott-1.0+dfsg~/w_wad.c	2008-01-10 09:19:48.000000000 +0100
++++ rott-1.0+dfsg/w_wad.c	2008-01-10 09:19:49.000000000 +0100
+@@ -230,7 +230,7 @@
+ //
+         lumpcache = calloc (numlumps, sizeof(*lumpcache));
+         if (!lumpcache)
+-           Error("W_InitFiles: lumpcache malloc failed size=%ld\n",numlumps<<2);
++           Error("W_InitFiles: lumpcache malloc failed size=%d\n",numlumps<<2);
+ 
+         if (!quiet)
+            printf("W_Wad: Wad Manager Started NUMLUMPS=%ld\n",(long int)numlumps);
+@@ -483,7 +483,7 @@
+ #else
+                 Z_Malloc (W_LumpLength (lump), tag, &lumpcache[lump]);
+                 W_ReadLump (lump, lumpcache[lump]);
+-                Debug("Invoking endian converter on %p, %i records\n", lump, numrec);
++                Debug("Invoking endian converter on %p, %i records\n", lumpcache[lump], numrec);
+                 converter(lumpcache[lump], numrec);
+ #endif
+         }
+diff -urNad rott-1.0+dfsg~/z_zone.c rott-1.0+dfsg/z_zone.c
+--- rott-1.0+dfsg~/z_zone.c	2008-01-09 13:52:29.000000000 +0100
++++ rott-1.0+dfsg/z_zone.c	2008-01-10 09:19:49.000000000 +0100
+@@ -122,7 +122,7 @@
+ 
+         header = malloc (size+sizeof(memzone_t));
+         if (!header)
+-                Error ("Z_AllocateZone: Couldn't malloc %i bytes avail=%ld\n",
++                Error ("Z_AllocateZone: Couldn't malloc %zd bytes avail=%d\n",
+                 size+sizeof(memzone_t), Z_AvailHeap());
+         header->size = size;
+         Z_ClearZone (header);
+@@ -540,7 +540,7 @@
+                         SoftError("ERROR: two consecutive free blocks\n");
+ 		}
+         }
+-        SoftError("Total Size of blocks = %ld\n",totalsize);
++        SoftError("Total Size of blocks = %d\n",totalsize);
+ 
+         SoftError("LEVEL ZONE\n");
+         SoftError("zone size: %i  location: %p\n",levelzone->size,levelzone);
+@@ -569,7 +569,7 @@
+                         SoftError("ERROR: two consecutive free blocks\n");
+ 		}
+         }
+-        SoftError("Total Size of blocks = %ld\n",totalsize);
++        SoftError("Total Size of blocks = %d\n",totalsize);
+ 
+ }
+ 

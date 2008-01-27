@@ -1,0 +1,19 @@
+# These templates have been reviewed by the debian-l10n-english
+# team
+#
+# If modifications/additions/rewording are needed, please ask
+# for an advice to debian-l10n-english@lists.debian.org
+#
+# Even minor modifications require translation updates and such
+# changes should be coordinated with translators and reviewers.
+
+Template: rott/shareware
+Type: boolean
+Default: true
+_Description: Download shareware data files?
+ The Rise of the Triad game requires additional data files which are
+ not available under a free license and cannot be distributed by
+ Debian. You may choose to automatically download the shareware data
+ files from the Internet and install them on the system now.
+ .
+ The installation will require about 15 MB of free disk space.
