@@ -1,0 +1,43 @@
+# Danish translation rott.
+# Copyright (C) 2010 rott & nedenst??ende overs??ttere.
+# This file is distributed under the same license as the rott package.
+# Joe Hansen <joedalton2@yahoo.dk>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: rott\n"
+"Report-Msgid-Bugs-To: fabian@debian-unofficial.org\n"
+"POT-Creation-Date: 2007-05-08 09:41+0200\n"
+"PO-Revision-Date: 2010-05-31 17:30+01:00\n"
+"Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
+"Language-Team: Danish <debian-l10n-danish@lists.debian.org> \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid "Download shareware data files?"
+msgstr "Hent sharewaredatafiler?"
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid ""
+"The Rise of the Triad game requires additional data files which are not "
+"available under a free license and cannot be distributed by Debian. You may "
+"choose to automatically download the shareware data files from the Internet "
+"and install them on the system now."
+msgstr ""
+"Spillet The Rise of the Triad kr??ver yderligere datafiler, som endnu ikke "
+"er tilg??ngelige under en fri licens, og derfor ikke kan distribueres sammen "
+"med Debian. Du kan nu v??lge automatisk at hente sharewaredatafilerne fra "
+"internettet og installere dem p?? systemet."
+
+#. Type: boolean
+#. Description
+#: ../templates:2001
+msgid "The installation will require about 15 MB of free disk space."
+msgstr "Installationen vil kr??ve cirka 15 MB ledig diskplads."

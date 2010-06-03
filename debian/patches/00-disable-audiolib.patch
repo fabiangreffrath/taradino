@@ -1,0 +1,56 @@
+Reverting parts of upstream r218 to disable audiolib, for testing purposes.
+
+--- rott-1.1.orig/rott/Makefile
++++ rott-1.1/rott/Makefile
+@@ -69,6 +69,7 @@
+ 	cin_util.o \
+ 	dosutil.o \
+ 	engine.o \
++	fx_man.o \
+ 	isr.o \
+ 	modexlib.o \
+ 	rt_actor.o \
+@@ -109,8 +110,6 @@
+ 	watcom.o \
+ 	z_zone.o \
+ 	byteordr.o \
+-	dukemusc.o \
+-	audiolib/audiolib.a \
+ 	winrott.o
+ 	$(CC) $^ $(LDLIBS) -o $@
+ 
+--- rott-1.1.orig/rott/rt_sound.c
++++ rott-1.1/rott/rt_sound.c
+@@ -395,6 +395,7 @@
+ 
+    snd=W_CacheLumpNum(SoundNumber(sndnum),PU_STATIC, CvtNull, 1);
+ 
++#ifdef DOS
+    if ( *snd == 'C' )
+       {
+       voice = FX_PlayVOC3D( snd, pitch, angle, distance,
+@@ -405,6 +406,24 @@
+       voice = FX_PlayWAV3D( snd, pitch, angle, distance,
+          sounds[sndnum].priority, (unsigned long) sndnum );
+       }
++#else
++/*
++   Oh boy.  The library used to implement these functions may need a
++   file size.  So, let's just hack these in!
++ */
++   if ( *snd == 'C' )
++      {
++      voice = FX_PlayVOC3D_ROTT( snd, W_LumpLength(SoundNumber(sndnum)),
++         pitch, angle, distance,
++         sounds[sndnum].priority, (unsigned long) sndnum );
++      }
++   else
++      {
++      voice = FX_PlayWAV3D_ROTT( snd, W_LumpLength(SoundNumber(sndnum)),
++         pitch, angle, distance,
++         sounds[sndnum].priority, (unsigned long) sndnum );
++      }
++#endif
+ 
+    if ( voice < FX_Ok )
+       {

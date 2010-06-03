@@ -1,14 +1,20 @@
 Rise of the Triad for Debian
 ----------------------------
 
-This is how I created rott_1.0+dfsg.orig.tar.gz:
+ * The source code is currently configured to use the shareware data files.
+   If you want to use the registered version of ROTT, you need to get the
+   package source code, uncomment '00-registered-version.patch' in
+   'debian/patches/series' and rebuild the package.
+   .
+   During package installation choose 'no' when asked to download the
+   shareware data files and copy the registered version data files into the
+   '/usr/share/games/rott' directory afterwards.
 
-	wget http://icculus.org/rott/releases/rott-1.0.tar.gz
-	tar xvzf rott-1.0.tar.gz
-	rm rott-1.0/rott/audio_wf.lib rott-1.0/rott/spball.lib
-	mv rott-1.0/rott/ rott-1.0+dfsg
-	mv rott-1.0/README rott-1.0/readme.txt rott-1.0+dfsg/
-	mv rott-1.0/gpl.txt rott-1.0+dfsg/COPYING
-	tar cvzf rott_1.0+dfsg.orig.tar.gz rott-1.0+dfsg/
+ * If you encounter game hangs like the one described in #498413,
+   please install the recommended packages 'timidity' and 'freepats'.
+   If you still encounter problems, please enable the ALSA MIDI Sequencer
+   in '/etc/default/timidity', restart timidity and try again.
+   .
+   Please note that this works around a bug in sdl-mixer1.2, not rott.
 
- -- Fabian Greffrath <fabian@debian-unofficial.org>  Fri, 11 Jan 2008 17:00:00 +0100
+ -- Fabian Greffrath <fabian@debian-unofficial.org>  Thu,  8 Jan 2009 11:20:00 +0100

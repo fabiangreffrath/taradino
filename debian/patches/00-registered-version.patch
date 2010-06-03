@@ -1,0 +1,16 @@
+The source code is setup to use shareware binaries. If you want to use the
+registered version of ROTT, apply this patch and compile as normal.
+
+--- rott-1.1.orig/rott/develop.h
++++ rott-1.1/rott/develop.h
+@@ -41,8 +41,8 @@
+ 
+ #define BNACRASHPREVENT  1 //bna added 
+ // Make sure only one of the following are on at one time
+-#define SHAREWARE   1
+-#define SUPERROTT   0
++#define SHAREWARE   0
++#define SUPERROTT   1
+ #define SITELICENSE 0
+ 
+ // cute little dopefish thing, only works with special patch?

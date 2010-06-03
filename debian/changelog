@@ -1,3 +1,182 @@
+rott (1.1.1-3.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix pending l10n issues. Debconf translations:
+    - Spanish (Francisco Javier Cuadrado).  Closes: #564185
+    - Danish (Joe Hansen).  Closes: #583962
+
+ -- Christian Perrier <bubulle@debian.org>  Thu, 03 Jun 2010 07:38:48 +0200
+
+rott (1.1.1-3) unstable; urgency=low
+
+  [ Fabian Greffrath ]
+  * Converted from cdbs to debhelper 7.3.
+  * Updated my email address.
+  * debian/patches/01-demo-datadir.patch: New patch, enable
+    playback of demo files in DATADIR.
+  * Converted packaging to source format "3.0 (quilt)".
+
+  [ Evgeni Golov ]
+  * debian/control:
+    + Standards-Version: 3.8.3, no changes needed.
+  * debian/patches/02-persistent-typo.patch:
+    + Fix typo spotted by lintian.
+
+ -- Evgeni Golov <evgeni@debian.org>  Mon, 21 Dec 2009 14:38:16 +0100
+
+rott (1.1.1-2) unstable; urgency=low
+
+  * debian/rott.postinst:
+    3drealms plays ping-pong with us, moved the zip to old location again.
+    Lets try both locations before failing.
+    Closes: #536536, LP: #395048
+
+ -- Evgeni Golov <evgeni@debian.org>  Fri, 17 Jul 2009 00:03:11 +0200
+
+rott (1.1.1-1) unstable; urgency=low
+
+  [ Fabian Greffrath ]
+  * New upstream release.
+  * debian/patches/01-gameover.patch,
+    debian/patches/02-fix-end-level-display.patch,
+    debian/patches/03-desktop-file.patch,
+    debian/patches/10-german-eszett-as-backslash.patch,
+    debian/patches/11-add-nosound-to-manpage.patch:
+    + Removed, applied upstream.
+  * debian/rules:
+    + Added -Wno-pointer-sign and -Wno-unused to CFLAGS.
+
+  [ Evgeni Golov ]
+  * debian/control:
+    + Standards-Version: 3.8.2, no changes needed.
+
+ -- Evgeni Golov <evgeni@debian.org>  Thu, 02 Jul 2009 08:39:58 +0200
+
+rott (1.1-3) unstable; urgency=low
+
+  * debian/rott.postinst:
+    + The shareware zip is now in pub/share/ on the ftp, fix the download link.
+      Closes: #530570, LP: #305779.
+  * debian/patches/11-add-nosound-to-manpage.patch:
+    + Add the nosound option to the manpage.
+  * debian/control:
+    + Add myself to Uploaders.
+    + Standards-Version: 3.8.1, no changes. 
+    + rott-dbg goes to contrib/debug, not contrib/devel.
+
+ -- Evgeni Golov <evgeni@debian.org>  Tue, 09 Jun 2009 10:38:11 +0200
+
+rott (1.1-2) unstable; urgency=low
+
+  * Upload to unstable.
+  * debian/patches/*, debian/README.Debian:
+    + Refreshed, renamed and commented all patches.
+  * debian/patches/00-ludicrous-gibs.patch:
+    + New patch to enable EKG mode by default, requires cheating
+      otherwise, disabled in debian/patches/series.
+  * debian/patches/03-desktop-file.patch, debian/rott.install:
+    + New patch to add a generic rott.desktop file into the misc/ directory.
+  * debian/rott.menu:
+    + Changed to match rott.desktop.
+  * debian/control, debian/rott.postinst:
+    + Accept p7zip-full as an alternative to unzip to extract the shareware
+      zip files.
+  * debian/README.Debian:
+    + Explained more detailed how to build the registered version of ROTT.
+    + Described how to work around game hangs like the one described in #498413.
+  * debian/control:
+    + Fixed "binary-control-field-duplicates-source section in package rott".
+  * debian/changelog:
+    + Simplified, it's all GPL after all.
+  * debian/po/gl.po:
+    + Updated the Galician translation of the debconf template
+      (Closes: #512692), thanks Marce Villarino <mvillarino@gmail.com>.
+
+ -- Fabian Greffrath <fabian@debian-unofficial.org>  Mon, 16 Feb 2009 13:16:00 +0100
+
+rott (1.1-1) experimental; urgency=low
+
+  * New upstream release.
+    + Uploaded to experimental due to the Lenny freeze.
+  * debian/copyright:
+    + Converted into machine-readable format.
+    + Added further copyright holders.
+    + Sourceless binary files have been removed upstream.
+  * debian/control:
+    + Bumped Standards-Version to 3.8.0.
+    + Re-added rott-dbg package.
+    + Promoted freepats and timidity to Recommends (Closes: #498984).
+  * debian/manpage/, debian/patches/, debian/pixmap/:
+    + Removed previous patchset, all applied upstream.
+  * debian/patches/rott-1.1-disable-audiolib.patch:
+    + Reverting parts of upstream r218 to disable audiolib,
+      for testing purposes, disabled in debian/patches/series.
+  * debian/patches/rott-1.1-registered-version.patch:
+    + Updated from the previous rott-1.0-registered.patch,
+      disabled in debian/patches/series.
+  * debian/patches/german-eszett-as-backslash.patch:
+    + New patch, accept the German eszett as a backslash key.
+  * debian/patches/svn-r240-gameover.patch:
+    + New patch from Hans de Goede to fix corrupted "Game Over" screen
+      in resolutions higher than 320x200.
+  * debian/patches/svn-r241-fix-end-level-display.patch:
+    + New patch from Hans de Goede to fix empty game statistics screen
+      after finishing a level in resolutions higher than 320x200.
+  * debian/README.Debian, debian/patches/series:
+    + Changed to reflect new patch names.
+  * debian/README.Debian, debian/rules:
+    + Removed get-orig-source rule.
+  * debian/README.source:
+    + Added due to Policy 3.8.0.
+  * debian/rott.docs, debian/rott.install, debian/rott.manpages:
+    + Adopted to new source directory structure.
+  * debian/rott.postinst:
+    + Change data file permissions to 0644.
+  * debian/rules:
+    + Set DEB_BUILDDIR := rott.
+
+ -- Fabian Greffrath <fabian@debian-unofficial.org>  Sun, 14 Sep 2008 14:15:00 +0100
+
+rott (1.0+dfsg-3) UNRELEASED; urgency=low
+
+  * debian/control, debian/compat:
+    + Set Maintainer to Debian Games Team and added myself to Uploaders.
+    + Added Vcs-Svn and Vcs-Browser fields.
+    + Bumped Build-Depends to cdbs (>= 0.4.52) and debhelper (>= 6.0.7).
+    + Added rott-dbg package.
+  * debian/{config,dirs,docs,install,manpages,menu,postinst,prerm}:
+    + Renamed to debian/rott.*.
+  * debian/copyright:
+    + Mentioned deletion of two sourceless binary files.
+    + Substituted '(C)' for '©'.
+  * debian/install:
+    + Removed debian/lintian/rott.
+  * debian/rules:
+    + Added get-orig-source rule.
+  * debian/README.Debian:
+    + Documented how to use the registered version of ROTT.
+    + Indented paragraphs.
+  * debian/rott.menu:
+    + Set resolution to 800x600.
+  * debian/lintian/rott:
+    + Renamed to debian/rott.lintian-overrides.
+  * debian/manpage/rott.6:
+    + Added new options: aim, fullscreen, window and resolution.
+
+  * debian/control, debian/rules, debian/patches/*:
+    + Switched from dpatch to quilt.
+  * debian/patches/*:
+    + Dropped the entire previous patchset in favour of the Fedora patchset
+      <http://cvs.fedoraproject.org/viewcvs/devel/rott/> courtesy of
+      Hans de Goede <j.w.r.degoede at hhs.nl>.
+  * debian/patches/rott-1.0-winrott-fixes.patch:
+    + Adopted changes to rott-1.0/README to the -p2 patch level.
+  * debian/patches/rott-1.0-debian-specific.patch:
+    + New patch. Added overridable CFLAGS and custom data path to stay on par
+      with the previous Debian patchset.
+
+ -- Fabian Greffrath <fabian@debian-unofficial.org>  Wed, 23 Apr 2008 17:00:00 +0100
+
 rott (1.0+dfsg-2) unstable; urgency=low
 
   * debian/patches/01-custom-datapath.dpatch,

@@ -1,0 +1,5 @@
+#00-disable-audiolib.patch
+#00-ludicrous-gibs.patch
+#00-registered-version.patch
+01-demo-datadir.patch
+02-persistent-typo.patch

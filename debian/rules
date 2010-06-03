@@ -1,5 +1,10 @@
 #!/usr/bin/make -f
 
-include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/makefile.mk
-include /usr/share/cdbs/1/rules/dpatch.mk
+CFLAGS += -DDATADIR=\"/usr/share/games/rott/\"
+CFLAGS += -Wno-pointer-sign -Wno-unused
+
+%:
+	dh --sourcedir=rott $@
+
+override_dh_strip:
+	dh_strip --dbg-package=rott-dbg

@@ -1,0 +1,5 @@
+?package(rott):needs="X11" section="Games/Action"\
+  title="Rise of the Triad"\
+  longtitle="A high quality, fast scrolling first-person perspective 3D action game"\
+  command="/usr/games/rott -fullscreen -resolution 800x600"\
+  icon="/usr/share/pixmaps/rott.xpm"

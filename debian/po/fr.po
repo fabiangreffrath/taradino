@@ -3,8 +3,8 @@
 # This file is distributed under the same license as the rott package.
 # Sylvain Archenault <sylvain.archenault@laposte.net>, 2007.
 # , fuzzy
-# 
-# 
+#
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: rott\n"
@@ -13,6 +13,7 @@ msgstr ""
 "PO-Revision-Date: 2007-05-08 12:22+0200\n"
 "Last-Translator: Sylvain Archenault <sylvain.archenault@laposte.net>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
