@@ -1,14 +1,20 @@
 Rise of the Triad for Debian
 ----------------------------
 
- * The source code is currently configured to use the shareware data files.
-   If you want to use the registered version of ROTT, you need to get the
-   package source code, uncomment '00-registered-version.patch' in
-   'debian/patches/series' and rebuild the package.
+ * The rott package in Debian supports all four variants of the game:
+   Shareware Version, Commercial Version, CD Version and Site License CD
+   Version. The corresponding binaries are named 'rott-shareware',
+   'rott-commercial', 'rott-superrott' and 'rott-sitelicense', respectively.
+   In order to select which variant is started by the 'rott' command and the
+   desktop and menu files, Debian's 'update-alternatives' mechanism is used:
    .
-   During package installation choose 'no' when asked to download the
-   shareware data files and copy the registered version data files into the
-   '/usr/share/games/rott' directory afterwards.
+   $ update-alternatives --config rott
+   .
+   By default, the 'rott-shareware' alternative is preferred.
+   .
+   The game expects its data files in the '/usr/share/games/rott' directory
+   (with upper case file names), so make sure to also copy the appropriate data
+   files into this directory when changing the 'rott' alternative.
 
  * If you encounter game hangs like the one described in #498413,
    please install the recommended packages 'timidity' and 'freepats'.
@@ -17,4 +23,4 @@ Rise of the Triad for Debian
    .
    Please note that this works around a bug in sdl-mixer1.2, not rott.
 
- -- Fabian Greffrath <fabian@debian-unofficial.org>  Thu,  8 Jan 2009 11:20:00 +0100
+ -- Fabian Greffrath <fabian+debian@greffrath.com>  Mon, 03 Jan 2011 15:10:21 +0100

@@ -1,3 +1,47 @@
+rott (1.1.1-6) unstable; urgency=low
+
+  * bump version for dak (I fumbled the last upload)
+
+ -- Jon Dowland <jmtd@debian.org>  Thu, 24 Mar 2011 15:47:04 +0000
+
+rott (1.1.1-5) unstable; urgency=low
+
+  [ Fabian Greffrath ]
+  * Add "Recommends: game-data-packager (>= 24)" and
+    move rott-data to Suggests.
+  * On remove, if rott-data is installed, delete all files
+    that are not in rott-data, delete the whole directory else.
+  * Remove debian/rott.dirs, don't claim the /usr/share/games/rott
+    directory for this package anymore, it belongs to rott-data.
+
+  [ Jon Dowland ]
+  * restore prerm/postinst for alternative. Whoops! That's what
+    experimental is for, folks!
+
+ -- Jon Dowland <jmtd@debian.org>  Wed, 23 Mar 2011 12:53:28 +0000
+
+rott (1.1.1-4) experimental; urgency=low
+
+  [ Fabian Greffrath ]
+  * Add Japanese po-debconf template translation,
+    thanks Hideki Yamane <henrich@debian.org> (Closes: #599886).
+  * Build all four variants of the game: Shareware Version, Commercial Version,
+    CD Version and Site License CD Version (LP: #511810).
+  * Handle variants via update-alternatives, document this in the manual page
+    and in README-Debian, add symlinks for the manual pages.
+  * Add lintian overrides for desktop-command-not-in-package
+    and menu-command-not-in-package.
+  * Fix another typo (parameter) spotted by lintian.
+  * Remove the debug package, it has never been of any use.
+  * Update Standards-Version and debhelper compat.
+  * Make sure object files get rebuilt whenever develop.h is changed.
+
+  [ Jon Dowland ]
+  * add Recommends: rott-data (to be provided by packages generated
+    by game-data-packager)
+
+ -- Jon Dowland <jmtd@debian.org>  Sun, 16 Jan 2011 23:49:32 +0000
+
 rott (1.1.1-3.1) unstable; urgency=low
 
   * Non-maintainer upload.

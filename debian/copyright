@@ -36,21 +36,3 @@ License: GPL-2+
 	.
 	On Debian systems, the complete text of the GNU General
 	Public License can be found in `/usr/share/common-licenses/GPL-2'.
-
-Files: debian/po/de.po
-Copyright:
-	© 2006-2008, Fabian Greffrath <fabian@debian-unofficial.org>
-	© 2007, Helge Kreutzmann <debian@helgefjell.de>
-License: GPL-2+
-	The Debian packaging is licensed under the GPL.
-	.
-	On Debian systems, the complete text of the GNU General
-	Public License can be found in `/usr/share/common-licenses/GPL-2'.
-
-Files: debian/po/pt_BR.po
-Copyright: © 2007, Eder L. Marques <frolic@debian-ce.org>
-License: GPL-2+
-	The Debian packaging is licensed under the GPL.
-	.
-	On Debian systems, the complete text of the GNU General
-	Public License can be found in `/usr/share/common-licenses/GPL-2'.

@@ -1,0 +1,48 @@
+Description: Document we support all variants of the game
+Author: Fabian Greffrath <fabian+debian@greffrath.com>
+Forwarded: not-needed
+
+--- rott-1.1.1.obsolete.0.838742770793946.orig/doc/rott.6
++++ rott-1.1.1.obsolete.0.838742770793946/doc/rott.6
+@@ -7,11 +7,41 @@ rott \- Rise of the Triad
+ .B rott
+ .RI [ options ]
+ 
++.B rott-shareware
++.RI [ options ]
++
++.B rott-commercial
++.RI [ options ]
++
++.B rott-superrott
++.RI [ options ]
++
++.B rott-sitelicense
++.RI [ options ]
++
+ .SH DESCRIPTION
+ .B ROTT
+ is a port of Apogee's 3D action title Rise of the Triad, originally released in 1994.
+ This port duplicates the functionality of the original game on modern operating systems, including Linux, Win32, and Mac OS X.
+ 
++The
++.B rott-shareware,
++.B rott-commercial,
++.B rott-superrott
++and
++.B rott-sitelicense
++binaries start the
++.B Shareware Version,
++.B Commercial Version,
++.B CD Version
++and
++.B Site License CD Version
++of the game, respectively. The
++.B rott
++binary is a symbolic link to one of these and is handled via Debian's
++.B update-alternatives
++mechanism.
++
+ .SH OPTIONS
+ .TP
+ .BR aim

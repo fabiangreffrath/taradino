@@ -3,18 +3,19 @@ Section: contrib/games
 Priority: optional
 Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
 Uploaders: Fabian Greffrath <fabian+debian@greffrath.com>,
- Evgeni Golov <evgeni@debian.org>
-Build-Depends: debhelper (>= 7.3), libsdl1.2-dev, libsdl-mixer1.2-dev
-Standards-Version: 3.8.3
+ Evgeni Golov <evgeni@debian.org>, Jon Dowland <jmtd@debian.org>
+Build-Depends: debhelper (>= 7.0.50~), libsdl1.2-dev, libsdl-mixer1.2-dev
+Standards-Version: 3.9.1
 Homepage: http://icculus.org/rott/
 Vcs-Svn: svn://svn.debian.org/svn/pkg-games/packages/trunk/rott/
 Vcs-Browser: http://svn.debian.org/wsvn/pkg-games/packages/trunk/rott/
 
 Package: rott
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, wget, unzip | p7zip-full
-Recommends: freepats, timidity
-Description: Rise of the Triad -- The HUNT Begins
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Recommends: freepats, timidity, game-data-packager (>= 24)
+Suggests: rott-data
+Description: SDL-Port of Rise of the Triad
  Rise of the Triad is a high quality, fast scrolling first-person perspective
  3D action game. It includes a lot of destructive enemies, an arsenal of
  weapons from simple pistols to missile launchers, life-preserving armor, traps
@@ -22,18 +23,5 @@ Description: Rise of the Triad -- The HUNT Begins
  .
  WARNING: Rise of the Triad features wanton and gratuitous violence.
  .
- This package contains no data files but can install the shareware data files
- from the Internet.
-
-Package: rott-dbg
-Section: contrib/debug
-Priority: extra
-Architecture: any
-Depends: rott (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
-Description: Rise of the Triad -- The HUNT Begins (debug)
- Rise of the Triad is a high quality, fast scrolling first-person perspective
- 3D action game. It includes a lot of destructive enemies, an arsenal of
- weapons from simple pistols to missile launchers, life-preserving armor, traps
- and ambushes galore.
- .
- This package contains the debug symbols.
+ This package contains no data files: use `game-data-packager' to generate
+ a suitable data package before installing rott.

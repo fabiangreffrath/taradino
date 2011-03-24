@@ -1,0 +1,26 @@
+Description: Make sure object files get rebuilt whenever develop.h is changed.
+Author: Fabian Greffrath <fabian+debian@greffrath.com>
+
+--- rott-1.1.1.orig/rott/Makefile
++++ rott-1.1.1/rott/Makefile
+@@ -60,7 +60,7 @@ all: rott
+ audiolib/audiolib.a:
+ 	$(MAKE) -C audiolib CC="$(CC)" CFLAGS="$(ALL_CFLAGS)" LDLIBS="$(LDLIBS)"
+ 
+-rott: 	\
++OBJS = \
+ 	cin_actr.o \
+ 	cin_efct.o \
+ 	cin_evnt.o \
+@@ -110,8 +110,10 @@ rott: 	\
+ 	z_zone.o \
+ 	byteordr.o \
+ 	dukemusc.o \
+-	audiolib/audiolib.a \
+ 	winrott.o
++
++$(OBJS): develop.h
++rott: $(OBJS) audiolib/audiolib.a
+ 	$(CC) $^ $(LDLIBS) -o $@
+ 
+ clean:

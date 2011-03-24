@@ -1,5 +1,7 @@
 #00-disable-audiolib.patch
 #00-ludicrous-gibs.patch
-#00-registered-version.patch
 01-demo-datadir.patch
 02-persistent-typo.patch
+03-parameter-typo.patch
+04-objs-depend-on-develop_h.patch
+10-all-variants.patch

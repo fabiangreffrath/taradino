@@ -6,5 +6,39 @@ CFLAGS += -Wno-pointer-sign -Wno-unused
 %:
 	dh --sourcedir=rott $@
 
-override_dh_strip:
-	dh_strip --dbg-package=rott-dbg
+override_dh_auto_build:
+	# Shareware Version
+	sed -e "s/^\(#define SHAREWARE\).*/\1   1/" \
+	    -e "s/^\(#define SUPERROTT\).*/\1   0/" \
+	    -e "s/^\(#define SITELICENSE\).*/\1 0/" \
+	    -i rott/develop.h
+	dh_auto_build
+	mv -fv rott/rott rott/rott-shareware
+	# Commercial Version
+	sed -e "s/^\(#define SHAREWARE\).*/\1   0/" \
+	    -e "s/^\(#define SUPERROTT\).*/\1   0/" \
+	    -e "s/^\(#define SITELICENSE\).*/\1 0/" \
+	    -i rott/develop.h
+	dh_auto_build
+	mv -fv rott/rott rott/rott-commercial
+	# CD Version
+	sed -e "s/^\(#define SHAREWARE\).*/\1   0/" \
+	    -e "s/^\(#define SUPERROTT\).*/\1   1/" \
+	    -e "s/^\(#define SITELICENSE\).*/\1 0/" \
+	    -i rott/develop.h
+	dh_auto_build
+	mv -fv rott/rott rott/rott-superrott
+	# Site License CD Version
+	sed -e "s/^\(#define SHAREWARE\).*/\1   0/" \
+	    -e "s/^\(#define SUPERROTT\).*/\1   0/" \
+	    -e "s/^\(#define SITELICENSE\).*/\1 1/" \
+	    -i rott/develop.h
+	dh_auto_build
+	mv -fv rott/rott rott/rott-sitelicense
+
+override_dh_auto_clean:
+	sed -e "s/^\(#define SHAREWARE\).*/\1   1/" \
+	    -e "s/^\(#define SUPERROTT\).*/\1   0/" \
+	    -e "s/^\(#define SITELICENSE\).*/\1 0/" \
+	    -i rott/develop.h
+	dh_auto_clean

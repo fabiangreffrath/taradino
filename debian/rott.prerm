@@ -1,13 +1,34 @@
 #!/bin/sh
-
 set -e
-
-SHAREDIR="/usr/share/games/rott"
-DOCDIR="/usr/share/doc/rott"
 
 case "$1" in
 	remove|deconfigure)
-		rm -rf ${SHAREDIR}/* ${DOCDIR}/vendor.doc
+		update-alternatives --quiet --remove-all rott
+
+		rm -f /usr/share/doc/rott/vendor.doc
+
+		if [ "`dpkg -l rott-data 2> /dev/null | grep ^ii`" ]
+		then
+			# rott-data is installed, delete all data files
+			# that are definitely not in rott-data
+			rm -f /usr/share/games/rott/1rott13.zip  \
+			      /usr/share/games/rott/FILE_ID.DIZ  \
+			      /usr/share/games/rott/INSTALL.EXE  \
+			      /usr/share/games/rott/ROTTSW13.SHR \
+			      /usr/share/games/rott/MODEM.PCK    \
+			      /usr/share/games/rott/ORDER.FRM    \
+			      /usr/share/games/rott/README.EXE   \
+			      /usr/share/games/rott/ROTT.EXE     \
+			      /usr/share/games/rott/ROTTHELP.EXE \
+			      /usr/share/games/rott/ROTTIPX.EXE  \
+			      /usr/share/games/rott/ROTTSER.EXE  \
+			      /usr/share/games/rott/SETUP.EXE    \
+			      /usr/share/games/rott/SNDSETUP.EXE
+		else
+			# rott-data is not (yet) installed, it is safe
+			# to delete the whole directory.
+			rm -rf /usr/share/games/rott
+		fi
 	;;
 
 	upgrade|failed-upgrade)
