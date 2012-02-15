@@ -1,4 +1,7 @@
-Enable playback of demo files in DATADIR.
+Description: Enable playback of demo files in DATADIR.
+Author: Fabian Greffrath <fabian+debian@greffrath.com>
+Applied-Upstream: http://svn.icculus.org/rott?view=rev&revision=254,
+ http://svn.icculus.org/rott?view=rev&revision=261
 
 --- rott-1.1.1.orig/rott/rt_net.c
 +++ rott-1.1.1/rott/rt_net.c
@@ -11,8 +14,8 @@ Enable playback of demo files in DATADIR.
  
 -   filename[4] = (char)('0' + (byte)demonumber);
 -   filename[6] = (char)('0' + (byte)gamestate.violence);
-+   filename[3 + sizeof(DATADIR)] = (char)('0' + (byte)demonumber);
-+   filename[5 + sizeof(DATADIR)] = (char)('0' + (byte)gamestate.violence);
++   filename[4 + strlen(DATADIR)] = (char)('0' + (byte)demonumber);
++   filename[6 + strlen(DATADIR)] = (char)('0' + (byte)gamestate.violence);
     FixFilePath(filename);
  }
  //****************************************************************************

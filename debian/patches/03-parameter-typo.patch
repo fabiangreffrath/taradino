@@ -1,5 +1,6 @@
 Description: paramater -> parameter
 Author: Fabian Greffrath <fabian+debian@greffrath.com>
+Applied-Upstream: http://svn.icculus.org/rott?view=rev&revision=255
 
 --- rott-1.1.1.orig/doc/rott.6
 +++ rott-1.1.1/doc/rott.6

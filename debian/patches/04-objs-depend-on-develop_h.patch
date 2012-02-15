@@ -1,5 +1,6 @@
 Description: Make sure object files get rebuilt whenever develop.h is changed.
 Author: Fabian Greffrath <fabian+debian@greffrath.com>
+Applied-Upstream: http://svn.icculus.org/rott?view=rev&revision=256
 
 --- rott-1.1.1.orig/rott/Makefile
 +++ rott-1.1.1/rott/Makefile

@@ -2,9 +2,10 @@
 
 CFLAGS += -DDATADIR=\"/usr/share/games/rott/\"
 CFLAGS += -Wno-pointer-sign -Wno-unused
+CFLAGS += $(CPPFLAGS)
 
 %:
-	dh --sourcedir=rott $@
+	dh $@ --sourcedir=rott
 
 override_dh_auto_build:
 	# Shareware Version

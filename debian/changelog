@@ -1,3 +1,17 @@
+rott (1.1.1-7) unstable; urgency=low
+
+  * Clarify relation to game-data-packager and its generated
+    packages in debian/control.
+  * Export CFLAGS for them to take effect as per dpkg (>= 1.16.1).
+  * Update Vcs-Browser field in debian/control.
+  * Remove obsolete 00-disable-audiolib.patch and 00-ludicrous-gibs.patch.
+  * Bump debhelper compatibility to v9.
+  * Fix format string vulnerabilities.
+  * Update patches and header information.
+  * Update debian/copyright to comply to DEP-5.
+
+ -- Fabian Greffrath <fabian+debian@greffrath.com>  Wed, 15 Feb 2012 13:45:37 +0100
+
 rott (1.1.1-6) unstable; urgency=low
 
   * bump version for dak (I fumbled the last upload)

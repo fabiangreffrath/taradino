@@ -1,6 +1,6 @@
 Description: persistant -> persistent
-Forwarded: no
 Author: Evgeni Golov <evgeni@debian.org>
+Applied-Upstream: http://svn.icculus.org/rott?view=rev&revision=252
 Last-Update: 2009-12-21
 
 Index: rott-1.1.1/rott/rt_cfg.c
