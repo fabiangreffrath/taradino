@@ -1,0 +1,78 @@
+================
+ROTT Port README
+================
+
+This is a port of Apogee's 3D action title Rise of the Triad, originally
+released in 1994.  This port duplicates the functionality of the original
+game on modern operating systems, including Linux, Win32, and OSX.
+
+This port makes use of the Simple Direct Media Layer, or SDL, and an additional
+library named SDL_mixer.  If you do not have these libraries installed, check
+the links section below.
+
+This software is distributed in source code format and is licensed under the
+terms of the GNU General Public License.  A copy of this license is included
+with the software in the file gnu.txt.
+
+This software is not supported by 3D Realms, Apogee, or the porters.
+
+For reference, the primary contributors to this port are:
+
+Steven Fuller
+Ryan Gordon
+John Hall
+Dan Olson
+
+
+-------------
+General Hints
+-------------
+
+To compile the source code under Linux, change to the rott/ directory and type:
+
+make clean
+make
+
+The source code is setup to use shareware binaries.  If you want to use the
+registered version of ROTT, edit rott/develop.h and make the following changes:
+
+change
+#define SHAREWARE   1
+#define SUPERROTT   0
+to
+#define SHAREWARE   0
+#define SUPERROTT   1
+
+After this, save your changes and compile as normal.
+
+If you experience difficulty with sound, you may need to download a CVS version
+of SDL_mixer.  Instructions for doing this can be found at the SDL_mixer site,
+linked below.
+
+
+------------
+Known Issues
+------------
+
+- Demos go out of sync.
+- DOS border coloring not implemented.
+- Screen shake from DOS version not implemented.
+- No netplay support.
+
+
+-------------
+Helpful Links
+-------------
+
+ROTT Port site:
+http://icculus.org/rott/
+
+The Simple Direct Media Layer:
+http://www.libsdl.org/
+
+SDL_mixer:
+http://www.libsdl.org/projects/SDL_mixer
+
+3D Realms official forum on ROTT source code:
+http://forums.3drealms.com/ubb/ultimatebb.php?ubb=forum;f=24
+
