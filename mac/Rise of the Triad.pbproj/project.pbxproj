@@ -1,0 +1,1187 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 38;
+	objects = {
+		080E96DDFE201D6D7F000001 = {
+			children = (
+				F5A47A9D01A0482F01D3D55B,
+				F5A47A9E01A0483001D3D55B,
+			);
+			isa = PBXGroup;
+			name = Classes;
+			refType = 4;
+		};
+		089C165CFE840E0CC02AAC07 = {
+			children = (
+				089C165DFE840E0CC02AAC07,
+			);
+			isa = PBXVariantGroup;
+			name = InfoPlist.strings;
+			refType = 4;
+		};
+		089C165DFE840E0CC02AAC07 = {
+			fileEncoding = 10;
+			isa = PBXFileReference;
+			name = English;
+			path = English.lproj/InfoPlist.strings;
+			refType = 4;
+		};
+		089C165EFE840E0CC02AAC07 = {
+			fileRef = 089C165CFE840E0CC02AAC07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//080
+//081
+//082
+//083
+//084
+//100
+//101
+//102
+//103
+//104
+		1058C7A0FEA54F0111CA2CBB = {
+			children = (
+				1058C7A1FEA54F0111CA2CBB,
+			);
+			isa = PBXGroup;
+			name = "Linked Frameworks";
+			refType = 4;
+		};
+		1058C7A1FEA54F0111CA2CBB = {
+			isa = PBXFrameworkReference;
+			name = Cocoa.framework;
+			path = /System/Library/Frameworks/Cocoa.framework;
+			refType = 0;
+		};
+		1058C7A2FEA54F0111CA2CBB = {
+			children = (
+				29B97325FDCFA39411CA2CEA,
+				29B97324FDCFA39411CA2CEA,
+			);
+			isa = PBXGroup;
+			name = "Other Frameworks";
+			refType = 4;
+		};
+		1058C7A3FEA54F0111CA2CBB = {
+			fileRef = 1058C7A1FEA54F0111CA2CBB;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//100
+//101
+//102
+//103
+//104
+//170
+//171
+//172
+//173
+//174
+		17587328FF379C6511CA2CBB = {
+			isa = PBXApplicationReference;
+			path = "Rise of the Triad.app";
+			refType = 3;
+		};
+//170
+//171
+//172
+//173
+//174
+//190
+//191
+//192
+//193
+//194
+		19C28FACFE9D520D11CA2CBB = {
+			children = (
+				17587328FF379C6511CA2CBB,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+		};
+//190
+//191
+//192
+//193
+//194
+//290
+//291
+//292
+//293
+//294
+		29B97313FDCFA39411CA2CEA = {
+			buildStyles = (
+				4A9504CCFFE6A4B311CA0CBA,
+				4A9504CDFFE6A4B311CA0CBA,
+			);
+			isa = PBXProject;
+			mainGroup = 29B97314FDCFA39411CA2CEA;
+			projectDirPath = "";
+			targets = (
+				29B97326FDCFA39411CA2CEA,
+			);
+		};
+		29B97314FDCFA39411CA2CEA = {
+			children = (
+				080E96DDFE201D6D7F000001,
+				29B97315FDCFA39411CA2CEA,
+				29B97317FDCFA39411CA2CEA,
+				29B97323FDCFA39411CA2CEA,
+				19C28FACFE9D520D11CA2CBB,
+				F5A3D67703BAB75001000002,
+				F5A3D67803BAB75001000002,
+				F5A3D67903BAB75001000002,
+				F5A3D67A03BAB75001000002,
+				F5A3D67B03BAB75001000002,
+				F5A3D67C03BAB75001000002,
+				F5A3D67D03BAB75001000002,
+				F5A3D67E03BAB75001000002,
+				F5A3D67F03BAB75001000002,
+				F5A3D68003BAB75001000002,
+				F5A3D68103BAB75001000002,
+				F5A3D68203BAB75001000002,
+			);
+			isa = PBXGroup;
+			name = "SDL App";
+			path = "";
+			refType = 4;
+		};
+		29B97315FDCFA39411CA2CEA = {
+			children = (
+				F5C71B7403B6FF1D01000002,
+				F5C71B7503B6FF1D01000002,
+				F5C71B7603B6FF1D01000002,
+				F5C71B7703B6FF1D01000002,
+				F5C71B7803B6FF1D01000002,
+				F5C71B7903B6FF1D01000002,
+				F5C71B7A03B6FF1D01000002,
+				F5C71B7D03B6FF1D01000002,
+				F5C71B7E03B6FF1D01000002,
+				F5C71B8003B6FF1D01000002,
+				F5C71B8103B6FF1D01000002,
+				F5C71B8203B6FF1D01000002,
+				F5C71B8303B6FF1D01000002,
+				F5C71B8403B6FF1D01000002,
+				F5C71B8503B6FF1D01000002,
+				F5C71B8603B6FF1D01000002,
+				F5C71B8703B6FF1D01000002,
+				F5C71B8803B6FF1D01000002,
+				F5C71B8903B6FF1D01000002,
+				F5C71B8A03B6FF1D01000002,
+				F5C71B8B03B6FF1D01000002,
+				F5C71B8E03B6FF1D01000002,
+				F5C71B8F03B6FF1D01000002,
+				F5C71B9003B6FF1D01000002,
+				F5C71B9103B6FF1D01000002,
+				F5C71B9203B6FF1D01000002,
+				F5C71B9303B6FF1D01000002,
+				F5C71B9403B6FF1D01000002,
+				F5C71B9503B6FF1D01000002,
+				F5C71B9603B6FF1D01000002,
+				F5C71B9703B6FF1D01000002,
+				F5C71B9803B6FF1D01000002,
+				F5C71B9A03B6FF1D01000002,
+				F5C71B9B03B6FF1D01000002,
+				F5C71B9C03B6FF1D01000002,
+				F5C71B9D03B6FF1D01000002,
+				F5C71B9E03B6FF1D01000002,
+				F5C71B9F03B6FF1D01000002,
+				F5C71BA003B6FF1D01000002,
+				F5C71BA103B6FF1D01000002,
+				F5C71BA303B6FF1D01000002,
+				F5C71BA503B6FF1D01000002,
+				F5C71BA603B6FF1D01000002,
+				F5C71BA803B6FF1D01000002,
+				F5C71BAB03B6FF1D01000002,
+				F5C71BAC03B6FF1D01000002,
+				F5C71BAD03B6FF1D01000002,
+				F5C71BF203B713D201000002,
+				F5C71BFF03B79CF301000002,
+			);
+			isa = PBXGroup;
+			name = "Other Sources";
+			path = "";
+			refType = 4;
+		};
+		29B97317FDCFA39411CA2CEA = {
+			children = (
+				089C165CFE840E0CC02AAC07,
+			);
+			isa = PBXGroup;
+			name = Resources;
+			path = "";
+			refType = 4;
+		};
+		29B97323FDCFA39411CA2CEA = {
+			children = (
+				1058C7A0FEA54F0111CA2CBB,
+				1058C7A2FEA54F0111CA2CBB,
+			);
+			isa = PBXGroup;
+			name = Frameworks;
+			path = "";
+			refType = 4;
+		};
+		29B97324FDCFA39411CA2CEA = {
+			isa = PBXFrameworkReference;
+			name = AppKit.framework;
+			path = /System/Library/Frameworks/AppKit.framework;
+			refType = 0;
+		};
+		29B97325FDCFA39411CA2CEA = {
+			isa = PBXFrameworkReference;
+			name = Foundation.framework;
+			path = /System/Library/Frameworks/Foundation.framework;
+			refType = 0;
+		};
+		29B97326FDCFA39411CA2CEA = {
+			buildPhases = (
+				29B97327FDCFA39411CA2CEA,
+				29B97328FDCFA39411CA2CEA,
+				29B9732BFDCFA39411CA2CEA,
+				29B9732DFDCFA39411CA2CEA,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "\"$(HOME)/Library/Frameworks\" /Users/overcode/Library/Frameworks";
+				HEADER_SEARCH_PATHS = "\"$(HOME)/Library/Frameworks/SDL.framework/Headers\" \"$(HOME)/Library/Frameworks/SDL_mixer.framework/Headers\"";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "-DUSE_SDL=1 -DPLATFORM_UNIX=1 -DPLATFORM_MACOSX=1 -DUSE_C_SQRT=1";
+				OTHER_LDFLAGS = "-framework SDL -framework SDL_mixer";
+				PRODUCT_NAME = "Rise of the Triad";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas -Wno-unused -Wno-switch";
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			isa = PBXApplicationTarget;
+			name = "Rise of the Triad";
+			productInstallPath = "$(HOME)/Applications";
+			productName = "SDL App";
+			productReference = 17587328FF379C6511CA2CBB;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>Rise of the Triad</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.1</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>
+";
+			shouldUseHeadermap = 1;
+		};
+		29B97327FDCFA39411CA2CEA = {
+			buildActionMask = 2147483647;
+			files = (
+				F5A47AA101A0483001D3D55B,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29B97328FDCFA39411CA2CEA = {
+			buildActionMask = 2147483647;
+			files = (
+				089C165EFE840E0CC02AAC07,
+				F5A3D68303BAB75001000002,
+				F5A3D68403BAB75001000002,
+				F5A3D68503BAB75001000002,
+				F5A3D68603BAB75001000002,
+				F5A3D68703BAB75001000002,
+				F5A3D68803BAB75001000002,
+				F5A3D68903BAB75001000002,
+				F5A3D68A03BAB75001000002,
+				F5A3D68B03BAB75001000002,
+				F5A3D68C03BAB75001000002,
+				F5A3D68D03BAB75001000002,
+				F5A3D68E03BAB75001000002,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29B9732BFDCFA39411CA2CEA = {
+			buildActionMask = 2147483647;
+			files = (
+				F5A47AA301A0483001D3D55B,
+				F5C71BAE03B6FF1D01000002,
+				F5C71BAF03B6FF1D01000002,
+				F5C71BB003B6FF1D01000002,
+				F5C71BB103B6FF1D01000002,
+				F5C71BB203B6FF1D01000002,
+				F5C71BB303B6FF1D01000002,
+				F5C71BB403B6FF1D01000002,
+				F5C71BB703B6FF1D01000002,
+				F5C71BB803B6FF1D01000002,
+				F5C71BBA03B6FF1D01000002,
+				F5C71BBB03B6FF1D01000002,
+				F5C71BBC03B6FF1D01000002,
+				F5C71BBD03B6FF1D01000002,
+				F5C71BBE03B6FF1D01000002,
+				F5C71BBF03B6FF1D01000002,
+				F5C71BC003B6FF1D01000002,
+				F5C71BC103B6FF1D01000002,
+				F5C71BC203B6FF1D01000002,
+				F5C71BC303B6FF1D01000002,
+				F5C71BC403B6FF1D01000002,
+				F5C71BC503B6FF1D01000002,
+				F5C71BC803B6FF1D01000002,
+				F5C71BC903B6FF1D01000002,
+				F5C71BCA03B6FF1D01000002,
+				F5C71BCB03B6FF1D01000002,
+				F5C71BCC03B6FF1D01000002,
+				F5C71BCD03B6FF1D01000002,
+				F5C71BCE03B6FF1D01000002,
+				F5C71BCF03B6FF1D01000002,
+				F5C71BD003B6FF1D01000002,
+				F5C71BD103B6FF1D01000002,
+				F5C71BD203B6FF1D01000002,
+				F5C71BD403B6FF1D01000002,
+				F5C71BD503B6FF1D01000002,
+				F5C71BD603B6FF1D01000002,
+				F5C71BD703B6FF1D01000002,
+				F5C71BD803B6FF1D01000002,
+				F5C71BD903B6FF1D01000002,
+				F5C71BDA03B6FF1D01000002,
+				F5C71BDB03B6FF1D01000002,
+				F5C71BDD03B6FF1D01000002,
+				F5C71BDF03B6FF1D01000002,
+				F5C71BE003B6FF1D01000002,
+				F5C71BE203B6FF1D01000002,
+				F5C71BE503B6FF1D01000002,
+				F5C71BE603B6FF1D01000002,
+				F5C71BE703B6FF1D01000002,
+				F5C71BF303B713D201000002,
+				F5C71C0003B79CF301000002,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		29B9732DFDCFA39411CA2CEA = {
+			buildActionMask = 2147483647;
+			files = (
+				1058C7A3FEA54F0111CA2CBB,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+//290
+//291
+//292
+//293
+//294
+//4A0
+//4A1
+//4A2
+//4A3
+//4A4
+		4A9504CCFFE6A4B311CA0CBA = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				OPTIMIZATION_CFLAGS = "-O0";
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		4A9504CDFFE6A4B311CA0CBA = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				OPTIMIZATION_CFLAGS = "-O3";
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+//4A0
+//4A1
+//4A2
+//4A3
+//4A4
+//F50
+//F51
+//F52
+//F53
+//F54
+		F5A3D67703BAB75001000002 = {
+			isa = PBXFileReference;
+			name = DEMO1_3.DMO;
+			path = /Users/overcode/Code/rott/swdata/DEMO1_3.DMO;
+			refType = 0;
+		};
+		F5A3D67803BAB75001000002 = {
+			isa = PBXFileReference;
+			name = DEMO2_3.DMO;
+			path = /Users/overcode/Code/rott/swdata/DEMO2_3.DMO;
+			refType = 0;
+		};
+		F5A3D67903BAB75001000002 = {
+			isa = PBXFileReference;
+			name = DEMO3_3.DMO;
+			path = /Users/overcode/Code/rott/swdata/DEMO3_3.DMO;
+			refType = 0;
+		};
+		F5A3D67A03BAB75001000002 = {
+			isa = PBXFileReference;
+			name = DEMO4_3.DMO;
+			path = /Users/overcode/Code/rott/swdata/DEMO4_3.DMO;
+			refType = 0;
+		};
+		F5A3D67B03BAB75001000002 = {
+			isa = PBXFileReference;
+			name = HUNTBGIN.RTC;
+			path = /Users/overcode/Code/rott/swdata/HUNTBGIN.RTC;
+			refType = 0;
+		};
+		F5A3D67C03BAB75001000002 = {
+			isa = PBXFileReference;
+			name = HUNTBGIN.RTL;
+			path = /Users/overcode/Code/rott/swdata/HUNTBGIN.RTL;
+			refType = 0;
+		};
+		F5A3D67D03BAB75001000002 = {
+			isa = PBXFileReference;
+			name = HUNTBGIN.WAD;
+			path = /Users/overcode/Code/rott/swdata/HUNTBGIN.WAD;
+			refType = 0;
+		};
+		F5A3D67E03BAB75001000002 = {
+			isa = PBXFileReference;
+			name = MODEM.PCK;
+			path = /Users/overcode/Code/rott/swdata/MODEM.PCK;
+			refType = 0;
+		};
+		F5A3D67F03BAB75001000002 = {
+			isa = PBXFileReference;
+			name = ORDER.FRM;
+			path = /Users/overcode/Code/rott/swdata/ORDER.FRM;
+			refType = 0;
+		};
+		F5A3D68003BAB75001000002 = {
+			isa = PBXFileReference;
+			name = README;
+			path = /Users/overcode/Code/rott/swdata/README;
+			refType = 0;
+		};
+		F5A3D68103BAB75001000002 = {
+			isa = PBXFileReference;
+			name = REMOTE1.RTS;
+			path = /Users/overcode/Code/rott/swdata/REMOTE1.RTS;
+			refType = 0;
+		};
+		F5A3D68203BAB75001000002 = {
+			isa = PBXFileReference;
+			name = VENDOR.DOC;
+			path = /Users/overcode/Code/rott/swdata/VENDOR.DOC;
+			refType = 0;
+		};
+		F5A3D68303BAB75001000002 = {
+			fileRef = F5A3D67703BAB75001000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A3D68403BAB75001000002 = {
+			fileRef = F5A3D67803BAB75001000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A3D68503BAB75001000002 = {
+			fileRef = F5A3D67903BAB75001000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A3D68603BAB75001000002 = {
+			fileRef = F5A3D67A03BAB75001000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A3D68703BAB75001000002 = {
+			fileRef = F5A3D67B03BAB75001000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A3D68803BAB75001000002 = {
+			fileRef = F5A3D67C03BAB75001000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A3D68903BAB75001000002 = {
+			fileRef = F5A3D67D03BAB75001000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A3D68A03BAB75001000002 = {
+			fileRef = F5A3D67E03BAB75001000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A3D68B03BAB75001000002 = {
+			fileRef = F5A3D67F03BAB75001000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A3D68C03BAB75001000002 = {
+			fileRef = F5A3D68003BAB75001000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A3D68D03BAB75001000002 = {
+			fileRef = F5A3D68103BAB75001000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A3D68E03BAB75001000002 = {
+			fileRef = F5A3D68203BAB75001000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A47A9D01A0482F01D3D55B = {
+			isa = PBXFileReference;
+			path = SDLMain.h;
+			refType = 2;
+		};
+		F5A47A9E01A0483001D3D55B = {
+			isa = PBXFileReference;
+			path = SDLMain.m;
+			refType = 2;
+		};
+		F5A47AA101A0483001D3D55B = {
+			fileRef = F5A47A9D01A0482F01D3D55B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5A47AA301A0483001D3D55B = {
+			fileRef = F5A47A9E01A0483001D3D55B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71B7403B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = cin_actr.c;
+			path = /Users/overcode/Code/rott/rott/cin_actr.c;
+			refType = 0;
+		};
+		F5C71B7503B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = cin_efct.c;
+			path = /Users/overcode/Code/rott/rott/cin_efct.c;
+			refType = 0;
+		};
+		F5C71B7603B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = cin_evnt.c;
+			path = /Users/overcode/Code/rott/rott/cin_evnt.c;
+			refType = 0;
+		};
+		F5C71B7703B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = cin_glob.c;
+			path = /Users/overcode/Code/rott/rott/cin_glob.c;
+			refType = 0;
+		};
+		F5C71B7803B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = cin_main.c;
+			path = /Users/overcode/Code/rott/rott/cin_main.c;
+			refType = 0;
+		};
+		F5C71B7903B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = cin_util.c;
+			path = /Users/overcode/Code/rott/rott/cin_util.c;
+			refType = 0;
+		};
+		F5C71B7A03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = engine.c;
+			path = /Users/overcode/Code/rott/rott/engine.c;
+			refType = 0;
+		};
+		F5C71B7D03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = fx_man.c;
+			path = /Users/overcode/Code/rott/rott/fx_man.c;
+			refType = 0;
+		};
+		F5C71B7E03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = isr.c;
+			path = /Users/overcode/Code/rott/rott/isr.c;
+			refType = 0;
+		};
+		F5C71B8003B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = modexlib.c;
+			path = /Users/overcode/Code/rott/rott/modexlib.c;
+			refType = 0;
+		};
+		F5C71B8103B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_actor.c;
+			path = /Users/overcode/Code/rott/rott/rt_actor.c;
+			refType = 0;
+		};
+		F5C71B8203B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_battl.c;
+			path = /Users/overcode/Code/rott/rott/rt_battl.c;
+			refType = 0;
+		};
+		F5C71B8303B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_build.c;
+			path = /Users/overcode/Code/rott/rott/rt_build.c;
+			refType = 0;
+		};
+		F5C71B8403B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_cfg.c;
+			path = /Users/overcode/Code/rott/rott/rt_cfg.c;
+			refType = 0;
+		};
+		F5C71B8503B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_com.c;
+			path = /Users/overcode/Code/rott/rott/rt_com.c;
+			refType = 0;
+		};
+		F5C71B8603B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_crc.c;
+			path = /Users/overcode/Code/rott/rott/rt_crc.c;
+			refType = 0;
+		};
+		F5C71B8703B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_debug.c;
+			path = /Users/overcode/Code/rott/rott/rt_debug.c;
+			refType = 0;
+		};
+		F5C71B8803B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_dmand.c;
+			path = /Users/overcode/Code/rott/rott/rt_dmand.c;
+			refType = 0;
+		};
+		F5C71B8903B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_door.c;
+			path = /Users/overcode/Code/rott/rott/rt_door.c;
+			refType = 0;
+		};
+		F5C71B8A03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_draw.c;
+			path = /Users/overcode/Code/rott/rott/rt_draw.c;
+			refType = 0;
+		};
+		F5C71B8B03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_err.c;
+			path = /Users/overcode/Code/rott/rott/rt_err.c;
+			refType = 0;
+		};
+		F5C71B8E03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_floor.c;
+			path = /Users/overcode/Code/rott/rott/rt_floor.c;
+			refType = 0;
+		};
+		F5C71B8F03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_game.c;
+			path = /Users/overcode/Code/rott/rott/rt_game.c;
+			refType = 0;
+		};
+		F5C71B9003B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_in.c;
+			path = /Users/overcode/Code/rott/rott/rt_in.c;
+			refType = 0;
+		};
+		F5C71B9103B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_main.c;
+			path = /Users/overcode/Code/rott/rott/rt_main.c;
+			refType = 0;
+		};
+		F5C71B9203B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_map.c;
+			path = /Users/overcode/Code/rott/rott/rt_map.c;
+			refType = 0;
+		};
+		F5C71B9303B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_menu.c;
+			path = /Users/overcode/Code/rott/rott/rt_menu.c;
+			refType = 0;
+		};
+		F5C71B9403B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_msg.c;
+			path = /Users/overcode/Code/rott/rott/rt_msg.c;
+			refType = 0;
+		};
+		F5C71B9503B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_net.c;
+			path = /Users/overcode/Code/rott/rott/rt_net.c;
+			refType = 0;
+		};
+		F5C71B9603B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_playr.c;
+			path = /Users/overcode/Code/rott/rott/rt_playr.c;
+			refType = 0;
+		};
+		F5C71B9703B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_rand.c;
+			path = /Users/overcode/Code/rott/rott/rt_rand.c;
+			refType = 0;
+		};
+		F5C71B9803B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_scale.c;
+			path = /Users/overcode/Code/rott/rott/rt_scale.c;
+			refType = 0;
+		};
+		F5C71B9A03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_sound.c;
+			path = /Users/overcode/Code/rott/rott/rt_sound.c;
+			refType = 0;
+		};
+		F5C71B9B03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_spbal.c;
+			path = /Users/overcode/Code/rott/rott/rt_spbal.c;
+			refType = 0;
+		};
+		F5C71B9C03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_sqrt.c;
+			path = /Users/overcode/Code/rott/rott/rt_sqrt.c;
+			refType = 0;
+		};
+		F5C71B9D03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_stat.c;
+			path = /Users/overcode/Code/rott/rott/rt_stat.c;
+			refType = 0;
+		};
+		F5C71B9E03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_state.c;
+			path = /Users/overcode/Code/rott/rott/rt_state.c;
+			refType = 0;
+		};
+		F5C71B9F03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_str.c;
+			path = /Users/overcode/Code/rott/rott/rt_str.c;
+			refType = 0;
+		};
+		F5C71BA003B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_swift.c;
+			path = /Users/overcode/Code/rott/rott/rt_swift.c;
+			refType = 0;
+		};
+		F5C71BA103B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_ted.c;
+			path = /Users/overcode/Code/rott/rott/rt_ted.c;
+			refType = 0;
+		};
+		F5C71BA303B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_util.c;
+			path = /Users/overcode/Code/rott/rott/rt_util.c;
+			refType = 0;
+		};
+		F5C71BA503B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_vid.c;
+			path = /Users/overcode/Code/rott/rott/rt_vid.c;
+			refType = 0;
+		};
+		F5C71BA603B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = rt_view.c;
+			path = /Users/overcode/Code/rott/rott/rt_view.c;
+			refType = 0;
+		};
+		F5C71BA803B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = scriplib.c;
+			path = /Users/overcode/Code/rott/rott/scriplib.c;
+			refType = 0;
+		};
+		F5C71BAB03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = w_wad.c;
+			path = /Users/overcode/Code/rott/rott/w_wad.c;
+			refType = 0;
+		};
+		F5C71BAC03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = watcom.c;
+			path = /Users/overcode/Code/rott/rott/watcom.c;
+			refType = 0;
+		};
+		F5C71BAD03B6FF1D01000002 = {
+			isa = PBXFileReference;
+			name = z_zone.c;
+			path = /Users/overcode/Code/rott/rott/z_zone.c;
+			refType = 0;
+		};
+		F5C71BAE03B6FF1D01000002 = {
+			fileRef = F5C71B7403B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BAF03B6FF1D01000002 = {
+			fileRef = F5C71B7503B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BB003B6FF1D01000002 = {
+			fileRef = F5C71B7603B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BB103B6FF1D01000002 = {
+			fileRef = F5C71B7703B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BB203B6FF1D01000002 = {
+			fileRef = F5C71B7803B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BB303B6FF1D01000002 = {
+			fileRef = F5C71B7903B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BB403B6FF1D01000002 = {
+			fileRef = F5C71B7A03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BB703B6FF1D01000002 = {
+			fileRef = F5C71B7D03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BB803B6FF1D01000002 = {
+			fileRef = F5C71B7E03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BBA03B6FF1D01000002 = {
+			fileRef = F5C71B8003B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BBB03B6FF1D01000002 = {
+			fileRef = F5C71B8103B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BBC03B6FF1D01000002 = {
+			fileRef = F5C71B8203B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BBD03B6FF1D01000002 = {
+			fileRef = F5C71B8303B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BBE03B6FF1D01000002 = {
+			fileRef = F5C71B8403B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BBF03B6FF1D01000002 = {
+			fileRef = F5C71B8503B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BC003B6FF1D01000002 = {
+			fileRef = F5C71B8603B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BC103B6FF1D01000002 = {
+			fileRef = F5C71B8703B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BC203B6FF1D01000002 = {
+			fileRef = F5C71B8803B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BC303B6FF1D01000002 = {
+			fileRef = F5C71B8903B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BC403B6FF1D01000002 = {
+			fileRef = F5C71B8A03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BC503B6FF1D01000002 = {
+			fileRef = F5C71B8B03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BC803B6FF1D01000002 = {
+			fileRef = F5C71B8E03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BC903B6FF1D01000002 = {
+			fileRef = F5C71B8F03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BCA03B6FF1D01000002 = {
+			fileRef = F5C71B9003B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BCB03B6FF1D01000002 = {
+			fileRef = F5C71B9103B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BCC03B6FF1D01000002 = {
+			fileRef = F5C71B9203B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BCD03B6FF1D01000002 = {
+			fileRef = F5C71B9303B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BCE03B6FF1D01000002 = {
+			fileRef = F5C71B9403B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BCF03B6FF1D01000002 = {
+			fileRef = F5C71B9503B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BD003B6FF1D01000002 = {
+			fileRef = F5C71B9603B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BD103B6FF1D01000002 = {
+			fileRef = F5C71B9703B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BD203B6FF1D01000002 = {
+			fileRef = F5C71B9803B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BD403B6FF1D01000002 = {
+			fileRef = F5C71B9A03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BD503B6FF1D01000002 = {
+			fileRef = F5C71B9B03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BD603B6FF1D01000002 = {
+			fileRef = F5C71B9C03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BD703B6FF1D01000002 = {
+			fileRef = F5C71B9D03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BD803B6FF1D01000002 = {
+			fileRef = F5C71B9E03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BD903B6FF1D01000002 = {
+			fileRef = F5C71B9F03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BDA03B6FF1D01000002 = {
+			fileRef = F5C71BA003B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BDB03B6FF1D01000002 = {
+			fileRef = F5C71BA103B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BDD03B6FF1D01000002 = {
+			fileRef = F5C71BA303B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BDF03B6FF1D01000002 = {
+			fileRef = F5C71BA503B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BE003B6FF1D01000002 = {
+			fileRef = F5C71BA603B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BE203B6FF1D01000002 = {
+			fileRef = F5C71BA803B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BE503B6FF1D01000002 = {
+			fileRef = F5C71BAB03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BE603B6FF1D01000002 = {
+			fileRef = F5C71BAC03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BE703B6FF1D01000002 = {
+			fileRef = F5C71BAD03B6FF1D01000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BF203B713D201000002 = {
+			isa = PBXFileReference;
+			name = dosutil.c;
+			path = /Users/overcode/Code/rott/rott/dosutil.c;
+			refType = 0;
+		};
+		F5C71BF303B713D201000002 = {
+			fileRef = F5C71BF203B713D201000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C71BFF03B79CF301000002 = {
+			isa = PBXFileReference;
+			name = byteordr.c;
+			path = /Users/overcode/Code/rott/rott/byteordr.c;
+			refType = 0;
+		};
+		F5C71C0003B79CF301000002 = {
+			fileRef = F5C71BFF03B79CF301000002;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA;
+}

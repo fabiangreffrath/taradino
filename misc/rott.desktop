@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Rise of the Triad
+Comment=A high quality, fast scrolling first-person perspective 3D action game
+Icon=rott
+TryExec=rott
+Exec=rott -fullscreen -resolution 800x600
+Categories=Game;ActionGame;
