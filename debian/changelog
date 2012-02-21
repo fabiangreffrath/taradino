@@ -1,4 +1,13 @@
-rott (1.1.1-7) unstable; urgency=low
+rott (1.1.2-1) unstable; urgency=low
+
+  * Imported Upstream version 1.1.2
+  * Update Vcs-* fields.
+  * Remove all patches applied upstream.
+  * Adapt debian/rules to the new build system.
+
+ -- Fabian Greffrath <fabian+debian@greffrath.com>  Tue, 21 Feb 2012 11:56:38 +0100
+
+rott (1.1.1-7) UNRELEASED; urgency=low
 
   * Clarify relation to game-data-packager and its generated
     packages in debian/control.
