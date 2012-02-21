@@ -100,7 +100,7 @@ void W_AddFile (char *_filename)
 			strcpy (buf,"Error, Could not find User file '");
 			strcat (buf,filename);
 			strcat (buf,"', ignoring file");
-			printf(buf);
+			printf("%s", buf);
 		}
 		//bna section end
 

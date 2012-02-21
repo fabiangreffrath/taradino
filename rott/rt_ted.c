@@ -1073,7 +1073,7 @@ void DrawPreCache( void )
       else
 			memcpy (&buf[0], "COMM-BAT", 8);
 
-      US_MeasureStr (&width, &height, &buf[0]);
+      US_MeasureStr (&width, &height, "%s", &buf[0]);
       VWB_TBar (PrintX-2, PrintY-2, width+4, height+4);
       US_BufPrint (&buf[0]);
 
@@ -1092,7 +1092,7 @@ void DrawPreCache( void )
          {
          itoa( gamestate.mapon + 1, &buf[ 5 ], 10 );
          }
-      US_MeasureStr (&width, &height, &buf[0]);
+      US_MeasureStr (&width, &height, "%s", &buf[0]);
       PrintX = (300-width);
       VWB_TBar (PrintX-2, PrintY-2, width+4, height+4);
       US_BufPrint (&buf[0]);
@@ -1107,7 +1107,7 @@ void DrawPreCache( void )
       else
          strcpy (temp, &(LevelName[0]));
 
-      US_MeasureStr (&width, &height, &temp[0]);
+      US_MeasureStr (&width, &height, "%s", &temp[0]);
 
       PrintX = (320-width) >> 1;
       PrintY = PRECACHESTRINGY;
@@ -1270,7 +1270,7 @@ DisableScreenStretch();
          CurrentFont = newfont1;//smallfont;
 
          strcpy( buf, "Press Any Key" );
-         US_MeasureStr (&width, &height, &buf[ 0 ] );
+         US_MeasureStr (&width, &height, "%s", &buf[ 0 ] );
          PrintX = (iGLOBAL_SCREENWIDTH-(width)) / 2;
          PrintY = WHratio*iGLOBAL_SCREENHEIGHT;//162;
          //VWB_TBar (PrintX-2, PrintY-2, width+4, height+4);

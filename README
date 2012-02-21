@@ -46,12 +46,16 @@ Michael Karcher (lots of bug and portability fixes for the Debian package)
 Fabian Greffrath (some minor improvements)
 
 
----------------------------
-Notes for the 1.1.1 Release
----------------------------
+----------------------------
+Notes for the 1.1.x Releases
+----------------------------
 
 Version 1.1.1 is merely a bugfix release that contains all the patches that
 have accumulated in Fedora and Debian during the previous year.
+
+Version 1.1.2 is another bugfix release that contains the Debian patches from
+the previous two and a half years; among them enabling the playback of demo
+files. Furthermore the build system has undergone a complete overhaul.
 
 Enabling the use of UNICODE (instead of keyboard scancodes) for the cheat codes
 and names in the highscore table is considered the release goal for the next
@@ -69,24 +73,21 @@ General Hints
 
 To compile the source code under Linux, change to the rott/ directory and type:
 
-make clean
-make
+  make clean
+  make
 
-The source code is setup to use shareware binaries.  If you want to use the
-registered version of ROTT, edit rott/develop.h and make the following changes:
+The build system is setup to use shareware binaries.  If you want to use the
+registered version of ROTT, compile with:
 
-change
-#define SHAREWARE   1
-#define SUPERROTT   0
-to
-#define SHAREWARE   0
-#define SUPERROTT   1
+  make SHAREWARE=0
 
-After this, save your changes and compile as normal.
+You may additionally append SUPERROTT=1 or SITELICENSE=1, if you want to use
+the CD version or the Site License CD version, respectively. However, make
+sure to only set one of them to 1 at once. You may want to edit rott/Makefile
+to make your changes persistent.
 
-If you experience difficulty with sound, you may need to download a CVS version
-of SDL_mixer.  Instructions for doing this can be found at the SDL_mixer site,
-linked below.
+It is generally recommended to build against the most recent version of 
+the Simple Direct Media Layer and SDL_mixer.
 
 
 ------------

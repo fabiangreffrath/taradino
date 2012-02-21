@@ -1225,7 +1225,7 @@ void WriteBattleConfig
    SafeWriteString(file, "\n;\n"
       "; These are the time in seconds of the various powerups.\n"
       "; You could modify these to give you infinite Mercury mode,\n"
-      "; stronger vests, or to make them persistant.\n;\n" );
+      "; stronger vests, or to make them persistent.\n;\n" );
 
    WriteParameter( file, "GodModeTime                ", BattleSpecialsTimes.GodModeTime );
    WriteParameter( file, "DogModeTime                ", BattleSpecialsTimes.DogModeTime );
