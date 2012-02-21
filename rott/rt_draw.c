@@ -4464,7 +4464,7 @@ fadeworld:
       if (i>3)
          I_Delay(50);
 
-      US_MeasureStr (&width, &height, &(EndCinematicText[i][0]));
+      US_MeasureStr (&width, &height, "%s", &(EndCinematicText[i][0]));
       if (LastScan !=0)
          break;
 
@@ -4555,11 +4555,11 @@ finalfade:
 
    if (LastScan == 0)
       {
-      US_MeasureStr (&width, &height, NextGameString1);
+      US_MeasureStr (&width, &height, "%s", NextGameString1);
       x=(320-width)>>1;
       y=(200-height)>>1;
       US_ClippedPrint (x,y-6, NextGameString1);
-      US_MeasureStr (&width, &height, NextGameString2);
+      US_MeasureStr (&width, &height, "%s", NextGameString2);
       x=(320-width)>>1;
       y=(200-height)>>1;
       US_ClippedPrint (x,y+6, NextGameString2);
@@ -4912,7 +4912,7 @@ void ScrollString ( int cy, char * string, byte * bkgnd, int scrolltime, int pau
    int time1,time2;
 
    LastScan=0;
-   US_MeasureStr (&width, &height, string);
+   US_MeasureStr (&width, &height, "%s", string);
 
    x=(320-width)>>1;
    y=cy-(height>>1);
@@ -5578,7 +5578,7 @@ void DoInBetweenCinematic (int yoffset, int lump, int delay, char * string )
    DrawNormalSprite(0,yoffset,lump);
 
    CurrentFont=smallfont;
-   US_MeasureStr (&width, &height, string);
+   US_MeasureStr (&width, &height, "%s", string);
    x=(320-width)>>1;
    y=190-height;
    US_ClippedPrint (x, y, string);
@@ -5674,7 +5674,7 @@ void DrawPreviousCredits ( int num, CreditType * Credits )
          CurrentFont=smallfont;
       else
          CurrentFont=tinyfont;
-      US_MeasureStr (&width, &height, &(Credits[i].text[0]));
+      US_MeasureStr (&width, &height, "%s", &(Credits[i].text[0]));
       x=(320-width)>>1;
       y=Credits[i].endy;
       US_ClippedPrint (x, y+4, &Credits[i].text[0]);
@@ -5706,7 +5706,7 @@ void WarpCreditString ( int time, byte * back, int num, CreditType * Credits)
       CurrentFont=smallfont;
    else
       CurrentFont=tinyfont;
-   US_MeasureStr (&width, &height, &(Credits[num].text[0]));
+   US_MeasureStr (&width, &height, "%s", &(Credits[num].text[0]));
 
    x=(320-width)>>1;
    y=Credits[num].endy;

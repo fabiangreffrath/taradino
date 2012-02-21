@@ -1,22 +1,30 @@
-CC=gcc
-AR=ar
-RANLIB=ranlib
-CFLAGS=-g -O2
-LDLIBS=
+AUDIOLIB ?= audiolib.a
 
+AR ?= ar
+CC ?= gcc
+RANLIB ?= ranlib
+
+ARFLAGS ?= rcT
+CFLAGS ?= -g -O2
+CFLAGS += -Wall
 CFLAGS += $(shell sdl-config --cflags)
-LDLIBS += $(shell sdl-config --libs)
 
-OBJ=fx_man.o dsl.o ll_man.o multivoc.o mv_mix.o mvreverb.o nodpmi.o \
-	pitch.o user.o usrhooks.o
+OBJS :=
+OBJS += fx_man.o
+OBJS += dsl.o
+OBJS += ll_man.o
+OBJS += multivoc.o
+OBJS += mv_mix.o
+OBJS += mvreverb.o
+OBJS += nodpmi.o
+OBJS += pitch.o
+OBJS += user.o
+OBJS += usrhooks.o
 
-audiolib.a: $(OBJ)
-	rm -rf $@
-	$(AR) rc $@ $^
+$(AUDIOLIB): $(OBJS)
+	$(RM) $@
+	$(AR) $(ARFLAGS) $@ $^
 	$(RANLIB) $@
 
 clean:
-	rm -rf audiolib.a *.o
-
-distclean: clean
-	rm -rf *~
+	$(RM) $(AUDIOLIB) $(OBJS)

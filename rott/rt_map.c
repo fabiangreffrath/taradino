@@ -782,14 +782,14 @@ void DrawMapInfo ( void )
    PrintX = 2;
    PrintY = 2;
    strcpy (&temp[0], &(LevelName[0]));
-   US_MeasureStr (&width, &height, &temp[0]);
+   US_MeasureStr (&width, &height, "%s", &temp[0]);
 
    VWB_TBar (0, 0, 320, height+4);
 
    US_BufPrint (&temp[0]);
 
    strcpy (&temp[0], "TAB=EXIT");
-   US_MeasureStr (&width, &height, &temp[0]);
+   US_MeasureStr (&width, &height, "%s", &temp[0]);
 
    PrintX = 316-width;
    PrintY = 2;
@@ -797,7 +797,7 @@ void DrawMapInfo ( void )
    US_BufPrint (&temp[0]);
 
    strcpy (&temp[0], "< > CHANGE BACKGROUND COLOR");
-   US_MeasureStr (&width, &height, &temp[0]);
+   US_MeasureStr (&width, &height, "%s", &temp[0]);
 
    PrintX = (320-width)>>1;
    PrintY = 2;

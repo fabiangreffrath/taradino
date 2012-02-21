@@ -543,7 +543,7 @@ void PositionMenuBuf( int angle, int distance, boolean drawbackground )
    DrawPlanePosts();
    oldfont=CurrentFont;
    CurrentFont = (font_t *)W_CacheLumpName ("newfnt1", PU_CACHE, Cvt_font_t, 1);
-   US_MeasureStr (&width, &height, titlestring);
+   US_MeasureStr (&width, &height, "%s", titlestring);
    US_ClippedPrint ((320-width)>>1, MENUTITLEY-titleyoffset, titlestring);
    CurrentFont=oldfont;
    FlipPage();

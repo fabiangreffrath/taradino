@@ -1033,12 +1033,12 @@ void DrawPlayers
 
                // Shorten name to fit into point count
                length = strlen( codename );
-               US_MeasureStr( &width, &height, codename );
+               US_MeasureStr( &width, &height, "%s", codename );
                while( width > KILLS_WIDTH )
                   {
                   codename[ length ] = 0;
                   length--;
-                  US_MeasureStr( &width, &height, codename );
+                  US_MeasureStr( &width, &height, "%s", codename );
                   }
 
                // Draw name
