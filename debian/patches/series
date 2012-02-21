@@ -1,6 +1,1 @@
-01-demo-datadir.patch
-02-persistent-typo.patch
-03-parameter-typo.patch
-04-objs-depend-on-develop_h.patch
 10-all-variants.patch
-format-security.patch
