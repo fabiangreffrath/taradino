@@ -2,44 +2,20 @@
 
 CFLAGS += -DDATADIR=\"/usr/share/games/rott/\"
 CFLAGS += -Wno-pointer-sign -Wno-unused
-CFLAGS += $(CPPFLAGS)
 
 %:
 	dh $@ --sourcedir=rott
 
 override_dh_auto_build:
 	# Shareware Version
-	sed -e "s/^\(#define SHAREWARE\).*/\1   1/" \
-	    -e "s/^\(#define SUPERROTT\).*/\1   0/" \
-	    -e "s/^\(#define SITELICENSE\).*/\1 0/" \
-	    -i rott/develop.h
-	dh_auto_build
-	mv -fv rott/rott rott/rott-shareware
+	$(MAKE) -C rott tidy
+	dh_auto_build -- ROTT=rott-shareware
 	# Commercial Version
-	sed -e "s/^\(#define SHAREWARE\).*/\1   0/" \
-	    -e "s/^\(#define SUPERROTT\).*/\1   0/" \
-	    -e "s/^\(#define SITELICENSE\).*/\1 0/" \
-	    -i rott/develop.h
-	dh_auto_build
-	mv -fv rott/rott rott/rott-commercial
+	$(MAKE) -C rott tidy
+	dh_auto_build -- ROTT=rott-commercial  SHAREWARE=0
 	# CD Version
-	sed -e "s/^\(#define SHAREWARE\).*/\1   0/" \
-	    -e "s/^\(#define SUPERROTT\).*/\1   1/" \
-	    -e "s/^\(#define SITELICENSE\).*/\1 0/" \
-	    -i rott/develop.h
-	dh_auto_build
-	mv -fv rott/rott rott/rott-superrott
+	$(MAKE) -C rott tidy
+	dh_auto_build -- ROTT=rott-superrott   SHAREWARE=0 SUPERROTT=1
 	# Site License CD Version
-	sed -e "s/^\(#define SHAREWARE\).*/\1   0/" \
-	    -e "s/^\(#define SUPERROTT\).*/\1   0/" \
-	    -e "s/^\(#define SITELICENSE\).*/\1 1/" \
-	    -i rott/develop.h
-	dh_auto_build
-	mv -fv rott/rott rott/rott-sitelicense
-
-override_dh_auto_clean:
-	sed -e "s/^\(#define SHAREWARE\).*/\1   1/" \
-	    -e "s/^\(#define SUPERROTT\).*/\1   0/" \
-	    -e "s/^\(#define SITELICENSE\).*/\1 0/" \
-	    -i rott/develop.h
-	dh_auto_clean
+	$(MAKE) -C rott tidy
+	dh_auto_build -- ROTT=rott-sitelicense SHAREWARE=0 SITELICENSE=1
