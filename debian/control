@@ -2,9 +2,14 @@ Source: rott
 Section: contrib/games
 Priority: optional
 Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
-Uploaders: Fabian Greffrath <fabian+debian@greffrath.com>,
- Evgeni Golov <evgeni@debian.org>, Jon Dowland <jmtd@debian.org>
-Build-Depends: debhelper (>= 9), libsdl1.2-dev, libsdl-mixer1.2-dev
+Uploaders:
+ Fabian Greffrath <fabian+debian@greffrath.com>,
+ Evgeni Golov <evgeni@debian.org>,
+ Jon Dowland <jmtd@debian.org>
+Build-Depends:
+ debhelper (>= 9),
+ libsdl-mixer1.2-dev,
+ libsdl1.2-dev
 Standards-Version: 3.9.1
 Homepage: http://icculus.org/rott/
 Vcs-Git: git://anonscm.debian.org/pkg-games/rott.git
@@ -12,9 +17,12 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-games/rott.git
 
 Package: rott
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends},
- rott-data | game-data-packager (>= 24)
-Recommends: freepats
+Depends:
+ rott-data | game-data-packager (>= 24),
+ ${misc:Depends},
+ ${shlibs:Depends}
+Recommends:
+ freepats
 Description: SDL-Port of Rise of the Triad
  Rise of the Triad is a high quality, fast scrolling first-person perspective
  3D action game. It includes a lot of destructive enemies, an arsenal of
