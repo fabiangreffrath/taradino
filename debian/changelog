@@ -1,3 +1,11 @@
+rott (1.1.2-2) UNRELEASED; urgency=low
+
+  * Remove "Recommends: timidity" and the corresponding advice in
+    debian/README.Debian. Installing the "freepats" package should be
+    sufficient for music playback to work (see #498984).
+
+ -- Fabian Greffrath <fabian+debian@greffrath.com>  Tue, 12 Feb 2013 09:42:07 +0100
+
 rott (1.1.2-1) unstable; urgency=low
 
   * Imported Upstream version 1.1.2

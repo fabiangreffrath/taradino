@@ -14,7 +14,7 @@ Package: rott
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},
  rott-data | game-data-packager (>= 24)
-Recommends: freepats, timidity
+Recommends: freepats
 Description: SDL-Port of Rise of the Triad
  Rise of the Triad is a high quality, fast scrolling first-person perspective
  3D action game. It includes a lot of destructive enemies, an arsenal of

@@ -16,11 +16,4 @@ Rise of the Triad for Debian
    (with upper case file names), so make sure to also copy the appropriate data
    files into this directory when changing the 'rott' alternative.
 
- * If you encounter game hangs like the one described in #498413,
-   please install the recommended packages 'timidity' and 'freepats'.
-   If you still encounter problems, please enable the ALSA MIDI Sequencer
-   in '/etc/default/timidity', restart timidity and try again.
-   .
-   Please note that this works around a bug in sdl-mixer1.2, not rott.
-
- -- Fabian Greffrath <fabian+debian@greffrath.com>  Mon, 03 Jan 2011 15:10:21 +0100
+ -- Fabian Greffrath <fabian+debian@greffrath.com>  Tue, 12 Feb 2013 09:41:26 +0100
