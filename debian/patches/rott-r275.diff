@@ -1,0 +1,23 @@
+r275 | fabian | 2013-02-20 20:44:37 +0100 (Wed, 20 Feb 2013) | 1 line
+
+Fix a segfault in the Darian level, original bug report and patch by Luc Habert in Debian #700977.
+--- a/rott/rt_actor.c
++++ b/rott/rt_actor.c
+@@ -251,7 +251,7 @@ static int        starthitpoints[4][NUME
+                    {0,0,60,80,70,70,75,525,300,350,175,2800,3800,5900,4800,-1,350,2}};
+ 
+ 
+-static statobj_t  *touchsprite;
++static statobj_t  *touchsprite = NULL;
+ 
+ 
+ static const byte dirdiff[8][8] = {{0,1,2,3,4,3,2,1},{1,0,1,2,3,4,3,2},
+@@ -11070,7 +11070,7 @@ void T_Use(objtype*ob)
+   {
+ #if (SHAREWARE == 0)
+    case b_darianobj:
+-    if (!DoPanicMapping())
++    if (touchsprite && !DoPanicMapping())
+        touchsprite->flags |= FL_ACTIVE;
+ 	 if ((!sprites[PLAYER[0]->tilex][PLAYER[0]->tiley]) && (ob->areanumber == PLAYER[0]->areanumber))
+ 	  {SpawnNewObj(PLAYER[0]->tilex,PLAYER[0]->tiley,&s_dspear1,spearobj);
