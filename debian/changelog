@@ -5,6 +5,7 @@ rott (1.1.2-2) UNRELEASED; urgency=low
     sufficient for music playback to work (see #498984).
   * Fix a segfault in the Darian level, original bug report and patch
     by Luc Habert (Closes: #700977).
+  * Color crosshair by player health.
 
  -- Fabian Greffrath <fabian+debian@greffrath.com>  Tue, 12 Feb 2013 09:42:07 +0100
 
