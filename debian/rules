@@ -3,6 +3,12 @@
 CFLAGS += -DDATADIR=\"/usr/share/games/rott/\"
 CFLAGS += -Wno-pointer-sign -Wno-unused
 
+debian/rott.xpm: debian/rott.png
+	convert $^ $@
+
+debian/rott.png: debian/rott.svg
+	inkscape --export-png=$@ $^
+
 %:
 	dh $@ --sourcedir=rott
 

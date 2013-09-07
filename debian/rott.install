@@ -1,3 +1,5 @@
+../debian/rott.png	/usr/share/icons/hicolor/32x32/apps/
+../debian/rott.svg	/usr/share/icons/hicolor/scalable/apps/
+../debian/rott.xpm	/usr/share/pixmaps/
 ../misc/rott.desktop	/usr/share/applications/
-../misc/rott.xpm	/usr/share/pixmaps/
 rott-*	/usr/games/
