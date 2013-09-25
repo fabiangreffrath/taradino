@@ -22,7 +22,7 @@ Depends:
  ${misc:Depends},
  ${shlibs:Depends}
 Recommends:
- freepats
+ musescore-soundfont-gm | freepats
 Description: SDL-Port of Rise of the Triad
  Rise of the Triad is a high quality, fast scrolling first-person perspective
  3D action game. It includes a lot of destructive enemies, an arsenal of
