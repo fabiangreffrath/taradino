@@ -15,13 +15,13 @@ debian/rott.png: debian/rott.svg
 override_dh_auto_build:
 	# Shareware Version
 	$(MAKE) -C rott tidy
-	dh_auto_build -- ROTT=rott-shareware
+	dh_auto_build --parallel -- ROTT=rott-shareware
 	# Commercial Version
 	$(MAKE) -C rott tidy
-	dh_auto_build -- ROTT=rott-commercial  SHAREWARE=0
+	dh_auto_build --parallel -- ROTT=rott-commercial  SHAREWARE=0
 	# CD Version
 	$(MAKE) -C rott tidy
-	dh_auto_build -- ROTT=rott-superrott   SHAREWARE=0 SUPERROTT=1
+	dh_auto_build --parallel -- ROTT=rott-superrott   SHAREWARE=0 SUPERROTT=1
 	# Site License CD Version
 	$(MAKE) -C rott tidy
-	dh_auto_build -- ROTT=rott-sitelicense SHAREWARE=0 SITELICENSE=1
+	dh_auto_build --parallel -- ROTT=rott-sitelicense SHAREWARE=0 SITELICENSE=1
