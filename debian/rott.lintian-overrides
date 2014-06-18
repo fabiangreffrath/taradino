@@ -1,5 +1,3 @@
 # The /usr/games/rott binary is handled via update-alternatives.
 rott: desktop-command-not-in-package
 rott: menu-command-not-in-package
-# False positive: This is not a license file
-rott: extra-license-file usr/games/rott-sitelicense

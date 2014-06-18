@@ -1,5 +1,6 @@
-rott (1.1.2-2) unstable; urgency=low
+rott (1.1.2-2) UNRELEASED; urgency=low
 
+  [ Fabian Greffrath ]
   * Remove "Recommends: timidity" and the corresponding advice in
     debian/README.Debian. Installing any package containing a soundfont
     should be sufficient for music playback to work (see #498984).
@@ -13,6 +14,10 @@ rott (1.1.2-2) unstable; urgency=low
   * Correctly append to CFLAGS in debian/rules.
   * Fix conflicting types in variable declarations (Closes: #751510),
     thanks Michael Tautschnig.
+
+  [ Stephen Kitt ]
+  * Drop obsolete Lintian override; rott-sitelicense is no longer
+    detected as an extra license file.
 
  -- Fabian Greffrath <fabian+debian@greffrath.com>  Mon, 16 Jun 2014 10:04:55 +0200
 
