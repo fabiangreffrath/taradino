@@ -18,6 +18,7 @@ rott (1.1.2-2) UNRELEASED; urgency=low
   [ Stephen Kitt ]
   * Drop obsolete Lintian override; rott-sitelicense is no longer
     detected as an extra license file.
+  * Use the canonical 1.0 copyright format URI.
 
  -- Fabian Greffrath <fabian+debian@greffrath.com>  Mon, 16 Jun 2014 10:04:55 +0200
 
