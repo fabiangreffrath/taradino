@@ -6,14 +6,16 @@ Description: Make the "registered" variant recognize all supported
 
 --- a/rott/Makefile
 +++ b/rott/Makefile
-@@ -2,13 +2,8 @@
- # Make sure only one of the following is set to 1 at once
- # Triple 0 will build the commercial/registered version
- 
+@@ -1,14 +1,8 @@
+ # Determine which version to build
+-# Make sure only one of the following is set to 1 at once
+-# Triple 0 will build the commercial/registered version
+-
 -SHAREWARE   ?= 1
 -SUPERROTT   ?= 0
 -SITELICENSE ?= 0
--
++# Leave at 0 to build the commercial/superrott/sitelicense version
+ 
 +SHAREWARE ?= 0
  CPPFLAGS += -DSHAREWARE=$(SHAREWARE)
 -CPPFLAGS += -DSUPERROTT=$(SUPERROTT)
