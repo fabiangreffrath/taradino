@@ -3,8 +3,8 @@ Rise of the Triad for Debian
 
  * The rott package in Debian supports all four variants of the game:
    Shareware Version, Commercial Version, CD Version and Site License CD
-   Version. The corresponding binaries are named 'rott-shareware',
-   'rott-commercial', 'rott-superrott' and 'rott-sitelicense', respectively.
+   Version. The corresponding binaries are named 'rott-shareware' and
+   'rott-commercial' for the latter three variants, respectively.
    In order to select which variant is started by the 'rott' command and the
    desktop and menu files, Debian's 'update-alternatives' mechanism is used:
    .

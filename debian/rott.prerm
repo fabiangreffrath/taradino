@@ -1,44 +1,10 @@
 #!/bin/sh
 set -e
 
-case "$1" in
-	remove|deconfigure)
-		update-alternatives --quiet --remove-all rott
-
-		rm -f /usr/share/doc/rott/vendor.doc
-
-		if [ "`dpkg -l rott-data 2> /dev/null | grep ^ii`" ]
-		then
-			# rott-data is installed, delete all data files
-			# that are definitely not in rott-data
-			rm -f /usr/share/games/rott/1rott13.zip  \
-			      /usr/share/games/rott/FILE_ID.DIZ  \
-			      /usr/share/games/rott/INSTALL.EXE  \
-			      /usr/share/games/rott/ROTTSW13.SHR \
-			      /usr/share/games/rott/MODEM.PCK    \
-			      /usr/share/games/rott/ORDER.FRM    \
-			      /usr/share/games/rott/README.EXE   \
-			      /usr/share/games/rott/ROTT.EXE     \
-			      /usr/share/games/rott/ROTTHELP.EXE \
-			      /usr/share/games/rott/ROTTIPX.EXE  \
-			      /usr/share/games/rott/ROTTSER.EXE  \
-			      /usr/share/games/rott/SETUP.EXE    \
-			      /usr/share/games/rott/SNDSETUP.EXE
-		else
-			# rott-data is not (yet) installed, it is safe
-			# to delete the whole directory.
-			rm -rf /usr/share/games/rott
-		fi
-	;;
-
-	upgrade|failed-upgrade)
-	;;
-
-	*)
-		echo "prerm called with unknown argument \`$1'" >&2
-		exit 1
-	;;
-esac
+if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ]
+then
+  update-alternatives --quiet --remove-all rott
+fi
 
 #DEBHELPER#
 

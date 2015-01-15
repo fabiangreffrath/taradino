@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "install" ] || [ "$1" = "upgrade" ]
+then
+  if dpkg --compare-versions "$2" lt-nl "1.1.2-3~"
+  then
+    update-alternatives --quiet --remove rott /usr/games/rott-superrott
+    update-alternatives --quiet --remove rott /usr/games/rott-sitelicense
+  fi
+fi
+
+#DEBHELPER#

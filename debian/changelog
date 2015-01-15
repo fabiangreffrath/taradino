@@ -1,3 +1,13 @@
+rott (1.1.2-3) UNRELEASED; urgency=medium
+
+  * Make the "commercial" variant recognize all supported
+    multiplayer map files and set 'gamestate.Product' accordingly.
+    This saves us from building the SUPERROTT and SITELICENSE variants
+    which had their multiplayer map file names hard-coded.
+    Adjust documentation and packaging accordingly.
+
+ -- Fabian Greffrath <fabian+debian@greffrath.com>  Thu, 15 Jan 2015 14:17:28 +0100
+
 rott (1.1.2-2) unstable; urgency=low
 
   * Team upload.
