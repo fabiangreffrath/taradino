@@ -47,7 +47,7 @@ Description: Make the "registered" variant recognize all supported
  
 --- a/rott/develop.h
 +++ b/rott/develop.h
-@@ -40,10 +40,6 @@ Foundation, Inc., 59 Temple Place - Suit
+@@ -40,10 +40,10 @@ Foundation, Inc., 59 Temple Place - Suit
  #define LOWCOST  0
  
  #define BNACRASHPREVENT  1 //bna added 
@@ -55,6 +55,10 @@ Description: Make the "registered" variant recognize all supported
 -//#define SHAREWARE   1
 -//#define SUPERROTT   0
 -//#define SITELICENSE 0
++
++#ifndef SHAREWARE
++#define SHAREWARE 0
++#endif
  
  // cute little dopefish thing, only works with special patch?
  #define DOPEFISH 0
