@@ -5,6 +5,12 @@ rott (1.1.2-3) UNRELEASED; urgency=medium
     This saves us from building the SUPERROTT and SITELICENSE variants
     which had their multiplayer map file names hard-coded.
     Adjust documentation and packaging accordingly.
+  * Fix missing fog on level Foggy Mountain (Closes: #775530).
+    Light level is calculated based on scaled texture and sprite height
+    and is thus resolution-dependent, fix special-casing for fog.
+    Thanks Alexandre Detiste for the bug report!
+  * Fix scaling of the weapon sprite.
+  * Fix scaling of the sky texture.
 
  -- Fabian Greffrath <fabian+debian@greffrath.com>  Thu, 15 Jan 2015 14:17:28 +0100
 

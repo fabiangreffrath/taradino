@@ -3,3 +3,6 @@ rott-r275.diff
 rott-r276.diff
 conflicting_types.patch
 rott-merge-commercial.patch
+fogshade.patch
+weaponscale.patch
+drawsky.patch
