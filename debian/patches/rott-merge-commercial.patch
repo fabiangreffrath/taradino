@@ -219,3 +219,28 @@ Description: Make the "registered" variant recognize all supported
        }
  
     FlipMenuBuf();
+--- a/README
++++ b/README
+@@ -76,15 +76,16 @@ To compile the source code under Linux,
+   make clean
+   make
+ 
+-The build system is setup to use shareware binaries.  If you want to use the
+-registered version of ROTT, compile with:
++The build system is setup to use shareware binaries.  If you want to use one
++of the commercial versions of ROTT, compile with:
+ 
+   make SHAREWARE=0
+ 
+-You may additionally append SUPERROTT=1 or SITELICENSE=1, if you want to use
+-the CD version or the Site License CD version, respectively. However, make
+-sure to only set one of them to 1 at once. You may want to edit rott/Makefile
+-to make your changes persistent.
++This variant supports the Registered Version, the "Super ROTT" CD Version and
++the "Site License" CD Version of the game by automatically detecting and
++loading their corresponding multiplayer map files.
++
++You may want to edit rott/Makefile to make your changes persistent.
+ 
+ It is generally recommended to build against the most recent version of 
+ the Simple Direct Media Layer and SDL_mixer.
