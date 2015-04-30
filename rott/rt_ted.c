@@ -115,7 +115,7 @@ static cachetype * cachelist;
 static word cacheindex;
 static boolean CachingStarted=false;
 static char * ROTTMAPS = STANDARDGAMELEVELS;
-static char * BATTMAPS = STANDARDBATTLELEVELS;
+char * BATTMAPS;
 
 static char NormalWeaponTiles[ 10 ] =
    {
@@ -1669,8 +1669,7 @@ void GetMapFileName ( char * filename )
 void SetBattleMapFileName ( char * filename )
 {
    BattleLevels.avail = true;
-   memset (&(BattleLevels.file[0]), 0, sizeof (BattleLevels.file));
-   strcpy (&(BattleLevels.file[0]), filename);
+   BattleLevels.file = strdup(filename);
 }
 
 /*

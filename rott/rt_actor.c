@@ -251,7 +251,7 @@ static int        starthitpoints[4][NUMENEMIES+2] =
                    {0,0,60,80,70,70,75,525,300,350,175,2800,3800,5900,4800,-1,350,2}};
 
 
-static statobj_t  *touchsprite;
+static statobj_t  *touchsprite = NULL;
 
 
 static const byte dirdiff[8][8] = {{0,1,2,3,4,3,2,1},{1,0,1,2,3,4,3,2},
@@ -1621,11 +1621,8 @@ void SpawnStand (classtype which, int tilex, int tiley, int dir, int ambush)
 
 
  #if 0
- #if (SUPERROTT == 1)
-
+ if (gamestate.Product == ROTT_SUPERCD)
    ConsiderAlternateActor(new,which);
-
- #endif
  #endif
 
    StandardEnemyInit(new,dir);
@@ -1671,9 +1668,8 @@ void SpawnPatrol (classtype which, int tilex, int tiley, int dir)
 {statetype *temp;
  int path=PATH;
 #if 0
-#if (SUPERROTT == 1)
+if (gamestate.Product == ROTT_SUPERCD)
  char *altstartlabel;
-#endif
 #endif
 
 
@@ -1711,9 +1707,8 @@ void SpawnPatrol (classtype which, int tilex, int tiley, int dir)
 
 
    #if 0
-   #if (SUPERROTT == 1)
+   if (gamestate.Product == ROTT_SUPERCD)
    ConsiderAlternateActor(new,which);
-   #endif
    #endif
 
    StandardEnemyInit(new,dir);
@@ -11070,7 +11065,7 @@ void T_Use(objtype*ob)
   {
 #if (SHAREWARE == 0)
    case b_darianobj:
-    if (!DoPanicMapping())
+    if (touchsprite && !DoPanicMapping())
        touchsprite->flags |= FL_ACTIVE;
 	 if ((!sprites[PLAYER[0]->tilex][PLAYER[0]->tiley]) && (ob->areanumber == PLAYER[0]->areanumber))
 	  {SpawnNewObj(PLAYER[0]->tilex,PLAYER[0]->tiley,&s_dspear1,spearobj);

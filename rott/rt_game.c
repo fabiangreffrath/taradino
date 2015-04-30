@@ -4854,8 +4854,8 @@ boolean SaveTheGame (int num, gamestorage_t * game)
    memset (&game->info, 0, sizeof (game->info));
    if (GameLevels.avail == true)
    {
-      memcpy (&game->info.path[0], &GameLevels.path[0], sizeof (GameLevels.path));
-      memcpy (&game->info.file[0], &GameLevels.file[0], sizeof (GameLevels.file));
+      game->info.path = GameLevels.path;
+      game->info.file = GameLevels.file;
       game->info.avail = true;
    }
 

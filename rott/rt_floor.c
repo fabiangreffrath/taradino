@@ -105,14 +105,15 @@ void DrawSky( void )
    else
       shadingtable=colormap+(1<<12);
 
-   ofs=(((maxheight)-(player->z))>>3)+(centery-(viewheight>>1));
+   ofs=(((maxheight)-(player->z))>>3)+(centery*200/iGLOBAL_SCREENHEIGHT-((viewheight*200/iGLOBAL_SCREENHEIGHT)>>1));
+
    if (ofs>centerskypost)
       {
       ofs=centerskypost;
       }
-   else if (((centerskypost-ofs)+viewheight)>1799)
+   else if (((centerskypost-ofs)+viewheight*200/iGLOBAL_SCREENHEIGHT)>1799)
       {
-      ofs=-(1799-(centerskypost+viewheight));
+      ofs=-(1799-(centerskypost+viewheight*200/iGLOBAL_SCREENHEIGHT));
       }
 //ofs=centerskypost;
 #ifdef DOS
@@ -527,7 +528,7 @@ void SetFCLightLevel (int height)
       }
    if (fog)
       {
-      i=(height>>normalshade)+minshade;
+      i=((height*200/iGLOBAL_SCREENHEIGHT)>>normalshade)+minshade;
       if (i>maxshade) i=maxshade;
       shadingtable=colormap+(i<<8);
       }

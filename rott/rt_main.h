@@ -31,6 +31,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rottnet.h"
 #include "rt_battl.h"
 
+#if (SHAREWARE==0)
+   #define  STANDARDGAMELEVELS   (DATADIR "DARKWAR.RTL")
+   #define  STANDARDBATTLELEVELS (DATADIR "DARKWAR.RTC")
+   #define  SUPERROTTBATTLELEVELS (DATADIR "ROTTCD.RTC")
+   #define  SITELICENSEBATTLELEVELS (DATADIR "ROTTSITE.RTC")
+#else
+   #define  STANDARDGAMELEVELS   (DATADIR "HUNTBGIN.RTL")
+   #define  STANDARDBATTLELEVELS (DATADIR "HUNTBGIN.RTC")
+#endif
+
 enum
 {vl_low,
  vl_medium,

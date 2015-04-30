@@ -386,19 +386,12 @@ void SetViewSize
    //   SetTextMode (  );
    //   viewheight=viewheight;
    height = viewheight;
-   if ( height > 168 )
+   if ( height > 168*iGLOBAL_SCREENHEIGHT/200 )
    {
         // Prevent weapon from being scaled too big
-	    height = 168;
-	  	if ( iGLOBAL_SCREENWIDTH == 640) {
-			height = 260;
-		}else if ( iGLOBAL_SCREENWIDTH == 800) {
-			height = 360;
-		}
+	    height = 168*iGLOBAL_SCREENHEIGHT/200;
    }
 
-   if ((G_weaponscale > 150)&&(G_weaponscale <600)){height = G_weaponscale;}
-   if ( iGLOBAL_SCREENWIDTH == 320) {G_weaponscale=G_weaponscale/2;}
    weaponscale = ( height << 16 ) / 168;//( height << 16 ) = 170 * 65536
 
   

@@ -39,6 +39,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "memcheck.h"
 #include "rt_util.h"
 #include "rt_net.h" // for GamePaused
+#include "myprint.h"
 
 static void StretchMemPicture ();
 // GLOBAL VARIABLES
@@ -796,6 +797,10 @@ int		iG_playerTilt;
 void DrawCenterAim ()
 {
 	int x;
+
+	int percenthealth = (locplayerstate->health * 10) / MaxHitpointsForCharacter(locplayerstate);
+	int color = percenthealth < 3 ? egacolor[RED] : percenthealth < 4 ? egacolor[YELLOW] : egacolor[GREEN];
+
 	if (iG_aimCross && !GamePaused){
 		if (( ingame == true )&&(iGLOBAL_SCREENWIDTH>320)){
 			  if ((iG_playerTilt <0 )||(iG_playerTilt >iGLOBAL_SCREENHEIGHT/2)){
@@ -806,22 +811,22 @@ void DrawCenterAim ()
 
 			  for (x=iG_X_center-10;x<=iG_X_center-4;x++){
 				  if ((iG_buf_center+x < bufofsTopLimit)&&(iG_buf_center+x > bufofsBottomLimit)){
-					 *(iG_buf_center+x) = 75;
+					 *(iG_buf_center+x) = color;
 				  }
 			  }
 			  for (x=iG_X_center+4;x<=iG_X_center+10;x++){
 				  if ((iG_buf_center+x < bufofsTopLimit)&&(iG_buf_center+x > bufofsBottomLimit)){
-					 *(iG_buf_center+x) = 75;
+					 *(iG_buf_center+x) = color;
 				  }
 			  }
 			  for (x=10;x>=4;x--){
 				  if (((iG_buf_center-(x*iGLOBAL_SCREENWIDTH)+iG_X_center) < bufofsTopLimit)&&((iG_buf_center-(x*iGLOBAL_SCREENWIDTH)+iG_X_center) > bufofsBottomLimit)){
-					 *(iG_buf_center-(x*iGLOBAL_SCREENWIDTH)+iG_X_center) = 75;
+					 *(iG_buf_center-(x*iGLOBAL_SCREENWIDTH)+iG_X_center) = color;
 				  }
 			  }
 			  for (x=4;x<=10;x++){
 				  if (((iG_buf_center+(x*iGLOBAL_SCREENWIDTH)+iG_X_center) < bufofsTopLimit)&&((iG_buf_center+(x*iGLOBAL_SCREENWIDTH)+iG_X_center) > bufofsBottomLimit)){
-					 *(iG_buf_center+(x*iGLOBAL_SCREENWIDTH)+iG_X_center) = 75;
+					 *(iG_buf_center+(x*iGLOBAL_SCREENWIDTH)+iG_X_center) = color;
 				  }
 			  }
 		}

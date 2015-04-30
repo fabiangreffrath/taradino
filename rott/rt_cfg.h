@@ -75,9 +75,9 @@ extern byte    passwordstring[20];
 
 typedef struct
 {
-   char path[41];
+   char *path;
    boolean avail;
-   char file[14];
+   char *file;
 } AlternateInformation;
 
 extern AlternateInformation RemoteSounds;
