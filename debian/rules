@@ -1,6 +1,5 @@
 #!/usr/bin/make -f
 
-DEB_CFLAGS_MAINT_APPEND += -DDATADIR=\"/usr/share/games/rott/\"
 DEB_CFLAGS_MAINT_APPEND += -Wno-pointer-sign -Wno-unused
 export DEB_CFLAGS_MAINT_APPEND
 
@@ -11,12 +10,26 @@ debian/rott.png: debian/rott.svg
 	inkscape --export-png=$@ $^
 
 %:
-	dh $@ --sourcedir=rott
+	dh $@ --with autoreconf
+
+override_dh_auto_configure:
+	# Both flavors are configured and built in the dh_auto_build target.
 
 override_dh_auto_build:
 	# Shareware Version
-	$(MAKE) -C rott tidy
-	dh_auto_build -O--parallel -- ROTT=rott-shareware  SHAREWARE=1
+	dh_auto_configure -- \
+		--enable-datadir="/usr/share/games/rott/" \
+		--enable-suffix="shareware" \
+		--enable-shareware
+	dh_auto_build -O--parallel
+
 	# Commercial Version
-	$(MAKE) -C rott tidy
-	dh_auto_build -O--parallel -- ROTT=rott-commercial SHAREWARE=0
+	dh_auto_configure -- \
+		--enable-datadir="/usr/share/games/rott/" \
+		--enable-suffix="commercial"
+	dh_auto_build -O--parallel
+
+override_dh_auto_install:
+
+override_dh_install:
+	dh_install --sourcedir=rott

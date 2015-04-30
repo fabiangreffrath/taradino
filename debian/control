@@ -8,6 +8,7 @@ Uploaders:
  Jon Dowland <jmtd@debian.org>
 Build-Depends:
  debhelper (>= 9),
+ dh-autoreconf,
  libsdl-mixer1.2-dev,
  libsdl1.2-dev
 Standards-Version: 3.9.5
