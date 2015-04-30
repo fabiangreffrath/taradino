@@ -23,6 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //#define	MAXVIEWHEIGHT MAXSCREENHEIGHT	
 #define MAXSKYSEGS    2048
 #define MAXSKYDATA    8
-#define MINSKYHEIGHT  0//148 //bna++ sky change here
+#define MINSKYHEIGHT  148
 
 #endif

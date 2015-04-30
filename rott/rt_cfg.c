@@ -2030,6 +2030,7 @@ void WriteConfig (void)
    memset(passwordtemp,0,sizeof(passwordtemp));
    ConvertPasswordStringToString ( &passwordtemp[0] );
    SafeWriteString(file,&passwordtemp[0]);
+   SafeWriteString(file,"\n");
 
    close (file);
 #endif
@@ -2047,13 +2048,12 @@ void WriteConfig (void)
 
 void GetAlternatePath (char * tokenstr, AlternateInformation *info)
 {
-   strcpy (&info->path[0], ".\0");
+   info->path = ".";
    GetToken (true);
    if (!stricmp (token, tokenstr))
       {
       GetTokenEOL (false);
-      memset (&info->path[0], 0, sizeof (info->path));
-      strcpy (&info->path[0], &name[0]);
+      info->path = strdup(name);
       }
 }
 
@@ -2068,7 +2068,7 @@ void GetAlternateFile (char * tokenstr, AlternateInformation *info)
 {
    // Read in remote sound file
    //
-   strcpy (&info->file[0], "foo.foo\0");
+   info->file = "foo.foo";
    GetToken (true);
    if (!stricmp (token, tokenstr))
       {
@@ -2079,11 +2079,10 @@ void GetAlternateFile (char * tokenstr, AlternateInformation *info)
             {
             #if (SHAREWARE == 0)
             info->avail = true;
-            memset (&info->file[0], 0, sizeof (info->file));
-            strcpy (&info->file[0], &token[0]);
+            info->file = strdup(token);
             #else
             printf("Alternate file %s ignored.\n",token);
-            memset (&info->file[0], 0, sizeof (info->file));
+            info->file = "";
             #endif
             }
          }

@@ -1636,7 +1636,7 @@ void SetSpriteLightLevel (int x, int y, visobj_t * sprite, int dir, int fullbrig
 
    if (fog)
       {
-      i=(sprite->viewheight>>normalshade)+minshade;
+      i=((sprite->viewheight*200/iGLOBAL_SCREENHEIGHT)>>normalshade)+minshade;
       if (i>maxshade) i=maxshade;
       sprite->colormap=colormap+(i<<8);
       }
@@ -1697,7 +1697,7 @@ void SetColorLightLevel (int x, int y, visobj_t * sprite, int dir, int color, in
 
    if (fog)
       {
-      i=(height>>normalshade)+minshade;
+      i=((height*200/iGLOBAL_SCREENHEIGHT)>>normalshade)+minshade;
       if (i>maxshade) i=maxshade;
       sprite->colormap=map+(i<<8);
       }
@@ -1792,7 +1792,7 @@ void SetWallLightLevel (wallcast_t * post)
       }
    if (fog)
       {
-      i =(post->wallheight>>normalshade)+minshade-lv+la;
+      i =((post->wallheight*200/iGLOBAL_SCREENHEIGHT)>>normalshade)+minshade-lv+la;
       if (i>maxshade+la) i=maxshade+la;
       shadingtable=colormap+(i<<8);
       }
@@ -4114,7 +4114,7 @@ void DrawBackground ( byte * bkgnd )
 //   int plane;
    int size;
 
-   size=linewidth*400;
+   size=linewidth*200;
 
 #ifdef DOS
    for (plane=0;plane<4;plane++)
@@ -4138,7 +4138,7 @@ void PrepareBackground ( byte * bkgnd )
 //   int plane;
    int size;
 
-   size=linewidth*400;
+   size=linewidth*200;
 
 #ifdef DOS
    for (plane=0;plane<4;plane++)
@@ -6009,6 +6009,7 @@ void DrawMaskedRotRow(int count, byte * dest, byte * src)
 
 void DrawSkyPost (byte * buf, byte * src, int height)
 {
+#if 0
 // bna fix for missing sky by high res eg 800x600
 // when sky is >400 (max skyheight) then reverse mouintain to missing spot
 // there should be 200 line of mouintain (400+200) = 600 height lines
@@ -6033,13 +6034,17 @@ void DrawSkyPost (byte * buf, byte * src, int height)
 		}
 	// bna section end
 	}
-	else {
+	else
+#endif
+	{
+	int i = 0;
+	const byte *orig_src = src;
 	// org code
 		while (height--) {
 			*buf = shadingtable[*src];
 			
 			buf += linewidth;
-			src++;
+			src = orig_src + (++i*200/iGLOBAL_SCREENHEIGHT);
 		}
 	//	
 	}

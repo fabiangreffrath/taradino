@@ -4,7 +4,7 @@
 # http://www.delphidude.com/personal/utilities/games/
 
 CONFIG=$HOME/.rott/darkwar/rott.rot
-EXE=./rott
+EXE=rott
 
 if [ $# != 1 ]; then
 	echo "usage: "$0" <RTL or RTC filename>"

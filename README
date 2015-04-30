@@ -71,23 +71,36 @@ distributions. Patches are always welcome. ;-)
 General Hints
 -------------
 
-To compile the source code under Linux, change to the rott/ directory and type:
+The following prerequisites are required to compile the source code:
 
-  make clean
+  autoconf
+  automake
+  pkg-config
+  SDL 1.2
+  SDL_mixer 1.2
+
+To compile the source code, type the following:
+
+  autoreconf -fiv
+  ./configure
   make
 
-The build system is setup to use shareware binaries.  If you want to use the
-registered version of ROTT, compile with:
+The resulting binaries can be found in the rott/ directory.
 
-  make SHAREWARE=0
+The build system is setup to build the commercial variant of ROTT.
+This variant supports the Registered Version, the "Super ROTT" CD Version and
+the "Site License" CD Version of the game by automatically detecting and
+loading their corresponding multiplayer map files.
 
-You may additionally append SUPERROTT=1 or SITELICENSE=1, if you want to use
-the CD version or the Site License CD version, respectively. However, make
-sure to only set one of them to 1 at once. You may want to edit rott/Makefile
-to make your changes persistent.
+If you want to build the shareware version of ROTT, configure with:
 
-It is generally recommended to build against the most recent version of 
-the Simple Direct Media Layer and SDL_mixer.
+  ./configure --enable-shareware
+
+Additionally, you may pass the "--enable-suffix=<suffix>" parameter to
+./configure in order to append a suffix to the executable file name,
+e.g. to tell the commercial and the shareware variants apart. You may
+also want to pass the "--enable-datadir=<datadir>" parameter to point
+the executables to the location of your game data files.
 
 
 ------------

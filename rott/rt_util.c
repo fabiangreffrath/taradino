@@ -1851,7 +1851,7 @@ boolean UL_ChangeDirectory (char *path)
 
    return (true);
 #else
-	if (!*path) {
+	if (!path || !*path) {
 		return true;
 	}
 	

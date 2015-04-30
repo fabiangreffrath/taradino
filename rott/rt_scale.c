@@ -149,7 +149,7 @@ void SetLightLevel (int height)
       }
    if (fog)
       {
-      i=(height>>normalshade)+minshade;
+      i=((height*200/iGLOBAL_SCREENHEIGHT)>>normalshade)+minshade;
       if (i>maxshade) i=maxshade;
       shadingtable=colormap+(i<<8);
       }
@@ -861,7 +861,7 @@ void ScaleWeapon (int xoff, int y, int shapenum)
                 return;         // off the left side
 
    dc_iscale=0xffffffffu/(unsigned)dc_invscale;
-   dc_texturemid=(((p->origsize>>1)+p->topoffset)<<SFRACBITS)+(SFRACUNIT>>1);
+   dc_texturemid=(((p->origsize>>1)+p->topoffset)<<SFRACBITS)+(SFRACUNIT>>2);
    sprtopoffset=(centeryclipped<<16) - FixedMul(dc_texturemid,dc_invscale);
 
 //
