@@ -5,7 +5,9 @@ rott (1.1.2+svn287-1) UNRELEASED; urgency=medium
     tarball was created.
   * Remove all patches that were applied upstream.
   * Upstream switched build system to Autotools.
-    + Add Build-Depends: dh-autoreconf and adapt debian/rules accordingly.
+    + Add "Build-Depends: dh-autoreconf" and adapt debian/rules accordingly.
+  * Add debian/gbp.conf file, set "compression = xz".
+  * Bump Standards-Version to 3.9.6.
 
  -- Fabian Greffrath <fabian+debian@greffrath.com>  Thu, 30 Apr 2015 16:26:04 +0200
 
