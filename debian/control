@@ -11,7 +11,7 @@ Build-Depends:
  dh-autoreconf,
  libsdl-mixer1.2-dev,
  libsdl1.2-dev
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Homepage: http://icculus.org/rott/
 Vcs-Git: git://anonscm.debian.org/pkg-games/rott.git
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-games/rott.git
