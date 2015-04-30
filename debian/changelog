@@ -1,4 +1,4 @@
-rott (1.1.2-3) UNRELEASED; urgency=medium
+rott (1.1.2-3) unstable; urgency=medium
 
   * Make the "commercial" variant recognize all supported
     multiplayer map files and set 'gamestate.Product' accordingly.
@@ -12,7 +12,7 @@ rott (1.1.2-3) UNRELEASED; urgency=medium
   * Fix scaling of the weapon sprite.
   * Fix scaling of the sky texture.
 
- -- Fabian Greffrath <fabian+debian@greffrath.com>  Thu, 15 Jan 2015 14:17:28 +0100
+ -- Fabian Greffrath <fabian+debian@greffrath.com>  Thu, 30 Apr 2015 16:15:21 +0200
 
 rott (1.1.2-2) unstable; urgency=low
 
