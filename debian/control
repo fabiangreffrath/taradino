@@ -19,10 +19,10 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-games/rott.git
 Package: rott
 Architecture: any
 Depends:
- rott-data | game-data-packager (>= 24),
  ${misc:Depends},
  ${shlibs:Depends}
 Recommends:
+ game-data-packager,
  musescore-soundfont-gm | freepats
 Description: SDL-Port of Rise of the Triad
  Rise of the Triad is a high quality, fast scrolling first-person perspective
