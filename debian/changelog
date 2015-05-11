@@ -1,15 +1,16 @@
-rott (1.1.2+svn287-1) UNRELEASED; urgency=medium
+rott (1.1.2+svn287-1) unstable; urgency=medium
 
   * New upstream SVN snapshot.
+    + Remove all patches that were applied upstream.
+    + Upstream switched build system to Autotools, add
+      "Build-Depends: dh-autoreconf" and adapt debian/rules accordingly.
   * Add debian/README.source file to document how the Debian source
-    tarball was created.
-  * Remove all patches that were applied upstream.
-  * Upstream switched build system to Autotools.
-    + Add "Build-Depends: dh-autoreconf" and adapt debian/rules accordingly.
-  * Add debian/gbp.conf file, set "compression = xz".
+    tarball was created, add debian/gbp.conf file to force xz compression.
   * Bump Standards-Version to 3.9.6.
+  * Move g-d-p from Depends to Recommends, drop virtual rott-data package from
+    alternative dependencies.
 
- -- Fabian Greffrath <fabian+debian@greffrath.com>  Thu, 30 Apr 2015 16:26:04 +0200
+ -- Fabian Greffrath <fabian+debian@greffrath.com>  Mon, 11 May 2015 14:23:27 +0200
 
 rott (1.1.2-3) unstable; urgency=medium
 
