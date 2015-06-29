@@ -8,12 +8,29 @@ Rise of the Triad for Debian
    In order to select which variant is started by the 'rott' command and the
    desktop and menu files, Debian's 'update-alternatives' mechanism is used:
    .
-   $ update-alternatives --config rott
+   # update-alternatives --config rott
    .
    By default, the 'rott-shareware' alternative is preferred.
    .
    The game expects its data files in the '/usr/share/games/rott' directory
    (with upper case file names), so make sure to also copy the appropriate data
    files into this directory when changing the 'rott' alternative.
+   .
+   To automate this task, you may want to install the 'game-data-packager'
+   package and run the following commands, which will locate/download the data,
+   build the possible rott-*-data Debian package(s), and install it/them.
+   .
+   $ game-data-packager -i rott
+   .
+   This will download the shareware episode and also try to automaticaly
+   process the commercial episode as sold by Steam (by looking in various
+   popular locations).
+   .
+   $ game-data-packager -i rott /path/to/setup_rise_of_the_triad_*.exe
+   .
+   This will download the shareware episode and process the commercial episode
+   as sold by GOG.com.
+   .
+   For more information, please see the manual page for game-data-packager(6).
 
- -- Fabian Greffrath <fabian+debian@greffrath.com>  Tue, 12 Feb 2013 09:41:26 +0100
+ -- Fabian Greffrath <fabian@debian.org>  Mon, 29 Jun 2015 13:51:26 +0200

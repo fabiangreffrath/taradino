@@ -1,0 +1,54 @@
+Description: show a dialog box if files are missing
+Author: Alexandre Detiste <alexandre.detiste@gmail.com>,
+        Fabian Greffrath <fabian@debian.org>
+Bug-Debian: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=790407
+
+--- a/rott/rt_util.c
++++ b/rott/rt_util.c
+@@ -446,6 +446,34 @@ void Error (char *error, ...)
+    #if USE_SDL
+    SDL_Quit();
+    #endif
++   #ifdef PLATFORM_UNIX
++   char* argv[6];
++   char zenity_buf[300] = "--text=\0";
++   strncat(zenity_buf,msgbuf,sizeof(zenity_buf)-8);
++   pid_t child_pid;
++   child_pid = fork();
++   if(child_pid == 0) {
++       argv[0] = "zenity";
++       argv[1] = "--error";
++       argv[2] = zenity_buf;
++       argv[3] = "--title=ROTT";
++       argv[4] = NULL;
++       execvp(argv[0], argv);
++       argv[0] = "kdialog";
++       argv[2] = msgbuf;
++       execvp(argv[0], argv);
++       argv[0] = "xmessage";
++       argv[1] = "-center";
++       argv[3] = NULL;
++       execvp(argv[0], argv);
++       argv[0] = "notify-send";
++       argv[1] = "ROTT";
++       argv[3] = "-i";
++       argv[4] = "dialog-error";
++       argv[5] = NULL;
++       execvp(argv[0], argv);
++   }
++   #endif
+ 
+    exit (1);
+ }
+--- a/rott/w_wad.c
++++ b/rott/w_wad.c
+@@ -235,7 +235,8 @@ void W_InitMultipleFiles (char **filenam
+                 W_AddFile (*filenames);
+ 
+         if (!numlumps)
+-                Error ("W_InitFiles: no files found");
++                Error ("W_InitFiles: One or more of the required ROTT 1.3 data files could not be found.\n\
++                Please read the README.Debian file.");
+ 
+ //
+ // set up caching
