@@ -22,7 +22,7 @@ Rise of the Triad for Debian
    .
    $ game-data-packager -i rott
    .
-   This will download the shareware episode and also try to automaticaly
+   This will download the shareware episode and also try to automatically
    process the commercial episode as sold by Steam (by looking in various
    popular locations).
    .
