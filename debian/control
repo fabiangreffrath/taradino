@@ -22,8 +22,7 @@ Depends:
  ${misc:Depends},
  ${shlibs:Depends}
 Recommends:
- game-data-packager,
- musescore-soundfont-gm | freepats
+ game-data-packager
 Suggests:
  zenity | kde-baseapps-bin | x11-utils | libnotify-bin
 Description: SDL-Port of Rise of the Triad
