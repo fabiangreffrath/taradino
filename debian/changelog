@@ -15,8 +15,11 @@ rott (1.1.2+svn287-2) unstable; urgency=medium
     <fabian@debian.org> address.
   * Remove rott.menu file and icons in XPM and PNG formats, install upstream's
     SVG icon.
+  * Fix the rott.desktop file.
+    + Remove hard-coded fullscreen mode and resolution.
+    + Add keywords.
 
- -- Fabian Greffrath <fabian@debian.org>  Fri, 09 Oct 2015 08:59:15 +0200
+ -- Fabian Greffrath <fabian@debian.org>  Fri, 09 Oct 2015 09:09:40 +0200
 
 rott (1.1.2+svn287-1) unstable; urgency=medium
 
