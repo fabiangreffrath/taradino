@@ -1,3 +1,2 @@
 # The /usr/games/rott binary is handled via update-alternatives.
 rott: desktop-command-not-in-package
-rott: menu-command-not-in-package

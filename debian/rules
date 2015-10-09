@@ -3,12 +3,6 @@
 DEB_CFLAGS_MAINT_APPEND += -Wno-pointer-sign -Wno-unused
 export DEB_CFLAGS_MAINT_APPEND
 
-debian/rott.xpm: debian/rott.png
-	convert $^ $@
-
-debian/rott.png: debian/rott.svg
-	inkscape --export-png=$@ $^
-
 %:
 	dh $@ --with autoreconf
 
