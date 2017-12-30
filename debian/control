@@ -24,7 +24,7 @@ Depends:
 Recommends:
  game-data-packager
 Suggests:
- zenity | kde-baseapps-bin | x11-utils | libnotify-bin
+ zenity | kdialog | x11-utils | libnotify-bin
 Description: SDL-Port of Rise of the Triad
  Rise of the Triad is a high quality, fast scrolling first-person perspective
  3D action game. It includes a lot of destructive enemies, an arsenal of

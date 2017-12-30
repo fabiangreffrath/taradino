@@ -1,3 +1,9 @@
+rott (1.1.2+svn287-3) UNRELEASED; urgency=medium
+
+  * Suggest kdialog instead of kde-baseapps-bin (see #885839)
+
+ -- Simon McVittie <smcv@debian.org>  Sat, 30 Dec 2017 21:37:32 +0000
+
 rott (1.1.2+svn287-2) unstable; urgency=medium
 
   * Show a dialog box if files are missing. Based on patches and
