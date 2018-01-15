@@ -7,7 +7,7 @@ Uploaders:
  Evgeni Golov <evgeni@debian.org>,
  Jon Dowland <jmtd@debian.org>
 Build-Depends:
- debhelper (>= 9),
+ debhelper (>= 11~),
  dh-autoreconf,
  libsdl-mixer1.2-dev,
  libsdl1.2-dev
