@@ -3,6 +3,7 @@ rott (1.1.2+svn287-3) UNRELEASED; urgency=medium
   * Suggest kdialog instead of kde-baseapps-bin (see #885839)
   * Update Vcs-* to point to salsa.debian.org
   * Use https URLs for Homepage and Source
+  * Use https for d/copyright Format
 
  -- Simon McVittie <smcv@debian.org>  Sat, 30 Dec 2017 21:37:32 +0000
 
