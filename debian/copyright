@@ -1,6 +1,6 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: Rise of the Triad
-Source: http://icculus.org/rott/
+Source: https://icculus.org/rott/
 
 Files: *
 Copyright: © 1991-1992, FORTE

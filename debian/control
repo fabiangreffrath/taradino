@@ -12,7 +12,7 @@ Build-Depends:
  libsdl-mixer1.2-dev,
  libsdl1.2-dev
 Standards-Version: 3.9.6
-Homepage: http://icculus.org/rott/
+Homepage: https://icculus.org/rott/
 Vcs-Git: https://salsa.debian.org/games-team/rott.git
 Vcs-Browser: https://salsa.debian.org/games-team/rott
 
