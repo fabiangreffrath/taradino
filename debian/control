@@ -4,8 +4,7 @@ Priority: optional
 Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
 Uploaders:
  Fabian Greffrath <fabian@debian.org>,
- Evgeni Golov <evgeni@debian.org>,
- Jon Dowland <jmtd@debian.org>
+ Evgeni Golov <evgeni@debian.org>
 Build-Depends:
  debhelper (>= 11~),
  libsdl-mixer1.2-dev,

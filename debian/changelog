@@ -1,3 +1,9 @@
+rott (1.1.2+svn287-4) UNRELEASED; urgency=medium
+
+  * Remove myself from Uploaders.
+
+ -- Jonathan Dowland <jmtd@debian.org>  Mon, 04 Nov 2019 16:26:13 +0000
+
 rott (1.1.2+svn287-3) unstable; urgency=medium
 
   * Team upload
