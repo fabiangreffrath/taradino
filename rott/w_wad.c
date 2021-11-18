@@ -235,7 +235,7 @@ void W_InitMultipleFiles (char **filenames)
                 W_AddFile (*filenames);
 
         if (!numlumps)
-                Error ("W_InitFiles: no files found");
+                Error ("W_InitFiles: One or more of the required ROTT 1.3 data files could not be found.");
 
 //
 // set up caching

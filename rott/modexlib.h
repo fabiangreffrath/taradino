@@ -135,6 +135,8 @@ void  VL_CopyPlanarPageToMemory ( byte * src, byte * dest );
 void  XFlipPage ( void );
 void  WaitVBL( void );
 void  TurnOffTextCursor ( void );
+void  ToggleFullScreen (void);
+void  SetShowCursor (int);
 
 #ifdef __WATCOMC__
 #pragma aux VGAWRITEMAP =      \

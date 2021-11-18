@@ -422,31 +422,90 @@ void XFlipPage ( void )
 static SDL_Surface *sdl_surface = NULL;
 static SDL_Surface *unstretch_sdl_surface = NULL;
 
+static SDL_Window *screen;
+static SDL_Renderer *renderer;
+static SDL_Surface *argbbuffer;
+static SDL_Texture *texture;
+static SDL_Rect blit_rect = {0};
+
+SDL_Surface *VL_GetVideoSurface (void)
+{
+	return sdl_surface;
+}
+
+void SetShowCursor(int show)
+{
+	SDL_SetRelativeMouseMode(!show);
+	SDL_GetRelativeMouseState(NULL, NULL);
+}
+
 void GraphicsMode ( void )
 {
-    Uint32 flags = 0;
+	uint32_t flags = 0;
+	uint32_t pixel_format;
+
+	unsigned int rmask, gmask, bmask, amask;
+	int bpp;
 
 	if (SDL_InitSubSystem (SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
-	    Error ("Could not initialize SDL\n");
+		Error ("Could not initialize SDL\n");
 	}
 
-    #if defined(PLATFORM_WIN32) || defined(PLATFORM_MACOSX)
-        // FIXME: remove this.  --ryan.
-        flags = SDL_FULLSCREEN;
-        SDL_WM_GrabInput(SDL_GRAB_ON);
-    #endif
+	flags |= SDL_WINDOW_RESIZABLE;
+	flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 
-    SDL_WM_SetCaption ("Rise of the Triad", "ROTT");
-    SDL_ShowCursor (0);
-//    sdl_surface = SDL_SetVideoMode (320, 200, 8, flags);
-    if (sdl_fullscreen)
-        flags = SDL_FULLSCREEN;
-    sdl_surface = SDL_SetVideoMode (iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 8, flags);    
-	if (sdl_surface == NULL)
+	if (sdl_fullscreen)
 	{
-		Error ("Could not set video mode\n");
-	} 
+		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+	}
+
+	screen = SDL_CreateWindow(NULL,
+	                          SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+	                          iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT,
+	                          flags);
+	SDL_SetWindowMinimumSize(screen, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+	SDL_SetWindowTitle(screen, PACKAGE_STRING);
+
+	renderer = SDL_CreateRenderer(screen, -1, flags = 0);
+	SDL_RenderSetLogicalSize(renderer, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+
+	sdl_surface = SDL_CreateRGBSurface(0,
+	                                   iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 8,
+	                                   0, 0, 0, 0);
+
+	pixel_format = SDL_GetWindowPixelFormat(screen);
+	SDL_PixelFormatEnumToMasks(pixel_format, &bpp,
+	                           &rmask, &gmask, &bmask, &amask);
+	argbbuffer = SDL_CreateRGBSurface(0,
+	                                  iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, bpp,
+	                                  rmask, gmask, bmask, amask);
+
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
+	texture = SDL_CreateTexture(renderer,
+	                            pixel_format,
+	                            SDL_TEXTUREACCESS_STREAMING,
+	                            iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+
+	blit_rect.w = iGLOBAL_SCREENWIDTH;
+	blit_rect.h = iGLOBAL_SCREENHEIGHT;
+
+	SetShowCursor(!sdl_fullscreen);
+}
+
+void ToggleFullScreen (void)
+{
+	unsigned int flags = 0;
+
+	sdl_fullscreen = !sdl_fullscreen;
+
+	if (sdl_fullscreen)
+	{
+		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+	}
+
+	SDL_SetWindowFullscreen(screen, flags);
+	SetShowCursor(!sdl_fullscreen);
 }
 
 /*
@@ -694,7 +753,11 @@ void VH_UpdateScreen (void)
 	}else{
 		DrawCenterAim ();
 	}
-	SDL_UpdateRect (SDL_GetVideoSurface (), 0, 0, 0, 0);
+	SDL_LowerBlit(VL_GetVideoSurface(), &blit_rect, argbbuffer, &blit_rect);
+	SDL_UpdateTexture(texture, NULL, argbbuffer->pixels, argbbuffer->pitch);
+	SDL_RenderClear(renderer);
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
+	SDL_RenderPresent(renderer);
 }
 
 
@@ -727,7 +790,11 @@ void XFlipPage ( void )
 	}else{
 		DrawCenterAim ();
 	}
-   SDL_UpdateRect (sdl_surface, 0, 0, 0, 0);
+   SDL_LowerBlit(sdl_surface, &blit_rect, argbbuffer, &blit_rect);
+   SDL_UpdateTexture(texture, NULL, argbbuffer->pixels, argbbuffer->pitch);
+   SDL_RenderClear(renderer);
+   SDL_RenderCopy(renderer, texture, NULL, NULL);
+   SDL_RenderPresent(renderer);
  
 #endif
 }
@@ -745,7 +812,7 @@ void EnableScreenStretch(void)
    {
       /* should really be just 320x200, but there is code all over the
          places which crashes then */
-      unstretch_sdl_surface = SDL_CreateRGBSurface(SDL_SWSURFACE,
+      unstretch_sdl_surface = SDL_CreateRGBSurface(0,
          iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 8, 0, 0, 0, 0);
    }
 	

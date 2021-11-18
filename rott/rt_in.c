@@ -30,6 +30,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #if USE_SDL
 #include "SDL.h"
 #endif
+#include "modexlib.h"
+#include "rt_scancodes.h"
 
 #include "rt_main.h"
 #include "rt_spbal.h"
@@ -103,7 +105,6 @@ static int sdl_total_sticks = 0;
 static word *sdl_stick_button_state = NULL;
 static word sdl_sticks_joybits = 0;
 static int sdl_mouse_grabbed = 0;
-static unsigned int scancodes[SDLK_LAST];
 extern boolean sdl_fullscreen;
 #endif
 
@@ -245,172 +246,6 @@ static int sdl_mouse_motion_filter(SDL_Event const *event)
 } /* sdl_mouse_motion_filter */
 
 
-/**
- * Attempt to flip the video surface to fullscreen or windowed mode.
- *  Attempts to maintain the surface's state, but makes no guarantee
- *  that pointers (i.e., the surface's pixels field) will be the same
- *  after this call.
- *
- * Caveats: Your surface pointers will be changing; if you have any other
- *           copies laying about, they are invalidated.
- *
- *          Do NOT call this from an SDL event filter on Windows. You can
- *           call it based on the return values from SDL_PollEvent, etc, just
- *           not during the function you passed to SDL_SetEventFilter().
- *
- *          Thread safe? Likely not.
- *
- *   @param surface pointer to surface ptr to toggle. May be different
- *                  pointer on return. MAY BE NULL ON RETURN IF FAILURE!
- *   @param flags   pointer to flags to set on surface. The value pointed
- *                  to will be XOR'd with SDL_FULLSCREEN before use. Actual
- *                  flags set will be filled into pointer. Contents are
- *                  undefined on failure. Can be NULL, in which case the
- *                  surface's current flags are used.
- *  @return non-zero on success, zero on failure.
- */
-static int attempt_fullscreen_toggle(SDL_Surface **surface, Uint32 *flags)
-{
-    long framesize = 0;
-    void *pixels = NULL;
-    SDL_Rect clip;
-    Uint32 tmpflags = 0;
-    int w = 0;
-    int h = 0;
-    int bpp = 0;
-    int grabmouse = (SDL_WM_GrabInput(SDL_GRAB_QUERY) == SDL_GRAB_ON);
-    int showmouse = SDL_ShowCursor(-1);
-    SDL_Color *palette = NULL;
-    int ncolors = 0;
-
-    /*
-    sdldebug("attempting to toggle fullscreen flag...");
-    */
-
-    if ( (!surface) || (!(*surface)) )  /* don't try if there's no surface. */
-    {
-	    /*
-        sdldebug("Null surface (?!). Not toggling fullscreen flag.");
-	*/
-        return(0);
-    } /* if */
-
-    if (SDL_WM_ToggleFullScreen(*surface))
-    {
-	    /*
-        sdldebug("SDL_WM_ToggleFullScreen() seems to work on this system.");
-	*/
-        if (flags)
-            *flags ^= SDL_FULLSCREEN;
-        return(1);
-    } /* if */
-
-    if ( !(SDL_GetVideoInfo()->wm_available) )
-    {
-	    /*
-        sdldebug("No window manager. Not toggling fullscreen flag.");
-	*/
-        return(0);
-    } /* if */
-
-    /*
-    sdldebug("toggling fullscreen flag The Hard Way...");
-    */
-    tmpflags = (*surface)->flags;
-    w = (*surface)->w;
-    h = (*surface)->h;
-    bpp = (*surface)->format->BitsPerPixel;
-
-    if (flags == NULL)  /* use the surface's flags. */
-        flags = &tmpflags;
-
-    SDL_GetClipRect(*surface, &clip);
-
-        /* save the contents of the screen. */
-    if ( (!(tmpflags & SDL_OPENGL)) && (!(tmpflags & SDL_OPENGLBLIT)) )
-    {
-        framesize = (w * h) * ((*surface)->format->BytesPerPixel);
-        pixels = malloc(framesize);
-        if (pixels == NULL)
-            return(0);
-        memcpy(pixels, (*surface)->pixels, framesize);
-    } /* if */
-
-#if 1
-    STUB_FUNCTION;   /* palette is broken. FIXME !!! --ryan. */
-#else
-    if ((*surface)->format->palette != NULL)
-    {
-        ncolors = (*surface)->format->palette->ncolors;
-        palette = malloc(ncolors * sizeof (SDL_Color));
-        if (palette == NULL)
-        {
-            free(pixels);
-            return(0);
-        } /* if */
-        memcpy(palette, (*surface)->format->palette->colors,
-               ncolors * sizeof (SDL_Color));
-    } /* if */
-#endif
-
-    if (grabmouse)
-        SDL_WM_GrabInput(SDL_GRAB_OFF);
-
-    SDL_ShowCursor(1);
-
-    *surface = SDL_SetVideoMode(w, h, bpp, (*flags) ^ SDL_FULLSCREEN);
-
-    if (*surface != NULL)
-        *flags ^= SDL_FULLSCREEN;
-
-    else  /* yikes! Try to put it back as it was... */
-    {
-        *surface = SDL_SetVideoMode(w, h, bpp, tmpflags);
-        if (*surface == NULL)  /* completely screwed. */
-        {
-            if (pixels != NULL)
-                free(pixels);
-            if (palette != NULL)
-                free(palette);
-            return(0);
-        } /* if */
-    } /* if */
-
-    /* Unfortunately, you lose your OpenGL image until the next frame... */
-
-    if (pixels != NULL)
-    {
-        memcpy((*surface)->pixels, pixels, framesize);
-        free(pixels);
-    } /* if */
-
-#if 1
-    STUB_FUNCTION;   /* palette is broken. FIXME !!! --ryan. */
-#else
-    if (palette != NULL)
-    {
-            /* !!! FIXME : No idea if that flags param is right. */
-        SDL_SetPalette(*surface, SDL_LOGPAL, palette, 0, ncolors);
-        free(palette);
-    } /* if */
-#endif
-
-    SDL_SetClipRect(*surface, &clip);
-
-    if (grabmouse)
-        SDL_WM_GrabInput(SDL_GRAB_ON);
-
-    SDL_ShowCursor(showmouse);
-
-#if 0
-    STUB_FUNCTION;  /* pull this out of buildengine/sdl_driver.c ... */
-    output_surface_info(*surface);
-#endif
-
-    return(1);
-} /* attempt_fullscreen_toggle */
-
-
     /*
      * The windib driver can't alert us to the keypad enter key, which
      *  Ken's code depends on heavily. It sends it as the same key as the
@@ -430,7 +265,7 @@ static int handle_keypad_enter_hack(const SDL_Event *event)
             if (event->key.keysym.mod & KMOD_SHIFT)
             {
                 kp_enter_hack = 1;
-                retval = scancodes[SDLK_KP_ENTER];
+                retval = GetScancode(SDLK_KP_ENTER);
             } /* if */
         } /* if */
 
@@ -439,7 +274,7 @@ static int handle_keypad_enter_hack(const SDL_Event *event)
             if (kp_enter_hack)
             {
                 kp_enter_hack = 0;
-                retval = scancodes[SDLK_KP_ENTER];
+                retval = GetScancode(SDLK_KP_ENTER);
             } /* if */
         } /* if */
     } /* if */
@@ -447,13 +282,12 @@ static int handle_keypad_enter_hack(const SDL_Event *event)
     return(retval);
 } /* handle_keypad_enter_hack */
 
-
 static int sdl_key_filter(const SDL_Event *event)
 {
 	int k;
     int keyon;
     int strippedkey;
-    SDL_GrabMode grab_mode = SDL_GRAB_OFF;
+    int grab_mode = 0;
     int extended;
 
     if ( (event->key.keysym.sym == SDLK_g) &&
@@ -464,8 +298,8 @@ static int sdl_key_filter(const SDL_Event *event)
       {
         sdl_mouse_grabbed = ((sdl_mouse_grabbed) ? 0 : 1);
         if (sdl_mouse_grabbed)
-            grab_mode = SDL_GRAB_ON;
-        SDL_WM_GrabInput(grab_mode);
+            grab_mode = 1;
+        SetShowCursor(!grab_mode);
       }
       return(0);
     } /* if */
@@ -475,8 +309,7 @@ static int sdl_key_filter(const SDL_Event *event)
               (event->key.state == SDL_PRESSED) &&
               (event->key.keysym.mod & KMOD_ALT) )
     {
-        if (SDL_WM_ToggleFullScreen(SDL_GetVideoSurface()))
-            sdl_fullscreen ^= 1;
+        ToggleFullScreen();
         return(0);
     } /* if */
 
@@ -491,18 +324,18 @@ static int sdl_key_filter(const SDL_Event *event)
     k = handle_keypad_enter_hack(event);
     if (!k)
     {
-        k = scancodes[event->key.keysym.sym];
+        k = GetScancode(event->key.keysym.sym);
         if (!k)   /* No DOS equivalent defined. */
             return(0);
     } /* if */
     
     /* Fix elweirdo SDL capslock/numlock handling, always treat as press */
     if ( (event->key.keysym.sym != SDLK_CAPSLOCK) &&
-         (event->key.keysym.sym != SDLK_NUMLOCK)  &&
+         (event->key.keysym.sym != SDLK_NUMLOCKCLEAR)  &&
          (event->key.state == SDL_RELEASED) )
         k += 128;  /* +128 signifies that the key is released in DOS. */
 
-    if (event->key.keysym.sym == SDLK_SCROLLOCK)
+    if (event->key.keysym.sym == SDLK_SCROLLLOCK)
         PanicPressed = true;
 
     else
@@ -516,7 +349,7 @@ static int sdl_key_filter(const SDL_Event *event)
         {
             KeyboardQueue[ Keytail ] = extended;
             Keytail = ( Keytail + 1 )&( KEYQMAX - 1 );
-            k = scancodes[event->key.keysym.sym] & 0xFF;
+            k = GetScancode(event->key.keysym.sym) & 0xFF;
             if (event->key.state == SDL_RELEASED)
                 k += 128;  /* +128 signifies that the key is released in DOS. */
         }
@@ -1029,130 +862,7 @@ void IN_Startup (void)
 // fixme: remove this.
 sdl_mouse_grabbed = 1;
 #endif
-
-/*
-  all keys are now mapped to the wolf3d-style names,
-  except where no such name is available.
- */
-    memset(scancodes, '\0', sizeof (scancodes));
-    scancodes[SDLK_ESCAPE]          = sc_Escape;
-    scancodes[SDLK_1]               = sc_1;
-    scancodes[SDLK_2]               = sc_2;
-    scancodes[SDLK_3]               = sc_3;
-    scancodes[SDLK_4]               = sc_4;
-    scancodes[SDLK_5]               = sc_5;
-    scancodes[SDLK_6]               = sc_6;
-    scancodes[SDLK_7]               = sc_7;
-    scancodes[SDLK_8]               = sc_8;
-    scancodes[SDLK_9]               = sc_9;
-    scancodes[SDLK_0]               = sc_0;
-    
-    //scancodes[SDLK_EQUALS]          = 0x4E;
-    scancodes[SDLK_EQUALS]          = sc_Equals;
-    
-    scancodes[SDLK_BACKSPACE]       = sc_BackSpace;
-    scancodes[SDLK_TAB]             = sc_Tab;
-    scancodes[SDLK_q]               = sc_Q;
-    scancodes[SDLK_w]               = sc_W;
-    scancodes[SDLK_e]               = sc_E;
-    scancodes[SDLK_r]               = sc_R;
-    scancodes[SDLK_t]               = sc_T;
-    scancodes[SDLK_y]               = sc_Y;
-    scancodes[SDLK_u]               = sc_U;
-    scancodes[SDLK_i]               = sc_I;
-    scancodes[SDLK_o]               = sc_O;
-    scancodes[SDLK_p]               = sc_P;
-    scancodes[SDLK_LEFTBRACKET]     = sc_OpenBracket;
-    scancodes[SDLK_RIGHTBRACKET]    = sc_CloseBracket;
-    scancodes[SDLK_RETURN]          = sc_Return;
-    scancodes[SDLK_LCTRL]           = sc_Control;
-    scancodes[SDLK_a]               = sc_A;
-    scancodes[SDLK_s]               = sc_S;
-    scancodes[SDLK_d]               = sc_D;
-    scancodes[SDLK_f]               = sc_F;
-    scancodes[SDLK_g]               = sc_G;
-    scancodes[SDLK_h]               = sc_H;
-    scancodes[SDLK_j]               = sc_J;
-    scancodes[SDLK_k]               = sc_K;
-    scancodes[SDLK_l]               = sc_L;
-    scancodes[SDLK_SEMICOLON]       = 0x27;
-    scancodes[SDLK_QUOTE]           = 0x28;
-    scancodes[SDLK_BACKQUOTE]       = 0x29;
-    
-    /* left shift, but ROTT maps it to right shift in isr.c */
-    scancodes[SDLK_LSHIFT]          = sc_RShift; /* sc_LShift */
-    
-    scancodes[SDLK_BACKSLASH]       = 0x2B;
-    /* Accept the German eszett as a backslash key */
-    scancodes[SDLK_WORLD_63]        = 0x2B;
-    scancodes[SDLK_z]               = sc_Z;
-    scancodes[SDLK_x]               = sc_X;
-    scancodes[SDLK_c]               = sc_C;
-    scancodes[SDLK_v]               = sc_V;
-    scancodes[SDLK_b]               = sc_B;
-    scancodes[SDLK_n]               = sc_N;
-    scancodes[SDLK_m]               = sc_M;
-    scancodes[SDLK_COMMA]           = sc_Comma;
-    scancodes[SDLK_PERIOD]          = sc_Period;
-    scancodes[SDLK_SLASH]           = 0x35;
-    scancodes[SDLK_RSHIFT]          = sc_RShift;
-    scancodes[SDLK_KP_DIVIDE]       = 0x35;
-    
-    /* 0x37 is printscreen */
-    //scancodes[SDLK_KP_MULTIPLY]     = 0x37;
-    
-    scancodes[SDLK_LALT]            = sc_Alt;
-    scancodes[SDLK_RALT]            = sc_Alt;
-    scancodes[SDLK_MODE]            = sc_Alt;
-    scancodes[SDLK_RCTRL]           = sc_Control;
-    scancodes[SDLK_SPACE]           = sc_Space;
-    scancodes[SDLK_CAPSLOCK]        = sc_CapsLock;
-    scancodes[SDLK_F1]              = sc_F1;
-    scancodes[SDLK_F2]              = sc_F2;
-    scancodes[SDLK_F3]              = sc_F3;
-    scancodes[SDLK_F4]              = sc_F4;
-    scancodes[SDLK_F5]              = sc_F5;
-    scancodes[SDLK_F6]              = sc_F6;
-    scancodes[SDLK_F7]              = sc_F7;
-    scancodes[SDLK_F8]              = sc_F8;
-    scancodes[SDLK_F9]              = sc_F9;
-    scancodes[SDLK_F10]             = sc_F10;
-    scancodes[SDLK_F11]             = sc_F11;
-    scancodes[SDLK_F12]             = sc_F12;
-    scancodes[SDLK_NUMLOCK]         = 0x45;
-    scancodes[SDLK_SCROLLOCK]       = 0x46;
-    
-    //scancodes[SDLK_MINUS]           = 0x4A;
-    scancodes[SDLK_MINUS]           = sc_Minus;
-    
-    scancodes[SDLK_KP7]             = sc_Home;
-    scancodes[SDLK_KP8]             = sc_UpArrow;
-    scancodes[SDLK_KP9]             = sc_PgUp;
-    scancodes[SDLK_HOME]            = sc_Home;
-    scancodes[SDLK_UP]              = sc_UpArrow;
-    scancodes[SDLK_PAGEUP]          = sc_PgUp;
-    // Make this a normal minus, for viewport changing
-    //scancodes[SDLK_KP_MINUS]        = 0xE04A;
-    scancodes[SDLK_KP_MINUS]        = sc_Minus;
-    scancodes[SDLK_KP4]             = sc_LeftArrow;
-    scancodes[SDLK_KP5]             = 0x4C;
-    scancodes[SDLK_KP6]             = sc_RightArrow;
-    scancodes[SDLK_LEFT]            = sc_LeftArrow;
-    scancodes[SDLK_RIGHT]           = sc_RightArrow;
-    
-    //scancodes[SDLK_KP_PLUS]         = 0x4E;
-    scancodes[SDLK_KP_PLUS]         = sc_Plus;
-    
-    scancodes[SDLK_KP1]             = sc_End;
-    scancodes[SDLK_KP2]             = sc_DownArrow;
-    scancodes[SDLK_KP3]             = sc_PgDn;
-    scancodes[SDLK_END]             = sc_End;
-    scancodes[SDLK_DOWN]            = sc_DownArrow;
-    scancodes[SDLK_PAGEDOWN]        = sc_PgDn;
-    scancodes[SDLK_DELETE]          = sc_Delete;
-    scancodes[SDLK_KP0]             = sc_Insert;
-    scancodes[SDLK_INSERT]          = sc_Insert;
-    scancodes[SDLK_KP_ENTER]        = sc_Return;
+    InitScancodes();
 #endif
 
    checkjoys        = true;

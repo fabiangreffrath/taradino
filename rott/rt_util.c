@@ -69,6 +69,8 @@ static boolean SoftErrorStarted=false;
 static boolean DebugStarted=false;
 static boolean MapDebugStarted=false;
 
+extern SDL_Surface *VL_GetVideoSurface (void);
+
 static unsigned char egargb[48]={ 0x00,0x00,0x00,
 									 0x00,0x00,0xab,
                             0x00,0xab,0x00,
@@ -444,6 +446,8 @@ void Error (char *error, ...)
 #endif
 
    #if USE_SDL
+   SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
+                            PACKAGE_STRING, msgbuf, NULL);
    SDL_Quit();
    #endif
 
@@ -1229,71 +1233,6 @@ void SwapIntelShortArray(short *s, int num)
 ============================================================================
 */
 
-/*
-==============
-=
-= GetaPalette
-=
-= Return an 8 bit / color palette
-=
-==============
-*/
-
-void GetaPalette (byte *palette)
-{
-#ifdef DOS
-	int	i;
-
-	OUTP (PEL_READ_ADR,0);
-	for (i=0 ; i<768 ; i++)
-		palette[i] = inp (PEL_DATA)<<2;
-#else
-	int i;
-	SDL_Palette *pal = SDL_GetVideoSurface()->format->palette;
-	
-	for (i = 0; i < 256; i++) {
-		palette[0] = pal->colors[i].r;
-		palette[1] = pal->colors[i].g;
-		palette[2] = pal->colors[i].b;
-		
-		palette += 3;
-	}
-#endif
-}
-
-/*
-==============
-=
-= SetaPalette
-=
-= Sets an 8 bit / color palette
-=
-==============
-*/
-
-void SetaPalette (byte *pal)
-{
-#ifdef DOS
-	int	i;
-
-	OUTP (PEL_WRITE_ADR,0);
-	for (i=0 ; i<768 ; i++)
-		OUTP (PEL_DATA, pal[i]>>2);
-#else
-   SDL_Color cmap[256];
-   int i;
-
-   for (i = 0; i < 256; i++)
-   {
-	   cmap[i].r = pal[i*3+0];
-	   cmap[i].g = pal[i*3+1];
-	   cmap[i].b = pal[i*3+2];
-   }
-
-   SDL_SetColors (SDL_GetVideoSurface (), cmap, 0, 256);
-#endif
-}
-
 void GetPalette(char * palette)
 {
 #ifdef DOS
@@ -1304,7 +1243,7 @@ void GetPalette(char * palette)
      *(palette+(unsigned char)i)=inp(0x3c9)<<2;
 #else
 	int i;
-	SDL_Palette *pal = SDL_GetVideoSurface()->format->palette;
+	SDL_Palette *pal = VL_GetVideoSurface()->format->palette;
 	
 	for (i = 0; i < 256; i++) {
 		palette[0] = pal->colors[i].r;
@@ -1405,7 +1344,7 @@ void VL_FillPalette (int red, int green, int blue)
            cmap[i].b = blue << 2;
    }
 
-   SDL_SetColors (SDL_GetVideoSurface (), cmap, 0, 256);
+   SDL_SetPaletteColors (VL_GetVideoSurface()->format->palette, cmap, 0, 256);
 #endif
 }
 
@@ -1505,7 +1444,7 @@ void VL_SetPalette (byte *palette)
 	   cmap[i].b = gammatable[(gammaindex<<6)+(*palette++)] << 2;
    }
 
-   SDL_SetColors (SDL_GetVideoSurface (), cmap, 0, 256);
+   SDL_SetPaletteColors (VL_GetVideoSurface()->format->palette, cmap, 0, 256);
 #endif
 }
 
@@ -1534,7 +1473,7 @@ void VL_GetPalette (byte *palette)
       *palette++ = inp (PEL_DATA);
 #else
 	int i;
-	SDL_Palette *pal = SDL_GetVideoSurface()->format->palette;
+	SDL_Palette *pal = VL_GetVideoSurface()->format->palette;
 	
 	for (i = 0; i < 256; i++) {
 		palette[0] = pal->colors[i].r >> 2;

@@ -9,12 +9,13 @@ AC_CONFIG_SRCDIR([rott/version.h])
 
 # Checks for programs.
 AC_PROG_CC
+AC_PROG_CXX
 AC_PROG_RANLIB
 
 # Checks for libraries.
 AC_DEFINE([USE_SDL])
-PKG_CHECK_MODULES([SDL],       [sdl])
-PKG_CHECK_MODULES([SDL_mixer], [SDL_mixer])
+PKG_CHECK_MODULES([SDL],       [sdl2])
+PKG_CHECK_MODULES([SDL_mixer], [SDL2_mixer])
 
 # Checks for header files.
 AC_DEFINE([PLATFORM_UNIX])
