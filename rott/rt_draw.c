@@ -1529,6 +1529,7 @@ void AdaptDetail ( void )
 =====================
 */
 
+extern void I_Sleep (int ms);
 void CalcTics (void)
 {
 
@@ -1553,7 +1554,7 @@ void CalcTics (void)
 //
 
    tc=GetTicCount();
-	while (tc==oldtime) { tc=GetTicCount(); } /* endwhile */
+	while (tc==oldtime) { tc=GetTicCount(); I_Sleep(1);} /* endwhile */
    tics=tc-oldtime;
 
 //   SoftError("CT GetTicCount()=%ld\n",GetTicCount());

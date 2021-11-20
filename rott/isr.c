@@ -759,6 +759,11 @@ int GetTicCount (void)
 	return ((SDL_GetTicks() - ticoffset) * VBLCOUNTER) / 1000 + ticbase;
 }
 
+void I_Sleep (int ms)
+{
+	SDL_Delay(ms);
+}
+
 /*
 ================
 =
