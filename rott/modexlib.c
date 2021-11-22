@@ -441,7 +441,7 @@ void SetShowCursor(int show)
 
 void GraphicsMode ( void )
 {
-	uint32_t flags = 0;
+	uint32_t flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
 	uint32_t pixel_format;
 
 	unsigned int rmask, gmask, bmask, amask;
@@ -451,9 +451,6 @@ void GraphicsMode ( void )
 	{
 		Error ("Could not initialize SDL\n");
 	}
-
-	flags |= SDL_WINDOW_RESIZABLE;
-	flags |= SDL_WINDOW_ALLOW_HIGHDPI;
 
 	if (sdl_fullscreen)
 	{
@@ -467,7 +464,11 @@ void GraphicsMode ( void )
 	SDL_SetWindowMinimumSize(screen, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 	SDL_SetWindowTitle(screen, PACKAGE_STRING);
 
-	renderer = SDL_CreateRenderer(screen, -1, flags = 0);
+	renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_PRESENTVSYNC);
+	if (!renderer)
+	{
+		renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_SOFTWARE);
+	}
 	SDL_RenderSetLogicalSize(renderer, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 
 	sdl_surface = SDL_CreateRGBSurface(0,
