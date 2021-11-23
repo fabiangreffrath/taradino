@@ -4726,13 +4726,11 @@ void DoLoadGameAction (void)
       py = 152;
       if (whichstr)
       {
-//         VW_DrawPropString ("ƒ");
          VW_DrawPropString (".");
          whichstr = 0;
 		}
       else
       {
-//         VW_DrawPropString ("„");
          VW_DrawPropString (".");
          whichstr = 1;
       }

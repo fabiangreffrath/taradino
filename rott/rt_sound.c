@@ -142,27 +142,6 @@ void SD_MakeCacheable( unsigned long sndnum )
       W_CacheLumpNum(SoundNumber(sndnum),PU_CACHE, CvtNull, 1);
 }
 
-#if 0
-//***************************************************************************
-//
-// SD_PrintActive
-//
-//***************************************************************************
-void SD_PrintActive ( void )
-{
-   int i;
-
-   myprintf("Active Sounds\n");
-   for (i=0;i<MAXSOUNDS;i++)
-      {
-      if (sounds[i].count>0)
-         {
-         myprintf("sound active #%ld\n",i);
-         }
-      }
-}
-#endif
-
 //***************************************************************************
 //
 // SD_SetupFXCard - Initialize sound Tables and start up sound card
