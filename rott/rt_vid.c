@@ -1000,8 +1000,8 @@ void VL_FadeIn (int start, int end, byte *palette, int steps)
    {
       for (j=start;j<=end;j++)
       {
-         delta = palette[j]-palette1[0][j];
-         palette2[0][j] = palette1[0][j] + delta * i / steps;
+         delta = palette[j]-(&palette1[0][0])[j];
+         (&palette2[0][0])[j] = (&palette1[0][0])[j] + delta * i / steps;
       }
 
       WaitVBL ();

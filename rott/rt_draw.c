@@ -6039,7 +6039,7 @@ void DrawSkyPost (byte * buf, byte * src, int height)
 #endif
 	{
 	int i = 0;
-	const byte *orig_src = src;
+	byte *const orig_src = src;
 	// org code
 		while (height--) {
 			*buf = shadingtable[*src];
