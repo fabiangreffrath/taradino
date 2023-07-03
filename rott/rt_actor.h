@@ -346,8 +346,8 @@ void     T_EsauRise(objtype*);
 void     A_Drain(objtype*ob);
 void     T_Explosion(objtype*ob);
 void     T_MoveColumn(objtype*);
-void     EnableObject(long object);
-void     DisableObject(long object);
+void     EnableObject(intptr_t object);
+void     DisableObject(intptr_t object);
 
 void     T_Collide(objtype*);
 void  Collision(objtype*ob,objtype *attacker,int hitmomentumx,int hitmomentumy);

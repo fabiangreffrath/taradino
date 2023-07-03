@@ -1,6 +1,8 @@
 #ifndef _INCLUDE_PLATFORM_H_
 #define _INCLUDE_PLATFORM_H_
 
+#include <stdint.h>
+
 static __inline unsigned short _swap16(unsigned short D)
 {
     return((D<<8)|(D>>8));

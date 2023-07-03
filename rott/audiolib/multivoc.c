@@ -94,7 +94,7 @@ static int MV_BuffShift;
 
 static int MV_TotalMemory;
 
-static long   MV_BufferDescriptor;
+static intptr_t   MV_BufferDescriptor;
 static int   MV_BufferEmpty[ NumberOfBuffers ];
 char *MV_MixBuffer[ NumberOfBuffers + 1 ];
 
@@ -574,7 +574,7 @@ playbackstatus MV_GetNextVOCBlock
    unsigned char *ptr;
    int            blocktype=0;
    int            lastblocktype=0;
-   unsigned long  blocklength=0l;
+   intptr_t       blocklength=0l;
    unsigned long  samplespeed=0l;
    unsigned int   tc=0;
    int            packtype=0;
@@ -804,17 +804,17 @@ playbackstatus MV_GetNextVOCBlock
 
       if ( voice->LoopEnd != NULL )
          {
-         if ( blocklength > ( unsigned long )voice->LoopEnd )
+         if ( blocklength > (intptr_t)voice->LoopEnd )
             {
-            blocklength = ( unsigned long )voice->LoopEnd;
+            blocklength = (intptr_t)voice->LoopEnd;
             }
          else
             {
-            voice->LoopEnd = ( char * )blocklength;
+            voice->LoopEnd = (char *)blocklength;
             }
 
-         voice->LoopStart = voice->sound + ( unsigned long )voice->LoopStart;
-         voice->LoopEnd   = voice->sound + ( unsigned long )voice->LoopEnd;
+         voice->LoopStart = voice->sound + (intptr_t)voice->LoopStart;
+         voice->LoopEnd   = voice->sound + (intptr_t)voice->LoopEnd;
          voice->LoopSize  = voice->LoopEnd - voice->LoopStart;
          }
 
@@ -2425,8 +2425,8 @@ int MV_PlayVOC
 int MV_PlayLoopedVOC
    (
    char *ptr,
-   long  loopstart,
-   long  loopend,
+   intptr_t  loopstart,
+   intptr_t  loopend,
    int   pitchoffset,
    int   vol,
    int   left,

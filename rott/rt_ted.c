@@ -3619,7 +3619,7 @@ void LinkElevatorDiskGroups(void)
 
 
 void LinkActor (objtype *ob,int tilex,int tiley,
-                void (*action)(long),void (*swapaction)(long)
+                void (*action)(intptr_t),void (*swapaction)(intptr_t)
                )
    {
 	word  touchx,touchy;
@@ -3636,7 +3636,7 @@ void LinkActor (objtype *ob,int tilex,int tiley,
       if ((clockx == tilex) && (clocky == tiley))
          {
          clocklinked = 1;
-         ClockLink(EnableObject,DisableObject,(long)ob,k);
+         ClockLink(EnableObject,DisableObject,(intptr_t)ob,k);
          }
       }
 
@@ -3663,9 +3663,9 @@ void LinkActor (objtype *ob,int tilex,int tiley,
 
 
          if (tswitch && (tswitch->flags & FL_ON))
-            Link_To_Touchplate(touchx,touchy,swapaction,action,(long)ob,0);
+            Link_To_Touchplate(touchx,touchy,swapaction,action,(intptr_t)ob,0);
          else
-            Link_To_Touchplate(touchx,touchy,action,swapaction,(long)ob,0);
+            Link_To_Touchplate(touchx,touchy,action,swapaction,(intptr_t)ob,0);
          if (ob->obclass == gasgrateobj)
             {
             ob->temp1 = touchx;
@@ -3696,7 +3696,7 @@ void SetupInanimateActors (void)
    {
    int   i,j,linked;
 	word   *map,tile;
-	void (*action)(long),(*swapaction)(long);
+	void (*action)(intptr_t),(*swapaction)(intptr_t);
 
 
    map = mapplanes[1];
@@ -4102,7 +4102,7 @@ void SetupLights(void)
 							 if (!(tswitch->flags & FL_ON))
 								{sprites[i][j]->shapenum --;
 								 if (touchindices[touchx][touchy])
-									 {Link_To_Touchplate(touchx,touchy,ActivateLight,DeactivateLight,(long)(sprites[i][j]),0);
+									 {Link_To_Touchplate(touchx,touchy,ActivateLight,DeactivateLight,(intptr_t)(sprites[i][j]),0);
 									  sprites[i][j]->linked_to = touchindices[touchx][touchy]-1;
 									 }
 								 else
@@ -4110,7 +4110,7 @@ void SetupLights(void)
 								}
 							 else
 								{if (touchindices[touchx][touchy])
-									 {Link_To_Touchplate(touchx,touchy,DeactivateLight,ActivateLight,(long)(sprites[i][j]),0);
+									 {Link_To_Touchplate(touchx,touchy,DeactivateLight,ActivateLight,(intptr_t)(sprites[i][j]),0);
 									  sprites[i][j]->linked_to = touchindices[touchx][touchy]-1;
 									 }
 								 else
@@ -4120,7 +4120,7 @@ void SetupLights(void)
 							}
 					  else
 						 {if (touchindices[touchx][touchy])
-							 {Link_To_Touchplate(touchx,touchy,DeactivateLight,ActivateLight,(long)(sprites[i][j]),0);
+							 {Link_To_Touchplate(touchx,touchy,DeactivateLight,ActivateLight,(intptr_t)(sprites[i][j]),0);
 							  sprites[i][j]->linked_to = touchindices[touchx][touchy]-1;
 							 }
 						  else

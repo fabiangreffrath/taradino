@@ -483,7 +483,7 @@ void LoadColorMap( void )
 	lump = W_GetNumForName("colormap");
 	length = W_LumpLength (lump) + 255;
 	colormap = SafeMalloc (length);
-	colormap = (byte *)( ((long)colormap + 255)&~0xff);
+	colormap = (byte *)( ((intptr_t)colormap + 255)&~0xff);
 	W_ReadLump (lump,colormap);
 
 // Fix fire colors in colormap
@@ -497,7 +497,7 @@ void LoadColorMap( void )
 	lump = W_GetNumForName("specmaps");
 	length = W_LumpLength (lump+1) + 255;
 	redmap = SafeMalloc (length);
-	redmap = (byte *)( ((long)redmap + 255)&~0xff);
+	redmap = (byte *)( ((intptr_t)redmap + 255)&~0xff);
 	W_ReadLump (lump+1,redmap);
    greenmap = redmap+(16*256);
 
@@ -510,7 +510,7 @@ void LoadColorMap( void )
          {
 	      length = W_LumpLength (lump+i) + 255;
 	      playermaps[i] = SafeMalloc (length);
-	      playermaps[i] = (byte *)( ((long)playermaps[i] + 255)&~0xff);
+	      playermaps[i] = (byte *)( ((intptr_t)playermaps[i] + 255)&~0xff);
 	      W_ReadLump (lump+i,playermaps[i]);
          }
       }
