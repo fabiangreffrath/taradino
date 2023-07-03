@@ -28,13 +28,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "develop.h"
 #define SAVE_SCREEN  1
 
-#ifndef _WIN32
 #include <unistd.h>
 #include <sys/types.h>
 #include <limits.h>
 #include <dirent.h>
 #include <ctype.h>
-#endif
 
 #include <stdint.h>
 
@@ -113,20 +111,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   #ifndef _fstricmp
     #define _fstricmp(x, y) strcasecmp(x, y)
   #endif
-
-  char *strupr(char *);
-  char *itoa(int, char *, int);
-  char *ltoa(long, char *, int);
-  char *ultoa(unsigned long, char *, int);
-  char getch(void);
-  long filelength(int handle);
 #endif
 
-#if !defined(ANSIESC)
+char *strupr(char *);
+char *itoa(int, char *, int);
+char *ltoa(long, char *, int);
+char *ultoa(unsigned long, char *, int);
+char getch(void);
+long filelength(int handle);
+
 #define STUB_FUNCTION fprintf(stderr,"STUB: %s at " __FILE__ ", line %d, thread %d\n",__FUNCTION__,__LINE__,getpid())
-#else
-#define STUB_FUNCTION
-#endif
 
 #define far
 #define cdecl

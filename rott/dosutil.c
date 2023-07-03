@@ -24,7 +24,6 @@
 int _argc;
 char **_argv;
 
-#ifndef _WIN32
 long filelength(int handle)
 {
 	struct stat buf;
@@ -111,7 +110,6 @@ char *ultoa(unsigned long value, char *string, int radix)
 	
 	return string;
 }
-#endif
 
 char getch(void)
 {
