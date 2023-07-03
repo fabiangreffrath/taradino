@@ -640,7 +640,7 @@ void CheckCommandLineParameters( void )
       printf ("                next parameter is level to start on\n");
       printf ("   TIMELIMIT  - Play ROTT in time limit mode\n");
       printf ("                next parameter is time in seconds\n");
-      printf ("   MAXTIMELIMIT - Maximimum time to count down from\n");
+      printf ("   MAXTIMELIMIT - Maximum time to count down from\n");
       printf ("                next parameter is time in seconds\n");
       printf ("   DOPEFISH   - ?\n");
       printf (" \n");
