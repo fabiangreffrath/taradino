@@ -3365,13 +3365,9 @@ void SpawnSuperFatalityGibs(objtype *ob,objtype *attacker)
       else
          {
          MISCVARS->randgibspeed = true;
-
-#ifdef MEDGIBS
+//         SpawnParticles(ob,GUTS,75);
+//MED
          SpawnParticles(ob,GUTS,150);
-#else
-         SpawnParticles(ob,GUTS,75);
-#endif
-         
          MISCVARS->randgibspeed = false;
          }
       SpawnParticles(ob,GUTS,40);
@@ -3426,7 +3422,7 @@ boolean Vicious_Annihilation(objtype *ob, objtype *attacker)
             MISCVARS->directgibs = true;
 //MED
             MISCVARS->gibgravity = GRAVITY/2;
-//            MISCVARS->gibgravity = GRAVITY*2;           
+//            MISCVARS->gibgravity = GRAVITY*2;
             MISCVARS->fulllightgibs = true;
             SpawnSuperFatalityGibs(ob,attacker);
             MISCVARS->fulllightgibs = false;
