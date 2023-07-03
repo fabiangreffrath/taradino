@@ -471,9 +471,14 @@ void GraphicsMode ( void )
 	}
 	SDL_RenderSetLogicalSize(renderer, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_RenderClear(renderer);
+	SDL_RenderPresent(renderer);
+
 	sdl_surface = SDL_CreateRGBSurface(0,
 	                                   iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 8,
 	                                   0, 0, 0, 0);
+	SDL_FillRect(sdl_surface, NULL, 0);
 
 	pixel_format = SDL_GetWindowPixelFormat(screen);
 	SDL_PixelFormatEnumToMasks(pixel_format, &bpp,
