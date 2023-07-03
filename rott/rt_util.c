@@ -390,11 +390,9 @@ void Error (char *error, ...)
    ShutDown();	// DDOI - moved this so that it doesn't try to access player
    		// which is freed by this function.
 
-   #if USE_SDL
    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
                             PACKAGE_STRING, msgbuf, NULL);
    SDL_Quit();
-   #endif
 
    exit (1);
 }
@@ -746,7 +744,7 @@ void	SaveFile (char *filename, void *buffer, long count)
 
 void FixFilePath(char *filename)
 {
-#if PLATFORM_UNIX
+#ifndef _WIN32
     char *ptr;
     char *lastsep = filename;
 

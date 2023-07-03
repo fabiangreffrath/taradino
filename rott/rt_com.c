@@ -58,7 +58,7 @@ static int    transittimes[MAXPLAYERS];
 void SyncTime( int client );
 void SetTransitTime( int client, int time );
 
-#ifdef PLATFORM_UNIX
+#ifndef _WIN32
 
 static int sock = -1;
 

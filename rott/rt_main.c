@@ -27,10 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <signal.h>
 
-#if USE_SDL
-/* Need to redefine main to SDL_main on some platforms... */
 #include "SDL.h"
-#endif
 
 #include "rt_actor.h"
 #include "rt_stat.h"
@@ -167,7 +164,7 @@ int main (int argc, char *argv[])
 	_argc = argc;
 	_argv = argv;
 
-#if defined(PLATFORM_MACOSX)
+#if defined(__APPLE__)
     {
         /* OS X will give us a path in the form '/Applications/Rise of the Triad.app/Contents/MacOS/Rise of the Triad'.
            Our data is in Contents/Resources. */
@@ -2556,7 +2553,7 @@ void PollKeyboard
             }
       #endif
       }
-#ifdef USE_SDL
+
       /* SDL doesn't send proper release events for these */
       if (Keystate[sc_CapsLock])
       {
@@ -2570,7 +2567,7 @@ void PollKeyboard
          if (Keystate[0x45] == 3)
             Keystate[0x45] = 0;
       }
-#endif
+
    waminot();
    }
 
