@@ -904,6 +904,7 @@ void VL_FadeOut (int start, int end, int red, int green, int blue, int steps)
 // final color
 //
    VL_FillPalette (red,green,blue);
+   VH_UpdateScreen();
 
    screenfaded = true;
 }
@@ -970,6 +971,7 @@ void VL_FadeToColor (int time, int red, int green, int blue)
 // final color
 //
    VL_FillPalette (red>>2,green>>2,blue>>2);
+   VH_UpdateScreen();
 
    screenfaded = true;
 }
@@ -1018,6 +1020,8 @@ void VL_FadeIn (int start, int end, byte *palette, int steps)
 // final color
 //
    VL_SetPalette (palette);
+   VH_UpdateScreen();
+
    screenfaded = false;
 }
 
