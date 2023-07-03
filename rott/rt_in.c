@@ -21,15 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdlib.h>
 #include <string.h>
 
-#if PLATFORM_DOS
-#include <conio.h>
-#include <dos.h>
-#include <i86.h>
-#endif
-
-#if USE_SDL
 #include "SDL.h"
-#endif
 #include "modexlib.h"
 #include "rt_scancodes.h"
 

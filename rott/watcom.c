@@ -4,40 +4,39 @@
 
 /* 
   C versions of watcom.h assembly.
-  Uses the '__int64' type (see rt_def.h).
  */
 
 fixed FixedMul(fixed a, fixed b)
 {
-	__int64 scratch1 = (__int64) a * (__int64) b + (__int64) 0x8000;
+	int64_t scratch1 = (int64_t) a * (int64_t) b + (int64_t) 0x8000;
 	return (scratch1 >> 16) & 0xffffffff;
 }
 
 fixed FixedMulShift(fixed a, fixed b, fixed shift)
 {
-	__int64 x = a;
-	__int64 y = b;
-	__int64 z = x * y;
+	int64_t x = a;
+	int64_t y = b;
+	int64_t z = x * y;
 	
-	return (((unsigned __int64)z) >> shift) & 0xffffffff;
+	return (((uint64_t)z) >> shift) & 0xffffffff;
 }
 
 fixed FixedDiv2(fixed a, fixed b)
 {
-	__int64 x = (signed int)a;
-	__int64 y = (signed int)b;
-	__int64 z = x * 65536 / y;
+	int64_t x = (signed int)a;
+	int64_t y = (signed int)b;
+	int64_t z = x * 65536 / y;
 	
 	return (z) & 0xffffffff;
 }
 
 fixed FixedScale(fixed orig, fixed factor, fixed divisor)
 {
-	__int64 x = orig;
-	__int64 y = factor;
-	__int64 z = divisor;
+	int64_t x = orig;
+	int64_t y = factor;
+	int64_t z = divisor;
 	
-	__int64 w = (x * y) / z;
+	int64_t w = (x * y) / z;
 	
 	return (w) & 0xffffffff;
 }

@@ -106,7 +106,7 @@ void AbortCheck (char * abortstring);
 void FixFilePath(char *filename);
 
 
-#if PLATFORM_WIN32
+#ifdef _WIN32
 #include <io.h>
 struct find_t
 {
@@ -116,8 +116,7 @@ struct find_t
 };
 int _dos_findfirst(char *filename, int x, struct find_t *f);
 int _dos_findnext(struct find_t *f);
-
-#elif PLATFORM_UNIX
+#else
 struct find_t
 {
     DIR *dir;
@@ -126,15 +125,9 @@ struct find_t
 };
 int _dos_findfirst(char *filename, int x, struct find_t *f);
 int _dos_findnext(struct find_t *f);
-
-#elif PLATFORM_DOS
-   /* no-op */
-#else
-#error please define for your platform.
 #endif
 
 
-#if !PLATFORM_DOS
 struct dosdate_t
 {
     unsigned char day;
@@ -144,7 +137,6 @@ struct dosdate_t
 };
 
 void _dos_getdate(struct dosdate_t *date);
-#endif
 
 
 #if (SOFTERROR==1)
@@ -177,33 +169,7 @@ void  DebugError (char *error, ...) __attribute__((format(printf,1,2)));
 
 void Square (void);
 
-#ifdef __WATCOMC__
-#pragma aux Square=\
-   "mov edx,03c4h",  \
-   "mov eax,0100h",  \
-	"out dx,ax",      \
-   "mov eax,0e3h",    \
-   "mov edx,03c2h",  \
-   "out dx,ax",      \
-   "mov eax,0300h",  \
-   "mov edx,03c4h",  \
-   "out dx,ax"      \
-   modify exact [eax edx]
-#endif
-
-
-#ifdef DOS
-void my_outp(int port, int data);
-#else
 #define my_outp(a,b)
-#endif
-
-#ifdef __WATCOMC__
-#pragma aux my_outp =  \
-        "out dx,al",                     \
-        parm    [edx] [eax] \
-        modify exact []
-#endif
 
 #define OUTP                              my_outp
 

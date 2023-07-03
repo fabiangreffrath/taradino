@@ -19,10 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 /* Copyright 1995 Spacetec IMC Corporation */
 
-#if defined(__BORLANDC__)
-#  pragma inline
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -46,57 +42,6 @@ typedef long fixed;
 #define SIGN(x) ((x<0)?-1:1)
 
 /* ----------------------------------------------------------------------- */
-
-#if defined(__BORLANDC__)
-
-fixed FIXED_MUL(fixed a, fixed b)
-{
-
-   fixed ret_code;
-
-   asm {
-
-      mov  eax,a
-      mov  edx,b
-      imul edx
-      shrd eax,edx,16
-      mov  ret_code,eax
-   }
-
-   return ret_code;
-}
-
-#elif defined(_MSC_VER)
-
-/* Microsoft C7.0 can not be done with inline assembler because it
-   can not handle 32-bit instructions
-*/
-fixed FIXED_MUL(fixed a,fixed b)
-{
-   fixed sgn,ah,al,bh,bl;
-
-   sgn = (SIGN(a) ^ SIGN(b)) ? -1 : 1 ;
-   ah = (a >> 16) & 0xffff ;
-   al = (a        & 0xffff);
-   bh = (b >> 16) & 0xffff ;
-   bl = (b        & 0xffff);
-
-   return sgn * ( ((al*bl)>>16) + (ah*bl) + (al*bh) + ((ah*bh)<<16) );
-}
-
-#elif defined(__WATCOMC__)
-
-fixed FIXED_MUL(fixed a, fixed b);
-
-#pragma aux FIXED_MUL =     \
-   "imul    edx"            \
-   "shrd    eax,edx,16"     \
-   parm     [eax] [edx]     \
-   value    [eax]           \
-   modify   exact [eax]     ;
-
-#endif /* definition of inline FIXED_MUL */
-
 
 static
 fixed StrToFx1616(char *string, char **ret_string)

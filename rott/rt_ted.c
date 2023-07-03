@@ -26,13 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdlib.h>
 #include <time.h>
 
-#ifdef DOS
-#include <io.h>
-#include <conio.h>
-#include <dos.h>
-#else
 #include <errno.h>
-#endif
 
 #include "states.h"
 #include "watcom.h"

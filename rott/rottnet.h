@@ -23,13 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "develop.h"
 
-#ifdef DOS
-#define PEL_WRITE_ADR   0x3c8
-#define PEL_DATA        0x3c9
-
-#define I_ColorBlack(r,g,b) {outp(PEL_WRITE_ADR,0);outp(PEL_DATA,r);outp(PEL_DATA,g);outp(PEL_DATA,b);};
-#endif
-
 #define	MAXNETNODES		14			// max computers in a game
 
 #if ( SHAREWARE == 1 )
@@ -47,10 +40,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define  MAXPACKETSIZE 2048
 #define	MAXCOMBUFFERSIZE 2048
-
-#if __WATCOMC__
-#pragma pack (1)
-#endif
 
 typedef struct
 {
@@ -73,30 +62,11 @@ typedef struct
 	char	data[MAXPACKETSIZE];
 } rottcom_t;
 
-#if __WATCOMC__
-#pragma pack (4)
-#endif
-
 #define  MODEM_GAME   0
 #define	NETWORK_GAME 1
 
 #define	ROTTLAUNCHER ("ROTT.EXE")
 
-#if defined(DOS) && (__WATCOMC__ == 0)
-
-extern   rottcom_t   rottcom;
-extern   boolean     pause;
-
-void ShutdownROTTCOM ( void );
-int  CheckParm (char *check);
-void LaunchROTT (void);
-void NetISR (void);
-long GetVector (void);
-
-#else
-
 extern   rottcom_t   * rottcom;
-
-#endif
 
 #endif

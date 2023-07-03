@@ -36,33 +36,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <ctype.h>
 #endif
 
-#if (defined _MSC_VER)
-/* __int64 is built in. */
-#include <malloc.h>
-#include <fcntl.h>
-#include <io.h>
-//#define alloca(x) _alloca(x)
-#define access(x, y) _access(x, y)
-#define F_OK  0
-#elif (defined __GNUC__)
-#define __int64 long long
-#else
-#error please define your platform.
-#endif
+#include <stdint.h>
 
-#if PLATFORM_DOS || PLATFORM_WIN32
-#define PATH_SEP_CHAR '\\'
-#define PATH_SEP_STR  "\\"
-#elif PLATFORM_UNIX
-#define PATH_SEP_CHAR '/'
-#define PATH_SEP_STR  "/"
-#define ROOTDIR       "/"
-#define CURDIR        "./"
-#elif PLATFORM_MACCLASSIC
-#define PATH_SEP_CHAR ':'
-#define PATH_SEP_STR  ":"
+#ifdef _WIN32
+  #define PATH_SEP_CHAR '\\'
+  #define PATH_SEP_STR  "\\"
 #else
-#error please define your platform.
+  #define PATH_SEP_CHAR '/'
+  #define PATH_SEP_STR  "/"
+  #define ROOTDIR       "/"
+  #define CURDIR        "./"
 #endif
 
 #if (!defined MAX_PATH)
@@ -115,32 +98,29 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define max(a, b)  (((a) > (b)) ? (a) : (b))
 #endif
 
-#if !PLATFORM_DOS
-  #if PLATFORM_WIN32
-    #define strcmpi(x, y) stricmp(x, y)
-    #define _fstricmp(x, y) stricmp(x, y)
-  #elif PLATFORM_UNIX
-    #ifndef strcmpi
-      #define strcmpi(x, y) strcasecmp(x, y)
-    #endif
-
-    #ifndef stricmp
-      #define stricmp(x, y) strcasecmp(x, y)
-    #endif
-
-    #ifndef _fstricmp
-      #define _fstricmp(x, y) strcasecmp(x, y)
-    #endif
-
-    char *strupr(char *);
-    char *itoa(int, char *, int);
-    char *ltoa(long, char *, int);
-    char *ultoa(unsigned long, char *, int);
-    char getch(void);
-    long filelength(int handle);
-  #else
-    #error please define for your platform.
+#ifdef _WIN32
+  #define strcmpi(x, y) stricmp(x, y)
+  #define _fstricmp(x, y) stricmp(x, y)
+#else
+  #ifndef strcmpi
+   #define strcmpi(x, y) strcasecmp(x, y)
   #endif
+
+  #ifndef stricmp
+    #define stricmp(x, y) strcasecmp(x, y)
+  #endif
+
+  #ifndef _fstricmp
+    #define _fstricmp(x, y) strcasecmp(x, y)
+  #endif
+
+  char *strupr(char *);
+  char *itoa(int, char *, int);
+  char *ltoa(long, char *, int);
+  char *ultoa(unsigned long, char *, int);
+  char getch(void);
+  long filelength(int handle);
+#endif
 
 #if !defined(ANSIESC)
 #define STUB_FUNCTION fprintf(stderr,"STUB: %s at " __FILE__ ", line %d, thread %d\n",__FUNCTION__,__LINE__,getpid())
@@ -150,7 +130,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define far
 #define cdecl
-#endif
 
 //***************************************************************************
 //
@@ -316,23 +295,10 @@ typedef int fixed;
 
 //////////////////      GLOBAL ENUMERATED TYPES    ///////////////////////
 
-#ifdef __WATCOMC__
-typedef enum
- {false,
-  true
- }
- boolean;
-#else
-/* boolean is serialized at the moment, and watcomc made it a byte. */
-
 typedef unsigned char boolean;
 enum {
   false, true
 };
-#endif
-
-
-
 
 typedef enum {
 		  east,
