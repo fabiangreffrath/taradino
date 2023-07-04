@@ -14,11 +14,6 @@
 
 #define ROTT
 
-#ifdef DUKE3D
-#include "duke3d.h"
-#include "buildengine/cache1d.h"
-#endif
-
 #define cdecl
 
 #include "SDL.h"
@@ -323,69 +318,6 @@ musdebug("Need to use PlaySongROTT.  :(");
 
 
 extern char ApogeePath[256];
-
-#ifdef DUKE3D
-// Duke3D-specific.  --ryan.
-void PlayMusic(char *_filename)
-{
-    //char filename[MAX_PATH];
-    //strcpy(filename, _filename);
-    //FixFilePath(filename);
-
-    char filename[MAX_PATH];
-    long handle;
-    long size;
-    void *song;
-    long rc;
-
-    MUSIC_StopSong();
-
-    // Read from a groupfile, write it to disk so SDL_mixer can read it.
-    //   Lame.  --ryan.
-    handle = kopen4load(_filename, 0);
-    if (handle == -1)
-        return;
-
-    size = kfilelength(handle);
-    if (size == -1)
-    {
-        kclose(handle);
-        return;
-    } // if
-
-    song = malloc(size);
-    if (song == NULL)
-    {
-        kclose(handle);
-        return;
-    } // if
-
-    rc = kread(handle, song, size);
-    kclose(handle);
-    if (rc != size)
-    {
-        free(song);
-        return;
-    } // if
-
-    // save the file somewhere, so SDL_mixer can load it
-    GetPathFromEnvironment(filename, MAX_PATH, "tmpsong.mid");
-    handle = SafeOpenWrite(filename, filetype_binary);
-    
-    SafeWrite(handle, song, size);
-    close(handle);
-    free(song);
-    
-    //music_songdata = song;
-
-    music_musicchunk = Mix_LoadMUS(filename);
-    if (music_musicchunk != NULL)
-    {
-        // !!! FIXME: I set the music to loop. Hope that's okay. --ryan.
-        Mix_PlayMusic(music_musicchunk, -1);
-    } // if
-}
-#endif
 
 #ifdef ROTT
 // ROTT Special - SBF
