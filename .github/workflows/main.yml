@@ -85,11 +85,6 @@ jobs:
       - name: Build
         run: make
 
-      - name: Install
-        run: |
-          cd build
-          cpack
-
   cppcheck:
     name: Cppcheck
     runs-on: ubuntu-latest
