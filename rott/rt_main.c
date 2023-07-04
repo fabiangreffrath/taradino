@@ -539,7 +539,6 @@ void CheckCommandLineParameters( void )
 #endif
       printf ("   NOJOYS     - Disable check for joystick.\n");
       printf ("   NOMOUSE    - Disable check for mouse.\n");
-      printf ("   CYBERMAN   - Enable check for Cyberman.\n");
       printf ("   ASSASSIN   - Enable check for Wingman Assassin.\n");
       printf ("   VER        - Version number.\n");
       printf ("   MAPSTATS   - Dump Map statistics to ERROR.\n");

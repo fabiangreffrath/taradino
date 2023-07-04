@@ -2512,118 +2512,6 @@ void PollMove (void)
       }
 }
 
-
-//******************************************************************************
-//
-// PollCyberman ()
-//
-//******************************************************************************
-
-void PollCyberman (void)
-{
-   int i;
-   int mask;
-   int press;
-
-   SWIFT_Get3DStatus (&SWIFTStatus);
-
-   mask = 4;
-   for( i = 0; i < 3; i++, mask >>= 1 )
-      {
-      press = SWIFTStatus.buttons & mask;
-
-      if ( press )
-         {
-//         if ( ( buttonmouse[ i ] != bt_nobutton ) &&
-//            ( DoubleClickCount[ i ] != 2 ) )
-         if ( buttonmouse[ i ] != bt_nobutton )
-            {
-            buttonpoll[ buttonmouse[ i ] ] = true;
-            }
-         }
-
-      // Check double-click
-      if ( buttonmouse[ i + 3 ] != bt_nobutton )
-         {
-         if ( press )
-            {
-            // Was the button pressed last tic?
-            if ( !DoubleClickPressed[ i ] )
-               {
-               // Yes, take note of it
-               DoubleClickPressed[ i ] = true;
-
-               // Is this the first click, or a really late click?
-               if ( ( DoubleClickCount[ i ] == 0 ) ||
-                  ( GetTicCount() >= DoubleClickTimer[ i ] ) )
-                  {
-                  // Yes, now wait for a second click
-                  DoubleClickTimer[ i ] = GetTicCount() + DoubleClickSpeed;
-
-                     //( tics << 5 );
-                  DoubleClickCount[ i ] = 1;
-                  }
-               else
-                  {
-                  // Second click
-                  buttonpoll[ buttonmouse[ i + 3 ] ] = true;
-                  DoubleClickTimer[ i ] = 0;
-                  DoubleClickCount[ i ] = 2;
-                  }
-               }
-            else
-               {
-               // After second click, button remains pressed
-               // until user releases it
-               if ( DoubleClickCount[ i ] == 2 )
-                  {
-                  buttonpoll[ buttonmouse[ i + 3 ] ] = true;
-                  }
-               }
-            }
-         else
-            {
-            if ( DoubleClickCount[ i ] == 2 )
-               {
-               DoubleClickCount[ i ] = 0;
-               }
-            DoubleClickPressed[ i ] = false;
-            }
-         }
-      }
-
-   if (SWIFTStatus.pitch > 0)
-     CYBERLOOKUP = true;
-   else if (SWIFTStatus.pitch < 0)
-     CYBERLOOKDOWN = true;
-
-   if ((abs (SWIFTStatus.x)) > CYBERDEADRANGE)
-   {
-      CX = -(SGN (SWIFTStatus.x) * (( (abs(SWIFTStatus.x)-CYBERDEADRANGE) ) << 10));
-      turnheldtime += tics;
-   }
-   else
-      if (SWIFTStatus.x != oldcyberx)
-		{
-         turnheldtime += tics;
-         if (SWIFTStatus.x > oldcyberx)
-				CX = -(0xB8000);
-         else
-				CX = 0xB8000;
-
-         oldcyberx = SWIFTStatus.x;
-      }
-      else
-         CX = 0;
-
-   if ((abs (SWIFTStatus.y)) > CYBERDEADRANGE)
-   {
-      CY = SWIFTStatus.y >> 2;
-   }
-	else
-      CY = 0;
-}
-
 //******************************************************************************
 //
 // PollAssassin ()
@@ -2816,7 +2704,7 @@ void PollControls (void)
 //
    PollKeyboardButtons ();
 
-   if (mouseenabled && !cybermanenabled)
+   if (mouseenabled)
       PollMouseButtons ();
 
 	if (joystickenabled)
@@ -2828,9 +2716,6 @@ void PollControls (void)
 //
    if (joystickenabled)
       PollJoystickMove ();
-
-	if (cybermanenabled)
-      PollCyberman ();
 
    else if (mouseenabled && MousePresent)
       PollMouseMove ();

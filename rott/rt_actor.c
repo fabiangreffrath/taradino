@@ -10572,8 +10572,6 @@ void DamagePlayerActor(objtype *ob, int damage)
    if (ob==player)
       {
       damagecount += damage;
-      if (cybermanenabled)
-         SWIFT_TactileFeedback (10*damage, 15, 15);
       if ( SHOW_BOTTOM_STATUS_BAR() )
          DrawBarHealth (false);
       }

@@ -47,7 +47,6 @@ extern int     NumVoices;
 extern int     NumChannels;
 extern int     NumBits;
 extern boolean stereoreversed;
-extern boolean cybermanenabled;
 extern boolean assassinenabled;
 extern boolean AutoDetailOn;
 extern int     DoubleClickSpeed;

@@ -22,7 +22,6 @@ FILE1        add external wads for graphic replacement
 FILE2
 NOJOYS       disable joystick test
 NOMOUSE      disable mouse test
-CYBERMAN     enable cyberman
 ASSASSIN     enable wingman assassin
 NOECHO       turn off reverb effect
 DEMOEXIT     exit the game when demo is interrupted

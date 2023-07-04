@@ -91,7 +91,6 @@ int     threshold        = 1;
 int     NumVoices        = 4;
 int     NumChannels      = 1;
 int     NumBits          = 8;
-boolean cybermanenabled  = false;
 boolean assassinenabled  = false;
 boolean AutoDetailOn     = true;
 int     DoubleClickSpeed = 20;
@@ -572,9 +571,6 @@ boolean ParseConfigFile (void)
          GetTokenEOL (false);
          ConvertStringToPasswordString ( &name[0] );
          }
-
-      if (!CybermanPresent)
-         cybermanenabled = false;
 
       if (!AssassinPresent)
          assassinenabled = false;
@@ -1660,13 +1656,6 @@ void WriteConfig (void)
    SafeWriteString(file,"; Threshold of Mouse and Joystick\n");
    SafeWriteString(file,"; (smallest) 1 - 15 (largest)\n");
    WriteParameter(file,"Threshold        ",threshold);
-
-   // Write in Cyberman Enabled
-
-//   SafeWriteString(file,"\n;\n");
-//   SafeWriteString(file,"; 1 - Cyberman Enabled\n");
-//   SafeWriteString(file,"; 0 - Cyberman Disabled\n");
-//   WriteParameter(file,"CybermanEnabled  ",cybermanenabled);
 
    // Write in Auto Detail
 

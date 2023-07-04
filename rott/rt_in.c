@@ -61,7 +61,6 @@ int IgnoreMouse = 0;
 
 // configuration variables
 //
-boolean  CybermanPresent;
 boolean  AssassinPresent;
 boolean  MousePresent;
 boolean  JoysPresent[MaxJoys];
@@ -161,7 +160,7 @@ static   Direction   DirTable[] =      // Quick lookup for total direction
 
 int (far *function_ptr)();
 
-static char *ParmStrings[] = {"nojoys","nomouse","cyberman","assassin",NULL};
+static char *ParmStrings[] = {"nojoys","nomouse","assassin",NULL};
 
 
 #define sdldebug printf
@@ -761,7 +760,6 @@ void IN_Startup (void)
 {
    boolean checkjoys,
            checkmouse,
-           checkcyberman,
            swiftstatus,
            checkassassin;
 
@@ -778,9 +776,7 @@ sdl_mouse_grabbed = 1;
 
    checkjoys        = true;
    checkmouse       = true;
-   checkcyberman    = false;
    checkassassin    = false;
-   CybermanPresent  = false;
    AssassinPresent  = false;
 
    for (i = 1; i < _argc; i++)
@@ -796,11 +792,6 @@ sdl_mouse_grabbed = 1;
       break;
 
       case 2:
-         checkcyberman = true;
-         checkmouse = false;
-      break;
-
-      case 4:
          checkassassin = true;
          checkmouse = false;
       break;
@@ -826,33 +817,6 @@ sdl_mouse_grabbed = 1;
             printf("IN_Startup: Joystick Present\n");
          }
       }
-
-   if ((checkcyberman || checkassassin) && (swiftstatus = SWIFT_Initialize ()))
-   {
-      int dynamic;
-
-      if (checkcyberman)
-         {
-         CybermanPresent = swiftstatus;
-         cybermanenabled = true;
-         }
-      else if (checkassassin)
-         {
-         AssassinPresent = checkassassin & swiftstatus;
-         assassinenabled = true;
-         }
-
-      dynamic = SWIFT_GetDynamicDeviceData ();
-
-      SWIFT_TactileFeedback (40, 20, 20);
-
-      if (SWIFT_GetDynamicDeviceData () == 2)
-         Error ("SWIFT ERROR : External Power too high!\n");
-
-      SWIFT_TactileFeedback (100, 10, 10);
-      if (!quiet)
-         printf("IN_Startup: Swift Device Present\n");
-   }
 
    IN_Started = true;
 }
@@ -896,9 +860,6 @@ void IN_Shutdown (void)
 
    for (i = 0;i < MaxJoys;i++)
       INL_ShutJoy(i);
-
-   if (CybermanPresent || AssassinPresent)
-      SWIFT_Terminate ();
 
    IN_Started = false;
 }

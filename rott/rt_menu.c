@@ -344,7 +344,6 @@ typedef enum
 	JOYENABLE,
 	USEPORT2,
 	PADENABLE,
-	CYBERMANENABLE,
 	THRESSENS,
 	MOUSESENS,
 	CUSTOMIZE
@@ -419,7 +418,6 @@ CP_MenuNames CtlMenuNames[] =
    "JOYSTICK ENABLED",
    "USE JOYSTICK PORT 2",
    "GAMEPAD ENABLED",
-   "CYBERMAN ENABLED",
    "ADJUST THRESHOLD",
    "MOUSE SENSITIVITY",
    "CUSTOMIZE CONTROLS"
@@ -432,7 +430,6 @@ CP_itemtype CtlMenu[] =
       { CP_Inactive, "ctl_jen\0", 'J', NULL },
       { CP_Inactive, "ctl_jp2\0", 'U', NULL },
       { CP_Inactive, "ctl_gpd\0", 'G', NULL },
-      { CP_Inactive, "cyberman\0",'C', NULL },
       { CP_Inactive, "ctl_thr\0", 'A', (menuptr)DoThreshold },
       { CP_Inactive, "ctl_mse\0", 'M', (menuptr)MouseSensitivity },
       { CP_Active,   "ctl_cus\0", 'C', (menuptr)CP_Custom }
@@ -1669,9 +1666,6 @@ void CleanUpControlPanel (void)
 
    if (mouseenabled)
       PollMouseMove ();    // Trying to kill movement
-
-   if (cybermanenabled)
-      PollCyberman ();
 
    RefreshPause = true;
 }
@@ -3703,11 +3697,6 @@ void CP_Control (void)
                }
          break;
 
-         case CYBERMANENABLE:
-            cybermanenabled ^= 1;
-            DrawCtlButtons ();
-         break;
-
 			case THRESSENS:
          case MOUSESENS:
          case CUSTOMIZE:
@@ -4635,9 +4624,6 @@ void DrawCtlButtons (void)
          mouseenabled = 0;
       }
 
-      if (CybermanPresent)
-         CtlMenu[CYBERMANENABLE].active = CP_Active;
-
       for (x = 0; x < CtlItems.amount; x++)
       {
          if (CtlMenu[x].active)
@@ -4686,18 +4672,6 @@ void DrawCtlButtons (void)
       EraseMenuBufRegion (x, y, 16, 16);
       DrawMenuBufItem (x, y, button_off);
    }
-
-   y += 14;
-
-   y += 14;
-   if (cybermanenabled)
-      DrawMenuBufItem (x, y, button_on);
-   else
-   {
-      EraseMenuBufRegion (x, y, 16, 16);
-      DrawMenuBufItem (x, y, button_off);
-   }
-
 
    if ((CtlItems.curpos < 0) || (!CtlMenu[CtlItems.curpos].active))
       for (i = 0; i < CtlItems.amount; i++)
