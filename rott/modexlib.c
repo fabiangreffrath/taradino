@@ -397,7 +397,6 @@ void XFlipPage ( void )
    SDL_RenderClear(renderer);
    SDL_RenderCopy(renderer, texture, NULL, NULL);
    SDL_RenderPresent(renderer);
- 
 }
 
 void EnableScreenStretch(void)

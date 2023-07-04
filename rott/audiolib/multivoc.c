@@ -574,7 +574,7 @@ playbackstatus MV_GetNextVOCBlock
    unsigned char *ptr;
    int            blocktype=0;
    int            lastblocktype=0;
-   intptr_t       blocklength=0l;
+   uintptr_t      blocklength=0l;
    unsigned long  samplespeed=0l;
    unsigned int   tc=0;
    int            packtype=0;
@@ -804,17 +804,17 @@ playbackstatus MV_GetNextVOCBlock
 
       if ( voice->LoopEnd != NULL )
          {
-         if ( blocklength > (intptr_t)voice->LoopEnd )
+         if ( blocklength > (uintptr_t)voice->LoopEnd )
             {
-            blocklength = (intptr_t)voice->LoopEnd;
+            blocklength = (uintptr_t)voice->LoopEnd;
             }
          else
             {
             voice->LoopEnd = (char *)blocklength;
             }
 
-         voice->LoopStart = voice->sound + (intptr_t)voice->LoopStart;
-         voice->LoopEnd   = voice->sound + (intptr_t)voice->LoopEnd;
+         voice->LoopStart = voice->sound + (uintptr_t)voice->LoopStart;
+         voice->LoopEnd   = voice->sound + (uintptr_t)voice->LoopEnd;
          voice->LoopSize  = voice->LoopEnd - voice->LoopStart;
          }
 

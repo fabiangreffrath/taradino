@@ -45,7 +45,7 @@ int iGLOBAL_SCREENHEIGHT;//bna val 600
 //
 //***************************************************************************
 
-extern  boolean StretchScreen;//bná++
+extern  boolean StretchScreen;
 
 //extern  int      ylookup[MAXSCREENHEIGHT];      // Table of row offsets
 extern  int      ylookup[600];      // just set to max res

@@ -84,7 +84,6 @@ char *FX_ErrorString
          break;
 
       case FX_SoundCardError :
-
          ErrorString = DSL_ErrorString( DSL_Error );
          break;
 
