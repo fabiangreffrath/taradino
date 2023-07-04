@@ -151,9 +151,6 @@ extern volatile int LastScan;
 extern JoystickDef JoyDefs[];
 extern ControlType Controls[MAXPLAYERS]; */
 
-extern boolean  SpaceBallPresent;
-extern boolean  CybermanPresent;
-extern boolean  AssassinPresent;
 extern char LastASCII;
 extern volatile int LastScan;
 

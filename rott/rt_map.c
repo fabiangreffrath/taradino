@@ -45,7 +45,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_floor.h"
 #include "engine.h"
 #include "develop.h"
-#include "rt_spbal.h"
 #include "rt_menu.h"
 #include "rt_net.h"
 #include "rt_str.h"
@@ -860,10 +859,6 @@ EnableScreenStretch();//bna++
 
    while (Keyboard[sc_Tab])
       IN_UpdateKeyboard ();
-   if (SpaceBallPresent && spaceballenabled)
-      {
-      while (GetSpaceBallButtons()) ;
-      }
 
    x=(cx-(xscale>>1))<<16;
    y=(cy-(yscale>>1))<<16;
@@ -884,11 +879,6 @@ EnableScreenStretch();//bna++
         else
            quitkey=sc_Escape;
         done=true;
-        }
-     if (SpaceBallPresent && spaceballenabled)
-        {
-        if (GetSpaceBallButtons()!=0)
-           done=true;
         }
      if ( Keyboard[ sc_Home ] )
         {
