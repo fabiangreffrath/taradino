@@ -48,7 +48,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "engine.h"
 #include "_rt_play.h"
 #include "rt_cfg.h"
-#include "rt_spbal.h"
 #include "rt_floor.h"
 #include "develop.h"
 #include "rt_msg.h"
@@ -2843,10 +2842,7 @@ void PollControls (void)
 
    PollMove ();
 
-   if (spaceballenabled)
-      PollSpaceBall ();
-
-   else if (assassinenabled)
+   if (assassinenabled)
        PollAssassin ();
 
 

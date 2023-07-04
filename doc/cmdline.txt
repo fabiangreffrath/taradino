@@ -22,7 +22,6 @@ FILE1        add external wads for graphic replacement
 FILE2
 NOJOYS       disable joystick test
 NOMOUSE      disable mouse test
-SPACEBALL    enable spaceball avenger
 CYBERMAN     enable cyberman
 ASSASSIN     enable wingman assassin
 NOECHO       turn off reverb effect

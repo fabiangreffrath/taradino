@@ -68,7 +68,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "modexlib.h"
 #include "rt_msg.h"
 #include "rt_net.h"
-#include "rt_spbal.h"
 #include "rt_scale.h"
 
 #include "rt_battl.h"
@@ -345,7 +344,6 @@ typedef enum
 	JOYENABLE,
 	USEPORT2,
 	PADENABLE,
-	SPACEBALLENABLE,
 	CYBERMANENABLE,
 	THRESSENS,
 	MOUSESENS,
@@ -421,7 +419,6 @@ CP_MenuNames CtlMenuNames[] =
    "JOYSTICK ENABLED",
    "USE JOYSTICK PORT 2",
    "GAMEPAD ENABLED",
-   "SPACEBALL ENABLED",
    "CYBERMAN ENABLED",
    "ADJUST THRESHOLD",
    "MOUSE SENSITIVITY",
@@ -435,7 +432,6 @@ CP_itemtype CtlMenu[] =
       { CP_Inactive, "ctl_jen\0", 'J', NULL },
       { CP_Inactive, "ctl_jp2\0", 'U', NULL },
       { CP_Inactive, "ctl_gpd\0", 'G', NULL },
-      { CP_Inactive, "spball\0",  'S', NULL },
       { CP_Inactive, "cyberman\0",'C', NULL },
       { CP_Inactive, "ctl_thr\0", 'A', (menuptr)DoThreshold },
       { CP_Inactive, "ctl_mse\0", 'M', (menuptr)MouseSensitivity },
@@ -3707,11 +3703,6 @@ void CP_Control (void)
                }
          break;
 
-         case SPACEBALLENABLE:
-            spaceballenabled ^= 1;
-            DrawCtlButtons ();
-         break;
-
          case CYBERMANENABLE:
             cybermanenabled ^= 1;
             DrawCtlButtons ();
@@ -4644,9 +4635,6 @@ void DrawCtlButtons (void)
          mouseenabled = 0;
       }
 
-      if (SpaceBallPresent)
-         CtlMenu[SPACEBALLENABLE].active = CP_Active;
-
       if (CybermanPresent)
          CtlMenu[CYBERMANENABLE].active = CP_Active;
 
@@ -4700,13 +4688,6 @@ void DrawCtlButtons (void)
    }
 
    y += 14;
-   if (spaceballenabled)
-      DrawMenuBufItem (x, y, button_on);
-   else
-   {
-      EraseMenuBufRegion (x, y, 16, 16);
-      DrawMenuBufItem (x, y, button_off);
-   }
 
    y += 14;
    if (cybermanenabled)
@@ -4842,35 +4823,6 @@ void ReadAnyControl (ControlInfo *ci)
             ci->button2=ci->button3=false;
       }
    }
-
-
-#if 0
-   if (SpaceBallPresent && spaceballenabled)
-   {
-		SP_Get(&packet);
-
-      if (packet.button)
-      {
-         if (packet.button & SP_BTN_1)
-            ci->button0 = true;
-
-         if (packet.button & SP_BTN_2)
-            ci->button1 = true;
-      }
-
-		if (packet.ty >  MENU_AMT)
-         ci->dir = dir_North;
-      else
-         if (packet.ty < -MENU_AMT)
-            ci->dir = dir_South;
-
-		if (packet.tx < (-MENU_AMT* 6))
-         ci->dir = dir_West;
-      else
-         if (packet.tx > (MENU_AMT * 6))
-            ci->dir = dir_East;
-   }
-#endif
 }
 
 

@@ -93,7 +93,6 @@ int     NumChannels      = 1;
 int     NumBits          = 8;
 boolean cybermanenabled  = false;
 boolean assassinenabled  = false;
-boolean spaceballenabled = false;
 boolean AutoDetailOn     = true;
 int     DoubleClickSpeed = 20;
 boolean BobbinOn         = true;
@@ -579,9 +578,6 @@ boolean ParseConfigFile (void)
 
       if (!AssassinPresent)
          assassinenabled = false;
-
-      if (!SpaceBallPresent)
-         spaceballenabled = false;
 
       if (!MousePresent)
          mouseenabled = false;
@@ -1671,13 +1667,6 @@ void WriteConfig (void)
 //   SafeWriteString(file,"; 1 - Cyberman Enabled\n");
 //   SafeWriteString(file,"; 0 - Cyberman Disabled\n");
 //   WriteParameter(file,"CybermanEnabled  ",cybermanenabled);
-
-   // Write in Spaceball Enabled
-
-//   SafeWriteString(file,"\n;\n");
-//   SafeWriteString(file,"; 1 - Spaceball Enabled\n");
-//   SafeWriteString(file,"; 0 - Spaceball Disabled\n");
-//   WriteParameter(file,"SpaceballEnabled ",spaceballenabled);
 
    // Write in Auto Detail
 

@@ -202,8 +202,6 @@ extern williamdidthis FREE;
 extern statetype s_player;
 extern williamdidthis WEAPONS[MAXWEAPONS];
 extern boolean cybermanenabled;
-extern boolean spaceballenabled;
-extern boolean SpaceBallPresent;
 extern boolean CybermanPresent;
 extern boolean mouseenabled;
 extern boolean joystickenabled;

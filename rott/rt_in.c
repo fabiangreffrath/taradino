@@ -26,7 +26,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_scancodes.h"
 
 #include "rt_main.h"
-#include "rt_spbal.h"
 #include "rt_def.h"
 #include "rt_in.h"
 #include "_rt_in.h"
@@ -62,7 +61,6 @@ int IgnoreMouse = 0;
 
 // configuration variables
 //
-boolean  SpaceBallPresent;
 boolean  CybermanPresent;
 boolean  AssassinPresent;
 boolean  MousePresent;
@@ -163,7 +161,7 @@ static   Direction   DirTable[] =      // Quick lookup for total direction
 
 int (far *function_ptr)();
 
-static char *ParmStrings[] = {"nojoys","nomouse","spaceball","cyberman","assassin",NULL};
+static char *ParmStrings[] = {"nojoys","nomouse","cyberman","assassin",NULL};
 
 
 #define sdldebug printf
@@ -764,7 +762,6 @@ void IN_Startup (void)
    boolean checkjoys,
            checkmouse,
            checkcyberman,
-           checkspaceball,
            swiftstatus,
            checkassassin;
 
@@ -783,8 +780,6 @@ sdl_mouse_grabbed = 1;
    checkmouse       = true;
    checkcyberman    = false;
    checkassassin    = false;
-   checkspaceball   = false;
-   SpaceBallPresent = false;
    CybermanPresent  = false;
    AssassinPresent  = false;
 
@@ -801,10 +796,6 @@ sdl_mouse_grabbed = 1;
       break;
 
       case 2:
-         checkspaceball = true;
-      break;
-
-      case 3:
          checkcyberman = true;
          checkmouse = false;
       break;
@@ -834,12 +825,6 @@ sdl_mouse_grabbed = 1;
          if (!quiet)
             printf("IN_Startup: Joystick Present\n");
          }
-      }
-
-   if (checkspaceball)
-      {
-      OpenSpaceBall ();
-      spaceballenabled=true;
       }
 
    if ((checkcyberman || checkassassin) && (swiftstatus = SWIFT_Initialize ()))
@@ -914,8 +899,6 @@ void IN_Shutdown (void)
 
    if (CybermanPresent || AssassinPresent)
       SWIFT_Terminate ();
-
-   CloseSpaceBall ();
 
    IN_Started = false;
 }
@@ -1075,11 +1058,6 @@ void IN_StartAck (void)
    buttons = IN_JoyButtons () << 4;
 
    buttons |= IN_GetMouseButtons();
-
-	if (SpaceBallPresent && spaceballenabled)
-		{
-      buttons |= GetSpaceBallButtons ();
-      }
 
    for (i=0;i<8;i++,buttons>>=1)
       if (buttons&1)

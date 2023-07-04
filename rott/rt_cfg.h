@@ -49,7 +49,6 @@ extern int     NumBits;
 extern boolean stereoreversed;
 extern boolean cybermanenabled;
 extern boolean assassinenabled;
-extern boolean spaceballenabled;
 extern boolean AutoDetailOn;
 extern int     DoubleClickSpeed;
 extern int     fulllight;

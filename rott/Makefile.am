@@ -38,7 +38,6 @@ rott@SUFFIX@_SOURCES = \
 	rt_rand.c \
 	rt_scale.c \
 	rt_sound.c \
-	rt_spbal.c \
 	rt_sqrt.c \
 	rt_stat.c \
 	rt_state.c \
