@@ -42,7 +42,6 @@ rott@SUFFIX@_SOURCES = \
 	rt_stat.c \
 	rt_state.c \
 	rt_str.c \
-	rt_swift.c \
 	rt_ted.c \
 	rt_util.c \
 	rt_vid.c \

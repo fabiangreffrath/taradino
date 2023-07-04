@@ -91,7 +91,6 @@ int     threshold        = 1;
 int     NumVoices        = 4;
 int     NumChannels      = 1;
 int     NumBits          = 8;
-boolean assassinenabled  = false;
 boolean AutoDetailOn     = true;
 int     DoubleClickSpeed = 20;
 boolean BobbinOn         = true;
@@ -571,9 +570,6 @@ boolean ParseConfigFile (void)
          GetTokenEOL (false);
          ConvertStringToPasswordString ( &name[0] );
          }
-
-      if (!AssassinPresent)
-         assassinenabled = false;
 
       if (!MousePresent)
          mouseenabled = false;

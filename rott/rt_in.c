@@ -31,7 +31,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "_rt_in.h"
 #include "isr.h"
 #include "rt_util.h"
-#include "rt_swift.h"
 #include "rt_vh_a.h"
 #include "rt_cfg.h"
 #include "rt_msg.h"
@@ -61,7 +60,6 @@ int IgnoreMouse = 0;
 
 // configuration variables
 //
-boolean  AssassinPresent;
 boolean  MousePresent;
 boolean  JoysPresent[MaxJoys];
 boolean  JoyPadPresent     = 0;
@@ -160,7 +158,7 @@ static   Direction   DirTable[] =      // Quick lookup for total direction
 
 int (far *function_ptr)();
 
-static char *ParmStrings[] = {"nojoys","nomouse","assassin",NULL};
+static char *ParmStrings[] = {"nojoys","nomouse",NULL};
 
 
 #define sdldebug printf
@@ -759,9 +757,7 @@ void INL_ShutJoy (word joy)
 void IN_Startup (void)
 {
    boolean checkjoys,
-           checkmouse,
-           swiftstatus,
-           checkassassin;
+           checkmouse;
 
    word    i;
 
@@ -776,8 +772,6 @@ sdl_mouse_grabbed = 1;
 
    checkjoys        = true;
    checkmouse       = true;
-   checkassassin    = false;
-   AssassinPresent  = false;
 
    for (i = 1; i < _argc; i++)
    {
@@ -788,11 +782,6 @@ sdl_mouse_grabbed = 1;
       break;
 
       case 1:
-         checkmouse = false;
-      break;
-
-      case 2:
-         checkassassin = true;
          checkmouse = false;
       break;
       }
