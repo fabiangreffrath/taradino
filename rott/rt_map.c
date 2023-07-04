@@ -849,7 +849,7 @@ void DoMap (int cx, int cy)
    int dx;
    int dy;
    boolean done;
-   int quitkey;
+   int quitkey=sc_Escape;
    ControlInfo control;
 
 EnableScreenStretch();//bna++

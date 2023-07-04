@@ -1824,7 +1824,7 @@ menuitems CP_MainMenu
    )
 
    {
-   int which;
+   int which = 0;
 
    SetupMenuBuf();
 
@@ -6831,7 +6831,7 @@ int ColorMenu
    int height;
    int timer;
    int baseshape;
-   int status;
+   int status = 0;
    boolean update;
    boolean done;
 

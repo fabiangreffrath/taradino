@@ -628,7 +628,7 @@ void SaveActors(byte **buffer,int*size)
 void LoadActors(byte *buffer,int size)
    {
    int numactors,i,playerindex;
-   saved_actor_type dummy;
+   saved_actor_type dummy = {0};
    objtype *temp;
    short *targetindices,*whateverindices;
 
@@ -3923,7 +3923,7 @@ void T_SpawnSoul(objtype*ob)
 
 
 void BloodDrip(objtype *ob,int tilex,int tiley)
-{int dx,dy,x,y,scale;
+{int dx,dy,x = 0,y = 0,scale;
 
  dx = ob->tilex - tilex;
  dy = ob->tiley - tiley;
@@ -10412,8 +10412,8 @@ void A_Drain (objtype *ob)
 
 
 void  A_DmonkAttack(objtype*ob)
-{int angle,nobclass,nspeed,altangle1=0,altangle2=0,zoff=0,sound;
- statetype *nstate;
+{int angle,nobclass = 0,nspeed,altangle1=0,altangle2=0,zoff=0,sound;
+ statetype *nstate = NULL;
 
 
   if (!ob->ticcount)

@@ -1011,7 +1011,7 @@ void PreCacheStaticFrames(statobj_t*temp)
 
 
 void LoadStatics( byte * buffer, int size)
-{saved_stat_type dummy;
+{saved_stat_type dummy = {0};
  int stcount,i;
  statobj_t*temp;
 

@@ -971,6 +971,7 @@ void VL_DrawLine (int x1, int y1, int x2, int y2, byte color)
    if (abs(dy)>=abs(dx))
       {
       count=abs(dy);
+      if (count == 0) return;
       yinc=(dy<<16)/count;
       if (dy==0)
          {
@@ -984,6 +985,7 @@ void VL_DrawLine (int x1, int y1, int x2, int y2, byte color)
    else
       {
       count=abs(dx);
+      if (count == 0) return;
       xinc=(dx<<16)/count;
       if (dx==0)
          {

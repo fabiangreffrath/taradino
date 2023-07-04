@@ -791,6 +791,19 @@ void SetupWads( void )
       }
    }
 
+static inline void *safe_realloc(void *ptr, size_t size)
+{
+    void *new_ptr;
+
+    new_ptr = realloc(ptr, size);
+
+    if (new_ptr == NULL && size != 0)
+    {
+        free(ptr);
+    }
+
+    return new_ptr;
+}
 
 #if (SHAREWARE==0)
    // Check for rtl files 	
@@ -799,7 +812,7 @@ void SetupWads( void )
    {
 	   FILE *f;char *buf = malloc(32);
 	   if (_argv[arg+1] != 0) { //are there a filename included
-		   tempstr = realloc(tempstr, 129 + strlen(_argv[arg+1]));
+		   tempstr = safe_realloc(tempstr, 129 + strlen(_argv[arg+1]));
 		   strcpy (tempstr,_argv[arg+1]);//copy it to tempstr
 		   if (strlen (tempstr) < MAX_PATH) {
 			   if (access (tempstr, 0) != 0) { //try open
@@ -820,7 +833,7 @@ void SetupWads( void )
 				    if (((strstr(buf,"RTL") != 0)||strstr(buf,"RTC") != 0)) {
 						GameLevels.file = strdup(tempstr);
 						GameLevels.avail++;
-						buf = realloc(buf, 32 + strlen(tempstr));
+						buf = safe_realloc(buf, 32 + strlen(tempstr));
 						strcpy (buf,"Adding ");
 						strcat (buf,tempstr);
 						printf("%s", buf);
@@ -838,7 +851,7 @@ NoRTL:;
    {
 	   FILE *f;char *buf = malloc(32);
 	   if (_argv[arg+1] != 0) { //are there a filename included
-		   tempstr = realloc(tempstr, 129 + strlen(_argv[arg+1]));
+		   tempstr = safe_realloc(tempstr, 129 + strlen(_argv[arg+1]));
 		   strcpy (tempstr,_argv[arg+1]);//copy it to tempstr
 		   if (strlen (tempstr) < MAX_PATH) {
 			   if (access (tempstr, 0) != 0) { //try open
@@ -859,7 +872,7 @@ NoRTL:;
 				    if (((strstr(buf,"RTL") != 0)||strstr(buf,"RTC") != 0)) {
 						BattleLevels.file = strdup(tempstr);
 						BattleLevels.avail++;
-						buf = realloc(buf, 32 + strlen(tempstr));
+						buf = safe_realloc(buf, 32 + strlen(tempstr));
 						strcpy (buf,"Adding ");
 						strcat (buf,tempstr);
 						printf("%s", buf);
@@ -917,7 +930,7 @@ NoRTC:;
       {
       char  *src;
 
-      tempstr = realloc(tempstr, strlen(RemoteSounds.path) + strlen(RemoteSounds.file) + 2);
+      tempstr = safe_realloc(tempstr, strlen(RemoteSounds.path) + strlen(RemoteSounds.file) + 2);
       strcpy (tempstr,RemoteSounds.path);
       src = RemoteSounds.path + strlen(RemoteSounds.path) - 1;
       if (*src != '\\')

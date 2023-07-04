@@ -699,7 +699,7 @@ boolean US_LineInput (int x, int y, char *buf, const char *def, boolean escok,
             cursorvis,
             cursormoved,
             done,
-            result;
+            result = false;
    char     s[MaxString],
             olds[MaxString];
    int      i,
@@ -991,7 +991,7 @@ boolean US_lineinput (int x, int y, char *buf, const char *def, boolean escok,
             cursorvis,
             cursormoved,
             done,
-            result;
+            result = false;
    char     s[MaxString],
             xx[MaxString],
             olds[MaxString];
@@ -1517,7 +1517,7 @@ void DrawIntensityChar  ( char ch )
 
 int GetColor (int num)
 {
-   int returnval;
+   int returnval = 0;
 
    if ((num >= '0') && (num <= '9'))
       returnval = egacolor[num - '0'];
