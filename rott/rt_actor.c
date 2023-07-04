@@ -992,7 +992,7 @@ void A_Steal(objtype*ob)
 void FindAddresses(void)
 {
  int i;
- unsigned long tstate,tfunct;
+ uintptr_t tstate,tfunct;
 
  MINFUNCTION = -1l;
  MAXFUNCTION = 0x00000000;
@@ -1001,7 +1001,7 @@ void FindAddresses(void)
 
  for(i=0;i<MAXSTATES;i++)
    {
-   tstate = (unsigned long)(statetable[i]);
+   tstate = (uintptr_t)(statetable[i]);
    if (tstate < MINSTATE)
       MINSTATE = tstate;
 
@@ -1009,7 +1009,7 @@ void FindAddresses(void)
       MAXSTATE = tstate;
    if (statetable[i]!=NULL)
       {
-      tfunct = (unsigned long)(statetable[i]->think);
+      tfunct = (uintptr_t)(statetable[i]->think);
       if (tfunct < MINFUNCTION)
          MINFUNCTION = tfunct;
 
@@ -1021,10 +1021,10 @@ void FindAddresses(void)
 
 void CheckBounds(objtype*ob)
 {
- unsigned long tstate,tfunct;
+ uintptr_t tstate,tfunct;
 
-  tstate = (unsigned long)(ob->state);
-  tfunct = (unsigned long)(ob->state->think);
+  tstate = (uintptr_t)(ob->state);
+  tfunct = (uintptr_t)(ob->state->think);
 
  if ((tfunct < MINFUNCTION) || (tfunct > MAXFUNCTION) ||
 	  (tstate < MINSTATE) || (tstate > MAXSTATE))
@@ -10058,7 +10058,7 @@ void T_DarkmonkLandAndFire(objtype*ob)
 		 if (ob->hitpoints <= 0)
 			{objtype*column = (objtype*)(ob->whatever);
 
-          EnableObject((long)column);
+          EnableObject((intptr_t)column);
 			 ob->whatever = NULL;
 
 			 KillActor(ob);
@@ -10423,7 +10423,7 @@ void  A_DmonkAttack(objtype*ob)
         {
         objtype*column = (objtype*)(ob->whatever);
 
-        EnableObject((long)column);
+        EnableObject((intptr_t)column);
         ob->whatever = NULL;
 
         KillActor(ob);
@@ -10653,7 +10653,7 @@ void DamageStaticObject(statobj_t*tempstat,int damage)
             {touchplatetype *tplate;
 
              for(tplate=touchplate[tempstat->linked_to];tplate;tplate = tplate->nextaction)
-                if (tplate->whichobj == (long)(tempstat))
+                if (tplate->whichobj == (intptr_t)(tempstat))
                    RemoveTouchplateAction(tplate,tempstat->linked_to);
             }
 
@@ -10869,7 +10869,7 @@ void ExplodeStatic(statobj_t*tempstat)
        (tempstat->itemnumber == stat_tntcrate)
       )
       {
-      tempstat->linked_to = (long)(LASTSTAT);
+      tempstat->linked_to = (intptr_t)(LASTSTAT);
       tempstat->flags |= FL_RESPAWN;
       }
 
@@ -10890,7 +10890,7 @@ void ExplodeStatic(statobj_t*tempstat)
 
 
 
-void EnableObject(long object)
+void EnableObject(intptr_t object)
    {
    objtype* ob;
    int i,gasicon;
@@ -10946,7 +10946,7 @@ void EnableObject(long object)
       }
    }
 
-void DisableObject(long object)
+void DisableObject(intptr_t object)
 {objtype*ob;
 
  ob = (objtype*)object;

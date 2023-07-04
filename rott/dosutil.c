@@ -4,7 +4,7 @@
 #include <ctype.h>
 
 #include <sys/stat.h>
-#if PLATFORM_UNIX
+#ifndef _WIN32
 #include <sys/types.h>
 #include <errno.h>
 #include <unistd.h>
@@ -14,9 +14,7 @@
 
 #include "rt_def.h"
 
-#if defined(USE_SDL)
 #include "SDL.h"
-#endif
               
 /* 
   Copied over from Wolf3D Linux: http://www.icculus.org/wolf3d/
@@ -26,7 +24,6 @@
 int _argc;
 char **_argv;
 
-#if PLATFORM_UNIX
 long filelength(int handle)
 {
 	struct stat buf;
@@ -113,7 +110,6 @@ char *ultoa(unsigned long value, char *string, int radix)
 	
 	return string;
 }
-#endif
 
 char getch(void)
 {
@@ -125,7 +121,7 @@ extern char ApogeePath[256];
 
 int setup_homedir (void)
 {
-#if PLATFORM_UNIX && !defined(__MINGW32__)
+#ifndef _WIN32
 	int err;
 
 	/* try to create the root directory */
@@ -235,9 +231,7 @@ void crash_print (int sig)
 	printf ("OH NO OH NO ROTT CRASHED!\n");
 	printf ("Here is where:\n");
 	print_stack (1);
-#if defined(USE_SDL)
 	SDL_Quit ();
-#endif
 	exit (1);
 }
 

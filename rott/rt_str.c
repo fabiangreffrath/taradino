@@ -110,11 +110,7 @@ void VW_DrawClippedString (int x, int y, const char *string)
                if ((y>=0) && (y<iGLOBAL_SCREENHEIGHT))
                   {
                   if (*source>0)
-#ifdef DOS
-                     *((byte *)(bufferofs+ylookup[y]+(x>>2))) = *source;
-#else
                      *((byte *)(bufferofs+ylookup[y]+x)) = *source;
-#endif
                   }
                source++;
                y++;
@@ -172,53 +168,6 @@ void US_ClippedPrint (int x, int y, const char *string)
 
 void VW_DrawPropString (const char *string)
 {
-#ifdef DOS
-   byte  pix;
-   int   width,step,height,ht;
-   byte  *source, *dest, *origdest;
-   int   ch,mask;
-
-
-   ht = CurrentFont->height;
-   dest = origdest = (byte *)(bufferofs+ylookup[py]+(px>>2));
-
-
-   mask = 1<<(px&3);
-
-
-   while ((ch = *string++)!=0)
-   {
-      ch -= 31;
-      width = step = CurrentFont->width[ch];
-      source = ((byte *)CurrentFont)+CurrentFont->charofs[ch];
-      while (width--)
-      {
-         VGAMAPMASK(mask);
-
-         height = ht;
-         while (height--)
-         {
-            pix = *source;
-            if (pix)
-               *dest = pix;
-
-            source++;
-            dest += linewidth;
-         }
-
-         px++;
-         mask <<= 1;
-         if (mask == 16)
-         {
-            mask = 1;
-            origdest++;
-         }
-         dest = origdest;
-      }
-   }
-   bufferheight = ht;
-   bufferwidth = ((dest+1)-origdest)*4;
-#else
    byte  pix;
    int   width,step,height,ht;
    byte  *source, *dest, *origdest;
@@ -252,7 +201,6 @@ void VW_DrawPropString (const char *string)
    }
    bufferheight = ht;
    bufferwidth = ((dest+1)-origdest);
-#endif
 }
 
 
@@ -292,12 +240,7 @@ void VW_DrawIPropString (const char *string)
 
 
    ht = CurrentFont->height;
-#ifdef DOS
-   dest = origdest = (byte *)(bufferofs+ylookup[py]+(px>>2));
-#else
    dest = origdest = (byte *)(bufferofs+ylookup[py]+px);
-#endif
-
 
    mask = 1<<(px&3);
 
@@ -323,26 +266,12 @@ void VW_DrawIPropString (const char *string)
          }
 
          px++;
-#ifdef DOS
-         mask <<= 1;
-         if (mask == 16)
-         {
-            mask = 1;
-            origdest++;
-         }
-#else
 	 origdest++;
-#endif
          dest = origdest;
       }
    }
    bufferheight = ht;
-#ifdef DOS
-   bufferwidth = ((dest+1)-origdest)*4;
-#else
    bufferwidth = ((dest+1)-origdest);
-#endif
-
 }
 
 

@@ -33,10 +33,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "modexlib.h"
 #include "rt_menu.h"
 
-#ifdef DOS
-#include <mem.h>
-#endif
-
 #include <stdlib.h>
 
 #include "rt_main.h"
@@ -105,27 +101,6 @@ byte   uniformcolors[MAXPLAYERCOLORS]={
                                        129,
                                        109
                                        };
-
-#ifdef DOS
-byte    mapmasks1[4][9] = {
-{1 ,3 ,7 ,15,15,15,15,15,15},
-{2 ,6 ,14,14,14,14,14,14,14},
-{4 ,12,12,12,12,12,12,12,12},
-{8 ,8 ,8 ,8 ,8 ,8 ,8 ,8 ,8} };
-
-byte    mapmasks2[4][9] = {
-{0 ,0 ,0 ,0 ,1 ,3 ,7 ,15,15},
-{0 ,0 ,0 ,1 ,3 ,7 ,15,15,15},
-{0 ,0 ,1 ,3 ,7 ,15,15,15,15},
-{0 ,1 ,3 ,7 ,15,15,15,15,15} };
-
-byte    mapmasks3[4][9] = {
-{0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,1},
-{0 ,0 ,0 ,0 ,0 ,0 ,0 ,1 ,3},
-{0 ,0 ,0 ,0 ,0 ,0 ,1 ,3 ,7},
-{0 ,0 ,0 ,0 ,0 ,1 ,3 ,7 ,15} };
-#endif
-
 
 /*
 =============================================================================
@@ -415,11 +390,7 @@ void SetViewSize
       }
 
    // Calculate offset of view window
-#ifdef DOS
-   screenofs = ( screenx >> 2 ) + ylookup[ screeny ];
-#else
    screenofs = screenx + ylookup[ screeny ];
-#endif
 
 //
 // calculate trace angles and projection constants
@@ -512,7 +483,7 @@ void LoadColorMap( void )
 	lump = W_GetNumForName("colormap");
 	length = W_LumpLength (lump) + 255;
 	colormap = SafeMalloc (length);
-	colormap = (byte *)( ((long)colormap + 255)&~0xff);
+	colormap = (byte *)( ((intptr_t)colormap + 255)&~0xff);
 	W_ReadLump (lump,colormap);
 
 // Fix fire colors in colormap
@@ -526,7 +497,7 @@ void LoadColorMap( void )
 	lump = W_GetNumForName("specmaps");
 	length = W_LumpLength (lump+1) + 255;
 	redmap = SafeMalloc (length);
-	redmap = (byte *)( ((long)redmap + 255)&~0xff);
+	redmap = (byte *)( ((intptr_t)redmap + 255)&~0xff);
 	W_ReadLump (lump+1,redmap);
    greenmap = redmap+(16*256);
 
@@ -539,7 +510,7 @@ void LoadColorMap( void )
          {
 	      length = W_LumpLength (lump+i) + 255;
 	      playermaps[i] = SafeMalloc (length);
-	      playermaps[i] = (byte *)( ((long)playermaps[i] + 255)&~0xff);
+	      playermaps[i] = (byte *)( ((intptr_t)playermaps[i] + 255)&~0xff);
 	      W_ReadLump (lump+i,playermaps[i]);
          }
       }

@@ -20,11 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "rt_def.h"
 
-#ifdef DOS
-#include <malloc.h>
-#include <dos.h>
-#endif
-
 #include <string.h>
 #include "sprites.h"
 #include <stdio.h>
@@ -397,7 +392,7 @@ void TurnOffLight(int tilex,int tiley)
 }
 
 
-void ActivateLight(long light)
+void ActivateLight(intptr_t light)
 {statobj_t*tstat;
 
  tstat = (statobj_t*)light;
@@ -409,7 +404,7 @@ void ActivateLight(long light)
 }
 
 
-void DeactivateLight(long light)
+void DeactivateLight(intptr_t light)
 {statobj_t*tstat;
 
  tstat = (statobj_t*)light;

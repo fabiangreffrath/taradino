@@ -85,19 +85,7 @@ typedef enum
 #define ACTORSIZE              0x5800
 #define PWALLRAD               0xa000
 
-#ifdef __WATCOMC__
-int M_ABS(int value);
-#pragma aux M_ABS =  \
-		  "test eax,eax",                     \
-		  "jge done", \
-		  "neg eax",\
-		  "done: "         \
-		  parm    [eax] \
-		  value   [eax]           \
-		  modify exact [eax]
-#else
 #define M_ABS abs
-#endif
 
 #define M_CheckPlayerKilled(ob) \
 { if ((ob->obclass == playerobj) && (ob->flags & FL_DYING)) \
@@ -358,8 +346,8 @@ void     T_EsauRise(objtype*);
 void     A_Drain(objtype*ob);
 void     T_Explosion(objtype*ob);
 void     T_MoveColumn(objtype*);
-void     EnableObject(long object);
-void     DisableObject(long object);
+void     EnableObject(intptr_t object);
+void     DisableObject(intptr_t object);
 
 void     T_Collide(objtype*);
 void  Collision(objtype*ob,objtype *attacker,int hitmomentumx,int hitmomentumy);

@@ -31,6 +31,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef __DPMI_H
 #define __DPMI_H
 
+#include <stdint.h>
+
 enum DPMI_Errors
    {
    DPMI_Warning = -2,
@@ -62,8 +64,8 @@ typedef struct
 unsigned long DPMI_GetRealModeVector( int num );
 void DPMI_SetRealModeVector( int num, unsigned long vector );
 int  DPMI_CallRealModeFunction( dpmi_regs *callregs );
-int  DPMI_GetDOSMemory( void **ptr, long *descriptor, unsigned length );
-int  DPMI_FreeDOSMemory( long descriptor );
+int  DPMI_GetDOSMemory( void **ptr, intptr_t *descriptor, unsigned length );
+int  DPMI_FreeDOSMemory( intptr_t descriptor );
 int  DPMI_LockMemory( void *address, unsigned length );
 int  DPMI_LockMemoryRegion( void *start, void *end );
 int  DPMI_UnlockMemory( void *address, unsigned length );
@@ -74,29 +76,5 @@ int  DPMI_UnlockMemoryRegion( void *start, void *end );
 
 #define DPMI_Unlock( variable ) \
    ( DPMI_UnlockMemory( (void *) &( variable ), sizeof( variable ) ) )
-
-#ifdef PLAT_DOS
-#pragma aux DPMI_GetDOSMemory = \
-   "mov    eax, 0100h",         \
-   "add    ebx, 15",            \
-   "shr    ebx, 4",             \
-   "int    31h",                \
-   "jc     DPMI_Exit",          \
-   "movzx  eax, ax",            \
-   "shl    eax, 4",             \
-   "mov    [ esi ], eax",       \
-   "mov    [ edi ], edx",       \
-   "sub    eax, eax",           \
-   "DPMI_Exit:",                \
-   parm [ esi ] [ edi ] [ ebx ] modify exact [ eax ebx edx ];
-
-#pragma aux DPMI_FreeDOSMemory = \
-   "mov    eax, 0101h",          \
-   "int    31h",                 \
-   "jc     DPMI_Exit",           \
-   "sub    eax, eax",            \
-   "DPMI_Exit:",                 \
-   parm [ edx ] modify exact [ eax ];
-#endif
 
 #endif

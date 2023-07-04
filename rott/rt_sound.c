@@ -34,12 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdio.h>
 #include <stdlib.h>
 
-#if PLATFORM_DOS
-#include <mem.h>
-#include <io.h>
-#elif PLATFORM_UNIX
 #include <unistd.h>
-#endif
 
 #include "rt_cfg.h"
 #include "isr.h"
@@ -66,17 +61,6 @@ static int NumBadSounds=0;
 static int remotestart;
 static boolean SoundsRemapped = false;
 
-#ifdef DOS
-int musicnums[ 11 ] = {
-   -1, UltraSound, SoundBlaster, SoundMan16, ProAudioSpectrum,
-   Awe32, SoundScape, WaveBlaster, GenMidi, SoundCanvas, Adlib
-   };
-
-int fxnums[ 11 ] = {
-   -1, UltraSound, SoundBlaster, SoundMan16, ProAudioSpectrum,
-   Awe32, SoundScape, Adlib, SoundSource, TandySoundSource, PC
-   };
-#else
 int musicnums[ 11 ] = {
    -1, -1, -1, -1, -1, -1, SoundScape, -1, -1, -1, -1
    };
@@ -84,11 +68,6 @@ int musicnums[ 11 ] = {
 int fxnums[ 11 ] = {
    -1, -1, -1, -1, -1, -1, SoundScape, -1, -1, -1, -1
    };
-#endif
-
-#if 0
-void MU_SetupGUSInitFile( void );
-#endif
 
 int MUSIC_GetPosition( void ) {
    songposition pos;
@@ -165,17 +144,7 @@ int SD_SetupFXCard ( int * numvoices, int * numbits, int * numchannels)
    card = fxnums[ FXMode ];
    if (card==-1) // Check if it is off
       return (0);
-#ifdef DOS
-   if ( ( card == SoundBlaster ) || ( card == Awe32 ) )
-      {
-      extern fx_blaster_config SBSettings;
 
-      status = FX_SetupSoundBlaster( SBSettings, numvoices,
-         numbits, numchannels );
-      }
-   else
-      {
-#endif
       status=FX_SetupCard( card, &device );
       if ( status == FX_Ok )
          {
@@ -183,9 +152,6 @@ int SD_SetupFXCard ( int * numvoices, int * numbits, int * numchannels)
          *numbits=device.MaxSampleBits;
          *numchannels=device.MaxChannels;
          }
-#ifdef DOS
-      }
-#endif
 
    return (status);
    }
@@ -219,29 +185,10 @@ int SD_Startup ( boolean bombonerror )
 
    switch (card)
       {
-#ifdef DOS
-      case UltraSound:
-      case SoundBlaster:
-      case SoundMan16:
-      case ProAudioSpectrum:
-      case Awe32:
-      case SoundSource:
-      case TandySoundSource:
-#endif
       case SoundScape:
          soundstart=W_GetNumForName("digistrt")+1;
          soundtype=fx_digital;
          break;
-#ifdef DOS
-      case Adlib:
-         soundstart=W_GetNumForName("adstart")+1;
-         soundtype=fx_muse;
-         break;
-      case PC:
-         soundstart=W_GetNumForName("pcstart")+1;
-         soundtype=fx_muse;
-         break;
-#endif
       default:
          Error("FX: Unsupported Card number %d",FXMode);
          break;
@@ -278,11 +225,7 @@ int SD_Startup ( boolean bombonerror )
       bits     = 8;
       }
 
-#ifdef DOS
-   status=FX_Init( card, voices, channels, bits, 11000 );
-#else
    status=FX_Init( card, voices, channels, bits, 11025 );
-#endif
 
    if (status != FX_Ok)
       {
@@ -1032,31 +975,8 @@ int MU_Startup ( boolean bombonerror )
    if (card==-1) // Check if it is off
       return (0);
 
-#ifdef DOS
-   if ( ( card == SoundBlaster ) || ( card == Awe32 ) || ( card == WaveBlaster ) )
-      {
-      if ( SD_Started == false )
-         {
-         extern fx_blaster_config SBSettings;
-         int numvoices;
-         int numbits;
-         int numchannels;
-
-         FX_SetupSoundBlaster( SBSettings, &numvoices,
-            &numbits, &numchannels );
-         }
-      }
-
-   if (card== UltraSound)
-      {
-      MU_SetupGUSInitFile();
-      }
-
-   status=MUSIC_Init( card, MidiAddress );
-#else
    /* Not DOS, no address config needed */
    status=MUSIC_Init( card, 0 );
-#endif
 
 
    if (status != MUSIC_Ok) {
@@ -1091,30 +1011,6 @@ void MU_Shutdown (void)
    MUSIC_Shutdown();
    MU_Started=false;
 }
-
-#ifdef DOS
-//***************************************************************************
-//
-// MU_SetupGUSInitFile - initialize GUS stuff
-//
-//***************************************************************************
-
-void MU_SetupGUSInitFile( void )
-{
-   char filename[ 128 ];
-
-   GetPathFromEnvironment( filename, ApogeePath, GUSMIDIINIFILE );
-   if (access (filename, F_OK) != 0)
-      {
-      int lump;
-
-      lump=W_GetNumForName("gusmidi");
-
-      SaveFile (filename, W_CacheLumpNum(lump,PU_CACHE, CvtNull, 1), W_LumpLength(lump));
-      }
-}
-
-#endif
 
 //***************************************************************************
 //
@@ -1164,17 +1060,10 @@ void MU_PlaySong ( int num )
 
    currentsong=W_CacheLumpNum(lump,PU_STATIC, CvtNull, 1);
 
-#ifdef PLATFORM_DOS
-   if (rottsongs[num].loopflag == loop_yes)
-      MUSIC_PlaySong(currentsong,size,MUSIC_LoopSong);
-   else
-      MUSIC_PlaySong(currentsong,size,MUSIC_PlayOnce);
-#else 
    if (rottsongs[num].loopflag == loop_yes)
       MUSIC_PlaySongROTT(currentsong,size,MUSIC_LoopSong);
    else
       MUSIC_PlaySongROTT(currentsong,size,MUSIC_PlayOnce);
-#endif
 
    MU_SetVolume (MUvolume);
 }

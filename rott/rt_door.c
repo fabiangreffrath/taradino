@@ -94,7 +94,7 @@ boolean	      areabyplayer[NUMAREAS];
 
 // Local Variables
 
-static void (*touchactions[NUMTOUCHPLATEACTIONS])(long) =
+static void (*touchactions[NUMTOUCHPLATEACTIONS])(intptr_t) =
 						 {ActivatePushWall,
 						  ActivateMoveWall,
 						  LinkedOpenDoor,
@@ -315,7 +315,7 @@ void DoAnimatedMaskedWalls ( void )
 }
 
 
-int GetIndexForAction(void (*action)(long))
+int GetIndexForAction(void (*action)(intptr_t))
 {int i;
 
  for(i=0;i<NUMTOUCHPLATEACTIONS;i++)
@@ -486,10 +486,10 @@ void LoadTouchPlates(byte * buffer, int size)
 	temp->complete = dummy.complete;
 
 	if (dummy.whichobj & FL_TACT)
-	  temp->whichobj = (long)(objlist[dummy.whichobj & ~FL_TACT]);
+	  temp->whichobj = (intptr_t)(objlist[dummy.whichobj & ~FL_TACT]);
 
 	else if (dummy.whichobj & FL_TSTAT)
-	  temp->whichobj = (long)(GetStatForIndex(dummy.whichobj & ~FL_TSTAT));
+	  temp->whichobj = (intptr_t)(GetStatForIndex(dummy.whichobj & ~FL_TSTAT));
 	else
 	  temp->whichobj = dummy.whichobj;
 	if (dummy.actionindex != -1)
@@ -613,7 +613,7 @@ void  RemoveTouchplateAction(touchplatetype *tplate,int index)
 
 
 
-void  Link_To_Touchplate(word touchlocx, word touchlocy, void (*maction)(long), void (*swapaction)(long), long wobj, int delaytime)
+void  Link_To_Touchplate(word touchlocx, word touchlocy, void (*maction)(intptr_t), void (*swapaction)(intptr_t), intptr_t wobj, int delaytime)
 {touchplatetype *temp;
  int index;
 
@@ -640,7 +640,7 @@ void  Link_To_Touchplate(word touchlocx, word touchlocy, void (*maction)(long), 
 
 
 
-void ClockLink (void (*saction)(long), void (*eaction)(long), long wobj,int whichclock)
+void ClockLink (void (*saction)(intptr_t), void (*eaction)(intptr_t), intptr_t wobj,int whichclock)
 {touchplatetype*temp;
 
 
@@ -731,7 +731,7 @@ void TriggerStuff(void)
    touchplatetype *temp;
    int i,touchcomplete,j;
    int playeron;
-   void (*tempact)(long);
+   void (*tempact)(intptr_t);
    boolean wallmessage,doormessage,columnmessage;
 
    for(i=0;i<lasttouch;i++)
@@ -1795,7 +1795,7 @@ void OperateDoor (int keys, int door, boolean localplayer )
 =====================
 */
 
-void LinkedOpenDoor (long door)
+void LinkedOpenDoor (intptr_t door)
 {
    UtilizeDoor(door,OpenDoor);
 }
@@ -1808,7 +1808,7 @@ void LinkedOpenDoor (long door)
 =====================
 */
 
-void LinkedCloseDoor (long door)
+void LinkedCloseDoor (intptr_t door)
 {
    if (DoorReadyToClose(door)==true)
       UtilizeDoor(door,CloseDoor);
@@ -3483,7 +3483,7 @@ void ActivateAllPushWalls(void)
 =====================
 */
 
-void ActivatePushWall (long pwall)
+void ActivatePushWall (intptr_t pwall)
 {
    pwallobj_t * pw;
 
@@ -3514,7 +3514,7 @@ void ActivatePushWall (long pwall)
 =====================
 */
 
-void ActivateMoveWall (long pwall)
+void ActivateMoveWall (intptr_t pwall)
 {
    pwallobj_t * pw;
 

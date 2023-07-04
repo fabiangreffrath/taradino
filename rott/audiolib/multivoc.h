@@ -105,7 +105,7 @@ int   MV_PlayVOC3D( char *ptr, int pitchoffset, int angle, int distance,
          int priority, unsigned long callbackval );
 int   MV_PlayVOC( char *ptr, int pitchoffset, int vol, int left, int right,
          int priority, unsigned long callbackval );
-int   MV_PlayLoopedVOC( char *ptr, long loopstart, long loopend,
+int   MV_PlayLoopedVOC( char *ptr, intptr_t loopstart, intptr_t loopend,
          int pitchoffset, int vol, int left, int right, int priority,
          unsigned long callbackval );
 void  MV_CreateVolumeTable( int index, int volume, int MaxVolume );
