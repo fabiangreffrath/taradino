@@ -9,7 +9,6 @@ AC_CONFIG_SRCDIR([rott/version.h])
 
 # Checks for programs.
 AC_PROG_CC
-AC_PROG_CXX
 AC_PROG_RANLIB
 
 # Checks for libraries.

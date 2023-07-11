@@ -28,7 +28,6 @@ rott@SUFFIX@_SOURCES = \
 	rt_floor.c \
 	rt_game.c \
 	rt_in.c \
-	rt_scancodes.cpp \
 	rt_main.c \
 	rt_map.c \
 	rt_menu.c \
@@ -52,5 +51,4 @@ rott@SUFFIX@_SOURCES = \
 	w_wad.c \
 	z_zone.c
 rott@SUFFIX@_CFLAGS = @SDL_CFLAGS@ @SDL_mixer_CFLAGS@
-rott@SUFFIX@_CXXFLAGS = @SDL_CFLAGS@ @SDL_mixer_CFLAGS@
 rott@SUFFIX@_LDADD = audiolib/libaudiolib.a @SDL_LIBS@ @SDL_mixer_LIBS@

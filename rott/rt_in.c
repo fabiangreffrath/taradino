@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "SDL.h"
 #include "modexlib.h"
-#include "rt_scancodes.h"
 
 #include "rt_main.h"
 #include "rt_def.h"
@@ -142,6 +141,61 @@ const char ScanChars[128] =    // Scan code names with single chars
 //
 //****************************************************************************]
 
+#define SCANCODE_TO_KEYS_ARRAY { \
+    0, 0, 0, 0, sc_A, \
+    sc_B, sc_C, sc_D, sc_E, sc_F, \
+    sc_G, sc_H, sc_I, sc_J, sc_K, \
+    sc_L, sc_L, sc_N, sc_O, sc_P, \
+    sc_Q, sc_R, sc_S, sc_T, sc_U, \
+    sc_V, sc_W, sc_X, sc_Y, sc_Z, \
+    sc_1, sc_2, sc_3, sc_4, sc_5, \
+    sc_6, sc_7, sc_8, sc_9, sc_0, \
+    sc_Return, sc_Escape, sc_BackSpace, sc_Tab, sc_Space, \
+    sc_Minus, sc_Equals, sc_OpenBracket, sc_CloseBracket, 0x2B, \
+    0, 0x27, 0x28, 0x29, sc_Comma, \
+    sc_Period, 0x35, sc_CapsLock, sc_F1, sc_F2, \
+    sc_F3, sc_F4, sc_F5, sc_F6, sc_F7, \
+    sc_F8, sc_F9, sc_F10, sc_F11, sc_F12, \
+    sc_PrintScreen, 0x46, 0, sc_Insert, sc_Home, \
+    sc_PgUp, sc_Delete, sc_End, sc_PgDn, sc_RightArrow, \
+    sc_LeftArrow, sc_DownArrow, sc_UpArrow, \
+    0x45, 0x35, 0x37, sc_Minus, sc_Plus, sc_Return, sc_End, \
+    sc_DownArrow, sc_PgDn, sc_LeftArrow, 0x4c, sc_RightArrow, \
+    sc_Home, sc_UpArrow, sc_PgUp, sc_Insert, sc_Period, \
+    0, 0, 0, sc_Equals \
+}
+
+static const int scancode_translate_table[] = SCANCODE_TO_KEYS_ARRAY;
+
+static int GetScancode(const int scancode)
+{
+    switch (scancode)
+    {
+        case SDL_SCANCODE_LCTRL:
+        case SDL_SCANCODE_RCTRL:
+            return sc_Control;
+
+        case SDL_SCANCODE_LSHIFT:
+            return sc_LShift;
+        case SDL_SCANCODE_RSHIFT:
+            return sc_RShift;
+
+        case SDL_SCANCODE_LALT:
+        case SDL_SCANCODE_RALT:
+            return sc_Alt;
+
+        default:
+            if (scancode >= 0 && scancode < arrlen(scancode_translate_table))
+            {
+                return scancode_translate_table[scancode];
+            }
+            else
+            {
+                return 0;
+            }
+    }
+}
+
 static KeyboardDef KbdDefs = {0x1d,0x38,0x47,0x48,0x49,0x4b,0x4d,0x4f,0x50,0x51};
 static JoystickDef JoyDefs[MaxJoys];
 static ControlType Controls[MAXPLAYERS];
@@ -242,14 +296,14 @@ static int handle_keypad_enter_hack(const SDL_Event *event)
     static int kp_enter_hack = 0;
     int retval = 0;
 
-    if (event->key.keysym.sym == SDLK_RETURN)
+    if (event->key.keysym.scancode == SDL_SCANCODE_RETURN)
     {
         if (event->key.state == SDL_PRESSED)
         {
             if (event->key.keysym.mod & KMOD_SHIFT)
             {
                 kp_enter_hack = 1;
-                retval = GetScancode(SDLK_KP_ENTER);
+                retval = GetScancode(SDL_SCANCODE_KP_ENTER);
             } /* if */
         } /* if */
 
@@ -258,7 +312,7 @@ static int handle_keypad_enter_hack(const SDL_Event *event)
             if (kp_enter_hack)
             {
                 kp_enter_hack = 0;
-                retval = GetScancode(SDLK_KP_ENTER);
+                retval = GetScancode(SDL_SCANCODE_KP_ENTER);
             } /* if */
         } /* if */
     } /* if */
@@ -308,7 +362,7 @@ static int sdl_key_filter(const SDL_Event *event)
     k = handle_keypad_enter_hack(event);
     if (!k)
     {
-        k = GetScancode(event->key.keysym.sym);
+        k = GetScancode(event->key.keysym.scancode);
         if (!k)   /* No DOS equivalent defined. */
             return(0);
     } /* if */
@@ -333,7 +387,7 @@ static int sdl_key_filter(const SDL_Event *event)
         {
             KeyboardQueue[ Keytail ] = extended;
             Keytail = ( Keytail + 1 )&( KEYQMAX - 1 );
-            k = GetScancode(event->key.keysym.sym) & 0xFF;
+            k = GetScancode(event->key.keysym.scancode) & 0xFF;
             if (event->key.state == SDL_RELEASED)
                 k += 128;  /* +128 signifies that the key is released in DOS. */
         }
@@ -768,7 +822,6 @@ void IN_Startup (void)
 // fixme: remove this.
 sdl_mouse_grabbed = 1;
 #endif
-    InitScancodes();
 
    checkjoys        = true;
    checkmouse       = true;
