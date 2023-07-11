@@ -423,7 +423,7 @@ CP_MenuNames CtlMenuNames[] =
    "CUSTOMIZE CONTROLS"
    };
 
-CP_iteminfo CtlItems  = { CTL_X, MENU_Y, 9, -1, 36, CtlMenuNames, mn_largefont };
+CP_iteminfo CtlItems  = { CTL_X, MENU_Y, 7, -1, 36, CtlMenuNames, mn_largefont };
 CP_itemtype CtlMenu[] =
    {
       { CP_Inactive, "ctl_mic\0", 'M', NULL },
