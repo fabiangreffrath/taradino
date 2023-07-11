@@ -533,9 +533,6 @@ void IN_GetJoyAbs (word joy, word *xp, word *yp)
    Joy_ys = joy? 3 : 1;       // Do the same for y axis
    Joy_yb = 1 << Joy_ys;
 
-#ifdef DOS
-   JoyStick_Vals ();
-#else
    if (joy < sdl_total_sticks)
    {
 	   Joy_x = SDL_JoystickGetAxis (sdl_joysticks[joy], 0);
@@ -544,7 +541,6 @@ void IN_GetJoyAbs (word joy, word *xp, word *yp)
 	   Joy_x = 0;
 	   Joy_y = 0;
    }
-#endif
 
    *xp = Joy_x;
    *yp = Joy_y;
@@ -794,9 +790,7 @@ boolean INL_StartJoy (word joy)
 void INL_ShutJoy (word joy)
 {
    JoysPresent[joy] = false;
-#ifndef DOS
    if (joy < sdl_total_sticks) SDL_JoystickClose (sdl_joysticks[joy]);
-#endif
 }
 
 

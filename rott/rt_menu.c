@@ -1384,10 +1384,6 @@ int getASCII ( void )
    int returnvalue = 0;
    int scancode = 0;
 
-#ifdef DOS
-   _disable ();      // must disable for SHIFT purposes
-#endif
-
    IN_UpdateKeyboard ();
 
    LS = Keyboard[sc_LShift];
@@ -1415,10 +1411,6 @@ int getASCII ( void )
    Keyboard[sc_LShift] = LS;
    Keyboard[sc_RShift] = RS;
 
-#ifdef DOS
-   _enable ();
-#endif
-
    return (returnvalue);
 }
 
@@ -1436,9 +1428,7 @@ void ScanForSavedGames ()
    char str[45];
    int which;
    boolean found = false;
-#ifndef DOS
    char *pathsave;
-#endif
 
    //
    // SEE WHICH SAVE GAME FILES ARE AVAILABLE & READ STRING IN
