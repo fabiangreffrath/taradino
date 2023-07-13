@@ -46,6 +46,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   #define CURDIR        "./"
 #endif
 
+#if defined(__GNUC__) || defined(__clang__)
+ #define PRINTF_ATTR(fmt, first) __attribute__((format(printf, fmt, first)))
+ #define PRINTF_ARG_ATTR(x) __attribute__((format_arg(x)))
+ #define NORETURN __attribute__((noreturn))
+#else
+ #define PRINTF_ATTR(fmt, first)
+ #define PRINTF_ARG_ATTR(x)
+ #define NORETURN
+#endif
+
 #if (!defined MAX_PATH)
   #if (defined MAXPATHLEN)
     #define MAX_PATH MAXPATHLEN
