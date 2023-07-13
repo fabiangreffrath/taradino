@@ -13,6 +13,7 @@ rott@SUFFIX@_SOURCES = \
 	dukemusc.c \
 	engine.c \
 	isr.c \
+	m_misc2.c \
 	modexlib.c \
 	rt_actor.c \
 	rt_battl.c \
@@ -20,6 +21,7 @@ rott@SUFFIX@_SOURCES = \
 	rt_cfg.c \
 	rt_com.c \
 	rt_crc.c \
+	rt_datadir.c \
 	rt_debug.c \
 	rt_dmand.c \
 	rt_door.c \

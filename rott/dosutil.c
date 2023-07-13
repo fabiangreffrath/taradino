@@ -117,38 +117,6 @@ char getch(void)
 	return 0;
 }
 
-extern char ApogeePath[256];
-
-int setup_homedir (void)
-{
-#ifndef _WIN32
-	int err;
-
-	/* try to create the root directory */
-	snprintf (ApogeePath, sizeof (ApogeePath), "%s/.rott/", getenv ("HOME"));
-	err = mkdir (ApogeePath, S_IRWXU);
-	
-/* keep the shareware and registered game data separated */
-#if (SHAREWARE == 1)
-	snprintf (ApogeePath, sizeof (ApogeePath), "%s/.rott/", getenv ("HOME"));
-#else
-	snprintf (ApogeePath, sizeof (ApogeePath), "%s/.rott/darkwar/", getenv ("HOME"));
-#endif
-
-	err = mkdir (ApogeePath, S_IRWXU);
-	if (err == -1 && errno != EEXIST)
-	{
-		fprintf (stderr, "Couldn't create preferences directory: %s\n", 
-				strerror (errno));
-		return -1;
-	}
-#else
-    sprintf(ApogeePath, ".%s", PATH_SEP_STR);
-#endif
-
-	return 0;
-}
-
 /* from Dan Olson */
 void put_dos2ansi(byte attrib)
 {

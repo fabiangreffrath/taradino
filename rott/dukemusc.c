@@ -12,17 +12,15 @@
 #include <string.h>
 #include <assert.h>
 
-#define ROTT
-
 #define cdecl
 
 #include "SDL.h"
 #include "SDL_mixer.h"
-#ifdef ROTT
+
 #include "rt_def.h"      // ROTT music hack
 #include "rt_cfg.h"      // ROTT music hack
 #include "rt_util.h"     // ROTT music hack
-#endif
+
 #include "music.h"
 
 #define __FX_TRUE  (1 == 1)
@@ -316,10 +314,6 @@ musdebug("Need to use PlaySongROTT.  :(");
     return(MUSIC_Ok);
 } // MUSIC_PlaySong
 
-
-extern char ApogeePath[256];
-
-#ifdef ROTT
 // ROTT Special - SBF
 int MUSIC_PlaySongROTT(unsigned char *song, int size, int loopflag)
 {
@@ -347,8 +341,6 @@ int MUSIC_PlaySongROTT(unsigned char *song, int size, int loopflag)
 
     return(MUSIC_Ok);
 } // MUSIC_PlaySongROTT
-#endif
-
 
 void MUSIC_SetContext(int context)
 {
