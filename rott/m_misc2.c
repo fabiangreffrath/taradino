@@ -25,6 +25,17 @@
 
 #include "m_misc2.h"
 
+// Create a directory
+
+void M_MakeDirectory(const char *path)
+{
+#ifdef _WIN32
+    mkdir(path);
+#else
+    mkdir(path, 0755);
+#endif
+}
+
 // Check if a file exists
 
 boolean M_FileExists(const char *filename)

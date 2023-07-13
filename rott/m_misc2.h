@@ -23,6 +23,7 @@
 
 #include "rt_def.h"
 
+void M_MakeDirectory(const char *path);
 boolean M_FileExists(const char *file);
 char *M_TempFile(const char *s);
 char *M_FileCaseExists(const char *file);
