@@ -18,6 +18,7 @@
 #include "SDL_filesystem.h"
 
 #include "m_misc2.h"
+#include "rt_util.h"
 
 static char *GetExeDir (void)
 {
@@ -27,7 +28,7 @@ static char *GetExeDir (void)
     {
         char *result;
 
-        result = SDL_GetdirPath();
+        result = SDL_GetBasePath();
         if (result != NULL)
         {
             dir = M_StringDuplicate(result);
@@ -35,7 +36,7 @@ static char *GetExeDir (void)
         }
         else
         {
-            result = M_DirName(myargv[0]);
+            result = M_DirName(_argv[0]);
             dir = M_StringDuplicate(result);
         }
     }
