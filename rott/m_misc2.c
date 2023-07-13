@@ -239,7 +239,7 @@ char *M_StringDuplicate(const char *orig)
 
     if (result == NULL)
     {
-        I_Error("Failed to duplicate string (length %ld)\n",
+        fprintf(stderr, "Failed to duplicate string (length %ld)\n",
                 (long)strlen(orig));
     }
 
@@ -278,7 +278,7 @@ char *M_StringReplace(const char *haystack, const char *needle,
     result = malloc(result_len);
     if (result == NULL)
     {
-        I_Error("M_StringReplace: Failed to allocate new string");
+        fprintf(stderr, "M_StringReplace: Failed to allocate new string");
         return NULL;
     }
 
@@ -387,7 +387,7 @@ char *M_StringJoin(const char *s, ...)
 
     if (result == NULL)
     {
-        I_Error("M_StringJoin: Failed to allocate new string.");
+        fprintf(stderr, "M_StringJoin: Failed to allocate new string.");
         return NULL;
     }
 
