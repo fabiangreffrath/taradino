@@ -79,6 +79,7 @@ jobs:
       - name: Configure
         env:
           CC: ${{ matrix.config.compiler }}
+          CFLAGS: -Wall
         run: |
           autoreconf -fiv
           ./configure
