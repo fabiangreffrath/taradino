@@ -108,7 +108,7 @@ byte    passwordstring[20];
 
 MacroList CommbatMacros[MAXMACROS];
 
-char ApogeePath[256];
+char *ApogeePath;
 
 //******************************************************************************
 //

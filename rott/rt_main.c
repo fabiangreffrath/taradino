@@ -68,6 +68,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "cin_main.h"
 #include "rottnet.h"
 #include "rt_scale.h"
+#include "rt_datadir.h"
 
 #include "music.h"
 #include "fx_man.h"
@@ -141,7 +142,6 @@ void CheckRemoteRidicule ( int scancode );
 void SetRottScreenRes (int Width, int Height);
 
 extern void crash_print (int);
-extern int setup_homedir (void);
 
 //extern int G_argc;
 //extern char G_argv[30][80];
@@ -186,7 +186,7 @@ int main (int argc, char *argv[])
 
    signal (11, crash_print);
 
-   if (setup_homedir() == -1) return 1;
+   ApogeePath = GetPrefDir();
 
    // Set which release version we're on
    gamestate.Version = ROTTVERSION;
