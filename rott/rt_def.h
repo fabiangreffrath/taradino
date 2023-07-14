@@ -39,9 +39,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifdef _WIN32
   #define PATH_SEP_CHAR '\\'
   #define PATH_SEP_STR  "\\"
+  #define LIST_SEP_CHAR ';'
 #else
   #define PATH_SEP_CHAR '/'
   #define PATH_SEP_STR  "/"
+  #define LIST_SEP_CHAR ':'
   #define ROOTDIR       "/"
   #define CURDIR        "./"
 #endif
@@ -74,10 +76,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //    Global Constants
 //
 //***************************************************************************
-
-#ifndef DATADIR
-#define DATADIR	""
-#endif
 
 #undef PI
 #undef M_PI

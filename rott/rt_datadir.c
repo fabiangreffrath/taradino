@@ -70,7 +70,7 @@ char *GetPrefDir (void)
 
 #if !(SHAREWARE == 1)
         result = dir;
-        dir = M_StringJoin(result, PATH_SEP_STR, "darkwar", PATH_SEP_STR, NULL);
+        dir = M_StringJoin(result, "darkwar", PATH_SEP_STR, NULL);
         free(result);
 
         M_MakeDirectory(dir);
@@ -78,5 +78,141 @@ char *GetPrefDir (void)
     }
 
     return dir;
+}
+
+char *datadir = NULL;
+
+#define MAX_DATADIRS 16
+static char *datadirs[MAX_DATADIRS] = {0};
+static int num_datadirs = 0;
+
+static void AddDataDir(char *dir)
+{
+    if (num_datadirs < MAX_DATADIRS)
+    {
+        datadirs[num_datadirs++] = dir;
+    }
+}
+
+static void AddDataPath(const char *path, const char *suffix)
+{
+    char *left, *p, *dup_path;
+
+    dup_path = M_StringDuplicate(path);
+
+    // Split into individual dirs within the list.
+    left = dup_path;
+
+    for (;;)
+    {
+        p = strchr(left, LIST_SEP_CHAR);
+        if (p != NULL)
+        {
+            *p = '\0';
+
+            AddDataDir(M_StringJoin(left, suffix, NULL));
+            left = p + 1;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    AddDataDir(M_StringJoin(left, suffix, NULL));
+
+    free(dup_path);
+}
+
+#ifndef _WIN32
+static void AddXdgDirs(void)
+{
+    char *env, *tmp_env;
+
+    env = getenv("XDG_DATA_HOME");
+    tmp_env = NULL;
+
+    if (env == NULL)
+    {
+        char *homedir = getenv("HOME");
+        if (homedir == NULL)
+        {
+            homedir = "/";
+        }
+
+        tmp_env = M_StringJoin(homedir, "/.local/share", NULL);
+        env = tmp_env;
+    }
+
+    AddDataDir(M_StringJoin(env, "/games/rott", NULL));
+    free(tmp_env);
+
+    env = getenv("XDG_DATA_DIRS");
+    if (env == NULL)
+    {
+        env = "/usr/local/share:/usr/share";
+    }
+
+    AddDataPath(env, "/games/rott");
+}
+#endif
+
+static void BuildDataDirList(void)
+{
+    char *env;
+
+    if (datadirs[0])
+    {
+        return;
+    }
+
+    // current directory
+    AddDataDir(".");
+
+    // executable directory
+    AddDataDir(GetExeDir());
+
+#ifdef DATADIR
+    // build-time data directory
+    AddDataDir(DATADIR);
+#endif
+
+#ifndef _WIN32
+    AddXdgDirs();
+#endif
+}
+
+char *FindFileByName(const char *name)
+{
+    char *path;
+    char *probe;
+    int i;
+
+    // Absolute path?
+
+    probe = M_FileCaseExists(name);
+    if (probe != NULL)
+    {
+        return probe;
+    }
+
+    BuildDataDirList();
+
+    for (i = 0; i < num_datadirs; i++)
+    {
+        path = M_StringJoin(datadirs[i], PATH_SEP_STR, name, NULL);
+
+        probe = M_FileCaseExists(path);
+        if (probe != NULL)
+        {
+            return probe;
+        }
+
+        free(path);
+    }
+
+    // File not found
+
+    return NULL;
 }
 

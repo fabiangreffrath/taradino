@@ -160,7 +160,7 @@ extern void RecordDemoQuery ( void );
 int main (int argc, char *argv[])
 {
     char *macwd;
-    extern char *BATTMAPS;
+    extern char *BATTMAPS, *ROTTMAPS;
 	_argc = argc;
 	_argv = argv;
 
@@ -192,34 +192,45 @@ int main (int argc, char *argv[])
    gamestate.Version = ROTTVERSION;
 
 #if ( SHAREWARE == 1 )
-   BATTMAPS = strdup(STANDARDBATTLELEVELS);
-   FixFilePath(BATTMAPS);
+   BATTMAPS = FindFileByName(STANDARDBATTLELEVELS);
    gamestate.Product = ROTT_SHAREWARE;
 #else
-   BATTMAPS = strdup(SITELICENSEBATTLELEVELS);
-   FixFilePath(BATTMAPS);
-   if (!access(BATTMAPS, R_OK))
+   BATTMAPS = FindFileByName(SITELICENSEBATTLELEVELS);
+   gamestate.Product = ROTT_SITELICENSE;
+
+   if (!BATTMAPS)
    {
-       gamestate.Product = ROTT_SITELICENSE;
+       BATTMAPS = FindFileByName(SUPERROTTBATTLELEVELS);
+       gamestate.Product = ROTT_SUPERCD;
+   }
+
+   if (!BATTMAPS)
+   {
+       BATTMAPS = FindFileByName(STANDARDBATTLELEVELS);
+       gamestate.Product = ROTT_REGISTERED;
+   }
+#endif
+
+   if (!BATTMAPS)
+   {
+        Error("Standard battle levels not found: %s!", STANDARDBATTLELEVELS);
    }
    else
    {
-       free(BATTMAPS);
-       BATTMAPS = strdup(SUPERROTTBATTLELEVELS);
-       FixFilePath(BATTMAPS);
-       if (!access(BATTMAPS, R_OK))
-       {
-           gamestate.Product = ROTT_SUPERCD;
-       }
-       else
-       {
-           free(BATTMAPS);
-           BATTMAPS = strdup(STANDARDBATTLELEVELS);
-           FixFilePath(BATTMAPS);
-           gamestate.Product = ROTT_REGISTERED;
-       }
+        char *filename;
+
+        datadir = M_DirName(BATTMAPS);
+
+        filename = M_StringJoin(datadir, PATH_SEP_STR, STANDARDGAMELEVELS, NULL);
+        ROTTMAPS = M_FileCaseExists(filename);
+
+        if (!ROTTMAPS)
+        {
+            Error("Standard game levels not found: %s!", filename);
+        }
+
+        free(filename);
    }
-#endif
 
    DrawRottTitle ();
    gamestate.randomseed=-1;
@@ -460,6 +471,8 @@ void DrawRottTitle ( void )
 
          UL_printf(title);
 	 printf ("\n");
+
+        printf("User dir: %s\nData dir: %s\n", ApogeePath, datadir);
 
          UL_ColorBox (0, 0, 80, 2, 0x1e);
       }
@@ -755,7 +768,7 @@ void SetupWads( void )
 {
    char  *newargs[99];
    int i, arg, argnum = 0;
-   char *tempstr = NULL;
+   char *tempstr = NULL, *filename;
    char *PStrings[] = {"AIM", "FULLSCREEN", "WINDOW", "RESOLUTION", NULL };
 
    // These must be checked here so that they can override the cfg file
@@ -907,10 +920,12 @@ NoRTC:;
    // Normal ROTT wads
 
 #if (SHAREWARE)
-   newargs [argnum++] = DATADIR "HUNTBGIN.WAD";
+   filename = M_StringJoin(datadir, PATH_SEP_STR, "HUNTBGIN.WAD", NULL);
 #else
-   newargs [argnum++] = DATADIR "DARKWAR.WAD";
+   filename = M_StringJoin(datadir, PATH_SEP_STR, "DARKWAR.WAD", NULL);
 #endif
+   newargs [argnum++] = M_FileCaseExists(filename);
+   free(filename);
 
 //   newargs [argnum++] = "credits.wad";
 
@@ -930,7 +945,9 @@ NoRTC:;
       }
    else
       {
-      newargs [argnum++] = DATADIR "REMOTE1.RTS";
+      filename = M_StringJoin(datadir, PATH_SEP_STR, "REMOTE1.RTS", NULL);
+      newargs [argnum++] = M_FileCaseExists(filename);
+      free(filename);
       }
 
    if (tempstr)

@@ -18,6 +18,11 @@
 #ifndef RT_DATADIR_H
 #define RT_DATADIR_H
 
+#include "m_misc2.h"
+
+extern char *datadir;
+
 char *GetPrefDir (void);
+char *FindFileByName(const char *name);
 
 #endif
