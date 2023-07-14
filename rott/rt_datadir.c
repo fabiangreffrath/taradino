@@ -70,7 +70,7 @@ char *GetPrefDir (void)
 
 #if !(SHAREWARE == 1)
         result = dir;
-        dir = M_StringJoin(result, PATH_SEP_STR, "darkwar", PATH_SEP_STR, NULL);
+        dir = M_StringJoin(result, "darkwar", PATH_SEP_STR, NULL);
         free(result);
 
         M_MakeDirectory(dir);

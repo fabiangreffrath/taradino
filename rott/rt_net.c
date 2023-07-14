@@ -3077,23 +3077,20 @@ void GetDemoFilename (int demonumber, char **filename)
 
     path = M_StringJoin(datadir, PATH_SEP_STR, "DEMO?_?.DMO", NULL);
 
-    if (path)
+    qm = strrchr(path, '?'); // "DEMO?_?.DMO"[6]
+    if (qm)
     {
-        qm = strrchr(path, '?'); // "DEMO?_?.DMO"[6]
-        if (qm)
-        {
-            *qm = (char)('0' + (byte)gamestate.violence);
-        }
-
-        qm = strrchr(path, '?'); // "DEMO?_?.DMO"[4]
-        if (qm)
-        {
-            *qm = (char)('0' + (byte)demonumber);
-        }
-
-        *filename = M_FileCaseExists(path);
-        free(path);
+        *qm = (char)('0' + (byte)gamestate.violence);
     }
+
+    qm = strrchr(path, '?'); // "DEMO?_?.DMO"[4]
+    if (qm)
+    {
+        *qm = (char)('0' + (byte)demonumber);
+    }
+
+    *filename = M_FileCaseExists(path);
+    free(path);
 }
 //****************************************************************************
 //

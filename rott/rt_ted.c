@@ -119,11 +119,14 @@ static void Init_ROTTMAPS(void)
         char *filename;
 
         filename = M_StringJoin(datadir, PATH_SEP_STR, STANDARDGAMELEVELS, NULL);
-        if (filename)
+        ROTTMAPS = M_FileCaseExists(filename);
+
+        if (!ROTTMAPS)
         {
-            ROTTMAPS = M_FileCaseExists(filename);
-            free(filename);
+            Error("Standard game levels not found: %s!", filename);
         }
+
+        free(filename);
     }
 }
 

@@ -210,10 +210,8 @@ int main (int argc, char *argv[])
        gamestate.Product = ROTT_REGISTERED;
    }
 #endif
-   if (BATTMAPS)
-   {
-       datadir = M_DirName(BATTMAPS);
-   }
+
+   datadir = BATTMAPS ? M_DirName(BATTMAPS) : ".";
 
    DrawRottTitle ();
    gamestate.randomseed=-1;
@@ -455,7 +453,7 @@ void DrawRottTitle ( void )
          UL_printf(title);
 	 printf ("\n");
 
-        printf("User dir: %s\nData dir: %s\n", ApogeePath, datadir ? datadir : "n/a");
+        printf("User dir: %s\nData dir: %s\n", ApogeePath, datadir);
 
          UL_ColorBox (0, 0, 80, 2, 0x1e);
       }
@@ -907,11 +905,8 @@ NoRTC:;
 #else
    filename = M_StringJoin(datadir, PATH_SEP_STR, "DARKWAR.WAD", NULL);
 #endif
-   if (filename)
-   {
-       newargs [argnum++] = M_FileCaseExists(filename);
-       free(filename);
-   }
+   newargs [argnum++] = M_FileCaseExists(filename);
+   free(filename);
 
 //   newargs [argnum++] = "credits.wad";
 
@@ -932,11 +927,8 @@ NoRTC:;
    else
       {
       filename = M_StringJoin(datadir, PATH_SEP_STR, "REMOTE1.RTS", NULL);
-      if (filename)
-      {
-          newargs [argnum++] = M_FileCaseExists(filename);
-          free(filename);
-      }
+      newargs [argnum++] = M_FileCaseExists(filename);
+      free(filename);
       }
 
    if (tempstr)
