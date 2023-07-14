@@ -209,7 +209,7 @@ void W_InitMultipleFiles (char **filenames)
         for ( ; *filenames ; filenames++)
                 W_AddFile (*filenames);
 
-        if (!numlumps)
+        if (numlumps < 2)
                 Error ("W_InitFiles: One or more of the required ROTT 1.3 data files could not be found.");
 
 //
