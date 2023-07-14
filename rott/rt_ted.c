@@ -109,26 +109,8 @@ char LevelName[80];
 static cachetype * cachelist;
 static word cacheindex;
 static boolean CachingStarted=false;
-static char *ROTTMAPS = NULL;
+char * ROTTMAPS;
 char * BATTMAPS;
-
-static void Init_ROTTMAPS(void)
-{
-    if (!ROTTMAPS)
-    {
-        char *filename;
-
-        filename = M_StringJoin(datadir, PATH_SEP_STR, STANDARDGAMELEVELS, NULL);
-        ROTTMAPS = M_FileCaseExists(filename);
-
-        if (!ROTTMAPS)
-        {
-            Error("Standard game levels not found: %s!", filename);
-        }
-
-        free(filename);
-    }
-}
 
 static char NormalWeaponTiles[ 10 ] =
    {
@@ -1654,8 +1636,6 @@ void GetMapFileInfo
 */
 void GetMapFileName ( char * filename )
 {
-   Init_ROTTMAPS();
-
    if ( ( BATTLEMODE ) && (BattleLevels.avail == true) )
       {
       strcpy(filename,BattleLevels.file);
@@ -1751,8 +1731,6 @@ void GetMapInfo
    )
 
    {
-   Init_ROTTMAPS();
-
    if ( ( BATTLEMODE ) && ( BattleLevels.avail == true ) )
       {
       GetAlternateMapInfo( mapinfo, &BattleLevels );
@@ -1915,8 +1893,6 @@ void LoadROTTMap
    )
 
    {
-   Init_ROTTMAPS();
-
    if ( tedlevel == true )
       {
       LoadTedMap( "rot", mapnum );

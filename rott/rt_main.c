@@ -160,7 +160,7 @@ extern void RecordDemoQuery ( void );
 int main (int argc, char *argv[])
 {
     char *macwd;
-    extern char *BATTMAPS;
+    extern char *BATTMAPS, *ROTTMAPS;
 	_argc = argc;
 	_argv = argv;
 
@@ -211,7 +211,26 @@ int main (int argc, char *argv[])
    }
 #endif
 
-   datadir = BATTMAPS ? M_DirName(BATTMAPS) : ".";
+   if (!BATTMAPS)
+   {
+        Error("Standard battle levels not found: %s!", STANDARDBATTLELEVELS);
+   }
+   else
+   {
+        char *filename;
+
+        datadir = M_DirName(BATTMAPS);
+
+        filename = M_StringJoin(datadir, PATH_SEP_STR, STANDARDGAMELEVELS, NULL);
+        ROTTMAPS = M_FileCaseExists(filename);
+
+        if (!ROTTMAPS)
+        {
+            Error("Standard game levels not found: %s!", filename);
+        }
+
+        free(filename);
+   }
 
    DrawRottTitle ();
    gamestate.randomseed=-1;
