@@ -192,34 +192,28 @@ int main (int argc, char *argv[])
    gamestate.Version = ROTTVERSION;
 
 #if ( SHAREWARE == 1 )
-   BATTMAPS = strdup(STANDARDBATTLELEVELS);
-   FixFilePath(BATTMAPS);
+   BATTMAPS = FindFileByName(STANDARDBATTLELEVELS);
    gamestate.Product = ROTT_SHAREWARE;
 #else
-   BATTMAPS = strdup(SITELICENSEBATTLELEVELS);
-   FixFilePath(BATTMAPS);
-   if (!access(BATTMAPS, R_OK))
+   BATTMAPS = FindFileByName(SITELICENSEBATTLELEVELS);
+   gamestate.Product = ROTT_SITELICENSE;
+
+   if (!BATTMAPS)
    {
-       gamestate.Product = ROTT_SITELICENSE;
+       BATTMAPS = FindFileByName(SUPERROTTBATTLELEVELS);
+       gamestate.Product = ROTT_SUPERCD;
    }
-   else
+
+   if (!BATTMAPS)
    {
-       free(BATTMAPS);
-       BATTMAPS = strdup(SUPERROTTBATTLELEVELS);
-       FixFilePath(BATTMAPS);
-       if (!access(BATTMAPS, R_OK))
-       {
-           gamestate.Product = ROTT_SUPERCD;
-       }
-       else
-       {
-           free(BATTMAPS);
-           BATTMAPS = strdup(STANDARDBATTLELEVELS);
-           FixFilePath(BATTMAPS);
-           gamestate.Product = ROTT_REGISTERED;
-       }
+       BATTMAPS = FindFileByName(STANDARDBATTLELEVELS);
+       gamestate.Product = ROTT_REGISTERED;
    }
 #endif
+   if (BATTMAPS)
+   {
+       datadir = M_DirName(BATTMAPS);
+   }
 
    DrawRottTitle ();
    gamestate.randomseed=-1;
@@ -460,6 +454,8 @@ void DrawRottTitle ( void )
 
          UL_printf(title);
 	 printf ("\n");
+
+        printf("User dir: %s\nData dir: %s\n", ApogeePath, datadir ? datadir : "n/a");
 
          UL_ColorBox (0, 0, 80, 2, 0x1e);
       }
@@ -755,7 +751,7 @@ void SetupWads( void )
 {
    char  *newargs[99];
    int i, arg, argnum = 0;
-   char *tempstr = NULL;
+   char *tempstr = NULL, *filename;
    char *PStrings[] = {"AIM", "FULLSCREEN", "WINDOW", "RESOLUTION", NULL };
 
    // These must be checked here so that they can override the cfg file
@@ -907,10 +903,15 @@ NoRTC:;
    // Normal ROTT wads
 
 #if (SHAREWARE)
-   newargs [argnum++] = DATADIR "HUNTBGIN.WAD";
+   filename = M_StringJoin(datadir, PATH_SEP_STR, "HUNTBGIN.WAD", NULL);
 #else
-   newargs [argnum++] = DATADIR "DARKWAR.WAD";
+   filename = M_StringJoin(datadir, PATH_SEP_STR, "DARKWAR.WAD", NULL);
 #endif
+   if (filename)
+   {
+       newargs [argnum++] = M_FileCaseExists(filename);
+       free(filename);
+   }
 
 //   newargs [argnum++] = "credits.wad";
 
@@ -930,7 +931,12 @@ NoRTC:;
       }
    else
       {
-      newargs [argnum++] = DATADIR "REMOTE1.RTS";
+      filename = M_StringJoin(datadir, PATH_SEP_STR, "REMOTE1.RTS", NULL);
+      if (filename)
+      {
+          newargs [argnum++] = M_FileCaseExists(filename);
+          free(filename);
+      }
       }
 
    if (tempstr)

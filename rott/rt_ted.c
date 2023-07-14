@@ -58,6 +58,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_debug.h"
 #include "rt_scale.h"
 #include "rt_net.h"
+#include "rt_datadir.h"
 //MED
 #include "memcheck.h"
 
@@ -108,8 +109,23 @@ char LevelName[80];
 static cachetype * cachelist;
 static word cacheindex;
 static boolean CachingStarted=false;
-static char * ROTTMAPS = STANDARDGAMELEVELS;
+static char *ROTTMAPS = NULL;
 char * BATTMAPS;
+
+static void Init_ROTTMAPS(void)
+{
+    if (!ROTTMAPS)
+    {
+        char *filename;
+
+        filename = M_StringJoin(datadir, PATH_SEP_STR, STANDARDGAMELEVELS, NULL);
+        if (filename)
+        {
+            ROTTMAPS = M_FileCaseExists(filename);
+            free(filename);
+        }
+    }
+}
 
 static char NormalWeaponTiles[ 10 ] =
    {
@@ -1635,6 +1651,8 @@ void GetMapFileInfo
 */
 void GetMapFileName ( char * filename )
 {
+   Init_ROTTMAPS();
+
    if ( ( BATTLEMODE ) && (BattleLevels.avail == true) )
       {
       strcpy(filename,BattleLevels.file);
@@ -1730,6 +1748,8 @@ void GetMapInfo
    )
 
    {
+   Init_ROTTMAPS();
+
    if ( ( BATTLEMODE ) && ( BattleLevels.avail == true ) )
       {
       GetAlternateMapInfo( mapinfo, &BattleLevels );
@@ -1892,6 +1912,8 @@ void LoadROTTMap
    )
 
    {
+   Init_ROTTMAPS();
+
    if ( tedlevel == true )
       {
       LoadTedMap( "rot", mapnum );

@@ -3070,13 +3070,29 @@ void SetupGameMaster ( void )
 //
 //****************************************************************************
 
-void GetDemoFilename (int demonumber, char * filename)
+void GetDemoFilename (int demonumber, char **filename)
 {
-   strcpy(filename,DATADIR "DEMO0_0.DMO\0");
+    char *path, *qm;
 
-   filename[4 + strlen(DATADIR)] = (char)('0' + (byte)demonumber);
-   filename[6 + strlen(DATADIR)] = (char)('0' + (byte)gamestate.violence);
-   FixFilePath(filename);
+    path = M_StringJoin(datadir, PATH_SEP_STR, "DEMO?_?.DMO", NULL);
+
+    qm = strrchr(path, '?'); // "DEMO?_?.DMO"[6]
+    if (qm)
+    {
+        *qm = (char)('0' + (byte)gamestate.violence);
+    }
+
+    qm = strrchr(path, '?'); // "DEMO?_?.DMO"[4]
+    if (qm)
+    {
+        *qm = (char)('0' + (byte)demonumber);
+    }
+
+    if (path)
+    {
+        *filename = M_FileCaseExists(path);
+        free(path);
+    }
 }
 //****************************************************************************
 //
@@ -3086,11 +3102,12 @@ void GetDemoFilename (int demonumber, char * filename)
 
 boolean DemoExists (int demonumber)
 {
-   char demo[20 + sizeof(DATADIR)];
+   char *demo;
+   boolean ret = false;
 
-   GetDemoFilename (demonumber, &demo[0]);
+   GetDemoFilename (demonumber, &demo);
    if (access (demo, F_OK) == 0)
-      return true;
+      ret = true;
    else
    {
       /* Saves the users violence level, only do this once, otherwise
@@ -3099,12 +3116,15 @@ boolean DemoExists (int demonumber)
          predemo_violence = gamestate.violence;
       /* The demos distributed with rott are all for a violence level of 3 */
       gamestate.violence = 3;
-      GetDemoFilename (demonumber, &demo[0]);
+      GetDemoFilename (demonumber, &demo);
       if (access (demo, F_OK) == 0)
-         return true;
+         ret = true;
       else
-         return false;
+         ret = false;
    }
+
+   free(demo);
+   return ret;
 }
 
 //****************************************************************************
@@ -3115,12 +3135,13 @@ boolean DemoExists (int demonumber)
 
 void SaveDemo (int demonumber)
 {
-   char demo[20 + sizeof(DATADIR)];
+   char *demo;
 
    RecordDemoCmd ();
-   GetDemoFilename (demonumber, &demo[0]);
+   GetDemoFilename (demonumber, &demo);
    SaveFile (demo, demobuffer, (demoptr-demobuffer));
    FreeDemo();
+   free(demo);
 }
 
 //****************************************************************************
@@ -3131,10 +3152,10 @@ void SaveDemo (int demonumber)
 
 void LoadDemo (int demonumber)
 {
-   char demo[20 + sizeof(DATADIR)];
+   char *demo;
    int size;
 
-   GetDemoFilename (demonumber, demo);
+   GetDemoFilename (demonumber, &demo);
    if (demobuffer!=NULL)
       FreeDemo();
    size = LoadFile (demo, (void **)&demobuffer);
@@ -3145,6 +3166,7 @@ void LoadDemo (int demonumber)
    InitializeWeapons(locplayerstate);
    ResetPlayerstate(locplayerstate);
    InitCharacter();
+   free(demo);
 }
 
 //****************************************************************************
