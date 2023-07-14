@@ -129,12 +129,12 @@ static void AddXdgDirs(void)
 {
     char *env, *tmp_env;
 
-    env = M_getenv("XDG_DATA_HOME");
+    env = getenv("XDG_DATA_HOME");
     tmp_env = NULL;
 
     if (env == NULL)
     {
-        char *homedir = M_getenv("HOME");
+        char *homedir = getenv("HOME");
         if (homedir == NULL)
         {
             homedir = "/";
@@ -147,7 +147,7 @@ static void AddXdgDirs(void)
     AddDataDir(M_StringJoin(env, "/games/rott", NULL));
     free(tmp_env);
 
-    env = M_getenv("XDG_DATA_DIRS");
+    env = getenv("XDG_DATA_DIRS");
     if (env == NULL)
     {
         env = "/usr/local/share:/usr/share";
