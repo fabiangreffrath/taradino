@@ -367,8 +367,6 @@ void FX_SetVolume
    )
 
    {
-   int status;
-
    MV_SetVolume( volume );
    }
 

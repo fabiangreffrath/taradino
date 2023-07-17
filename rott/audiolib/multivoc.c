@@ -961,32 +961,6 @@ playbackstatus MV_GetNextWAVBlock
    }
 
 
-/*---------------------------------------------------------------------
-   Function: MV_ServiceRecord
-
-   Starts recording of the waiting buffer.
----------------------------------------------------------------------*/
-
-static void MV_ServiceRecord
-   (
-   void
-   )
-
-   {
-   if ( MV_RecordFunc )
-      {
-      MV_RecordFunc( MV_MixBuffer[ 0 ] + MV_MixPage * MixBufferSize,
-         MixBufferSize );
-      }
-
-   // Toggle which buffer we'll mix next
-   MV_MixPage++;
-   if ( MV_MixPage >= NumberOfBuffers )
-      {
-      MV_MixPage = 0;
-      }
-   }
-
 
 /*---------------------------------------------------------------------
    Function: MV_GetVoice

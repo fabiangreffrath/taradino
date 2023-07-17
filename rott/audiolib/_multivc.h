@@ -188,7 +188,7 @@ typedef struct
 
 typedef struct
    {
-   unsigned char DATA[ 4 ];
+   char DATA[ 4 ];
    unsigned long size;
    } data_header;
 
@@ -196,28 +196,6 @@ typedef MONO8  VOLUME8[ 256 ];
 typedef MONO16 VOLUME16[ 256 ];
 
 typedef char HARSH_CLIP_TABLE_8[ MV_NumVoices * 256 ];
-
-static void MV_Mix( VoiceNode *voice, int buffer );
-static void MV_PlayVoice( VoiceNode *voice );
-static void MV_StopVoice( VoiceNode *voice );
-static void MV_ServiceVoc( void );
-
-static playbackstatus MV_GetNextVOCBlock( VoiceNode *voice );
-static playbackstatus MV_GetNextDemandFeedBlock( VoiceNode *voice );
-static playbackstatus MV_GetNextRawBlock( VoiceNode *voice );
-static playbackstatus MV_GetNextWAVBlock( VoiceNode *voice );
-
-static void       MV_ServiceRecord( void );
-static VoiceNode *MV_GetVoice( int handle );
-static VoiceNode *MV_AllocVoice( int priority );
-
-static short     *MV_GetVolumeTable( int vol );
-
-static void       MV_SetVoiceMixMode( VoiceNode *voice );
-
-static void       MV_SetVoicePitch( VoiceNode *voice, unsigned long rate, int pitchoffset );
-static void       MV_CalcVolume( int MaxLevel );
-static void       MV_CalcPanTable( void );
 
 void ClearBuffer_DW( void *ptr, unsigned data, int length );
 
