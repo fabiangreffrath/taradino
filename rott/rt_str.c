@@ -41,7 +41,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "_rt_str.h"
 #include "isr.h"
 #include "rt_in.h"
-#include "rt_menu.h"
 #include "rt_view.h"
 #include "w_wad.h"
 #include "z_zone.h"
@@ -234,7 +233,7 @@ void VW_DrawIPropString (const char *string)
    byte  pix;
    int   width,step,height,ht;
    byte  *source, *dest, *origdest;
-   int   ch,
+   int   ch;
 
 
    ht = CurrentFont->height;
