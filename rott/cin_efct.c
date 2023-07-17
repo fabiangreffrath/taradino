@@ -332,7 +332,6 @@ void DrawCinematicBackground ( backevent * back )
    byte * buf;
    lpic_t * pic;
    int i;
-   int plane;
    int offset;
    int height;
 
@@ -345,13 +344,9 @@ void DrawCinematicBackground ( backevent * back )
    if (height!=iGLOBAL_SCREENHEIGHT)
       DrawClearBuffer ();
 
-   plane = 0;
-   
       {
       buf=(byte *)bufferofs+ylookup[back->yoffset];
-      offset=(back->currentoffset>>FRACTIONBITS)+plane;
-
-      VGAWRITEMAP(plane);
+      offset=(back->currentoffset>>FRACTIONBITS);
 
       for (i=0;i<iGLOBAL_SCREENWIDTH;i++,offset++,buf++)
          {
@@ -379,7 +374,6 @@ void DrawCinematicMultiBackground ( backevent * back )
    byte * src;
    byte * buf;
    int i;
-   int plane;
    int offset;
    int height;
 
@@ -390,13 +384,9 @@ void DrawCinematicMultiBackground ( backevent * back )
    if (height!=iGLOBAL_SCREENHEIGHT)
       DrawClearBuffer ();
 
-   plane = 0;
-   
       {
       buf=(byte *)bufferofs+ylookup[back->yoffset];
-      offset=(back->currentoffset>>FRACTIONBITS)+plane;
-
-      VGAWRITEMAP(plane);
+      offset=(back->currentoffset>>FRACTIONBITS);
 
       for (i=0;i<iGLOBAL_SCREENWIDTH;i++,offset++,buf++)
          {
@@ -426,7 +416,6 @@ void DrawCinematicBackdrop ( backevent * back )
    byte * buf;
    patch_t * p;
    int i;
-   int plane;
    int offset;
    int postoffset;
    int postlength;
@@ -437,13 +426,9 @@ void DrawCinematicBackdrop ( backevent * back )
 
    toppost=-p->topoffset+back->yoffset;
 
-   plane = 0;
-
       {
       buf=(byte *)bufferofs;
-      offset=(back->currentoffset>>FRACTIONBITS)+plane;
-
-      VGAWRITEMAP(plane);
+      offset=(back->currentoffset>>FRACTIONBITS);
 
       for (i=0;i<iGLOBAL_SCREENWIDTH;i++,offset++,buf++)
          {
@@ -539,7 +524,6 @@ void DrawCinematicSprite ( spriteevent * sprite )
 
    for (; x1<=x2 ; x1++, frac += cin_iscale)
      {
-     VGAWRITEMAP(x1&3);
      ScaleFilmPost(((p->collumnofs[frac>>FRACTIONBITS])+shape),buf+x1);
      }
 }
@@ -845,7 +829,6 @@ void ProfileDisplay ( void )
 
       {
       buf=(byte *)bufferofs;
-      VGAWRITEMAP(0);
 
       for (i=0;i<width;i++,buf++)
          {
@@ -868,7 +851,6 @@ void DrawPostPic ( int lumpnum )
    byte * buf;
    lpic_t * pic;
    int i;
-   int plane;
    int height;
    int width = StretchScreen? 320:iGLOBAL_SCREENWIDTH;
 
@@ -876,14 +858,10 @@ void DrawPostPic ( int lumpnum )
 
    height = pic->height;
 
-   plane = 0;
-   
       {
       buf=(byte *)bufferofs;
 
-      src=&(pic->data) + (plane*pic->height);
-
-      VGAWRITEMAP(plane);
+      src=&(pic->data);
 
       for (i=0;i<width;i++,src+=pic->height,buf++)
          {
