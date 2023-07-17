@@ -232,7 +232,7 @@ static char *ExtScanNames[] = // Names corresponding to ExtScanCodes
 
 void MouseSensitivity (void);
 void DoThreshold (void);
-byte * IN_GetScanName (ScanCode scan);
+char * IN_GetScanName (ScanCode scan);
 void DisplayInfo (int which);
 
 void PrintLSEntry (int w);

@@ -683,7 +683,7 @@ static void USL_XORICursor (int x, int y, const char *s, int cursor, int color)
 //
 ///******************************************************************************
 
-extern byte * IN_GetScanName (ScanCode scan);
+extern char * IN_GetScanName (ScanCode scan);
 
 boolean US_LineInput (int x, int y, char *buf, const char *def, boolean escok,
                       int maxchars, int maxwidth, int color)
