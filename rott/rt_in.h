@@ -67,7 +67,7 @@ typedef  enum
    dir_None
 } Direction;
 
-typedef char ScanCode;
+typedef byte ScanCode;
 
 typedef  enum
 {

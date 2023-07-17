@@ -3152,6 +3152,7 @@ int SetNextAction(elevator_t*eptr,int action)
 void OperateElevatorSwitch(objtype*ob,int elevnum,int checkx,int checky)
 {elevator_t*eptr;
  doorobj_t *door1;
+
  eptr = &ELEVATOR[elevnum];
 
  if ((eptr->state == ev_mts) ||

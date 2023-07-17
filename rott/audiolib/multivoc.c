@@ -2771,7 +2771,7 @@ int MV_Init
       LL_Add( (VoiceNode *)&VoicePool, &MV_Voices[ index ], next, prev );
       }
 
-   // Allocate mix buffer within 1st megachar
+   // Allocate mix buffer within 1st megabyte
    status = DPMI_GetDOSMemory( ( void ** )&ptr, &MV_BufferDescriptor,
       2 * TotalBufferSize );
 

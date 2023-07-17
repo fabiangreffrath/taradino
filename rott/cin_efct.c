@@ -102,6 +102,8 @@ spriteevent * SpawnCinematicSprite ( char * name,
    sprite->frame=0;
    sprite->frametime=framedelay;
 
+   W_CacheLumpNum( W_GetNumForName(sprite->name), PU_CACHE, Cvt_patch_t, 1);
+
    sprite->x=x << FRACTIONBITS;
    sprite->y=y << FRACTIONBITS;
 
@@ -279,9 +281,14 @@ void DrawFlic ( flicevent * flic )
 
    DrawFadeout ( );
 
-   strcpy(flicname,flic->name);
-   if (flic->usefile!=false)
+   if (flic->usefile==false)
       {
+      W_CacheLumpName(flic->name,PU_CACHE, CvtNull, 1);
+      strcpy(flicname,flic->name);
+      }
+   else
+      {
+      strcpy(flicname,flic->name);
       strcat(flicname,".fli");
       }
 
