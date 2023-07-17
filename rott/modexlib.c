@@ -54,8 +54,8 @@ int    screensize;
 byte  *bufferofs;
 byte  *displayofs;
 boolean graphicsmode=false;
-char        *bufofsTopLimit;
-char        *bufofsBottomLimit;
+byte  *bufofsTopLimit;
+byte  *bufofsBottomLimit;
 
 void DrawCenterAim ();
 
@@ -395,8 +395,6 @@ void XFlipPage ( void )
 
 void EnableScreenStretch(void)
 {
-   int i,offset;
-   
    if (iGLOBAL_SCREENWIDTH <= 320 || StretchScreen) return;
    
    if (unstretch_sdl_surface == NULL)

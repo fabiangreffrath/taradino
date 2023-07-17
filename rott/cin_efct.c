@@ -87,7 +87,6 @@ spriteevent * SpawnCinematicSprite ( char * name,
                                    )
 {
    spriteevent * sprite;
-   patch_t *p;
 
    sprite = SafeMalloc ( sizeof (spriteevent) );
 
@@ -102,8 +101,6 @@ spriteevent * SpawnCinematicSprite ( char * name,
    sprite->framedelay = framedelay;
    sprite->frame=0;
    sprite->frametime=framedelay;
-
-   p=(patch_t *)W_CacheLumpNum( W_GetNumForName(sprite->name), PU_CACHE, Cvt_patch_t, 1);
 
    sprite->x=x << FRACTIONBITS;
    sprite->y=y << FRACTIONBITS;
@@ -274,7 +271,6 @@ void ScaleFilmPost (byte * src, byte * buf)
 void DrawFlic ( flicevent * flic )
 {
    byte * curpal;
-   byte * buf;
    char flicname[40];
 
    curpal = SafeMalloc (768);
@@ -283,14 +279,9 @@ void DrawFlic ( flicevent * flic )
 
    DrawFadeout ( );
 
-   if (flic->usefile==false)
+   strcpy(flicname,flic->name);
+   if (flic->usefile!=false)
       {
-      buf=W_CacheLumpName(flic->name,PU_CACHE, CvtNull, 1);
-      strcpy(flicname,flic->name);
-      }
-   else
-      {
-      strcpy(flicname,flic->name);
       strcat(flicname,".fli");
       }
 
@@ -847,17 +838,14 @@ void ProfileDisplay ( void )
 {
    byte * buf;
    int i;
-   int plane;
    byte src[200];
    int width = StretchScreen? 320:iGLOBAL_SCREENWIDTH;
 
    DrawClearBuffer ();
 
-   plane = 0;
-   
       {
       buf=(byte *)bufferofs;
-      VGAWRITEMAP(plane);
+      VGAWRITEMAP(0);
 
       for (i=0;i<width;i++,buf++)
          {

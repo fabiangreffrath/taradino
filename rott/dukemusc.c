@@ -40,16 +40,8 @@ int MUSIC_ErrorCode = MUSIC_Ok;
 
 static char warningMessage[80];
 static char errorMessage[80];
-static int fx_initialized = 0;
-static int numChannels = MIX_CHANNELS;
-static void (*callback)(unsigned long);
-static int reverseStereo = 0;
-static int reverbDelay = 256;
-static int reverbLevel = 0;
-static int fastReverb = 0;
 static FILE *debug_file = NULL;
 static int initialized_debugging = 0;
-static int mixerIsStereo = 1;
 
 // This gets called all over the place for information and debugging messages.
 //  If the user set the DUKESND_DEBUG environment variable, the messages
@@ -94,15 +86,6 @@ static void init_debugging(void)
 
     initialized_debugging = 1;
 } // init_debugging
-
-static void setWarningMessage(const char *msg)
-{
-    strncpy(warningMessage, msg, sizeof (warningMessage));
-    // strncpy() doesn't add the null char if there isn't room...
-    warningMessage[sizeof (warningMessage) - 1] = '\0';
-    musdebug("Warning message set to [%s].", warningMessage);
-} // setErrorMessage
-
 
 static void setErrorMessage(const char *msg)
 {
@@ -163,7 +146,7 @@ char *MUSIC_ErrorString(int ErrorNumber)
 static int music_initialized = 0;
 static int music_context = 0;
 static int music_loopflag = MUSIC_PlayOnce;
-static char *music_songdata = NULL;
+static unsigned char *music_songdata = NULL;
 static Mix_Music *music_musicchunk = NULL;
 
 int MUSIC_Init(int SoundCard, int Address)
@@ -268,7 +251,6 @@ void MUSIC_Pause(void)
 
 int MUSIC_StopSong(void)
 {
-    //if (!fx_initialized)
     if (!Mix_QuerySpec(NULL, NULL, NULL))
     {
         setErrorMessage("Need FX system initialized, too. Sorry.");
