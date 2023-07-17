@@ -1120,7 +1120,6 @@ static boolean StartGame = false;
 
 static int  SaveGamesAvail[ NUMSAVEGAMES ];
 static char SaveGameNames[ NUMSAVEGAMES ][ 32 ];
-static char SaveName[ 13 ] = "rottgam?.rot\0";
 
 static byte *savedscreen;
 static mapfileinfo_t * mapinfo;
@@ -1423,51 +1422,44 @@ int getASCII ( void )
 
 void ScanForSavedGames ()
 {
-   struct find_t f;
-   char filename[256];
-   char str[45];
-   int which;
-   boolean found = false;
-   char *pathsave;
+    char *path, *qm;
+    int which;
+    boolean found = false;
 
-   //
-   // SEE WHICH SAVE GAME FILES ARE AVAILABLE & READ STRING IN
-   //
-   memset (&SaveGamesAvail[0], 0, sizeof (SaveGamesAvail));
-#ifdef _WIN32
-   GetPathFromEnvironment( filename, ApogeePath, SaveName );
-#else
-   strncpy (filename, SaveName, 256);
-   pathsave = getcwd (NULL, 0);
-   chdir (ApogeePath);
-#endif
+    //
+    // SEE WHICH SAVE GAME FILES ARE AVAILABLE & READ STRING IN
+    //
+    memset (&SaveGamesAvail[0], 0, sizeof (SaveGamesAvail));
 
-   if (!_dos_findfirst (filename, 0, &f))
-      do
-      {
-         strcpy(str,&f.name[7]);
-         sscanf((const char *)&str[0],"%x",&which);
+    path = M_StringJoin(ApogeePath, PATH_SEP_STR, "rottgam?.rot", NULL);
+    qm = strrchr(path, '?');
 
-         if (which < NUMSAVEGAMES)
-         {
+    for (which = 0; which < NUMSAVEGAMES; which++)
+    {
+        char *file;
+
+        *qm = (char)('0' + which);
+        file = M_FileCaseExists(path);
+
+        if (file)
+        {
             found = true;
             SaveGamesAvail[which] = 1;
             GetSavedMessage (which, &SaveGameNames[which][0]);
-         }
 
-      } while (!_dos_findnext (&f));
+            free(file);
+        }
+    }
 
-      if (found)
-      {
-         if (MainMenu[loadgame].active == CP_Inactive)
+    free(path);
+
+    if (found)
+    {
+        if (MainMenu[loadgame].active == CP_Inactive)
             MainMenu[loadgame].active = CP_Active;
-      }
-      else
-         MainMenu[loadgame].active = CP_Inactive;
-#ifndef _WIN32
-      chdir (pathsave);
-      free (pathsave);
-#endif
+    }
+    else
+        MainMenu[loadgame].active = CP_Inactive;
 }
 
 
