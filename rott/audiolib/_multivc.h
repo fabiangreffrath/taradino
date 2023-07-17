@@ -103,7 +103,7 @@ typedef struct VoiceNode
 
    unsigned char *NextBlock;
    unsigned char *LoopStart;
-   char         *LoopEnd;
+   unsigned char *LoopEnd;
    unsigned      LoopCount;
    unsigned long LoopSize;
    unsigned long BlockLength;
