@@ -225,10 +225,10 @@ void MV_Mix16BitStereo16( unsigned long position,
 
 void MV_16BitReverb( const char *src, char *dest, const VOLUME16 *volume, int count );
 
-void MV_8BitReverb( const signed char *src, signed char *dest, const VOLUME16 *volume, int count );
+void MV_8BitReverb( const char *src, char *dest, const VOLUME16 *volume, int count );
 
 void MV_16BitReverbFast( const char *src, char *dest, int count, int shift );
 
-void MV_8BitReverbFast( const signed char *src, signed char *dest, int count, int shift );
+void MV_8BitReverbFast( const char *src, char *dest, int count, int shift );
 
 #endif

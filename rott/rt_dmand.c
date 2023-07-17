@@ -52,7 +52,7 @@ static boolean RecordingSemaphore=false;
 // SD_UpdatePlaybackSound - Update playback of a sound in chunks
 //
 //***************************************************************************
-void SD_UpdatePlaybackSound ( byte ** ptr, unsigned long * length )
+void SD_UpdatePlaybackSound ( char ** ptr, unsigned long * length )
    {
    if ( Playing==false )
       {

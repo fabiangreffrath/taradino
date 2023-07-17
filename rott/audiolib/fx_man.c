@@ -1008,7 +1008,7 @@ int FX_StopAllSounds
 
 int FX_StartDemandFeedPlayback
    (
-   void ( *function )( unsigned char **ptr, unsigned long *length ),
+   void ( *function )( char **ptr, unsigned long *length ),
    int rate,
    int pitchoffset,
    int vol,
