@@ -412,7 +412,7 @@ void MV_ServiceVoc
       }
    else
       {
-      char *end;
+      signed char *end;
       signed char *source;
       signed char *dest;
       int   count;
