@@ -385,7 +385,6 @@ void MV_ServiceVoc
    {
    VoiceNode *voice;
    VoiceNode *next;
-   char      *buffer;
 
    // Toggle which buffer we'll mix next
    MV_MixPage++;
@@ -414,8 +413,8 @@ void MV_ServiceVoc
    else
       {
       char *end;
-      char *source;
-      char *dest;
+      signed char *source;
+      signed char *dest;
       int   count;
       int   length;
 
@@ -564,6 +563,8 @@ static __inline unsigned int get_le16(void *p0)
 	unsigned short val = *((unsigned short *) p0);
 	return( (unsigned int) (BUILDSWAP_INTEL16(val)) );
 }
+
+static void MV_SetVoiceMixMode (VoiceNode *voice);
 
 playbackstatus MV_GetNextVOCBlock
    (
