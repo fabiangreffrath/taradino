@@ -104,16 +104,6 @@ boolean BATTLE_ShowKillCount;
 boolean BATTLEMODE = false;
 
 /*---------------------------------------------------------------------
-	Function Prototypes:
----------------------------------------------------------------------*/
-
-static int BATTLE_CheckKills
-	(
-	battle_event reason,
-	int player
-	);
-
-/*---------------------------------------------------------------------
 	Function: BATTLE_Init
 
 	Initializes the battle information.

@@ -60,8 +60,6 @@ void SetTransitTime( int client, int time );
 
 #ifndef _WIN32
 
-static int sock = -1;
-
 static void ReadUDPPacket()
 {
 	rottcom->remotenode = -1;
@@ -84,7 +82,6 @@ static void WriteUDPPacket()
 void InitROTTNET (void)
 {
 	int netarg;
-	long netaddress;
 
 	if (ComStarted==true)
 		return;
@@ -217,7 +214,7 @@ boolean ReadPacket (void)
    if (rottcom->remotenode!=-1)
       {
       // calculate crc on packet
-      crc=CalculateCRC (&rottcom->data[0], rottcom->datalength-sizeof(word));
+      crc=CalculateCRC ((byte *)&rottcom->data[0], rottcom->datalength-sizeof(word));
 
       // get crc inside packet
       sentcrc=*((word *)(&rottcom->data[rottcom->datalength-sizeof(word)]));

@@ -42,7 +42,7 @@ extern boolean iG_aimCross;
 extern boolean sdl_fullscreen;
 extern int iG_X_center;
 extern int iG_Y_center;
-char 	   *iG_buf_center;
+byte  *iG_buf_center;
   
 int    linewidth;
 //int    ylookup[MAXSCREENHEIGHT];

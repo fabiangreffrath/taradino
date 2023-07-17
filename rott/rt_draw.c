@@ -935,7 +935,6 @@ void DrawScaleds (void)
 
   int   i,numvisible;
   int   gx,gy;
-  unsigned short int  *tilespot;
   byte   *visspot;
   boolean result;
   statobj_t *statptr;
@@ -1131,7 +1130,6 @@ void DrawScaleds (void)
 				  (visptr->shapenum >= shapestop))
 		  Error("actor shapenum %d out of range (%d-%d)",visptr->shapenum,shapestart,shapestop);
 	  visspot = &spotvis[obj->tilex][obj->tiley];
-	  tilespot = &tilemap[obj->tilex][obj->tiley];
 
 	  //
 	  // could be in any of the nine surrounding tiles
@@ -1927,7 +1925,7 @@ bottomcheck:
 
 void   DrawWalls (void)
 {
-   char * buf;
+   byte * buf;
    int plane;
    wallcast_t * post;
 
@@ -2377,7 +2375,6 @@ void InterpolateWall (visobj_t * plane)
    int dh;
    int dx;
    int height;
-   byte * buf;
 
    whereami=17;
    dx=(plane->x2-plane->x1+1);
@@ -2391,7 +2388,6 @@ void InterpolateWall (visobj_t * plane)
    bot=d2*dx;
    botinc=d1-d2;
    height=plane->h1<<DHEIGHTFRACTION;
-   buf=(byte *)bufferofs;
    if (plane->x1>=viewwidth)
       return;
    for (i=plane->x1;i<=plane->x2;i++)
@@ -2457,7 +2453,8 @@ void InterpolateDoor (visobj_t * plane)
    botinc=d1-d2;
    if (plane->x1>=viewwidth)
       return;
-      {
+
+   {
       top=0;
       bot=(d2*dx);
       height=(plane->h1<<DHEIGHTFRACTION);
@@ -2498,7 +2495,7 @@ void InterpolateDoor (visobj_t * plane)
          bot+=botinc;
          height+=dh;
          }
-      }
+   }
 }
 
 
@@ -2530,7 +2527,6 @@ void InterpolateMaskedWall (visobj_t * plane)
 	transpatch_t *p;
    patch_t *p2;
    patch_t *p3;
-   int pl;
    boolean drawbottom,drawmiddle,drawtop;
    int topoffset;
 
@@ -2579,7 +2575,8 @@ void InterpolateMaskedWall (visobj_t * plane)
    botinc=d1-d2;
    if (plane->x1>=viewwidth)
       return;
-      {
+
+   {
       top=0;
       bot=(d2*dx);
       height=(plane->h1<<DHEIGHTFRACTION);
@@ -2616,7 +2613,7 @@ void InterpolateMaskedWall (visobj_t * plane)
          bot+=botinc;
          height+=dh;
          }
-      }
+   }
 }
 
 /*
@@ -2955,12 +2952,6 @@ void StartupRotateBuffer ( int masked)
 {
 	int k;////zxcv
    int a,b;
-
-//   int Xres = 320;//org
-//   int Yres = 200;//org
-   int   Xres =   iGLOBAL_SCREENWIDTH;//bna val 800
-   int   Yres = iGLOBAL_SCREENHEIGHT;//bna val 600
-
 
    iG_masked = masked;
 
@@ -3660,8 +3651,6 @@ void WarpString (
    int dy;
    int cx;
    int cy;
-   int starttime;
-
 
    LastScan = 0;
 
@@ -3670,7 +3659,6 @@ void WarpString (
    dy=((endy-y)<<16)/time;
    cx=x<<16;
    cy=y<<16;
-   starttime=time;
 
    CalcTics();
 

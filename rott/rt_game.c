@@ -1611,17 +1611,12 @@ void DrawMPPic (int xpos, int ypos, int width, int height, int heightmod, byte *
    int x;
    int y;
    int planes;
-   byte mask;
    byte pixel;
-
-   mask = 1 << (xpos&3);
 
    olddest = ylookup[ypos] + xpos;
 
    for (planes = 0; planes < 4; planes++)
    {
-      VGAMAPMASK (mask);
-
       dest = olddest;
 
       dest += planes;
@@ -1682,20 +1677,15 @@ void DrawColoredMPPic (int xpos, int ypos, int width, int height, int heightmod,
    int x;
    int y;
    int planes;
-   byte mask;
    byte pixel;
    byte * cmap;
 
    cmap=playermaps[color]+(1<<12);
 
-   mask = 1 << (xpos&3);
-
    olddest = ylookup[ypos] + xpos;
 
    for (planes = 0; planes < 4; planes++)
    {
-      VGAMAPMASK (mask);
-
       dest = olddest;
 
       dest += planes;
@@ -2347,11 +2337,8 @@ void GM_DrawBonus
    )
 
    {
-   int    x;
-
    if ( which < stat_gasmask )
       {
-      x = POWERUP1X;
       poweruptime = GetBonusTimeForItem(which);
       poweradjust = (poweruptime >> 4);
       powerupheight  = 0;
@@ -2360,7 +2347,6 @@ void GM_DrawBonus
       }
    else
       {
-      x = POWERUP2X;
       protectiontime = GetBonusTimeForItem(which);
       poweradjust = (protectiontime >> 4);
       protectionheight = 0;
@@ -2535,17 +2521,11 @@ void Drawpic (int xpos, int ypos, int width, int height, byte *src)
    int x;
    int y;
    int planes;
-   byte mask;
    byte pixel;
-
-
-   mask = 1 << (xpos&3);
 
    olddest = (byte *)(bufferofs + ylookup[ypos] + xpos);
    for (planes = 0; planes < 4; planes++)
    {
-      VGAMAPMASK (mask);
-
       dest = olddest;
 
       for (y = 0; y < height; y++)
@@ -2658,13 +2638,11 @@ void  DrawEpisodeLevel (int x, int y)
 void GM_MemToScreen (byte *source, int width, int height, int x, int y)
 {
    int dest;
-   byte *dest1, *dest2, *dest3, mask;
+   byte *dest1, *dest2, *dest3;
    byte *screen1, *screen2, *screen3;
    int  plane;
-   int w;
-   
+
    dest = ylookup[y]+x;
-   mask = 1 << (x&3);
 
    dest1 = (byte *)(dest+page1start);
    dest2 = (byte *)(dest+page2start);
@@ -2672,8 +2650,6 @@ void GM_MemToScreen (byte *source, int width, int height, int x, int y)
 
    for (plane = 0; plane<4; plane++)
    {
-      VGAMAPMASK (mask);
-
       screen1 = dest1;
       screen2 = dest2;
       screen3 = dest3;
@@ -4084,7 +4060,7 @@ void BattleLevelCompleted ( int localplayer )
             {
             ReadAnyControl (&ci);
             }
-         while( ci.dir == (dirtype)key );
+         while( ci.dir == (Direction)key );
          }
 
       LastScreen = Screen;
@@ -4665,11 +4641,9 @@ boolean SaveTheGame (int num, gamestorage_t * game)
    char   filename[MAX_PATH];
    byte   * altbuffer;
 	int    size;
-	int    avail;
    int    savehandle;
    int    crc;
 	int    i;
-   char   letter;
    int myticcount;
    
 	if (num > 15 || num < 0)

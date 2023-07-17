@@ -159,8 +159,6 @@ static void AddXdgDirs(void)
 
 static void BuildDataDirList(void)
 {
-    char *env;
-
     if (datadirs[0])
     {
         return;
