@@ -2104,10 +2104,8 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
  int side, middle, above, bottom;
  maskedwallobj_t * lastmaskobj;
  boolean metal;
- int maskedstart;
 
 	himask=W_GetNumForName("HMSKSTRT")+1;
-   maskedstart=W_GetNumForName("MASKSTRT");
 
 	maskobjlist[maskednum]=(maskedwallobj_t*)Z_LevelMalloc(sizeof(maskedwallobj_t),PU_LEVELSTRUCT,NULL);
 	memset(maskobjlist[maskednum],0,sizeof(maskedwallobj_t));
@@ -2156,7 +2154,7 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
    else if (rt>0)
 		lastmaskobj->vertical = false;
 
-	tilemap[tilex][tiley] = maskednum | 0xc000;
+   tilemap[tilex][tiley] = maskednum | 0xc000;
 	map = &MAPSPOT(tilex,tiley,0);
 
 	if (lastmaskobj->vertical==true)
@@ -3153,7 +3151,7 @@ int SetNextAction(elevator_t*eptr,int action)
 
 void OperateElevatorSwitch(objtype*ob,int elevnum,int checkx,int checky)
 {elevator_t*eptr;
-
+ doorobj_t *door1;
  eptr = &ELEVATOR[elevnum];
 
  if ((eptr->state == ev_mts) ||
@@ -3166,6 +3164,8 @@ void OperateElevatorSwitch(objtype*ob,int elevnum,int checkx,int checky)
 	 #endif
 	 return;
 	}
+
+ door1 = doorobjlist[eptr->door1];
 
  if ((abs(ob->tilex-door1->tilex)<=1) && //switch at source
 	  (abs(ob->tiley-door1->tiley)<=1))

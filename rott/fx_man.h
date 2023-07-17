@@ -104,7 +104,7 @@ int FX_SoundActive( int handle );
 int FX_SoundsPlaying( void );
 int FX_StopSound( int handle );
 int FX_StopAllSounds( void );
-int FX_StartDemandFeedPlayback( void ( *function )( char **ptr, unsigned long *length ),
+int FX_StartDemandFeedPlayback( void ( *function )( byte **ptr, unsigned long *length ),
        int rate, int pitchoffset, int vol, int left, int right,
        int priority, unsigned long callbackval );
 int  FX_StartRecording( int MixRate, void ( *function )( char *ptr, int length ) );
