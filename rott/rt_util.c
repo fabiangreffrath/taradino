@@ -1053,7 +1053,7 @@ void GetPalette(char * palette)
 	}
 }
 
-void SetPalette ( char * pal )
+void SetPalette ( byte * pal )
 {
    VL_SetPalette (pal);
 }
@@ -1261,7 +1261,7 @@ void UL_DisplayMemoryError ( int memneeded )
 =================
 */
 
-void UL_printf (byte *str)
+void UL_printf (char *str)
 {
    printf ("%s ",str);	// Hackish but works - DDOI
 }

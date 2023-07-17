@@ -159,30 +159,9 @@ extern void RecordDemoQuery ( void );
 
 int main (int argc, char *argv[])
 {
-    char *macwd;
     extern char *BATTMAPS, *ROTTMAPS;
 	_argc = argc;
 	_argv = argv;
-
-#if defined(__APPLE__)
-    {
-        /* OS X will give us a path in the form '/Applications/Rise of the Triad.app/Contents/MacOS/Rise of the Triad'.
-           Our data is in Contents/Resources. */
-        char *path;
-        const char suffix[] = "/Resources/";
-        int end;
-        path = (char *)malloc(strlen(argv[0]) + strlen(suffix) + 1);
-        if (path == NULL) return 1;
-        strcpy(path, argv[0]);
-        /* Back up two '/'s. */
-        for (end = strlen(path)-1; end >= 0 && path[end] != '/'; end--);
-        if (end >= 0) for (--end; end >= 0 && path[end] != '/'; end--);
-        strcpy(&path[end], suffix);
-        printf("Changing to working directory: %s\n", path);
-        chdir(path);
-        free(path);
-    }
-#endif
 
    signal (11, crash_print);
 
@@ -271,15 +250,13 @@ int main (int argc, char *argv[])
 //      }
    if (standalone==false)
       {
-      int status1 = 0;
       int status2 = 0;
-      int status3 = 0;
 
       if ( !NoSound && !IS8250 )
          {
          if (!quiet)
             printf( "MU_Startup: " );
-         status1 = MU_Startup(false);
+         MU_Startup(false);
          if (!quiet)
             printf( "%s\n", MUSIC_ErrorString( MUSIC_Error ) );
          }
@@ -308,7 +285,7 @@ int main (int argc, char *argv[])
             {
             if (!quiet)
                printf( "SD_Startup: " );
-            status3 = SD_Startup(false);
+            SD_Startup(false);
             if (!quiet)
                printf( "%s\n", FX_ErrorString( FX_Error ) );
             }
@@ -863,13 +840,13 @@ NoRTL:;
 						//stil no useful filename
 						strcat (tempstr," not found, skipping RTC file ");
 						printf("%s", tempstr);
-						goto NoRTL;
+						goto NoRTC;
 					}
 			   }
 			   if((f = fopen( tempstr, "r" )) == NULL ){ //try opening file
 					strcat (tempstr," not could not be opened, skipping RTC file ");
 					printf("%s", tempstr);
-					goto NoRTL;
+					goto NoRTC;
 			   }else{
 					fread(buf,3,3,f);//is the 3 first letters RTL (RTC)
 				    if (((strstr(buf,"RTL") != 0)||strstr(buf,"RTC") != 0)) {
@@ -1055,7 +1032,6 @@ int NumberOfTeams
 void GameLoop (void)
 {
    boolean done   = false;
-   boolean loadit = false;
    int NextLevel;
 
    wami(1);
@@ -1318,7 +1294,7 @@ void GameLoop (void)
          break;
 
          case ex_died:
-            loadit = done = false;
+            done = false;
 //		   SetTextMode (  ); //12345678
             Died ();
             StopWind();
@@ -1625,10 +1601,8 @@ void QuitGame ( void )
 
 #if (DEVELOPMENT == 1)
    int temp;
-#else
-   byte *txtscn;
-#endif
    int k;
+#endif
 
    MU_FadeOut(200);
    while (MU_FadeActive())
@@ -1675,11 +1649,6 @@ void QuitGame ( void )
    printf("LIGHTRATE =%ld\n",GetLightRateTile());
    printf("\nCENTERY=%ld\n",centery);
 #else
-#if (SHAREWARE==0)
-      txtscn = (byte *) W_CacheLumpNum (W_GetNumForName ("regend"), PU_CACHE, CvtNull, 1);
-#else
-      txtscn = (byte *) W_CacheLumpNum (W_GetNumForName ("shareend"), PU_CACHE, CvtNull, 1);
-#endif
 
 #if (DEBUG == 1)
       px = ERRORVERSIONCOL;
