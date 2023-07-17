@@ -72,6 +72,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "rt_battl.h"
 #include "develop.h"
+#include "m_misc2.h"
 //MED
 #include "memcheck.h"
 
@@ -4791,7 +4792,7 @@ void ReadAnyControl (ControlInfo *ci)
 
 byte * IN_GetScanName (ScanCode scan)
 {
-   byte     **p;
+   char     **p;
    ScanCode *s;
 
    for (s = ExtScanCodes, p = ExtScanNames; *s; p++, s++)
