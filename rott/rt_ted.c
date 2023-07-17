@@ -1128,7 +1128,6 @@ void PreCache( void )
 {
    int i;
 	int total;
-   byte * dummy;
    int maxheapsize;
    int newheap;
 
@@ -1180,7 +1179,7 @@ void PreCache( void )
       ticdelay=CACHETICDELAY;
       for (i=1;i<cacheindex;i++)
 			{
-         dummy=W_CacheLumpNum(cachelist[i].lump,cachelist[i].cachelevel, CvtForType(cachelist[i].type), 1);
+         W_CacheLumpNum(cachelist[i].lump,cachelist[i].cachelevel, CvtForType(cachelist[i].type), 1);
          total+=W_LumpLength(cachelist[i].lump);
          newheap=Z_UsedHeap();
 			currentmem=(newheap*MAXLEDS)/maxheapsize;
@@ -1307,7 +1306,7 @@ DisableScreenStretch();
       {
       for (i=1;i<cacheindex;i++)
          {
-			dummy=W_CacheLumpNum(cachelist[i].lump,cachelist[i].cachelevel, CvtForType(cachelist[i].type), 1);
+			W_CacheLumpNum(cachelist[i].lump,cachelist[i].cachelevel, CvtForType(cachelist[i].type), 1);
          DoLoadGameAction ();
          }
       ShutdownPreCache ();
@@ -1400,7 +1399,7 @@ void CheckRTLVersion
    // Check the version number
    //
    SafeRead( filehandle, &RTLVersion, sizeof( RTLVersion ) );
-   SwapIntelLong(&RTLVersion);
+   SwapIntelLong((int *)&RTLVersion);
    if ( RTLVersion > RTL_VERSION )
       {
       Error(
@@ -3356,7 +3355,6 @@ void SetupDoorLinks (void)
    int  clockx,clocky;
    int  doornumber;
 	word touchx,
-        tile,
 		  touchy;
 
    map = mapplanes[0];
@@ -3364,7 +3362,7 @@ void SetupDoorLinks (void)
    for (j = 0; j < mapheight; j++)
       for (i = 0; i < mapwidth; i++)
       {
-         tile = *map++;
+         map++;
 
          if (MAPSPOT (i, j, 2))
          {

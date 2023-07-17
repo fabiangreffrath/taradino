@@ -344,7 +344,7 @@ void DrawCinematicBackground ( backevent * back )
    if (height!=iGLOBAL_SCREENHEIGHT)
       DrawClearBuffer ();
 
-      {
+   {
       buf=(byte *)bufferofs+ylookup[back->yoffset];
       offset=(back->currentoffset>>FRACTIONBITS);
 
@@ -358,7 +358,7 @@ void DrawCinematicBackground ( backevent * back )
             src=&(pic->data) + ( offset * (pic->height) );
          DrawFilmPost(buf,src,height);
          }
-      }
+   }
 }
 
 /*
@@ -384,7 +384,7 @@ void DrawCinematicMultiBackground ( backevent * back )
    if (height!=iGLOBAL_SCREENHEIGHT)
       DrawClearBuffer ();
 
-      {
+   {
       buf=(byte *)bufferofs+ylookup[back->yoffset];
       offset=(back->currentoffset>>FRACTIONBITS);
 
@@ -398,7 +398,7 @@ void DrawCinematicMultiBackground ( backevent * back )
             src=back->data + ( offset * (back->height) );
          DrawFilmPost(buf,src,height);
          }
-      }
+   }
 }
 
 /*

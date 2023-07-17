@@ -145,7 +145,7 @@ int SD_SetupFXCard ( int * numvoices, int * numbits, int * numchannels)
    if (card==-1) // Check if it is off
       return (0);
 
-      status=FX_SetupCard( card, &device );
+   status=FX_SetupCard( card, &device );
       if ( status == FX_Ok )
          {
          *numvoices=device.MaxVoices;
@@ -289,7 +289,7 @@ boolean SD_SoundOkay ( int sndnum )
 int SD_PlayIt ( int sndnum, int angle, int distance, int pitch )
 {
    int voice;
-   byte * snd;
+   char * snd;
 
 #if (DEVELOPMENT == 1)
 #if (SOUNDTEST == 1)

@@ -313,9 +313,6 @@ static int MenuNum = 0;
 static int handlewhich;
 static int CSTactive = 0;
 static boolean INFXSETUP = false;
-static int MaxVoices;
-static int MaxBits;
-static int MaxChannels;
 
 //
 // MENU CURSOR SHAPES
@@ -4790,7 +4787,7 @@ void ReadAnyControl (ControlInfo *ci)
 //
 //******************************************************************************
 
-byte * IN_GetScanName (ScanCode scan)
+char * IN_GetScanName (ScanCode scan)
 {
    char     **p;
    ScanCode *s;
@@ -4947,10 +4944,6 @@ void FXVolume
    )
 
    {
-   int oldvolume;
-
-   oldvolume = FXvolume;
-
    SliderMenu( &FXvolume, 254, 0, 33, 81, 225, 8, "block3", FX_SetVolume,
       "Sound Volume", "Low", "High" );
 

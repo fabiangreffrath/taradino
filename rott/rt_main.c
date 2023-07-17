@@ -1031,7 +1031,6 @@ int NumberOfTeams
 
 void GameLoop (void)
 {
-   boolean done   = false;
    int NextLevel;
 
    wami(1);
@@ -1294,8 +1293,6 @@ void GameLoop (void)
          break;
 
          case ex_died:
-            done = false;
-//		   SetTextMode (  ); //12345678
             Died ();
             StopWind();
 			 DisableScreenStretch();//bna++ shut off streech mode

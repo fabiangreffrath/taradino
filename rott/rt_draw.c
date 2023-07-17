@@ -2437,7 +2437,6 @@ void InterpolateDoor (visobj_t * plane)
    byte * shape2;
    byte * buf;
    patch_t *p;
-   int pl;
 
    whereami=18;
    dx=(plane->x2-plane->x1+1);
