@@ -11745,10 +11745,8 @@ void A_Repeat(objtype*ob)
 
 void  A_MissileWeapon(objtype *ob)
 {
- int    sound,nspeed,noffset,zoffset;
-
 #if (SHAREWARE == 0)
- int oldyzangle;
+ int oldyzangle = 0;
 #endif
  classtype nobclass = inertobj;
  statetype *nstate = NULL;
@@ -11774,10 +11772,10 @@ void  A_MissileWeapon(objtype *ob)
 	 }
  // Move sounds, flags into switch cases
 
-	sound = BAS[ob->obclass].fire;
-	nspeed = 0x4000;
-	noffset = 0x8000;
-	zoffset = 0;
+	int sound = BAS[ob->obclass].fire;
+	int nspeed = 0x4000;
+	int noffset = 0x8000;
+	int zoffset = 0;
 	switch (ob->obclass)
     {
 
