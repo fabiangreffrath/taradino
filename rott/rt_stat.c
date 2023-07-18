@@ -1779,7 +1779,7 @@ void CheckCriticalStatics(void)
 	 ddt = rtemp->next;
 
 	 if (rtemp->ticcount <=0)
-		 {int stype;
+		 {int stype = 0;
 
 		  stilex = rtemp->tilex;
 		  stiley = rtemp->tiley;

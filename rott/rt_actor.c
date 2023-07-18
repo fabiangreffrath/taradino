@@ -6506,8 +6506,6 @@ movement_status CheckRegularWalls(objtype *ob,int tryx,int tryy,int tryz)
    boolean ISPLAYER=false;
 
    ocl = ob->obclass;
-   tryz=tryz;
-
 
    if (ocl != playerobj)
          {
@@ -11751,8 +11749,8 @@ void  A_MissileWeapon(objtype *ob)
 #if (SHAREWARE == 0)
  int oldyzangle;
 #endif
- classtype nobclass;
- statetype*nstate;
+ classtype nobclass = inertobj;
+ statetype *nstate = NULL;
 
 
  if ((ob->obclass == wallopobj) || (ob->obclass == roboguardobj));

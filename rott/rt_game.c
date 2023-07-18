@@ -397,7 +397,7 @@ void DrawPlayScreen (boolean bufferofsonly)
 
    {
    pic_t *shape;
-   int    shapenum;
+   int    shapenum = 0;
    int ShowKillsYoffset = 0;//bna++
 
 //return; 
@@ -1834,7 +1834,6 @@ void DrawPPic (int xpos, int ypos, int width, int height, byte *src, int num, bo
    int x;
    int y;
    int planes;
-   byte mask;
    byte pixel;
    int k;
    int amt;
@@ -1844,14 +1843,10 @@ void DrawPPic (int xpos, int ypos, int width, int height, byte *src, int num, bo
    else
       amt = -8;
 
-   mask = 1;
-
    olddest = ylookup[ypos] + xpos;
 
    for (planes = 0; planes < 4; planes++)
    {
-      VGAMAPMASK (mask);
-
       dest = olddest;
 
       dest += planes;
@@ -1882,8 +1877,6 @@ void DrawPPic (int xpos, int ypos, int width, int height, byte *src, int num, bo
 
          dest += (linewidth-width*4);
       }
-
-      mask <<= 1;
    }
 }
 
@@ -2040,7 +2033,6 @@ void SingleDrawPPic (int xpos, int ypos, int width, int height, byte *src, int n
    int x;
 	int y;
    int planes;
-   byte mask;
    byte pixel;
    int k;
    int amt;
@@ -2050,14 +2042,10 @@ void SingleDrawPPic (int xpos, int ypos, int width, int height, byte *src, int n
    else
       amt = -8;
 
-   mask = 1;
-
    olddest = (byte *)(bufferofs - screenofs + ylookup[ypos] + xpos);
 
    for (planes = 0; planes < 4; planes++)
    {
-      VGAMAPMASK (mask);
-
       dest = olddest;
 
       dest += planes;
@@ -2081,8 +2069,6 @@ void SingleDrawPPic (int xpos, int ypos, int width, int height, byte *src, int n
 
          dest += (linewidth-width*4);
       }
-
-      mask <<= 1;
    }
 }
 
@@ -2371,7 +2357,7 @@ void GM_UpdateBonus
 
    {
    pic_t *shape;
-   int    shapenum;
+   int    shapenum = 0;
 
    if ( powerup )
       {

@@ -3067,11 +3067,7 @@ void ScaleAndRotateBuffer (int startangle, int endangle, int startscale, int end
 
    int Xh = iGLOBAL_SCREENWIDTH/2;
    int Yh = iGLOBAL_SCREENHEIGHT/2;
- //  Xh = 259;
- //  Yh = 109;
 
-   time = time;
-////zxcv
 	DisableScreenStretch();//bna++
 
 

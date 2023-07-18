@@ -1317,6 +1317,7 @@ DisableScreenStretch();
 
       MapDebug("Map Number %d\n",gamestate.mapon);
       MapDebug("sizeoflevel=%d\n",Z_UsedLevelHeap());
+      MapDebug("TotalPrecached: %ld\n",(long)total);
       }
 #if (PRECACHETEST == 1)
    SoftError("<<<<<<<<<<<<<<<<<<<<<<<Precaching done\n");

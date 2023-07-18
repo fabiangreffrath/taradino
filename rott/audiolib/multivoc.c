@@ -112,7 +112,7 @@ static void ( *MV_MixFunction )( VoiceNode *voice, int buffer );
 
 static int MV_MaxVolume = 63;
 
-char  *MV_HarshClipTable;
+unsigned char  *MV_HarshClipTable;
 char  *MV_MixDestination;
 short *MV_LeftVolume;
 short *MV_RightVolume;
@@ -2758,7 +2758,7 @@ int MV_Init
       }
 
    MV_Voices = ( VoiceNode * )ptr;
-   MV_HarshClipTable = ptr + ( MV_TotalMemory - sizeof( HARSH_CLIP_TABLE_8 ) );
+   MV_HarshClipTable = (unsigned char *) ptr + ( MV_TotalMemory - sizeof( HARSH_CLIP_TABLE_8 ) );
 
    // Set number of voices before calculating volume table
    MV_MaxVoices = Voices;
