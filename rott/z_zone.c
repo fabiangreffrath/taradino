@@ -127,8 +127,6 @@ void Z_Free(void *p)
   block->prev->next = block->next;
   block->next->prev = block->prev;
 
-  memset(p, 0, block->size);
-
   heapsize -= block->size;
 
   free(block);
