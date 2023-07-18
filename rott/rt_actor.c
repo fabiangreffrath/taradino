@@ -7289,7 +7289,8 @@ void PushWallMove(int num)
 }
 
 void ActorMovement (objtype *ob)
-{int tryx,tryy,tryz,limitok,max,friction,ocl;
+{
+  int max = 0;
 
 
 
@@ -7310,12 +7311,12 @@ void ActorMovement (objtype *ob)
 	}
 
 
- limitok = 1;
+ int limitok = 1;
 
- friction = ACTORFRICTION;
+ int friction = ACTORFRICTION;
  if (!(ob->flags & FL_DYING))
     friction >>= 1;
- ocl = ob->obclass;
+ int ocl = ob->obclass;
  if (ocl == playerobj)
     {
     playertype *pstate;
@@ -7361,9 +7362,9 @@ void ActorMovement (objtype *ob)
 
   }
 
-  tryx = ob->x + ob->momentumx;
-  tryy = ob->y + ob->momentumy;
-  tryz = ob->z + (ob->momentumz >> 16);
+  int tryx = ob->x + ob->momentumx;
+  int tryy = ob->y + ob->momentumy;
+  int tryz = ob->z + (ob->momentumz >> 16);
 
  if (ocl != playerobj)
 	 ob->flags &= ~FL_STUCK;
