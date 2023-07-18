@@ -268,6 +268,9 @@ void WritePacket (void * buffer, int len, int destination)
 {
    word      crc;
 
+    if (!rottcom)
+        return;
+
    // set send command
 	rottcom->command=CMD_SEND;
 
