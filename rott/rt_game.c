@@ -4986,6 +4986,7 @@ boolean LoadTheGame (int num, gamestorage_t * game)
 
 	// Free up the current level
 	Z_FreeTags (PU_LEVELSTRUCT, PU_LEVELEND);       // Free current level
+	InitStaticList();
 
    gamestate.battlemode = battle_StandAloneGame;
    BATTLE_SetOptions( &BATTLE_Options[ battle_StandAloneGame ] );
