@@ -4790,10 +4790,9 @@ void SpawnMissileSmoke(objtype *ob)
 
 void T_Projectile (objtype *ob)
    {
-   objtype *owner;
-   playertype * pstate;
+   playertype * pstate = 0;
 
-   owner = (objtype*)(ob->whatever);
+   objtype *owner = (objtype*)(ob->whatever);
 
    if (owner->obclass == playerobj)
       M_LINKSTATE(owner,pstate);
