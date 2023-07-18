@@ -81,7 +81,9 @@ static void WriteUDPPacket()
 
 void InitROTTNET (void)
 {
+#ifndef _WIN32
 	int netarg;
+#endif
 
 	if (ComStarted==true)
 		return;

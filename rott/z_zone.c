@@ -104,8 +104,8 @@ memzone_t *Z_AllocateZone (int size)
 
         header = malloc (size+sizeof(memzone_t));
         if (!header)
-                Error ("Z_AllocateZone: Couldn't malloc %zd bytes avail=%d\n",
-                size+sizeof(memzone_t), Z_AvailHeap());
+                Error ("Z_AllocateZone: Couldn't malloc %ld bytes avail=%ld\n",
+                (long)size+sizeof(memzone_t), (long)Z_AvailHeap());
         header->size = size;
         Z_ClearZone (header);
         return header;

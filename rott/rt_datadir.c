@@ -94,6 +94,7 @@ static void AddDataDir(char *dir)
     }
 }
 
+#ifndef _WIN32
 static void AddDataPath(const char *path, const char *suffix)
 {
     char *left, *p, *dup_path;
@@ -124,7 +125,6 @@ static void AddDataPath(const char *path, const char *suffix)
     free(dup_path);
 }
 
-#ifndef _WIN32
 static void AddXdgDirs(void)
 {
     char *env, *tmp_env;
