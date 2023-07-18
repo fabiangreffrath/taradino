@@ -8900,7 +8900,8 @@ void UpdateNMELinkedActors(objtype*ob)
 
 void T_OrobotChase(objtype*ob)
    {
-   int dx,dy;
+   int dx = 0;
+   int dy = 0;
 
 
    if (CheckLine(ob,PLAYER[0],SIGHT))
@@ -8928,7 +8929,7 @@ void T_OrobotChase(objtype*ob)
 
       if (CheckLine(ob,PLAYER[0],SIGHT))
          {
-         int inrange;
+         int inrange = 0;
 
          switch(gamestate.difficulty)
             {
