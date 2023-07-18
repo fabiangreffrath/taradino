@@ -11941,13 +11941,15 @@ void SelectRollDir(objtype *ob)
 
 void SelectDodgeDir (objtype *ob)
 {
-	int      dx,dy,i,tx,ty;
-	unsigned absdx,absdy;
-	dirtype  dirtry[5];
-	dirtype  turnaround,tdir,olddir;
+	int dx = 0;
+  int dy = 0;
+  int tx = 0;
+  int ty = 0;
+	dirtype dirtry[5] = {0};
+	dirtype turnaround = {0};
+  dirtype tdir = {0};
 
-
-	olddir = ob->dir;
+	dirtype olddir = ob->dir;
 	if (ob->flags & FL_FIRSTATTACK)
 	{
 	//
@@ -12009,8 +12011,8 @@ void SelectDodgeDir (objtype *ob)
 //
 // randomize a bit for dodging
 //
-	absdx = abs(dx);
-	absdy = abs(dy);
+	unsigned int absdx = abs(dx);
+	unsigned int absdy = abs(dy);
 
 	if (absdx > absdy)
 	{
@@ -12036,7 +12038,7 @@ void SelectDodgeDir (objtype *ob)
 
 	ZEROMOM;
 
-	for (i=0;i<5;i++)
+	for (size_t i=0;i<5;i++)
 	  {if ((dirtry[i] == nodir) || (dirdiff[dirtry[i]][olddir] > 1))
 		 continue;
 
