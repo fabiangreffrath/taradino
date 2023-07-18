@@ -4790,10 +4790,9 @@ void SpawnMissileSmoke(objtype *ob)
 
 void T_Projectile (objtype *ob)
    {
-   objtype *owner;
-   playertype * pstate;
+   playertype * pstate = 0;
 
-   owner = (objtype*)(ob->whatever);
+   objtype *owner = (objtype*)(ob->whatever);
 
    if (owner->obclass == playerobj)
       M_LINKSTATE(owner,pstate);
@@ -7289,7 +7288,8 @@ void PushWallMove(int num)
 }
 
 void ActorMovement (objtype *ob)
-{int tryx,tryy,tryz,limitok,max,friction,ocl;
+{
+  int max = 0;
 
 
 
@@ -7310,12 +7310,12 @@ void ActorMovement (objtype *ob)
 	}
 
 
- limitok = 1;
+ int limitok = 1;
 
- friction = ACTORFRICTION;
+ int friction = ACTORFRICTION;
  if (!(ob->flags & FL_DYING))
     friction >>= 1;
- ocl = ob->obclass;
+ int ocl = ob->obclass;
  if (ocl == playerobj)
     {
     playertype *pstate;
@@ -7361,9 +7361,9 @@ void ActorMovement (objtype *ob)
 
   }
 
-  tryx = ob->x + ob->momentumx;
-  tryy = ob->y + ob->momentumy;
-  tryz = ob->z + (ob->momentumz >> 16);
+  int tryx = ob->x + ob->momentumx;
+  int tryy = ob->y + ob->momentumy;
+  int tryz = ob->z + (ob->momentumz >> 16);
 
  if (ocl != playerobj)
 	 ob->flags &= ~FL_STUCK;
@@ -8900,7 +8900,8 @@ void UpdateNMELinkedActors(objtype*ob)
 
 void T_OrobotChase(objtype*ob)
    {
-   int dx,dy;
+   int dx = 0;
+   int dy = 0;
 
 
    if (CheckLine(ob,PLAYER[0],SIGHT))
@@ -8928,7 +8929,7 @@ void T_OrobotChase(objtype*ob)
 
       if (CheckLine(ob,PLAYER[0],SIGHT))
          {
-         int inrange;
+         int inrange = 0;
 
          switch(gamestate.difficulty)
             {
@@ -11744,10 +11745,8 @@ void A_Repeat(objtype*ob)
 
 void  A_MissileWeapon(objtype *ob)
 {
- int    sound,nspeed,noffset,zoffset;
-
 #if (SHAREWARE == 0)
- int oldyzangle;
+ int oldyzangle = 0;
 #endif
  classtype nobclass = inertobj;
  statetype *nstate = NULL;
@@ -11773,10 +11772,10 @@ void  A_MissileWeapon(objtype *ob)
 	 }
  // Move sounds, flags into switch cases
 
-	sound = BAS[ob->obclass].fire;
-	nspeed = 0x4000;
-	noffset = 0x8000;
-	zoffset = 0;
+	int sound = BAS[ob->obclass].fire;
+	int nspeed = 0x4000;
+	int noffset = 0x8000;
+	int zoffset = 0;
 	switch (ob->obclass)
     {
 
@@ -11940,13 +11939,15 @@ void SelectRollDir(objtype *ob)
 
 void SelectDodgeDir (objtype *ob)
 {
-	int      dx,dy,i,tx,ty;
-	unsigned absdx,absdy;
-	dirtype  dirtry[5];
-	dirtype  turnaround,tdir,olddir;
+	int dx = 0;
+  int dy = 0;
+  int tx = 0;
+  int ty = 0;
+	dirtype dirtry[5] = {0};
+	dirtype turnaround = {0};
+  dirtype tdir = {0};
 
-
-	olddir = ob->dir;
+	dirtype olddir = ob->dir;
 	if (ob->flags & FL_FIRSTATTACK)
 	{
 	//
@@ -12008,8 +12009,8 @@ void SelectDodgeDir (objtype *ob)
 //
 // randomize a bit for dodging
 //
-	absdx = abs(dx);
-	absdy = abs(dy);
+	unsigned int absdx = abs(dx);
+	unsigned int absdy = abs(dy);
 
 	if (absdx > absdy)
 	{
@@ -12035,7 +12036,7 @@ void SelectDodgeDir (objtype *ob)
 
 	ZEROMOM;
 
-	for (i=0;i<5;i++)
+	for (size_t i=0;i<5;i++)
 	  {if ((dirtry[i] == nodir) || (dirdiff[dirtry[i]][olddir] > 1))
 		 continue;
 

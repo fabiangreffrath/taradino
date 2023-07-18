@@ -279,13 +279,9 @@ enum_eventtype GetEventType ( void )
 */
 void ParseBack ( eventtype * event )
 {
-   char name[10];
-   char name2[10];
-   int duration;
-   int yoffset;
-   int width;
-   int startx;
-   int endx;
+   char name[10] = {0};
+   char name2[10] = {0};
+   int width = 0;
 
    GetToken (false);
    strcpy(&(name[0]),token);
@@ -297,9 +293,9 @@ void ParseBack ( eventtype * event )
       }
 
    GetToken (false);
-   duration=ParseNum(token);
+   int duration=ParseNum(token);
    GetToken (false);
-   yoffset=ParseNum(token);
+   int yoffset=ParseNum(token);
    if (
        (event->effecttype==background_noscrolling) ||
        (event->effecttype==background_scrolling)
@@ -318,8 +314,8 @@ void ParseBack ( eventtype * event )
       width = patch->width;
       }
 
-   startx=0;
-   endx=0;
+   int startx=0;
+   int endx=0;
    if (
        (event->effecttype==backdrop_scrolling) ||
        (event->effecttype==background_scrolling) ||
