@@ -1180,6 +1180,8 @@ void PreCache( void )
          total+=W_LumpLength(cachelist[i].lump);
          newheap=Z_UsedHeap();
 			currentmem=(newheap*MAXLEDS)/maxheapsize;
+			if (currentmem >= MAXLEDS)
+			    currentmem = MAXLEDS - 1;
          while (lastmem<=currentmem)
             {//SetTextMode (  );
    			if ( iGLOBAL_SCREENWIDTH == 320) {
