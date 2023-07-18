@@ -710,7 +710,7 @@ playbackstatus MV_GetNextVOCBlock
             if ( voice->LoopEnd == NULL )
                {
                voice->LoopCount = get_le16(ptr);
-               voice->LoopStart = ptr + blocklength;
+               voice->LoopStart = (char *)ptr + blocklength;
                }
             ptr += blocklength;
             break;
@@ -726,7 +726,7 @@ playbackstatus MV_GetNextVOCBlock
                {
                if ( ( voice->LoopCount > 0 ) && ( voice->LoopStart != NULL ) )
                   {
-                  ptr = voice->LoopStart;
+                  ptr = (unsigned char *)voice->LoopStart;
                   if ( voice->LoopCount < 0xffff )
                      {
                      voice->LoopCount--;
@@ -789,8 +789,8 @@ playbackstatus MV_GetNextVOCBlock
 
    if ( voice->Playing )
       {
-      voice->NextBlock    = ptr + blocklength;
-      voice->sound        = ptr;
+      voice->NextBlock    = (char *)ptr + blocklength;
+      voice->sound        = (char *)ptr;
 
       voice->SamplingRate = samplespeed;
       voice->RateScale    = ( voice->SamplingRate * voice->PitchScale ) / MV_MixRate;
