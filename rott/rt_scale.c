@@ -577,16 +577,6 @@ void ScaleTransparentShape (visobj_t * sprite)
       frac=0;
    x2 = x2 >= viewwidth ? viewwidth-1 : x2;
 
-#if 0
-   for (; x1<=x2 ; x1++, frac += dc_iscale)
-      {
-      if (posts[x1].wallheight>sprite->viewheight)
-         continue;
-      VGAWRITEMAP(x1&3);
-      VGAREADMAP(x1&3);
-      ScaleTransparentPost(((p->collumnofs[frac>>SFRACBITS])+shape),(byte *)bufferofs+(x1>>2),sprite->h2);
-      }
-#endif
    startx=x1;
    startfrac=frac;
 
