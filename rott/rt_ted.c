@@ -1293,7 +1293,7 @@ DisableScreenStretch();
       OpenMapDebug();
 
       MapDebug("Map Number %d\n",gamestate.mapon);
-      MapDebug("sizeoflevel=%d\n",Z_UsedLevelHeap());
+      MapDebug("sizeoflevel=%ld\n",(long)Z_UsedLevelHeap());
       MapDebug("TotalPrecached: %ld\n",(long)total);
       }
 #if (PRECACHETEST == 1)
@@ -1467,7 +1467,7 @@ void ReadROTTMap
       lseek( filehandle, pos, SEEK_SET );
       SafeRead( filehandle, buffer, compressed );
 
-      mapplanes[ plane ] = Z_Malloc( expanded, PU_LEVEL, &mapplanes[ plane ] );
+      mapplanes[ plane ] = Z_Malloc( expanded, PU_LEVEL, (void **)&mapplanes[ plane ] );
 
       //
       // unRLEW, skipping expanded length
@@ -1815,7 +1815,7 @@ void LoadTedMap
       buffer = SafeMalloc( compressed );
       SafeRead( maphandle, buffer, compressed );
 
-      mapplanes[ plane ] = Z_Malloc( expanded, PU_LEVEL, &mapplanes[ plane ] );
+      mapplanes[ plane ] = Z_Malloc( expanded, PU_LEVEL, (void **)&mapplanes[ plane ] );
 
       //
       // unRLEW, skipping expanded length
