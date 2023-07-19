@@ -620,15 +620,8 @@ void SetupAnimatedWall(int which)
    aw->basetexture=texture;
    aw->texture=texture;
 
-   if (DoPanicMapping()==true)
-      {
-      PreCacheLump(aw->basetexture,PU_CACHEWALLS,cache_pic_t);
-      }
-   else
-      {
       for (i=aw->basetexture;i<aw->basetexture+animwallsinfo[which].numanims;i++)
          PreCacheLump(i,PU_CACHEWALLS,cache_pic_t);
-      }
 }
 
 
@@ -1284,18 +1277,6 @@ void SpawnStatic (int tilex, int tiley, int mtype, int zoffset)
                  (mtype == stat_metalfrag) || (mtype == stat_missmoke)
                 );
 
-     if (DoPanicMapping())
-        {
-        if (temp->numanims && (!onetimer))
-           {
-           temp->flags &= ~FL_ACTIVE;
-           temp->numanims = 0;
-           GameRandomNumber("SpawnStatic",mtype);
-           }
-        }
-
-     else
-        {
         if (temp->numanims)
            {
            if (!onetimer)
@@ -1315,10 +1296,6 @@ void SpawnStatic (int tilex, int tiley, int mtype, int zoffset)
             (temp->itemnumber == stat_emptystatue) ||
             (temp->itemnumber == stat_standardpole))
            temp->flags|=FL_ROTATING;
-        }
-
-
-
 
      if (mtype != stat_missmoke)
 		  sprites[tilex][tiley] = temp;
@@ -1725,9 +1702,6 @@ void AnimateWalls(void)
 {
 	int i;
 	animwall_t * aw;
-
-   if (DoPanicMapping()==true)
-      return;
 
    for(i=0;i<MAXANIMWALLS;i++)
 		{

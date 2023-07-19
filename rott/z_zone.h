@@ -29,8 +29,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <sys/types.h>
 
-extern int lowmemory;
-
 typedef enum {
     // tags < PU_PURGELEVEL are not overwritten until freed
     PU_STATIC,      // static entire execution time

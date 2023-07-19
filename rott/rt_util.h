@@ -29,9 +29,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ERRORVERSIONROW 1
 #define ERRORVERSIONCOL 67
 
-#define LOWMEMORYROW 18
-#define LOWMEMORYCOL 1
-
 #include "develop.h"
 
 extern  int    egacolor[16];

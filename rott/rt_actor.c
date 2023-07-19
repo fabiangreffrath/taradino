@@ -440,15 +440,6 @@ static boolean MissileSound      =    true;
 
 boolean FirstExplosionState(statetype *state)
    {
-   if (DoPanicMapping())
-      {
-      if (state == &s_altexplosion1)
-         return true;
-      else
-         return false;
-      }
-   else
-      {
       if ((state == &s_explosion1) ||
           (state == &s_grexplosion1) ||
           (state == &s_staticexplosion1)
@@ -456,8 +447,6 @@ boolean FirstExplosionState(statetype *state)
          return true;
       else
          return false;
-      }
-
    }
 
 
@@ -1179,19 +1168,10 @@ void ApplyGravity(objtype *ob)
 
 void NewState (objtype *ob, statetype *newstate)
 {
-   if (DoPanicMapping() &&
-       ((newstate == &s_explosion1) ||
-        (newstate == &s_grexplosion1) ||
-        (newstate == &s_staticexplosion1)
-       )
-      )
-      ob->state = &s_altexplosion1;
-   else{
 #if (BNACRASHPREVENT == 1)//crashed here when oscuro and larves were all killed
 		if (ob == 0){return;}
 #endif
       ob->state = newstate;
-   }
    SetVisiblePosition(ob,ob->x,ob->y);
 #if (BNACRASHPREVENT == 1)
 		if (ob->state == 0){return;}
@@ -3805,9 +3785,6 @@ void SpawnParticles(objtype*ob,int which,int numparticles)
             }
 
          }
-
-      if (lowmemory && (gibtype >= gt_rib) && (gibtype <= gt_limb))
-         gibtype = gt_organ;
 
       if
          (
@@ -11048,7 +11025,7 @@ void T_Use(objtype*ob)
   {
 #if (SHAREWARE == 0)
    case b_darianobj:
-    if (touchsprite && !DoPanicMapping())
+    if (touchsprite)
        touchsprite->flags |= FL_ACTIVE;
 	 if ((!sprites[PLAYER[0]->tilex][PLAYER[0]->tiley]) && (ob->areanumber == PLAYER[0]->areanumber))
 	  {SpawnNewObj(PLAYER[0]->tilex,PLAYER[0]->tiley,&s_dspear1,spearobj);

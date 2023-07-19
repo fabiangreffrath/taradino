@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define MAXMEMORYSIZE (8 << 20)
 
-int lowmemory = 0;
 int zonememorystarted = 0;
 
 // Minimum chunk size at which blocks are allocated
