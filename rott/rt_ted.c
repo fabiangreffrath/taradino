@@ -1909,13 +1909,6 @@ void SetupWalls( void )
          if (tile <= 32)
             {
             index = tile;
-#if 0
-            if (tile==12)
-               {
-               if (MAPSPOT(i,j,2)==0)
-                  MAPSPOT(i,j,2)=21;
-               }
-#endif
             }
          else
             index = tile-3;
@@ -2711,18 +2704,6 @@ void SetupMaskedWalls( void )
                      Error ("Illegal Maskedwall platform value at x=%d y=%d\n",i,j);
                      break;
 						}
-#if 0
-               if (IsPlatform(i+1,j))
-                  {
-                  if ( (IsPlatform(i,j+1)) || (IsPlatform(i,j-1)) )
-			            SpawnStatic(i,j,83,MAPSPOT(i,j,2));
-                  }
-               else if (IsPlatform(i-1,j))
-                  {
-                  if ( (IsPlatform(i,j+1)) || (IsPlatform(i,j-1)) )
-			            SpawnStatic(i,j,83,MAPSPOT(i,j,2));
-                  }
-#endif
                }
             else
                Error("You have what appears to be a platform ontop\n a wall at x=%d y=%d\n",i,j);
@@ -3590,15 +3571,6 @@ void SetupInanimateActors (void)
             case 193:
                SpawnSpring(i,j);
                break;
-
-#if 0
-            case 460:
-//               if ( gamestate.Product != ROTT_SHAREWARE )
-                  {
-                  SpawnNewObj(i,j,&s_wind,inertobj);
-                  }
-               break;
-#endif
 
             case 462:
             case 463:
@@ -4902,28 +4874,8 @@ void DoRegisterConversionForegroundPlane (void)
    {
 //   int i,j;
 //   word * map;
+//TODO: This function doesn't do anything.
 
-
-#if 0
-	for (j=0;j<mapheight;j++)
-      {
-      for(i=0;i<mapwidth;i++)
-			{
-         map=&MAPSPOT(i,j,1);
-         switch (*map)
-            {
-            //sprites
-            case 42:
-            case 43:
-            case 63:
-            case 64:
-               *map = 43;
-               break;
-
-            }
-         }
-      }
-#endif
    }
 
 /*
@@ -4964,24 +4916,6 @@ void SetupGameLevel (void)
 {
 	int crud;
 	int i;
-
-#if 0
-   mapwidth = mapheight = 128;
-
-   InsaneDump();
-   /*
-   for(i=0;i<11;i++)
-     {GetEpisode(i);
-      LoadROTTMap(i);
-      MapDebug("\n//================================//");
-      MapDebug("\n//   SHAREWARE LEVEL %d            //",i);
-      MapDebug("\n//================================//\n\n");
-
-      PrintTileStats();
-     }
-   */
-   Error("okay");
-#endif
 
 	insetupgame=true;
 
