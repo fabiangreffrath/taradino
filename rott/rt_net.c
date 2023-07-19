@@ -322,14 +322,6 @@ void InitializeGameCommands( void )
 			server=consoleplayer^1;
          }
       }
-#if 0
-#if (DEVELOPMENT == 1)
-      if (IsServer)
-         ComError("I am the server\n");
-      ComError("consoleplayer=%ld\n",consoleplayer);
-      ComError("server=%ld mynumber=%ld\n",server,consoleplayer);
-#endif
-#endif
 }
 
 
@@ -448,9 +440,6 @@ void ShutdownGameCommands( void )
 void ShutdownClientControls ( void )
 {
    int i;
-#if (DEVELOPMENT == 1)
-   SoftError ("LARGEST time difference=%ld\n",largesttime);
-#endif
    controlupdatestarted=0;
    for (i=0;i<numplayers;i++)
        {
@@ -571,10 +560,6 @@ void StartupClientControls ( void )
          }
       }
 
-
-#if (DEVELOPMENT == 1)
-//   ComError("StartupClientControls: GetTicCount()=%ld oldtime=%ld controlupdatetime=%ld\n",GetTicCount(),oldtime,controlupdatetime);
-#endif
 
    if ((demoplayback==false) && (standalone==false))
       {
@@ -751,6 +736,7 @@ void UpdateClientControls ( void )
 // take out
    if (modemgame==true)
       {
+//TODO: Not sure if that's DEVELOPMENT code or not.
 //#if (DEVELOPMENT == 1)
       if (PanicPressed==true)
          {
@@ -799,9 +785,6 @@ void CheckForPacket ( void )
       if (badpacket==0)
          {
          ProcessPacket(&ROTTpacket[0], rottcom->remotenode);
-         #if (DEVELOPMENT == 1)
-//         ComError("CheckForPacket: from=%ld\n",rottcom->remotenode);
-         #endif
          }
       else
          RequestPacket (LastCommandTime[rottcom->remotenode]+controldivisor, rottcom->remotenode, controldivisor);
@@ -991,10 +974,6 @@ void PrepareLocalPacket ( void )
    if (modemgame==true)
       SendPacket (pkt, server);
 
-#if (DEVELOPMENT == 1)
-//   ComError("packet sent: realtime=%ld time=%ld type=%ld dest=%ld\n",GetTicCount(),pkt->time,pkt->type,server);
-#endif
-
    controlupdatetime+=controldivisor;
    waminot();
 }
@@ -1144,9 +1123,6 @@ void SendPacket (void * pkt, int dest)
       ComError("SendPacket:Problems\n");
    else
       WritePacket(pkt,GetPacketSize(pkt),dest);
-#if (DEVELOPMENT == 1)
-//   ComError( "SendPacket: time=%ld dest=%ld\n",((MoveType *)pkt)->time,dest);
-#endif
 }
 
 //****************************************************************************
@@ -1997,12 +1973,6 @@ void RequestPacket (int time, int dest, int numpackets)
    COM_RequestType request;
    int i;
 
-
-#if (DEVELOPMENT == 1)
-   if (modemgame==false)
-      Error("Called Request Packet outside of modem game\n");
-#endif
-
    request.type=COM_REQUEST;
    request.time=time;
    request.numpackets=numpackets/controldivisor;
@@ -2035,10 +2005,6 @@ void RequestPacket (int time, int dest, int numpackets)
    // send out the packet
 
    WritePacket (&request, GetPacketSize(&request), dest);
-
-#if (DEVELOPMENT == 1)
-//   ComError( "BADPKT, request sent at %ld lgt=%ld dest=%ld\n",GetTicCount(),time,dest);
-#endif
 }
 
 //****************************************************************************
@@ -2375,9 +2341,6 @@ void ServerLoop( void )
       while(1)
          {
          ProcessServer();
-#if (DEVELOPMENT == 1)
-         Z_CheckHeap();
-#endif
          CalcTics();
          if (restartgame==true)
             break;
@@ -2679,22 +2642,6 @@ void UpdatePlayerObj ( int player )
    if (demoplayback||demorecord) {
       SoftError("  dmx=%4x dmy=%4x da=%4x time=%5d\n",pstate->dmomx,pstate->dmomy,pstate->angle>>11,oldpolltime);
    }
-#if 0
-#if (DEVELOPMENT == 1)
-         if ((modemgame==true) || (demoplayback==true) || (demorecord==true))
-		   {
-			ComError( "player#%2ld\n",player);
-		   ComError( "momx = %6ld\n", PLAYER[player]->momentumx);
-		   ComError( "momy = %6ld\n", PLAYER[player]->momentumy);
-		   ComError( "   x = %6ld\n", PLAYER[player]->x);
-		   ComError( "   y = %6ld\n", PLAYER[player]->y);
-		   ComError( "   z = %6ld\n", PLAYER[player]->z);
-		   ComError( "   a = %6ld\n", PLAYER[player]->angle);
-		   if (pstate->buttonstate[bt_attack])
-			   ComError( "FIRING\n");
-         }
-#endif
-#endif
 }
 
 
