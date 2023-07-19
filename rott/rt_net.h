@@ -54,9 +54,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define COM_GAMEACK 18
 #define COM_ENDGAME  19
 #define COM_SYNCTIME 20
-#if (SYNCCHECK==1)
-#define COM_SYNCCHECK 21
-#endif
 #define COM_SOUNDANDDELTA  22
 #define COM_EXIT    23
 #define COM_GAMEEND 24
@@ -319,12 +316,6 @@ extern boolean    GamePaused;
 extern boolean    battlegibs;
 
 extern boolean    remoteridicule;
-
-#if (SYNCCHECK==1)
-extern int        lastsynccheck;
-extern COM_CheckSyncType PlayerSync[MAXPLAYERS];
-void CheckForSyncCheck ( void );
-#endif
 
 int GamePacketSize( void );
 
