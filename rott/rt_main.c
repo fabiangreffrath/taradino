@@ -303,21 +303,6 @@ int main (int argc, char *argv[])
       }
    I_StartupTimer();
    I_StartupKeyboard();
-#if 0
-#if (SHAREWARE == 1)
-   if ((!SOUNDSETUP) && (standalone==false))
-      {
-      byte * txtscn;
-      int i;
-
-      for (i=0;i<20;i++)
-         printf("\n");
-      txtscn = (byte *) W_CacheLumpNum (W_GetNumForName ("rotts10"), PU_CACHE);
-      memcpy ((byte *)0xB8000, txtscn, 4000);
-      I_Delay (600);
-      }
-#endif
-#endif
    locplayerstate = &PLAYERSTATE[consoleplayer];
 
    if (standalone==true)
@@ -2167,13 +2152,6 @@ void PollKeyboard
       autopressed = false;
       }
 
-#if 0
-   if ( modemgame == false )
-      {
-      CheckDevelopmentKeys();
-      }
-#endif
-
    if ( ( MSG.messageon == false ) && ( !quitactive ) )
       {
       if ( ( Keyboard[ buttonscan[ bt_message ] ] ) && ( BATTLEMODE ) )
@@ -2352,23 +2330,6 @@ void PollKeyboard
             IN_UpdateKeyboard();
             }
          }
-    #if 0
-      if ( Keyboard[ sc_M ] )
-         {
-         char str[ 50 ] = "Mouse Y-Rotation Input Scale ";
-         char str2[ 10 ];
-
-         if ( Keyboard[ sc_RShift ] )
-            mouse_ry_input_scale += 50;
-         else
-            mouse_ry_input_scale -= 50;
-
-         itoa(mouse_ry_input_scale,str2,10);
-         strcat( str, str2 );
-         AddMessage( str, MSG_SYSTEM );
-
-         }
-    #endif
       // Increase volume
       if ( Keyboard[ sc_CloseBracket ] )
          {
