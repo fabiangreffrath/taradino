@@ -105,11 +105,7 @@ boolean newlevel = false;
 boolean infopause;
 boolean quiet = false;
 
-#if (DEVELOPMENT == 1)
-boolean DebugOk = true;
-#else
 boolean DebugOk = false;
-#endif
 
 #if (WHEREAMI==1)
 int programlocation=-1;
@@ -1584,19 +1580,10 @@ void ShutDown ( void )
 
 //===========================================================================
 
-#if (DEVELOPMENT == 1)
-   extern int totallevelsize;
-#endif
-
 void QuitGame ( void )
 {
 #if (DEBUG == 1)
    char buf[5];
-#endif
-
-#if (DEVELOPMENT == 1)
-   int temp;
-   int k;
 #endif
 
    MU_FadeOut(200);
@@ -1610,41 +1597,6 @@ void QuitGame ( void )
    PrintTileStats();
    SetTextMode();
 
-#if (DEVELOPMENT == 1)
-   printf("Clean Exit\n");
-   if (gamestate.TimeCount)
-      {
-      temp=(gamestate.frame*VBLCOUNTER*100)/gamestate.TimeCount;
-      printf("fps  = %2ld.%2ld\n",temp/100,temp%100);
-      }
-   printf("argc=%ld\n",_argc);
-   for (k=0;k<_argc;k++) printf("%s\n",_argv[k]);
-   switch( _heapchk() )
-   {
-   case _HEAPOK:
-     printf( "OK - heap is good\n" );
-     break;
-   case _HEAPEMPTY:
-     printf( "OK - heap is empty\n" );
-     break;
-   case _HEAPBADBEGIN:
-     printf( "ERROR - heap is damaged\n" );
-     break;
-   case _HEAPBADNODE:
-     printf( "ERROR - bad node in heap\n" );
-     break;
-   }
-   printf("\nLight Characteristics\n");
-   printf("---------------------\n");
-   if (fog)
-      printf("FOG is ON\n");
-   else
-      printf("FOG is OFF\n");
-   printf("LIGHTLEVEL=%ld\n",GetLightLevelTile());
-   printf("LIGHTRATE =%ld\n",GetLightRateTile());
-   printf("\nCENTERY=%ld\n",centery);
-#else
-
 #if (DEBUG == 1)
       px = ERRORVERSIONCOL;
       py = ERRORVERSIONROW;
@@ -1657,7 +1609,6 @@ void QuitGame ( void )
       px++;
 
       UL_printf (itoa(ROTTMINORVERSION,&buf[0],10));
-#endif
 #endif
 
    exit(0);
@@ -1753,12 +1704,6 @@ void UpdateGameObjects ( void )
 			{
 			 temp = ob->nextactive;
 			 DoActor (ob);
-#if (DEVELOPMENT == 1)
-			 if ((ob->x<=0) || (ob->y<=0))
-				Error("object xy below zero obj->x=%ld obj->y=%ld obj->obclass=%ld\n",ob->x,ob->y,ob->obclass);
-			 if ((ob->angle<0) || (ob->angle>=FINEANGLES))
-				Error("object angle below zero obj->angle=%ld obj->obclass=%ld\n",ob->angle,ob->obclass);
-#endif
 			 ob = temp;
 			}
 
@@ -1978,10 +1923,6 @@ fromloadedgame:
       AnimateWalls();
 
       UpdateClientControls();
-
-      #if (DEVELOPMENT == 1)
-         Z_CheckHeap();
-      #endif
 
       if ( AutoDetailOn == true )
          {
@@ -2518,16 +2459,6 @@ void PollKeyboard
          }
 
       #if SAVE_SCREEN
-#if (DEVELOPMENT == 1)
-         if ( Keyboard[ sc_CapsLock ] && Keyboard[ sc_C ] )
-            {
-            SaveScreen( true );
-            }
-         else if ( Keyboard[ sc_CapsLock ] && Keyboard[ sc_X ] )
-            {
-            SaveScreen( false );
-            }
-#endif
          else if ( Keyboard[ sc_Alt] && Keyboard[ sc_C ] )
             {
             SaveScreen( false );
@@ -2812,21 +2743,13 @@ void SaveScreen (boolean saveLBM)
    if (saveLBM)
    {
       WriteLBMfile (filename, buffer, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
-#if (DEVELOPMENT == 1)
-      while (Keyboard[sc_CapsLock] && Keyboard[sc_C])
-#else
       while (Keyboard[sc_Alt] && Keyboard[sc_V])
-#endif
            IN_UpdateKeyboard ();
    }
    else
    {
       WritePCX (filename, buffer);
-#if (DEVELOPMENT == 1)
-      while (Keyboard[sc_CapsLock] && Keyboard[sc_X])
-#else
       while (Keyboard[sc_Alt] && Keyboard[sc_C])
-#endif
            IN_UpdateKeyboard ();
    }
 
