@@ -872,39 +872,6 @@ void MiscPreCache( void )
 	end  =W_GetNumForName("MISSMO14");
    PreCacheGroup(start,end,cache_patch_t);
 
-#if (DEVELOPMENT == 1)
-	// cache in all weapon sounds
-   SD_PreCacheSoundGroup(SD_ATKPISTOLSND,SD_LOSEMODESND);
-
-	// cache in misc player weapons
-#if (SHAREWARE == 0)
-   start=W_GetNumForName("KNIFE1");
-   end  =W_GetNumForName("DOGPAW4");
-   PreCacheGroup(start,end,cache_patch_t);
-	// cache in kinetic sphere
-   start=W_GetNumForName("KSPHERE1");
-	end  =W_GetNumForName("KSPHERE4");
-   PreCacheGroup(start,end,cache_patch_t);
-
-#else
-   start=W_GetNumForName("MPIST11");
-   end  =W_GetNumForName("GODHAND8");
-   PreCacheGroup(start,end,cache_patch_t);
-#endif
-
-
-   // cache in god mode stuff
-
-	PreCacheGroup(W_GetNumForName("VAPO1"),
-	              W_GetNumForName("LITSOUL"),
-	              cache_patch_t);
-
-	PreCacheGroup(W_GetNumForName("GODFIRE1"),
-					  W_GetNumForName("GODFIRE4"),
-					  cache_patch_t);
-
-
-#endif
    // cache in player's gun
 
    // cache in rubble
@@ -1253,26 +1220,6 @@ DisableScreenStretch();
             ;
          }
  //  EnableScreenStretch();
-#if (DEVELOPMENT == 1)
-      tempbuf=bufferofs;
-      bufferofs=displayofs;
-      CurrentFont = smallfont;
-      US_CenterWindow(30,6);
-      PrintY+=6;
-      US_Print("Max  Heap Size:");
-      US_PrintUnsigned(maxheapsize);
-		US_Print("\n");
-      US_Print("Used Heap Size:");
-      US_PrintUnsigned(newheap);
-      US_Print("\n");
-      US_Print("Percentage Used:");
-      US_PrintUnsigned(newheap*100/maxheapsize);
-		US_Print("\n");
-      US_Print("TotalPrecached:");
-      US_PrintUnsigned(total);
-      bufferofs=tempbuf;
-      I_Delay (40);
-#endif
 #if (PRECACHETEST == 1)
       SoftError("Max  Heap Size: %ld\n",maxheapsize);
       SoftError("Used Heap Size: %ld\n",newheap);
@@ -2318,9 +2265,6 @@ void RespawnPlayerobj(objtype *ob)
          numchecked ++;
          rand = (rand + 1) % NUMSPAWNLOCATIONS;
          }
-#if (DEVELOPMENT == 1)
-      SoftError("\nno spawn locations available, using FindEmptyTile");
-#endif
       nx = SPAWNLOC[rand].x;
       ny = SPAWNLOC[rand].y;
       ndir = SPAWNLOC[rand].dir;
@@ -2530,24 +2474,6 @@ void SetupTeams(void)
 
 //numplayers = 1;
 //Error("Okay");
-#if ((DEVELOPMENT == 1))
-#if (TEAMTEST == 1)
-
-  Debug("Team Spawn Location\n");
-  Debug("-------------------\n");
-  for(i=0;i<numteams;i++)
-    Debug("%d   %3d,%3d\n",i,TEAM[i].tilex,TEAM[i].tiley);
-
-
-  Debug("Player            Team          Location\n");
-  Debug("------            ----          --------\n");
-  for(i=0;i<numplayers;i++)
-    Debug("  %d             %d            %3d,%3d\n",i,PLAYERSTATE[i].team,PLAYER[i]->tilex,PLAYER[i]->tiley);
-
-//  Error("done");
-#endif
-#endif
-
 }
 
 
@@ -3023,9 +2949,7 @@ void SetupPushWallLinks( void )
                         {
                         if (MAPSPOT(i,j+1,2)!=0)
                            {
-#if (DEVELOPMENT == 1)
-                           SoftError("MAPWARNING:You left a delay for a linked push wall under the pushwall\n at x=%ld y=%ld\n",i,j);
-#endif
+                             //TODO: This code does nothing.
                            }
 								Link_To_Touchplate(touchx,touchy,ActivatePushWall,NULL,GetPushWallNumber(i,j),0);
                         }
@@ -3058,9 +2982,7 @@ void SetupPushWallLinks( void )
                         {
                         if (MAPSPOT(i,j+1,2)!=0)
                            {
-#if (DEVELOPMENT == 1)
-                           SoftError("MAPWARNING:You left a delay for a linked push wall under the pushwall\n at x=%ld y=%ld\n",i,j);
-#endif
+                             //TODO: This code does nothing.
                            }
 								Link_To_Touchplate(touchx,touchy,ActivateMoveWall,NULL,GetPushWallNumber(i,j),0);
                         }
@@ -3084,9 +3006,7 @@ void SetupPushWallLinks( void )
                         {
 								if (MAPSPOT(i,j+1,2)!=0)
                            {
-#if (DEVELOPMENT == 1)
-                           SoftError("MAPWARNING:You left a delay for a linked push wall under the pushwall\n at x=%ld y=%ld\n",i,j);
-#endif
+                             //TODO: This code does nothing.
                            }
 								Link_To_Touchplate(touchx,touchy,ActivateMoveWall,NULL,GetPushWallNumber(i,j),0);
                         }
@@ -3214,12 +3134,6 @@ void SetupElevators (void)
 
 		  }
 	  }
-  #if ((DEVELOPMENT == 1))
-  #if ((ELEVATORTEST == 1))
-	 for(i=0;i<_numelevators;i++)
-		Debug("\nelevator %d door1 %2d, door2 %2d",i,ELEVATOR[i].door1,ELEVATOR[i].door2);
-  #endif
-  #endif
 }
 
 
@@ -4266,148 +4180,6 @@ int GetLumpForTile(int tile)
 
 
 
-#if (DEVELOPMENT == 1)
-
-
-/*
-==================
-=
-= Insane Dump
-=
-==================
-*/
-
-void InsaneDump(void)
-{
-   int i,j,level;
-   word *map,tile;
-   int tally[1000];
-   int inlevel[1000][10];
-
-   if (TILESTATS==false)
-      return;
-
-   OpenMapDebug();
-
-
-// WALLS
-   memset(tally,0,sizeof(tally));
-   memset(inlevel,0,sizeof(inlevel));
-   MapDebug("=======================\n");
-   MapDebug("= WALLS\n");
-   MapDebug("=======================\n");
-   mapheight = mapwidth = 128;
-   BATTLEMODE = 1;
-   for(level=0;level<8;level ++)
-    {
-     GetEpisode(level);
-     LoadROTTMap(level);
-     map = mapplanes[0];
-     for (j=0;j<mapheight;j++)
-      {
-	   for(i=0;i<mapwidth;i++)
-         {tile = *map++;
-         if (IsWall(i,j)==true)
-            {tally[tile]++;
-             inlevel[tile][level]=1;
-            }
-
-         }
-      }
-    }
-
-   MapDebug("Wall #   Frequency    Levels\n");
-   MapDebug("----------------------------\n");
-   for (i=0;i<1000;i++)
-     if (i < 90)
-       {MapDebug("%4d      %4d       %s",i,tally[i],
-                 W_GetNameForNum(GetLumpForTile(i)));
-        MapDebug("     ");
-        for(level=0;level < 10;level ++)
-          if (inlevel[i][level])
-           MapDebug("%d,",level);
-        MapDebug("\n");
-       }
-
-
-
-
-
-// Doors
-   memset(tally,0,sizeof(tally));
-   memset(inlevel,0,sizeof(inlevel));
-   MapDebug("=======================\n");
-   MapDebug("= DOORS\n");
-   MapDebug("=======================\n");
-   for(level=0;level<10;level ++)
-    {
-     GetEpisode(level);
-     LoadROTTMap(level);
-     map = mapplanes[0];
-     for (j=0;j<mapheight;j++)
-      {
-	   for(i=0;i<mapwidth;i++)
-         {tile = *map++;
-         if (IsDoor(i,j)==true)
-            {tally[tile]++;
-             inlevel[tile][level]=1;
-            }
-
-         }
-      }
-    }
-
-   MapDebug("Door #   Frequency    Levels\n");
-   MapDebug("----------------------------\n");
-   for (i=0;i<1000;i++)
-     if (tally[i]!=0)
-       {MapDebug("%4d      %4d         ",i,tally[i]);
-        for(level=0;level < 10;level ++)
-          if (inlevel[i][level])
-           MapDebug("%d,",level);
-        MapDebug("\n");
-
-       }
-
-// MaskedWalls
-   memset(tally,0,sizeof(tally));
-   memset(inlevel,0,sizeof(inlevel));
-   MapDebug("=======================\n");
-   MapDebug("= MASKED WALLS\n");
-   MapDebug("=======================\n");
-   for(level=0;level<10;level ++)
-    {
-     GetEpisode(level);
-     LoadROTTMap(level);
-     map = mapplanes[0];
-     for (j=0;j<mapheight;j++)
-      {
-	   for(i=0;i<mapwidth;i++)
-         {tile = *map++;
-         if ((IsMaskedWall(i,j)) && (!IsPlatform(i,j)))
-            {tally[tile]++;
-             inlevel[tile][level]=1;
-            }
-
-         }
-      }
-    }
-
-   MapDebug("MWall #   Frequency    Levels\n");
-   MapDebug("----------------------------\n");
-   for (i=0;i<1000;i++)
-     if (tally[i]!=0)
-       {MapDebug("%4d      %4d         ",i,tally[i]);
-        for(level=0;level < 10;level ++)
-          if (inlevel[i][level])
-           MapDebug("%d,",level);
-        MapDebug("\n");
-
-       }
-
-}
-
-#endif
 
 /*
 ==================
@@ -5391,20 +5163,7 @@ void SetupGameLevel (void)
 	if (loadedgame==false)
 		{
 		ConnectAreas();
-#if (DEVELOPMENT == 1)
-#if (PRECACHETEST == 1)
-		SoftError("Start PreCaching\n");
-#endif
-#endif
-#if (DEVELOPMENT == 1)
-      PrintMapStats();
-#endif
 		PreCache();
-#if (DEVELOPMENT == 1)
-#if (PRECACHETEST == 1)
-		SoftError("Done PreCaching\n");
-#endif
-#endif
 		SetupPlayScreen();
 		SetupScreen(false);
 	}
