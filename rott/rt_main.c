@@ -2650,23 +2650,12 @@ void GetFileName (boolean saveLBM)
 
 boolean inhmenu;
 
-#if (BETA == 1)
-#define SSX (160-(46*2))
-#define SSY (17)
-#endif
 void SaveScreen (boolean saveLBM)
 {
    byte *buffer;
    byte * screen;
    boolean oldHUD;
    char filename[ 128 ];
-
-#if (BETA == 1)
-   unsigned tmp;
-   char buf[30];
-   int i;
-#endif
-
 
    oldHUD=HUD;
    HUD=false;
@@ -2682,39 +2671,6 @@ void SaveScreen (boolean saveLBM)
 
    //buffer = (byte *) SafeMalloc (65000);
    buffer = (byte *) SafeMalloc ((iGLOBAL_SCREENHEIGHT*iGLOBAL_SCREENWIDTH)+4000);
-
-#if (BETA == 1)
-   if (SCREENSHOTS == false)
-   {
-      if (screen!=(byte *)bufferofs)
-         {
-         tmp=bufferofs;
-         bufferofs=displayofs;
-         }
-      CurrentFont=tinyfont;
-
-      VGAMAPMASK(15);
-      for (i=-1;i<6;i++)
-         memset((byte *)bufferofs+(ylookup[i+SSY])+(SSX>>2),0,46);
-      px=SSX;
-      py=SSY;
-      VW_DrawPropString(" Rise of the Triad (c) 1995 Apogee  Version ");
-      VW_DrawPropString(itoa(ROTTMAJORVERSION,&buf[0],10));
-      VW_DrawPropString(".");
-      VW_DrawPropString(itoa(ROTTMINORVERSION,&buf[0],10));
-      px=SSX+13;
-      py=SSY+8;
-      VW_DrawPropString(" Episode ");
-      VW_DrawPropString(itoa(gamestate.episode,&buf[0],10));
-      VW_DrawPropString(" Area ");
-      VW_DrawPropString(itoa(GetLevel(gamestate.episode, gamestate.mapon),&buf[0],10));
-
-      if (screen!=(byte *)bufferofs)
-         bufferofs=tmp;
-   }
-#endif
-
-
 
    GetFileName (saveLBM);
    GetPathFromEnvironment( filename, ApogeePath, savename );
