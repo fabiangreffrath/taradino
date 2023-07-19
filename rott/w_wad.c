@@ -215,7 +215,7 @@ void W_InitMultipleFiles (char **filenames)
 
         if (!quiet)
            printf("W_Wad: Wad Manager Started NUMLUMPS=%ld\n",(long int)numlumps);
-           W_CheckWADIntegrity ();
+        W_CheckWADIntegrity ();
 }
 
 
