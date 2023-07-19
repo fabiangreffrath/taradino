@@ -402,7 +402,7 @@ void SoftwareError (char *error, ...)
 
 //#endif
 
-
+//TODO: Not sure if this is DEBUG code or not.
 //#if (DEBUG == 1)
 
 /*
@@ -484,13 +484,6 @@ void OpenMapDebug ( void )
 */
 void StartupSoftError ( void )
 {
-#if (DEBUG == 1)
-  if (DebugStarted==false)
-     {
-     debugout = fopen(DEBUGFILE,"wt+");
-     DebugStarted=true;
-     }
-#endif
 #if (SOFTERROR == 1)
   if (SoftErrorStarted==false)
      OpenSoftError();
