@@ -958,13 +958,6 @@ EnableScreenStretch();//bna++
         if (control.dir==dir_North)
            dy=-(tics<<17)/(5-mapscale);
         }
-#if (DEVELOPMENT == 1)
-     if (Keyboard[sc_M])
-        {
-        CheatMap();
-        ChangeMapScale( &x, &y, mapscale );
-        }
-#endif
 
      x+=dx;
      y+=dy;
