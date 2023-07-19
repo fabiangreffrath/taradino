@@ -42,7 +42,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "watcom.h"
 #include "develop.h"
 //MED
-#include "memcheck.h"
 
 #define LIGHTNINGLEVEL 4
 #define MINLIGHTNINGLEVEL   2

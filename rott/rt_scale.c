@@ -38,7 +38,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_view.h"
 #include "rt_playr.h"
 //MED
-#include "memcheck.h"
 
 /*
 =============================================================================

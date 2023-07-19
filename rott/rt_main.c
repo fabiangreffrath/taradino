@@ -73,7 +73,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "music.h"
 #include "fx_man.h"
 //MED
-#include "memcheck.h"
 
 volatile int    oldtime;
 volatile int    gametime;

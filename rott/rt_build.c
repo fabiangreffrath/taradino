@@ -47,7 +47,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "modexlib.h"
 #include "rt_str.h"
 //MED
-#include "memcheck.h"
 
 byte * intensitytable;
 

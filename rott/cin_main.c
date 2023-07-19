@@ -35,7 +35,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "cin_evnt.h"
 #include "cin_efct.h"
 //MED
-#include "memcheck.h"
 
 boolean cinematicdone;
 static int cinematictime;
