@@ -535,10 +535,6 @@ void RevivePlayerobj (int tilex, int tiley, int dir, objtype*ob)
 */
 void SpawnPlayerobj (int tilex, int tiley, int dir, int playerindex)
 {
- playertype *pstate;
-
-	pstate = &PLAYERSTATE[playerindex];
-
 	GetNewActor();
 	MakeActive(new);
 
@@ -5297,7 +5293,6 @@ void CheckTemp2Codes(objtype *ob,playertype *pstate)
    {
 	int pitheight;
 	int godheight;
-	int dogheight;
 	int height;
    int oldz;
    int destheightoffset;
@@ -5305,7 +5300,6 @@ void CheckTemp2Codes(objtype *ob,playertype *pstate)
 
 	pitheight    = maxheight - 8;
 	height = ob->z + pstate->playerheight;
-	dogheight    = ob->z + DOGOFFSET;
 	godheight    = ob->z + GODOFFSET;
 
    //SoftError("\nheightoffset: %d, temp2: %d",pstate->heightoffset,ob->temp2);

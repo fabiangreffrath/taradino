@@ -72,6 +72,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "rt_battl.h"
 #include "develop.h"
+#include "m_misc2.h"
 //MED
 #include "memcheck.h"
 
@@ -312,9 +313,6 @@ static int MenuNum = 0;
 static int handlewhich;
 static int CSTactive = 0;
 static boolean INFXSETUP = false;
-static int MaxVoices;
-static int MaxBits;
-static int MaxChannels;
 
 //
 // MENU CURSOR SHAPES
@@ -1120,7 +1118,6 @@ static boolean StartGame = false;
 
 static int  SaveGamesAvail[ NUMSAVEGAMES ];
 static char SaveGameNames[ NUMSAVEGAMES ][ 32 ];
-static char SaveName[ 13 ] = "rottgam?.rot\0";
 
 static byte *savedscreen;
 static mapfileinfo_t * mapinfo;
@@ -1423,51 +1420,44 @@ int getASCII ( void )
 
 void ScanForSavedGames ()
 {
-   struct find_t f;
-   char filename[256];
-   char str[45];
-   int which;
-   boolean found = false;
-   char *pathsave;
+    char *path, *qm;
+    int which;
+    boolean found = false;
 
-   //
-   // SEE WHICH SAVE GAME FILES ARE AVAILABLE & READ STRING IN
-   //
-   memset (&SaveGamesAvail[0], 0, sizeof (SaveGamesAvail));
-#ifdef _WIN32
-   GetPathFromEnvironment( filename, ApogeePath, SaveName );
-#else
-   strncpy (filename, SaveName, 256);
-   pathsave = getcwd (NULL, 0);
-   chdir (ApogeePath);
-#endif
+    //
+    // SEE WHICH SAVE GAME FILES ARE AVAILABLE & READ STRING IN
+    //
+    memset (&SaveGamesAvail[0], 0, sizeof (SaveGamesAvail));
 
-   if (!_dos_findfirst (filename, 0, &f))
-      do
-      {
-         strcpy(str,&f.name[7]);
-         sscanf((const char *)&str[0],"%x",&which);
+    path = M_StringJoin(ApogeePath, PATH_SEP_STR, "rottgam?.rot", NULL);
+    qm = strrchr(path, '?');
 
-         if (which < NUMSAVEGAMES)
-         {
+    for (which = 0; which < NUMSAVEGAMES; which++)
+    {
+        char *file;
+
+        *qm = (char)('0' + which);
+        file = M_FileCaseExists(path);
+
+        if (file)
+        {
             found = true;
             SaveGamesAvail[which] = 1;
             GetSavedMessage (which, &SaveGameNames[which][0]);
-         }
 
-      } while (!_dos_findnext (&f));
+            free(file);
+        }
+    }
 
-      if (found)
-      {
-         if (MainMenu[loadgame].active == CP_Inactive)
+    free(path);
+
+    if (found)
+    {
+        if (MainMenu[loadgame].active == CP_Inactive)
             MainMenu[loadgame].active = CP_Active;
-      }
-      else
-         MainMenu[loadgame].active = CP_Inactive;
-#ifndef _WIN32
-      chdir (pathsave);
-      free (pathsave);
-#endif
+    }
+    else
+        MainMenu[loadgame].active = CP_Inactive;
 }
 
 
@@ -4797,9 +4787,9 @@ void ReadAnyControl (ControlInfo *ci)
 //
 //******************************************************************************
 
-byte * IN_GetScanName (ScanCode scan)
+char * IN_GetScanName (ScanCode scan)
 {
-   byte     **p;
+   char     **p;
    ScanCode *s;
 
    for (s = ExtScanCodes, p = ExtScanNames; *s; p++, s++)
@@ -4954,10 +4944,6 @@ void FXVolume
    )
 
    {
-   int oldvolume;
-
-   oldvolume = FXvolume;
-
    SliderMenu( &FXvolume, 254, 0, 33, 81, 225, 8, "block3", FX_SetVolume,
       "Sound Volume", "Low", "High" );
 

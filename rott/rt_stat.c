@@ -1251,7 +1251,7 @@ void SpawnStatic (int tilex, int tiley, int mtype, int zoffset)
 	  else if (mtype>stat_chandelier)
 		  temp->z = nominalheight;
 
-	  temp->visspot = &spotvis[tilex][tiley];
+     temp->visspot = &spotvis[tilex][tiley];
 	  temp->which = SPRITE;
 	  temp->ticcount = stats[mtype].tictime;
 	  temp->hitpoints = stats[mtype].hitpoints;
@@ -1779,7 +1779,7 @@ void CheckCriticalStatics(void)
 	 ddt = rtemp->next;
 
 	 if (rtemp->ticcount <=0)
-		 {int stype;
+		 {int stype = 0;
 
 		  stilex = rtemp->tilex;
 		  stiley = rtemp->tiley;
@@ -1853,20 +1853,11 @@ void CheckCriticalStatics(void)
 */
 
 void DoSprites(void)
-{int index,i;
+{int index;
  statobj_t *temp,*tempnext;
 
-
-#if (0)
-	 Debug("\n");
-#endif
-i=0;
 for(temp = firstactivestat;temp;)
   {tempnext = temp->nextactive;
-
-	#if (0)
-	 Debug("\nid: %d, shapenum: %d, numanims: %d",i++,temp->shapenum,temp->numanims);
-	#endif
 
 	if ((temp->shapenum != NOTHING) && (temp->flags & FL_ACTIVE))
 		{index = temp->itemnumber;

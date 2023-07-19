@@ -1126,22 +1126,18 @@ void DrawPreCache( void )
 */
 void PreCache( void )
 {
-   int i;
-	int total;
-   byte * dummy;
-   int maxheapsize;
-   int newheap;
+	int total = 0;
+   int maxheapsize = 0;
+   int newheap = 0;
 
-   int currentmem;
-   int currentcache;
+   int currentmem = 0;
+   int currentcache = 0;
    int lastmem=0;
    int lastcache=0;
-   int ticdelay;
+   int ticdelay = 0;
    byte *tempbuf;
 
-   double Gs;
-   Gs = (iGLOBAL_SCREENWIDTH*100/320);
-   Gs = Gs / 100;
+   double Gs = (iGLOBAL_SCREENWIDTH*100.0/320.0) / 100.0;
 
 //SetTextMode (  );
 
@@ -1178,9 +1174,9 @@ void PreCache( void )
       tempbuf=bufferofs;
       bufferofs=page1start; // fixed, was displayofs
       ticdelay=CACHETICDELAY;
-      for (i=1;i<cacheindex;i++)
+      for (size_t i=1;i<cacheindex;i++)
 			{
-         dummy=W_CacheLumpNum(cachelist[i].lump,cachelist[i].cachelevel, CvtForType(cachelist[i].type), 1);
+         W_CacheLumpNum(cachelist[i].lump,cachelist[i].cachelevel, CvtForType(cachelist[i].type), 1);
          total+=W_LumpLength(cachelist[i].lump);
          newheap=Z_UsedHeap();
 			currentmem=(newheap*MAXLEDS)/maxheapsize;
@@ -1250,10 +1246,10 @@ void PreCache( void )
 
       if ( BATTLEMODE )
          {
-         int width,height;
-         char buf[30];//byte * shape;
-		double WHratio = 16200/200;
-		WHratio = WHratio/100;
+         int width = 0;
+         int height = 0;
+         char buf[30] = {0};//byte * shape;
+		double WHratio = (16200.0/200.0) / 100.0;
 ///	iGLOBAL_SCREENWIDTH = 640;
 //	iGLOBAL_SCREENHEIGHT = 480;
 DisableScreenStretch();
@@ -1305,9 +1301,9 @@ DisableScreenStretch();
       }
    else
       {
-      for (i=1;i<cacheindex;i++)
+      for (size_t i=1;i<cacheindex;i++)
          {
-			dummy=W_CacheLumpNum(cachelist[i].lump,cachelist[i].cachelevel, CvtForType(cachelist[i].type), 1);
+			W_CacheLumpNum(cachelist[i].lump,cachelist[i].cachelevel, CvtForType(cachelist[i].type), 1);
          DoLoadGameAction ();
          }
       ShutdownPreCache ();
@@ -1318,6 +1314,7 @@ DisableScreenStretch();
 
       MapDebug("Map Number %d\n",gamestate.mapon);
       MapDebug("sizeoflevel=%d\n",Z_UsedLevelHeap());
+      MapDebug("TotalPrecached: %ld\n",(long)total);
       }
 #if (PRECACHETEST == 1)
    SoftError("<<<<<<<<<<<<<<<<<<<<<<<Precaching done\n");
@@ -1400,7 +1397,7 @@ void CheckRTLVersion
    // Check the version number
    //
    SafeRead( filehandle, &RTLVersion, sizeof( RTLVersion ) );
-   SwapIntelLong(&RTLVersion);
+   SwapIntelLong((int *)&RTLVersion);
    if ( RTLVersion > RTL_VERSION )
       {
       Error(
@@ -3356,7 +3353,6 @@ void SetupDoorLinks (void)
    int  clockx,clocky;
    int  doornumber;
 	word touchx,
-        tile,
 		  touchy;
 
    map = mapplanes[0];
@@ -3364,7 +3360,7 @@ void SetupDoorLinks (void)
    for (j = 0; j < mapheight; j++)
       for (i = 0; i < mapwidth; i++)
       {
-         tile = *map++;
+         map++;
 
          if (MAPSPOT (i, j, 2))
          {

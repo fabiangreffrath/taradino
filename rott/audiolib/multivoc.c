@@ -112,7 +112,7 @@ static void ( *MV_MixFunction )( VoiceNode *voice, int buffer );
 
 static int MV_MaxVolume = 63;
 
-char  *MV_HarshClipTable;
+unsigned char  *MV_HarshClipTable;
 char  *MV_MixDestination;
 short *MV_LeftVolume;
 short *MV_RightVolume;
@@ -387,7 +387,6 @@ void MV_ServiceVoc
    {
    VoiceNode *voice;
    VoiceNode *next;
-   char      *buffer;
 
    // Toggle which buffer we'll mix next
    MV_MixPage++;
@@ -553,19 +552,17 @@ void MV_ServiceRightGus( char **ptr, unsigned long *length )
 ---------------------------------------------------------------------*/
 static __inline unsigned int get_le32(void *p0)
 {
-	//unsigned char *p = p0;
-	//return p[0] | (p[1]<<8) | (p[2]<<16) | (p[3]<<24);
 	unsigned int val = *((unsigned int *) p0);
 	return(BUILDSWAP_INTEL32(val));
 }
 
 static __inline unsigned int get_le16(void *p0)
 {
-	//unsigned char *p = p0;
-	//return p[0] | (p[1]<<8);
 	unsigned short val = *((unsigned short *) p0);
 	return( (unsigned int) (BUILDSWAP_INTEL16(val)) );
 }
+
+static void MV_SetVoiceMixMode (VoiceNode *voice);
 
 playbackstatus MV_GetNextVOCBlock
    (
@@ -715,7 +712,7 @@ playbackstatus MV_GetNextVOCBlock
             if ( voice->LoopEnd == NULL )
                {
                voice->LoopCount = get_le16(ptr);
-               voice->LoopStart = ptr + blocklength;
+               voice->LoopStart = (char *)ptr + blocklength;
                }
             ptr += blocklength;
             break;
@@ -731,7 +728,7 @@ playbackstatus MV_GetNextVOCBlock
                {
                if ( ( voice->LoopCount > 0 ) && ( voice->LoopStart != NULL ) )
                   {
-                  ptr = voice->LoopStart;
+                  ptr = (unsigned char *)voice->LoopStart;
                   if ( voice->LoopCount < 0xffff )
                      {
                      voice->LoopCount--;
@@ -794,8 +791,8 @@ playbackstatus MV_GetNextVOCBlock
 
    if ( voice->Playing )
       {
-      voice->NextBlock    = ptr + blocklength;
-      voice->sound        = ptr;
+      voice->NextBlock    = (char *)ptr + blocklength;
+      voice->sound        = (char *)ptr;
 
       voice->SamplingRate = samplespeed;
       voice->RateScale    = ( voice->SamplingRate * voice->PitchScale ) / MV_MixRate;
@@ -962,32 +959,6 @@ playbackstatus MV_GetNextWAVBlock
    return( KeepPlaying );
    }
 
-
-/*---------------------------------------------------------------------
-   Function: MV_ServiceRecord
-
-   Starts recording of the waiting buffer.
----------------------------------------------------------------------*/
-
-static void MV_ServiceRecord
-   (
-   void
-   )
-
-   {
-   if ( MV_RecordFunc )
-      {
-      MV_RecordFunc( MV_MixBuffer[ 0 ] + MV_MixPage * MixBufferSize,
-         MixBufferSize );
-      }
-
-   // Toggle which buffer we'll mix next
-   MV_MixPage++;
-   if ( MV_MixPage >= NumberOfBuffers )
-      {
-      MV_MixPage = 0;
-      }
-   }
 
 
 /*---------------------------------------------------------------------
@@ -2789,7 +2760,7 @@ int MV_Init
       }
 
    MV_Voices = ( VoiceNode * )ptr;
-   MV_HarshClipTable = ptr + ( MV_TotalMemory - sizeof( HARSH_CLIP_TABLE_8 ) );
+   MV_HarshClipTable = (unsigned char *) ptr + ( MV_TotalMemory - sizeof( HARSH_CLIP_TABLE_8 ) );
 
    // Set number of voices before calculating volume table
    MV_MaxVoices = Voices;

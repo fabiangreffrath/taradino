@@ -87,7 +87,6 @@ spriteevent * SpawnCinematicSprite ( char * name,
                                    )
 {
    spriteevent * sprite;
-   patch_t *p;
 
    sprite = SafeMalloc ( sizeof (spriteevent) );
 
@@ -103,7 +102,7 @@ spriteevent * SpawnCinematicSprite ( char * name,
    sprite->frame=0;
    sprite->frametime=framedelay;
 
-   p=(patch_t *)W_CacheLumpNum( W_GetNumForName(sprite->name), PU_CACHE, Cvt_patch_t, 1);
+   W_CacheLumpNum( W_GetNumForName(sprite->name), PU_CACHE, Cvt_patch_t, 1);
 
    sprite->x=x << FRACTIONBITS;
    sprite->y=y << FRACTIONBITS;
@@ -274,7 +273,6 @@ void ScaleFilmPost (byte * src, byte * buf)
 void DrawFlic ( flicevent * flic )
 {
    byte * curpal;
-   byte * buf;
    char flicname[40];
 
    curpal = SafeMalloc (768);
@@ -285,7 +283,7 @@ void DrawFlic ( flicevent * flic )
 
    if (flic->usefile==false)
       {
-      buf=W_CacheLumpName(flic->name,PU_CACHE, CvtNull, 1);
+      W_CacheLumpName(flic->name,PU_CACHE, CvtNull, 1);
       strcpy(flicname,flic->name);
       }
    else
@@ -341,7 +339,6 @@ void DrawCinematicBackground ( backevent * back )
    byte * buf;
    lpic_t * pic;
    int i;
-   int plane;
    int offset;
    int height;
 
@@ -354,13 +351,9 @@ void DrawCinematicBackground ( backevent * back )
    if (height!=iGLOBAL_SCREENHEIGHT)
       DrawClearBuffer ();
 
-   plane = 0;
-   
-      {
+   {
       buf=(byte *)bufferofs+ylookup[back->yoffset];
-      offset=(back->currentoffset>>FRACTIONBITS)+plane;
-
-      VGAWRITEMAP(plane);
+      offset=(back->currentoffset>>FRACTIONBITS);
 
       for (i=0;i<iGLOBAL_SCREENWIDTH;i++,offset++,buf++)
          {
@@ -372,7 +365,7 @@ void DrawCinematicBackground ( backevent * back )
             src=&(pic->data) + ( offset * (pic->height) );
          DrawFilmPost(buf,src,height);
          }
-      }
+   }
 }
 
 /*
@@ -388,7 +381,6 @@ void DrawCinematicMultiBackground ( backevent * back )
    byte * src;
    byte * buf;
    int i;
-   int plane;
    int offset;
    int height;
 
@@ -399,13 +391,9 @@ void DrawCinematicMultiBackground ( backevent * back )
    if (height!=iGLOBAL_SCREENHEIGHT)
       DrawClearBuffer ();
 
-   plane = 0;
-   
-      {
+   {
       buf=(byte *)bufferofs+ylookup[back->yoffset];
-      offset=(back->currentoffset>>FRACTIONBITS)+plane;
-
-      VGAWRITEMAP(plane);
+      offset=(back->currentoffset>>FRACTIONBITS);
 
       for (i=0;i<iGLOBAL_SCREENWIDTH;i++,offset++,buf++)
          {
@@ -417,7 +405,7 @@ void DrawCinematicMultiBackground ( backevent * back )
             src=back->data + ( offset * (back->height) );
          DrawFilmPost(buf,src,height);
          }
-      }
+   }
 }
 
 /*
@@ -435,7 +423,6 @@ void DrawCinematicBackdrop ( backevent * back )
    byte * buf;
    patch_t * p;
    int i;
-   int plane;
    int offset;
    int postoffset;
    int postlength;
@@ -446,13 +433,9 @@ void DrawCinematicBackdrop ( backevent * back )
 
    toppost=-p->topoffset+back->yoffset;
 
-   plane = 0;
-
       {
       buf=(byte *)bufferofs;
-      offset=(back->currentoffset>>FRACTIONBITS)+plane;
-
-      VGAWRITEMAP(plane);
+      offset=(back->currentoffset>>FRACTIONBITS);
 
       for (i=0;i<iGLOBAL_SCREENWIDTH;i++,offset++,buf++)
          {
@@ -548,7 +531,6 @@ void DrawCinematicSprite ( spriteevent * sprite )
 
    for (; x1<=x2 ; x1++, frac += cin_iscale)
      {
-     VGAWRITEMAP(x1&3);
      ScaleFilmPost(((p->collumnofs[frac>>FRACTIONBITS])+shape),buf+x1);
      }
 }
@@ -847,17 +829,13 @@ void ProfileDisplay ( void )
 {
    byte * buf;
    int i;
-   int plane;
    byte src[200];
    int width = StretchScreen? 320:iGLOBAL_SCREENWIDTH;
 
    DrawClearBuffer ();
 
-   plane = 0;
-   
       {
       buf=(byte *)bufferofs;
-      VGAWRITEMAP(plane);
 
       for (i=0;i<width;i++,buf++)
          {
@@ -880,7 +858,6 @@ void DrawPostPic ( int lumpnum )
    byte * buf;
    lpic_t * pic;
    int i;
-   int plane;
    int height;
    int width = StretchScreen? 320:iGLOBAL_SCREENWIDTH;
 
@@ -888,14 +865,10 @@ void DrawPostPic ( int lumpnum )
 
    height = pic->height;
 
-   plane = 0;
-   
       {
       buf=(byte *)bufferofs;
 
-      src=&(pic->data) + (plane*pic->height);
-
-      VGAWRITEMAP(plane);
+      src=&(pic->data);
 
       for (i=0;i<width;i++,src+=pic->height,buf++)
          {

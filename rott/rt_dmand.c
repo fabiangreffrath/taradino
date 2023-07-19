@@ -37,7 +37,7 @@ static int RecordingPointer;
 static int FeederPointer;
 static boolean Playback=false;
 static boolean Playing=false;
-static byte * PlaybackBuffer;
+static char * PlaybackBuffer;
 static int PlaybackPointer;
 static int PlayingPointer;
 static boolean RecordingSemaphore=false;

@@ -78,7 +78,7 @@ byte  BestColor (int r, int g, int b, byte *palette);
 int   atan2_appx(int,int);
 int   FindDistance(int ix, int iy);
 int   Find_3D_Distance(int ix, int iy, int iz);
-void  SetPalette ( char * pal );
+void  SetPalette ( byte * pal );
 void  SetaPalette ( byte * pal );
 void  FindEGAColors ( void );
 void  VL_FillPalette (int red, int green, int blue);
@@ -86,7 +86,7 @@ void  VL_SetColor  (int color, int red, int green, int blue);
 void  VL_GetColor  (int color, int *red, int *green, int *blue);
 void  VL_SetPalette (byte *palette);
 void  VL_GetPalette (byte *palette);
-void  UL_printf (byte *str);
+void  UL_printf (char *str);
 void  VL_NormalizePalette (byte *palette);
 void  MapDebug (char *error, ...) __attribute__((format(printf,1,2)));
 void  OpenMapDebug ( void );
@@ -104,29 +104,6 @@ boolean UL_ChangeDrive (char *drive);
 void AbortCheck (char * abortstring);
 
 void FixFilePath(char *filename);
-
-
-#ifdef _WIN32
-#include <io.h>
-struct find_t
-{
-	long handle;
-    struct _finddata_t data;
-	char name[MAX_PATH];
-};
-int _dos_findfirst(char *filename, int x, struct find_t *f);
-int _dos_findnext(struct find_t *f);
-#else
-struct find_t
-{
-    DIR *dir;
-    char pattern[MAX_PATH];
-    char name[MAX_PATH];
-};
-int _dos_findfirst(char *filename, int x, struct find_t *f);
-int _dos_findnext(struct find_t *f);
-#endif
-
 
 struct dosdate_t
 {

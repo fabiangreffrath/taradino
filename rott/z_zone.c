@@ -63,19 +63,6 @@ int zonememorystarted=0;
 static memzone_t       *mainzone;
 static memzone_t       *levelzone;
 static int levelzonesize=LEVELZONESIZE;
-static struct meminfo
-   {
-   unsigned LargestBlockAvail;
-   unsigned MaxUnlockedPage;
-   unsigned LargestLockablePage;
-   unsigned LinAddrSpace;
-   unsigned NumFreePagesAvail;
-   unsigned NumPhysicalPagesFree;
-   unsigned TotalPhysicalPages;
-   unsigned FreeLinAddrSpace;
-   unsigned SizeOfPageFile;
-   unsigned Reserved[3];
-   } MemInfo;
 
 /*
 ========================
@@ -117,8 +104,8 @@ memzone_t *Z_AllocateZone (int size)
 
         header = malloc (size+sizeof(memzone_t));
         if (!header)
-                Error ("Z_AllocateZone: Couldn't malloc %zd bytes avail=%d\n",
-                size+sizeof(memzone_t), Z_AvailHeap());
+                Error ("Z_AllocateZone: Couldn't malloc %ld bytes avail=%ld\n",
+                (long)(size+sizeof(memzone_t)), (long)Z_AvailHeap());
         header->size = size;
         Z_ClearZone (header);
         return header;

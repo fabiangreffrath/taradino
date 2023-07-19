@@ -424,7 +424,6 @@ void ScaleShape (visobj_t * sprite)
    int      x1,x2;
    int      tx;
    int      size;
-   int      plane;
 
    whereami=32;
    shape=W_CacheLumpNum(sprite->shapenum,PU_CACHE, Cvt_patch_t, 1);
@@ -523,7 +522,6 @@ void ScaleShape (visobj_t * sprite)
          {
             {
             frac=startfrac;
-//   VGAWRITEMAP(plane&3);
             for (x1=startx;x1<=x2;x1+=2, frac += (dc_iscale<<1))
                {
                if (
@@ -576,7 +574,6 @@ void ScaleTransparentShape (visobj_t * sprite)
    byte * b;
    int    startfrac;
    int    startx;
-   int    plane;
 
    whereami=33;
    shape=W_CacheLumpNum(sprite->shapenum,PU_CACHE, Cvt_transpatch_t, 1);
@@ -658,7 +655,6 @@ void ScaleSolidShape (visobj_t * sprite)
    int      x1,x2;
    int      tx;
    int      size;
-   int      plane;
 	byte * b;
    int    startfrac;
    int    startx;
@@ -738,7 +734,6 @@ void ScaleWeapon (int xoff, int y, int shapenum)
 	byte * b;
 	int    startfrac;
 	int    startx;
-   int    plane;
 
    whereami=35;
    SetPlayerLightLevel();
@@ -785,7 +780,6 @@ void ScaleWeapon (int xoff, int y, int shapenum)
       {
       frac=startfrac;
       b=(byte *)bufferofs+startx;
-      VGAWRITEMAP(plane&3);
       for (x1=startx; x1<=x2 ; x1++, frac += dc_iscale,b++)
          ScaleClippedPost(((p->collumnofs[frac>>SFRACBITS])+shape),b);
       }
@@ -813,7 +807,6 @@ void DrawUnScaledSprite (int x, int y, int shapenum, int shade)
    byte * b;
    int    startfrac;
    int    startx;
-	int    plane;
         
    whereami=36;
    shadingtable=colormap+(shade<<8);
@@ -901,7 +894,6 @@ void DrawPositionedScaledSprite (int x, int y, int shapenum, int height, int typ
 	byte * b;
 	int    startfrac;
 	int    startx;
-	int    plane;
 	int    size;
 
    whereami=38;
@@ -980,7 +972,6 @@ void DrawScreenSizedSprite (int lump)
    patch_t *p;
    int      x1,x2;
    int      tx;
-//   int      plane;
    byte * b;
    int    startfrac;
 
@@ -1063,72 +1054,6 @@ void DrawScreenSizedSprite (int lump)
       }
 }
 
-#if 0
-   byte *shape;
-   int      frac;
-   patch_t *p;
-   int      x1,x2;
-   int      tx;
-   int      xdc_invscale;
-   int      xdc_iscale;
-   byte *   buf;
-   byte *   b;
-   int      plane;
-   int      startx,startfrac;
-
-   whereami=39;
-   SetPlayerLightLevel();
-   buf=(byte *)bufferofs;
-   shape=W_CacheLumpNum(lump,PU_CACHE);
-   p=(patch_t *)shape;
-   dc_invscale=(viewheight<<16)/200;
-	xdc_invscale=(viewwidth<<16)/320;
-
-   tx=-p->leftoffset;
-   centeryclipped=viewheight>>1;
-//
-// calculate edges of the shape
-//
-        x1 = (tx*xdc_invscale)>>SFRACBITS;
-        if (x1 >= viewwidth)
-                return;               // off the right side
-        tx+=p->width;
-        x2 = ((tx*xdc_invscale)>>SFRACBITS) - 1 ;
-		  if (x2 < 0)
-                return;         // off the left side
-
-   dc_iscale=(200*65536)/viewheight;
-   xdc_iscale=(320*65536)/viewwidth;
-   dc_texturemid=(((p->height>>1)+p->topoffset)<<SFRACBITS)+(SFRACUNIT>>1);
-   sprtopoffset=(centeryclipped<<16) - FixedMul(dc_texturemid,dc_invscale);
-
-//
-// store information in a vissprite
-//
-   if (x1<0)
-      {
-      frac=xdc_iscale*(-x1);
-      x1=0;
-      }
-   else
-      frac=0;
-        x2 = x2 >= viewwidth ? viewwidth-1 : x2;
-
-   startx=x1;
-   startfrac=frac;
-   for (plane=startx;plane<startx+4;plane++,startfrac+=xdc_iscale)
-      {
-      frac=startfrac;
-      b=(byte *)bufferofs+(plane>>2);
-      VGAWRITEMAP(plane&3);
-      for (x1=plane; x1<=x2 ; x1+=4, frac += xdc_iscale<<2,b++)
-         ScaleClippedPost(((p->collumnofs[frac>>SFRACBITS])+shape),b);
-      }
-}
-#endif
-
-
-
 //******************************************************************************
 //
 // DrawNormalPost
@@ -1178,7 +1103,6 @@ void DrawNormalSprite (int x, int y, int shapenum)
    int cnt;
    byte *shape;
    patch_t *p;
-   int plane;
    byte * b;
    int startx;
 
@@ -1295,7 +1219,6 @@ void R_DrawClippedColumn (byte * buf)
 void R_DrawSolidColumn (int color, byte * buf)
 {
 	int count;
-	int frac, fracstep;
 	byte *dest;
 
 	count = dc_yh - dc_yl + 1;

@@ -2100,7 +2100,6 @@ void T_Spring(objtype*ob)
 void T_Count(objtype*ob)
    {
    int index;
-   wall_t* tswitch;
    touchplatetype *temp;
    objtype* tempactor;
 
@@ -2178,16 +2177,6 @@ void T_Count(objtype*ob)
             tempactor = (objtype*)(temp->whichobj);
             tempactor->flags &= ~FL_ACTIVE;
             }
-
-      tswitch = (wall_t*)actorat[ob->temp1][ob->temp2];
-      /*
-      if (tswitch && (tswitch->which != ACTOR))
-         {
-         tilemap[ob->temp1][ob->temp2]--;
-         tswitch->flags &= ~FL_ON;
-         }
-      */
-
       }
    }
 
@@ -2649,7 +2638,7 @@ void MissileHitActor(objtype *owner, objtype *missile, objtype *victim,
 
 void MissileHit (objtype *ob,void *hitwhat)
    {
-   int damage=0, random,tcl=0,ocl,fireweapon=0,sound,hitmomx,hitmomy;
+   int damage=0, random,tcl=0,ocl,sound,hitmomx,hitmomy;
    objtype* tempactor=NULL,*owner;
 
 
@@ -2770,7 +2759,6 @@ void MissileHit (objtype *ob,void *hitwhat)
       case fireballobj:
          NewState(ob,&s_explosion1);
          damage = (random >> 3) + 10;
-         fireweapon = 1;
          break;
 
       case missileobj:
@@ -2792,7 +2780,6 @@ void MissileHit (objtype *ob,void *hitwhat)
          else if (M_ISWALL(tempactor) || (tempactor->which == DOOR))
             NewState(ob,&s_crossdone1);
          damage = EnvironmentDamage(ob);
-         fireweapon = 1;
          break;
 
 
@@ -2878,7 +2865,6 @@ void MissileHit (objtype *ob,void *hitwhat)
       case dmfballobj:
          NewState(ob,&s_explosion1);
          damage = (random >>3) + 20;
-         fireweapon = 1;
          break;
 
       case h_mineobj:
@@ -2971,7 +2957,7 @@ void T_Spears(objtype*ob)
 
 
 void T_CrushUp(objtype*ob)
-{int dx, dy,dist,dz,i,playeron;
+{int dx, dy,dist,dz,i;
 
 
   if ((!ob->ticcount) && (ob->state->condition & SF_SOUND) &&
@@ -2994,7 +2980,6 @@ void T_CrushUp(objtype*ob)
   ob->temp2 = maxheight - ob->temp1 + 32;
 
 
-  playeron = 0;
   for(i=0;i<numplayers;i++)
 	 {dx = abs(PLAYER[i]->x - ob->x);
 	  dy = abs(PLAYER[i]->y - ob->y);
@@ -3003,7 +2988,6 @@ void T_CrushUp(objtype*ob)
 	  if ((dx < dist) && (dy < dist) && (dz < 65))
 		  {ob->flags &= ~FL_BLOCK;
 		  //player->temp2 = 0;
-			playeron  = 1;
 			if ((!ob->ticcount) && (ob->state->condition & SF_CRUSH) &&
              (levelheight<2) && (!(ob->flags & FL_DYING)))
 			  {DamageThing(PLAYER[i],EnvironmentDamage(ob));
@@ -3035,7 +3019,6 @@ void T_CrushUp(objtype*ob)
 
 	}
 
-  //if (!playeron)
 	 {if (ob->state->condition & SF_BLOCK)
 		 ob->flags |= FL_BLOCK;
 	  else
@@ -3048,7 +3031,7 @@ void T_CrushUp(objtype*ob)
 
 
 void T_CrushDown(objtype*ob)
-{int dx,dy,dz,i,playeron;
+{int dx,dy,dz,i;
 
 
   if ((!ob->ticcount) && (ob->state->condition & SF_SOUND)&&
@@ -3056,7 +3039,6 @@ void T_CrushDown(objtype*ob)
 	SD_PlaySoundRTP(BAS[ob->obclass].operate,ob->x,ob->y);
 
   ob->temp2 = ob->z;
-  playeron = 0;
   for(i=0;i<numplayers;i++)
 	  {dx = abs(PLAYER[i]->x - ob->x);
 		dy = abs(PLAYER[i]->y - ob->y);
@@ -3064,7 +3046,6 @@ void T_CrushDown(objtype*ob)
 
 		 if ((dx < STANDDIST) && (dy < STANDDIST) && (dz < 20))
 			 {//PLAYER[i]->temp2 = 0;
-			  playeron = 1;
 			  ob->flags &= ~FL_BLOCK;
            if ((!ob->ticcount) && (ob->state->condition & SF_CRUSH) &&
                (!(ob->flags & FL_DYING)))
@@ -3085,7 +3066,7 @@ void T_CrushDown(objtype*ob)
 			 }
 
 	  }
-  //if (!playeron)
+
 	 {if (ob->state->condition & SF_BLOCK)
 			ob->flags |= FL_BLOCK;
 	  else
@@ -4809,10 +4790,9 @@ void SpawnMissileSmoke(objtype *ob)
 
 void T_Projectile (objtype *ob)
    {
-   objtype *owner;
-   playertype * pstate;
+   playertype * pstate = 0;
 
-   owner = (objtype*)(ob->whatever);
+   objtype *owner = (objtype*)(ob->whatever);
 
    if (owner->obclass == playerobj)
       M_LINKSTATE(owner,pstate);
@@ -5489,10 +5469,8 @@ void ResolveRide(objtype *ob)
 
 void MoveActor(objtype*ob)
    {
-   int linked,oldarea,newarea,
+   int oldarea,newarea,
        tilex,tiley,oldtilex,oldtiley;
-
-	linked = 0;
 
    ResolveRide(ob);
 
@@ -5808,7 +5786,6 @@ boolean EluderCaught(objtype*ob)
 {
  objtype *temp;
  int dx,dy,dz;
- playertype *pstate;
  int dist = 0xc000;
 
  for(temp = PLAYER[0];temp != PLAYER[numplayers-1]->next;temp=temp->next)
@@ -5830,7 +5807,6 @@ boolean EluderCaught(objtype*ob)
 	  if (dz > (dist>>10))
 		 continue;
 
-	  M_LINKSTATE(temp,pstate);
 	  //if (DOGSCRATCH.attackinfo[pstate->attackframe].attack == at_pulltrigger)
 		 {BATTLE_CheckGameStatus(battle_caught_eluder,temp->dirchoosetime);
 		  SpawnNewObj(ob->tilex,ob->tiley,&s_itemspawn1,inertobj);
@@ -6305,8 +6281,6 @@ movement_status CheckOtherActors(objtype*ob,int tryx,int tryy,int tryz)
    int dzt,dztp1,checkz;
    int x,y,dx,dy;
    int ocl,tcl;
-   int ISPLAYER = 0;
-   int hoffset;
 
    ocl = ob->obclass;
 
@@ -6339,15 +6313,6 @@ movement_status CheckOtherActors(objtype*ob,int tryx,int tryy,int tryz)
          else if (ocl == inertobj)
             radius -= 0x2000;
          }
-
-   else
-         {
-         ISPLAYER = 1;
-         if (ob->flags & FL_DOGMODE)
-            hoffset = 10;
-         }
-
-
 
    tilexlow = (int)((tryx-radius) >>TILESHIFT);
    tileylow = (int)((tryy-radius) >>TILESHIFT);
@@ -6537,11 +6502,9 @@ movement_status CheckRegularWalls(objtype *ob,int tryx,int tryy,int tryz)
    {
    int tilexlow,tilexhigh,tileylow,tileyhigh,x,y,radius;
    classtype ocl;
-   boolean WALLSTOP,ISPLAYER=false;
+   boolean ISPLAYER=false;
 
    ocl = ob->obclass;
-   tryz=tryz;
-
 
    if (ocl != playerobj)
          {
@@ -6572,17 +6535,12 @@ movement_status CheckRegularWalls(objtype *ob,int tryx,int tryy,int tryz)
    tilexhigh = (int)((tryx+radius) >>TILESHIFT);
    tileyhigh = (int)((tryy+radius) >>TILESHIFT);
 
-
-   WALLSTOP = false;
-
    for (y=tileylow;y<=tileyhigh;y++)
       for (x=tilexlow;x<=tilexhigh;x++)
          {
          wall_t          *tempwall;
-         int             wall;
 
          tempwall = (wall_t*)actorat[x][y];
-         wall=tilemap[x][y];
          if (tempwall)
             {
             if (tempwall->which==WALL)// && IsWindow(x,y)==false)
@@ -6605,7 +6563,6 @@ movement_status CheckRegularWalls(objtype *ob,int tryx,int tryy,int tryz)
                   }
 
                //return false;
-               WALLSTOP = true;
                if ((ocl == inertobj) &&
                    (ob->dirchoosetime == GIBVALUE) &&
 
@@ -7331,7 +7288,8 @@ void PushWallMove(int num)
 }
 
 void ActorMovement (objtype *ob)
-{int tryx,tryy,tryz,limitok,max,friction,ocl;
+{
+  int max = 0;
 
 
 
@@ -7352,12 +7310,12 @@ void ActorMovement (objtype *ob)
 	}
 
 
- limitok = 1;
+ int limitok = 1;
 
- friction = ACTORFRICTION;
+ int friction = ACTORFRICTION;
  if (!(ob->flags & FL_DYING))
     friction >>= 1;
- ocl = ob->obclass;
+ int ocl = ob->obclass;
  if (ocl == playerobj)
     {
     playertype *pstate;
@@ -7403,9 +7361,9 @@ void ActorMovement (objtype *ob)
 
   }
 
-  tryx = ob->x + ob->momentumx;
-  tryy = ob->y + ob->momentumy;
-  tryz = ob->z + (ob->momentumz >> 16);
+  int tryx = ob->x + ob->momentumx;
+  int tryy = ob->y + ob->momentumy;
+  int tryz = ob->z + (ob->momentumz >> 16);
 
  if (ocl != playerobj)
 	 ob->flags &= ~FL_STUCK;
@@ -8284,7 +8242,7 @@ hiding_status HoleStatus(objtype*ob)
 
 void SelectTouchDir (objtype *ob)
    {
-   int dx,dy,noneleft,invisible;
+   int dx,dy;
    hiding_status hole;
 
 
@@ -8294,10 +8252,6 @@ void SelectTouchDir (objtype *ob)
 
    olddir=ob->dir;
    turnaround= opposite[olddir];
-
-
-   invisible = 0;
-   noneleft = 1;
 
    if (!MISCVARS->notouch)
       {
@@ -8946,7 +8900,8 @@ void UpdateNMELinkedActors(objtype*ob)
 
 void T_OrobotChase(objtype*ob)
    {
-   int dx,dy;
+   int dx = 0;
+   int dy = 0;
 
 
    if (CheckLine(ob,PLAYER[0],SIGHT))
@@ -8974,7 +8929,7 @@ void T_OrobotChase(objtype*ob)
 
       if (CheckLine(ob,PLAYER[0],SIGHT))
          {
-         int inrange;
+         int inrange = 0;
 
          switch(gamestate.difficulty)
             {
@@ -11790,13 +11745,11 @@ void A_Repeat(objtype*ob)
 
 void  A_MissileWeapon(objtype *ob)
 {
- int    sound,nspeed,noffset,zoffset;
-
 #if (SHAREWARE == 0)
- int oldyzangle;
+ int oldyzangle = 0;
 #endif
- classtype nobclass;
- statetype*nstate;
+ classtype nobclass = inertobj;
+ statetype *nstate = NULL;
 
 
  if ((ob->obclass == wallopobj) || (ob->obclass == roboguardobj));
@@ -11819,10 +11772,10 @@ void  A_MissileWeapon(objtype *ob)
 	 }
  // Move sounds, flags into switch cases
 
-	sound = BAS[ob->obclass].fire;
-	nspeed = 0x4000;
-	noffset = 0x8000;
-	zoffset = 0;
+	int sound = BAS[ob->obclass].fire;
+	int nspeed = 0x4000;
+	int noffset = 0x8000;
+	int zoffset = 0;
 	switch (ob->obclass)
     {
 
@@ -11986,13 +11939,15 @@ void SelectRollDir(objtype *ob)
 
 void SelectDodgeDir (objtype *ob)
 {
-	int      dx,dy,i,tx,ty;
-	unsigned absdx,absdy;
-	dirtype  dirtry[5];
-	dirtype  turnaround,tdir,olddir;
+	int dx = 0;
+  int dy = 0;
+  int tx = 0;
+  int ty = 0;
+	dirtype dirtry[5] = {0};
+	dirtype turnaround = {0};
+  dirtype tdir = {0};
 
-
-	olddir = ob->dir;
+	dirtype olddir = ob->dir;
 	if (ob->flags & FL_FIRSTATTACK)
 	{
 	//
@@ -12054,8 +12009,8 @@ void SelectDodgeDir (objtype *ob)
 //
 // randomize a bit for dodging
 //
-	absdx = abs(dx);
-	absdy = abs(dy);
+	unsigned int absdx = abs(dx);
+	unsigned int absdy = abs(dy);
 
 	if (absdx > absdy)
 	{
@@ -12081,7 +12036,7 @@ void SelectDodgeDir (objtype *ob)
 
 	ZEROMOM;
 
-	for (i=0;i<5;i++)
+	for (size_t i=0;i<5;i++)
 	  {if ((dirtry[i] == nodir) || (dirdiff[dirtry[i]][olddir] > 1))
 		 continue;
 
@@ -12173,8 +12128,6 @@ void SelectDodgeDir (objtype *ob)
    dy= ob->y-player->y;                          \
    if ((abs(dx) < 0xb000) && (abs(dy) < 0xb000)) \
       return;                                    \
-   dummy.x = player->x;                          \
-   dummy.y = player->y;                          \
    }
 
 
@@ -12183,7 +12136,6 @@ void SelectChaseDir (objtype *ob)
 	int dx,dy,whichway,tx,ty,actrad,visible,
 		 realdiff;
 	dirtype dtry1,dtry2,tdir,olddir,next,prev,start,straight;
-	tpoint dummy;
 	byte dirtried[9] = {0};
 
 	olddir=ob->dir;
@@ -12202,16 +12154,12 @@ void SelectChaseDir (objtype *ob)
 	else
 		turnaround=nodir;
 	*/
-	dummy.which = ACTOR;
-	dummy.z = ob->z;
 	if (ob->targettilex || ob->targettiley)
       {
       tx = ob->targettilex;
       ty = ob->targettiley;
       dx= tx - ob->x;
       dy= ob->y - ty;
-      dummy.x = tx;
-      dummy.y = ty;
       if ((abs(dx) < 0x2000) && (abs(dy) < 0x2000))
          ChasePlayer(ob);
 		}

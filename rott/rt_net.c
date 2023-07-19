@@ -214,7 +214,7 @@ void InitializeGameCommands( void )
 
    GameCommandsStarted=true;
 
-   if ((modemgame==true))
+   if (modemgame==true)
       controldivisor=rottcom->ticstep;
 
    standalone=false;
@@ -2200,7 +2200,6 @@ void ProcessServer ( void )
    boolean exit;
    int i;
    int time;
-   int quittime;
 
    if (InProcessServer==true)
       return;
@@ -2211,7 +2210,6 @@ void ProcessServer ( void )
       goto exitProcessServer;
 
    time=GetTicCount();
-   quittime=GetTicCount()+SERVERTIMEOUT;
    exit=false;
 
    while (time>=serverupdatetime)
@@ -2252,10 +2250,6 @@ void ProcessServer ( void )
                }
             savetime=GetTicCount()+NETWORKTIMEOUT;
             }
-//         if (GetTicCount()>quittime)
-//            {
-//            Error("Server aborting after %ld seconds\n",SERVERTIMEOUT/VBLCOUNTER);
-//            }
          if ((standalone==false) && (done==false))
             {
             exit=true;

@@ -563,7 +563,6 @@ void INL_GetJoyDelta (word joy, int *dx, int *dy)
 {
    word        x, y;
    JoystickDef *def;
-   static longword lasttime;
 
    IN_GetJoyAbs (joy, &x, &y);
    def = JoyDefs + joy;
@@ -613,8 +612,6 @@ void INL_GetJoyDelta (word joy, int *dx, int *dy)
    }
    else
       *dy = 0;
-
-   lasttime = GetTicCount();
 }
 
 
@@ -923,7 +920,7 @@ void IN_ClearKeysDown (void)
 
 void IN_ReadControl (int player, ControlInfo *info)
 {
-   boolean     realdelta;
+   boolean     realdelta = false;
    word        buttons;
    int         dx,dy;
    Motion      mx,my;

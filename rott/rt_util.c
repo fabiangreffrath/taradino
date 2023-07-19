@@ -314,15 +314,10 @@ void Error (char *error, ...)
 {
    char msgbuf[300];
 	va_list	argptr;
-   char i;
    int size;
    char * sptr;
-   char buf[30];
-   int handle;
-   int x,y;
    int level;
    static int inerror = 0;
-   char filename[ 128 ];
 
 
    inerror++;
@@ -809,123 +804,6 @@ void FixFilePath(char *filename)
 #endif
 }
 
-
-#ifdef _WIN32
-int _dos_findfirst(char *filename, int x, struct find_t *f)
-{
-    long rc = _findfirst(filename, &f->data);
-    f->handle = rc;
-    if (rc != -1)
-    {
-        strncpy(f->name, f->data.name, sizeof (f->name) - 1);
-        f->name[sizeof (f->name) - 1] = '\0';
-        return(0);
-    }
-    return(1);
-}
-
-int _dos_findnext(struct find_t *f)
-{
-    int rc = 0;
-    if (f->handle == -1)
-        return(1);   /* invalid handle. */
-
-    rc = _findnext(f->handle, &f->data);
-    if (rc == -1)
-    {
-        _findclose(f->handle);
-        f->handle = -1;
-        return(1);
-    }
-
-    strncpy(f->name, f->data.name, sizeof (f->name) - 1);
-    f->name[sizeof (f->name) - 1] = '\0';
-    return(0);
-}
-
-#else
-int _dos_findfirst(char *filename, int x, struct find_t *f)
-{
-    char *ptr;
-
-    if (strlen(filename) >= sizeof (f->pattern))
-        return(1);
-
-    strcpy(f->pattern, filename);
-    FixFilePath(f->pattern);
-    ptr = strrchr(f->pattern, PATH_SEP_CHAR);
-
-    if (ptr == NULL)
-    {
-        ptr = filename;
-        f->dir = opendir(CURDIR);
-    }
-    else
-    {
-        *ptr = '\0';
-        f->dir = opendir(f->pattern);
-        memmove(f->pattern, ptr + 1, strlen(ptr + 1) + 1);
-    }
-
-    return(_dos_findnext(f));
-}
-
-
-static int check_pattern_nocase(const char *x, const char *y)
-{
-    if ((x == NULL) || (y == NULL))
-        return(0);  /* not a match. */
-
-    while ((*x) && (*y))
-    {
-        if (*x == '*')
-            Error("Unexpected wildcard!");  /* FIXME? */
-
-        else if (*x == '?')
-        {
-            if (*y == '\0')
-                return(0);  /* anything but EOS is okay. */
-        }
-
-        else
-        {
-            if (toupper((int) *x) != toupper((int) *y))
-                return(0);  /* not a match. */
-        }
-
-        x++;
-        y++;
-    }
-
-    return(*x == *y);  /* it's a match (both should be EOS). */
-}
-
-int _dos_findnext(struct find_t *f)
-{
-    struct dirent *dent;
-
-    if (f->dir == NULL)
-        return(1);  /* no such dir or we're just done searching. */
-
-    while ((dent = readdir(f->dir)) != NULL)
-    {
-        if (check_pattern_nocase(f->pattern, dent->d_name))
-        {
-            if (strlen(dent->d_name) < sizeof (f->name))
-            {
-                strcpy(f->name, dent->d_name);
-                return(0);  /* match. */
-            }
-        }
-    }
-
-    closedir(f->dir);
-    f->dir = NULL;
-    return(1);  /* no match in whole directory. */
-}
-#endif
-
-
 void _dos_getdate(struct dosdate_t *date)
 {
 	time_t curtime = time(NULL);
@@ -1170,7 +1048,7 @@ void GetPalette(char * palette)
 	}
 }
 
-void SetPalette ( char * pal )
+void SetPalette ( byte * pal )
 {
    VL_SetPalette (pal);
 }
@@ -1378,7 +1256,7 @@ void UL_DisplayMemoryError ( int memneeded )
 =================
 */
 
-void UL_printf (byte *str)
+void UL_printf (char *str)
 {
    printf ("%s ",str);	// Hackish but works - DDOI
 }

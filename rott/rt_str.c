@@ -41,7 +41,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "_rt_str.h"
 #include "isr.h"
 #include "rt_in.h"
-#include "rt_menu.h"
 #include "rt_view.h"
 #include "w_wad.h"
 #include "z_zone.h"
@@ -132,12 +131,10 @@ void US_ClippedPrint (int x, int y, const char *string)
    char  c,
          *se;
    char  *s;
-   int   startx;
 
    strcpy(strbuf, string);
    s = strbuf;
    
-   startx=x;
    while (*s)
    {
       se = s;
@@ -171,7 +168,7 @@ void VW_DrawPropString (const char *string)
    byte  pix;
    int   width,step,height,ht;
    byte  *source, *dest, *origdest;
-   int   ch,mask;
+   int   ch;
 
    ht = CurrentFont->height;
    dest = origdest = (byte *)(bufferofs+ylookup[py]+px);
@@ -236,14 +233,11 @@ void VW_DrawIPropString (const char *string)
    byte  pix;
    int   width,step,height,ht;
    byte  *source, *dest, *origdest;
-   int   ch,mask;
+   int   ch;
 
 
    ht = CurrentFont->height;
    dest = origdest = (byte *)(bufferofs+ylookup[py]+px);
-
-   mask = 1<<(px&3);
-
 
    while ((ch = (unsigned char)*string++)!=0)
    {
@@ -252,8 +246,6 @@ void VW_DrawIPropString (const char *string)
       source = ((byte *)CurrentFont)+CurrentFont->charofs[ch];
       while (width--)
       {
-         VGAMAPMASK(mask);
-
          height = ht;
          while (height--)
          {
@@ -690,7 +682,7 @@ static void USL_XORICursor (int x, int y, const char *s, int cursor, int color)
 //
 ///******************************************************************************
 
-extern byte * IN_GetScanName (ScanCode scan);
+extern char * IN_GetScanName (ScanCode scan);
 
 boolean US_LineInput (int x, int y, char *buf, const char *def, boolean escok,
                       int maxchars, int maxwidth, int color)
@@ -1311,7 +1303,6 @@ void US_DrawWindow (int x, int y, int w, int h)
    pic_t *Win2;
    pic_t *Win3;
    pic_t *Win4;
-   pic_t *Win5;
    pic_t *Win6;
    pic_t *Win7;
    pic_t *Win8;
@@ -1326,8 +1317,6 @@ void US_DrawWindow (int x, int y, int w, int h)
 	Win3 = (pic_t *) shape;
 	shape = W_CacheLumpNum (W_GetNumForName ("window4"), PU_CACHE, Cvt_pic_t, 1);
 	Win4 = (pic_t *) shape;
-	shape = W_CacheLumpNum (W_GetNumForName ("window5"), PU_CACHE, Cvt_pic_t, 1);
-	Win5 = (pic_t *) shape;
 	shape = W_CacheLumpNum (W_GetNumForName ("window6"), PU_CACHE, Cvt_pic_t, 1);
 	Win6 = (pic_t *) shape;
 	shape = W_CacheLumpNum (W_GetNumForName ("window7"), PU_CACHE, Cvt_pic_t, 1);
@@ -1428,16 +1417,12 @@ void DrawIntensityChar  ( char ch )
    {
 
    byte  pix;
-   int   px1,py1;
-   int   width,w1;
-   int   height,h1;
+   int   width;
+   int   height;
    int   ht;
-   byte  *source,*src1;
+   byte  *source;
    byte  *dest;
-   byte  *origdest,*orgdst1;
-   int   mask;
-
-   px1 = px;py1 = py;
+   byte  *origdest;
 
    ht = IFont->height;
 
@@ -1449,13 +1434,9 @@ void DrawIntensityChar  ( char ch )
    width = IFont->width[ (unsigned char)ch ];
    source = ( ( byte * )IFont ) + IFont->charofs[ (unsigned char)ch ];
 
-   mask = 1 << ( px & 3 );
-
    if ((iGLOBAL_SCREENWIDTH <= 320)||(StretchScreen == true)){
 	   while( width-- )
 	   {
-		  VGAMAPMASK( mask );
-
 		  height = ht;
 		  while( height-- )
 			 {
@@ -1474,14 +1455,8 @@ void DrawIntensityChar  ( char ch )
 		  dest = origdest;
 	   }
 	}else{//strech letter in x any direction
-	   w1 = width;
-	   h1 = ht;
-	   orgdst1 = origdest;
-	   src1 = source;
 	   while( width-- )
 	   {
-		  VGAMAPMASK( mask );
-
 		  height = ht;
 		  while( height-- )
 			 {

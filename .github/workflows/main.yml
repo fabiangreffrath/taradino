@@ -82,7 +82,7 @@ jobs:
           CFLAGS: -Wall
         run: |
           autoreconf -fiv
-          ./configure
+          ./configure --enable-werror
 
       - name: Build
         run: make
