@@ -636,59 +636,6 @@ int       CalcHeight (void)
 	return (heightnumerator/nx);
 }
 
-
-
-#if 0
-//==========================================================================
-
-//******************************************************************************
-//
-// NextPlaneptr
-//
-//******************************************************************************
-
-void NextPlaneptr ( void )
-{
-   if (planeptr < &planelist[MAXPLANES-1]) // don't let it overflo'
-  		planeptr++;
-}
-
-//******************************************************************************
-//
-// RestPlaneptr
-//
-//******************************************************************************
-
-void ResetPlaneptr ( void )
-{
-   planeptr = &planelist[0];
-}
-
-//******************************************************************************
-//
-// NextVisptr
-//
-//******************************************************************************
-
-void NextVisptr ( void )
-{
-   if (visptr < &vislist[MAXVISIBLE-1]) // don't let it overflo'
-  		visptr++;
-}
-
-//******************************************************************************
-//
-// ResetVisptr
-//
-//******************************************************************************
-
-void ResetVisptr ( void )
-{
-   visptr = &vislist[0];
-}
-
-#endif
-
 //==========================================================================
 
 
@@ -792,89 +739,6 @@ int   CalcRotate (objtype *ob)
 	return rotation;
 
 }
-
-
-
-#if 0
-/*
-=====================
-=
-= DrawMaskedWalls
-=
-=====================
-*/
-
-void DrawMaskedWalls (void)
-{
-
-
-  int   i,numvisible;
-  int   gx,gy;
-  unsigned short int  *tilespot;
-  byte   *visspot;
-  boolean result;
-  statobj_t *statptr;
-  objtype   *obj;
-  maskedwallobj_t* tmwall;
-
-	whereami=6;
-
-//
-// place maskwall objects
-//
-  for(tmwall=FIRSTMASKEDWALL;tmwall;tmwall=tmwall->next)
-	  {
-	  if (spotvis[tmwall->tilex][tmwall->tiley])
-		  {
-		  mapseen[tmwall->tilex][tmwall->tiley]=1;
-		  if (tmwall->vertical)
-			  {
-			  gx=(tmwall->tilex<<16)+0x8000;
-			  gy=(tmwall->tiley<<16);
-			  visptr->texturestart=0;
-			  visptr->textureend=0;
-			  if (viewx<gx)
-				  result=TransformPlane(gx,gy,gx,gy+0xffff,visptr);
-			  else
-				  result=TransformPlane(gx,gy+0xffff,gx,gy,visptr);
-			  visptr->shapenum=tmwall->bottomtexture;
-			  visptr->altshapenum=tmwall->midtexture;
-			  visptr->viewx=tmwall->toptexture;
-			  visptr->shapesize=2;
-			  }
-		  else
-			  {
-			  gx=(tmwall->tilex<<16);
-			  gy=(tmwall->tiley<<16)+0x8000;
-			  visptr->texturestart=0;
-			  visptr->textureend=0;
-			  if (viewy<gy)
-				  result=TransformPlane(gx+0xffff,gy,gx,gy,visptr);
-			  else
-				  result=TransformPlane(gx,gy,gx+0xffff,gy,visptr);
-			  visptr->shapenum=tmwall->bottomtexture;
-			  visptr->altshapenum=tmwall->midtexture;
-			  visptr->viewx=tmwall->toptexture;
-			  visptr->shapesize=2;
-			  }
-		  if ((tmwall->flags&MW_TOPFLIPPING) &&
-            (nonbobpheight>64)
-			  )
-			  {
-			  visptr->viewx++;
-			  }
-		  else if ((tmwall->flags&MW_BOTTOMFLIPPING) &&
-                 (nonbobpheight>maxheight-32)
-					 )
-			  {
-			  visptr->shapenum++;
-			  }
-		  if ((visptr < &vislist[MAXVISIBLE-1]) && (result==true)) // don't let it overflo'
-			  visptr++;
-		  }
-	  }
-}
-#endif
 
 /*
 ======================
@@ -4083,18 +3947,6 @@ ExplosionInfoType ExplosionInfo[NUMEXPLOSIONTYPES]=
   {"EXP1\0",20},
   {"GREXP1\0",25},
   {"PART1\0",12},
-#if 0
-  {"GUTS1\0",12},
-  {"ORGAN1\0",12},
-  {"RIB1\0",12},
-  {"GPINK1\0",12},
-  {"GHEAD1\0",12},
-  {"GARM1\0",12},
-  {"GLEG1\0",12},
-  {"GHUM1\0",12},
-  {"GHIP1\0",12},
-  {"GLIMB1\0",12},
-#endif
 };
 
 
@@ -5397,33 +5249,6 @@ void DrawMaskedRotRow(int count, byte * dest, byte * src)
 
 void DrawSkyPost (byte * buf, byte * src, int height)
 {
-#if 0
-// bna fix for missing sky by high res eg 800x600
-// when sky is >400 (max skyheight) then reverse mouintain to missing spot
-// there should be 200 line of mouintain (400+200) = 600 height lines
-// not the best solution but what it works
-
-	if (iGLOBAL_SCREENWIDTH > 320){
-	// bna section start
-		//int n = 0;
-		int orgh = 0;//height;
-		if (height > 400){orgh=height;}
-
-		while (height--) {
-			if ((orgh > 0)&&( height<(orgh-400))){
-				src-=2;
-				*buf = shadingtable[*src];
-			}else{
-
-				*buf = shadingtable[*src];
-			}
-			buf += linewidth;
-			src++;
-		}
-	// bna section end
-	}
-	else
-#endif
 	{
 	int i = 0;
 	byte *const orig_src = src;
