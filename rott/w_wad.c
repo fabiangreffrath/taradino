@@ -443,15 +443,6 @@ void    *W_CacheLumpNum (int lump, int tag, converter_t converter, int numrec)
         if (!lumpcache[lump])
         {
                 // read the lump in
-#if (PRECACHETEST == 1)
-                char str[9];
-                strncpy(&str[0],W_GetNameForNum(lump),8);
-                str[8]=0;
-                SoftError("Lump #%d, %s cached at %ld tics size=%ld tag=%ld\n",lump,str,ticcount,W_LumpLength (lump),tag);
-                if (W_LumpLength(lump)==0)
-                   SoftError("Caching in zero length lump #%d, %s cached at %ld tics size=%ld tag=%ld\n",lump,str,ticcount,W_LumpLength (lump),tag);
-#endif
-
 #if (DATACORRUPTIONTEST == 1)
                 {
                 int length;
