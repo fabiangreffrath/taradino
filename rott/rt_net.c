@@ -49,12 +49,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_datadir.h"
 //MED
 
-#if (SYNCCHECK == 1)
-int            lastsynccheck;
-COM_CheckSyncType PlayerSync[MAXPLAYERS];
-#endif
-
-
 CommandType * LocalCmds;
 CommandType * ServerCmds;
 
@@ -487,9 +481,6 @@ void StartupClientControls ( void )
    serverupdatetime=controlupdatetime;
    oldpolltime=controlupdatetime;
    nextupdatetime=oldpolltime;
-#if (SYNCCHECK == 1)
-   lastsynccheck=oldpolltime+CHECKSYNCTIME;
-#endif
    controlupdatestartedtime=controlupdatetime;
 
    for( j = 0; j < numplayers; j++ )
@@ -1020,11 +1011,6 @@ int GetPacketSize (void * pkt)
       case COM_SYNCTIME:
          size=sizeof(COM_SyncType);
          break;
-#if (SYNCCHECK == 1)
-      case COM_SYNCCHECK:
-         size=sizeof(COM_CheckSyncType);
-         break;
-#endif
       case COM_SOUNDANDDELTA:
          size=sizeof(MoveType)+sizeof(COM_SoundType);
          break;
@@ -1371,42 +1357,6 @@ void FixupPacket (void * pkt, int src)
       }
 }
 
-#if (SYNCCHECK == 1)
-//****************************************************************************
-//
-// CheckForSyncCheck
-//
-//****************************************************************************
-
-void CheckForSyncCheck ( void )
-{
-   int i;
-
-
-   if (modemgame==true)
-      {
-      if (oldpolltime==lastsynccheck)
-         {
-         for (i=0;i<numplayers;i++)
-            {
-            PlayerSync[i].x=PLAYER[i]->x;
-            PlayerSync[i].y=PLAYER[i]->y;
-            PlayerSync[i].z=PLAYER[i]->z;
-            PlayerSync[i].angle=PLAYER[i]->angle;
-            }
-         PlayerSync[0].randomindex=GetRNGindex();
-         PlayerSync[0].synctime=lastsynccheck;
-         SendSyncCheckPacket();
-         lastsynccheck+=CHECKSYNCTIME;
-         }
-      if (oldpolltime>lastsynccheck)
-         {
-         Error("Missed a player sync check time=%d\n",oldpolltime);
-         }
-      }
-}
-#endif
-
 //****************************************************************************
 //
 // ProcessSyncTimePacket
@@ -1420,86 +1370,6 @@ void ProcessSyncTimePacket (void * pkt)
    sync=(COM_SyncType *)pkt;
    ISR_SetTime(sync->synctime);
 }
-
-#if (SYNCCHECK == 1)
-//****************************************************************************
-//
-// ProcessSyncCheckPacket
-//
-//****************************************************************************
-
-void ProcessSyncCheckPacket (void * pkt, int src)
-{
-   COM_CheckSyncType * sync;
-
-   sync=(COM_CheckSyncType *)pkt;
-//   SoftError("Sync packet time=%ld\n",sync->synctime);
-   if (sync->synctime!=PlayerSync[0].synctime)
-      {
-      SoftError("Old sync packet received\n");
-      return;
-      }
-   if (sync->randomindex!=PlayerSync[0].randomindex)
-      {
-      Error("Player %d is unsynced localindex=%d remoteindex=%d\n"
-            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
-             src, PlayerSync[0].randomindex, sync->randomindex,
-             PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
-             PlayerSync[src].z,PLAYERSTATE[src].codename);
-      }
-   if (sync->x!=PlayerSync[src].x)
-      {
-      Error("Player %d is unsynced local x=%d remote x=%d\n"
-            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
-             src,PlayerSync[src].x,sync->x,
-             PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
-             PlayerSync[src].z,PLAYERSTATE[src].codename);
-      }
-   if (sync->y!=PlayerSync[src].y)
-      {
-      Error("Player %d is unsynced local y=%d remote y=%d\n"
-            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
-             src,PlayerSync[src].y,sync->y,
-             PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
-             PlayerSync[src].z,PLAYERSTATE[src].codename);
-      }
-   if (sync->z!=PlayerSync[src].z)
-      {
-      Error("Player %d is unsynced local z=%d remote z=%d\n"
-            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
-             src,PlayerSync[src].z,sync->z,
-             PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
-             PlayerSync[src].z,PLAYERSTATE[src].codename);
-      }
-   if (sync->angle!=PlayerSync[src].angle)
-      {
-      Error("Player %d is unsynced local angle=%d remote angle=%d\n"
-            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
-             src,PlayerSync[src].angle,sync->angle,
-             PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
-             PlayerSync[src].z,PLAYERSTATE[src].codename);
-      }
-}
-
-//****************************************************************************
-//
-// SendSyncCheckPacket
-//
-//****************************************************************************
-
-void SendSyncCheckPacket ( void )
-{
-   ((COM_CheckSyncType *)NextLocalCommand())->type=COM_SYNCCHECK;
-   ((COM_CheckSyncType *)NextLocalCommand())->synctime=PlayerSync[0].synctime;
-   ((COM_CheckSyncType *)NextLocalCommand())->x=PlayerSync[consoleplayer].x;
-	((COM_CheckSyncType *)NextLocalCommand())->y=PlayerSync[consoleplayer].y;
-	((COM_CheckSyncType *)NextLocalCommand())->z=PlayerSync[consoleplayer].z;
-	((COM_CheckSyncType *)NextLocalCommand())->angle=PlayerSync[consoleplayer].angle;
-	((COM_CheckSyncType *)NextLocalCommand())->randomindex=PlayerSync[0].randomindex;
-
-   PrepareLocalPacket();
-}
-#endif
 
 //****************************************************************************
 //
@@ -1591,9 +1461,6 @@ void ProcessPacket (void * pkt, int src)
       case COM_RESPAWN:
       case COM_UNPAUSE:
       case COM_ENDGAME:
-#if (SYNCCHECK == 1)
-      case COM_SYNCCHECK:
-#endif
 //         if (FixingPackets==false)
          AddPacket(pkt,src);
          break;
@@ -1749,9 +1616,6 @@ void AddClientPacket (void * pkt, int src)
       case COM_EXIT:
       case COM_RESPAWN:
       case COM_UNPAUSE:
-#if (SYNCCHECK == 1)
-      case COM_SYNCCHECK:
-#endif
       case COM_ENDGAME:
          size=GetPacketSize(packet);
          memcpy(PlayerCommand(src,CommandAddress(packet->time)),packet,size);
@@ -2299,12 +2163,6 @@ void ProcessPlayerCommand( int player )
          AddMessage( string, MSG_REMOTE );
          }
       }
-#if (SYNCCHECK == 1)
-	else if (cmd->type==COM_SYNCCHECK)
-      {
-      ProcessSyncCheckPacket(cmd, player);
-      }
-#endif
 	else if (cmd->type==COM_PAUSE)
       {
       MUSIC_Pause();
