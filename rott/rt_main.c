@@ -1582,10 +1582,6 @@ void ShutDown ( void )
 
 void QuitGame ( void )
 {
-#if (DEBUG == 1)
-   char buf[5];
-#endif
-
    MU_FadeOut(200);
    while (MU_FadeActive())
       {
@@ -1596,20 +1592,6 @@ void QuitGame ( void )
    PrintMapStats();
    PrintTileStats();
    SetTextMode();
-
-#if (DEBUG == 1)
-      px = ERRORVERSIONCOL;
-      py = ERRORVERSIONROW;
-#if (BETA == 1)
-      UL_printf ("\xE1");
-#else
-      UL_printf (itoa(ROTTMAJORVERSION,&buf[0],10));
-#endif
-      // Skip the dot
-      px++;
-
-      UL_printf (itoa(ROTTMINORVERSION,&buf[0],10));
-#endif
 
    exit(0);
 }
