@@ -1149,7 +1149,6 @@ void GameLoop (void)
                   if (
                       (!LastScan) &&
                       (!IN_GetMouseButtons()) &&
-                      (lowmemory==0) &&
                       (GameLevels.avail==false)
                      )
                      {
