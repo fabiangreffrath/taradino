@@ -785,7 +785,7 @@ void SD_PreCacheSound ( int num )
    if ( SD_SoundOkay ( num ) == false )
       return;
 
-   PreCacheLump(SoundNumber(num),PU_CACHESOUNDS+sounds[num].priority,cache_other);
+   PreCacheLump(SoundNumber(num),PU_CACHESOUNDS/*+sounds[num].priority*/,cache_other);
 }
 
 //***************************************************************************

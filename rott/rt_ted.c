@@ -183,11 +183,6 @@ int GetLumpForTile(int tile);
 /*--------------------------------------------------------------------------*/
 int CompareTags(s1p,s2p) cachetype *s1p,*s2p;
 {
-// Sort according to lump
-   if (DoPanicMapping()==true)
-      return SGN(s1p->cachelevel-s2p->cachelevel);
-// Sort according to cachelevel
-   else
       return SGN(s1p->lump-s2p->lump);
 }
 
@@ -863,18 +858,9 @@ void MiscPreCache( void )
 
    // cache in explosions
 
-   if (DoPanicMapping()==true)
-      {
-      start=W_GetNumForName("EXPLOS1");
-      end  =W_GetNumForName("EXPLOS20");
-      PreCacheGroup(start,end,cache_patch_t);
-      }
-   else
-      {
       start=W_GetNumForName("EXPLOS1");
       end  =W_GetNumForName("GREXP25");
       PreCacheGroup(start,end,cache_patch_t);
-      }
 
 	// cache in misc player sprites
 	start=W_GetNumForName("BLOODS1");
@@ -938,16 +924,8 @@ void MiscPreCache( void )
 
    if (gamestate.violence >= vl_high)
       {                                  // cache in all gibs
-      if (DoPanicMapping()==true)
-         {
-         start = W_GetNumForName("ORGAN1");
-         end = W_GetNumForName("ORGAN12");
-         }
-      else
-         {
          start = W_GetNumForName("PART1");
          end = W_GetNumForName("GEYE3");
-         }
       PreCacheGroup(start,end,cache_patch_t);
       }
 }
@@ -1180,6 +1158,8 @@ void PreCache( void )
          total+=W_LumpLength(cachelist[i].lump);
          newheap=Z_UsedHeap();
 			currentmem=(newheap*MAXLEDS)/maxheapsize;
+			if (currentmem >= MAXLEDS)
+			    currentmem = MAXLEDS - 1;
          while (lastmem<=currentmem)
             {//SetTextMode (  );
    			if ( iGLOBAL_SCREENWIDTH == 320) {
@@ -1313,7 +1293,7 @@ DisableScreenStretch();
       OpenMapDebug();
 
       MapDebug("Map Number %d\n",gamestate.mapon);
-      MapDebug("sizeoflevel=%d\n",Z_UsedLevelHeap());
+      MapDebug("sizeoflevel=%ld\n",(long)Z_UsedLevelHeap());
       MapDebug("TotalPrecached: %ld\n",(long)total);
       }
 #if (PRECACHETEST == 1)
@@ -1487,7 +1467,7 @@ void ReadROTTMap
       lseek( filehandle, pos, SEEK_SET );
       SafeRead( filehandle, buffer, compressed );
 
-      mapplanes[ plane ] = Z_Malloc( expanded, PU_LEVEL, &mapplanes[ plane ] );
+      mapplanes[ plane ] = Z_Malloc( expanded, PU_LEVEL, (void **)&mapplanes[ plane ] );
 
       //
       // unRLEW, skipping expanded length
@@ -1835,7 +1815,7 @@ void LoadTedMap
       buffer = SafeMalloc( compressed );
       SafeRead( maphandle, buffer, compressed );
 
-      mapplanes[ plane ] = Z_Malloc( expanded, PU_LEVEL, &mapplanes[ plane ] );
+      mapplanes[ plane ] = Z_Malloc( expanded, PU_LEVEL, (void **)&mapplanes[ plane ] );
 
       //
       // unRLEW, skipping expanded length
@@ -5039,416 +5019,6 @@ void DoSharewareConversionBackgroundPlane (void)
       }
 }
 
-
-/*
-========================================
-=
-= DoLowMemoryConversionBackgroundPlane
-=
-========================================
-*/
-void DoLowMemoryConversionBackgroundPlane (void)
-   {
-   int i,j;
-   word * map;
-
-
-	for (j=0;j<mapheight;j++)
-      {
-      for(i=0;i<mapwidth;i++)
-			{
-         map=&(mapplanes[0][MAPSIZE*(j)+(i)]);
-         switch (*map)
-            {
-            //Walls
-
-            case 2:
-            case 3:
-            case 4:
-               *map = 1;
-               break;
-
-            case 6:
-            case 7:
-            case 8:
-               *map = 5;
-               break;
-
-            case 14:
-            case 15:
-            case 16:
-               *map = 13;
-               break;
-
-            case 18:
-            case 19:
-            case 20:
-               *map = 17;
-               break;
-
-            case 26:
-            case 27:
-            case 28:
-               *map = 25;
-               break;
-
-            case 30:
-            case 31:
-            case 32:
-               *map = 29;
-               break;
-
-#if 0
-            case 37:
-            case 38:
-            case 39:
-               *map = 36;
-               break;
-
-            case 41:
-            case 42:
-            case 43:
-               *map = 40;
-               break;
-#endif
-
-            case 50:
-            case 51:
-            case 52:
-               *map = 49;
-               break;
-
-#if 0
-            case 55:
-            case 56:
-            case 57:
-               *map = 54;
-               break;
-
-            case 59:
-            case 60:
-            case 61:
-               *map = 58;
-               break;
-#endif
-
-            case 66:
-            case 67:
-            case 68:
-               *map = 65;
-               break;
-
-            case 70:
-            case 71:
-               *map = 69;
-               break;
-
-            case 81:
-            case 82:
-            case 84:
-               *map = 83;
-               break;
-
-            // Masked Walls
-            case 158:
-            case 159:
-            case 160:
-            case 168:
-            case 169:
-            case 176:
-            case 178:
-               *map=177;
-               break;
-            case 162:
-            case 163:
-            case 164:
-            case 166:
-            case 167:
-               *map=165;
-               break;
-
-            //Doors
-            case 90:
-            case 91:
-            case 92:
-            case 93:
-            case 98:
-            case 99:
-            case 100:
-            case 101:
-            case 103:
-            case 104:
-            case 33:
-            case 34:
-            case 35:
-            case 154:
-            case 155:
-            case 156:
-               *map = 101;
-               break;
-
-            //Animating Walls
-            case 22:
-            case 23:
-            case 24:
-            case 228:
-            case 229:
-            case 230:
-            case 231:
-            case 232:
-            case 242:
-            case 243:
-            case 244:
-               *map = 21;
-               break;
-            case 233:
-               *map = 44;
-               break;
-
-#if 0
-            //Skys
-            case 234:
-            case 235:
-            case 236:
-            case 237:
-            case 238:
-            case 239:
-               *map=(*(&(mapplanes[0][MAPSIZE*(0)+(0)]))) + 18;
-               break;
-#endif
-            }
-         }
-      }
-   }
-
-
-/*
-========================================
-=
-= DoLowMemoryConversionIconPlane
-=
-========================================
-*/
-void DoLowMemoryConversionIconPlane (void)
-   {
-#if 0
-   int i,j;
-   word * map;
-
-
-	for (j=0;j<mapheight;j++)
-      {
-      for(i=0;i<mapwidth;i++)
-			{
-         map=&(mapplanes[2][MAPSIZE*(j)+(i)]);
-         switch (*map)
-            {
-            case 13:
-               *(&(mapplanes[0][MAPSIZE*(j)+(i)]))=21;
-               *map=0;
-               break;
-            }
-         }
-      }
-#endif
-   }
-
-
-
-/*
-========================================
-=
-= DoLowMemoryConversionForegroundPlane
-=
-========================================
-*/
-
-void DoLowMemoryConversionForegroundPlane (void)
-   {
-   int i,j;
-   word * map;
-
-
-	for (j=0;j<mapheight;j++)
-      {
-      for(i=0;i<mapwidth;i++)
-			{
-         map=&MAPSPOT(i,j,1);
-         switch (*map)
-            {
-            // light sourcing
-            case 139:
-               *map=0;
-               break;
-
-            //sprites
-            case 42:
-            case 43:
-            case 63:
-            case 64:
-               *map = 43;
-               break;
-
-            case 246:
-            case 247:
-            case 248:
-            case 264:
-            case 265:
-            case 267:
-            case 283:
-               *map = 266;
-               break;
-
-            //lightning
-            case 377:
-               *map = 0;
-               break;
-
-            // actor guards
-
-            // normal low guards
-            case 108:
-            case 109:
-            case 110:
-            case 111:
-            case 112:
-            case 113:
-            case 114:
-            case 115:
-            case 116:
-            case 117:
-            case 118:
-            case 119:
-
-            case 126:
-            case 127:
-            case 128:
-            case 129:
-            case 130:
-            case 131:
-            case 132:
-            case 133:
-            case 134:
-            case 135:
-            case 136:
-            case 137:
-               (*map)+=216;
-               break;
-
-            // sneaky low guards
-            case 120:
-            case 138:
-               *map = 0;
-               break;
-
-            // normal over patrol
-            case 216:
-            case 217:
-            case 218:
-            case 219:
-            case 220:
-            case 221:
-            case 222:
-            case 223:
-            case 224:
-            case 225:
-            case 226:
-            case 227:
-
-
-            case 234:
-            case 235:
-            case 236:
-            case 237:
-            case 238:
-            case 239:
-            case 240:
-            case 241:
-            case 242:
-            case 243:
-            case 244:
-            case 245:
-               (*map)-=36;
-               break;
-
-            //environment dangers
-
-#if (SHAREWARE==0)
-            case 412:      //spears to firejets
-               *map = 372;
-               break;
-
-            case 430:
-               *map = 390;
-               break;
-
-            case 413:       //cylinders down to firejets
-               *map = 372;
-               break;
-#endif
-
-            case 156:
-            case 157:
-               *map = 372;    //spinblade stabbers to firejets
-               break;
-
-            case 174:
-            case 175:
-               *map = 390;
-               break;
-
-            case 301:          // directional spin blades
-               *map = 373;
-               break;
-
-            case 319:          // directional spin blades
-               *map = 374;
-               break;
-
-            case 337:          // directional spin blades
-               *map = 375;
-               break;
-
-            case 355:          // directional spin blades
-               *map = 376;
-               break;
-
-            case 302:          // directional spin blades
-               *map = 391;
-               break;
-
-            case 320:          // directional spin blades
-               *map = 392;
-               break;
-
-            case 338:          // directional spin blades
-               *map = 393;
-               break;
-
-            case 356:          // directional spin blades
-               *map = 394;
-               break;
-
-            case 194:      // directional emplacements to four-way
-            case 195:      // easy
-            case 196:
-            case 197:
-               *map = 89;
-               break;
-
-            case 212:      // hard
-            case 213:
-            case 214:
-            case 215:
-               *map = 211;
-               break;
-
-            }
-         }
-      }
-   }
-
-
 /*
 ==================
 =
@@ -5627,38 +5197,6 @@ void DoRegisterConversion (void)
 }
 
 /*
-=======================
-=
-= DoPanicMapping
-=
-=======================
-*/
-boolean DoPanicMapping (void)
-   {
-   if ((lowmemory==true) && (modemgame==false) && (demorecord==false) && (demoplayback==false))
-      return true;
-   else
-      return false;
-   }
-
-/*
-=======================
-=
-= DoLowMemoryConversion
-=
-=======================
-*/
-void DoLowMemoryConversion (void)
-   {
-   DoLowMemoryConversionBackgroundPlane ();
-   if ((modemgame==false) && (demorecord==false) && (demoplayback==false))
-      DoLowMemoryConversionForegroundPlane ();
-   DoLowMemoryConversionIconPlane ();
-   }
-
-
-
-/*
 ==================
 =
 = SetupGameLevel
@@ -5709,10 +5247,6 @@ void SetupGameLevel (void)
 		GetEpisode (gamestate.mapon);
 		LoadROTTMap(gamestate.mapon);
 		}
-   if (DoPanicMapping())
-      {
-      DoLowMemoryConversion();
-      }
    if ( gamestate.Product == ROTT_SHAREWARE )
       {
       DoSharewareConversion ();

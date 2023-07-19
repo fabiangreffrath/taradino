@@ -179,6 +179,4 @@ int GetSongForLevel ( void );
 void CheckHolidays(void);
 boolean IsChristmas(void);
 
-boolean DoPanicMapping (void);
-
 #endif
