@@ -40,11 +40,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "develop.h"
 #include "rt_main.h"
 
-#if (DEVELOPMENT == 1)
-
-#include "rt_vid.h"
-
-#endif
 //MED
 #include "memcheck.h"
 
