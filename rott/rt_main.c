@@ -1694,9 +1694,6 @@ void UpdateGameObjects ( void )
             break;
             }
          }
-#if (SYNCCHECK == 1)
-      CheckForSyncCheck();
-#endif
       if (timelimitenabled == true)
          {
          if (timelimit-gamestate.TimeCount>maxtimelimit)
@@ -1746,9 +1743,6 @@ void PauseLoop ( void )
    while (oldpolltime<oldtime)
 	   {
       CheckUnPause();
-#if (SYNCCHECK == 1)
-      CheckForSyncCheck();
-#endif
       oldpolltime++;
       if (GamePaused==false)
          {
