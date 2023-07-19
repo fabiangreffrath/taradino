@@ -3268,7 +3268,7 @@ void ApogeeTitle (void)
 #define APOGEESTARTY 0
 #define APOGEEENDY   100
 
-#define APOGEESCALESTART ((unsigned)FINEANGLES<<4)
+#define APOGEESCALESTART ((int)FINEANGLES<<4)
 #define APOGEESCALEEND (FINEANGLES)
 #define APOGEESONGTIME (124-1)
 
