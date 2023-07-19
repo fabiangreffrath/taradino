@@ -255,9 +255,6 @@ void PreCacheLump( int lump, int level, int type ) // added type
       return;
    if (!W_LumpLength(lump))
       {
-#if (PRECACHETEST == 1)
-      SoftError("Tried to precache a label, lump = %ld tag=%ld maskednum=%ld\n",lump, level, maskednum);
-#endif
       return;
       }
    for (i=1;i<cacheindex;i++)
@@ -294,9 +291,6 @@ void PreCacheGroup( int start, int end, int type ) // added type
       {
       if (!W_LumpLength(j))
          {
-#if (PRECACHETEST == 1)
-         SoftError("Tried to precache a label, lump = %ld\n",j);
-#endif
          continue;
          }
       found=0;
@@ -1220,11 +1214,6 @@ DisableScreenStretch();
             ;
          }
  //  EnableScreenStretch();
-#if (PRECACHETEST == 1)
-      SoftError("Max  Heap Size: %ld\n",maxheapsize);
-      SoftError("Used Heap Size: %ld\n",newheap);
-      SoftError("TotalPrecached: %ld\n",total);
-#endif
       }
    else
       {
@@ -1243,9 +1232,6 @@ DisableScreenStretch();
       MapDebug("sizeoflevel=%ld\n",(long)Z_UsedLevelHeap());
       MapDebug("TotalPrecached: %ld\n",(long)total);
       }
-#if (PRECACHETEST == 1)
-   SoftError("<<<<<<<<<<<<<<<<<<<<<<<Precaching done\n");
-#endif
 }
 
 
