@@ -1584,12 +1584,6 @@ void SpawnStand (classtype which, int tilex, int tiley, int dir, int ambush)
    if (ambush)
       new->flags |= FL_AMBUSH;
 
-
- #if 0
- if (gamestate.Product == ROTT_SUPERCD)
-   ConsiderAlternateActor(new,which);
- #endif
-
    StandardEnemyInit(new,dir);
 
    if (which == b_darkmonkobj)
@@ -1632,12 +1626,6 @@ void SpawnStand (classtype which, int tilex, int tiley, int dir, int ambush)
 void SpawnPatrol (classtype which, int tilex, int tiley, int dir)
 {statetype *temp;
  int path=PATH;
-#if 0
-if (gamestate.Product == ROTT_SUPERCD)
- char *altstartlabel;
-#endif
-
-
 
  #if (SHAREWARE==1)
    switch(which)
@@ -1669,12 +1657,6 @@ if (gamestate.Product == ROTT_SUPERCD)
 
    if (!loadedgame)
       gamestate.killtotal++;
-
-
-   #if 0
-   if (gamestate.Product == ROTT_SUPERCD)
-   ConsiderAlternateActor(new,which);
-   #endif
 
    StandardEnemyInit(new,dir);
 
@@ -3116,13 +3098,6 @@ void T_Explosion(objtype* ob)
          check->flags &= ~FL_SHOOTABLE;
          return;
          }
-#if 0
-      dist = FindDistance(dx,dy);
-      scalefactor = (blastradius-dist)>>4;
-      if (scalefactor > 0xffff)
-         scalefactor = 0xffff;
-      pdamage = FixedMul(damage,scalefactor);
-#endif
 //#if 0
      //magdx = abs(dx);
      //magdy = abs(dy);
@@ -3431,14 +3406,6 @@ void BeginEnemyFatality(objtype *ob,objtype *attacker)
 
    ob->flags |= FL_DYING;
    ob->soundhandle = -1;
-
-#if 0
-   if ((ob->obclass == blitzguardobj) &&
-       (ob->state->condition & SF_DOWN)
-      )
-
-      SD_Play(PlayerSnds[locplayerstate->player]);
-#endif
 
    if (Vicious_Annihilation(ob,attacker))
       return;
@@ -9147,16 +9114,6 @@ findplayer:
          prevdir = ((prevdir+2) & 0xf);
 
          }
-   #if 0
-      SoftError("\n straight dir: %d\n queue dirs ",tdir);
-      for(count = 0;count < MISCVARS->NMEqueuesize;count++)
-         {
-         SoftError("\n dir %d: %d",MISCVARS->NMEqueuesize-count,
-                   ((ob->temp1 >> (4*count)) &0xf)
-                  );
-
-         }
-   #endif
       }
    else             // else goto next queue dir;
       {
