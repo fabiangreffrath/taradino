@@ -3397,10 +3397,10 @@ void QuickSaveGame (void)
 
    filename = M_StringJoin(ApogeePath, PATH_SEP_STR, loadname, NULL);
    length=LoadFile(filename,(void **)&buf);
-   free(filename)
+   free(filename);
    filename = M_StringJoin(ApogeePath, PATH_SEP_STR, QUICKSAVEBACKUP, NULL);
    SaveFile(filename,buf,length);
-   free(filename)
+   free(filename);
    SafeFree(buf);
 
    s=&game.picture[0];
@@ -3462,10 +3462,10 @@ void UndoQuickSaveGame (void)
       loadname[8]='.';
       filename = M_StringJoin(ApogeePath, PATH_SEP_STR, QUICKSAVEBACKUP, NULL);
       length=LoadFile(filename,(void **)&buf);
-      free(filename)
+      free(filename);
       filename = M_StringJoin(ApogeePath, PATH_SEP_STR, loadname, NULL);
       SaveFile(filename,buf,length);
-      free(filename)
+      free(filename);
       SafeFree(buf);
       AddMessage("Previous Quicksave Game Restored.",MSG_SYSTEM);
       }
