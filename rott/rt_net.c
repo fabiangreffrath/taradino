@@ -47,14 +47,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_battl.h"
 #include "rt_dmand.h"
 #include "rt_datadir.h"
-//MED
-#include "memcheck.h"
-
-#if (SYNCCHECK == 1)
-int            lastsynccheck;
-COM_CheckSyncType PlayerSync[MAXPLAYERS];
-#endif
-
 
 CommandType * LocalCmds;
 CommandType * ServerCmds;
@@ -143,24 +135,6 @@ int MaxSpeedForCharacter(playertype *pstate);
 //****************************************************************************
 
 #define ComError SoftError
-#if 0
-void ComError (char *error, ...)
-{
-#if 0
-	va_list	argptr;
-#endif
-
-   SoftError(error);
-#if 0
-   if (standalone==true)
-      {
-	   va_start (argptr, error);
-      vprintf (error, argptr);
-	   va_end (argptr);
-      }
-#endif
-}
-#endif
 
 //****************************************************************************
 //
@@ -322,14 +296,6 @@ void InitializeGameCommands( void )
 			server=consoleplayer^1;
          }
       }
-#if 0
-#if (DEVELOPMENT == 1)
-      if (IsServer)
-         ComError("I am the server\n");
-      ComError("consoleplayer=%ld\n",consoleplayer);
-      ComError("server=%ld mynumber=%ld\n",server,consoleplayer);
-#endif
-#endif
 }
 
 
@@ -448,9 +414,6 @@ void ShutdownGameCommands( void )
 void ShutdownClientControls ( void )
 {
    int i;
-#if (DEVELOPMENT == 1)
-   SoftError ("LARGEST time difference=%ld\n",largesttime);
-#endif
    controlupdatestarted=0;
    for (i=0;i<numplayers;i++)
        {
@@ -517,9 +480,6 @@ void StartupClientControls ( void )
    serverupdatetime=controlupdatetime;
    oldpolltime=controlupdatetime;
    nextupdatetime=oldpolltime;
-#if (SYNCCHECK == 1)
-   lastsynccheck=oldpolltime+CHECKSYNCTIME;
-#endif
    controlupdatestartedtime=controlupdatetime;
 
    for( j = 0; j < numplayers; j++ )
@@ -572,10 +532,6 @@ void StartupClientControls ( void )
       }
 
 
-#if (DEVELOPMENT == 1)
-//   ComError("StartupClientControls: GetTicCount()=%ld oldtime=%ld controlupdatetime=%ld\n",GetTicCount(),oldtime,controlupdatetime);
-#endif
-
    if ((demoplayback==false) && (standalone==false))
       {
       if (modemgame==true)
@@ -617,17 +573,6 @@ void UpdateClientControls ( void )
 
    wami(6);
 
-#if 0
-
-   delta=GetTicCount()-lastcontrolupdatetime;
-   if (delta>largesttime)
-      {
-      if (delta>10)
-         largesttime=delta;
-      largesttime=delta;
-      }
-
-#endif
    lastcontrolupdatetime=GetTicCount();
 
    if (standalone==false)
@@ -751,6 +696,7 @@ void UpdateClientControls ( void )
 // take out
    if (modemgame==true)
       {
+//TODO: Not sure if that's DEVELOPMENT code or not.
 //#if (DEVELOPMENT == 1)
       if (PanicPressed==true)
          {
@@ -799,9 +745,6 @@ void CheckForPacket ( void )
       if (badpacket==0)
          {
          ProcessPacket(&ROTTpacket[0], rottcom->remotenode);
-         #if (DEVELOPMENT == 1)
-//         ComError("CheckForPacket: from=%ld\n",rottcom->remotenode);
-         #endif
          }
       else
          RequestPacket (LastCommandTime[rottcom->remotenode]+controldivisor, rottcom->remotenode, controldivisor);
@@ -991,10 +934,6 @@ void PrepareLocalPacket ( void )
    if (modemgame==true)
       SendPacket (pkt, server);
 
-#if (DEVELOPMENT == 1)
-//   ComError("packet sent: realtime=%ld time=%ld type=%ld dest=%ld\n",GetTicCount(),pkt->time,pkt->type,server);
-#endif
-
    controlupdatetime+=controldivisor;
    waminot();
 }
@@ -1071,11 +1010,6 @@ int GetPacketSize (void * pkt)
       case COM_SYNCTIME:
          size=sizeof(COM_SyncType);
          break;
-#if (SYNCCHECK == 1)
-      case COM_SYNCCHECK:
-         size=sizeof(COM_CheckSyncType);
-         break;
-#endif
       case COM_SOUNDANDDELTA:
          size=sizeof(MoveType)+sizeof(COM_SoundType);
          break;
@@ -1144,9 +1078,6 @@ void SendPacket (void * pkt, int dest)
       ComError("SendPacket:Problems\n");
    else
       WritePacket(pkt,GetPacketSize(pkt),dest);
-#if (DEVELOPMENT == 1)
-//   ComError( "SendPacket: time=%ld dest=%ld\n",((MoveType *)pkt)->time,dest);
-#endif
 }
 
 //****************************************************************************
@@ -1195,16 +1126,6 @@ void ResendLocalPackets (int time, int dest, int numpackets)
    MoveType * pkt;
 
    cmd = CommandAddress(time);
-
-#if 0
-   if (networkgame==false)
-      {
-      int nump;
-      nump=controlupdatetime-time;
-      if (nump>numpackets)
-         numpackets=nump;
-      }
-#endif
 
    if (controlupdatetime<=time)
       return;
@@ -1393,10 +1314,6 @@ void FixupPacket (void * pkt, int src)
    fix=(COM_FixupType *)pkt;
 
    ComError( "Fixup received at %d, time=%d numpackets=%d\n", GetTicCount(), fix->time, fix->numpackets);
-#if 0
-   if (networkgame==false)
-      FixingPackets=false;
-#endif
    time=fix->time;
    ptr=&(fix->data);
 
@@ -1439,42 +1356,6 @@ void FixupPacket (void * pkt, int src)
       }
 }
 
-#if (SYNCCHECK == 1)
-//****************************************************************************
-//
-// CheckForSyncCheck
-//
-//****************************************************************************
-
-void CheckForSyncCheck ( void )
-{
-   int i;
-
-
-   if (modemgame==true)
-      {
-      if (oldpolltime==lastsynccheck)
-         {
-         for (i=0;i<numplayers;i++)
-            {
-            PlayerSync[i].x=PLAYER[i]->x;
-            PlayerSync[i].y=PLAYER[i]->y;
-            PlayerSync[i].z=PLAYER[i]->z;
-            PlayerSync[i].angle=PLAYER[i]->angle;
-            }
-         PlayerSync[0].randomindex=GetRNGindex();
-         PlayerSync[0].synctime=lastsynccheck;
-         SendSyncCheckPacket();
-         lastsynccheck+=CHECKSYNCTIME;
-         }
-      if (oldpolltime>lastsynccheck)
-         {
-         Error("Missed a player sync check time=%d\n",oldpolltime);
-         }
-      }
-}
-#endif
-
 //****************************************************************************
 //
 // ProcessSyncTimePacket
@@ -1488,144 +1369,6 @@ void ProcessSyncTimePacket (void * pkt)
    sync=(COM_SyncType *)pkt;
    ISR_SetTime(sync->synctime);
 }
-
-#if (SYNCCHECK == 1)
-//****************************************************************************
-//
-// ProcessSyncCheckPacket
-//
-//****************************************************************************
-
-void ProcessSyncCheckPacket (void * pkt, int src)
-{
-   COM_CheckSyncType * sync;
-
-   sync=(COM_CheckSyncType *)pkt;
-//   SoftError("Sync packet time=%ld\n",sync->synctime);
-   if (sync->synctime!=PlayerSync[0].synctime)
-      {
-      SoftError("Old sync packet received\n");
-      return;
-      }
-   if (sync->randomindex!=PlayerSync[0].randomindex)
-      {
-      Error("Player %d is unsynced localindex=%d remoteindex=%d\n"
-            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
-             src, PlayerSync[0].randomindex, sync->randomindex,
-             PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
-             PlayerSync[src].z,PLAYERSTATE[src].codename);
-      }
-   if (sync->x!=PlayerSync[src].x)
-      {
-      Error("Player %d is unsynced local x=%d remote x=%d\n"
-            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
-             src,PlayerSync[src].x,sync->x,
-             PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
-             PlayerSync[src].z,PLAYERSTATE[src].codename);
-      }
-   if (sync->y!=PlayerSync[src].y)
-      {
-      Error("Player %d is unsynced local y=%d remote y=%d\n"
-            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
-             src,PlayerSync[src].y,sync->y,
-             PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
-             PlayerSync[src].z,PLAYERSTATE[src].codename);
-      }
-   if (sync->z!=PlayerSync[src].z)
-      {
-      Error("Player %d is unsynced local z=%d remote z=%d\n"
-            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
-             src,PlayerSync[src].z,sync->z,
-             PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
-             PlayerSync[src].z,PLAYERSTATE[src].codename);
-      }
-   if (sync->angle!=PlayerSync[src].angle)
-      {
-      Error("Player %d is unsynced local angle=%d remote angle=%d\n"
-            "Unsynced Player x=%x y=%x a=%d z=%d name=%s\n",
-             src,PlayerSync[src].angle,sync->angle,
-             PlayerSync[src].x, PlayerSync[src].y, PlayerSync[src].angle,
-             PlayerSync[src].z,PLAYERSTATE[src].codename);
-      }
-}
-
-//****************************************************************************
-//
-// SendSyncCheckPacket
-//
-//****************************************************************************
-
-void SendSyncCheckPacket ( void )
-{
-   ((COM_CheckSyncType *)NextLocalCommand())->type=COM_SYNCCHECK;
-   ((COM_CheckSyncType *)NextLocalCommand())->synctime=PlayerSync[0].synctime;
-   ((COM_CheckSyncType *)NextLocalCommand())->x=PlayerSync[consoleplayer].x;
-	((COM_CheckSyncType *)NextLocalCommand())->y=PlayerSync[consoleplayer].y;
-	((COM_CheckSyncType *)NextLocalCommand())->z=PlayerSync[consoleplayer].z;
-	((COM_CheckSyncType *)NextLocalCommand())->angle=PlayerSync[consoleplayer].angle;
-	((COM_CheckSyncType *)NextLocalCommand())->randomindex=PlayerSync[0].randomindex;
-
-   PrepareLocalPacket();
-}
-#endif
-
-#if 0
-
-//****************************************************************************
-//
-// CheckForSyncTime
-//
-//****************************************************************************
-
-void CheckForSyncTime ( void )
-{
-   if ((modemgame==true) && (networkgame==false) && (consoleplayer==0))
-      {
-      if (controlupdatetime>=syncservertime)
-         {
-         SendSyncTimePacket();
-         syncservertime+=MODEMSYNCSERVERTIME;
-         }
-      }
-}
-#endif
-
-#if 0
-//****************************************************************************
-//
-// SendSyncTimePacket
-//
-//****************************************************************************
-
-void SendSyncTimePacket ( void )
-{
-   int i;
-   COM_SyncType sync;
-
-   return;
-
-   sync.type=COM_SYNCTIME;
-
-   if (networkgame==true)
-      {
-      for (i=0;i<numplayers;i++)
-         {
-         if ((PlayerStatus[i]!=player_ingame) || ( (i==consoleplayer) && (standalone==false) ) )
-            continue;
-         sync.synctime=GetTicCount()+GetTransitTime(i);
-         WritePacket ( &sync.type, GetPacketSize(&sync.type), i);
-         }
-      }
-   else
-      {
-      if (PlayerStatus[server]==player_ingame)
-         {
-         sync.synctime=GetTicCount()+GetTransitTime(server);
-         WritePacket ( &sync.type, GetPacketSize(&sync.type), server);
-         }
-      }
-}
-#endif
 
 //****************************************************************************
 //
@@ -1688,17 +1431,6 @@ void SyncToServer( void )
 //      SoftError("diff=%ld\n",diff);
 //      if (abs(diff)>1)
 //         ISR_SetTime(GetTicCount()-diff);
-#if 0
-      diff = controlupdatetime-LastCommandTime[0];
-      if (diff>3)
-         {
-         ISR_SetTime(GetTicCount()-1);
-         }
-      else if (diff<-3)
-         {
-         ISR_SetTime(GetTicCount()+1);
-         }
-#endif
 //      }
 //   else
 //      {
@@ -1728,9 +1460,6 @@ void ProcessPacket (void * pkt, int src)
       case COM_RESPAWN:
       case COM_UNPAUSE:
       case COM_ENDGAME:
-#if (SYNCCHECK == 1)
-      case COM_SYNCCHECK:
-#endif
 //         if (FixingPackets==false)
          AddPacket(pkt,src);
          break;
@@ -1886,9 +1615,6 @@ void AddClientPacket (void * pkt, int src)
       case COM_EXIT:
       case COM_RESPAWN:
       case COM_UNPAUSE:
-#if (SYNCCHECK == 1)
-      case COM_SYNCCHECK:
-#endif
       case COM_ENDGAME:
          size=GetPacketSize(packet);
          memcpy(PlayerCommand(src,CommandAddress(packet->time)),packet,size);
@@ -1997,12 +1723,6 @@ void RequestPacket (int time, int dest, int numpackets)
    COM_RequestType request;
    int i;
 
-
-#if (DEVELOPMENT == 1)
-   if (modemgame==false)
-      Error("Called Request Packet outside of modem game\n");
-#endif
-
    request.type=COM_REQUEST;
    request.time=time;
    request.numpackets=numpackets/controldivisor;
@@ -2035,10 +1755,6 @@ void RequestPacket (int time, int dest, int numpackets)
    // send out the packet
 
    WritePacket (&request, GetPacketSize(&request), dest);
-
-#if (DEVELOPMENT == 1)
-//   ComError( "BADPKT, request sent at %ld lgt=%ld dest=%ld\n",GetTicCount(),time,dest);
-#endif
 }
 
 //****************************************************************************
@@ -2263,13 +1979,6 @@ void ProcessServer ( void )
       if (restartgame==true)
          break;
       SendFullServerPacket();
-#if 0
-      if (serverupdatetime>=syncservertime)
-         {
-         SendSyncTimePacket();
-         syncservertime+=NETSYNCSERVERTIME;
-         }
-#endif
       }
 exitProcessServer:
    InProcessServer=false;
@@ -2375,9 +2084,6 @@ void ServerLoop( void )
       while(1)
          {
          ProcessServer();
-#if (DEVELOPMENT == 1)
-         Z_CheckHeap();
-#endif
          CalcTics();
          if (restartgame==true)
             break;
@@ -2456,12 +2162,6 @@ void ProcessPlayerCommand( int player )
          AddMessage( string, MSG_REMOTE );
          }
       }
-#if (SYNCCHECK == 1)
-	else if (cmd->type==COM_SYNCCHECK)
-      {
-      ProcessSyncCheckPacket(cmd, player);
-      }
-#endif
 	else if (cmd->type==COM_PAUSE)
       {
       MUSIC_Pause();
@@ -2594,21 +2294,6 @@ void ControlPlayerObj (objtype * ob)
       if (ob->flags&FL_PUSHED)
          {
          ob->flags&=~FL_PUSHED;
-#if 0
-         if (abs(ob->momentumx)>0)
-            {
-            if (abs(ob->momentumx+pstate->dmomx)>=abs(ob->momentumx))
-               {
-               ob->momentumx += pstate->dmomx;
-               ob->momentumy += pstate->dmomy;
-               }
-            }
-         else if (abs(ob->momentumy+pstate->dmomy)>=abs(ob->momentumy))
-            {
-            ob->momentumx += pstate->dmomx;
-            ob->momentumy += pstate->dmomy;
-            }
-#endif
          if (abs(ob->momentumx+pstate->dmomx)>=abs(ob->momentumx))
             {
             ob->momentumx += pstate->dmomx;
@@ -2679,22 +2364,6 @@ void UpdatePlayerObj ( int player )
    if (demoplayback||demorecord) {
       SoftError("  dmx=%4x dmy=%4x da=%4x time=%5d\n",pstate->dmomx,pstate->dmomy,pstate->angle>>11,oldpolltime);
    }
-#if 0
-#if (DEVELOPMENT == 1)
-         if ((modemgame==true) || (demoplayback==true) || (demorecord==true))
-		   {
-			ComError( "player#%2ld\n",player);
-		   ComError( "momx = %6ld\n", PLAYER[player]->momentumx);
-		   ComError( "momy = %6ld\n", PLAYER[player]->momentumy);
-		   ComError( "   x = %6ld\n", PLAYER[player]->x);
-		   ComError( "   y = %6ld\n", PLAYER[player]->y);
-		   ComError( "   z = %6ld\n", PLAYER[player]->z);
-		   ComError( "   a = %6ld\n", PLAYER[player]->angle);
-		   if (pstate->buttonstate[bt_attack])
-			   ComError( "FIRING\n");
-         }
-#endif
-#endif
 }
 
 

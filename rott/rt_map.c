@@ -49,8 +49,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_net.h"
 #include "rt_str.h"
 #include "watcom.h"
-//MED
-#include "memcheck.h"
 
 //===========================================================================
 
@@ -958,13 +956,6 @@ EnableScreenStretch();//bna++
         if (control.dir==dir_North)
            dy=-(tics<<17)/(5-mapscale);
         }
-#if (DEVELOPMENT == 1)
-     if (Keyboard[sc_M])
-        {
-        CheatMap();
-        ChangeMapScale( &x, &y, mapscale );
-        }
-#endif
 
      x+=dx;
      y+=dy;

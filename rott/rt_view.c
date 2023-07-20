@@ -41,8 +41,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_str.h"
 #include "watcom.h"
 #include "develop.h"
-//MED
-#include "memcheck.h"
 
 #define LIGHTNINGLEVEL 4
 #define MINLIGHTNINGLEVEL   2
@@ -705,16 +703,6 @@ void UpdateLightLevel (int area)
       maxshade-=1;
    else if (maxshade<targetmax)
       maxshade+=1;
-
-#if 0
-   targetlevel=baseminshade+(GENERALNUMLIGHTS-numlights);
-   if (abs(minshade-targetlevel)==1)
-      minshade=targetlevel;
-   else if (minshade>targetlevel)
-      minshade-=2;
-   else if (minshade<targetlevel)
-      minshade+=2;
-#endif
 }
 
 /*

@@ -37,8 +37,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_vid.h"
 #include "rt_view.h"
 #include "rt_playr.h"
-//MED
-#include "memcheck.h"
 
 /*
 =============================================================================
@@ -170,38 +168,8 @@ void ScaleTransparentPost (byte * src, byte * buf, int level)
    int  bottomscreen;
    byte * oldlevel;
    byte * seelevel;
-#if (DEVELOPMENT == 1)
-   boolean found=false;
-   int  i;
-#endif
 
    whereami=25;
-#if (DEVELOPMENT == 1)
-   if ((shadingtable>=colormap) && (shadingtable<=(colormap+(31*256))))
-      {
-      found=true;
-      }
-   else if ((shadingtable>=redmap) && (shadingtable<=(redmap+(31*256))))
-      {
-      found=true;
-      }
-   else
-      {
-      for (i=0;i<MAXPLAYERCOLORS;i++)
-         {
-         if ((shadingtable>=playermaps[i]) || (shadingtable<=(playermaps[i]+(31*256))))
-            found=true;
-         }
-      }
-   if (found==false)
-      {
-      Error ("Shadingtable out of range\n");
-      }
-   if ((level<0) || (level>=64))
-      {
-      Error ("translucent level out of range\n");
-      }
-#endif
 
    seelevel=colormap+(((level+64)>>2)<<8);
    oldlevel=shadingtable;
@@ -266,10 +234,6 @@ void ScaleMaskedPost (byte * src, byte * buf)
          {
          dc_source=src-offset;
          R_DrawColumn (buf);
-#if (DEVELOPMENT == 1)
-//         if (dc_firstsource<src)
-//            SoftError("dc_firstsource=%p src=%p\n",dc_firstsource,src);
-#endif
          }
       src+=length;
       offset=*(src++);
@@ -612,16 +576,6 @@ void ScaleTransparentShape (visobj_t * sprite)
       frac=0;
    x2 = x2 >= viewwidth ? viewwidth-1 : x2;
 
-#if 0
-   for (; x1<=x2 ; x1++, frac += dc_iscale)
-      {
-      if (posts[x1].wallheight>sprite->viewheight)
-         continue;
-      VGAWRITEMAP(x1&3);
-      VGAREADMAP(x1&3);
-      ScaleTransparentPost(((p->collumnofs[frac>>SFRACBITS])+shape),(byte *)bufferofs+(x1>>2),sprite->h2);
-      }
-#endif
    startx=x1;
    startfrac=frac;
 

@@ -48,8 +48,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_view.h"
 #include "modexlib.h"
 #include "rt_cfg.h"
-//MED
-#include "memcheck.h"
 
 int    egacolor[16];
 byte   *  origpal;
@@ -81,10 +79,6 @@ static unsigned char egargb[48]={ 0x00,0x00,0x00,
 									 0xff,0xff,0xff};
 
 extern const byte * ROTT_ERR;
-
-#if (DEVELOPMENT == 1)
-int TotalStaticMemory=0;
-#endif
 
 #define SWAP(a,b) \
    {              \
@@ -406,7 +400,7 @@ void SoftwareError (char *error, ...)
 
 //#endif
 
-
+//TODO: Not sure if this is DEBUG code or not.
 //#if (DEBUG == 1)
 
 /*
@@ -488,13 +482,6 @@ void OpenMapDebug ( void )
 */
 void StartupSoftError ( void )
 {
-#if (DEBUG == 1)
-  if (DebugStarted==false)
-     {
-     debugout = fopen(DEBUGFILE,"wt+");
-     DebugStarted=true;
-     }
-#endif
 #if (SOFTERROR == 1)
   if (SoftErrorStarted==false)
      OpenSoftError();

@@ -58,8 +58,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_rand.h"
 #include "rt_net.h"
 #include "rt_sc_a.h"
-//MED
-#include "memcheck.h"
 
 
 extern void VH_UpdateScreen (void);
@@ -637,59 +635,6 @@ int       CalcHeight (void)
 	return (heightnumerator/nx);
 }
 
-
-
-#if 0
-//==========================================================================
-
-//******************************************************************************
-//
-// NextPlaneptr
-//
-//******************************************************************************
-
-void NextPlaneptr ( void )
-{
-   if (planeptr < &planelist[MAXPLANES-1]) // don't let it overflo'
-  		planeptr++;
-}
-
-//******************************************************************************
-//
-// RestPlaneptr
-//
-//******************************************************************************
-
-void ResetPlaneptr ( void )
-{
-   planeptr = &planelist[0];
-}
-
-//******************************************************************************
-//
-// NextVisptr
-//
-//******************************************************************************
-
-void NextVisptr ( void )
-{
-   if (visptr < &vislist[MAXVISIBLE-1]) // don't let it overflo'
-  		visptr++;
-}
-
-//******************************************************************************
-//
-// ResetVisptr
-//
-//******************************************************************************
-
-void ResetVisptr ( void )
-{
-   visptr = &vislist[0];
-}
-
-#endif
-
 //==========================================================================
 
 
@@ -793,89 +738,6 @@ int   CalcRotate (objtype *ob)
 	return rotation;
 
 }
-
-
-
-#if 0
-/*
-=====================
-=
-= DrawMaskedWalls
-=
-=====================
-*/
-
-void DrawMaskedWalls (void)
-{
-
-
-  int   i,numvisible;
-  int   gx,gy;
-  unsigned short int  *tilespot;
-  byte   *visspot;
-  boolean result;
-  statobj_t *statptr;
-  objtype   *obj;
-  maskedwallobj_t* tmwall;
-
-	whereami=6;
-
-//
-// place maskwall objects
-//
-  for(tmwall=FIRSTMASKEDWALL;tmwall;tmwall=tmwall->next)
-	  {
-	  if (spotvis[tmwall->tilex][tmwall->tiley])
-		  {
-		  mapseen[tmwall->tilex][tmwall->tiley]=1;
-		  if (tmwall->vertical)
-			  {
-			  gx=(tmwall->tilex<<16)+0x8000;
-			  gy=(tmwall->tiley<<16);
-			  visptr->texturestart=0;
-			  visptr->textureend=0;
-			  if (viewx<gx)
-				  result=TransformPlane(gx,gy,gx,gy+0xffff,visptr);
-			  else
-				  result=TransformPlane(gx,gy+0xffff,gx,gy,visptr);
-			  visptr->shapenum=tmwall->bottomtexture;
-			  visptr->altshapenum=tmwall->midtexture;
-			  visptr->viewx=tmwall->toptexture;
-			  visptr->shapesize=2;
-			  }
-		  else
-			  {
-			  gx=(tmwall->tilex<<16);
-			  gy=(tmwall->tiley<<16)+0x8000;
-			  visptr->texturestart=0;
-			  visptr->textureend=0;
-			  if (viewy<gy)
-				  result=TransformPlane(gx+0xffff,gy,gx,gy,visptr);
-			  else
-				  result=TransformPlane(gx,gy,gx+0xffff,gy,visptr);
-			  visptr->shapenum=tmwall->bottomtexture;
-			  visptr->altshapenum=tmwall->midtexture;
-			  visptr->viewx=tmwall->toptexture;
-			  visptr->shapesize=2;
-			  }
-		  if ((tmwall->flags&MW_TOPFLIPPING) &&
-            (nonbobpheight>64)
-			  )
-			  {
-			  visptr->viewx++;
-			  }
-		  else if ((tmwall->flags&MW_BOTTOMFLIPPING) &&
-                 (nonbobpheight>maxheight-32)
-					 )
-			  {
-			  visptr->shapenum++;
-			  }
-		  if ((visptr < &vislist[MAXVISIBLE-1]) && (result==true)) // don't let it overflo'
-			  visptr++;
-		  }
-	  }
-}
-#endif
 
 /*
 ======================
@@ -1053,21 +915,9 @@ void DrawScaleds (void)
 			 else if (statptr->flags&FL_COLORED)
 				 {
 				 visptr->shapesize=0;
-#if (DEVELOPMENT == 1)
-				 if ((statptr->hitpoints>=0) &&
-					 (statptr->hitpoints<MAXPLAYERCOLORS))
-					 {
-#endif
 					 SetColorLightLevel(statptr->x,statptr->y,visptr,
                                    0,statptr->hitpoints,
                                    (statptr->flags&FL_FULLLIGHT));
-#if (DEVELOPMENT == 1)
-					 }
-				 else
-                {
-                Error("Illegal color map for sprite type %d\n",statptr->itemnumber);
-					 }
-#endif
 				 }
           else
 				 {
@@ -1171,21 +1021,9 @@ void DrawScaleds (void)
 				  playertype *pstate;
 
 				  M_LINKSTATE(obj,pstate);
-#if (DEVELOPMENT == 1)
-				  if ((pstate->uniformcolor>=0) &&
-					  (pstate->uniformcolor<MAXPLAYERCOLORS))
-					  {
-#endif
 					  SetColorLightLevel(obj->x,obj->y,visptr,
                                     obj->dir,pstate->uniformcolor,
                                     (obj->flags&FL_FULLLIGHT) );
-#if (DEVELOPMENT == 1)
-					  }
-				  else
-					  {
-					  Error("Illegal color map for players\n");
-					  }
-#endif
 				  }
 			  else
               SetSpriteLightLevel(obj->x,obj->y,visptr,obj->dir,(obj->flags&FL_FULLLIGHT));
@@ -1532,9 +1370,6 @@ void CalcTics (void)
    oldtime=GetTicCount();
    return;
 #else
-#if (DEVELOPMENT == 1)
-   int i;
-#endif
    volatile int tc;
 
    whereami=9;
@@ -1568,34 +1403,6 @@ void CalcTics (void)
          }
       }
    oldtime=tc;
-#if (DEVELOPMENT == 1)
-   if (graphicsmode==true)
-      {
-      int drawntics;
-
-      VGAWRITEMAP(1);
-      drawntics=tics;
-      if (drawntics>MAXDRAWNTICS)
-         drawntics=MAXDRAWNTICS;
-      for (i=0;i<drawntics;i++)
-         *((byte *)displayofs+screenofs+(SCREENBWIDE*3)+i)=egacolor[15];
-      }
-/*
-      if (drawtime>MAXDRAWNTICS)
-         drawtime=MAXDRAWNTICS;
-      for (i=0;i<drawtime;i++)
-         *((byte *)displayofs+screenofs+(SCREENBWIDE*5)+i)=egacolor[2];
-      if (walltime>MAXDRAWNTICS)
-         walltime=MAXDRAWNTICS;
-      for (i=0;i<walltime;i++)
-         *((byte *)displayofs+screenofs+(SCREENBWIDE*7)+i)=egacolor[14];
-      if (actortime>MAXDRAWNTICS)
-         actortime=MAXDRAWNTICS;
-      for (i=0;i<actortime;i++)
-         *((byte *)displayofs+screenofs+(SCREENBWIDE*9)+i)=egacolor[4];
-      }
-*/
-#endif
 #endif
 
 }
@@ -2664,22 +2471,6 @@ void      ThreeDRefresh (void)
 
    whereami=21;
    tempptr=player;
-#if (DEVELOPMENT == 1)
-   if (Keyboard[sc_9])
-      {
-      while (Keyboard[sc_9])
-         {
-         IN_UpdateKeyboard();
-         }
-      playerview++;
-      if (playerview>numplayers)
-         playerview=1;
-      }
-   if (playerview!=0)
-      {
-      player=PLAYER[playerview-1];
-      }
-#endif
 
 //
 // Erase old messages
@@ -4155,18 +3946,6 @@ ExplosionInfoType ExplosionInfo[NUMEXPLOSIONTYPES]=
   {"EXP1\0",20},
   {"GREXP1\0",25},
   {"PART1\0",12},
-#if 0
-  {"GUTS1\0",12},
-  {"ORGAN1\0",12},
-  {"RIB1\0",12},
-  {"GPINK1\0",12},
-  {"GHEAD1\0",12},
-  {"GARM1\0",12},
-  {"GLEG1\0",12},
-  {"GHUM1\0",12},
-  {"GHIP1\0",12},
-  {"GLIMB1\0",12},
-#endif
 };
 
 
@@ -5469,33 +5248,6 @@ void DrawMaskedRotRow(int count, byte * dest, byte * src)
 
 void DrawSkyPost (byte * buf, byte * src, int height)
 {
-#if 0
-// bna fix for missing sky by high res eg 800x600
-// when sky is >400 (max skyheight) then reverse mouintain to missing spot
-// there should be 200 line of mouintain (400+200) = 600 height lines
-// not the best solution but what it works
-
-	if (iGLOBAL_SCREENWIDTH > 320){
-	// bna section start
-		//int n = 0;
-		int orgh = 0;//height;
-		if (height > 400){orgh=height;}
-
-		while (height--) {
-			if ((orgh > 0)&&( height<(orgh-400))){
-				src-=2;
-				*buf = shadingtable[*src];
-			}else{
-
-				*buf = shadingtable[*src];
-			}
-			buf += linewidth;
-			src++;
-		}
-	// bna section end
-	}
-	else
-#endif
 	{
 	int i = 0;
 	byte *const orig_src = src;

@@ -57,8 +57,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_msg.h"
 #include "rt_scale.h"
 #include "develop.h"
-//MED
-#include "memcheck.h"
 
 #if (SHAREWARE == 1)
 #define NUMAMMOGRAPHICS 10
@@ -5035,19 +5033,8 @@ boolean LoadTheGame (int num, gamestorage_t * game)
 	size=LoadBuffer(&altbuffer,&bufptr);
 	LoadPushWalls(altbuffer,size);
 	SafeFree(altbuffer);
-#if 0
-	// Animated Walls Tag
 
-	size=5;
-	LoadTag(&bufptr,"AWALL",size);
-
-	// Animated Walls
-	size=LoadBuffer(&altbuffer,&bufptr);
-	LoadAnimWalls(altbuffer,size);
-	SafeFree(altbuffer);
-#endif
-
-	// MaskedWalls Tag
+  // MaskedWalls Tag
 
 	size=5;
 	LoadTag(&bufptr,"MWALL",size);

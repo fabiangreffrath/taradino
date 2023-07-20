@@ -48,8 +48,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #else
 #include "snd_shar.h"
 #endif
-//MED
-#include "memcheck.h"
 
 // Local Variables
 
@@ -291,12 +289,6 @@ int SD_PlayIt ( int sndnum, int angle, int distance, int pitch )
    int voice;
    char * snd;
 
-#if (DEVELOPMENT == 1)
-#if (SOUNDTEST == 1)
-   SoftError("SOUND =%d \n",sndnum);
-#endif
-#endif
-
    if (!(sounds[sndnum].flags & SD_WRITE))
       {
       if (sounds[sndnum].count)
@@ -330,17 +322,6 @@ int SD_PlayIt ( int sndnum, int angle, int distance, int pitch )
 
    if ( voice < FX_Ok )
       {
-#if (DEVELOPMENT == 1)
-/*
-      if (MV_ErrorCode == MV_InvalidVOCFile)
-         {
-         Error("SD_PlayIt: Invalid VOC File snd=%p sndnum=%ld lump=%ld\n",snd,sndnum,SoundNumber(sndnum));
-         }
-*/
-      NumBadSounds++;
-      SoftError("SD_PlayIt: Error/Warning %s\n",FX_ErrorString( FX_Error ));
-      SoftError("BadSoundNumber %ld time %ld\n",NumBadSounds,GetTicCount());
-#endif
       SD_MakeCacheable( sndnum );
 
       return 0;
@@ -546,9 +527,7 @@ void SD_SetSoundPitch ( int sndnum, int pitch )
    status=FX_SetPitch( sndnum, pitch );
    if (status != FX_Ok)
       {
-#if (DEVELOPMENT == 1)
-      SoftError("SD_SetSoundPitch : %s\n",FX_ErrorString( status ));
-#endif
+        //TODO: This code does nothing.
       }
 }
 
@@ -593,9 +572,7 @@ void SD_PanRTP ( int handle, int x, int y )
 
    if (status != FX_Ok)
       {
-#if (DEVELOPMENT == 1)
-      SoftError("SD_PanPositionedSound: %s\n",FX_ErrorString( status ));
-#endif
+        //TODO: This code does nothing.
       }
 }
 
@@ -619,9 +596,7 @@ void SD_SetPan ( int handle, int vol, int left, int right )
 
    if (status != FX_Ok)
       {
-#if (DEVELOPMENT == 1)
-      SoftError("SD_SetPan: %s\n",FX_ErrorString( status ));
-#endif
+        //TODO: This code does nothing.
       }
 }
 
@@ -666,9 +641,7 @@ void SD_PanPositionedSound ( int handle, int px, int py, int x, int y )
 
    if (status != FX_Ok)
       {
-#if (DEVELOPMENT == 1)
-      SoftError("SD_PanPositionedSound: %s\n",FX_ErrorString( status ));
-#endif
+        //TODO: This code does nothing.
       }
 }
 
@@ -690,9 +663,7 @@ void SD_StopSound ( int handle )
 
    if (status != FX_Ok)
       {
-#if (DEVELOPMENT == 1)
-      SoftError("SD_StopSound: %s\n",FX_ErrorString( status ));
-#endif
+        //TODO: This code does nothing.
       }
 }
 
@@ -713,9 +684,7 @@ void  SD_StopAllSounds ( void )
 
    if (status != FX_Ok)
       {
-#if (DEVELOPMENT == 1)
-      SoftError("SD_StopAllSounds: %s\n",FX_ErrorString( status ));
-#endif
+        //TODO: This code does nothing.
       }
 }
 
@@ -1151,9 +1120,6 @@ void MU_FadeOut ( int time )
       return;
    if (!MUSIC_SongPlaying())
       {
-#if (DEVELOPMENT == 1)
-      SoftError("Called FadeOut with no song playing\n");
-#endif
       return;
       }
    MUSIC_FadeVolume(0,time);

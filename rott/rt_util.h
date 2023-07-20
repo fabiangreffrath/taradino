@@ -128,18 +128,9 @@ void  SoftwareError (char *error, ...) __attribute__((format(printf,1,2)));
 
 #endif
 
-#if (DEBUG==1)
-
-void  DebugError (char *error, ...) __attribute__((format(printf,1,2)));
-#define Debug  DebugError
-
-#else
-
 void  DebugError (char *error, ...) __attribute__((format(printf,1,2)));
 #define Debug  DebugError
 //#define Debug
-
-#endif
 
 void Square (void);
 
