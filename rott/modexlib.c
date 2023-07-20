@@ -85,6 +85,11 @@ SDL_Surface *VL_GetVideoSurface (void)
 	return sdl_surface;
 }
 
+int VL_SaveBMP (const char *file)
+{
+    return SDL_SaveBMP(sdl_surface, file);
+}
+
 void SetShowCursor(int show)
 {
 	SDL_SetRelativeMouseMode(!show);
