@@ -30,4 +30,6 @@ void FixColorMap( void );
 #define QUITTIMEINTERVAL ((35*6)-5)
 boolean CheckForQuickLoad ( void );
 
+void DrawRottTitle ( void );
+
 #endif
