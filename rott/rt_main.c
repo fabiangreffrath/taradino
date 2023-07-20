@@ -2429,7 +2429,7 @@ void SaveScreen (boolean inhmenu)
             free(screenshotname);
         }
 
-        screenshotname = M_StringJoin(ApogeePath, DIR_SEPARATOR_S, filename, NULL);
+        screenshotname = M_StringJoin(ApogeePath, PATH_SEP_STR, filename, NULL);
     }
     while (!access(screenshotname, F_OK) && --tries);
 
