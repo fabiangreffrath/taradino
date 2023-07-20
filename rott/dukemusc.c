@@ -299,13 +299,13 @@ musdebug("Need to use PlaySongROTT.  :(");
 // ROTT Special - SBF
 int MUSIC_PlaySongROTT(unsigned char *song, int size, int loopflag)
 {
-    char filename[MAX_PATH];
+    char *filename;
     int handle;
     
     MUSIC_StopSong();
 
     // save the file somewhere, so SDL_mixer can load it
-    GetPathFromEnvironment(filename, ApogeePath, "tmpsong.mid");
+    filename = M_StringJoin(ApogeePath, PATH_SEP_STR, "tmpsong.mid", NULL);
     handle = SafeOpenWrite(filename);
     
     SafeWrite(handle, song, size);
@@ -315,6 +315,7 @@ int MUSIC_PlaySongROTT(unsigned char *song, int size, int loopflag)
 
     // finally, we can load it with SDL_mixer
     music_musicchunk = Mix_LoadMUS(filename);
+    free(filename);
     if (music_musicchunk == NULL) {
         return MUSIC_Error;
     }

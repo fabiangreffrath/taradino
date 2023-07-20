@@ -2246,18 +2246,19 @@ int HandleMenu (CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w))
          {
             if (CP_DisplayMsg ("Delete saved game?\nAre you sure?", 12) == true)
             {
-               char loadname[45] = "rottgam0.rot";
-               char filename[128];
+               char loadname[] = "rottgam0.rot";
+               char *filename;
 
                // Create the proper file name
                itoa (handlewhich, &loadname[7], 16);
                loadname[8]='.';
 
-               GetPathFromEnvironment( filename, ApogeePath, loadname );
+               filename = M_StringJoin(ApogeePath, PATH_SEP_STR, loadname, NULL);
 
                // Delete the file
 
 					unlink (filename);
+					free(filename);
 
                memset (&SaveGameNames[handlewhich][0], 0, 32);
                SaveGamesAvail[handlewhich] = 0;
@@ -3267,18 +3268,19 @@ int DoLoad (int which)
       {
          if (CP_DisplayMsg ("Saved Game is\n old or incompatible\nDelete it?", 12)==true)
          {
-            char loadname[45] = "rottgam0.rot";
-            char filename[128];
+            char loadname[] = "rottgam0.rot";
+            char *filename;
 
             // Create the proper file name
             itoa (which, &loadname[7], 16);
             loadname[8]='.';
 
-            GetPathFromEnvironment( filename, ApogeePath, loadname );
+            filename = M_StringJoin(ApogeePath, PATH_SEP_STR, loadname, NULL);
 
             // Delete the file
 
             unlink (filename);
+            free(filename);
 
             memset (&SaveGameNames[which][0], 0, 32);
             SaveGamesAvail[which] = 0;
@@ -3385,18 +3387,20 @@ void QuickSaveGame (void)
    byte * buf;
    int length;
 
-   char   loadname[45]="rottgam0.rot";
-   char   filename[128];
+   char   loadname[]="rottgam0.rot";
+   char   *filename;
 
    // Create the proper file name
 
    itoa(quicksaveslot,&loadname[7],16);
    loadname[8]='.';
 
-   GetPathFromEnvironment( filename, ApogeePath, loadname );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, loadname, NULL);
    length=LoadFile(filename,(void **)&buf);
-   GetPathFromEnvironment( filename, ApogeePath, QUICKSAVEBACKUP );
+   free(filename);
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, QUICKSAVEBACKUP, NULL);
    SaveFile(filename,buf,length);
+   free(filename);
    SafeFree(buf);
 
    s=&game.picture[0];
@@ -3446,8 +3450,8 @@ void QuickSaveGame (void)
 void UndoQuickSaveGame (void)
 {
    byte * buf;
-   char   loadname[45]="rottgam0.rot";
-   char   filename[128];
+   char   loadname[]="rottgam0.rot";
+   char   *filename;
    int length;
 
    if (quicksaveslot!=-1)
@@ -3456,10 +3460,12 @@ void UndoQuickSaveGame (void)
 
       itoa(quicksaveslot,&loadname[7],16);
       loadname[8]='.';
-      GetPathFromEnvironment( filename, ApogeePath, QUICKSAVEBACKUP );
+      filename = M_StringJoin(ApogeePath, PATH_SEP_STR, QUICKSAVEBACKUP, NULL);
       length=LoadFile(filename,(void **)&buf);
-      GetPathFromEnvironment( filename, ApogeePath, loadname );
+      free(filename);
+      filename = M_StringJoin(ApogeePath, PATH_SEP_STR, loadname, NULL);
       SaveFile(filename,buf,length);
+      free(filename);
       SafeFree(buf);
       AddMessage("Previous Quicksave Game Restored.",MSG_SYSTEM);
       }

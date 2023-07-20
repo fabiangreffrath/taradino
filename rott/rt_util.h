@@ -30,6 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ERRORVERSIONCOL 67
 
 #include "rt_def.h"
+#include "m_misc2.h"
 #include "develop.h"
 
 extern  int    egacolor[16];
@@ -57,7 +58,6 @@ void  *SafeLevelMalloc (long size);
 void  SafeFree (void * ptr);
 long  LoadFile (char *filename, void **bufferptr);
 void  SaveFile (char *filename, void *buffer, long count);
-void  GetPathFromEnvironment( char *fullname, const char *envname, const char *filename );
 void  DefaultExtension (char *path, char *extension);
 void  DefaultPath (char *path, char *basepath);
 void  ExtractFileBase (char *path, char *dest);
@@ -100,8 +100,6 @@ char * UL_GetPath (char * path, char *dir);
 boolean UL_ChangeDirectory (char *path);
 boolean UL_ChangeDrive (char *drive);
 void AbortCheck (char * abortstring);
-
-void FixFilePath(char *filename);
 
 struct dosdate_t
 {

@@ -71,14 +71,6 @@ void SetRottScreenRes (int Width, int Height)
 	
 		dTopYZANGLELIMIT = (90*FINEANGLES/360);;
 	}
-
-	//dYZANGLELIMIT = (12*FINEANGLES/360);
-	//#define YZANGLELIMIT  (12*FINEANGLES/360)//bna--(30*FINEANGLES/360)
-
-	//#define TopYZANGLELIMIT  (44*FINEANGLES/360)//bna added
-
-//	GetCurrentDirectory(sizeof(ApogeePath),ApogeePath);// curent directory name
-
 }
 
 //----------------------------------------------------------------------

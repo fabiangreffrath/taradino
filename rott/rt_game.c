@@ -4621,8 +4621,8 @@ void SaveTag (int handle, char * tag, int size)
 
 boolean SaveTheGame (int num, gamestorage_t * game)
 {
-   char   loadname[MAX_PATH]="rottgam0.rot";
-   char   filename[MAX_PATH];
+   char   loadname[]="rottgam0.rot";
+   char   *filename;
    byte   * altbuffer;
 	int    size;
    int    savehandle;
@@ -4652,7 +4652,7 @@ boolean SaveTheGame (int num, gamestorage_t * game)
    loadname[8]='.';
 
 
-   GetPathFromEnvironment( filename, ApogeePath, loadname );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, loadname, NULL);
 
    // Open the savegame file
 
@@ -4857,6 +4857,7 @@ boolean SaveTheGame (int num, gamestorage_t * game)
    size=sizeof(crc);
    SafeWrite(savehandle,&crc,size);
 
+   free(filename);
    close (savehandle);
 
    pickquick = true;
@@ -4905,8 +4906,8 @@ int LoadBuffer (byte ** dest, byte ** src)
 
 boolean LoadTheGame (int num, gamestorage_t * game)
 {
-   char   loadname[45]="rottgam0.rot";
-   char   filename[128];
+   char   loadname[]="rottgam0.rot";
+   char   *filename;
    byte   * loadbuffer;
 	byte   * bufptr;
 	byte   * altbuffer;
@@ -4926,12 +4927,13 @@ boolean LoadTheGame (int num, gamestorage_t * game)
    itoa(num,&loadname[7],16);
    loadname[8]='.';
 
-   GetPathFromEnvironment( filename, ApogeePath, loadname );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, loadname, NULL);
 
    // Load the file
 
 	totalsize=LoadFile(filename,(void **)&loadbuffer);
 	bufptr=loadbuffer;
+	free(filename);
 
 	// Calculate checksum
 
@@ -5255,8 +5257,8 @@ boolean LoadTheGame (int num, gamestorage_t * game)
 void GetSavedMessage (int num, char * message)
 {
    gamestorage_t game;
-   char   loadname[45]="rottgam0.rot";
-   char   filename[128];
+   char   loadname[]="rottgam0.rot";
+   char   *filename;
    byte   * loadbuffer;
    byte   * bufptr;
    int    size;
@@ -5269,12 +5271,13 @@ void GetSavedMessage (int num, char * message)
    itoa(num,&loadname[7],16);
    loadname[8]='.';
 
-   GetPathFromEnvironment( filename, ApogeePath, loadname );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, loadname, NULL);
 
    // Load the file
 
    size=LoadFile(filename,(void **)&loadbuffer);
    bufptr=loadbuffer;
+   free(filename);
 
    size=4;
    LoadTag(&bufptr,"ROTT",size);
@@ -5297,8 +5300,8 @@ void GetSavedMessage (int num, char * message)
 
 void GetSavedHeader (int num, gamestorage_t * game)
 {
-   char   loadname[45]="rottgam0.rot";
-   char   filename[128];
+   char   loadname[]="rottgam0.rot";
+   char   *filename;
    byte   * loadbuffer;
    byte   * bufptr;
    int    size;
@@ -5311,12 +5314,13 @@ void GetSavedHeader (int num, gamestorage_t * game)
    itoa(num,&loadname[7],16);
    loadname[8]='.';
 
-   GetPathFromEnvironment( filename, ApogeePath, loadname );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, loadname, NULL);
 
    // Load the file
 
    size=LoadFile(filename, (void **)&loadbuffer);
    bufptr=loadbuffer;
+   free(filename);
 
    size=4;
    LoadTag(&bufptr,"ROTT",size);

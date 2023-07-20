@@ -463,12 +463,13 @@ void MapDebug (char *error, ...)
 */
 void OpenMapDebug ( void )
 {
-  char filename[ 128 ];
+  char *filename;
 
   if (MapDebugStarted==true)
      return;
-  GetPathFromEnvironment( filename, ApogeePath, MAPDEBUGFILE );
+  filename = M_StringJoin(ApogeePath, PATH_SEP_STR, MAPDEBUGFILE, NULL);
   mapdebugout = fopen(filename,"wt+");
+  free(filename);
   MapDebugStarted=true;
 }
 
@@ -557,7 +558,6 @@ int SafeOpenAppend (char *_filename)
     char filename[MAX_PATH];
     strncpy(filename, _filename, sizeof (filename));
     filename[sizeof (filename) - 1] = '\0';
-    FixFilePath(filename);
 
 	handle = open(filename,O_RDWR | O_BINARY | O_CREAT | O_APPEND
 	, S_IREAD | S_IWRITE);
@@ -574,7 +574,6 @@ int SafeOpenWrite (char *_filename)
     char filename[MAX_PATH];
     strncpy(filename, _filename, sizeof (filename));
     filename[sizeof (filename) - 1] = '\0';
-    FixFilePath(filename);
 
 	handle = open(filename,O_RDWR | O_BINARY | O_CREAT | O_TRUNC
 	, S_IREAD | S_IWRITE);
@@ -591,7 +590,6 @@ int SafeOpenRead (char *_filename)
     char filename[MAX_PATH];
     strncpy(filename, _filename, sizeof (filename));
     filename[sizeof (filename) - 1] = '\0';
-    FixFilePath(filename);
 
 	handle = open(filename,O_RDONLY | O_BINARY);
 
@@ -729,82 +727,6 @@ void	SaveFile (char *filename, void *buffer, long count)
 	close (handle);
 }
 
-
-void FixFilePath(char *filename)
-{
-#ifndef _WIN32
-    char *ptr;
-    char *lastsep = filename;
-
-    if ((!filename) || (*filename == '\0'))
-        return;
-
-    if (access(filename, F_OK) == 0)  /* File exists; we're good to go. */
-        return;
-
-    for (ptr = filename; 1; ptr++)
-    {
-        if (*ptr == '\\')
-            *ptr = PATH_SEP_CHAR;
-
-        if ((*ptr == PATH_SEP_CHAR) || (*ptr == '\0'))
-        {
-            char pch = *ptr;
-            struct dirent *dent = NULL;
-            DIR *dir;
-
-            if ((pch == PATH_SEP_CHAR) && (*(ptr + 1) == '\0'))
-                return; /* eos is pathsep; we're done. */
-
-            if (lastsep == ptr)
-                continue;  /* absolute path; skip to next one. */
-
-            *ptr = '\0';
-            if (lastsep == filename) {
-                dir = opendir((*lastsep == PATH_SEP_CHAR) ? ROOTDIR : CURDIR);
-                
-                if (*lastsep == PATH_SEP_CHAR) {
-                    lastsep++;
-                }
-            } 
-            else
-            {
-                *lastsep = '\0';
-                dir = opendir(filename);
-                *lastsep = PATH_SEP_CHAR;
-                lastsep++;
-            }
-
-            if (dir == NULL)
-            {
-                *ptr = PATH_SEP_CHAR;
-                return;  /* maybe dir doesn't exist? give up. */
-            }
-
-            while ((dent = readdir(dir)) != NULL)
-            {
-                if (strcasecmp(dent->d_name, lastsep) == 0)
-                {
-                    /* found match; replace it. */
-                    strcpy(lastsep, dent->d_name);
-                    break;
-                }
-            }
-
-            closedir(dir);
-            *ptr = pch;
-            lastsep = ptr;
-
-            if (dent == NULL)
-                return;  /* no match. oh well. */
-
-            if (pch == '\0')  /* eos? */
-                return;
-        }
-    }
-#endif
-}
-
 void _dos_getdate(struct dosdate_t *date)
 {
 	time_t curtime = time(NULL);
@@ -823,30 +745,6 @@ void _dos_getdate(struct dosdate_t *date)
 		date->dayofweek = tm->tm_wday + 1;
 	}
 }
-
-
-void GetPathFromEnvironment( char *fullname, const char *envname, const char *filename )
-   {
-
-   const char *path;
-   path = envname;
-
-   if ( path != NULL )
-      {
-      strcpy( fullname, path );
-      if ( fullname[ strlen( fullname ) - 1 ] != PATH_SEP_CHAR )
-         {
-         strcat( fullname, PATH_SEP_STR );
-         }
-      strcat( fullname, filename );
-      }
-   else
-      {
-      strcpy( fullname, filename );
-      }
-
-      FixFilePath(fullname);
-   }
 
 void DefaultExtension (char *path, char *extension)
 {
