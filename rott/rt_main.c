@@ -558,8 +558,8 @@ void CheckCommandLineParameters( void )
       printf ("         Z                - Type directed message\n");
       printf ("         Tab              - Toggle KillCount display\n");
       printf (" \n");
-      printf ("SCREENSHOOT\n");
-      printf ("         Alt+C            - Screenshoot in PCX format\n");
+      printf ("SCREENSHOT\n");
+      printf ("         Alt+C            - Screenshot in BMP format\n");
       exit (0);
       }
 
