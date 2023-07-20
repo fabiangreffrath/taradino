@@ -152,10 +152,7 @@ extern  int polltime;
 extern  int oldpolltime;
 extern  volatile int oldtime;
 void PauseLoop ( void );
-#if SAVE_SCREEN
-extern boolean inhmenu;
-void SaveScreen (boolean saveLBM);
-#endif
+void SaveScreen (boolean inhmenu);
 void SetupWads( void );
 
 extern boolean SCREENSHOTS;
