@@ -204,24 +204,6 @@ void Z_ChangeTag(void *ptr, pu_tag tag)
   block->tag = tag;
 }
 
-void Z_Realloc (void **ptr, size_t newsize)
-{
-    memblock_t *block;
-    void *newptr;
-    size_t oldsize;
-
-    block = (memblock_t *) ((char *)(*ptr) - HEADER_SIZE);
-    oldsize = block->size;
-    newptr = SafeMalloc(newsize);
-    if (oldsize > newsize)
-    {
-        oldsize = newsize;
-    }
-    memcpy(newptr, *ptr, oldsize);
-    SafeFree(*ptr);
-    *ptr = newptr;
-}
-
 size_t Z_HeapSize (void)
 {
     return (size_t)MAXMEMORYSIZE;

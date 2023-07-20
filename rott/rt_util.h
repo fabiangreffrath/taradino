@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ERRORVERSIONROW 1
 #define ERRORVERSIONCOL 67
 
+#include "rt_def.h"
 #include "develop.h"
 
 extern  int    egacolor[16];
@@ -112,6 +113,7 @@ struct dosdate_t
 
 void _dos_getdate(struct dosdate_t *date);
 
+void *safe_realloc (void *ptr, size_t size);
 
 #if (SOFTERROR==1)
 

@@ -70,7 +70,6 @@ void Z_ChangeTag (void *ptr, pu_tag tag);          // Change the tag of a memory
 size_t Z_HeapSize ( void );                        // Return the total heap size
 size_t Z_UsedHeap ( void );                        // Return used portion of heap size
 void Z_ShutDown( void );
-void Z_Realloc (void **ptr, size_t newsize);
 
 #define Z_LevelMalloc(a,b,c) Z_Malloc(a,b,c)
 #define Z_UsedLevelHeap() Z_UsedHeap()

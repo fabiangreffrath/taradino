@@ -137,10 +137,8 @@ void W_AddFile (char *_filename)
 //
 // Fill in lumpinfo
 //
-        Z_Realloc((void **)&lumpinfo,numlumps*sizeof(lumpinfo_t));
-//        lumpinfo = realloc (lumpinfo, numlumps*sizeof(lumpinfo_t));
-//        if (!lumpinfo)
-//           Error("W_AddFile: Could not realloc %ld bytes",numlumps*sizeof(lumpinfo_t));
+
+        lumpinfo = safe_realloc(lumpinfo, numlumps * sizeof(*lumpinfo));
         lump_p = &lumpinfo[startlump];
 
         for (i=startlump ; i<(unsigned int)numlumps ; i++,lump_p++, fileinfo++)
@@ -198,7 +196,7 @@ void W_InitMultipleFiles (char **filenames)
 // open all the files, load headers, and count lumps
 //
         numlumps = 0;
-        lumpinfo = SafeMalloc(5);   // will be realloced as lumps are added
+        lumpinfo = NULL;   // will be realloced as lumps are added
 
         for ( ; *filenames ; filenames++)
                 W_AddFile (*filenames);

@@ -706,20 +706,6 @@ void CheckCommandLineParameters( void )
    }
 }
 
-static inline void *safe_realloc(void *ptr, size_t size)
-{
-    void *new_ptr;
-
-    new_ptr = realloc(ptr, size);
-
-    if (new_ptr == NULL && size != 0)
-    {
-        free(ptr);
-    }
-
-    return new_ptr;
-}
-
 void SetupWads( void )
 {
    char  *newargs[99];

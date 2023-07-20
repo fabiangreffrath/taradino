@@ -674,6 +674,22 @@ void SafeFree (void * ptr)
 	Z_Free (ptr);
 }
 
+void *safe_realloc (void *ptr, size_t size)
+{
+    void *new_ptr;
+
+    new_ptr = realloc(ptr, size);
+
+    if (new_ptr == NULL && size != 0)
+    {
+        free(ptr);
+        Error("safe_realloc: Could not realloc %lu bytes", (unsigned long) size);
+    }
+
+    return new_ptr;
+}
+
+
 /*
 ==============
 =
