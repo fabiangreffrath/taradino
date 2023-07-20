@@ -82,7 +82,6 @@ void W_AddFile (char *_filename)
 
         strncpy(filename, _filename, sizeof (filename));
         filename[sizeof (filename) - 1] = '\0';
-        FixFilePath(filename);
 
 		//bna section start
 		if (access (filename, 0) != 0) {

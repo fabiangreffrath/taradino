@@ -137,9 +137,9 @@ char CodeName[MAXCODENAMELENGTH];
 void ReadScores (void)
 {
    int file;
-   char filename[ 128 ];
+   char *filename;
 
-   GetPathFromEnvironment( filename, ApogeePath, ScoresName );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, ScoresName, NULL);
    if (access (filename, F_OK) == 0)
       {
       file = SafeOpenRead (filename);
@@ -148,6 +148,7 @@ void ReadScores (void)
       }
    else
       gamestate.violence = 0;
+   free(filename);
 }
 
 //******************************************************************************
@@ -858,10 +859,11 @@ void SetConfigDefaultValues (void)
 //******************************************************************************
 void DeleteSoundFile ( void )
 {
-   char filename[ 128 ];
+   char *filename;
 
-   GetPathFromEnvironment( filename, ApogeePath, SoundName );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, SoundName, NULL);
    unlink (filename);          // Delete SOUND.ROT
+   free(filename);
 }
 
 //******************************************************************************
@@ -873,9 +875,9 @@ void DeleteSoundFile ( void )
 
 void ReadConfig (void)
 {
-   char filename[ 128 ];
+   char *filename;
 
-   GetPathFromEnvironment( filename, ApogeePath, SoundName );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, SoundName, NULL);
    SetSoundDefaultValues ();
 
    if (access (filename, F_OK) == 0)
@@ -891,8 +893,9 @@ void ReadConfig (void)
       }
 
    ReadScores();
+   free(filename);
 
-   GetPathFromEnvironment( filename, ApogeePath, ConfigName );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, ConfigName, NULL);
    SetConfigDefaultValues ();
    if (access(filename,F_OK)==0)
       {
@@ -905,8 +908,9 @@ void ReadConfig (void)
 
       Z_Free(scriptbuffer);
       }
+   free(filename);
 
-   GetPathFromEnvironment( filename, ApogeePath, BattleName );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, BattleName, NULL);
    SetBattleDefaultValues ();
    if (access(filename,F_OK)==0)
       {
@@ -920,6 +924,7 @@ void ReadConfig (void)
       Z_Free(scriptbuffer);
       }
    ConfigLoaded = true;
+   free(filename);
 }
 
 //******************************************************************************
@@ -944,9 +949,9 @@ void CheckVendor (void)
    int size;
    int lump;
    byte * vendor;
-   char filename[ 128 ];
+   char *filename;
 
-   GetPathFromEnvironment( filename, ApogeePath, VENDORDOC );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, VENDORDOC, NULL);
    if (access (filename, F_OK) == 0)
       {
       size = LoadFile(filename,(void **)&vendor);
@@ -969,6 +974,7 @@ void CheckVendor (void)
       size = W_LumpLength(lump);
       SaveFile (filename,vendor,size);
       }
+   free(filename);
 }
 
 //******************************************************************************
@@ -1033,12 +1039,13 @@ void WriteParameterHex (int file, const char * s1, int val)
 void WriteScores (void)
 {
    int file;
-   char filename[ 128 ];
+   char *filename;
 
-   GetPathFromEnvironment( filename, ApogeePath, ScoresName );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, ScoresName, NULL);
    file=SafeOpenWrite( filename );
    SafeWrite (file, &Scores, sizeof (Scores));
    close(file);
+   free(filename);
 }
 
 
@@ -1056,11 +1063,11 @@ void WriteBattleConfig
    {
    int  file;
    int  index;
-   char filename[ 128 ];
+   char *filename;
    extern specials BattleSpecialsTimes;
 
    // Write Battle File
-   GetPathFromEnvironment( filename, ApogeePath, BattleName );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, BattleName, NULL);
    file = open( filename, O_RDWR | O_TEXT | O_CREAT | O_TRUNC,
       S_IREAD | S_IWRITE );
 
@@ -1068,6 +1075,8 @@ void WriteBattleConfig
       {
       Error( "Error opening %s: %s", filename, strerror( errno ) );
       }
+
+   free(filename);
 
    // Write out BATTLECONFIG header
    SafeWriteString( file,
@@ -1410,19 +1419,21 @@ void WriteSoundConfig
 
    {
    int file;
-   char filename[ 128 ];
+   char *filename;
 
    if ( !WriteSoundFile )
       {
       return;
       }
 
-   GetPathFromEnvironment( filename, ApogeePath, SoundName );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, SoundName, NULL);
    file = open ( filename, O_RDWR | O_TEXT | O_CREAT | O_TRUNC,
       S_IREAD | S_IWRITE);
 
    if (file == -1)
       Error ("Error opening %s: %s", filename, strerror(errno));
+
+   free(filename);
 
    // Write out ROTTSOUND header
 
@@ -1507,7 +1518,7 @@ void WriteSoundConfig
 void WriteConfig (void)
 {
    int file;
-   char filename[ 128 ];
+   char *filename;
    char passwordtemp[50];
    static int inconfig = 0;
 
@@ -1528,12 +1539,14 @@ void WriteConfig (void)
    WriteScores();
    WriteBattleConfig();
 
-   GetPathFromEnvironment( filename, ApogeePath, ConfigName );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, ConfigName, NULL);
    file = open( filename,O_RDWR | O_TEXT | O_CREAT | O_TRUNC
    , S_IREAD | S_IWRITE);
 
    if (file == -1)
       Error ("Error opening %s: %s",filename,strerror(errno));
+
+   free(filename);
 
    // Write out ROTTCONFIG header
 
@@ -1891,7 +1904,7 @@ void GetAlternateFile (char * tokenstr, AlternateInformation *info)
 
 void ReadSETUPFiles (void)
 {
-   char filename[ 128 ];
+   char *filename;
    int i;
 
    RemoteSounds.avail   = false;
@@ -1899,7 +1912,7 @@ void ReadSETUPFiles (void)
    GameLevels.avail     = false;
    BattleLevels.avail   = false;
 
-   GetPathFromEnvironment( filename, ApogeePath, CONFIG );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, CONFIG, NULL);
    if (access (filename, F_OK) == 0)
    {
       LoadScriptFile (filename);
@@ -1956,8 +1969,9 @@ void ReadSETUPFiles (void)
 
       Z_Free (scriptbuffer);
    }
+   free(filename);
 
-   GetPathFromEnvironment( filename, ApogeePath, ROTT );
+   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, ROTT, NULL);
    if (access (filename, F_OK) == 0)
    {
       LoadScriptFile (filename);
@@ -1973,4 +1987,5 @@ void ReadSETUPFiles (void)
 
       unlink (filename);          // Delete ROTT.ROT
    }
+   free(filename);
 }
