@@ -3268,7 +3268,7 @@ void ApogeeTitle (void)
 #define APOGEESTARTY 0
 #define APOGEEENDY   100
 
-#define APOGEESCALESTART ((int)FINEANGLES<<4)
+#define APOGEESCALESTART ((unsigned)FINEANGLES<<4)
 #define APOGEESCALEEND (FINEANGLES)
 #define APOGEESONGTIME (124-1)
 
@@ -3280,8 +3280,8 @@ void ApogeeTitle (void)
    y=APOGEESTARTY<<16;
    dy=((APOGEEENDY-APOGEESTARTY)<<16)/time;
 
-   dscale=((APOGEESCALEEND-APOGEESCALESTART)<<16)/time;
-   scale=APOGEESCALESTART<<16;
+   dscale=(int)((APOGEESCALEEND-APOGEESCALESTART)<<16)/time;
+   scale=(int)(APOGEESCALESTART<<16);
 
    angle=0;
    dangle=(FINEANGLES<<17)/time;
