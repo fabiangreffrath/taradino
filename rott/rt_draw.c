@@ -58,7 +58,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_rand.h"
 #include "rt_net.h"
 #include "rt_sc_a.h"
-//MED
 
 
 extern void VH_UpdateScreen (void);

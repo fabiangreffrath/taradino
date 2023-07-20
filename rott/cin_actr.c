@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "cin_actr.h"
 #include "cin_efct.h"
 #include "modexlib.h"
-//MED
 
 actortype * firstcinematicactor;
 actortype * lastcinematicactor;

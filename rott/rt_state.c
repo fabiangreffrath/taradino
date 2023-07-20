@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_actor.h"
 #include "develop.h"
 #define SPRINGDELAY 3
-//MED
 
 /*
 =============================================================================

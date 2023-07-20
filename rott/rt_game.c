@@ -57,7 +57,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_msg.h"
 #include "rt_scale.h"
 #include "develop.h"
-//MED
 
 #if (SHAREWARE == 1)
 #define NUMAMMOGRAPHICS 10

@@ -64,7 +64,6 @@ typedef struct
    } CP_iteminfo;
 
 
-//MED
 typedef void (*menuptr)(int);
 
 typedef struct
