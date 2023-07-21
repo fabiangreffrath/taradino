@@ -485,7 +485,7 @@ void CheckCommandLineParameters( void )
       printf ("   WINDOW     - Start in windowed mode\n");
       printf ("   RESOLUTION - Specify the screen resolution to use\n");
       printf ("              - next param is <widthxheight>, valid resolutions are:\n");
-      printf ("              - 320x200, 640x480 and 800x600\n");
+      printf ("              - 320x200 and 640x480\n");
 #if (SHAREWARE==0)
       printf ("   FILERTL    - used to load Userlevels (RTL files)\n");
       printf ("              - next parameter is RTL filename\n");
@@ -730,8 +730,7 @@ void SetupWads( void )
                int width, height;
                if ( (sscanf(_argv[i], "%dx%d", &width, &height) == 2) &&
                     ( ( (width == 320) && (height == 200) ) ||
-                      ( (width == 640) && (height == 480) ) ||
-                      ( (width == 800) && (height == 600) ) ) )
+                      ( (width == 640) && (height == 480) ) ) )
                {
                  iGLOBAL_SCREENWIDTH  = width;
                  iGLOBAL_SCREENHEIGHT = height;

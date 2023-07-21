@@ -28,17 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "WinRott.h"
 #include "rt_def.h"
-/*
-int iGLOBAL_SCREENWIDTH;//bna val 800
-int iGLOBAL_SCREENHEIGHT;//bna val 600
 
-
-#define MAXSCREENHEIGHT    600//     200*2
-#define MAXSCREENWIDTH     800//     320*2
-#define SCREENBWIDE        800*(96/320)//     96*2
-#define MAXVIEWWIDTH       800//     320*2
-#define SCREENWIDTH        800*(96/320)//     96*2              // default screen width in bytes
-*/
 //***************************************************************************
 //
 //    Video (ModeX) Constants

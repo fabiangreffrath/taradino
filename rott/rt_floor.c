@@ -77,9 +77,6 @@ static int      horizonheight;
 static int      centerskypost;
 static int      oldsky=-1;
 
-
-//bna fixit skyerror by 800x600 clouds not big enough
-
 void DrawSky( void )
 {
 
@@ -87,7 +84,7 @@ void DrawSky( void )
    int dest;
 //   int plane;
    int height;
-//   int height2;
+   const int height2 = viewheight*200/iGLOBAL_SCREENHEIGHT;
    int ang;
    int angle;
    int ofs;
@@ -99,15 +96,15 @@ void DrawSky( void )
    else
       shadingtable=colormap+(1<<12);
 
-   ofs=(((maxheight)-(player->z))>>3)+(centery*200/iGLOBAL_SCREENHEIGHT-((viewheight*200/iGLOBAL_SCREENHEIGHT)>>1));
+   ofs=(((maxheight)-(player->z))>>3)+(centery*200/iGLOBAL_SCREENHEIGHT-((height2)>>1));
 
    if (ofs>centerskypost)
       {
       ofs=centerskypost;
       }
-   else if (((centerskypost-ofs)+viewheight*200/iGLOBAL_SCREENHEIGHT)>1799)
+   else if (((centerskypost-ofs)+height2)>1799)
       {
-      ofs=-(1799-(centerskypost+viewheight*200/iGLOBAL_SCREENHEIGHT));
+      ofs=-(1799-(centerskypost+height2));
       }
 //ofs=centerskypost;
       {

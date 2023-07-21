@@ -1472,19 +1472,8 @@ void SetUpControlPanel (void)
    byte * b;
    byte * s;
 
-//   int Xres = 320;//org
-//   int Yres = 200;//org
    int Xres = 640;
    int Yres = 400;
-
-   //dont work in 800x600 until we get a better screen schrinker
-  //  int Xres = iGLOBAL_SCREENWIDTH;//640;
- //  int Yres = iGLOBAL_SCREENHEIGHT;//400;
-
-  Xres = 640;
-   Yres = 400;
-
-
 
    // Save the current game screen
 
@@ -1520,15 +1509,7 @@ void SetUpControlPanel (void)
 			  for (j=0;j<(Yres/4);j++,s++,b+=(iGLOBAL_SCREENWIDTH<<1)*2)
 				 *s=*b;
 			  }
-	  }/*
-      if (iGLOBAL_SCREENWIDTH == 800) { 	 
-		  for (i=0;i<Xres;i+=8)		{	  
-			  b=(byte *)bufferofs+i;//schrink screen to 1/3 size
-			  for (j=0;j<(Yres/8);j++,s++,b+=(iGLOBAL_SCREENWIDTH<<1)*3)
-				 *s=*b;
-		  }
-
-      }*/
+	  }
 
    ScanForSavedGames ();
 

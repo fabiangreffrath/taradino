@@ -445,10 +445,8 @@ boolean ParseConfigFile (void)
 		   if (iGLOBAL_SCREENWIDTH == 320){
 				G_weaponscale=168;
 		   }else if (iGLOBAL_SCREENWIDTH == 640){
-				G_weaponscale=299;		
-		   }else if (iGLOBAL_SCREENWIDTH == 800) {
-				G_weaponscale=376;
-		   }	   
+				G_weaponscale=299;
+		   }
 	   }
 
       // Read in MouseAdjustment
@@ -1618,7 +1616,7 @@ void WriteConfig (void)
    // Write out resolution
    SafeWriteString(file,"\n;\n");
    SafeWriteString(file,"; Screen Resolution, supported resolutions: \n");
-   SafeWriteString(file,"; 320x200, 640x480 and 800x600\n");
+   SafeWriteString(file,"; 320x200 and 640x480\n");
    WriteParameter(file,"ScreenWidth      ",iGLOBAL_SCREENWIDTH);
    WriteParameter(file,"ScreenHeight     ",iGLOBAL_SCREENHEIGHT);
 
@@ -1640,10 +1638,8 @@ void WriteConfig (void)
 	   if (iGLOBAL_SCREENWIDTH == 320){
 			G_weaponscale=168;
 	   }else if (iGLOBAL_SCREENWIDTH == 640){
-			G_weaponscale=299;		
-	   }else if (iGLOBAL_SCREENWIDTH == 800) {
-			G_weaponscale=376;
-	   }	   
+			G_weaponscale=299;
+	   }
    }
    WriteParameter(file,"Weaponscale         ",G_weaponscale);
 
