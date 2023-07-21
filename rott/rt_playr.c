@@ -1531,11 +1531,7 @@ void PlayNoWaySound ( void )
 ===============
 */
 
-boolean AreJumping = false;//bna added
-int		oldzval;
-int donttilt=0;
-
-
+static int jumptics;
 
 void Cmd_Use (objtype*ob)
 {
@@ -1625,26 +1621,23 @@ void Cmd_Use (objtype*ob)
    if (doorn == (elevatorstart + 6))
       return;
 
-   //bna ++ jumpmode
-   //SetTextMode (  );
-   if (!BATTLEMODE){//dont use jump in battle, spoils sync
-   if (usejump == true){
-   if (pstate->buttonheld[bt_use]){
-   if ((AreJumping == false)&&(ob->z > 0)&&(doorn==0)){
-	    oldzval = ob->z;
-		ob->z -= 15;
-		ob->momentumz += GRAVITY;
-		AreJumping = true;
-		donttilt=10;
-		return;
-   } 
-		AreJumping = false;
-		return;
-   }
-   }
-   }
-   //bna 
-
+    //bna ++ jumpmode
+    if (!BATTLEMODE) // don't use jump in battle, spoils sync
+    {
+        if (usejump == true)
+        {
+            if (pstate->buttonheld[bt_use])
+            {
+                if (ob->momentumz == 0 && doorn == 0 && jumptics == 0)
+                {
+                    ob->momentumz -= HIGH_GRAVITY;
+                    jumptics = VBLCOUNTER; // [FG] 1 sec delay
+                    return;
+                }
+            }
+        }
+    }
+    //bna
 
    if (pstate->buttonheld[bt_use])
       return;
@@ -1813,25 +1806,6 @@ void Cmd_Use (objtype*ob)
       }
    else if ((tempwall) && (tempwall->which == WALL) && (ob==player)){
       PlayNoWaySound();
-   	  //bna ++ jumpmode
-   //SetTextMode (  );
-   if (!BATTLEMODE){//dint use jump in battle, spoils sync
-   if (usejump == true){
-   if (pstate->buttonheld[bt_use]){
-   if ((AreJumping == false)&&(ob->z > 0)&&(doorn==0)){
-	    oldzval = ob->z;
-		ob->z -= 15;
-		ob->momentumz += GRAVITY;
-		AreJumping = true;
-		donttilt=10;
-		return;
-   } 
-		AreJumping = false;
-		return;
-   }
-   }
-   }
-	  //bna 
 	  }
 //      else
 //         SD_PlaySoundRTP (SD_NOWAYSND,ob->x,ob->y);
@@ -3787,11 +3761,12 @@ void PlayerTiltHead (objtype * ob)
    int dyz=0;
    int yzangle;
 
-//bna++   jumpmode
-  if ((donttilt > 0)){
-	  donttilt--;
-	  return;
-  }
+    // bna ++ jumpmode
+    if (jumptics > 0)
+    {
+        jumptics--;
+        return;
+    }
 
 	M_LINKSTATE(ob,pstate);
 
