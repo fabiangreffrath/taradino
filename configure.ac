@@ -34,7 +34,7 @@ AC_TYPE_UINT64_T
 AC_FUNC_ALLOCA
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
-AC_CHECK_FUNCS([memmove memset mkdir pow strcasecmp strerror strrchr strstr strtol])
+AC_CHECK_FUNCS([memmove memset mkdir pow strcasecmp strerror strrchr strstr strtol strchr strdup])
 
 # Set to build the shareware version
 AC_ARG_ENABLE([shareware],
