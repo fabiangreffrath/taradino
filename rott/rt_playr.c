@@ -58,9 +58,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define FLYINGZMOM  350000
 
-extern boolean usejump;
-
-
 specials CurrentSpecialsTimes =
       {
       60*VBLCOUNTER, // god
@@ -1531,12 +1528,6 @@ void PlayNoWaySound ( void )
 ===============
 */
 
-boolean AreJumping = false;//bna added
-int		oldzval;
-int donttilt=0;
-
-
-
 void Cmd_Use (objtype*ob)
 {
    int             checkx,checky,doorn,
@@ -1624,27 +1615,6 @@ void Cmd_Use (objtype*ob)
 //       tempsprite = sprites[checkx][checky];
    if (doorn == (elevatorstart + 6))
       return;
-
-   //bna ++ jumpmode
-   //SetTextMode (  );
-   if (!BATTLEMODE){//dont use jump in battle, spoils sync
-   if (usejump == true){
-   if (pstate->buttonheld[bt_use]){
-   if ((AreJumping == false)&&(ob->z > 0)&&(doorn==0)){
-	    oldzval = ob->z;
-		ob->z -= 15;
-		ob->momentumz += GRAVITY;
-		AreJumping = true;
-		donttilt=10;
-		return;
-   } 
-		AreJumping = false;
-		return;
-   }
-   }
-   }
-   //bna 
-
 
    if (pstate->buttonheld[bt_use])
       return;
@@ -1813,25 +1783,6 @@ void Cmd_Use (objtype*ob)
       }
    else if ((tempwall) && (tempwall->which == WALL) && (ob==player)){
       PlayNoWaySound();
-   	  //bna ++ jumpmode
-   //SetTextMode (  );
-   if (!BATTLEMODE){//dint use jump in battle, spoils sync
-   if (usejump == true){
-   if (pstate->buttonheld[bt_use]){
-   if ((AreJumping == false)&&(ob->z > 0)&&(doorn==0)){
-	    oldzval = ob->z;
-		ob->z -= 15;
-		ob->momentumz += GRAVITY;
-		AreJumping = true;
-		donttilt=10;
-		return;
-   } 
-		AreJumping = false;
-		return;
-   }
-   }
-   }
-	  //bna 
 	  }
 //      else
 //         SD_PlaySoundRTP (SD_NOWAYSND,ob->x,ob->y);
@@ -3786,12 +3737,6 @@ void PlayerTiltHead (objtype * ob)
 	playertype * pstate;
    int dyz=0;
    int yzangle;
-
-//bna++   jumpmode
-  if ((donttilt > 0)){
-	  donttilt--;
-	  return;
-  }
 
 	M_LINKSTATE(ob,pstate);
 
