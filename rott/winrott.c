@@ -6,8 +6,8 @@
 
 //typedef unsigned char byte;
 
-int iGLOBAL_SCREENWIDTH  = 640;//bna val 800
-int iGLOBAL_SCREENHEIGHT = 480;//bna val 600
+int iGLOBAL_SCREENWIDTH  = 640;//bna
+int iGLOBAL_SCREENHEIGHT = 480;//bna
 int iGLOBAL_SCREENBWIDE ;
 int iG_SCREENWIDTH;// default screen width in bytes
 
@@ -60,16 +60,6 @@ void SetRottScreenRes (int Width, int Height)
 		iGLOBAL_AMMO_Y = 464;//480-16;
 
 		dTopYZANGLELIMIT = (42*FINEANGLES/360);;
-	}
-	if (iGLOBAL_SCREENWIDTH == 800) {
-		iGLOBAL_FOCALWIDTH = 200;
-		dGLOBAL_FPFOCALWIDTH = 200.0 ;
-		iGLOBAL_HEALTH_X = 40;//20*2;
-		iGLOBAL_HEALTH_Y = 585;//(185/200)*600;
-		iGLOBAL_AMMO_X = 750;//(300/320)*800;
-		iGLOBAL_AMMO_Y = 584;//600-16;
-	
-		dTopYZANGLELIMIT = (90*FINEANGLES/360);;
 	}
 }
 

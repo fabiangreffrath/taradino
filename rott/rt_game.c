@@ -415,21 +415,7 @@ void DrawPlayScreen (boolean bufferofsonly)
 				 ( byte * )&erase->data, 2, true, bufferofsonly );
 		  shape = ( pic_t * )W_CacheLumpName( "stat_bar", PU_CACHE, Cvt_pic_t, 1 );
 		  GameMemToScreen( shape, 0, 0, bufferofsonly );
-	   }else if (iGLOBAL_SCREENWIDTH == 800) {
-		   //use this as dummy pic to fill out missing bar
-		  shape = ( pic_t * ) W_CacheLumpName( "bottbar", PU_CACHE, Cvt_pic_t, 1 );
-		  GameMemToScreen( shape, 0, 0, bufferofsonly );
-		  GameMemToScreen( shape, 260, 0, bufferofsonly );
-		  GameMemToScreen( shape, 800-320, 0, bufferofsonly );
-		  // delete hart in middle of topbar
-		  DrawPPic( 480+3,1, 8 >> 2, 16,
-				 ( byte * )&erase->data, 2, true, bufferofsonly );
-		  // delete bullet in end of topbar
-		  DrawPPic( 780,1, 8 >> 2, 16,
-				 ( byte * )&erase->data, 2, true, bufferofsonly );
-		  shape = ( pic_t * )W_CacheLumpName( "stat_bar", PU_CACHE, Cvt_pic_t, 1 );
-		  GameMemToScreen( shape, 0, 0, bufferofsonly );
-	   }else if (iGLOBAL_SCREENWIDTH == 320) {
+	   } else if (iGLOBAL_SCREENWIDTH == 320) {
 		  
 		  //SetTextMode (  );
 		  shape = ( pic_t * )W_CacheLumpName( "stat_bar", PU_CACHE, Cvt_pic_t, 1 );
@@ -478,20 +464,7 @@ void DrawPlayScreen (boolean bufferofsonly)
 				 DrawPPic( 324, (224*2)+17-ShowKillsYoffset, 8 >> 2, 16,
 					 ( byte * )&erase->data, 2, true, bufferofsonly );
 
-			}else if (iGLOBAL_SCREENWIDTH == 800) {
-				 GameMemToScreen( shape, 800-320, 584-ShowKillsYoffset, bufferofsonly );
-				 //copy next shape to mem
-				 GameMemToScreen( shape, 300, 584-ShowKillsYoffset, bufferofsonly );
-				 //copy next shape to mem
-				 GameMemToScreen( shape, 0, 584-ShowKillsYoffset, bufferofsonly );
-				 // delete 2 bullets in middle of shape picture
-				 DrawPPic( 305, 584+1-ShowKillsYoffset, 8 >> 2, 16,
-					 ( byte * )&erase->data, 2, true, bufferofsonly );
-				 // delete hart in middle of shape picture
-				 DrawPPic( 610, 584+1-ShowKillsYoffset, 8 >> 2, 16,
-					 ( byte * )&erase->data, 2, true, bufferofsonly );
-
-			}else{
+			} else {
 				 GameMemToScreen( shape, 0, 184, bufferofsonly );
 			}
          }
@@ -507,10 +480,7 @@ void DrawPlayScreen (boolean bufferofsonly)
 				 //   ( byte * )&shape->data, 1, true, bufferofsonly );bna
 				 DrawPPic( 148*2, 465, shape->width, shape->height,
 					( byte * )&shape->data, 1, true, bufferofsonly );
-			 }else if (iGLOBAL_SCREENWIDTH == 800) {
-				 DrawPPic( 380, 585, shape->width, shape->height,
-					( byte * )&shape->data, 1, true, bufferofsonly );
-			 }else{
+			 } else {
 					DrawPPic( 148, 185, shape->width, shape->height,
 					( byte * )&shape->data, 1, true, bufferofsonly );		
 			 }

@@ -2756,8 +2756,6 @@ void StartupRotateBuffer ( int masked)
 		RotatedImage=SafeMalloc(131072);
    }else if (iGLOBAL_SCREENWIDTH == 640) { 
 		RotatedImage=SafeMalloc(131072*4);
-   }else if (iGLOBAL_SCREENWIDTH == 800) { 
-		RotatedImage=SafeMalloc(131072*8);
    }
 //SetupScreen(false);//used these 2 to test screen size
 //VW_UpdateScreen ();
@@ -2766,39 +2764,18 @@ void StartupRotateBuffer ( int masked)
 		  memset(RotatedImage,0,131072);
 	   }else if (iGLOBAL_SCREENWIDTH == 640) { 
 		  memset(RotatedImage,0,131072*4);
-	   }else if (iGLOBAL_SCREENWIDTH == 800) { 
-		  //memset(RotatedImage,0,131072);//org
-		  memset(RotatedImage,0,131072*8);
 	   }
    } else {
 	   if (iGLOBAL_SCREENWIDTH == 320) {
 		  memset(RotatedImage,0xff,131072);
 	   }else if (iGLOBAL_SCREENWIDTH == 640) { 
 		  memset(RotatedImage,0xff,131072*4);
-	   }else if (iGLOBAL_SCREENWIDTH == 800) { 
-		  memset(RotatedImage,0xff,131072*8);
 	   }
    }
       //memset(RotatedImage,0xff,131072);//org
       //memset(RotatedImage,0xff,131072*8);
 
-      if ((masked == false)&&(iGLOBAL_SCREENWIDTH == 800)) {
-		DisableScreenStretch();
-		// SetTextMode (  );
-
-		k=(28*512);//14336;
-		//k=((0+28)<<10);//28672
-		   for (a=0;a<iGLOBAL_SCREENHEIGHT;a++){
-			   for (b=0;b<iGLOBAL_SCREENWIDTH;b++){
-					//*(RotatedImage+99+((a+28)<<9)+b)   =   *((byte *)bufferofs+(a*linewidth)+b);
-					// 99 is some offset value
-					k = ((a+28)<<10);
-					*(RotatedImage+(k)+b)   =   *((byte *)bufferofs+(a*linewidth)+b);
-					//*(RotatedImage+b)   =   *((byte *)bufferofs+(a*linewidth)+b);
-			   }
-			   //k+=512*2;
-		   }
-	  }else if ((masked == false)&&(iGLOBAL_SCREENWIDTH == 640)) {
+      if ((masked == false)&&(iGLOBAL_SCREENWIDTH == 640)) {
 		DisableScreenStretch();
 		k=(28*512);//14336;
 		   for (a=0;a<iGLOBAL_SCREENHEIGHT;a++){
@@ -2960,24 +2937,14 @@ void DrawRotatedScreen(int cx, int cy, byte *destscreen, int angle, int scale, i
 	   xst = (((-cx)*s)+((268)<<16))-(cy*c);
 	   xct = (((-cx)*c)+((317)<<16)+(1<<18)-(1<<16))+(cy*s);
    }//y=268;x=317
-   else if ((iGLOBAL_SCREENWIDTH == 800 )&&(masked == false)) {
-	   xst = (((-cx)*s)+((328)<<16))-(cy*c);
-	   xct = (((-cx)*c)+((397)<<16)+(1<<18)-(1<<16))+(cy*s);
-   }//328 397
 
    mr_xstep=s;
    mr_ystep=c;
 
-  
-   if ((iGLOBAL_SCREENWIDTH == 800)&&(masked==0)) {
-        screen=destscreen+iGLOBAL_SCREENWIDTH;//bna aaaa fix
-   }else{
 		screen=destscreen;
-   }
 
    if (masked==0)
       {
-		 // paint hole 800x600 screen
 		 { 
          mr_yfrac=xct;
          mr_xfrac=xst;
@@ -3276,9 +3243,6 @@ void StartupScreenSaver ( void )
    }else if (iGLOBAL_SCREENWIDTH == 640){
 		ScreenSaver->pausex=240;
 		ScreenSaver->pausey=201;
-   }else if (iGLOBAL_SCREENWIDTH == 800){
-		ScreenSaver->pausex=300;
-		ScreenSaver->pausey=252;
    }
    ScreenSaver->pausex=120;
    ScreenSaver->pausey=84;
@@ -3371,9 +3335,6 @@ void UpdateScreenSaver ( void )
       }else if (iGLOBAL_SCREENWIDTH == 640){
 		  ScreenSaver->pausex=RandomNumber ("pausex",0)%480;
 		  ScreenSaver->pausey=RandomNumber ("pausey",0)%403;
-	  }else if (iGLOBAL_SCREENWIDTH == 800){
-		  ScreenSaver->pausex=RandomNumber ("pausex",0)%600;
-		  ScreenSaver->pausey=RandomNumber ("pausey",0)%504;
 	  }
    }
    DrawPauseXY (ScreenSaver->pausex, ScreenSaver->pausey);
@@ -5141,8 +5102,6 @@ void DrawRotRow(int count, byte * dest, byte * src)
 {
 	unsigned eax, ecx, edx;
 //	unsigned a, b, c,d;
-	 byte * srctmp;
-	 byte * desttmp;
 
 	ecx = mr_yfrac;
 	edx = mr_xfrac;
@@ -5176,49 +5135,6 @@ void DrawRotRow(int count, byte * dest, byte * src)
 			edx += mr_xstep;
 			ecx += mr_ystep;
 		}
-	}else if (iGLOBAL_SCREENWIDTH == 800) {
-
-
-
-	srctmp = src;
-	desttmp = dest;
-
-	desttmp -= (iGLOBAL_SCREENWIDTH*1);
-
-	ecx = mr_yfrac;
-	edx = mr_xfrac;
-	//count = 800
-//zxcv
-	while (count--) { 
-		eax = edx >> 16;//edx=4146069504 eax=63264  edx/eax = 65536->0x10000
-		 
-		//a=(eax << 9); //=eax*512
-		//a=(eax << 7); //=eax*128
-		//a=512|128; = 640;
-		//SetTextMode (  );
-		//a=(ecx >> 16);//ecx=4102225920 a=62595   ecx/65536 = 62595
-
-		//         Y-dir                    x-dir
-		if (eax < (256*2.5) && (ecx >> 16) < (512*2)) {
-			//eax = (eax << 9) | ((ecx << 7) >> (32-9));
-			eax = (eax << 10) | ((ecx << 6) >> (32-10));
-	/*		eax = (eax * 512*2) ;
-								//(23)
-			eax += 	 ((ecx ) >> (32-9));//ecx=196608
-			*/
-		} else {
-			eax = 0;
-
-			
-		}
- 		//desttmp -= centeroffset;	
-		*desttmp++ = srctmp[eax];
-		//*desttmp++ = srctmp[eax];
-		
-		edx += mr_xstep;
-		ecx += mr_ystep;
-	}
-
 	}
 }
 

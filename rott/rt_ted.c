@@ -1130,11 +1130,6 @@ void PreCache( void )
 				DrawNormalSprite (72+(Gs*(lastmem<<2)),446+3,W_GetNumForName ("led1"));//led1 progressbar
 				DrawNormalSprite (72+3+(Gs*(lastmem<<2)),446,W_GetNumForName ("led1"));//led1 progressbar
 				DrawNormalSprite (72+3+(Gs*(lastmem<<2)),446+3,W_GetNumForName ("led1"));//led1 progressbar
-			}else if ( iGLOBAL_SCREENWIDTH == 800) {
-				DrawNormalSprite (91+(Gs*(lastmem<<2)),559,W_GetNumForName ("led1"));//led1 progressbar
-				DrawNormalSprite (91+(Gs*(lastmem<<2)),559+3,W_GetNumForName ("led1"));//led1 progressbar
-				DrawNormalSprite (91+3+(Gs*(lastmem<<2)),559,W_GetNumForName ("led1"));//led1 progressbar
-				DrawNormalSprite (91+3+(Gs*(lastmem<<2)),559+3,W_GetNumForName ("led1"));//led1 progressbar
 			}
 
             lastmem++;
@@ -1154,11 +1149,6 @@ void PreCache( void )
 				DrawNormalSprite (72+3+(Gs*(lastcache<<2)),458,W_GetNumForName ("led2"));//led2 progressbar
 				DrawNormalSprite (72+3+(Gs*(lastcache<<2)),458+3,W_GetNumForName ("led2"));//led2 progressbar
 			
-			}else if ( iGLOBAL_SCREENWIDTH == 800) {
-				DrawNormalSprite (91+(Gs*(lastcache<<2)),573,W_GetNumForName ("led2"));//led2 progressbar
-				DrawNormalSprite (91+(Gs*(lastcache<<2)),573+3,W_GetNumForName ("led2"));//led2 progressbar
-				DrawNormalSprite (91+3+(Gs*(lastcache<<2)),573,W_GetNumForName ("led2"));//led2 progressbar
-				DrawNormalSprite (91+3+(Gs*(lastcache<<2)),573+3,W_GetNumForName ("led2"));//led2 progressbar
 			}
 			DisableScreenStretch();//bna++
 			VW_UpdateScreen ();//bna++

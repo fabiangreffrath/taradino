@@ -171,19 +171,11 @@ void ChangeFocalWidth ( int amount )
 
 void SetViewDelta ( void )
 {
-//iGLOBAL_SCREENHEIGHT
-//iGLOBAL_SCREENWIDTH
 //
 // calculate scale value for vertical height calculations
 // and sprite x calculations
 //
-	if ( iGLOBAL_SCREENWIDTH == 320) {
-		scale = (centerx*focalwidth)/(160);
-	}else if ( iGLOBAL_SCREENWIDTH == 640) {
-		scale = (centerx*focalwidth)/(160);
-	}else if ( iGLOBAL_SCREENWIDTH == 800) {
-		scale = (centerx*focalwidth)/(160);
-	}
+	scale = (centerx*focalwidth)/(160);
 //
 // divide heightnumerator by a posts distance to get the posts height for
 // the heightbuffer.  The pixel height is height>>HEIGHTFRACTION
@@ -290,21 +282,7 @@ void SetViewSize
         viewsizes[height++]= 640; viewsizes[height++]= 464;
         viewsizes[height++]= 640; viewsizes[height++]= 480;
         viewsizes[height++]= 640; viewsizes[height++]= 480;
-	}else if ( iGLOBAL_SCREENWIDTH == 800) {
-		height = 0;
-		viewsizes[height++]= 556; viewsizes[height++]= 488;
-        viewsizes[height++]= 588; viewsizes[height++]= 504;
-        viewsizes[height++]= 620; viewsizes[height++]= 520;
-        viewsizes[height++]= 652; viewsizes[height++]= 536;
-        viewsizes[height++]= 684; viewsizes[height++]= 552;
-        viewsizes[height++]= 716; viewsizes[height++]= 568;
-        viewsizes[height++]= 748; viewsizes[height++]= 584;
-        viewsizes[height++]= 800; viewsizes[height++]= 600;
-        viewsizes[height++]= 800; viewsizes[height++]= 600;
-        viewsizes[height++]= 800; viewsizes[height++]= 600;
-        viewsizes[height++]= 800; viewsizes[height++]= 600;
 	}
-
 
 	if ((size<0) || (size>=MAXVIEWSIZES)){//bna added
         printf("Illegal screen size = %d\n",size);

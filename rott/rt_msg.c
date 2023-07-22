@@ -513,8 +513,6 @@ void DisplayMessage   (int num,int position)
 			PrintX += 8 * 8;
 		 }else if ( iGLOBAL_SCREENWIDTH == 640) {
 			PrintX += 8 * 8*2;
-		 }else if ( iGLOBAL_SCREENWIDTH == 800) {
-			PrintX += 8 * 8*2;
 		 }
 
          fontcolor = egacolor[ LIGHTGRAY ];

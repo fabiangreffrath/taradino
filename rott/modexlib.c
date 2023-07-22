@@ -126,7 +126,7 @@ void GraphicsMode ( void )
 	{
 		renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_SOFTWARE);
 	}
-	SDL_RenderSetLogicalSize(renderer, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+	SDL_RenderSetLogicalSize(renderer, 640, 480);
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
