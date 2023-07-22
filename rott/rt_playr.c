@@ -58,9 +58,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define FLYINGZMOM  350000
 
-extern boolean usejump;
-
-
 specials CurrentSpecialsTimes =
       {
       60*VBLCOUNTER, // god
@@ -1531,8 +1528,6 @@ void PlayNoWaySound ( void )
 ===============
 */
 
-static int jumptics;
-
 void Cmd_Use (objtype*ob)
 {
    int             checkx,checky,doorn,
@@ -1620,24 +1615,6 @@ void Cmd_Use (objtype*ob)
 //       tempsprite = sprites[checkx][checky];
    if (doorn == (elevatorstart + 6))
       return;
-
-    //bna ++ jumpmode
-    if (!BATTLEMODE) // don't use jump in battle, spoils sync
-    {
-        if (usejump == true)
-        {
-            if (pstate->buttonheld[bt_use])
-            {
-                if (ob->momentumz == 0 && doorn == 0 && jumptics == 0)
-                {
-                    ob->momentumz -= HIGH_GRAVITY;
-                    jumptics = VBLCOUNTER; // [FG] 1 sec delay
-                    return;
-                }
-            }
-        }
-    }
-    //bna
 
    if (pstate->buttonheld[bt_use])
       return;
@@ -3760,13 +3737,6 @@ void PlayerTiltHead (objtype * ob)
 	playertype * pstate;
    int dyz=0;
    int yzangle;
-
-    // bna ++ jumpmode
-    if (jumptics > 0)
-    {
-        jumptics--;
-        return;
-    }
 
 	M_LINKSTATE(ob,pstate);
 

@@ -737,10 +737,9 @@ CP_MenuNames ExtOptionsNames[] =
    "MOUSELOOK",
    "INVERSE MOUSE",
    "CROSS HAIR",
-   "JUMPING",
    "FULLSCREEN"
    };
-CP_iteminfo ExtOptionsItems = { 20, MENU_Y, 5, 0, 43, ExtOptionsNames, mn_largefont };
+CP_iteminfo ExtOptionsItems = { 20, MENU_Y, 4, 0, 43, ExtOptionsNames, mn_largefont };
 
 CP_itemtype ExtOptionsMenu[] =
 {
@@ -5139,7 +5138,6 @@ void DrawExtOptionsMenu (void)
 extern int inverse_mouse;
 extern boolean usemouselook;
 extern boolean iG_aimCross;
-extern boolean usejump;
 extern boolean sdl_fullscreen;
 
 void CP_ExtOptionsMenu (void)
@@ -5163,8 +5161,7 @@ void CP_ExtOptionsMenu (void)
 				 DrawExtOptionsButtons (); 
 				 break;
          case 2: iG_aimCross   ^= 1; DrawExtOptionsButtons (); break;
-         case 3: usejump       ^= 1; DrawExtOptionsButtons (); break;
-         case 4:
+         case 3:
             {
                ToggleFullScreen();
                DrawExtOptionsButtons ();
@@ -5200,8 +5197,7 @@ void DrawExtOptionsButtons (void)
             case 0: if (usemouselook  == 1) on = 1; break;
             case 1: if (inverse_mouse == -1)on = 1; break;
             case 2: if (iG_aimCross   == 1) on = 1; break;
-            case 3: if (usejump       == 1) on = 1; break;
-            case 4: if (sdl_fullscreen== 1) on = 1; break;
+            case 3: if (sdl_fullscreen== 1) on = 1; break;
          }
 
          if (on)
