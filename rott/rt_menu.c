@@ -1536,7 +1536,7 @@ void SetUpControlPanel (void)
 
       if ( consoleplayer != 0 )
          {
-         MainMenu[battlemode].routine = ( void (*)(int) )BattleGamePlayerSetup;
+         MainMenu[battlemode].routine = (menuptr)BattleGamePlayerSetup;
          }
       }
    }
@@ -2291,8 +2291,8 @@ int HandleMenu (CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w))
    switch (exit)
    {
       case 1:
-         if ((items+handlewhich)->routine!=NULL)
-            (items+handlewhich)->routine(0);
+         if ((items+handlewhich)->routine.v!=NULL)
+            (items+handlewhich)->routine.vi(0);
          return (handlewhich);
 
       case 2:
@@ -3154,7 +3154,7 @@ void AdjustMenuStruct
 
    {
    MainMenu[ savegame ].active         = CP_Inactive;
-   MainMenu[ viewscores ].routine      = ( void * )CP_ViewScores;
+   MainMenu[ viewscores ].routine      = (menuptr)CP_ViewScores;
    MainMenu[ viewscores ].texture[ 6 ] = '7';
    MainMenu[ viewscores ].texture[ 7 ] = '\0';
    MainMenu[ viewscores ].letter       = 'V';
@@ -4996,7 +4996,7 @@ void MenuFixup
    MainMenu[ viewscores ].texture[ 6 ] = '1';
    MainMenu[ viewscores ].texture[ 7 ] = '0';
    MainMenu[ viewscores ].texture[ 8 ] = '\0';
-   MainMenu[ viewscores ].routine      = ( void * )CP_EndGame;
+   MainMenu[ viewscores ].routine      = (menuptr)CP_EndGame;
    MainMenu[ viewscores ].letter       = 'E';
    strcpy (MainMenuNames[ viewscores ] , "END GAME");
    MainMenu[ savegame ].active         = CP_Active;
@@ -6335,7 +6335,7 @@ void DrawTimeLimitOptionDescription( int w )
 
 #define TURN_OFF_BATTLE_MODE( x ) \
    ModeMenu[ ( x ) - 1 ].active  = CP_SemiActive; \
-   ModeMenu[ ( x ) - 1 ].routine = NULL;
+   ModeMenu[ ( x ) - 1 ].routine = (menuptr)NULL;
 
 
 //****************************************************************************

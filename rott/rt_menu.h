@@ -64,14 +64,21 @@ typedef struct
    } CP_iteminfo;
 
 
-typedef void (*menuptr)(int);
+typedef union
+{
+  void (*v);
+  void (*vv)(void);
+  void (*vi)(int); // CP_Quit()
+  int (*iv)(void); // CP_SaveGame()
+  int (*iii)(int, int); // CP_LoadGame()
+} menuptr;
 
 typedef struct
 {
    int active;
    char texture[9];
    char letter;
-   void (* routine)(int temp1);
+   menuptr routine;
 } CP_itemtype;
 
 enum
