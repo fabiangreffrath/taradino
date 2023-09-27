@@ -391,21 +391,21 @@ CP_itemtype MainMenu[] =
 CP_iteminfo LSItems  = { LSM_X, LSM_Y, NUMSAVEGAMES, 0, 10, NULL, mn_largefont };
 CP_itemtype LSMenu[] =
    {
-	   { CP_Active, "", 'a', NULL },
-	   { CP_Active, "", 'b', NULL },
-	   { CP_Active, "", 'c', NULL },
-	   { CP_Active, "", 'd', NULL },
-	   { CP_Active, "", 'e', NULL },
-	   { CP_Active, "", 'f', NULL },
-	   { CP_Active, "", 'g', NULL },
-	   { CP_Active, "", 'h', NULL },
-      { CP_Active, "", 'i', NULL },
-      { CP_Active, "", 'j', NULL },
-      { CP_Active, "", 'k', NULL },
-      { CP_Active, "", 'l', NULL },
-      { CP_Active, "", 'm', NULL },
-      { CP_Active, "", 'n', NULL },
-	   { CP_Active, "", 'o', NULL }
+	   { CP_Active, "", 'a', {NULL} },
+	   { CP_Active, "", 'b', {NULL} },
+	   { CP_Active, "", 'c', {NULL} },
+	   { CP_Active, "", 'd', {NULL} },
+	   { CP_Active, "", 'e', {NULL} },
+	   { CP_Active, "", 'f', {NULL} },
+	   { CP_Active, "", 'g', {NULL} },
+	   { CP_Active, "", 'h', {NULL} },
+      { CP_Active, "", 'i', {NULL} },
+      { CP_Active, "", 'j', {NULL} },
+      { CP_Active, "", 'k', {NULL} },
+      { CP_Active, "", 'l', {NULL} },
+      { CP_Active, "", 'm', {NULL} },
+      { CP_Active, "", 'n', {NULL} },
+	   { CP_Active, "", 'o', {NULL} }
    };
 
 CP_MenuNames CtlMenuNames[] =
@@ -422,10 +422,10 @@ CP_MenuNames CtlMenuNames[] =
 CP_iteminfo CtlItems  = { CTL_X, MENU_Y, 7, -1, 36, CtlMenuNames, mn_largefont };
 CP_itemtype CtlMenu[] =
    {
-      { CP_Inactive, "ctl_mic\0", 'M', NULL },
-      { CP_Inactive, "ctl_jen\0", 'J', NULL },
-      { CP_Inactive, "ctl_jp2\0", 'U', NULL },
-      { CP_Inactive, "ctl_gpd\0", 'G', NULL },
+      { CP_Inactive, "ctl_mic\0", 'M', {NULL} },
+      { CP_Inactive, "ctl_jen\0", 'J', {NULL} },
+      { CP_Inactive, "ctl_jp2\0", 'U', {NULL} },
+      { CP_Inactive, "ctl_gpd\0", 'G', {NULL} },
       { CP_Inactive, "ctl_thr\0", 'A', (menuptr)DoThreshold },
       { CP_Inactive, "ctl_mse\0", 'M', (menuptr)MouseSensitivity },
       { CP_Active,   "ctl_cus\0", 'C', (menuptr)CP_Custom }
@@ -434,15 +434,15 @@ CP_itemtype CtlMenu[] =
 CP_iteminfo CusItems  = { 32, CST_Y + 13 * 2, 9, -1, 0, NULL, mn_largefont };
 CP_itemtype CusMenu[] =
    {
-      { CP_Active,   "ctl_mic\0", 'a', NULL },
-      { CP_Inactive, "ctl_mic\0", 'a', NULL },
-      { CP_Inactive, "ctl_mic\0", 'a', NULL },
-      { CP_Active,   "ctl_mic\0", 'a', NULL },
-      { CP_Inactive, "ctl_mic\0", 'a', NULL },
-      { CP_Inactive, "ctl_mic\0", 'a', NULL },
-      { CP_Active,   "ctl_mic\0", 'a', NULL },
-      { CP_Inactive, "ctl_mic\0", 'a', NULL },
-      { CP_Active,   "ctl_mic\0", 'a', NULL }
+      { CP_Active,   "ctl_mic\0", 'a', {NULL} },
+      { CP_Inactive, "ctl_mic\0", 'a', {NULL} },
+      { CP_Inactive, "ctl_mic\0", 'a', {NULL} },
+      { CP_Active,   "ctl_mic\0", 'a', {NULL} },
+      { CP_Inactive, "ctl_mic\0", 'a', {NULL} },
+      { CP_Inactive, "ctl_mic\0", 'a', {NULL} },
+      { CP_Active,   "ctl_mic\0", 'a', {NULL} },
+      { CP_Inactive, "ctl_mic\0", 'a', {NULL} },
+      { CP_Active,   "ctl_mic\0", 'a', {NULL} }
    };
 
 
@@ -450,43 +450,43 @@ CP_iteminfo TufItems = { TUF_X, TUF_Y, 7, 0, 80, NULL, mn_largefont };
 CP_itemtype TufMenu[ 4 ][ 7 ] =
    {
       {
-         { 2, "new11\0", 'a', NULL },
-         { 3, "new11\0", 'a', NULL },
-         { 1, "new12\0", 'a', NULL },
-         { 3, "new12\0", 'a', NULL },
-         { 1, "new13\0", 'a', NULL },
-         { 3, "new13\0", 'a', NULL },
-         { 1, "new14\0", 'a', NULL },
+         { 2, "new11\0", 'a', {NULL} },
+         { 3, "new11\0", 'a', {NULL} },
+         { 1, "new12\0", 'a', {NULL} },
+         { 3, "new12\0", 'a', {NULL} },
+         { 1, "new13\0", 'a', {NULL} },
+         { 3, "new13\0", 'a', {NULL} },
+         { 1, "new14\0", 'a', {NULL} },
       },
 
       {
-         { 2, "new21\0", 'a', NULL },
-         { 3, "new21\0", 'a', NULL },
-         { 1, "new22\0", 'a', NULL },
-         { 3, "new22\0", 'a', NULL },
-         { 1, "new23\0", 'a', NULL },
-         { 3, "new23\0", 'a', NULL },
-         { 1, "new24\0", 'a', NULL },
+         { 2, "new21\0", 'a', {NULL} },
+         { 3, "new21\0", 'a', {NULL} },
+         { 1, "new22\0", 'a', {NULL} },
+         { 3, "new22\0", 'a', {NULL} },
+         { 1, "new23\0", 'a', {NULL} },
+         { 3, "new23\0", 'a', {NULL} },
+         { 1, "new24\0", 'a', {NULL} },
       },
 
       {
-         { 2, "new31\0", 'a', NULL },
-         { 3, "new31\0", 'a', NULL },
-         { 1, "new32\0", 'a', NULL },
-         { 3, "new32\0", 'a', NULL },
-         { 1, "new33\0", 'a', NULL },
-         { 3, "new33\0", 'a', NULL },
-         { 1, "new34\0", 'a', NULL },
+         { 2, "new31\0", 'a', {NULL} },
+         { 3, "new31\0", 'a', {NULL} },
+         { 1, "new32\0", 'a', {NULL} },
+         { 3, "new32\0", 'a', {NULL} },
+         { 1, "new33\0", 'a', {NULL} },
+         { 3, "new33\0", 'a', {NULL} },
+         { 1, "new34\0", 'a', {NULL} },
       },
 
       {
-         { 2, "stk_1\0", 'a', NULL },
-         { 3, "stk_1\0", 'a', NULL },
-         { 1, "stk_2\0", 'a', NULL },
-         { 3, "stk_2\0", 'a', NULL },
-         { 1, "stk_3\0", 'a', NULL },
-         { 3, "stk_3\0", 'a', NULL },
-         { 1, "stk_4\0", 'a', NULL },
+         { 2, "stk_1\0", 'a', {NULL} },
+         { 3, "stk_1\0", 'a', {NULL} },
+         { 1, "stk_2\0", 'a', {NULL} },
+         { 3, "stk_2\0", 'a', {NULL} },
+         { 1, "stk_3\0", 'a', {NULL} },
+         { 3, "stk_3\0", 'a', {NULL} },
+         { 1, "stk_4\0", 'a', {NULL} },
       }
    };
 
@@ -601,27 +601,27 @@ CP_iteminfo ControlSelectItems = { CONTROLSELECT_X, 17, NUMCONTROLNAMES, 0, 16, 
 
 CP_itemtype ControlSelectMenu[] =
    {
-      { 2, "\0", 'N', NULL },
-      { 1, "\0", 'L', NULL },
-      { 1, "\0", 'R', NULL },
-      { 1, "\0", 'F', NULL },
-      { 1, "\0", 'B', NULL },
-      { 1, "\0", 'R', NULL },
-      { 1, "\0", 'O', NULL },
-      { 1, "\0", 'F', NULL },
-      { 1, "\0", 'S', NULL },
-      { 1, "\0", 'S', NULL },
-      { 1, "\0", 'S', NULL },
-      { 1, "\0", 'L', NULL },
-      { 1, "\0", 'L', NULL },
-      { 1, "\0", 'A', NULL },
-      { 1, "\0", 'A', NULL },
-      { 1, "\0", 'A', NULL },
-      { 1, "\0", 'T', NULL },
-      { 1, "\0", 'D', NULL },
-      { 1, "\0", 'V', NULL },
-      { 1, "\0", 'A', NULL },
-      { 1, "\0", 'M', NULL }
+      { 2, "\0", 'N', {NULL} },
+      { 1, "\0", 'L', {NULL} },
+      { 1, "\0", 'R', {NULL} },
+      { 1, "\0", 'F', {NULL} },
+      { 1, "\0", 'B', {NULL} },
+      { 1, "\0", 'R', {NULL} },
+      { 1, "\0", 'O', {NULL} },
+      { 1, "\0", 'F', {NULL} },
+      { 1, "\0", 'S', {NULL} },
+      { 1, "\0", 'S', {NULL} },
+      { 1, "\0", 'S', {NULL} },
+      { 1, "\0", 'L', {NULL} },
+      { 1, "\0", 'L', {NULL} },
+      { 1, "\0", 'A', {NULL} },
+      { 1, "\0", 'A', {NULL} },
+      { 1, "\0", 'A', {NULL} },
+      { 1, "\0", 'T', {NULL} },
+      { 1, "\0", 'D', {NULL} },
+      { 1, "\0", 'V', {NULL} },
+      { 1, "\0", 'A', {NULL} },
+      { 1, "\0", 'M', {NULL} }
    };
 
 #define MOUSEBTNINDEX 17
@@ -690,11 +690,11 @@ CP_iteminfo PlayerItems = {TUF_X, 48, 5, 0, 80, PlayerMenuNames, mn_largefont };
 
 CP_itemtype PlayerMenu[] =
 {
-	{2, "name1\0", 'T', NULL},
-   {1, "name2\0", 'T', NULL},
-   {1, "name3\0", 'D', NULL},
-   {1, "name4\0", 'L', NULL},
-   {1, "name5\0", 'I', NULL},
+	{2, "name1\0", 'T', {NULL}},
+   {1, "name2\0", 'T', {NULL}},
+   {1, "name3\0", 'D', {NULL}},
+   {1, "name4\0", 'L', {NULL}},
+   {1, "name5\0", 'I', {NULL}},
 };
 
 CP_MenuNames ControlMMenuNames[] =
@@ -743,11 +743,11 @@ CP_iteminfo ExtOptionsItems = { 20, MENU_Y, 4, 0, 43, ExtOptionsNames, mn_largef
 
 CP_itemtype ExtOptionsMenu[] =
 {
-   {1, "", 'M', NULL},
-   {1, "", 'I', NULL},
-   {1, "", 'C', NULL},
-   {1, "", 'J', NULL},
-   {1, "", 'F', NULL}
+   {1, "", 'M', {NULL}},
+   {1, "", 'I', {NULL}},
+   {1, "", 'C', {NULL}},
+   {1, "", 'J', {NULL}},
+   {1, "", 'F', {NULL}}
 };
    
 //bna added end
@@ -756,10 +756,10 @@ CP_iteminfo OptionsItems = { 20, MENU_Y, 9, 0, 43, OptionsNames, mn_largefont };
 
 CP_itemtype OptionsMenu[] =
 {
-   {2, "autoadj\0", 'A', NULL},
-   {1, "lightdim\0",'L', NULL},
-   {1, "bobbin\0",  'B', NULL},
-   {1, "fandc\0",   'F', NULL},
+   {2, "autoadj\0", 'A', {NULL}},
+   {1, "lightdim\0",'L', {NULL}},
+   {1, "bobbin\0",  'B', {NULL}},
+   {1, "fandc\0",   'F', {NULL}},
    {1, "double\0",  'D', (menuptr)CP_DoubleClickSpeed},
    {1, "menuspd\0", 'M', (menuptr)MenuFlipSpeed},
    {1, "detail\0",  'D', (menuptr)CP_DetailMenu},
@@ -778,9 +778,9 @@ CP_iteminfo DetailItems = { 32, 64, 3, 0, 43, DetailMenuNames, mn_largefont };
 
 CP_itemtype DetailMenu[] =
 {
-   {2, "lowdtl\0", 'L', NULL},
-   {1, "meddtl\0", 'M', NULL},
-   {1, "hidtl\0",  'H', NULL}
+   {2, "lowdtl\0", 'L', {NULL}},
+   {1, "meddtl\0", 'M', {NULL}},
+   {1, "hidtl\0",  'H', {NULL}}
 };
 
 CP_MenuNames BattleMenuNames[] =
@@ -811,10 +811,10 @@ CP_iteminfo ViolenceItems = { 32, 64, 4, 0, 45, ViolenceMenuNames, mn_largefont 
 
 CP_itemtype ViolenceMenu[] =
 {
-   {2, "vnone\0",   'N', NULL},
-   {1, "vsome\0",   'S', NULL},
-   {1, "valot\0",   'A', NULL},
-   {1, "vexcess\0", 'E', NULL}
+   {2, "vnone\0",   'N', {NULL}},
+   {1, "vsome\0",   'S', {NULL}},
+   {1, "valot\0",   'A', {NULL}},
+   {1, "vexcess\0", 'E', {NULL}}
 };
 
 CP_MenuNames VMenuNames[] =
@@ -898,9 +898,9 @@ CP_iteminfo GravityItems = { 32, 26, 3, 0, 45, GravityMenuNames, mn_largefont };
 
 CP_itemtype GravityMenu[] =
 {
-	{2, "b_low\0",    'L', NULL},
-	{1, "b_normal\0", 'N', NULL},
-	{1, "b_high\0",   'H', NULL}
+	{2, "b_low\0",    'L', {NULL}},
+	{1, "b_normal\0", 'N', {NULL}},
+	{1, "b_high\0",   'H', {NULL}}
 };
 
 CP_MenuNames SpeedMenuNames[] =
@@ -913,8 +913,8 @@ CP_iteminfo SpeedItems = { 32, MP_Y, 2, 0, 45, SpeedMenuNames, mn_largefont };
 
 CP_itemtype SpeedMenu[] =
 {
-   {2, "b_normal\0", 'N', NULL},
-   {1, "b_fast\0",   'F', NULL}
+   {2, "b_normal\0", 'N', {NULL}},
+   {1, "b_fast\0",   'F', {NULL}}
 };
 
 CP_MenuNames AmmoPerWeaponMenuNames[] =
@@ -928,9 +928,9 @@ CP_iteminfo AmmoPerWeaponItems = { 32, 26, 3, 0, 45, AmmoPerWeaponMenuNames, mn_
 
 CP_itemtype AmmoPerWeaponMenu[] =
 {
-   {2, "b_one\0",    'O', NULL},
-   {1, "b_normal\0", 'N', NULL},
-   {1, "b_gunf\0",   'G', NULL}
+   {2, "b_one\0",    'O', {NULL}},
+   {1, "b_normal\0", 'N', {NULL}},
+   {1, "b_gunf\0",   'G', {NULL}}
 };
 
 CP_MenuNames HitPointMenuNames[] =
@@ -948,13 +948,13 @@ CP_iteminfo HitPointItems = { 32, 32, 7, 0, 45, HitPointMenuNames, mn_largefont 
 
 CP_itemtype HitPointMenu[] =
 {
-   {2, "b_one\0",  'O', NULL},
-   {1, "b_25\0",   'a', NULL},
-   {1, "b_char\0", 'C', NULL},
-   {1, "b_100\0",  'a', NULL},
-   {1, "b_250\0",  'a', NULL},
-	{1, "b_500\0",  'a', NULL},
-   {1, "b_4000\0", 'a', NULL}
+   {2, "b_one\0",  'O', {NULL}},
+   {1, "b_25\0",   'a', {NULL}},
+   {1, "b_char\0", 'C', {NULL}},
+   {1, "b_100\0",  'a', {NULL}},
+   {1, "b_250\0",  'a', {NULL}},
+	{1, "b_500\0",  'a', {NULL}},
+   {1, "b_4000\0", 'a', {NULL}}
 };
 
 CP_MenuNames SpawnMenuNames[] =
@@ -973,14 +973,14 @@ CP_iteminfo SpawnItems = { 20, 24, 8, 0, 35, SpawnMenuNames, mn_largefont };
 
 CP_itemtype SpawnMenu[] =
 {
-   {2, "b_danger\0", 'S', NULL},
-   {1, "b_health\0", 'S', NULL},
-   {1, "b_weap\0",   'S', NULL},
-   {1, "b_mines\0",  'S', NULL},
-   {1, "b_rpawn\0",  'R', NULL},
-   {1, "b_persis\0", 'W', NULL},
-   {1, "b_rndwpn\0", 'R', NULL},
-   {1, "b_friend\0", 'F', NULL}
+   {2, "b_danger\0", 'S', {NULL}},
+   {1, "b_health\0", 'S', {NULL}},
+   {1, "b_weap\0",   'S', {NULL}},
+   {1, "b_mines\0",  'S', {NULL}},
+   {1, "b_rpawn\0",  'R', {NULL}},
+   {1, "b_persis\0", 'W', {NULL}},
+   {1, "b_rndwpn\0", 'R', {NULL}},
+   {1, "b_friend\0", 'F', {NULL}}
 };
 
 CP_MenuNames LightLevelMenuNames[] =
@@ -997,12 +997,12 @@ CP_iteminfo LightLevelItems = { 32, 40, 6, 0, 45, LightLevelMenuNames, mn_largef
 
 CP_itemtype LightLevelMenu[] =
 {
-   {2, "b_dark\0",   'D', NULL},
-   {1, "b_normal\0", 'N', NULL},
-   {1, "b_bright\0", 'B', NULL},
-   {1, "b_fog\0",    'F', NULL},
-   {1, "b_period\0", 'P', NULL},
-   {1, "b_light\0",  'L', NULL}
+   {2, "b_dark\0",   'D', {NULL}},
+   {1, "b_normal\0", 'N', {NULL}},
+   {1, "b_bright\0", 'B', {NULL}},
+   {1, "b_fog\0",    'F', {NULL}},
+   {1, "b_period\0", 'P', {NULL}},
+   {1, "b_light\0",  'L', {NULL}}
 };
 
 CP_MenuNames PointGoalMenuNames[] =
@@ -1022,15 +1022,15 @@ CP_iteminfo PointGoalItems = { 32, 16, 9, 0, 45, PointGoalMenuNames, mn_largefon
 
 CP_itemtype PointGoalMenu[] =
 {
-	{2, "b_1\0",      'a', NULL},
-   {1, "b_5\0",      'a', NULL},
-   {1, "b_11\0",     'a', NULL},
-   {1, "b_21\0",     'a', NULL},
-   {1, "b_50\0",     'a', NULL},
-   {1, "b_100\0",    'a', NULL},
-   {1, "b_random\0", 'R', NULL},
-	{1, "b_randb\0",  'R', NULL},
-	{1, "b_inf\0",    'I', NULL}
+	{2, "b_1\0",      'a', {NULL}},
+   {1, "b_5\0",      'a', {NULL}},
+   {1, "b_11\0",     'a', {NULL}},
+   {1, "b_21\0",     'a', {NULL}},
+   {1, "b_50\0",     'a', {NULL}},
+   {1, "b_100\0",    'a', {NULL}},
+   {1, "b_random\0", 'R', {NULL}},
+	{1, "b_randb\0",  'R', {NULL}},
+	{1, "b_inf\0",    'I', {NULL}}
 };
 
 CP_MenuNames DangerMenuNames[] =
@@ -1044,9 +1044,9 @@ CP_iteminfo DangerItems = { 32, 56, 3, 0, 45, DangerMenuNames, mn_largefont };
 
 CP_itemtype DangerMenu[] =
 {
-   {2, "b_low\0",    'L', NULL},
-   {1, "b_normal\0", 'N', NULL},
-	{1, "b_kill\0",   'K', NULL}
+   {2, "b_low\0",    'L', {NULL}},
+   {1, "b_normal\0", 'N', {NULL}},
+	{1, "b_kill\0",   'K', {NULL}}
 };
 
 CP_MenuNames TimeLimitMenuNames[] =
@@ -1065,14 +1065,14 @@ CP_iteminfo TimeLimitItems = { 32, 24, 8, 0, 45, TimeLimitMenuNames, mn_largefon
 
 CP_itemtype TimeLimitMenu[] =
 {
-	{2, "b_1\0",    'a', NULL},
-	{1, "b_2\0",    'a', NULL},
-	{1, "b_5\0",    'a', NULL},
-	{1, "b_10\0",   'a', NULL},
-   {1, "b_21\0",   'a', NULL},
-	{1, "b_30\0",   'a', NULL},
-	{1, "b_99\0",   'a', NULL},
-   {1, "vnone\0",  'N', NULL}
+	{2, "b_1\0",    'a', {NULL}},
+	{1, "b_2\0",    'a', {NULL}},
+	{1, "b_5\0",    'a', {NULL}},
+	{1, "b_10\0",   'a', {NULL}},
+   {1, "b_21\0",   'a', {NULL}},
+	{1, "b_30\0",   'a', {NULL}},
+	{1, "b_99\0",   'a', {NULL}},
+   {1, "vnone\0",  'N', {NULL}}
 };
 
 CP_MenuNames MultiPageCustomNames[ MAXCUSTOM + 2 ] =
@@ -1084,20 +1084,20 @@ CP_MenuNames MultiPageCustomNames[ MAXCUSTOM + 2 ] =
 CP_iteminfo MultiPageCustomItems = { 18, 17, 0, 0, 12, MultiPageCustomNames, mn_smallfont };
 CP_itemtype MultiPageCustomMenu[] =
 {
-	{1, "", 'N', NULL},
-   {1, "", 'P', NULL},
-   {1, "", 'a', NULL},
-   {1, "", 'a', NULL},
-   {1, "", 'a', NULL},
-   {1, "", 'a', NULL},
-   {1, "", 'a', NULL},
-   {1, "", 'a', NULL},
-   {1, "", 'a', NULL},
-   {1, "", 'a', NULL},
-   {1, "", 'a', NULL},
-   {1, "", 'a', NULL},
-   {1, "", 'a', NULL},
-   {1, "", 'a', NULL},
+	{1, "", 'N', {NULL}},
+   {1, "", 'P', {NULL}},
+   {1, "", 'a', {NULL}},
+   {1, "", 'a', {NULL}},
+   {1, "", 'a', {NULL}},
+   {1, "", 'a', {NULL}},
+   {1, "", 'a', {NULL}},
+   {1, "", 'a', {NULL}},
+   {1, "", 'a', {NULL}},
+   {1, "", 'a', {NULL}},
+   {1, "", 'a', {NULL}},
+   {1, "", 'a', {NULL}},
+   {1, "", 'a', {NULL}},
+   {1, "", 'a', {NULL}},
 };
 
 #define COLORX 113
