@@ -107,9 +107,11 @@ void SD_StartIncomingSound ( void )
    PlayingPointer = -1;
    PlaybackPointer = 0;
 
+#if 0
    Playingvoice = FX_StartDemandFeedPlayback ( SD_UpdatePlaybackSound,
                   RECORDINGSAMPLERATE,
                   0, 255, 255, 255, 255, -1);
+#endif
    if (Playingvoice==0)
       {
       SafeFree(PlaybackBuffer);
@@ -250,7 +252,9 @@ boolean SD_StartRecordingSound ( void )
    FeederPointer = -1;
    RecordingPointer = 0;
 
+#if 0
    status=FX_StartRecording( RECORDINGSAMPLERATE, SD_UpdateRecordingSound);
+#endif
 
    if (status!=FX_Ok)
       {
@@ -274,7 +278,9 @@ void SD_StopRecordingSound ( void )
       return;
    if (Recording == true)
       {
+#if 0
       FX_StopRecord();
+#endif
       Recording=false;
       }
 }
