@@ -30,6 +30,7 @@ typedef struct
    byte    count;
    int     prevhandle;
    int     prevdistance;
+   void   *chunk;
 } sound_t;
 
 #define SD_OVERWRITE  0x01
