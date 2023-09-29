@@ -37,7 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define MAX_CHANNELS 8
 
-struct
+static struct
 {
     sound_t *sfx;
 } channels[MAX_CHANNELS];
@@ -231,15 +231,14 @@ int FX_SetupCard(int SoundCard, fx_device *device)
 
     if (SDL_Init(SDL_INIT_AUDIO) < 0)
     {
-        fprintf(stderr, "\n Couldn't initialize SDL audio: %s\n",
-                SDL_GetError());
+        fprintf(stderr, "\n Couldn't initialize SDL audio: %s", SDL_GetError());
         return FX_Error;
     }
 
     if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, GetSliceSize(),
                             NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
     {
-        fprintf(stderr, "\n Couldn't open audio with desired format.\n");
+        fprintf(stderr, "\n Couldn't open audio with desired format.");
         return FX_Error;
     }
 
@@ -301,9 +300,11 @@ int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
 
             if (!(sounds[i].chunk = Mix_LoadWAV_RW(rw, 1)))
             {
-                fprintf(stderr, "FX_Init: %s (%d %d %s)\n", SDL_GetError(), i,
-                        snd, W_GetNameForNum(snd));
+                fprintf(stderr, "FX_Init: %s (%s)\n", SDL_GetError(),
+                        W_GetNameForNum(snd));
             }
+
+            Z_Free(data);
         }
     }
     printf("done.");
