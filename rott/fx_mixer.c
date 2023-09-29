@@ -171,7 +171,9 @@ void FX_SetReverb(int reverb)
 
 void FX_SetVolume(int volume)
 {
+#if SDL_MIXER_VERSION_ATLEAST(2,6,0)
     Mix_MasterVolume(volume >> 1);
+#endif
 }
 
 char *FX_ErrorString(int ErrorNumber)
