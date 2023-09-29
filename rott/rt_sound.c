@@ -287,7 +287,6 @@ boolean SD_SoundOkay ( int sndnum )
 int SD_PlayIt ( int sndnum, int angle, int distance, int pitch )
 {
    int voice;
-   char * snd;
 
    if (!(sounds[sndnum].flags & SD_WRITE))
       {
