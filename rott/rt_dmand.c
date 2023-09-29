@@ -236,7 +236,7 @@ void SD_UpdateRecordingSound ( char * ptr, int length )
 
 boolean SD_StartRecordingSound ( void )
 {
-   int status;
+   int status=FX_Ok;
 
    if (SD_Started==false)
       return false;
