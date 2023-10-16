@@ -173,6 +173,13 @@ void FX_SetVolume(int volume)
 {
 #if SDL_MIXER_VERSION_ATLEAST(2,6,0)
     Mix_MasterVolume(volume >> 1);
+#else
+    int i;
+
+    for (i = 0; i < MAX_CHANNELS; i++)
+    {
+        Mix_Volume(i, volume >> 1);
+    }
 #endif
 }
 
