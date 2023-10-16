@@ -171,7 +171,7 @@ void FX_SetReverb(int reverb)
 
 void FX_SetVolume(int volume)
 {
-#if SDL_MIXER_VERSION_ATLEAST(2,6,0)
+#if SDL_MIXER_VERSION_ATLEAST(2, 6, 0)
     Mix_MasterVolume(volume >> 1);
 #else
     int i;
@@ -214,7 +214,7 @@ static int GetSliceSize(void)
     int limit;
     int n;
 
-    limit = snd_samplerate / 35;
+    limit = snd_samplerate / 35; // VBLCOUNTER
 
     // Try all powers of two, not exceeding the limit.
 
@@ -333,7 +333,6 @@ int FX_SetCallBack(void (*function)(unsigned long))
 static int reverse_stereo;
 
 void FX_SetReverseStereo(int setting)
-
 {
     reverse_stereo = setting;
 }
