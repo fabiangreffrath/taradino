@@ -1,6 +1,7 @@
 
 /*
 Copyright (C) 1994-1995 Apogee Software, Ltd.
+Copyright (C) 2023 Fabian Greffrath
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -63,58 +64,28 @@ int   FX_Init( int SoundCard, int numvoices, int numchannels, int samplebits, un
 int   FX_Shutdown( void );
 int   FX_SetCallBack( void ( *function )( unsigned long ) );
 void  FX_SetVolume( int volume );
-int   FX_GetVolume( void );
 
 void  FX_SetReverseStereo( int setting );
 int   FX_GetReverseStereo( void );
 void  FX_SetReverb( int reverb );
-void  FX_SetFastReverb( int reverb );
-int   FX_GetMaxReverbDelay( void );
-int   FX_GetReverbDelay( void );
-void  FX_SetReverbDelay( int delay );
 
 int FX_VoiceAvailable( int priority );
-int FX_EndLooping( int handle );
 int FX_SetPan( int handle, int vol, int left, int right );
 int FX_SetPitch( int handle, int pitchoffset );
-int FX_SetFrequency( int handle, int frequency );
 
-int FX_PlayVOC( char *ptr, int pitchoffset, int vol, int left, int right,
-       int priority, unsigned long callbackval );
-int FX_PlayLoopedVOC( char *ptr, long loopstart, long loopend,
-       int pitchoffset, int vol, int left, int right, int priority,
-       unsigned long callbackval );
-int FX_PlayWAV( char *ptr, int pitchoffset, int vol, int left, int right,
-       int priority, unsigned long callbackval );
-int FX_PlayLoopedWAV( char *ptr, long loopstart, long loopend,
-       int pitchoffset, int vol, int left, int right, int priority,
-       unsigned long callbackval );
-int FX_PlayVOC3D( char *ptr, int pitchoffset, int angle, int distance,
-       int priority, unsigned long callbackval );
-int FX_PlayWAV3D( char *ptr, int pitchoffset, int angle, int distance,
-       int priority, unsigned long callbackval );
-int FX_PlayRaw( char *ptr, unsigned long length, unsigned rate,
-       int pitchoffset, int vol, int left, int right, int priority,
-       unsigned long callbackval );
-int FX_PlayLoopedRaw( char *ptr, unsigned long length, char *loopstart,
-       char *loopend, unsigned rate, int pitchoffset, int vol, int left,
-       int right, int priority, unsigned long callbackval );
+int FX_Play ( int handle, int sndnum, int pitchoffset, int angle, int distance, int priority );
+
 int FX_Pan3D( int handle, int angle, int distance );
 int FX_SoundActive( int handle );
-int FX_SoundsPlaying( void );
 int FX_StopSound( int handle );
 int FX_StopAllSounds( void );
+
+#if 0
 int FX_StartDemandFeedPlayback( void ( *function )( char **ptr, unsigned long *length ),
        int rate, int pitchoffset, int vol, int left, int right,
        int priority, unsigned long callbackval );
 int  FX_StartRecording( int MixRate, void ( *function )( char *ptr, int length ) );
 void FX_StopRecord( void );
-
-// ROTT Special - SBF
-int FX_PlayVOC3D_ROTT( char *ptr, int size, int pitchoffset, int angle, int distance,
-       int priority, unsigned long callbackval );
-int FX_PlayWAV3D_ROTT( char *ptr, int size, int pitchoffset, int angle, int distance,
-       int priority, unsigned long callbackval );
-// End ROTT hacks
+#endif
 
 #endif

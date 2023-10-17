@@ -88,5 +88,5 @@ AC_ARG_ENABLE([werror],
 AS_IF([test "x$enable_werror" = "xyes"],
       [CFLAGS="$CFLAGS -Werror"])
 
-AC_CONFIG_FILES([Makefile rott/Makefile rott/audiolib/Makefile])
+AC_CONFIG_FILES([Makefile rott/Makefile])
 AC_OUTPUT

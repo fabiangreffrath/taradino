@@ -55,7 +55,6 @@ static int soundstart;
 static int soundtype;
 int SD_Started=false;
 static boolean PositionStored=false;
-static int NumBadSounds=0;
 static int remotestart;
 static boolean SoundsRemapped = false;
 
@@ -223,6 +222,8 @@ int SD_Startup ( boolean bombonerror )
       bits     = 8;
       }
 
+   remotestart=W_GetNumForName("remostrt")+1;
+
    status=FX_Init( card, voices, channels, bits, 11025 );
 
    if (status != FX_Ok)
@@ -243,7 +244,6 @@ int SD_Startup ( boolean bombonerror )
 
    FX_SetCallBack( SD_MakeCacheable );
 
-   remotestart=W_GetNumForName("remostrt")+1;
 
    SD_Started=true;
 
@@ -287,7 +287,6 @@ boolean SD_SoundOkay ( int sndnum )
 int SD_PlayIt ( int sndnum, int angle, int distance, int pitch )
 {
    int voice;
-   char * snd;
 
    if (!(sounds[sndnum].flags & SD_WRITE))
       {
@@ -300,36 +299,14 @@ int SD_PlayIt ( int sndnum, int angle, int distance, int pitch )
          }
       }
 
-   if ( !FX_VoiceAvailable( sounds[sndnum].priority ) )
+   if ((voice = FX_VoiceAvailable(sounds[sndnum].priority)) == -1)
       {
       return( 0 );
       }
 
-   sounds[sndnum].count++;
+   voice = FX_Play(voice, sndnum, pitch, angle, distance, sounds[sndnum].priority);
 
-   snd=W_CacheLumpNum(SoundNumber(sndnum),PU_STATIC, CvtNull, 1);
-
-   if ( *snd == 'C' )
-      {
-      voice = FX_PlayVOC3D( snd, pitch, angle, distance,
-         sounds[sndnum].priority, (unsigned long) sndnum );
-      }
-   else
-      {
-      voice = FX_PlayWAV3D( snd, pitch, angle, distance,
-         sounds[sndnum].priority, (unsigned long) sndnum );
-      }
-
-   if ( voice < FX_Ok )
-      {
-      SD_MakeCacheable( sndnum );
-
-      return 0;
-      }
-
-   NumBadSounds=0;
-
-   if (!(sounds[sndnum].flags & SD_WRITE))
+   if (voice >= 0 && !(sounds[sndnum].flags & SD_WRITE))
       {
       sounds[sndnum].prevhandle=voice;
       sounds[sndnum].prevdistance=distance;
