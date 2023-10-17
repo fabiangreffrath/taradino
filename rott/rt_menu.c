@@ -2668,7 +2668,11 @@ void CP_Quit ( int which )
    {
       int handle;
 
+#ifdef _WIN32
+      MU_StopSong();
+#else
       MU_FadeOut(310);
+#endif
       handle=SD_Play(SD_QUIT1SND+num);
       VL_FadeOut (0, 255, 0, 0, 0, 10);
       CleanUpControlPanel();
