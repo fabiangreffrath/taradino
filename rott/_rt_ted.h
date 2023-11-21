@@ -28,8 +28,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define SHAREWARE_TAG     0x4d4b
 #define REGISTERED_TAG    0x4344
 #define RTL_VERSION       ( 0x0101 )
+#define RXL_VERSION       ( 0x0200 )
 #define COMMBAT_SIGNATURE ( "RTC" )
 #define NORMAL_SIGNATURE  ( "RTL" )
+#define EXTENDED_COMMBAT_SIGNATURE  ( "RXC" )
+#define EXTENDED_SIGNATURE  ( "RXL" )
 #define RTL_HEADER_OFFSET 8
 
 typedef struct
