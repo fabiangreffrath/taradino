@@ -1298,8 +1298,6 @@ void CheckRTLVersion
 
       if (RTLVersion > RXL_VERSION)
       {
-         close( filehandle );
-
          Error(
             "The file '%s' is a version %d.%d %s file.\n"
             "The highest this version of ROTT can load is %d.%d.", filename,
@@ -1307,6 +1305,7 @@ void CheckRTLVersion
             RXL_VERSION >> 8, RXL_VERSION & 0xff );
       }
 
+      close( filehandle );
       return;
   }
 
