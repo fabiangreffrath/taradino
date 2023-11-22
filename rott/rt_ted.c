@@ -1298,6 +1298,8 @@ void CheckRTLVersion
 
       if (RTLVersion > RXL_VERSION)
       {
+         close( filehandle );
+
          Error(
             "The file '%s' is a version %d.%d %s file.\n"
             "The highest this version of ROTT can load is %d.%d.", filename,
@@ -1339,9 +1341,8 @@ void CheckRTLVersion
 ======================
 */
 
-size_t GetMapArrayOffset(char *filename)
+size_t GetMapArrayOffset(int filehandle)
 {
-   int filehandle;
    char RTLSignature[ 4 ];
    uint64_t ofs_info_headers;
    uint64_t num_info_headers;
@@ -1351,10 +1352,8 @@ size_t GetMapArrayOffset(char *filename)
    uint64_t info_header_len;
    int RTLVersion;
 
-   // open file
-   filehandle = SafeOpenRead( filename );
-
    // load signature
+   lseek( filehandle, 0, SEEK_SET );
    SafeRead( filehandle, RTLSignature, sizeof( RTLSignature ) );
 
    // check if it's from RottEX
@@ -1393,7 +1392,7 @@ size_t GetMapArrayOffset(char *filename)
 
       // fail
       close(filehandle);
-      Error( "GetMapArrayOffset: Couldn't find MAPS info header!" );
+      Error( "GetMapArrayOffset: Couldn't find MAPS or MAPSET info header!" );
       return 0;
    }
    else
@@ -1428,8 +1427,8 @@ void ReadROTTMap
    size_t mapsoffset;
 
    CheckRTLVersion( filename );
-   mapsoffset = GetMapArrayOffset( filename );
    filehandle = SafeOpenRead( filename );
+   mapsoffset = GetMapArrayOffset( filehandle );
 
    //
    // Load map header
@@ -1590,8 +1589,8 @@ void GetMapFileInfo
    size_t mapsoffset;
 
    CheckRTLVersion( filename );
-   mapsoffset = GetMapArrayOffset( filename );
    filehandle = SafeOpenRead( filename );
+   mapsoffset = GetMapArrayOffset( filehandle );
 
    //
    // Load map header
@@ -1678,8 +1677,8 @@ word GetMapCRC
 
    GetMapFileName( &filename[ 0 ] );
    CheckRTLVersion( filename );
-   mapsoffset = GetMapArrayOffset( filename );
    filehandle = SafeOpenRead( filename );
+   mapsoffset = GetMapArrayOffset( filehandle );
 
    //
    // Load map header
