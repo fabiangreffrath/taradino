@@ -1385,7 +1385,6 @@ size_t GetMapArrayOffset(int filehandle)
          if ( ( RTLVersion == RXL_VERSION && strcmp( info_header_magic, "MAPS" ) == 0 )
             || ( RTLVersion == RTL_VERSION && strcmp( info_header_magic, "MAPSET" ) == 0 ) )
          {
-            close(filehandle);
             return info_header_ofs;
          }
       }
@@ -1397,7 +1396,6 @@ size_t GetMapArrayOffset(int filehandle)
    }
    else
    {
-      close(filehandle);
       return RTL_HEADER_OFFSET;
    }
 }
