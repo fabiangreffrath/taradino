@@ -1288,6 +1288,27 @@ void CheckRTLVersion
    //
    SafeRead( filehandle, RTLSignature, sizeof( RTLSignature ) );
 
+   // check if it's from RottEX
+   if ( strcmp( RTLSignature, EXTENDED_SIGNATURE ) == 0
+      || strcmp( RTLSignature, EXTENDED_COMMBAT_SIGNATURE ) == 0 )
+   {
+      // check version number
+      SafeRead( filehandle, &RTLVersion, sizeof( RTLVersion ) );
+      SwapIntelLong((int *)&RTLVersion);
+
+      if (RTLVersion > RXL_VERSION)
+      {
+         Error(
+            "The file '%s' is a version %d.%d %s file.\n"
+            "The highest this version of ROTT can load is %d.%d.", filename,
+            RTLVersion >> 8, RTLVersion & 0xff, RTLSignature,
+            RXL_VERSION >> 8, RXL_VERSION & 0xff );
+      }
+
+      close( filehandle );
+      return;
+  }
+
    if ( ( strcmp( RTLSignature, COMMBAT_SIGNATURE ) != 0 ) &&
       ( strcmp( RTLSignature, NORMAL_SIGNATURE ) != 0 ) )
       {
@@ -1311,6 +1332,72 @@ void CheckRTLVersion
    close( filehandle );
    }
 
+/*
+======================
+=
+= GetMapArrayOffset
+=
+======================
+*/
+
+size_t GetMapArrayOffset(int filehandle)
+{
+   char RTLSignature[ 4 ];
+   uint64_t ofs_info_headers;
+   uint64_t num_info_headers;
+   int i;
+   char info_header_magic[16];
+   uint64_t info_header_ofs;
+   uint64_t info_header_len;
+   int RTLVersion;
+
+   // load signature
+   lseek( filehandle, 0, SEEK_SET );
+   SafeRead( filehandle, RTLSignature, sizeof( RTLSignature ) );
+
+   // check if it's from RottEX
+   if ( strcmp( RTLSignature, EXTENDED_SIGNATURE ) == 0 || strcmp( RTLSignature, EXTENDED_COMMBAT_SIGNATURE ) == 0 )
+   {
+      // check version (it matters)
+      SafeRead( filehandle, &RTLVersion, sizeof( RTLVersion ) );
+
+      // seek to header location
+      lseek( filehandle, 8, SEEK_SET );
+
+      // read offset and num
+      SafeRead( filehandle, &ofs_info_headers, sizeof( ofs_info_headers ) );
+      SafeRead( filehandle, &num_info_headers, sizeof( num_info_headers ) );
+
+      // seek to headers
+      lseek( filehandle, ofs_info_headers, SEEK_SET );
+
+      // read info headers
+      for ( i = 0; i < num_info_headers; i++ )
+      {
+         // read header
+         SafeRead( filehandle, info_header_magic, sizeof( info_header_magic ) );
+         SafeRead( filehandle, &info_header_ofs, sizeof( info_header_ofs ) );
+         SafeRead( filehandle, &info_header_len, sizeof( info_header_len ) );
+
+         // MAPS info header contains reliable offset to data
+         // RXL 1.1 has "MAPSET", RXL 2.0 has "MAPS"
+         if ( ( RTLVersion == RXL_VERSION && strcmp( info_header_magic, "MAPS" ) == 0 )
+            || ( RTLVersion == RTL_VERSION && strcmp( info_header_magic, "MAPSET" ) == 0 ) )
+         {
+            return info_header_ofs;
+         }
+      }
+
+      // fail
+      close(filehandle);
+      Error( "GetMapArrayOffset: Couldn't find MAPS or MAPSET info header!" );
+      return 0;
+   }
+   else
+   {
+      return RTL_HEADER_OFFSET;
+   }
+}
 
 /*
 ======================
@@ -1334,14 +1421,16 @@ void ReadROTTMap
    long   expanded;
    int    plane;
    byte  *buffer;
+   size_t mapsoffset;
 
    CheckRTLVersion( filename );
    filehandle = SafeOpenRead( filename );
+   mapsoffset = GetMapArrayOffset( filehandle );
 
    //
    // Load map header
    //
-   lseek( filehandle, RTL_HEADER_OFFSET + mapnum * sizeof( RTLMap ),
+   lseek( filehandle, mapsoffset + mapnum * sizeof( RTLMap ),
       SEEK_SET );
    SafeRead( filehandle, &RTLMap, sizeof( RTLMap ) );
 
@@ -1494,15 +1583,16 @@ void GetMapFileInfo
    int    filehandle;
    int    i;
    int    nummaps;
+   size_t mapsoffset;
 
    CheckRTLVersion( filename );
-
    filehandle = SafeOpenRead( filename );
+   mapsoffset = GetMapArrayOffset( filehandle );
 
    //
    // Load map header
    //
-   lseek( filehandle, RTL_HEADER_OFFSET, SEEK_SET );
+   lseek( filehandle, mapsoffset, SEEK_SET );
    SafeRead( filehandle, &RTLMap, sizeof( RTLMap ) );
    close( filehandle );
 
@@ -1580,15 +1670,17 @@ word GetMapCRC
    int  filehandle;
    char filename[ 80 ];
    RTLMAP RTLMap;
+   size_t mapsoffset;
 
    GetMapFileName( &filename[ 0 ] );
    CheckRTLVersion( filename );
    filehandle = SafeOpenRead( filename );
+   mapsoffset = GetMapArrayOffset( filehandle );
 
    //
    // Load map header
    //
-   lseek( filehandle, RTL_HEADER_OFFSET + num * sizeof( RTLMap ), SEEK_SET );
+   lseek( filehandle, mapsoffset + num * sizeof( RTLMap ), SEEK_SET );
    SafeRead( filehandle, &RTLMap, sizeof( RTLMap ) );
 
    close( filehandle );
