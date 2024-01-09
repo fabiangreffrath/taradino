@@ -55,8 +55,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 static int tilesize;
-static fixed xscale;
-static fixed yscale;
+static int32_t xscale;
+static int32_t yscale;
 static int mapscale=2;
 static int oldw,oldh;
 static byte * skytile;
@@ -410,7 +410,7 @@ void DrawMap_Player (int x, int y)
 
 void DrawMap( int cx, int cy )
 {
-   fixed x,y;
+   int32_t x,y;
    statobj_t * s;
    objtype * a;
    int i,j;

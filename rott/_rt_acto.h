@@ -268,7 +268,7 @@ typedef struct  sat
 typedef struct
  {thingtype which;
   byte tilex,tiley;
-  fixed x,y,z;
+  int32_t x,y,z;
  }tpoint;
 
 

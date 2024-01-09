@@ -125,8 +125,8 @@ void DrawRotPost ( int height, byte * src, byte * buf, int origheight)
 void GetPoint (int x1, int y1, int px, int py, int * screenx, int * height, int angle)
 {
 
-  fixed gxt,gyt,nx,ny;
-  fixed gxtt,gytt;
+  int32_t gxt,gyt,nx,ny;
+  int32_t gxtt,gytt;
   int gx,gy;
 
 

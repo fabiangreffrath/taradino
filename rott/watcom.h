@@ -19,9 +19,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #ifndef _watcom_h_public
 #define _watcom_h_public
-fixed FixedMul(fixed a, fixed b);
-fixed FixedDiv2(fixed a, fixed b);
-fixed FixedScale(fixed orig, fixed factor, fixed divisor);
-fixed FixedMulShift(fixed a, fixed b, fixed shift);
+int32_t FixedMul(int32_t a, int32_t b);
+int32_t FixedDiv2(int32_t a, int32_t b);
+int32_t FixedScale(int32_t orig, int32_t factor, int32_t divisor);
+int32_t FixedMulShift(int32_t a, int32_t b, int32_t shift);
 
 #endif

@@ -1719,7 +1719,7 @@ void SpawnDisk(int tilex, int tiley, int type, bool master)
       //new->flags |= FL_SYNCED;
       zoffset = MAPSPOT(tilex,tiley,2);
       if ((zoffset&0xff00)==0xb000)
-         Set_NewZ_to_MapValue((fixed*)(&(new->temp2)),zoffset,"elev disk",tilex,tiley);
+         Set_NewZ_to_MapValue((int32_t*)(&(new->temp2)),zoffset,"elev disk",tilex,tiley);
       else
          new->temp2 = 32;
       new->temp1 = 1;
@@ -1729,7 +1729,7 @@ void SpawnDisk(int tilex, int tiley, int type, bool master)
       SpawnNewObj(tilex,tiley,&s_pathdisk,diskobj);
       zoffset = MAPSPOT(tilex,tiley,2);
       if ((zoffset&0xff00)==0xb000)
-         Set_NewZ_to_MapValue((fixed*)(&(new->z)),zoffset,"path disk",tilex,tiley);
+         Set_NewZ_to_MapValue((int32_t*)(&(new->z)),zoffset,"path disk",tilex,tiley);
 
       new->dir = (type-1) << 1;
       new->speed = 0x1000;

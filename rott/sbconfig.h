@@ -26,11 +26,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 /* ----------------------------------------------------------------------- */
 
-//typedef long fixed;	/* 16.16 fixed pt number */
-
-#define INT_TO_FIXED(n)   ((fixed)((long)(n)<<16))
+#define INT_TO_FIXED(n)   ((int32_t)((long)(n)<<16))
 #define FIXED_TO_INT(n)   ((long)((n)>>16))
-#define FLOAT_TO_FIXED(n) ((fixed)((n)*65536.0))
+#define FLOAT_TO_FIXED(n) ((int32_t)((n)*65536.0))
 
 #define FIXED_ADD(a, b)		((a)+(b))
 #define FIXED_SUB(a, b)		((a)-(b))
@@ -40,7 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 typedef struct {
 	short low; 			/* range of input values this warp covers */
 	short high;
-	fixed mult;		/* multiplier to be applied to this range */
+	int32_t mult;		/* multiplier to be applied to this range */
 } WarpRange;
 
 
@@ -82,7 +80,7 @@ WarpRecord *SbConfigGetWarpRange(char *rngName);
 /*
  * Warp a value based on the given warp range
  */
-fixed SbFxConfigWarp(WarpRecord *warp, short value);  /* returns fixed pt */
+int32_t SbFxConfigWarp(WarpRecord *warp, short value);  /* returns integer */
 long    SbConfigWarp(WarpRecord *warp, short value);  /* returns integer */
 
 /* ----------------------------------------------------------------------- */

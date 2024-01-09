@@ -59,16 +59,16 @@ extern int fandc;
 // math tables
 //
 extern short    tantable[FINEANGLES];
-extern fixed    sintable[FINEANGLES+FINEANGLEQUAD+1];
-extern fixed    *costable;
+extern int32_t    sintable[FINEANGLES+FINEANGLEQUAD+1];
+extern int32_t    *costable;
 
 //
 // refresh variables
 //
 
-extern fixed   viewx,viewy;             // the focal point
+extern int32_t   viewx,viewy;             // the focal point
 extern int     viewangle;
-extern fixed   viewsin,viewcos;
+extern int32_t   viewsin,viewcos;
 
 //
 // ray tracing variables

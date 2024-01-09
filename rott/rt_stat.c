@@ -1075,7 +1075,7 @@ void LoadStatics( byte * buffer, int size)
 }
 
 
-void Set_NewZ_to_MapValue(fixed *newz,int zoffset,const char*errorstr,int tilex,int tiley)
+void Set_NewZ_to_MapValue(int32_t *newz,int zoffset,const char*errorstr,int tilex,int tiley)
    {
    int zf,z;
 

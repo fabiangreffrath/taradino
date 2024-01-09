@@ -138,7 +138,7 @@ typedef struct statstruct
 {
 		  thingtype         which;
 		  byte              tilex,tiley;
-		  fixed             x,y,z;
+		  int32_t             x,y,z;
 		  int               shapenum;
 		  unsigned          flags;
 		  signed char       ticcount;
@@ -201,7 +201,7 @@ extern   int            animwallstart;
 extern   animwall_t     animwalls[MAXANIMWALLS];
 
 
-void Set_NewZ_to_MapValue(fixed*,int,const char*,int,int);
+void Set_NewZ_to_MapValue(int32_t*,int,const char*,int,int);
 void RemoveFromFreeStaticList(statobj_t*);
 void CheckCriticalStatics(void);
 void ActivateLight(intptr_t);
