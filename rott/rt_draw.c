@@ -81,7 +81,7 @@ int whereami=-1;
 
 uint8_t * shadingtable;
 
-word   tilemap[MAPSIZE][MAPSIZE]; // wall values only
+uint16_t   tilemap[MAPSIZE][MAPSIZE]; // wall values only
 uint8_t   spotvis[MAPSIZE][MAPSIZE];
 uint8_t   mapseen[MAPSIZE][MAPSIZE];
 unsigned long * lights;
@@ -3144,7 +3144,7 @@ void RotationFun ( void )
    int   angle;
    int   scale;
    int   x,y;
-   word  buttons;
+   uint16_t  buttons;
 
    //save off fastcounter
 

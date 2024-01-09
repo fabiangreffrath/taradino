@@ -57,8 +57,8 @@ typedef struct
 typedef struct
 {
         int   planestart[3];
-        word  planelength[3];
-        word  width,height;
+        uint16_t  planelength[3];
+        uint16_t  width,height;
         char            name[16];
 } maptype;
 

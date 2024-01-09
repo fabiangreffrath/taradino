@@ -89,7 +89,7 @@ int lightsource;
 int SNAKELEVEL;
 int whichpath;
 
-word *mapplanes[3];
+uint16_t *mapplanes[3];
 int  mapwidth;
 int  mapheight;
 int  lastlevelloaded=-1;
@@ -106,7 +106,7 @@ char LevelName[80];
 //========================================
 
 static cachetype * cachelist;
-static word cacheindex;
+static uint16_t cacheindex;
 static bool CachingStarted=false;
 char * ROTTMAPS;
 char * BATTMAPS;
@@ -1235,10 +1235,10 @@ DisableScreenStretch();
 ======================
 */
 
-void CA_RLEWexpand (word *source, word *dest,long length, unsigned rlewtag)
+void CA_RLEWexpand (uint16_t *source, uint16_t *dest,long length, unsigned rlewtag)
 {
-        word  value,count,i;
-        word          *end;
+        uint16_t  value,count,i;
+        uint16_t          *end;
 
         end = dest + length;
         //
@@ -1485,10 +1485,10 @@ void ReadROTTMap
       // unRLEW, skipping expanded length
       //
       #if ( SHAREWARE == 1 )
-         CA_RLEWexpand( ( word * )buffer, ( word * )mapplanes[ plane ],
+         CA_RLEWexpand( ( uint16_t * )buffer, ( uint16_t * )mapplanes[ plane ],
             expanded >> 1, SHAREWARE_TAG );
       #else
-         CA_RLEWexpand( ( word * )buffer, ( word * )mapplanes[ plane ],
+         CA_RLEWexpand( ( uint16_t * )buffer, ( uint16_t * )mapplanes[ plane ],
             expanded >> 1, RTLMap.RLEWtag );
       #endif
 
@@ -1513,8 +1513,8 @@ void ReadROTTMap
 */
 int GetNextMap ( int tilex, int tiley )
    {
-   word next;
-   word icon;
+   uint16_t next;
+   uint16_t icon;
    bool done;
 
    next = MAPSPOT( tilex, tiley, 2 );
@@ -1663,7 +1663,7 @@ void SetBattleMapFileName ( char * filename )
 =
 ======================
 */
-word GetMapCRC
+uint16_t GetMapCRC
    (
    int num
    )
@@ -1773,7 +1773,7 @@ void LoadTedMap
    LoadFile( name, ( void * )&tinf );
 
    // fix structure alignment
-   tinf = ( void * )( ( word * )tinf - 1 );
+   tinf = ( void * )( ( uint16_t * )tinf - 1 );
 
    for( i = 0 ; i < 100 ; i++ )
       {
@@ -1835,14 +1835,14 @@ void LoadTedMap
       //
       // unRLEW, skipping expanded length
       //
-      CA_RLEWexpand( ( word * )( buffer + 2 ), ( word * )mapplanes[ plane ],
+      CA_RLEWexpand( ( uint16_t * )( buffer + 2 ), ( uint16_t * )mapplanes[ plane ],
          expanded >> 1, 0xabcd );
 
       SafeFree( buffer );
       }
 
    // fix structure alignment
-	tinf = ( void * )( ( word * )tinf + 1 );
+	tinf = ( void * )( ( uint16_t * )tinf + 1 );
 
 	SafeFree( tinf );
 
@@ -1909,7 +1909,7 @@ void LoadROTTMap
 
 void CountAreaTiles(void)
 {int i,j,areanumber;
- word*map,tile;
+ uint16_t*map,tile;
 
  memset(numareatiles,0,sizeof(numareatiles));
  map  = mapplanes[0];
@@ -1950,7 +1950,7 @@ void CountAreaTiles(void)
 void SetupWalls( void )
    {
    int   i,j,lump,index;
-	word   *map,tile;
+	uint16_t   *map,tile;
    wall_t * tempwall;
 
 
@@ -2034,7 +2034,7 @@ void SetupWalls( void )
 =
 ===============
 */
-word GetNearestAreaNumber ( int tilex, int tiley )
+uint16_t GetNearestAreaNumber ( int tilex, int tiley )
 {
 	int up,dn,lt,rt;
    int tile;
@@ -2098,7 +2098,7 @@ void SetupWindows ( void )
                {
                MAPSPOT(i,j,2)=0;
                }
-            MAPSPOT(i,j,0)=(word)(GetNearestAreaNumber(i,j));
+            MAPSPOT(i,j,0)=(uint16_t)(GetNearestAreaNumber(i,j));
             }
          }
       }
@@ -2189,7 +2189,7 @@ int GetWallIndex( int texture )
 void SetupAnimatedWalls( void )
 {
 	int   i,j;
-	word   *map,tile;
+	uint16_t   *map,tile;
    wall_t * tempwall;
 
 	InitAnimatedWallList();
@@ -2273,7 +2273,7 @@ void SetupAnimatedWalls( void )
 void SetupSwitches( void )
 {
 	int   i,j;
-	word   *map,tile;
+	uint16_t   *map,tile;
 
 	map = mapplanes[0];
 	for (j=0;j<mapheight;j++)
@@ -2549,7 +2549,7 @@ void SetupTeams(void)
 void SetupPlayers( void )
 {
 	int   i,j;
-	word   *map,tile;
+	uint16_t   *map,tile;
 
 	//START in icon plane = 10
 
@@ -2681,7 +2681,7 @@ void SetupPlayers( void )
 void SetupMaskedWalls( void )
 {
 	int   i,j;
-	word   *map,tile;
+	uint16_t   *map,tile;
 
 	map = mapplanes[0];
 	for (j=0;j<mapheight;j++)
@@ -2804,8 +2804,8 @@ void RemoveDangerWalls
    {
    int   i;
    int   j;
-   word *map;
-   word  tile;
+   uint16_t *map;
+   uint16_t  tile;
 
    map = mapplanes[ 1 ];
 
@@ -2822,7 +2822,7 @@ void RemoveDangerWalls
 		      case 259:
                if ( MAPSPOT( i, j, 2 ) == 0 )
                   {
-                  MAPSPOT( i, j, 0 ) = ( word )( GetAreaNumber( i, j,
+                  MAPSPOT( i, j, 0 ) = ( uint16_t )( GetAreaNumber( i, j,
                      ( tile - 256 ) << 1 ) + AREATILE );
                   MAPSPOT( i, j, 1 ) = 0;
                   }
@@ -2834,7 +2834,7 @@ void RemoveDangerWalls
 		      case 354:
                if ( MAPSPOT( i, j, 2 ) == 0 )
                   {
-                  MAPSPOT( i, j, 0 ) = ( word )( GetAreaNumber( i, j,
+                  MAPSPOT( i, j, 0 ) = ( uint16_t )( GetAreaNumber( i, j,
                      ( ( tile - 300 ) / 9 ) + AREATILE ) );
                   MAPSPOT( i, j, 1 ) = 0;
                   }
@@ -2857,7 +2857,7 @@ void RemoveDangerWalls
 void SetupPushWalls( void )
 {
 	int   i,j;
-	word   *map,tile;
+	uint16_t   *map,tile;
 	int   temp;
 
    map = mapplanes[1];
@@ -2969,8 +2969,8 @@ int GetPushWallNumber( int tx, int ty )
 void SetupPushWallLinks( void )
 {
 	int   i,j;
-	word   *map,tile;
-   word  touchx,touchy;
+	uint16_t   *map,tile;
+   uint16_t  touchx,touchy;
 
    map = mapplanes[1];
    for(j=0;j<mapheight;j++)
@@ -2992,8 +2992,8 @@ void SetupPushWallLinks( void )
 		            {
 			         if (MAPSPOT(i,j,2))
 			            {
-                     touchx = (word) ((MAPSPOT(i,j,2) >> 8) & 0xff);
-							touchy = (word) ((MAPSPOT(i,j,2) >> 0) & 0xff);
+                     touchx = (uint16_t) ((MAPSPOT(i,j,2) >> 8) & 0xff);
+							touchy = (uint16_t) ((MAPSPOT(i,j,2) >> 0) & 0xff);
 				         if (touchindices[touchx][touchy])
                         {
                         if (MAPSPOT(i,j+1,2)!=0)
@@ -3025,8 +3025,8 @@ void SetupPushWallLinks( void )
 			         {
 						if (MAPSPOT(i,j,2))
 			            {
-                     touchx = (word) ((MAPSPOT(i,j,2) >> 8) & 0xff);
-				         touchy = (word) ((MAPSPOT(i,j,2) >> 0) & 0xff);
+                     touchx = (uint16_t) ((MAPSPOT(i,j,2) >> 8) & 0xff);
+				         touchy = (uint16_t) ((MAPSPOT(i,j,2) >> 0) & 0xff);
 				         if (touchindices[touchx][touchy])
                         {
                         if (MAPSPOT(i,j+1,2)!=0)
@@ -3049,8 +3049,8 @@ void SetupPushWallLinks( void )
 			         {
 			         if (MAPSPOT(i,j,2))
 			            {
-                     touchx = (word) ((MAPSPOT(i,j,2) >> 8) & 0xff);
-				         touchy = (word) ((MAPSPOT(i,j,2) >> 0) & 0xff);
+                     touchx = (uint16_t) ((MAPSPOT(i,j,2) >> 8) & 0xff);
+				         touchy = (uint16_t) ((MAPSPOT(i,j,2) >> 0) & 0xff);
 				         if (touchindices[touchx][touchy])
                         {
 								if (MAPSPOT(i,j+1,2)!=0)
@@ -3080,8 +3080,8 @@ void SetupPushWallLinks( void )
 void SetupElevators (void)
 {
 	int j, i,x,y,starti;
-	word *map;
-	word tile;
+	uint16_t *map;
+	uint16_t tile;
 	elevator_t *elev;
 	doorobj_t* dptr;
 
@@ -3197,8 +3197,8 @@ void SetupElevators (void)
 void SetupDoors (void)
 {
    int j, i;
-   word *map;
-	word tile;
+   uint16_t *map;
+	uint16_t tile;
    uint8_t locked;
 
    map = mapplanes[0];
@@ -3291,11 +3291,11 @@ void SetupDoorLinks (void)
    int  j,
         i,
         k;
-   word *map;
+   uint16_t *map;
    int  clocklinked;
    int  clockx,clocky;
    int  doornumber;
-	word touchx,
+	uint16_t touchx,
 		  touchy;
 
    map = mapplanes[0];
@@ -3329,8 +3329,8 @@ void SetupDoorLinks (void)
 
                if (!clocklinked)
 					{
-                  touchx = (word) ((MAPSPOT (i, j, 2) >> 8) & 0xff);
-                  touchy = (word) ((MAPSPOT (i, j, 2) >> 0) & 0xff);
+                  touchx = (uint16_t) ((MAPSPOT (i, j, 2) >> 8) & 0xff);
+                  touchy = (uint16_t) ((MAPSPOT (i, j, 2) >> 0) & 0xff);
 
                   if (touchindices[touchx][touchy])
                   {
@@ -3404,7 +3404,7 @@ void SetupClocks (void)
         minutes,
         seconds,
         starti;
-   word *map,
+   uint16_t *map,
         tile,
         mapx,
         mapy;
@@ -3428,8 +3428,8 @@ void SetupClocks (void)
 
          if (tile == 121)
          {
-            mapx = (word) ((MAPSPOT (i, j, 2) >> 8) & 0xff);
-            mapy = (word) ((MAPSPOT (i, j, 2) >> 0) & 0xff);
+            mapx = (uint16_t) ((MAPSPOT (i, j, 2) >> 8) & 0xff);
+            mapy = (uint16_t) ((MAPSPOT (i, j, 2) >> 0) & 0xff);
 
             minutes = (int) ((MAPSPOT (mapx, mapy, 2) >> 8) & 0xff);
             seconds = (int) ((MAPSPOT (mapx, mapy, 2) >> 0) & 0xff);
@@ -3561,7 +3561,7 @@ void LinkActor (objtype *ob,int tilex,int tiley,
                 void (*action)(intptr_t),void (*swapaction)(intptr_t)
                )
    {
-	word  touchx,touchy;
+	uint16_t  touchx,touchy;
 	int   clockx,clocky;
    int   clocklinked,k;
 	wall_t * tswitch;
@@ -3581,8 +3581,8 @@ void LinkActor (objtype *ob,int tilex,int tiley,
 
    if (!clocklinked)
       {
-      touchx = (word) ((MAPSPOT(tilex,tiley,2) >> 8) & 0xff);
-      touchy = (word) ((MAPSPOT(tilex,tiley,2) >> 0) & 0xff);
+      touchx = (uint16_t) ((MAPSPOT(tilex,tiley,2) >> 8) & 0xff);
+      touchy = (uint16_t) ((MAPSPOT(tilex,tiley,2) >> 0) & 0xff);
       if ((MISCVARS->TOMLOC.x == touchx) && (MISCVARS->TOMLOC.y == touchy))
          {
          objtype *tom = (objtype*)actorat[touchx][touchy];
@@ -3634,7 +3634,7 @@ void LinkActor (objtype *ob,int tilex,int tiley,
 void SetupInanimateActors (void)
    {
    int   i,j,linked;
-	word   *map,tile;
+	uint16_t   *map,tile;
 	void (*action)(intptr_t),(*swapaction)(intptr_t);
 
 
@@ -3929,7 +3929,7 @@ void SetupInanimateActors (void)
 
 void FixTiles(void)
    {
-   word *map,tile;
+   uint16_t *map,tile;
    int i,j;
 
    map = mapplanes[1];
@@ -3981,7 +3981,7 @@ void SetupLights(void)
 {
 	int i,j,touchx,touchy;
 	wall_t *tswitch;
-	word *map,tile;
+	uint16_t *map,tile;
 	int starti;
 
 // Initialize Lights in Area
@@ -4023,8 +4023,8 @@ void SetupLights(void)
 				case 43:
 					if (MAPSPOT(i,j,2))
 					  {
-						touchx = (word) ((MAPSPOT(i,j,2) >> 8) & 0xff);
-						touchy = (word) ((MAPSPOT(i,j,2) >> 0) & 0xff);
+						touchx = (uint16_t) ((MAPSPOT(i,j,2) >> 8) & 0xff);
+						touchy = (uint16_t) ((MAPSPOT(i,j,2) >> 0) & 0xff);
 						tswitch = (wall_t*) actorat[touchx][touchy];
 
 						if (tswitch && (tswitch->which == WALL))
@@ -4231,7 +4231,7 @@ int GetLumpForTile(int tile)
 void PrintTileStats (void)
 {
    int i,j;
-   word *map;
+   uint16_t *map;
    int easytotal;
    int hardtotal;
    int tally[1000];
@@ -4698,7 +4698,7 @@ int GetSongForLevel ( void )
 void DoSharewareConversionBackgroundPlane (void)
 {
    int i,j;
-   word * map;
+   uint16_t * map;
 
 
 	for (j=0;j<mapheight;j++)
@@ -4841,7 +4841,7 @@ void DoSharewareConversionBackgroundPlane (void)
 void DoSharewareConversionForegroundPlane (void)
 {
    int i,j;
-   word * map;
+   uint16_t * map;
 
 
 	for (j=0;j<mapheight;j++)
@@ -4902,7 +4902,7 @@ void DoSharewareConversionForegroundPlane (void)
 void DoRegisterConversionBackgroundPlane (void)
    {
    int i,j;
-   word * map;
+   uint16_t * map;
 
 
 	for (j=0;j<mapheight;j++)
@@ -4956,7 +4956,7 @@ void DoRegisterConversionBackgroundPlane (void)
 void DoRegisterConversionForegroundPlane (void)
    {
 //   int i,j;
-//   word * map;
+//   uint16_t * map;
 //TODO: This function doesn't do anything.
 
    }
@@ -5087,7 +5087,7 @@ void SetupGameLevel (void)
 
 	SetupLightLevels();
 
-   crud=(word)MAPSPOT(0,0,1);
+   crud=(uint16_t)MAPSPOT(0,0,1);
 	if ((crud>=90) && (crud<=97))
 		{
 		levelheight=crud-89;
@@ -5225,7 +5225,7 @@ void SetupSnakePath(void)
 {
 #if (SHAREWARE == 0)
  int i,j;
- word *map,tile;
+ uint16_t *map,tile;
 
  map = mapplanes[1];
 
@@ -5245,7 +5245,7 @@ void SetupSnakePath(void)
 
 void SetupRandomActors(void)
 {int i,j;
- word *map,tile;
+ uint16_t *map,tile;
  int starti,totalrandom=0,count=0,ambush,locindex,orig;
  uint8_t actorpresent[10]={0},index=0,randomtype,used[100]={0};
  _2Dpoint randloc[100];
@@ -5320,7 +5320,7 @@ void SetupRandomActors(void)
 void SetupActors(void)
 {
   int i,j;
-  word *map,tile;
+  uint16_t *map,tile;
   int starti;
 
 
@@ -5790,7 +5790,7 @@ void SetupActors(void)
 void SetupStatics(void)
 {
 	int i,j,spawnz;
-	word *map,tile;
+	uint16_t *map,tile;
 	int starti;
 
 	map = mapplanes[1];

@@ -519,11 +519,11 @@ void SetupLightLevels ( void )
 
 // Set up light level for level
 
-	if (((word)MAPSPOT(2,0,1)>=104) && ((word)MAPSPOT(2,0,1)<=105))
-		fog=(word)MAPSPOT(2,0,1)-104;
+	if (((uint16_t)MAPSPOT(2,0,1)>=104) && ((uint16_t)MAPSPOT(2,0,1)<=105))
+		fog=(uint16_t)MAPSPOT(2,0,1)-104;
 	else
 		Error ("There is no Fog icon on map %d\n",gamestate.mapon);
-	if ((word)MAPSPOT(3,0,1)==139)
+	if ((uint16_t)MAPSPOT(3,0,1)==139)
       {
       if (fog==0)
          {
@@ -534,16 +534,16 @@ void SetupLightLevels ( void )
       else
 		   Error("You cannot use light sourcing on a level with fog on map %d\n",gamestate.mapon);
       }
-	else if ((word)MAPSPOT(3,0,1))
+	else if ((uint16_t)MAPSPOT(3,0,1))
 		Error("You must use the lightsource icon or nothing at all at (3,0) in plane 1 on map %d\n",gamestate.mapon);
-   if (((word)MAPSPOT(2,0,0)>=LIGHTLEVELBASE) && ((word)MAPSPOT(2,0,0)<=LIGHTLEVELEND))
+   if (((uint16_t)MAPSPOT(2,0,0)>=LIGHTLEVELBASE) && ((uint16_t)MAPSPOT(2,0,0)<=LIGHTLEVELEND))
       glevel=(MAPSPOT(2,0,0)-LIGHTLEVELBASE);
 	else
 		Error("You must specify a valid darkness level icon at (2,0) on map %d\n",gamestate.mapon);
 
    SetLightLevels ( glevel );
 
-   if (((word)MAPSPOT(3,0,0)>=LIGHTRATEBASE) && ((word)MAPSPOT(3,0,0)<=LIGHTRATEEND))
+   if (((uint16_t)MAPSPOT(3,0,0)>=LIGHTRATEBASE) && ((uint16_t)MAPSPOT(3,0,0)<=LIGHTRATEEND))
       glevel=(MAPSPOT(3,0,0)-LIGHTRATEBASE);
 	else
       {
@@ -820,42 +820,42 @@ void SetModemLightLevel ( int type )
    switch (type)
       {
       case bo_light_dark:
-         MAPSPOT(2,0,0)=(word)216;
-         MAPSPOT(3,0,0)=(word)255;
-         MAPSPOT(3,0,1)=(word)139;
-         MAPSPOT(2,0,1)=(word)104;
+         MAPSPOT(2,0,0)=(uint16_t)216;
+         MAPSPOT(3,0,0)=(uint16_t)255;
+         MAPSPOT(3,0,1)=(uint16_t)139;
+         MAPSPOT(2,0,1)=(uint16_t)104;
          SetupLightLevels ();
          break;
       case bo_light_normal:
          break;
       case bo_light_bright:
-         MAPSPOT(2,0,0)=(word)223;
-         MAPSPOT(3,0,0)=(word)267;
-         MAPSPOT(3,0,1)=(word)0;
-         MAPSPOT(2,0,1)=(word)104;
+         MAPSPOT(2,0,0)=(uint16_t)223;
+         MAPSPOT(3,0,0)=(uint16_t)267;
+         MAPSPOT(3,0,1)=(uint16_t)0;
+         MAPSPOT(2,0,1)=(uint16_t)104;
          SetupLightLevels ();
          break;
       case bo_light_fog:
-         MAPSPOT(2,0,0)=(word)219;
-         MAPSPOT(3,0,0)=(word)259;
-         MAPSPOT(2,0,1)=(word)105;
-         MAPSPOT(3,0,1)=(word)0;
+         MAPSPOT(2,0,0)=(uint16_t)219;
+         MAPSPOT(3,0,0)=(uint16_t)259;
+         MAPSPOT(2,0,1)=(uint16_t)105;
+         MAPSPOT(3,0,1)=(uint16_t)0;
          SetupLightLevels ();
          break;
       case bo_light_periodic:
          fog=0;
-         MAPSPOT(2,0,1)=(word)104;
-         MAPSPOT(3,0,1)=(word)139;
+         MAPSPOT(2,0,1)=(uint16_t)104;
+         MAPSPOT(3,0,1)=(uint16_t)139;
          SetupLightLevels ();
          periodic=true;
          break;
       case bo_light_lightning:
          if (sky!=0)
             {
-            MAPSPOT(2,0,0)=(word)222;
-            MAPSPOT(3,0,0)=(word)255;
-            MAPSPOT(3,0,1)=(word)139;
-            MAPSPOT(2,0,1)=(word)104;
+            MAPSPOT(2,0,0)=(uint16_t)222;
+            MAPSPOT(3,0,0)=(uint16_t)255;
+            MAPSPOT(3,0,1)=(uint16_t)139;
+            MAPSPOT(2,0,1)=(uint16_t)104;
             SetupLightLevels ();
             lightning=true;
             }

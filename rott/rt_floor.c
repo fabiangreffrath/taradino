@@ -349,12 +349,12 @@ void SetPlaneViewSize (void)
 
 	if (MAPSPOT(1,0,0) >= 234)
     {
-    word crud;
+    uint16_t crud;
 	 sky = (MAPSPOT(1,0,0) - 233);
     if ((sky<1) || (sky>6))
        Error("Illegal Sky Tile = %d\n",sky);
     ceilingnum=1;
-	 crud=(word)MAPSPOT(1,0,1);
+	 crud=(uint16_t)MAPSPOT(1,0,1);
 	 if ((crud>=90) && (crud<=97))
 	    horizonheight=crud-89;
     else if ((crud>=450) && (crud<=457))
@@ -364,7 +364,7 @@ void SetPlaneViewSize (void)
 
     // Check for lightnign icon
 
-	 crud=(word)MAPSPOT(4,0,1);
+	 crud=(uint16_t)MAPSPOT(4,0,1);
 	 if (crud==377)
        lightning=true;
     }

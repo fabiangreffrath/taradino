@@ -65,7 +65,7 @@ typedef struct
 { thingtype   which;
   uint8_t        flags;
   uint8_t        hitpoints;
-  word        tile;
+  uint16_t        tile;
   uint8_t        tilex,tiley;
 
 
@@ -127,7 +127,7 @@ extern  wall_t walls[MAXWALLTILES];
 extern str_clock Clocks[MAXCLOCKS];
 extern int LightsInArea[NUMAREAS+1];
 extern int numclocks;
-extern word ELEVATORLOCATION;
+extern uint16_t ELEVATORLOCATION;
 
 extern unsigned short int *mapplanes[3];
 extern int gunsstart;
@@ -172,7 +172,7 @@ void PrintTileStats (void);
 void GetMapInfo (mapfileinfo_t * mapinfo);
 void GetMapFileName ( char * filename );
 void SetBattleMapFileName ( char * filename );
-word GetMapCRC ( int num );
+uint16_t GetMapCRC ( int num );
 
 int GetNextMap ( int tilex, int tiley );
 void Illuminate();

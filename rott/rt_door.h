@@ -94,10 +94,10 @@ typedef struct doorstruct
 {
 		  thingtype   which;
 		  uint8_t        tilex,tiley;
-		  word        texture;
-		  word        alttexture;
-		  word        sidepic;
-		  word        basetexture;
+		  uint16_t        texture;
+		  uint16_t        alttexture;
+		  uint16_t        sidepic;
+		  uint16_t        basetexture;
 		  uint8_t        lock;
 		  uint8_t        flags;
 		  short int   ticcount;
@@ -119,7 +119,7 @@ typedef struct pwallstruct
 		  uint8_t      tilex,tiley;
 		  uint8_t      num;
 		  uint8_t      speed;
-		  word      texture;
+		  uint16_t      texture;
 		  int       soundhandle;
 		  enum      {pw_npushed,pw_pushing,pw_pushed,pw_moving}       action;
 		  int       state;
@@ -165,7 +165,7 @@ typedef struct mwall
   signed short toptexture;
   signed short midtexture;
   signed short bottomtexture;
-  word      flags;
+  uint16_t      flags;
   bool   vertical;
   int       sidepic;
 
@@ -176,7 +176,7 @@ typedef struct mwall
 
 typedef struct animmwall
 {
-  word     num;
+  uint16_t     num;
   uint8_t     count;
   signed char ticcount;
   struct animmwall *next;
@@ -216,7 +216,7 @@ void OperateElevatorDoor(int);
 
 
 int  PlatformHeight(int,int);
-void Link_To_Touchplate(word, word, void (*)(intptr_t), void (*)(intptr_t), intptr_t, int);
+void Link_To_Touchplate(uint16_t, uint16_t, void (*)(intptr_t), void (*)(intptr_t), intptr_t, int);
 void TriggerStuff(void);
 void ClockLink(void (*)(intptr_t),void(*)(intptr_t),intptr_t,int);
 void RecursiveConnect(int);

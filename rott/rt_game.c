@@ -2782,9 +2782,9 @@ void DrawHighScores (void)
 //
 //******************************************************************************
 
-void CheckHighScore (long score, word other, bool INMENU)
+void CheckHighScore (long score, uint16_t other, bool INMENU)
 {
-   word        i,j;
+   uint16_t        i,j;
    int         n;
    HighScore   myscore;
    int         level;
@@ -4888,7 +4888,7 @@ bool LoadTheGame (int num, gamestorage_t * game)
 	int    checksum;
 	int    savedchecksum;
 	int    i;
-   word   mapcrc;
+   uint16_t   mapcrc;
         int myticcount;
 
 	if (num>15 || num<0)

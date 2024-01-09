@@ -83,8 +83,8 @@ typedef struct DemoType {
   int   time;
   short momx;
   short momy;
-  word  dangle;
-  word  buttons;
+  uint16_t  dangle;
+  uint16_t  buttons;
 } DemoType;
 
 // Demo Header Structure
@@ -98,8 +98,8 @@ typedef struct MoveType {
   int   time;
   short momx;
   short momy;
-  word  dangle;
-  word  buttons;
+  uint16_t  dangle;
+  uint16_t  buttons;
   char  Sounddata[0];
 } MoveType;
 
@@ -141,8 +141,8 @@ typedef struct {
   int   x;
   int   y;
   int   z;
-  word  angle;
-  word  randomindex;
+  uint16_t  angle;
+  uint16_t  randomindex;
 } COM_CheckSyncType;
 
 typedef struct {
@@ -217,7 +217,7 @@ typedef struct {
 typedef struct {
   uint8_t  type;
   uint8_t  level;
-  word  mapcrc;
+  uint16_t  mapcrc;
   uint8_t  violence;
   uint8_t  Product;
   uint8_t  mode;

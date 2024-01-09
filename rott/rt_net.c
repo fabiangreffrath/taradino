@@ -2470,7 +2470,7 @@ void SendGameDescription( void )
 void SetGameDescription( void * pkt )
 {
    COM_GameMasterType * desc;
-   word localcrc;
+   uint16_t localcrc;
    int i;
 
    desc=(COM_GameMasterType *)pkt;

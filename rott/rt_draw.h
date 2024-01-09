@@ -50,7 +50,7 @@ uint8_t * colormap;
 } visobj_t;
 
 
-extern  word             tilemap[MAPSIZE][MAPSIZE];    // wall values only
+extern  uint16_t             tilemap[MAPSIZE][MAPSIZE];    // wall values only
 extern  uint8_t             spotvis[MAPSIZE][MAPSIZE];
 
 extern int tics;

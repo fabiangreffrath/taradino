@@ -128,7 +128,7 @@ typedef struct
 		  signed short       heightoffset;
 		  signed short       weaponheight;
 		  uint8_t               weaponx,weapony;
-		  word               batblast;
+		  uint16_t               batblast;
 		  signed char        NETCAPTURED;
 		  signed char        HASKNIFE;
         int                oldweapon, oldmissileweapon;

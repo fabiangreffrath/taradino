@@ -114,7 +114,7 @@ typedef  struct
 
 typedef struct
 {
-   word  joyMinX,joyMinY,
+   uint16_t  joyMinX,joyMinY,
          threshMinX,threshMinY,
          threshMaxX,threshMaxY,
          joyMaxX,joyMaxY,
@@ -160,7 +160,7 @@ extern uint8_t Joy_xb,
             Joy_yb,
             Joy_xs,
             Joy_ys;
-extern word Joy_x,
+extern uint16_t Joy_x,
             Joy_y;
 
 extern int LastLetter;
@@ -176,7 +176,7 @@ extern const char ScanChars[128];
 //***************************************************************************
 
 void INL_GetMouseDelta(int *x,int *y);
-word IN_GetMouseButtons (void);
+uint16_t IN_GetMouseButtons (void);
 void IN_IgnoreMouseButtons( void );
 bool INL_StartMouse (void);
 void INL_ShutMouse (void);
@@ -193,14 +193,14 @@ void IN_StartAck (void);
 bool IN_CheckAck (void);
 void IN_Ack (void);
 bool IN_UserInput (long delay);
-void IN_GetJoyAbs (word joy, word *xp, word *yp);
-void INL_GetJoyDelta (word joy, int *dx, int *dy);
-word INL_GetJoyButtons (word joy);
-//word IN_GetJoyButtonsDB (word joy);
-void INL_SetJoyScale (word joy);
-void IN_SetupJoy (word joy, word minx, word maxx, word miny, word maxy);
-bool INL_StartJoy (word joy);
-void INL_ShutJoy (word joy);
+void IN_GetJoyAbs (uint16_t joy, uint16_t *xp, uint16_t *yp);
+void INL_GetJoyDelta (uint16_t joy, int *dx, int *dy);
+uint16_t INL_GetJoyButtons (uint16_t joy);
+//uint16_t IN_GetJoyButtonsDB (uint16_t joy);
+void INL_SetJoyScale (uint16_t joy);
+void IN_SetupJoy (uint16_t joy, uint16_t minx, uint16_t maxx, uint16_t miny, uint16_t maxy);
+bool INL_StartJoy (uint16_t joy);
+void INL_ShutJoy (uint16_t joy);
 uint8_t IN_JoyButtons (void);
 void IN_UpdateKeyboard (void);
 void IN_ClearKeyboardQueue (void);

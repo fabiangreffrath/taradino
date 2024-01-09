@@ -197,8 +197,8 @@ void InitROTTNET (void)
 
 bool ReadPacket (void)
 {
-   word   crc;
-   word   sentcrc;
+   uint16_t   crc;
+   uint16_t   sentcrc;
 
    // Set command (Get Packet)
 	rottcom->command=CMD_GET;
@@ -216,10 +216,10 @@ bool ReadPacket (void)
    if (rottcom->remotenode!=-1)
       {
       // calculate crc on packet
-      crc=CalculateCRC ((uint8_t *)&rottcom->data[0], rottcom->datalength-sizeof(word));
+      crc=CalculateCRC ((uint8_t *)&rottcom->data[0], rottcom->datalength-sizeof(uint16_t));
 
       // get crc inside packet
-      sentcrc=*((word *)(&rottcom->data[rottcom->datalength-sizeof(word)]));
+      sentcrc=*((uint16_t *)(&rottcom->data[rottcom->datalength-sizeof(uint16_t)]));
 
       // are the crcs the same?
       if (crc!=sentcrc)
@@ -257,7 +257,7 @@ bool ReadPacket (void)
 
 void WritePacket (void * buffer, int len, int destination)
 {
-   word      crc;
+   uint16_t      crc;
 
     if (!rottcom)
         return;
@@ -268,7 +268,7 @@ void WritePacket (void * buffer, int len, int destination)
    // set destination
    rottcom->remotenode=destination;
 
-   if (len>(int)(MAXCOMBUFFERSIZE-sizeof(word)))
+   if (len>(int)(MAXCOMBUFFERSIZE-sizeof(uint16_t)))
       {
       Error("WritePacket: Overflowed buffer\n");
       }
@@ -280,10 +280,10 @@ void WritePacket (void * buffer, int len, int destination)
    crc=CalculateCRC (buffer, len);
 
    // put CRC into realmode buffer packet
-   *((word *)&rottcom->data[len])=crc;
+   *((uint16_t *)&rottcom->data[len])=crc;
 
    // set size of realmode packet including crc
-   rottcom->datalength=len+sizeof(word);
+   rottcom->datalength=len+sizeof(uint16_t);
 
    if (*((uint8_t *)buffer)==0)
        Error("Packet type = 0\n");

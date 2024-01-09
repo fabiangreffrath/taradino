@@ -57,7 +57,7 @@ typedef struct
    uint8_t  area;
    uint8_t  version;
    uint8_t  picture[16000];
-   word  mapcrc;
+   uint16_t  mapcrc;
    AlternateInformation info;
 } gamestorage_t;
 
@@ -65,7 +65,7 @@ typedef  struct
 {
 	char  name[MaxHighName + 1];
 	long  score;
-	word  completed,episode;
+	uint16_t  completed,episode;
 } HighScore;
 
 
@@ -123,7 +123,7 @@ void GetSavedMessage (int num, char * message);
 void GetSavedHeader (int num, gamestorage_t * game);
 
 void DrawHighScores (void);
-void CheckHighScore (long score, word other, bool INMENU);
+void CheckHighScore (long score, uint16_t other, bool INMENU);
 void LevelCompleted ( exit_t playstate );
 void BattleLevelCompleted ( int localplayer );
 void Died (void);
