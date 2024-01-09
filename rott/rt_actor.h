@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_actor_public
 #define _rt_actor_public
 
+#include <stdbool.h>
+
 //***************************************************************************
 //
 //                            RT_ACTOR.C (actor functions)
@@ -269,24 +271,24 @@ typedef struct b_struct
   int   KEYACTORSLEFT;
   int      GASON;
   int      gasindex;
-  boolean  NET_IN_FLIGHT;
-  boolean  madenoise;
+  bool  NET_IN_FLIGHT;
+  bool  madenoise;
   _2Dpoint ETOUCH[MAXTOUCH],EPOP[MAXPOP],TOMLOC;
   int   NUMWEAPONS;
   int   BulletHoleNum;
   int   NUMBEGGINGKEVINS;
-  boolean fulllightgibs;
-  boolean directgibs;
+  bool fulllightgibs;
+  bool directgibs;
   int     gibgravity;
   int     gibspeed;
-  boolean supergibflag;
-  boolean randgibspeed;
+  bool supergibflag;
+  bool randgibspeed;
   int     numgibs;
-  boolean elevatormusicon;
+  bool elevatormusicon;
  }misc_stuff;
 
 
-extern  boolean          ludicrousgibs;
+extern  bool          ludicrousgibs;
 extern  objtype*         PLAYER0MISSILE;
 extern  byte             deathshapeoffset[8];
 extern  byte             RANDOMACTORTYPE[10];
@@ -312,7 +314,7 @@ void     SpawnInertActor(int,int,int);
 objtype* DiskAt(int tilex,int tiley);
 void     GetRainActors(void);
 void     DoRain(void);
-void     SpawnDisk(int,int,int,boolean);
+void     SpawnDisk(int,int,int,bool);
 void     T_ElevDisk(objtype*);
 void     Add_To_Delete_Array(void*);
 void     Remove_Delete_Array_Entries(void);
@@ -336,7 +338,7 @@ void     T_Firethink(objtype*);
 void     SpawnBlade(int,int,int,int,int);
 void     T_OrobotChase(objtype*);
 void     SpawnMultiSpriteActor(classtype,int,int,int);
-boolean  ActorTryMove(objtype*,int,int,int);
+bool  ActorTryMove(objtype*,int,int,int);
 void     A_Repeat(objtype*);
 void     T_Heinrich_Defend(objtype*);
 void     T_Heinrich_Out_of_Control(objtype*);
@@ -370,9 +372,9 @@ void     InitHitRect (objtype *ob, unsigned radius);
 void     NewState (objtype *ob, statetype *state);
 void     SelectPathDir(objtype*);
 void     SelectChaseDir (objtype *ob);
-boolean  SightPlayer (objtype *ob);
-boolean  CheckLine (void*,void *,int);
-boolean  CheckSight (objtype *ob,void*);
+bool  SightPlayer (objtype *ob);
+bool  CheckLine (void*,void *,int);
+bool  CheckSight (objtype *ob,void*);
 void     KillActor (objtype *ob);
 void     DamageThing (void *, int);
 void     MissileHit (objtype *,void*);
@@ -397,22 +399,22 @@ void     A_Steal(objtype*);
 
 void     T_Roll(objtype*);
 void     T_BossDied (objtype *ob);
-boolean  QuickSpaceCheck(objtype*,int,int);
+bool  QuickSpaceCheck(objtype*,int,int);
 void     PushWallMove(int num);
 void     SpawnNewObj(unsigned,unsigned,statetype*,classtype);
 void     SpawnSpring(int,int);
 void     SpawnFourWayGun(int,int);
 void     SpawnSnake(int tilex,int tiley);
 void     SpawnSneaky(int,int);
-boolean  MissileTryMove(objtype*ob,int,int,int);
+bool  MissileTryMove(objtype*ob,int,int,int);
 
 void     SaveActors(byte ** buf, int * size);
 void     LoadActors(byte * buf, int size);
 
-boolean  TurnOffLight0 (int tilex, int tiley);
-boolean  TurnOffLight1 (int tilex, int tiley, int i, int j);
-boolean  TurnOffLight2 (int tilex, int tiley, int j);
-boolean  TurnOffLight3 (int tilex, int tiley, int i);
+bool  TurnOffLight0 (int tilex, int tiley);
+bool  TurnOffLight1 (int tilex, int tiley, int i, int j);
+bool  TurnOffLight2 (int tilex, int tiley, int j);
+bool  TurnOffLight3 (int tilex, int tiley, int i);
 
 void     ParseMomentum(objtype *ob,int angle);
 void     SpawnGroundExplosion(int x, int y, int z);

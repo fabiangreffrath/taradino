@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "SDL.h"
 
+#include <stdbool.h>
 #include <stdarg.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -55,9 +56,9 @@ FILE   *  errout;
 FILE   *  debugout;
 FILE   *  mapdebugout;
 
-static boolean SoftErrorStarted=false;
-static boolean DebugStarted=false;
-static boolean MapDebugStarted=false;
+static bool SoftErrorStarted=false;
+static bool DebugStarted=false;
+static bool MapDebugStarted=false;
 
 extern SDL_Surface *VL_GetVideoSurface (void);
 
@@ -194,7 +195,7 @@ int atan2_appx(int dx, int dy)
 // StringsNotEqual
 //
 //******************************************************************************
-boolean StringsNotEqual (char * s1, char * s2, int length)
+bool StringsNotEqual (char * s1, char * s2, int length)
 {
    int i;
 
@@ -1270,7 +1271,7 @@ static int i,n,stop;
 
 char * UL_GetPath (char * path, char *dir)
 {
-   boolean done      = 0;
+   bool done      = 0;
    char *dr          = dir;
    int cnt           = 0;
 
@@ -1308,12 +1309,12 @@ char * UL_GetPath (char * path, char *dir)
 //    path - The path to change to.
 //
 // Returns
-//    TRUE  - If successful.
-//    FALSE - If unsuccessful.
+//    true  - If successful.
+//    false - If unsuccessful.
 //
 //******************************************************************************
 
-boolean UL_ChangeDirectory (char *path)
+bool UL_ChangeDirectory (char *path)
 {
 	if (!path || !*path) {
 		return true;
@@ -1339,12 +1340,12 @@ boolean UL_ChangeDirectory (char *path)
 //    drive - The drive to change to.
 //
 // Returns
-//    TRUE  - If drive change successful.
-//    FALSE - If drive change unsuccessful.
+//    true  - If drive change successful.
+//    false - If drive change unsuccessful.
 //
 //******************************************************************************
 
-boolean UL_ChangeDrive (char *drive)
+bool UL_ChangeDrive (char *drive)
 {
 	STUB_FUNCTION;
 	

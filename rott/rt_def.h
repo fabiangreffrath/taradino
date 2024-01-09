@@ -272,11 +272,6 @@ typedef int fixed;
 
 //////////////////      GLOBAL ENUMERATED TYPES    ///////////////////////
 
-typedef unsigned char boolean;
-enum {
-  false, true
-};
-
 typedef enum {
 		  east,
 		  northeast,

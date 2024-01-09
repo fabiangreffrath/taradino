@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _isr_public
 #define _isr_public
 
+#include <stdbool.h>
 #include "keyb.h"
 
 //***************************************************************************
@@ -60,13 +61,13 @@ extern int KeyboardStarted;
 
 extern const int ASCIINames[];   // Ascii -> scan code conversion
 extern const int ShiftNames[];   // Shifted Ascii->scancode conversion
-extern volatile boolean PausePressed;  //Game paused variable
-extern volatile boolean PanicPressed;  //Panic key variable
+extern volatile bool PausePressed;  //Game paused variable
+extern volatile bool PanicPressed;  //Panic key variable
 
 void I_StartupTimer (void);        // Start up timer isr
 void I_SetTimer0(int speed);       // Set the timer to a given speed
 void I_ShutdownTimer (void);       // Shutdown timer isr
-void I_SetKeyboardLEDs( int which, boolean val ); // Turns LED's on or off
+void I_SetKeyboardLEDs( int which, bool val ); // Turns LED's on or off
 void I_StartupKeyboard (void);     // Startup Keyboard isr
 void I_ShutdownKeyboard (void);    // Shutdown keyboard isr
 void I_Delay ( int delay );

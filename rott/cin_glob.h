@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_def.h"
 #include "rt_util.h"
 #include "isr.h"
+#include <stdbool.h>
 #include <time.h>
 
 #ifndef CIN_GLOB_H
@@ -31,7 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 void CinematicDelay( void );
 int GetCinematicTime( void );
-boolean CinematicAbort( void );
+bool CinematicAbort( void );
 void ClearCinematicAbort( void );
 
 #endif

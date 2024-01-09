@@ -18,6 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include <stdbool.h>
 #include "cin_glob.h"
 #include "cin_def.h"
 #include "cin_actr.h"
@@ -30,7 +31,7 @@ actortype * lastcinematicactor;
 
 // LOCALS
 
-boolean cinematicactorsystemstarted=false;
+bool cinematicactorsystemstarted=false;
 static int numcinematicactors;
 
 /*
@@ -228,12 +229,12 @@ void DrawCinematicActors ( void )
 {
    actortype * actor;
    actortype * nextactor;
-   boolean draw;
+   bool draw;
    enum_drawphases sequence;
 #if DUMP
    int numactors=0;
 #endif
-   boolean flippage=true;
+   bool flippage=true;
 
    for (sequence=screenfunctions;sequence<numdrawphases;sequence++)
       {

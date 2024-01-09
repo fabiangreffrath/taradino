@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //***************************************************************************
 
+#include <stdbool.h>
 #include "rottnet.h"
 
 
@@ -134,9 +135,9 @@ extern int spritestop;
 extern int fog;
 extern int lightsource;
 extern int SNAKELEVEL;
-extern boolean insetupgame;
+extern bool insetupgame;
 extern char LevelName[80];
-extern boolean ISRTL;
+extern bool ISRTL;
 
 void PreCacheGroup(int,int,int); // added type
 void AssignTeams(void);
@@ -177,6 +178,6 @@ void Illuminate();
 
 int GetSongForLevel ( void );
 void CheckHolidays(void);
-boolean IsChristmas(void);
+bool IsChristmas(void);
 
 #endif

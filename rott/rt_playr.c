@@ -18,6 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -126,9 +127,9 @@ playertype     PLAYERSTATE[MAXPLAYERS],*locplayerstate;
 
 gametype       gamestate;
 
-boolean        godmode = false;
+bool        godmode = false;
 
-boolean       missilecam=false;
+bool       missilecam=false;
 objtype       * missobj=NULL;
 // Player control variables
 
@@ -140,14 +141,14 @@ int JX = 0;
 int JY = 0;
 int CX = 0;
 int CY = 0;
-boolean vrenabled = false;
+bool vrenabled = false;
 int VX = 0;
 int VY = 0;
 
 int oldcyberx = 0;
 int oldcybery = 0;
 int CYBERDEADRANGE = 6000;
-boolean CYBERLOOKUP,CYBERLOOKDOWN;
+bool CYBERLOOKUP,CYBERLOOKDOWN;
 
 int leftmom = 0;
 int rightmom = 0;
@@ -155,9 +156,9 @@ int lastmom = 0;
 int first    = 1;
 
 int pausedstartedticcount;
-boolean RefreshPause = true;
+bool RefreshPause = true;
 
-boolean  buttonpoll[NUMBUTTONS];
+bool  buttonpoll[NUMBUTTONS];
 
 int      buttonscan[NUMBUTTONS] = {sc_Control, sc_Alt, sc_RShift, sc_Space,
 											  sc_PgUp,sc_PgDn,sc_Enter,sc_Delete,
@@ -225,7 +226,7 @@ williamdidthis WEAPONS[MAXWEAPONS] =
 
 void     CheckPlayerSpecials(objtype * ob);
 void     CheckWeaponStates(objtype * ob);
-boolean  CheckSprite (statobj_t* ,int *);
+bool  CheckSprite (statobj_t* ,int *);
 void     T_Tag (objtype *ob);
 void     T_Player (objtype *ob);
 void     T_BatBlast(objtype*ob);
@@ -996,7 +997,7 @@ void PlayerMissileAttack(objtype*ob)
 //====================================================================
 
 
-boolean InRange (objtype *p, objtype *victim, int distance)
+bool InRange (objtype *p, objtype *victim, int distance)
 {
 	int dx,dy;
 	int angle;
@@ -1826,7 +1827,7 @@ void PollKeyboardButtons (void)
 // PollMouseButtons
 //
 //******************************************************************************
-extern boolean usemouselook;
+extern bool usemouselook;
 void PollMouseButtons (void)
    {
    int i;
@@ -2311,7 +2312,7 @@ void PollVirtualReality (void)
 //
 //******************************************************************************
 
-boolean aimbuttonpressed=false;
+bool aimbuttonpressed=false;
 void PollMove (void)
 {
 	int angle;
@@ -2635,7 +2636,7 @@ void SaveWeapons(objtype*ob)
 
 
 
-boolean GivePowerup(objtype *ob,int flag,int time,int sound)
+bool GivePowerup(objtype *ob,int flag,int time,int sound)
    {
    playertype *pstate;
 
@@ -2686,7 +2687,7 @@ void GiveLifePoints(objtype *ob,int points)
    }
 
 
-boolean GiveBulletWeapon(objtype *ob,int bulletweapon,statobj_t*check)
+bool GiveBulletWeapon(objtype *ob,int bulletweapon,statobj_t*check)
    {
    playertype *pstate;
 
@@ -2712,7 +2713,7 @@ boolean GiveBulletWeapon(objtype *ob,int bulletweapon,statobj_t*check)
    }
 
 
-boolean GivePlayerMissileWeapon(objtype *ob, playertype *pstate,
+bool GivePlayerMissileWeapon(objtype *ob, playertype *pstate,
                                 statobj_t *check)
    {
    if  ((ob->flags & FL_DOGMODE) || (ob->flags & FL_GODMODE))
@@ -2875,7 +2876,7 @@ void GetBonus (objtype*ob,statobj_t *check)
 {
 	int heal;
 	playertype * pstate;
-   boolean randompowerup;
+   bool randompowerup;
 
 	M_LINKSTATE(ob,pstate);
 

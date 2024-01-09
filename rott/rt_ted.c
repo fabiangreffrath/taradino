@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "rt_def.h"
 #include "rt_sound.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -66,7 +67,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // GLOBAL VARIABLES
 //========================================
 
-extern boolean  UseBaseMarker;
+extern bool  UseBaseMarker;
 
 teamtype TEAM[MAXPLAYERS];
 int numareatiles[NUMAREAS+1];
@@ -92,8 +93,8 @@ int  mapwidth;
 int  mapheight;
 int  lastlevelloaded=-1;
 
-boolean insetupgame;
-boolean ISRTL = false;
+bool insetupgame;
+bool ISRTL = false;
 
 unsigned MapSpecials = 0;
 
@@ -105,7 +106,7 @@ char LevelName[80];
 
 static cachetype * cachelist;
 static word cacheindex;
-static boolean CachingStarted=false;
+static bool CachingStarted=false;
 char * ROTTMAPS;
 char * BATTMAPS;
 
@@ -898,7 +899,7 @@ void MiscPreCache( void )
 ========================
 */
 
-boolean IsChristmas(void)
+bool IsChristmas(void)
    {
    struct dosdate_t date;
 
@@ -961,7 +962,7 @@ void CheckHolidays(void)
 =
 ======================
 */
-extern boolean dopefish;
+extern bool dopefish;
 void DrawPreCache( void )
 {
    if (loadedgame==false)
@@ -1156,7 +1157,7 @@ void PreCache( void )
             ticdelay--;
             if (ticdelay==0)
                {
-               extern boolean dopefish;
+               extern bool dopefish;
 
                if ( dopefish==true )
                   {
@@ -1513,7 +1514,7 @@ int GetNextMap ( int tilex, int tiley )
    {
    word next;
    word icon;
-   boolean done;
+   bool done;
 
    next = MAPSPOT( tilex, tiley, 2 );
    icon = MAPSPOT( tilex, tiley, 1 );
@@ -2075,7 +2076,7 @@ word GetNearestAreaNumber ( int tilex, int tiley )
 void SetupWindows ( void )
 {
    int i,j;
-   boolean skythere;
+   bool skythere;
 
    skythere = SkyExists();
 
@@ -3486,7 +3487,7 @@ void LinkElevatorDiskGroups(void)
    int maxplatformheight[30]={-1};
    int num_distinct_max_heights=0;
    int i;
-   boolean newdiskheight;
+   bool newdiskheight;
 
 
  #define M_ISELEVDISK(actor) \
@@ -4112,7 +4113,7 @@ void PrintMapStats (void)
 }
 
 
-boolean IsWeapon(int tile)
+bool IsWeapon(int tile)
 {
  if ((tile >= 46) && (tile <= 56))
    return true;

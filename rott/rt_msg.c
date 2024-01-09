@@ -34,6 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_net.h"
 #include "rt_com.h"
 
+#include <stdbool.h>
 #include <stdlib.h>
 
 
@@ -57,12 +58,12 @@ messagetype Messages[MAXMSGS];
 static int  UpdateMessageBackground;
 static int  MessageSystemStarted=0;
 static int  LastMessageTime;
-static boolean EraseMessage[ MAXMSGS ];
+static bool EraseMessage[ MAXMSGS ];
 static int     MessageOrder[ MAXMSGS ];
 static int     TotalMessages = 0;
 static int     MsgPos = 0;
 
-boolean MessagesEnabled = true;
+bool MessagesEnabled = true;
 
 int StringLength (char *string)
 {
@@ -106,7 +107,7 @@ void InitializeMessages
 
    {
    int i;
-   boolean start;
+   bool start;
 
    start = false;
 
@@ -162,7 +163,7 @@ void GetMessageOrder
    int  lowest;
    int  lowesttime;
    byte done[ MAXMSGS ];
-   boolean found;
+   bool found;
 
    memset( &done[ 0 ],    0, sizeof( done ) );
    memset( MessageOrder, -1, sizeof( MessageOrder ) );
@@ -210,7 +211,7 @@ void DeleteMessage
    {
    int i;
    int msg;
-   boolean found;
+   bool found;
 
    found = false;
    for( i = 0; i < TotalMessages; i++ )
@@ -327,7 +328,7 @@ void SetMessage
    int i;
    int msg;
    int length;
-   boolean found;
+   bool found;
 
    if (iGLOBAL_SCREENWIDTH >= 640){
 		CurrentFont = newfont1;//smallfont;
@@ -759,7 +760,7 @@ void DrawPlayerSelectionMenu
 void FinishModemMessage
    (
    int num,
-   boolean send
+   bool send
    )
    {
    if ( ( !MSG.inmenu ) && ( MSG.length > 0 ) )

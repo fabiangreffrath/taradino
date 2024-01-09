@@ -18,6 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 #include "rt_def.h"
+#include <stdbool.h>
 #include <string.h>
 
 #include "sprites.h"
@@ -843,7 +844,7 @@ void DoMap (int cx, int cy)
    int x,y;
    int dx;
    int dy;
-   boolean done;
+   bool done;
    int quitkey=sc_Escape;
    ControlInfo control;
 

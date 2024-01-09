@@ -6,6 +6,7 @@
  * Written by Ryan C. Gordon. (icculus@clutteredmind.org)
  */
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -22,9 +23,6 @@
 #include "rt_util.h"     // ROTT music hack
 
 #include "music.h"
-
-#define __FX_TRUE  (1 == 1)
-#define __FX_FALSE (!__FX_TRUE)
 
 #define DUKESND_DEBUG       "DUKESND_DEBUG"
 
@@ -230,7 +228,7 @@ void MUSIC_SetLoopFlag(int loopflag)
 
 int MUSIC_SongPlaying(void)
 {
-    return((Mix_PlayingMusic()) ? __FX_TRUE : __FX_FALSE);
+    return((Mix_PlayingMusic()) ? true : false);
 } // MUSIC_SongPlaying
 
 
@@ -377,7 +375,7 @@ int MUSIC_FadeVolume(int tovolume, int milliseconds)
 
 int MUSIC_FadeActive(void)
 {
-    return((Mix_FadingMusic() == MIX_FADING_OUT) ? __FX_TRUE : __FX_FALSE);
+    return((Mix_FadingMusic() == MIX_FADING_OUT) ? true : false);
 } // MUSIC_FadeActive
 
 

@@ -20,10 +20,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _cin_efct_public
 #define _cin_efct_public
 
+#include <stdbool.h>
 #include "cin_glob.h"
 #include "cin_def.h"
 
-flicevent * SpawnCinematicFlic ( char * name, boolean loop, boolean usefile );
+flicevent * SpawnCinematicFlic ( char * name, bool loop, bool usefile );
 spriteevent * SpawnCinematicSprite ( char * name,
                                      int duration,
                                      int numframes,
@@ -58,10 +59,10 @@ void DrawPalette (paletteevent * event);
 void DrawCinematicSprite ( spriteevent * sprite );
 void DrawClearBuffer ( void );
 void DrawBlankScreen ( void );
-boolean DrawCinematicEffect ( enum_eventtype type, void * effect );
-boolean UpdateCinematicBack ( backevent * back );
-boolean UpdateCinematicSprite ( spriteevent * sprite );
-boolean UpdateCinematicEffect ( enum_eventtype type, void * effect );
+bool DrawCinematicEffect ( enum_eventtype type, void * effect );
+bool UpdateCinematicBack ( backevent * back );
+bool UpdateCinematicSprite ( spriteevent * sprite );
+bool UpdateCinematicEffect ( enum_eventtype type, void * effect );
 void PrecacheCinematicEffect ( enum_eventtype type, void * effect );
 void ProfileDisplay ( void );
 void DrawPostPic ( int lumpnum );

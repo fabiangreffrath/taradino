@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "rt_def.h"
 #include "lumpy.h"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -76,53 +77,53 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 volatile int    oldtime;
 volatile int    gametime;
 
-boolean         tedlevel;
+bool         tedlevel;
 int             tedlevelnum;
 int             tedx=0;
 int             tedy=0;
-boolean         warp;
+bool         warp;
 int             warpx=0;
 int             warpy=0;
 int             warpa=0;
 int             NoSound;
 int             polltime;
 int             oldpolltime;
-boolean         fizzlein = false;
+bool         fizzlein = false;
 int             pheight;
 
-boolean SCREENSHOTS             = false;
-boolean MONOPRESENT             = false;
-boolean MAPSTATS                = false;
-boolean TILESTATS               = false;
-boolean HUD                     = false;
-boolean IS8250                  = false;
+bool SCREENSHOTS             = false;
+bool MONOPRESENT             = false;
+bool MAPSTATS                = false;
+bool TILESTATS               = false;
+bool HUD                     = false;
+bool IS8250                  = false;
 
-boolean dopefish;
+bool dopefish;
 
-boolean newlevel = false;
-boolean infopause;
-boolean quiet = false;
+bool newlevel = false;
+bool infopause;
+bool quiet = false;
 
-boolean DebugOk = false;
+bool DebugOk = false;
 
 #if (WHEREAMI==1)
 int programlocation=-1;
 #endif
 
-static boolean turbo;
+static bool turbo;
 
 static int NoWait;
 static int startlevel=0;
 static int demonumber=-1;
 
 char CWD[40];                          // curent working directory
-static boolean quitactive = false;
+static bool quitactive = false;
 
 int timelimit;
 int maxtimelimit;
-boolean timelimitenabled;
-boolean demoexit;
-boolean noecho;
+bool timelimitenabled;
+bool demoexit;
+bool noecho;
 
 void CheckCommandLineParameters( void );
 void PlayTurboGame( void );
@@ -136,8 +137,8 @@ extern void crash_print (int);
 //extern char G_argv[30][80];
 int G_weaponscale;
 extern int iDropDemo;
-extern boolean iG_aimCross;
-extern boolean sdl_fullscreen;
+extern bool iG_aimCross;
+extern bool sdl_fullscreen;
 
 extern void ComSetTime ( void );
 extern void VH_UpdateScreen (void);
@@ -1483,7 +1484,7 @@ void GameLoop (void)
    waminot();
    }
 
-boolean CheckForQuickLoad  (void )
+bool CheckForQuickLoad  (void )
 
    {
 
@@ -1763,7 +1764,7 @@ void PlayLoop
    {
    volatile int atime;
 
-   boolean canquit = true;
+   bool canquit = true;
    int     quittime = 0;
 
    wami(3);
@@ -1881,7 +1882,7 @@ fromloadedgame:
 
       if ( ( !BATTLEMODE ) && ( CP_CheckQuick( LastScan ) ) )
 			{
-         boolean escaped=false;
+         bool escaped=false;
 
          if (LastScan == sc_Escape)
             {
@@ -2401,13 +2402,13 @@ void PollKeyboard
 //
 //****************************************************************************
 
-void SaveScreen (boolean inhmenu)
+void SaveScreen (bool inhmenu)
 {
     static int shot;
     char filename[16] = {0};
     int tries = 10000;
     char *screenshotname = NULL;
-    const boolean oldHUD = HUD;
+    const bool oldHUD = HUD;
     int err = 1;
 
     extern int VL_SaveBMP (const char *file);

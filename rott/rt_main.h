@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_main_public
 #define _rt_main_public
 
+#include <stdbool.h>
 #include "develop.h"
 #include "rt_def.h"
 #include "rottnet.h"
@@ -103,40 +104,40 @@ typedef struct
 	int     battlemode;
 	int     battleoption;
 	int     randomseed;
-   boolean teamplay;
-	boolean DODEMOCRATICBONUS1;
-	boolean DOGROUNDZEROBONUS;
+   bool teamplay;
+	bool DODEMOCRATICBONUS1;
+	bool DOGROUNDZEROBONUS;
 	int     autorun;
 
 	// Battle Options
    battle_type BattleOptions;
 
-   boolean SpawnCollectItems;
-	boolean SpawnEluder;
-	boolean SpawnDeluder;
-   boolean ShowScores;
-	boolean PlayerHasGun[ MAXPLAYERS ];
+   bool SpawnCollectItems;
+	bool SpawnEluder;
+	bool SpawnDeluder;
+   bool ShowScores;
+	bool PlayerHasGun[ MAXPLAYERS ];
    specials SpecialsTimes;
    } gametype;
 
 
 extern  int      doublestep;
-extern  boolean  tedlevel;
+extern  bool  tedlevel;
 extern  int      tedlevelnum;
 extern  int      tedx;
 extern  int      tedy;
-extern  boolean  fizzlein;
+extern  bool  fizzlein;
 extern  int      pheight;
 extern  int      NoSound;
 extern  int      timelimit;
-extern  boolean  timelimitenabled;
-extern  boolean  noecho;
-extern  boolean  demoexit;
-extern  boolean  quiet;
+extern  bool  timelimitenabled;
+extern  bool  noecho;
+extern  bool  demoexit;
+extern  bool  quiet;
 
 extern gametype  gamestate;
-extern boolean DebugOk;
-extern  boolean newlevel;
+extern bool DebugOk;
+extern  bool newlevel;
 
 void QuitGame( void );
 void PlayCinematic (void);
@@ -152,15 +153,15 @@ extern  int polltime;
 extern  int oldpolltime;
 extern  volatile int oldtime;
 void PauseLoop ( void );
-void SaveScreen (boolean inhmenu);
+void SaveScreen (bool inhmenu);
 void SetupWads( void );
 
-extern boolean SCREENSHOTS;
-extern boolean COMPUTELEVELSIZE;
-extern boolean MONOPRESENT;
-extern boolean MAPSTATS;
-extern boolean TILESTATS;
-extern boolean HUD;
+extern bool SCREENSHOTS;
+extern bool COMPUTELEVELSIZE;
+extern bool MONOPRESENT;
+extern bool MAPSTATS;
+extern bool TILESTATS;
+extern bool HUD;
 
 extern char CWD[40];
 

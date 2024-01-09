@@ -18,6 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#include <stdbool.h>
 #include "rt_def.h"
 #include "rt_util.h"
 #include "rt_sound.h"
@@ -27,18 +28,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fx_man.h"
 #include "develop.h"
 
-static boolean Recording=false;
-static boolean Feeder=false;
+static bool Recording=false;
+static bool Feeder=false;
 static byte * RecordingBuffer;
 static int Playingvoice;
 static int RecordingPointer;
 static int FeederPointer;
-static boolean Playback=false;
-static boolean Playing=false;
+static bool Playback=false;
+static bool Playing=false;
 static char * PlaybackBuffer;
 static int PlaybackPointer;
 static int PlayingPointer;
-static boolean RecordingSemaphore=false;
+static bool RecordingSemaphore=false;
 
 //#define FX_StartDemandFeedPlayback MV_StartDemandFeedPlayback
 //#define FX_StartRecording          MV_StartRecording
@@ -234,7 +235,7 @@ void SD_UpdateRecordingSound ( char * ptr, int length )
 //
 //***************************************************************************
 
-boolean SD_StartRecordingSound ( void )
+bool SD_StartRecordingSound ( void )
 {
    int status=FX_Ok;
 
@@ -313,7 +314,7 @@ void SD_ClearRecordingActive ( void )
 //
 //***************************************************************************
 
-boolean SD_RecordingActive ( void )
+bool SD_RecordingActive ( void )
 {
    return RecordingSemaphore;
 }
@@ -389,7 +390,7 @@ recordstate SD_GetSoundData ( byte * data, word length )
 //
 //***************************************************************************
 
-boolean SD_SoundDataReady ( void )
+bool SD_SoundDataReady ( void )
 {
    if (SD_Started==false)
       return false;

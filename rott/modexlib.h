@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _modexlib_public
 #define _modexlib_public
 
+#include <stdbool.h>
 #include "WinRott.h"
 #include "rt_def.h"
 
@@ -35,7 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //***************************************************************************
 
-extern  boolean StretchScreen;
+extern  bool StretchScreen;
 
 //extern  int      ylookup[MAXSCREENHEIGHT];      // Table of row offsets
 extern  int      ylookup[600];      // just set to max res
@@ -46,7 +47,7 @@ extern  byte    *page3start;
 extern  int      screensize;
 extern  byte    *bufferofs;
 extern  byte    *displayofs;
-extern  boolean  graphicsmode;
+extern  bool  graphicsmode;
 
 
 void  GraphicsMode ( void );

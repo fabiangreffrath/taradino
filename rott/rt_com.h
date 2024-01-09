@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_com_public
 #define _rt_com_public
 
+#include <stdbool.h>
+
 //***************************************************************************
 //
 // RT_COM.C
@@ -40,7 +42,7 @@ extern int controlsynctime;
 //#define consoleplayer (rottcom->consoleplayer)
 
 void InitROTTNET (void);
-boolean ReadPacket (void);
+bool ReadPacket (void);
 void WritePacket (void * buffer, int len, int destination);
 void ComSetTime (void);
 int GetTransitTime( int client );

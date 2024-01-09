@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "modexlib.h"
 #include "rt_menu.h"
 
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "rt_main.h"
@@ -58,7 +59,7 @@ extern int G_weaponscale;
 
 int    StatusBar = 0;
 int    lightninglevel=0;
-boolean  lightning=false;
+bool  lightning=false;
 int    normalshade;
 int    darknesslevel;
 int    maxshade;
@@ -128,7 +129,7 @@ static int      lightningtime=0;
 static int      lightningdelta=0;
 static int      lightningdistance=0;
 static int      lightningsoundtime=0;
-static boolean  periodic=false;
+static bool  periodic=false;
 static int      periodictime=0;
 
 void SetViewDelta ( void );
@@ -415,7 +416,7 @@ void DrawCPUJape
 ==========================
 */
 
-void SetupScreen ( boolean flip )
+void SetupScreen ( bool flip )
 {
    pic_t *shape;
 

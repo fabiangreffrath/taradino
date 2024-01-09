@@ -51,7 +51,7 @@ typedef struct task
     int           active;
 } task;
 
-// TS_InInterrupt is TRUE during a taskman interrupt.
+// TS_InInterrupt is true during a taskman interrupt.
 // Use this if you have code that may be used both outside
 // and within interrupts.
 

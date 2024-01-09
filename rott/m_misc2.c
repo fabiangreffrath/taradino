@@ -17,6 +17,7 @@
 //      [FG] miscellaneous helper functions from Chocolate Doom.
 //
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -39,7 +40,7 @@ void M_MakeDirectory(const char *path)
 
 // Check if a file exists
 
-boolean M_FileExists(const char *filename)
+bool M_FileExists(const char *filename)
 {
     FILE *fstream;
 
@@ -149,7 +150,7 @@ char *M_FileCaseExists(const char *path)
     return NULL;
 }
 
-boolean M_StrToInt(const char *str, int *result)
+bool M_StrToInt(const char *str, int *result)
 {
     return sscanf(str, " 0x%x", (unsigned int *) result) == 1
         || sscanf(str, " 0X%x", (unsigned int *) result) == 1
@@ -322,7 +323,7 @@ char *M_StringReplace(const char *haystack, const char *needle,
 // Safe string copy function that works like OpenBSD's strlcpy().
 // Returns true if the string was not truncated.
 
-boolean M_StringCopy(char *dest, const char *src, size_t dest_size)
+bool M_StringCopy(char *dest, const char *src, size_t dest_size)
 {
     size_t len;
 
@@ -343,7 +344,7 @@ boolean M_StringCopy(char *dest, const char *src, size_t dest_size)
 // Safe string concat function that works like OpenBSD's strlcat().
 // Returns true if string not truncated.
 
-boolean M_StringConcat(char *dest, const char *src, size_t dest_size)
+bool M_StringConcat(char *dest, const char *src, size_t dest_size)
 {
     size_t offset;
 
@@ -358,13 +359,13 @@ boolean M_StringConcat(char *dest, const char *src, size_t dest_size)
 
 // Returns true if 's' ends with the specified suffix.
 
-boolean M_StringEndsWith(const char *s, const char *suffix)
+bool M_StringEndsWith(const char *s, const char *suffix)
 {
     return strlen(s) >= strlen(suffix)
         && strcmp(s + strlen(s) - strlen(suffix), suffix) == 0;
 }
 
-boolean M_StringCaseEndsWith(const char *s, const char *suffix)
+bool M_StringCaseEndsWith(const char *s, const char *suffix)
 {
     return strlen(s) >= strlen(suffix)
         && strcasecmp(s + strlen(s) - strlen(suffix), suffix) == 0;

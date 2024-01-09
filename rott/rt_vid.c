@@ -17,6 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -54,7 +55,7 @@ unsigned uwidthtable[UPDATEHIGH];
 unsigned blockstarts[UPDATEWIDE*UPDATEHIGH];
 byte     update[UPDATESIZE];
 byte     palette1[256][3], palette2[256][3];
-boolean  screenfaded;
+bool  screenfaded;
 
 //******************************************************************************
 //
@@ -389,7 +390,7 @@ void VWB_Vlin (int y1, int y2, int x, int color)
 //
 //******************************************************************************
 
-void VL_THlin (unsigned x, unsigned y, unsigned width, boolean up)
+void VL_THlin (unsigned x, unsigned y, unsigned width, bool up)
 {
 	byte *dest = (byte*)(bufferofs+ylookup[y]+x);
 	
@@ -416,7 +417,7 @@ void VL_THlin (unsigned x, unsigned y, unsigned width, boolean up)
 //
 //******************************************************************************
 
-void VL_TVlin (unsigned x, unsigned y, unsigned height, boolean up)
+void VL_TVlin (unsigned x, unsigned y, unsigned height, bool up)
 {
 	byte *dest = (byte*)(bufferofs+ylookup[y]+x);
 	
@@ -443,7 +444,7 @@ void VL_TVlin (unsigned x, unsigned y, unsigned height, boolean up)
 //
 //******************************************************************************
 
-void VWB_THlin (int x1, int x2, int y, boolean up)
+void VWB_THlin (int x1, int x2, int y, bool up)
 {
    if (VW_MarkUpdateBlock (x1,y,x2,y))
       VW_THlin (x1,x2,y,up);
@@ -456,7 +457,7 @@ void VWB_THlin (int x1, int x2, int y, boolean up)
 //
 //******************************************************************************
 
-void VWB_TVlin (int y1, int y2, int x, boolean up)
+void VWB_TVlin (int y1, int y2, int x, bool up)
 {
    if (VW_MarkUpdateBlock (x,y1,x,y2))
       VW_TVlin (y1,y2,x,up);
@@ -758,7 +759,7 @@ void SwitchPalette (byte * newpal, int steps)
 //
 //****************************************************************************
 
-void VL_DecompressLBM (lbm_t *lbminfo, boolean flip)
+void VL_DecompressLBM (lbm_t *lbminfo, bool flip)
 {
    int  count;
    byte b, rept;

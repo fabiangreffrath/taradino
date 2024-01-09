@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 // RT_FLOOR.C
 
+#include <stdbool.h>
 #include "rt_def.h"
 #include "watcom.h"
 #include "rt_floor.h"
@@ -304,7 +305,7 @@ int GetFloorCeilingLump ( int num )
 ===================
 */
 
-boolean SkyExists (void)
+bool SkyExists (void)
 {
    if (MAPSPOT(1,0,0) >= 234)
       {

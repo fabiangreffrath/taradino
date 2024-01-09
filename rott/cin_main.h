@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _cin_main_public
 #define _cin_main_public
 
+#include <stdbool.h>
+
 //***************************************************************************
 //
 // CIN_MAIN.H
@@ -27,10 +29,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //***************************************************************************
 #include "cin_glob.h"
 
-void GrabMovieScript (char const *basename, boolean uselumpy);
-void PlayMovie (char * name, boolean uselumpy);
+void GrabMovieScript (char const *basename, bool uselumpy);
+void PlayMovie (char * name, bool uselumpy);
 void GetCinematicTics ( void );
 
-extern boolean cinematicdone;
+extern bool cinematicdone;
 
 #endif

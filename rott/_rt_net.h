@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_net_private
 #define _rt_net_private
 
+#include <stdbool.h>
+
 #define DEMOBUFFSIZE 50000
 
 #define FASTSPEED (0xB000)
@@ -111,9 +113,9 @@ void AddServerPacket(void * pkt, int src);
 void AddClientPacket (void * pkt, int src);
 void AddPacket (void * pkt, int src);
 void RequestPacket (int time, int dest, int numpackets);
-boolean AllPlayersReady ( void );
-boolean AreClientsReady ( void );
-boolean IsServerCommandReady ( int time );
+bool AllPlayersReady ( void );
+bool AreClientsReady ( void );
+bool IsServerCommandReady ( int time );
 void UpdatePlayerObj ( int player );
 void AddServerSubPacket(COM_ServerHeaderType * serverpkt);
 void AddSubPacket (void * pkt, int src);

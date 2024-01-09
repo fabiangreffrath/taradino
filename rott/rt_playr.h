@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_playr_public
 #define _rt_playr_public
 
+#include <stdbool.h>
 #include "rt_actor.h"
 #include "rt_stat.h"
 #include "states.h"
@@ -118,8 +119,8 @@ typedef struct
         int                dmomy;
 		  int                angle;
 		  int                anglefrac;
-        boolean            buttonheld[NUMBUTTONS];
-        boolean            buttonstate[NUMBUTTONS];
+        bool            buttonheld[NUMBUTTONS];
+        bool            buttonstate[NUMBUTTONS];
         int                horizon;
         int                lastmomz;
 		  signed short       playerheight;
@@ -137,7 +138,7 @@ typedef struct
 		  int                targettime;
 //        int                steptime;
 //        int                stepwhich;
-        boolean            falling;
+        bool            falling;
 		  int                oldshapeoffset;
 		  int                uniformcolor;
         char               codename[MAXCODENAMELENGTH];
@@ -175,18 +176,18 @@ extern ROTTCHARS  characters[5];
 extern williamdidthis FREE;
 extern statetype s_player;
 extern williamdidthis WEAPONS[MAXWEAPONS];
-extern boolean mouseenabled;
-extern boolean joystickenabled;
-extern boolean joypadenabled;
-extern boolean joystickprogressive;
+extern bool mouseenabled;
+extern bool joystickenabled;
+extern bool joypadenabled;
+extern bool joystickprogressive;
 extern int joystickport;
 extern int joyxmax, joyymax, joyxmin, joyymin;
 extern int buttonscan[NUMBUTTONS];
 extern int buttonmouse[6];
 extern int buttonjoy[8];
-extern boolean  buttonpoll[NUMBUTTONS];
-extern boolean godmode;
-extern boolean missilecam;
+extern bool  buttonpoll[NUMBUTTONS];
+extern bool godmode;
+extern bool missilecam;
 extern objtype       * missobj;
 extern int lastpolltime;
 
@@ -194,7 +195,7 @@ extern int controlbuf[3];
 extern int buttonbits;
 
 extern int pausedstartedticcount;
-extern boolean RefreshPause;
+extern bool RefreshPause;
 
 
 void     PlayNoWaySound(void);
@@ -232,7 +233,7 @@ void     SpawnMetalSparks(objtype * ob, int angle);
 void     CheckPlayerSpecials(objtype * ob);
 void     LoadPlayer ( void );
 void     PlayerTiltHead (objtype * ob);
-boolean  InRange (objtype *p, objtype *victim, int distance);
+bool  InRange (objtype *p, objtype *victim, int distance);
 void     CheckUnPause ( void );
 void     UpdatePlayers ( void );
 void UnTargetActor ( objtype * target );
@@ -257,7 +258,7 @@ extern void SaveWeapons(objtype*);
 extern int whichpath;
 extern statobj_t *BulletHoles[MAXBULLETS];
 
-extern boolean vrenabled;
+extern bool vrenabled;
 
 void SetupBulletHoleLink (int num, statobj_t * item);
 
