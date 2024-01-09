@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_actor_public
 
 #include <stdbool.h>
+#include <stdint.h>
 
 //***************************************************************************
 //
@@ -216,7 +217,7 @@ typedef enum {
 typedef struct objstruct
 {
 		  thingtype                     which;
-		  byte                     tilex,tiley;
+		  uint8_t                     tilex,tiley;
 		  int32_t                    x,y,z;
         int                      shapenum;
 		  unsigned                 flags;
@@ -229,7 +230,7 @@ typedef struct objstruct
 		  classtype                obclass;
 		  statetype *              state;
 		  signed char              door_to_open;
-		  byte                     areanumber;
+		  uint8_t                     areanumber;
 		  signed short             shapeoffset;
 		  int                      targettilex,targettiley;
 
@@ -290,8 +291,8 @@ typedef struct b_struct
 
 extern  bool          ludicrousgibs;
 extern  objtype*         PLAYER0MISSILE;
-extern  byte             deathshapeoffset[8];
-extern  byte             RANDOMACTORTYPE[10];
+extern  uint8_t             deathshapeoffset[8];
+extern  uint8_t             RANDOMACTORTYPE[10];
 extern  objtype*         FIRSTACTOR,*LASTACTOR;
 extern  objtype          *FIRSTRAIN,*LASTRAIN;
 extern  objtype*         SCREENEYE;
@@ -408,8 +409,8 @@ void     SpawnSnake(int tilex,int tiley);
 void     SpawnSneaky(int,int);
 bool  MissileTryMove(objtype*ob,int,int,int);
 
-void     SaveActors(byte ** buf, int * size);
-void     LoadActors(byte * buf, int size);
+void     SaveActors(uint8_t ** buf, int * size);
+void     LoadActors(uint8_t * buf, int size);
 
 bool  TurnOffLight0 (int tilex, int tiley);
 bool  TurnOffLight1 (int tilex, int tiley, int i, int j);

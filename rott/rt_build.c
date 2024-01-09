@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "rt_def.h"
 #include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 #include "watcom.h"
 #include <stdio.h>
@@ -48,13 +49,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "modexlib.h"
 #include "rt_str.h"
 
-byte * intensitytable;
+uint8_t * intensitytable;
 
 
 // LOCAL VARIABLES
 
-static byte * menubuf;
-static byte * menubuffers[2];
+static uint8_t * menubuf;
+static uint8_t * menubuffers[2];
 static char menutitles[2][40];
 static int alternatemenubuf=0;
 static int titleshade=16;
@@ -80,7 +81,7 @@ static char strbuf[MaxString];
 //
 //******************************************************************************
 
-void DrawRotPost ( int height, byte * src, byte * buf, int origheight)
+void DrawRotPost ( int height, uint8_t * src, uint8_t * buf, int origheight)
 {
    int y1;
    int y2;
@@ -229,8 +230,8 @@ void InterpolatePlane (visobj_t * plane)
 void   DrawPlanePosts (void)
 {
    int height;
-   byte * buf;
-   byte * shape;
+   uint8_t * buf;
+   uint8_t * shape;
    int lastwall=-2;
    int i;
 
@@ -238,7 +239,7 @@ void   DrawPlanePosts (void)
 
       {
       VGAWRITEMAP(plane);
-      buf=(byte *)(bufferofs);
+      buf=(uint8_t *)(bufferofs);
 
       for (i=0;i<viewwidth;i++,buf++)
          {
@@ -398,7 +399,7 @@ void DrawTransformedPlanes ( void )
 
 void ClearMenuBuf ( void )
 {
-   byte * shape;
+   uint8_t * shape;
 
    if (MenuBufStarted==false)
       Error("Called ClearMenuBuf without menubuf started\n");
@@ -571,7 +572,7 @@ void RefreshMenuBuf( int time )
 //
 //******************************************************************************
 
-void ScaleMenuBufPost (byte * src, int topoffset, byte * buf)
+void ScaleMenuBufPost (uint8_t * src, int topoffset, uint8_t * buf)
 {
    int  d;
    int  offset;
@@ -632,9 +633,9 @@ void SetMenuTitle ( const char * menutitle )
 //
 //******************************************************************************
 
-void DrawMenuBufPicture (int x, int y, const byte * pic, int w, int h)
+void DrawMenuBufPicture (int x, int y, const uint8_t * pic, int w, int h)
 {
-   byte *buffer;
+   uint8_t *buffer;
    int i;
 
    if (MenuBufStarted==false)
@@ -647,7 +648,7 @@ void DrawMenuBufPicture (int x, int y, const byte * pic, int w, int h)
 
    for (i=0;i<w;i++)
       {
-      buffer = (byte*)menubuf+y+((x+i)*TEXTUREHEIGHT);
+      buffer = (uint8_t*)menubuf+y+((x+i)*TEXTUREHEIGHT);
       memcpy(buffer,pic,h);
       pic+=h;
       }
@@ -661,9 +662,9 @@ void DrawMenuBufPicture (int x, int y, const byte * pic, int w, int h)
 
 void DrawMenuBufItem (int x, int y, int shapenum)
 {
-   byte *buffer;
+   uint8_t *buffer;
    int cnt;
-   byte *shape;
+   uint8_t *shape;
    patch_t *p;
 
    if (MenuBufStarted==false)
@@ -677,10 +678,10 @@ void DrawMenuBufItem (int x, int y, int shapenum)
    if (((y-p->topoffset)<0) || ((y-p->topoffset+p->height)>=TEXTUREHEIGHT))
       Error ("DrawMenuBufItem: y is out of range\n");
 
-   buffer = (byte*)menubuf+y+((x-p->leftoffset)*TEXTUREHEIGHT);
+   buffer = (uint8_t*)menubuf+y+((x-p->leftoffset)*TEXTUREHEIGHT);
 
    for (cnt = 0; cnt < p->width; cnt++,buffer+=TEXTUREHEIGHT)
-      ScaleMenuBufPost ((byte *)(p->collumnofs[cnt]+shape),
+      ScaleMenuBufPost ((uint8_t *)(p->collumnofs[cnt]+shape),
                         p->topoffset, buffer);
 }
 
@@ -690,7 +691,7 @@ void DrawMenuBufItem (int x, int y, int shapenum)
 //
 //******************************************************************************
 
-void IScaleMenuBufPost (byte * src, int topoffset, byte * buf, int color)
+void IScaleMenuBufPost (uint8_t * src, int topoffset, uint8_t * buf, int color)
 {
    int  d;
    int  offset;
@@ -723,9 +724,9 @@ void IScaleMenuBufPost (byte * src, int topoffset, byte * buf, int color)
 
 void DrawIMenuBufItem (int x, int y, int shapenum, int color)
 {
-   byte *buffer;
+   uint8_t *buffer;
    int cnt;
-   byte *shape;
+   uint8_t *shape;
    patch_t *p;
 
 
@@ -740,10 +741,10 @@ void DrawIMenuBufItem (int x, int y, int shapenum, int color)
    if (((y-p->topoffset)<0) || ((y-p->topoffset+p->height)>=TEXTUREHEIGHT))
       Error ("DrawIMenuBufItem: y is out of range\n");
 
-   buffer = (byte*)menubuf+y+((x-p->leftoffset)*TEXTUREHEIGHT);
+   buffer = (uint8_t*)menubuf+y+((x-p->leftoffset)*TEXTUREHEIGHT);
 
    for (cnt = 0; cnt < p->width; cnt++,buffer+=TEXTUREHEIGHT)
-      IScaleMenuBufPost ((byte *)(p->collumnofs[cnt]+shape),
+      IScaleMenuBufPost ((uint8_t *)(p->collumnofs[cnt]+shape),
                         p->topoffset, buffer, color);
 }
 
@@ -753,12 +754,12 @@ void DrawIMenuBufItem (int x, int y, int shapenum, int color)
 // TScaleMenuBufPost
 //
 //******************************************************************************
-void TScaleMenuBufPost (byte * src, int topoffset, byte * buf)
+void TScaleMenuBufPost (uint8_t * src, int topoffset, uint8_t * buf)
 {
    int  d;
    int  offset;
    int  length;
-   byte pixel;
+   uint8_t pixel;
    int  s;
 
 
@@ -788,12 +789,12 @@ void TScaleMenuBufPost (byte * src, int topoffset, byte * buf)
 // CScaleMenuBufPost
 //
 //******************************************************************************
-void CScaleMenuBufPost (byte * src, int topoffset, byte * buf)
+void CScaleMenuBufPost (uint8_t * src, int topoffset, uint8_t * buf)
 {
    int  d;
    int  offset;
    int  length;
-   byte pixel;
+   uint8_t pixel;
    int  s;
 
 
@@ -826,9 +827,9 @@ void CScaleMenuBufPost (byte * src, int topoffset, byte * buf)
 
 void EraseMenuBufRegion (int x, int y, int width, int height)
 {
-   byte *buffer;
+   uint8_t *buffer;
    int xx,yy;
-   byte * shape;
+   uint8_t * shape;
 
    if (MenuBufStarted==false)
       Error("Called EraseMenuBufRegion without menubuf started\n");
@@ -841,7 +842,7 @@ void EraseMenuBufRegion (int x, int y, int width, int height)
    shape=W_CacheLumpName(MENUBACKNAME,PU_CACHE, Cvt_patch_t, 1);
    shape+=8;
    shape+=(x*TEXTUREHEIGHT)+y;
-   buffer = (byte*)menubuf+(x*TEXTUREHEIGHT)+y;
+   buffer = (uint8_t*)menubuf+(x*TEXTUREHEIGHT)+y;
 
    for (xx = 0; xx < width; xx++)
       {
@@ -861,12 +862,12 @@ void EraseMenuBufRegion (int x, int y, int width, int height)
 
 void DrawTMenuBufPic (int x, int y, int shapenum)
 {
-   byte *buffer;
-   byte *buf;
+   uint8_t *buffer;
+   uint8_t *buf;
    int xx,yy;
    int plane;
    int pixel;
-   byte *shape;
+   uint8_t *shape;
    pic_t *p;
 
    if (MenuBufStarted==false)
@@ -882,7 +883,7 @@ void DrawTMenuBufPic (int x, int y, int shapenum)
    if ((y<0) || ((y+p->height)>=TEXTUREHEIGHT))
       Error ("DrawTMenuBufPic: y is out of range\n");
 
-   buffer = (byte*)menubuf+(x*TEXTUREHEIGHT)+y;
+   buffer = (uint8_t*)menubuf+(x*TEXTUREHEIGHT)+y;
 
    for (plane=0;plane<4;plane++,buffer+=TEXTUREHEIGHT)
       {
@@ -908,9 +909,9 @@ void DrawTMenuBufPic (int x, int y, int shapenum)
 
 void DrawTMenuBufItem (int x, int y, int shapenum)
 {
-   byte *buffer;
+   uint8_t *buffer;
    int cnt;
-   byte *shape;
+   uint8_t *shape;
    patch_t *p;
 
 
@@ -927,10 +928,10 @@ void DrawTMenuBufItem (int x, int y, int shapenum)
    if (((y-p->topoffset)<0) || ((y-p->topoffset+p->height)>=TEXTUREHEIGHT))
       Error ("DrawTMenuBufItem: y is out of range\n");
 
-   buffer = (byte*)menubuf+y+((x-p->leftoffset)*TEXTUREHEIGHT);
+   buffer = (uint8_t*)menubuf+y+((x-p->leftoffset)*TEXTUREHEIGHT);
 
    for (cnt = 0; cnt < p->width; cnt++,buffer+=TEXTUREHEIGHT)
-      TScaleMenuBufPost ((byte *)(p->collumnofs[cnt]+shape),
+      TScaleMenuBufPost ((uint8_t *)(p->collumnofs[cnt]+shape),
                         p->topoffset, buffer);
 }
 
@@ -942,9 +943,9 @@ void DrawTMenuBufItem (int x, int y, int shapenum)
 
 void DrawColoredMenuBufItem (int x, int y, int shapenum, int color)
 {
-   byte *buffer;
+   uint8_t *buffer;
    int cnt;
-   byte *shape;
+   uint8_t *shape;
    patch_t *p;
 
 
@@ -961,10 +962,10 @@ void DrawColoredMenuBufItem (int x, int y, int shapenum, int color)
    if (((y-p->topoffset)<0) || ((y-p->topoffset+p->height)>=TEXTUREHEIGHT))
       Error ("DrawColoredMenuBufItem: y is out of range\n");
 
-   buffer = (byte*)menubuf+y+((x-p->leftoffset)*TEXTUREHEIGHT);
+   buffer = (uint8_t*)menubuf+y+((x-p->leftoffset)*TEXTUREHEIGHT);
 
    for (cnt = 0; cnt < p->width; cnt++,buffer+=TEXTUREHEIGHT)
-      CScaleMenuBufPost ((byte *)(p->collumnofs[cnt]+shape),
+      CScaleMenuBufPost ((uint8_t *)(p->collumnofs[cnt]+shape),
                         p->topoffset, buffer);
 }
 
@@ -976,12 +977,12 @@ void DrawColoredMenuBufItem (int x, int y, int shapenum, int color)
 
 void DrawMenuBufPic (int x, int y, int shapenum)
 {
-   byte *buffer;
-   byte *buf;
+   uint8_t *buffer;
+   uint8_t *buf;
    int xx,yy;
    int plane;
-   byte *shape;
-   byte *src;
+   uint8_t *shape;
+   uint8_t *src;
    pic_t *p;
 
    if (MenuBufStarted==false)
@@ -996,9 +997,9 @@ void DrawMenuBufPic (int x, int y, int shapenum)
       Error ("DrawTMenuBufPic: y is out of range\n");
 
 
-   buffer = (byte*)menubuf+(x*TEXTUREHEIGHT)+y;
+   buffer = (uint8_t*)menubuf+(x*TEXTUREHEIGHT)+y;
 
-   src=(byte *)&p->data;
+   src=(uint8_t *)&p->data;
    for (plane=0;plane<4;plane++,buffer+=TEXTUREHEIGHT)
       {
       for (yy = 0; yy < p->height; yy++)
@@ -1022,7 +1023,7 @@ void DrawMenuBufPic (int x, int y, int shapenum)
 
 void DrawTMenuBufBox ( int x, int y, int width, int height )
    {
-   byte *buffer;
+   uint8_t *buffer;
    int   xx;
    int   yy;
    int   pixel;
@@ -1037,7 +1038,7 @@ void DrawTMenuBufBox ( int x, int y, int width, int height )
    if ( ( y < 0 ) || ( y + height ) >= TEXTUREHEIGHT )
       Error ("DrawTMenuBar : y is out of range\n");
 
-   buffer = ( byte * )menubuf + ( x * TEXTUREHEIGHT ) + y;
+   buffer = ( uint8_t * )menubuf + ( x * TEXTUREHEIGHT ) + y;
 
    for ( xx = 0; xx < width; xx++ )
       {
@@ -1061,8 +1062,8 @@ void DrawTMenuBufBox ( int x, int y, int width, int height )
 
 void DrawTMenuBufHLine (int x, int y, int width, bool up)
 {
-   byte *buffer;
-   byte *buf;
+   uint8_t *buffer;
+   uint8_t *buf;
    int xx;
    int plane;
    int pixel;
@@ -1074,7 +1075,7 @@ void DrawTMenuBufHLine (int x, int y, int width, bool up)
    if (y<0)
       Error ("DrawTMenuBufBox: y is out of range\n");
 
-   buffer = (byte*)menubuf+(x*TEXTUREHEIGHT)+y;
+   buffer = (uint8_t*)menubuf+(x*TEXTUREHEIGHT)+y;
 
    if (up)
       shadingtable=colormap+(13<<8);
@@ -1119,8 +1120,8 @@ void DrawTMenuBufHLine (int x, int y, int width, bool up)
 
 void DrawTMenuBufVLine (int x, int y, int height, bool up)
 {
-   byte *buffer;
-   byte *buf;
+   uint8_t *buffer;
+   uint8_t *buf;
    int yy;
    int pixel;
 
@@ -1129,7 +1130,7 @@ void DrawTMenuBufVLine (int x, int y, int height, bool up)
    if ((y<0) || ((y+height)>=TEXTUREHEIGHT))
       Error ("DrawTMenuBufBox: y is out of range\n");
 
-   buffer = (byte*)menubuf+(x*TEXTUREHEIGHT)+y;
+   buffer = (uint8_t*)menubuf+(x*TEXTUREHEIGHT)+y;
 
    if (up)
       shadingtable=colormap+(13<<8);
@@ -1162,9 +1163,9 @@ void DrawTMenuBufVLine (int x, int y, int height, bool up)
 
 void DrawMenuBufPropString (int px, int py, const char *string)
 {
-   byte  pix;
+   uint8_t  pix;
    int   width,height,ht;
-   byte  *source, *dest, *origdest;
+   uint8_t  *source, *dest, *origdest;
    int   ch;
 
 
@@ -1172,13 +1173,13 @@ void DrawMenuBufPropString (int px, int py, const char *string)
       Error("Called DrawMenuBufPropString without menubuf started\n");
 
    ht = CurrentFont->height;
-   dest = origdest = (byte*)menubuf+(px*TEXTUREHEIGHT)+py;
+   dest = origdest = (uint8_t*)menubuf+(px*TEXTUREHEIGHT)+py;
 
    while ((ch = (unsigned char)*string++)!=0)
    {
       ch -= 31;
       width = CurrentFont->width[ch];
-      source = ((byte *)CurrentFont)+CurrentFont->charofs[ch];
+      source = ((uint8_t *)CurrentFont)+CurrentFont->charofs[ch];
       while (width--)
       {
          height = ht;
@@ -1209,9 +1210,9 @@ void DrawMenuBufPropString (int px, int py, const char *string)
 
 void DrawMenuBufIString (int px, int py, const char *string, int color)
 {
-   byte  pix;
+   uint8_t  pix;
    int   width,height,ht;
-   byte  *source, *dest, *origdest;
+   uint8_t  *source, *dest, *origdest;
    int   ch;
 
    if (MenuBufStarted==false)
@@ -1223,7 +1224,7 @@ void DrawMenuBufIString (int px, int py, const char *string, int color)
       }
 
    ht = IFont->height;
-   dest = origdest = (byte*)menubuf+(px*TEXTUREHEIGHT)+py;
+   dest = origdest = (uint8_t*)menubuf+(px*TEXTUREHEIGHT)+py;
 
    PrintX = px;
    PrintY = py;
@@ -1246,7 +1247,7 @@ void DrawMenuBufIString (int px, int py, const char *string, int color)
       ch -= 31;
       width = IFont->width[ ch ];
 
-      source = ( ( byte * )IFont ) + IFont->charofs[ ch ];
+      source = ( ( uint8_t * )IFont ) + IFont->charofs[ ch ];
 
       while (width--)
       {
@@ -1256,7 +1257,7 @@ void DrawMenuBufIString (int px, int py, const char *string, int color)
             pix = *source;
             if ( pix != 0xFE )
                {
-               *dest = ( ( byte )intensitytable[ ( pix << 8 ) + color ] );
+               *dest = ( ( uint8_t )intensitytable[ ( pix << 8 ) + color ] );
                GetIntensityColor( pix );
                }
 
@@ -1283,9 +1284,9 @@ void DrawMenuBufIString (int px, int py, const char *string, int color)
 
 void DrawTMenuBufPropString (int px, int py, const char *string)
 {
-   byte  pix;
+   uint8_t  pix;
    int   width,height,ht;
-   byte  *source, *dest, *origdest;
+   uint8_t  *source, *dest, *origdest;
    int   ch;
 
 
@@ -1293,14 +1294,14 @@ void DrawTMenuBufPropString (int px, int py, const char *string)
       Error("Called DrawTMenuBufPropString without menubuf started\n");
 
    ht = CurrentFont->height;
-   dest = origdest = (byte*)menubuf+(px*TEXTUREHEIGHT)+py;
+   dest = origdest = (uint8_t*)menubuf+(px*TEXTUREHEIGHT)+py;
 
    shadingtable=colormap+(StringShade<<8);
    while ((ch = (unsigned char)*string++)!=0)
    {
       ch -= 31;
       width = CurrentFont->width[ch];
-      source = ((byte *)CurrentFont)+CurrentFont->charofs[ch];
+      source = ((uint8_t *)CurrentFont)+CurrentFont->charofs[ch];
       while (width--)
       {
          height = ht;

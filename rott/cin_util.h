@@ -20,9 +20,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _cin_util_public
 #define _cin_util_public
 
+#include <stdint.h>
 
-void CinematicGetPalette (byte *pal);
-void CinematicSetPalette (byte *pal);
+void CinematicGetPalette (uint8_t *pal);
+void CinematicSetPalette (uint8_t *pal);
 
 #endif
 

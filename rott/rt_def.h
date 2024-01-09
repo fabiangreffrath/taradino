@@ -261,7 +261,6 @@ long filelength(int handle);
 ///////////////////      GLOBAL DATA TYPES ///////////////////////////////
 
 
-typedef unsigned char           byte;
 typedef unsigned short int      word;
 typedef unsigned int            longword;
 

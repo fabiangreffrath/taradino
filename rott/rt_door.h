@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_door_public
 
 #include <stdbool.h>
+#include <stdint.h>
 
 //***************************************************************************
 //
@@ -92,13 +93,13 @@ typedef struct elevator
 typedef struct doorstruct
 {
 		  thingtype   which;
-		  byte        tilex,tiley;
+		  uint8_t        tilex,tiley;
 		  word        texture;
 		  word        alttexture;
 		  word        sidepic;
 		  word        basetexture;
-		  byte        lock;
-		  byte        flags;
+		  uint8_t        lock;
+		  uint8_t        flags;
 		  short int   ticcount;
 		  signed char eindex;
 		  bool     vertical;
@@ -112,17 +113,17 @@ typedef struct pwallstruct
 		  thingtype      which;
 		  int       x,y;
 		  int       momentumx,momentumy;
-		  byte      areanumber;
-		  byte      lock;
-		  byte      dir;
-		  byte      tilex,tiley;
-		  byte      num;
-		  byte      speed;
+		  uint8_t      areanumber;
+		  uint8_t      lock;
+		  uint8_t      dir;
+		  uint8_t      tilex,tiley;
+		  uint8_t      num;
+		  uint8_t      speed;
 		  word      texture;
 		  int       soundhandle;
 		  enum      {pw_npushed,pw_pushing,pw_pushed,pw_moving}       action;
 		  int       state;
-        byte      flags;
+        uint8_t      flags;
 } pwallobj_t;
 
 typedef struct tplate
@@ -131,12 +132,12 @@ typedef struct tplate
   struct tplate * nextaction;
   struct tplate * prevaction;
   intptr_t whichobj;
-  byte tictime;
-  byte ticcount;
-  byte triggered;
-  byte done;
-  byte complete;
-  byte clocktype;
+  uint8_t tictime;
+  uint8_t ticcount;
+  uint8_t triggered;
+  uint8_t done;
+  uint8_t complete;
+  uint8_t clocktype;
 } touchplatetype;
 
 #define MW_SHOOTABLE       0x01
@@ -159,7 +160,7 @@ typedef struct tplate
 typedef struct mwall
 {
   thingtype      which;
-  byte      tilex,tiley;
+  uint8_t      tilex,tiley;
   signed char areanumber;
   signed short toptexture;
   signed short midtexture;
@@ -176,7 +177,7 @@ typedef struct mwall
 typedef struct animmwall
 {
   word     num;
-  byte     count;
+  uint8_t     count;
   signed char ticcount;
   struct animmwall *next;
   struct animmwall *prev;
@@ -187,9 +188,9 @@ extern elevator_t          ELEVATOR[MAXELEVATORS];
 extern int                 _numelevators;
 extern animmaskedwallobj_t *FIRSTANIMMASKEDWALL,*LASTANIMMASKEDWALL;
 extern maskedwallobj_t     *FIRSTMASKEDWALL,*LASTMASKEDWALL;
-extern byte                touchindices[MAPSIZE][MAPSIZE],lasttouch;
+extern uint8_t                touchindices[MAPSIZE][MAPSIZE],lasttouch;
 extern touchplatetype      *touchplate[MAXTOUCHPLATES],*lastaction[MAXTOUCHPLATES];
-extern byte                TRIGGER[MAXTOUCHPLATES];
+extern uint8_t                TRIGGER[MAXTOUCHPLATES];
 
 extern doorobj_t           *doorobjlist[MAXDOORS];
 extern int                 doornum;
@@ -198,7 +199,7 @@ extern int                 maskednum;
 extern pwallobj_t          *pwallobjlist[MAXPWALLS];
 extern int                 pwallnum;
 																																			 // 0xffff = fully open
-extern byte                areaconnect[NUMAREAS][NUMAREAS];
+extern uint8_t                areaconnect[NUMAREAS][NUMAREAS];
 extern bool             areabyplayer[NUMAREAS];
 
 
@@ -242,14 +243,14 @@ int  UpdateMaskedWall (int num);
 
 void FixDoorAreaNumbers ( void );
 void FixMaskedWallAreaNumbers ( void );
-void SaveMaskedWalls(byte ** buf, int * size);
-void LoadMaskedWalls(byte * buf, int size);
-void SaveDoors(byte ** buf, int * size);
-void SaveTouchPlates(byte ** buf, int * size);
-void LoadDoors(byte * buf, int size);
-void LoadTouchPlates(byte * buf, int size);
-void SavePushWalls(byte ** buf, int * sz);
-void LoadPushWalls(byte * bufptr, int sz);
+void SaveMaskedWalls(uint8_t ** buf, int * size);
+void LoadMaskedWalls(uint8_t * buf, int size);
+void SaveDoors(uint8_t ** buf, int * size);
+void SaveTouchPlates(uint8_t ** buf, int * size);
+void LoadDoors(uint8_t * buf, int size);
+void LoadTouchPlates(uint8_t * buf, int size);
+void SavePushWalls(uint8_t ** buf, int * sz);
+void LoadPushWalls(uint8_t * bufptr, int sz);
 
 void DeactivateAnimMaskedWall(animmaskedwallobj_t* amwall);
 void ActivateAnimMaskedWall(animmaskedwallobj_t* amwall);
@@ -259,9 +260,9 @@ void KillAnimatedMaskedWall ( animmaskedwallobj_t * temp );
 
 void DoAnimatedMaskedWalls ( void );
 
-void SaveElevators(byte ** buffer,int *size);
+void SaveElevators(uint8_t ** buffer,int *size);
 
-void LoadElevators(byte * buffer,int size);
+void LoadElevators(uint8_t * buffer,int size);
 
 void MakeWideDoorVisible ( int doornum );
 void LinkedCloseDoor (intptr_t door);

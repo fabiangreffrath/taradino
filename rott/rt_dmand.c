@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <stdbool.h>
+#include <stdint.h>
 #include "rt_def.h"
 #include "rt_util.h"
 #include "rt_sound.h"
@@ -30,7 +31,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 static bool Recording=false;
 static bool Feeder=false;
-static byte * RecordingBuffer;
+static uint8_t * RecordingBuffer;
 static int Playingvoice;
 static int RecordingPointer;
 static int FeederPointer;
@@ -140,7 +141,7 @@ void SD_StopIncomingSound ( void )
 //
 //***************************************************************************
 
-void SD_UpdateIncomingSound ( byte * ptr, word length )
+void SD_UpdateIncomingSound ( uint8_t * ptr, word length )
 {
    int amount;
 
@@ -331,7 +332,7 @@ bool SD_RecordingActive ( void )
 //
 //***************************************************************************
 
-recordstate SD_GetSoundData ( byte * data, word length )
+recordstate SD_GetSoundData ( uint8_t * data, word length )
 {
    recordstate status=rs_data;
    int amount;

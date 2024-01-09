@@ -17,6 +17,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+#include <stdint.h>
+
 #include "cin_glob.h"
 #include "modexlib.h"
 
@@ -31,7 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ==============
 */
 
-void CinematicGetPalette (byte *pal)
+void CinematicGetPalette (uint8_t *pal)
 {
 }
 
@@ -45,6 +47,6 @@ void CinematicGetPalette (byte *pal)
 ==============
 */
 
-void CinematicSetPalette (byte *pal)
+void CinematicSetPalette (uint8_t *pal)
 {
 }

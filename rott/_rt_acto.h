@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_actor_private
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #define MAXGIBS            600
 #define HAAPT              24
@@ -257,8 +258,8 @@ typedef struct  sat
 	short        stateindex;
 	short        dirchoosetime;
 
-	byte         areanumber;
-	byte         obclass;
+	uint8_t         areanumber;
+	uint8_t         obclass;
 	signed char  door_to_open;
 	signed char  dir;
 
@@ -267,7 +268,7 @@ typedef struct  sat
 
 typedef struct
  {thingtype which;
-  byte tilex,tiley;
+  uint8_t tilex,tiley;
   int32_t x,y,z;
  }tpoint;
 

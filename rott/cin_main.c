@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -233,7 +234,7 @@ void PlayMovie ( char * name, bool uselumpy )
 }
 
 int cin_iscale;
-byte *cin_source;
+uint8_t *cin_source;
 int cin_texturemid;
 int cin_ycenter;
 int cin_yh;
@@ -241,12 +242,12 @@ int cin_yl;
 
 /* f_scale.asm */
 
-void R_DrawFilmColumn (byte * buf)
+void R_DrawFilmColumn (uint8_t * buf)
 {
 	// This is *NOT* 100% correct - DDOI
 	int count;
 	int frac, fracstep;
-	byte *dest;
+	uint8_t *dest;
 
 	count = cin_yh - cin_yl;
 	if (count < 0) return;
@@ -263,7 +264,7 @@ void R_DrawFilmColumn (byte * buf)
 	}
 }
 
-void DrawFilmPost (byte * buf, byte * src, int height)
+void DrawFilmPost (uint8_t * buf, uint8_t * src, int height)
 {
 	while (height--) { 
 		*buf = *src;

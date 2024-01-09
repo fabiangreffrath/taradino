@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_draw_public
 #define _rt_draw_public
 
+#include <stdint.h>
+
 //***************************************************************************
 //
 //    RT_DRAW.C - Draw-o-rama
@@ -31,7 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 extern int whereami;
 
-extern byte * shadingtable;            // Shading table for DrawPost
+extern uint8_t * shadingtable;            // Shading table for DrawPost
 
 typedef struct
 {
@@ -43,13 +45,13 @@ int shapesize;
 int x1,x2,h1,h2;
 int texturestart;
 int textureend;
-byte * colormap;
+uint8_t * colormap;
 
 } visobj_t;
 
 
 extern  word             tilemap[MAPSIZE][MAPSIZE];    // wall values only
-extern  byte             spotvis[MAPSIZE][MAPSIZE];
+extern  uint8_t             spotvis[MAPSIZE][MAPSIZE];
 
 extern int tics;
 extern int wstart;
@@ -78,7 +80,7 @@ extern visobj_t vislist[MAXVISIBLE];
 extern visobj_t *visptr,*visstep,*farthest;
 
 extern long     xintercept,yintercept;
-extern byte     mapseen[MAPSIZE][MAPSIZE];
+extern uint8_t     mapseen[MAPSIZE][MAPSIZE];
 extern unsigned long * lights;
 
 extern int hp_startfrac;

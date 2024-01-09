@@ -18,6 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -68,7 +69,7 @@ bool  Paused;
 char LastASCII;
 volatile int LastScan;
 
-byte Joy_xb,
+uint8_t Joy_xb,
      Joy_yb,
      Joy_xs,
      Joy_ys;
@@ -1052,13 +1053,13 @@ bool IN_UserInput (long delay)
 ===================
 */
 
-byte IN_JoyButtons (void)
+uint8_t IN_JoyButtons (void)
 {
    unsigned joybits = 0;
 
    joybits = sdl_sticks_joybits;
 
-   return (byte) joybits;
+   return (uint8_t) joybits;
 }
 
 

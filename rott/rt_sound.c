@@ -32,6 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_rand.h"
 #include "watcom.h"
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -815,7 +816,7 @@ static song_t rottsongs[MAXSONGS] = {
       };
 #endif
 
-static byte * currentsong;
+static uint8_t * currentsong;
 static int MU_Started=false;
 static int lastsongnumber=-1;
 int storedposition=0;
@@ -1231,10 +1232,10 @@ void MU_SetSongPosition ( int position )
 //
 //***************************************************************************
 
-void MU_SaveMusic (byte ** buf, int * size)
+void MU_SaveMusic (uint8_t ** buf, int * size)
 {
    int unitsize;
-   byte *ptr;
+   uint8_t *ptr;
    int vsize;
    int i;
 
@@ -1250,7 +1251,7 @@ void MU_SaveMusic (byte ** buf, int * size)
 
 
    *size = unitsize;
-   *buf = (byte *) SafeMalloc (*size);
+   *buf = (uint8_t *) SafeMalloc (*size);
 
    ptr = *buf;
 
@@ -1305,10 +1306,10 @@ void MU_SaveMusic (byte ** buf, int * size)
 //
 //***************************************************************************
 
-void MU_LoadMusic (byte * buf, int size)
+void MU_LoadMusic (uint8_t * buf, int size)
 {
    int unitsize;
-   byte *ptr;
+   uint8_t *ptr;
    int i;
    int songnumber;
    bool differentsong=false;

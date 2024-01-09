@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -46,7 +47,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 rottcom_t   *	rottcom;
 int badpacket;
 int consoleplayer;
-byte ROTTpacket[MAXCOMBUFFERSIZE];
+uint8_t ROTTpacket[MAXCOMBUFFERSIZE];
 int controlsynctime;
 
 // LOCAL VARIABLES
@@ -215,7 +216,7 @@ bool ReadPacket (void)
    if (rottcom->remotenode!=-1)
       {
       // calculate crc on packet
-      crc=CalculateCRC ((byte *)&rottcom->data[0], rottcom->datalength-sizeof(word));
+      crc=CalculateCRC ((uint8_t *)&rottcom->data[0], rottcom->datalength-sizeof(word));
 
       // get crc inside packet
       sentcrc=*((word *)(&rottcom->data[rottcom->datalength-sizeof(word)]));
@@ -273,7 +274,7 @@ void WritePacket (void * buffer, int len, int destination)
       }
 
    // copy local buffer into realmode buffer
-   memcpy((byte *)&(rottcom->data[0]),(byte *)buffer,len);
+   memcpy((uint8_t *)&(rottcom->data[0]),(uint8_t *)buffer,len);
 
    // calculate CRC
    crc=CalculateCRC (buffer, len);
@@ -284,7 +285,7 @@ void WritePacket (void * buffer, int len, int destination)
    // set size of realmode packet including crc
    rottcom->datalength=len+sizeof(word);
 
-   if (*((byte *)buffer)==0)
+   if (*((uint8_t *)buffer)==0)
        Error("Packet type = 0\n");
 
    if (networkgame==true)

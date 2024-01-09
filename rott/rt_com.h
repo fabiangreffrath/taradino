@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_com_public
 
 #include <stdbool.h>
+#include <stdint.h>
 
 //***************************************************************************
 //
@@ -34,7 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 extern int badpacket;
 extern int consoleplayer;
-extern byte ROTTpacket[MAXCOMBUFFERSIZE];
+extern uint8_t ROTTpacket[MAXCOMBUFFERSIZE];
 
 extern int controlsynctime;
 

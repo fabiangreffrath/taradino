@@ -41,6 +41,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_rand.h"
 #include "engine.h"
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -71,13 +72,13 @@ elevator_t     ELEVATOR[MAXELEVATORS];
 int            _numelevators;
 animmaskedwallobj_t* FIRSTANIMMASKEDWALL,*LASTANIMMASKEDWALL;
 maskedwallobj_t* FIRSTMASKEDWALL,*LASTMASKEDWALL;
-byte             touchindices[MAPSIZE][MAPSIZE],lasttouch;
+uint8_t             touchindices[MAPSIZE][MAPSIZE],lasttouch;
 touchplatetype   *touchplate[MAXTOUCHPLATES],*lastaction[MAXTOUCHPLATES];
 
-byte             numactions[MAXTOUCHPLATES];
+uint8_t             numactions[MAXTOUCHPLATES];
 int              totalactions;
 
-byte             TRIGGER[MAXTOUCHPLATES];
+uint8_t             TRIGGER[MAXTOUCHPLATES];
 doorobj_t	   *doorobjlist[MAXDOORS];
 int			   doornum;
 maskedwallobj_t *maskobjlist[MAXMASKED];
@@ -86,7 +87,7 @@ int            maskednum;
 pwallobj_t     *pwallobjlist[MAXPWALLS];
 int            pwallnum;
 
-byte	         areaconnect[NUMAREAS][NUMAREAS];
+uint8_t	         areaconnect[NUMAREAS][NUMAREAS];
 
 bool	      areabyplayer[NUMAREAS];
 
@@ -299,9 +300,9 @@ int GetIndexForAction(void (*action)(intptr_t))
 }
 
 
-void SaveTouchPlates(byte ** buffer,int *size)
+void SaveTouchPlates(uint8_t ** buffer,int *size)
 {int i,k;
- byte * tptr;
+ uint8_t * tptr;
  touchplatetype *temp;
  saved_touch_type dummy;
 
@@ -309,7 +310,7 @@ void SaveTouchPlates(byte ** buffer,int *size)
  *size += sizeof(numactions);
  *size += sizeof(saved_touch_type)*totalactions;
 
- *buffer = (byte *)SafeMalloc(*size);
+ *buffer = (uint8_t *)SafeMalloc(*size);
  tptr = *buffer;
  memcpy(tptr,&TRIGGER[0],sizeof(TRIGGER));
  tptr+=sizeof(TRIGGER);
@@ -375,7 +376,7 @@ statobj_t* GetStatForIndex(int index)
 }
 
 
-void LoadTouchPlates(byte * buffer, int size)
+void LoadTouchPlates(uint8_t * buffer, int size)
 {touchplatetype *temp;
  int i,savedactions,loadedactions,index=0;
  saved_touch_type dummy;
@@ -3759,11 +3760,11 @@ void WallMoving (int pwall)
 =
 =================
 */
-void SavePushWalls(byte ** buf, int * sz)
+void SavePushWalls(uint8_t ** buf, int * sz)
 {
   int unitsize;
   pwallobj_t * pw;
-  byte * bufptr;
+  uint8_t * bufptr;
   int i;
   int size;
 
@@ -3823,7 +3824,7 @@ void SavePushWalls(byte ** buf, int * sz)
 =
 =================
 */
-void LoadPushWalls(byte * bufptr, int sz)
+void LoadPushWalls(uint8_t * bufptr, int sz)
 {
   int unitsize;
   pwallobj_t * pw;
@@ -3939,11 +3940,11 @@ void LoadPushWalls(byte * bufptr, int sz)
 =
 =================
 */
-void SaveMaskedWalls(byte ** buf, int * size)
+void SaveMaskedWalls(uint8_t ** buf, int * size)
 {
   int unitsize;
   maskedwallobj_t * mw;
-  byte * bufptr;
+  uint8_t * bufptr;
   int i;
   int sz;
 
@@ -3978,7 +3979,7 @@ void SaveMaskedWalls(byte ** buf, int * size)
 =
 =================
 */
-void LoadMaskedWalls(byte * bufptr, int sz)
+void LoadMaskedWalls(uint8_t * bufptr, int sz)
 {
   int unitsize;
   maskedwallobj_t * mw;
@@ -4024,16 +4025,16 @@ void LoadMaskedWalls(byte * bufptr, int sz)
 =================
 */
 
-void SaveDoors (byte ** buf, int * size)
+void SaveDoors (uint8_t ** buf, int * size)
 {
    int door;
    int doorsave;
-   byte doorflag;
-   byte doorlocked;
+   uint8_t doorflag;
+   uint8_t doorlocked;
    signed char dooreindex;
    short int doortime;
    int unitsize;
-   byte *ptr;
+   uint8_t *ptr;
 
    if (doornum==0)
       {
@@ -4043,7 +4044,7 @@ void SaveDoors (byte ** buf, int * size)
       }
 
    //
-   // Size = (int + byte + byte) * numdoors
+   // Size = (int + uint8_t + byte) * numdoors
    //
 
    unitsize=0;
@@ -4054,7 +4055,7 @@ void SaveDoors (byte ** buf, int * size)
    unitsize+=sizeof(dooreindex);
 
    *size = unitsize*doornum;
-   *buf = (byte *) SafeMalloc (*size);
+   *buf = (uint8_t *) SafeMalloc (*size);
 
    ptr = *buf;
 
@@ -4089,15 +4090,15 @@ void SaveDoors (byte ** buf, int * size)
 =================
 */
 
-void LoadDoors (byte * buf, int size)
+void LoadDoors (uint8_t * buf, int size)
 {
    int door;
    int doorsave;
-   byte doorflag;
-   byte doorlocked;
+   uint8_t doorflag;
+   uint8_t doorlocked;
    signed char dooreindex;
    short int doortime;
-   byte *ptr;
+   uint8_t *ptr;
    int unitsize;
    int num;
 
@@ -4171,13 +4172,13 @@ void LoadDoors (byte * buf, int size)
 =====================
 */
 
-void SaveElevators(byte ** buffer,int *size)
+void SaveElevators(uint8_t ** buffer,int *size)
 {int i;
- byte * tptr;
+ uint8_t * tptr;
 
  *size = _numelevators*sizeof(elevator_t);
 
- *buffer = (byte *)SafeMalloc(*size);
+ *buffer = (uint8_t *)SafeMalloc(*size);
  tptr = *buffer;
 
  for(i=0;i<_numelevators;i++)
@@ -4196,7 +4197,7 @@ void SaveElevators(byte ** buffer,int *size)
 =====================
 */
 
-void LoadElevators(byte * buffer,int size)
+void LoadElevators(uint8_t * buffer,int size)
 {int i;
 
  _numelevators = size/sizeof(elevator_t);

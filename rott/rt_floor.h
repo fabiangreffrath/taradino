@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_floor_public
 
 #include <stdbool.h>
+#include <stdint.h>
 
 //***************************************************************************
 //
@@ -36,7 +37,7 @@ extern int		mr_yfrac;
 extern int     sky;      //Whether Parallax is on or off
 void DrawPlanes (void);
 void SetPlaneViewSize( void );
-void MakeSkyTile (byte * tile);
+void MakeSkyTile (uint8_t * tile);
 void DrawFullSky( void );
 bool SkyExists (void);
 

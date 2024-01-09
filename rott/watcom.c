@@ -1,5 +1,6 @@
-#include "rt_def.h"
+#include <stdint.h>
 
+#include "rt_def.h"
 #include "watcom.h"
 
 /* 

@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_stat_private
 #define _rt_stat_private
 
+#include <stdint.h>
+
 void        AddStatic(statobj_t*);
 void        AddAnimStatic(statobj_t*);
 void        PreCacheStaticSounds(int);
@@ -51,7 +53,7 @@ typedef struct sas
   signed char  itemnumber;
   short int    areanumber;
   short int    whichstat;
-  byte         numanims;
+  uint8_t         numanims;
   int          linked_to;
 }saved_stat_type;
 

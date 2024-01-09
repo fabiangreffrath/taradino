@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_cfg_public
 
 #include <stdbool.h>
+#include <stdint.h>
 
 //****************************************************************************
 //
@@ -63,7 +64,7 @@ extern char    *ApogeePath;
 extern int     DefaultDifficulty;
 extern int     DefaultPlayerCharacter;
 extern int     DefaultPlayerColor;
-extern byte    passwordstring[20];
+extern uint8_t    passwordstring[20];
 
 typedef struct
 {
@@ -81,7 +82,7 @@ extern AlternateInformation BattleLevels;
 #define MAXMACROS      10
 
 typedef struct {
-   byte avail;
+   uint8_t avail;
    char macro[MAXMACROLENGTH+1];
 } MacroList;
 

@@ -34,6 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_menu.h"
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 
 #include "rt_main.h"
@@ -77,17 +78,17 @@ int    centeryfrac;
 int    fulllight;
 int    weaponscale;
 int    viewsize;
-byte * colormap;
-byte * redmap;
-byte * greenmap;
-byte * playermaps[MAXPLAYERCOLORS];
+uint8_t * colormap;
+uint8_t * redmap;
+uint8_t * greenmap;
+uint8_t * playermaps[MAXPLAYERCOLORS];
 //short  pixelangle[MAXVIEWWIDTH];
 short  pixelangle[800];
-byte   gammatable[GAMMAENTRIES];
+uint8_t   gammatable[GAMMAENTRIES];
 int    gammaindex;
 int    focalwidth=160;
 int    yzangleconverter;
-byte   uniformcolors[MAXPLAYERCOLORS]={
+uint8_t   uniformcolors[MAXPLAYERCOLORS]={
                                        25,
                                        222,
                                        29,
@@ -197,8 +198,8 @@ void CalcProjection ( void )
     int   i;
     int   frac;
     int   intang;
-    byte * table;
-    byte * ptr;
+    uint8_t * table;
+    uint8_t * ptr;
     int   length;
     int  * pangle;
 
@@ -460,7 +461,7 @@ void LoadColorMap( void )
 	lump = W_GetNumForName("colormap");
 	length = W_LumpLength (lump) + 255;
 	colormap = SafeMalloc (length);
-	colormap = (byte *)( ((intptr_t)colormap + 255)&~0xff);
+	colormap = (uint8_t *)( ((intptr_t)colormap + 255)&~0xff);
 	W_ReadLump (lump,colormap);
 
 // Fix fire colors in colormap
@@ -474,7 +475,7 @@ void LoadColorMap( void )
 	lump = W_GetNumForName("specmaps");
 	length = W_LumpLength (lump+1) + 255;
 	redmap = SafeMalloc (length);
-	redmap = (byte *)( ((intptr_t)redmap + 255)&~0xff);
+	redmap = (uint8_t *)( ((intptr_t)redmap + 255)&~0xff);
 	W_ReadLump (lump+1,redmap);
    greenmap = redmap+(16*256);
 
@@ -487,7 +488,7 @@ void LoadColorMap( void )
          {
 	      length = W_LumpLength (lump+i) + 255;
 	      playermaps[i] = SafeMalloc (length);
-	      playermaps[i] = (byte *)( ((intptr_t)playermaps[i] + 255)&~0xff);
+	      playermaps[i] = (uint8_t *)( ((intptr_t)playermaps[i] + 255)&~0xff);
 	      W_ReadLump (lump+i,playermaps[i]);
          }
       }

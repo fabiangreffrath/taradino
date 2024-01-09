@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_def.h"
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 #include "sprites.h"
 #include <stdio.h>
@@ -632,10 +633,10 @@ void SetupAnimatedWall(int which)
 ===============
 */
 
-void SaveStatics (byte **buffer, int * size)
+void SaveStatics (uint8_t **buffer, int * size)
 {statobj_t * temp;
  saved_stat_type dummy;
- byte * tptr;
+ uint8_t * tptr;
  int count;
 
  if (statcount==0)
@@ -645,7 +646,7 @@ void SaveStatics (byte **buffer, int * size)
 	 return;
 	 }
  *size = statcount*sizeof(saved_stat_type);
- *buffer = (byte *)SafeMalloc(*size);
+ *buffer = (uint8_t *)SafeMalloc(*size);
  tptr = *buffer;
 
  for(count=0,temp=FIRSTSTAT;temp;temp=temp->statnext)
@@ -1002,7 +1003,7 @@ void PreCacheStaticFrames(statobj_t*temp)
 
 
 
-void LoadStatics( byte * buffer, int size)
+void LoadStatics( uint8_t * buffer, int size)
 {saved_stat_type dummy = {0};
  int stcount,i;
  statobj_t*temp;
@@ -1601,9 +1602,9 @@ void PreCacheStaticSounds (int itemnumber)
 ===============
 */
 
-void SaveSwitches(byte ** buffer, int * size)
+void SaveSwitches(uint8_t ** buffer, int * size)
 {int numswitches,i;
- byte * tptr;
+ uint8_t * tptr;
 
  numswitches = lastswitch-&switches[0];
  if (numswitches==0)
@@ -1614,7 +1615,7 @@ void SaveSwitches(byte ** buffer, int * size)
 	 }
  *size = numswitches*sizeof(wall_t);
 
- *buffer = (byte *)SafeMalloc(*size);
+ *buffer = (uint8_t *)SafeMalloc(*size);
  tptr = *buffer;
 
  for(i=0;i<numswitches;i++)
@@ -1633,7 +1634,7 @@ void SaveSwitches(byte ** buffer, int * size)
 ===============
 */
 
-void LoadSwitches (byte * buffer, int size)
+void LoadSwitches (uint8_t * buffer, int size)
 {int numswitches,i,tilex,tiley;
 
  numswitches = size/sizeof(wall_t);

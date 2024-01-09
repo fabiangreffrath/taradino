@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 // W_wad.c
 
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
@@ -364,7 +365,7 @@ char *  W_GetNameForNum (int i)
 ====================
 */
 int readinglump;
-byte * lumpdest;
+uint8_t * lumpdest;
 void W_ReadLump (int lump, void *dest)
 {
         int                     c;

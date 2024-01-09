@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //***************************************************************************
 
 #include <stdbool.h>
+#include <stdint.h>
 #include "rottnet.h"
 
 
@@ -54,7 +55,7 @@ typedef struct
  int nummembers;
  int uniformcolor;
  int tilex,tiley;
- byte dir;
+ uint8_t dir;
 
 } teamtype;
 
@@ -62,10 +63,10 @@ extern teamtype TEAM[MAXPLAYERS];
 
 typedef struct
 { thingtype   which;
-  byte        flags;
-  byte        hitpoints;
+  uint8_t        flags;
+  uint8_t        hitpoints;
   word        tile;
-  byte        tilex,tiley;
+  uint8_t        tilex,tiley;
 
 
 } wall_t;
@@ -110,8 +111,8 @@ extern _2dvec SPAWNLOC[MAXSPAWNLOCATIONS],FIRST,SECOND;
 typedef struct
  {int time1;
   int time2;
-  byte points_to_tilex;
-  byte points_to_tiley;
+  uint8_t points_to_tilex;
+  uint8_t points_to_tiley;
   int linkindex;
  }str_clock;
 

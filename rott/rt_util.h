@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_util_public
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #define ERRORVERSIONROW 1
 #define ERRORVERSIONCOL 67
@@ -36,7 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "develop.h"
 
 extern  int    egacolor[16];
-extern  byte   *  origpal;
+extern  uint8_t   *  origpal;
 extern  int      _argc;
 extern  char **  _argv;
 
@@ -74,20 +75,20 @@ void  SwapIntelShort(short *s);
 void  SwapIntelLongArray (int *l, int num);
 void  SwapIntelShortArray (short *s, int num);
 int   US_CheckParm (char *parm, char **strings);
-byte  BestColor (int r, int g, int b, byte *palette);
+uint8_t  BestColor (int r, int g, int b, uint8_t *palette);
 int   atan2_appx(int,int);
 int   FindDistance(int ix, int iy);
 int   Find_3D_Distance(int ix, int iy, int iz);
-void  SetPalette ( byte * pal );
-void  SetaPalette ( byte * pal );
+void  SetPalette ( uint8_t * pal );
+void  SetaPalette ( uint8_t * pal );
 void  FindEGAColors ( void );
 void  VL_FillPalette (int red, int green, int blue);
 void  VL_SetColor  (int color, int red, int green, int blue);
 void  VL_GetColor  (int color, int *red, int *green, int *blue);
-void  VL_SetPalette (byte *palette);
-void  VL_GetPalette (byte *palette);
+void  VL_SetPalette (uint8_t *palette);
+void  VL_GetPalette (uint8_t *palette);
 void  UL_printf (char *str);
-void  VL_NormalizePalette (byte *palette);
+void  VL_NormalizePalette (uint8_t *palette);
 void  MapDebug (char *error, ...) __attribute__((format(printf,1,2)));
 void  OpenMapDebug ( void );
 void  UL_ColorBox (int x, int y, int w, int h, int color);

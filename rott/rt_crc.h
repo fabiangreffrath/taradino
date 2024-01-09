@@ -17,8 +17,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
+#include <stdint.h>
+
 #include "rt_def.h"
 
 int updatecrc(int,int);
-word CalculateCRC (byte *source, unsigned size);
+word CalculateCRC (uint8_t *source, unsigned size);
 

@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_game_public
 
 #include <stdbool.h>
+#include <stdint.h>
 
 //***************************************************************************
 //
@@ -52,10 +53,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 typedef struct
 {
    char  message[30];
-   byte  episode;
-   byte  area;
-   byte  version;
-   byte  picture[16000];
+   uint8_t  episode;
+   uint8_t  area;
+   uint8_t  version;
+   uint8_t  picture[16000];
    word  mapcrc;
    AlternateInformation info;
 } gamestorage_t;
@@ -142,7 +143,7 @@ int GetLevel (int episode, int mapon);
 void DrawPause (void);
 void DrawPauseXY (int x, int y);
 
-void DrawColoredMPPic (int xpos, int ypos, int width, int height, int heightmod, byte *src, bool bufferofsonly, int color);
+void DrawColoredMPPic (int xpos, int ypos, int width, int height, int heightmod, uint8_t *src, bool bufferofsonly, int color);
 void StatusDrawColoredPic (unsigned x, unsigned y, pic_t *nums, bool bufferofsonly, int color);
 
 void ClearTriads (playertype * pstate);

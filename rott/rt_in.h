@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_in_public
 
 #include <stdbool.h>
+#include <stdint.h>
 #include "develop.h"
 #include "rottnet.h"
 
@@ -68,7 +69,7 @@ typedef  enum
    dir_None
 } Direction;
 
-typedef byte ScanCode;
+typedef uint8_t ScanCode;
 
 typedef  enum
 {
@@ -155,7 +156,7 @@ extern ControlType Controls[MAXPLAYERS]; */
 extern char LastASCII;
 extern volatile int LastScan;
 
-extern byte Joy_xb,
+extern uint8_t Joy_xb,
             Joy_yb,
             Joy_xs,
             Joy_ys;
@@ -200,7 +201,7 @@ void INL_SetJoyScale (word joy);
 void IN_SetupJoy (word joy, word minx, word maxx, word miny, word maxy);
 bool INL_StartJoy (word joy);
 void INL_ShutJoy (word joy);
-byte IN_JoyButtons (void);
+uint8_t IN_JoyButtons (void);
 void IN_UpdateKeyboard (void);
 void IN_ClearKeyboardQueue (void);
 int IN_InputUpdateKeyboard (void);

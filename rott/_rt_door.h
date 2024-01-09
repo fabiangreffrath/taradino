@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_door_private
 #define _rt_door_private
 
+#include <stdint.h>
+
 #define OPENTICS	165
 
 typedef struct tp
@@ -27,11 +29,11 @@ typedef struct tp
   signed char actionindex;
   signed char swapactionindex;
   int         whichobj;
-  byte        tictime;
-  byte        ticcount;
-  byte        triggered;
-  byte        complete;
-  byte        done;
+  uint8_t        tictime;
+  uint8_t        ticcount;
+  uint8_t        triggered;
+  uint8_t        complete;
+  uint8_t        done;
  } saved_touch_type;
 
 

@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _cin_def_public
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #define MAXCINEMATICEVENTS 100
 #define MAXCINEMATICACTORS 30
@@ -93,7 +94,7 @@ typedef struct
    int dx;
    int yoffset;
    int height;
-   byte * data;
+   uint8_t * data;
    } backevent;
 
 typedef struct

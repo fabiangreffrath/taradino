@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "profile.h"
 #include "rt_def.h"
 #include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 
 #include "watcom.h"
@@ -78,11 +79,11 @@ int iG_masked;
 
 int whereami=-1;
 
-byte * shadingtable;
+uint8_t * shadingtable;
 
 word   tilemap[MAPSIZE][MAPSIZE]; // wall values only
-byte   spotvis[MAPSIZE][MAPSIZE];
-byte   mapseen[MAPSIZE][MAPSIZE];
+uint8_t   spotvis[MAPSIZE][MAPSIZE];
+uint8_t   mapseen[MAPSIZE][MAPSIZE];
 unsigned long * lights;
 
 int         wstart;
@@ -187,7 +188,7 @@ static const int weaponshape[NUMWEAPGRAPHICS] =
 		};
 
 void SetColorLightLevel (int x, int y, visobj_t * sprite, int dir, int color, int fullbright);
-void DrawRotatedScreen(int cx, int cy, byte *destscreen, int angle, int scale, int masked);
+void DrawRotatedScreen(int cx, int cy, uint8_t *destscreen, int angle, int scale, int masked);
 void InterpolateMaskedWall (visobj_t * plane);
 void InterpolateDoor (visobj_t * plane);
 void InterpolateWall (visobj_t * plane);
@@ -202,8 +203,8 @@ void InterpolateWall (visobj_t * plane);
 
 void BuildTables (void)
 {
-  byte * table;
-  byte * ptr;
+  uint8_t * table;
+  uint8_t * ptr;
   int   length;
   int   i;
 
@@ -268,7 +269,7 @@ void BuildTables (void)
 //
 // get gamma table
 //
-   memcpy(&gammatable[0],ptr,length*sizeof(byte));
+   memcpy(&gammatable[0],ptr,length*sizeof(uint8_t));
    table=W_CacheLumpName("tables",PU_CACHE, CvtNull, 1);
 
    costable = (int32_t *)&(sintable[FINEANGLES/4]);
@@ -798,7 +799,7 @@ void DrawScaleds (void)
 
   int   i,numvisible;
   int   gx,gy;
-  byte   *visspot;
+  uint8_t   *visspot;
   bool result;
   statobj_t *statptr;
   objtype   *obj;
@@ -1479,7 +1480,7 @@ void SetColorLightLevel (int x, int y, visobj_t * sprite, int dir, int color, in
    int lv;
    int intercept;
    int height;
-   byte * map;
+   uint8_t * map;
 
 
    whereami=11;
@@ -1617,13 +1618,13 @@ void SetWallLightLevel (wallcast_t * post)
 ====================
 */
 
-void DrawWallPost ( wallcast_t * post, byte * buf)
+void DrawWallPost ( wallcast_t * post, uint8_t * buf)
 {
    int ht;
    int topscreen;
    int bottomscreen;
-   byte * src;
-   byte * src2;
+   uint8_t * src;
+   uint8_t * src2;
 
    whereami=42;
    if (post->lump)
@@ -1733,7 +1734,7 @@ bottomcheck:
 
 void   DrawWalls (void)
 {
-   byte * buf;
+   uint8_t * buf;
    int plane;
    wallcast_t * post;
 
@@ -1745,7 +1746,7 @@ void   DrawWalls (void)
       {
          {
          VGAMAPMASK((1<<plane)+(1<<(plane+1)));
-         buf=(byte *)(bufferofs);
+         buf=(uint8_t *)(bufferofs);
          for (post=&posts[plane];post<&posts[viewwidth];post+=2,buf+=2)
             {
             SetWallLightLevel(post);
@@ -1760,7 +1761,7 @@ void   DrawWalls (void)
       {
          {
          VGAWRITEMAP(plane);
-         buf=(byte *)(bufferofs);
+         buf=(uint8_t *)(bufferofs);
          for (post=&posts[plane];post<&posts[viewwidth];post++,buf++)
             {
             SetWallLightLevel(post);
@@ -1868,7 +1869,7 @@ void TransformPushWalls( void )
 {
   int   i;
   int   gx,gy;
-  byte   *visspot;
+  uint8_t   *visspot;
   visobj_t *savedptr;
   int numvisible;
   bool result;
@@ -2241,9 +2242,9 @@ void InterpolateDoor (visobj_t * plane)
    int dx;
    int height;
    int bottomscreen;
-   byte * shape;
-   byte * shape2;
-   byte * buf;
+   uint8_t * shape;
+   uint8_t * shape2;
+   uint8_t * buf;
    patch_t *p;
 
    whereami=18;
@@ -2265,7 +2266,7 @@ void InterpolateDoor (visobj_t * plane)
       top=0;
       bot=(d2*dx);
       height=(plane->h1<<DHEIGHTFRACTION);
-      buf=(byte *)bufferofs+(plane->x1);
+      buf=(uint8_t *)bufferofs+(plane->x1);
 
       for (i=plane->x1;i<=plane->x2;i++,buf++)
          {
@@ -2327,10 +2328,10 @@ void InterpolateMaskedWall (visobj_t * plane)
    int dh;
    int dx;
    int height;
-   byte * shape;
-   byte * shape2;
-   byte * shape3;
-   byte * buf;
+   uint8_t * shape;
+   uint8_t * shape2;
+   uint8_t * shape3;
+   uint8_t * buf;
 	transpatch_t *p;
    patch_t *p2;
    patch_t *p3;
@@ -2387,7 +2388,7 @@ void InterpolateMaskedWall (visobj_t * plane)
       top=0;
       bot=(d2*dx);
       height=(plane->h1<<DHEIGHTFRACTION);
-      buf=(byte *)bufferofs+(plane->x1);
+      buf=(uint8_t *)bufferofs+(plane->x1);
       for (i=plane->x1;i<=plane->x2;i++,buf++)
          {
          if ((i>=0 && i<viewwidth) && (bot!=0) && (posts[i].wallheight<=(height>>DHEIGHTFRACTION)) )
@@ -2442,7 +2443,7 @@ void DrawPlayerLocation ( void )
    whereami=20;
    VGAMAPMASK(15);
    for (i=0;i<18;i++)
-      memset((byte *)bufferofs+(ylookup[i+PLY])+PLX,0,6);
+      memset((uint8_t *)bufferofs+(ylookup[i+PLY])+PLX,0,6);
    px=PLX;
 	py=PLY;
 	VW_DrawPropString(strupr(itoa(player->x,&buf[0],16)));
@@ -2626,14 +2627,14 @@ void TurnShakeOff
 // draw sreen after reentering fro restore game
 //******************************************************************************
 
-void DrawScaledScreen(int x, int y, int step, byte * src)
+void DrawScaledScreen(int x, int y, int step, uint8_t * src)
 {
     int     xfrac;
     int     yfrac;
 //    int     plane;
     int     i,j;
-    byte    * p;
-    byte    * buf;
+    uint8_t    * p;
+    uint8_t    * buf;
     int     xsize;
     int     ysize;
 
@@ -2647,7 +2648,7 @@ void DrawScaledScreen(int x, int y, int step, byte * src)
        for (j=y;j<y+ysize;j++)
           {
           p=src+(iGLOBAL_SCREENWIDTH*(yfrac>>16));
-          buf=(byte *)bufferofs+ylookup[j]+x;
+          buf=(uint8_t *)bufferofs+ylookup[j]+x;
           xfrac=0;
           yfrac+=step;
           for (i=x;i<x+xsize;i++)
@@ -2677,7 +2678,7 @@ void DoLoadGameSequence ( void )
    int ds;
    int time;
    int i;
-   byte * destscreen;
+   uint8_t * destscreen;
    pic_t *shape;//bna++
    
    
@@ -2701,7 +2702,7 @@ void DoLoadGameSequence ( void )
    FlipPage();
    FlipPage();
 
-   VL_CopyPlanarPageToMemory ( (byte *)bufferofs,  destscreen );
+   VL_CopyPlanarPageToMemory ( (uint8_t *)bufferofs,  destscreen );
    VL_CopyDisplayToHidden ();
 
    CalcTics();
@@ -2737,7 +2738,7 @@ void DoLoadGameSequence ( void )
 // StartupRotateBuffer
 //
 //******************************************************************************
-byte * RotatedImage;
+uint8_t * RotatedImage;
 bool RotateBufferStarted = false;
 void StartupRotateBuffer ( int masked)
 {
@@ -2782,14 +2783,14 @@ void StartupRotateBuffer ( int masked)
 		   for (a=0;a<iGLOBAL_SCREENHEIGHT;a++){
 			   for (b=0;b<iGLOBAL_SCREENWIDTH;b++){
 					k = ((a+28)<<10);
-					*(RotatedImage+(k)+b)   =   *((byte *)bufferofs+(a*linewidth)+b);
+					*(RotatedImage+(k)+b)   =   *((uint8_t *)bufferofs+(a*linewidth)+b);
 			   }
 		   }
 
 	  }else if ((masked == true)||(iGLOBAL_SCREENWIDTH == 320)) {
 		  for (a=0;a<200;a++){
 			 for (b=0;b<320;b++)
-				*(RotatedImage+99+((a+28)<<9)+b)=*((byte *)bufferofs+(a*linewidth)+b);
+				*(RotatedImage+99+((a+28)<<9)+b)=*((uint8_t *)bufferofs+(a*linewidth)+b);
 		  }
 	  }
 
@@ -2851,18 +2852,18 @@ void ScaleAndRotateBuffer (int startangle, int endangle, int startscale, int end
    CalcTics();
    for (i=0;i<time;i+=tics)
       {//zxcv
-      DrawRotatedScreen(Xh,Yh, (byte *)bufferofs,(angle>>16)&(FINEANGLES-1),scale>>6,0);
+      DrawRotatedScreen(Xh,Yh, (uint8_t *)bufferofs,(angle>>16)&(FINEANGLES-1),scale>>6,0);
       FlipPage();
       scale+=(scalestep*tics);
       angle+=(anglestep*tics);
       CalcTics();
       }
 
-   DrawRotatedScreen(Xh,Yh, (byte *)bufferofs,endangle&(FINEANGLES-1),endscale,0);
+   DrawRotatedScreen(Xh,Yh, (uint8_t *)bufferofs,endangle&(FINEANGLES-1),endscale,0);
    FlipPage();
-   DrawRotatedScreen(Xh,Yh, (byte *)bufferofs,endangle&(FINEANGLES-1),endscale,0);
+   DrawRotatedScreen(Xh,Yh, (uint8_t *)bufferofs,endangle&(FINEANGLES-1),endscale,0);
    FlipPage();
-   DrawRotatedScreen(Xh,Yh, (byte *)bufferofs,endangle&(FINEANGLES-1),endscale,0);
+   DrawRotatedScreen(Xh,Yh, (uint8_t *)bufferofs,endangle&(FINEANGLES-1),endscale,0);
    CalcTics();
    CalcTics();
    //I_Delay (240);//bna++
@@ -2910,13 +2911,13 @@ void RotateBuffer (int startangle, int endangle, int startscale, int endscale, i
 //
 //******************************************************************************
 
-void DrawRotatedScreen(int cx, int cy, byte *destscreen, int angle, int scale, int masked)
+void DrawRotatedScreen(int cx, int cy, uint8_t *destscreen, int angle, int scale, int masked)
 {//ZXCV
    int     c, s;
    int     xst, xct;
    int     y;
 
-   byte    * screen;
+   uint8_t    * screen;
    //int Xres = 320;//old value
    //int Yres = 200;//old val
 
@@ -2974,7 +2975,7 @@ void DrawRotatedScreen(int cx, int cy, byte *destscreen, int angle, int scale, i
 //
 //******************************************************************************
 
-void DrawScaledPost ( int height, byte * src, int offset, int x)
+void DrawScaledPost ( int height, uint8_t * src, int offset, int x)
 {
    patch_t *p;
 
@@ -2985,14 +2986,14 @@ void DrawScaledPost ( int height, byte * src, int offset, int x)
    sprtopoffset=centeryfrac - FixedMul(dc_texturemid,dc_invscale);
    shadingtable=colormap+(1<<12);
    VGAWRITEMAP(x&3);
-   ScaleMaskedPost(((p->collumnofs[offset])+src), (byte *)bufferofs+x);
+   ScaleMaskedPost(((p->collumnofs[offset])+src), (uint8_t *)bufferofs+x);
 }
 
 
 
 void ApogeeTitle (void)
 {
-   byte pal[768];
+   uint8_t pal[768];
    int   angle;
    int   scale;
    int   x,y;
@@ -3056,7 +3057,7 @@ void ApogeeTitle (void)
 
       x=100+FixedMul(APOGEEXMAG,sintable[anglex>>16]);
 
-      DrawRotatedScreen(x,y>>16,(byte *)bufferofs,(angle>>16)&(FINEANGLES-1),scale>>16,1);
+      DrawRotatedScreen(x,y>>16,(uint8_t *)bufferofs,(angle>>16)&(FINEANGLES-1),scale>>16,1);
       FlipPage();
       CalcTics();
       angle+=dangle*tics;
@@ -3070,7 +3071,7 @@ void ApogeeTitle (void)
    CalcTics();
    CalcTics();
    VL_DrawPostPic (W_GetNumForName("ap_wrld"));
-   DrawRotatedScreen(x,y>>16,(byte *)bufferofs,0,APOGEESCALEEND,1);
+   DrawRotatedScreen(x,y>>16,(uint8_t *)bufferofs,0,APOGEESCALEEND,1);
    FlipPage();
 
    while (MU_SongPlaying())
@@ -3121,7 +3122,7 @@ void DopefishTitle (void)
       {
       DrawPositionedScaledSprite (160+FixedMul(60,costable[height&(FINEANGLES-1)]), 100+FixedMul(60,sintable[height&(FINEANGLES-1)]), shapenum, 200, 0);
       FlipPage();
-      VL_CopyPlanarPage ( (byte *) displayofs, (byte *) bufferofs );
+      VL_CopyPlanarPage ( (uint8_t *) displayofs, (uint8_t *) bufferofs );
       CalcTics();
       if ((LastScan) || IN_GetMouseButtons())
          break;
@@ -3158,7 +3159,7 @@ void RotationFun ( void )
    while (!Keyboard[sc_Escape])
       {
       IN_UpdateKeyboard ();
-      DrawRotatedScreen(160,100,(byte *)bufferofs,angle,scale,0);
+      DrawRotatedScreen(160,100,(uint8_t *)bufferofs,angle,scale,0);
       FlipPage();
       CalcTics();
       INL_GetMouseDelta(&x, &y);
@@ -3324,7 +3325,7 @@ void UpdateScreenSaver ( void )
    if (abs(ScreenSaver->dy)>MAXSPEED)
       ScreenSaver->dy=SGN(ScreenSaver->dy)*MAXSPEED;
 
-   DrawRotatedScreen(ScreenSaver->x,ScreenSaver->y, (byte *)bufferofs,ScreenSaver->angle,ScreenSaver->scale,0);
+   DrawRotatedScreen(ScreenSaver->x,ScreenSaver->y, (uint8_t *)bufferofs,ScreenSaver->angle,ScreenSaver->scale,0);
 
    ScreenSaver->pausetime-=tics;
    if (ScreenSaver->pausetime<=0)
@@ -3349,7 +3350,7 @@ void UpdateScreenSaver ( void )
 //
 //******************************************************************************
 
-void DrawBackground ( byte * bkgnd )
+void DrawBackground ( uint8_t * bkgnd )
 {
 //   int plane;
    int size;
@@ -3358,7 +3359,7 @@ void DrawBackground ( byte * bkgnd )
 
       {
       VGAWRITEMAP(plane);
-      memcpy((byte *)bufferofs,bkgnd,size);
+      memcpy((uint8_t *)bufferofs,bkgnd,size);
       bkgnd+=size;
       }
 }
@@ -3370,7 +3371,7 @@ void DrawBackground ( byte * bkgnd )
 //
 //******************************************************************************
 
-void PrepareBackground ( byte * bkgnd )
+void PrepareBackground ( uint8_t * bkgnd )
 {
 //   int plane;
    int size;
@@ -3379,7 +3380,7 @@ void PrepareBackground ( byte * bkgnd )
 
       {
       VGAREADMAP(plane);
-      memcpy(bkgnd,(byte *)bufferofs,size);
+      memcpy(bkgnd,(uint8_t *)bufferofs,size);
       bkgnd+=size;
       }
 }
@@ -3392,7 +3393,7 @@ void PrepareBackground ( byte * bkgnd )
 
 void WarpString (
                   int x, int y, int endx, int endy,
-                  int time, byte * back, char * str
+                  int time, uint8_t * back, char * str
                 )
 {
    int dx;
@@ -3447,7 +3448,7 @@ void WarpString (
 
 void WarpSprite (
                   int x, int y, int endx, int endy,
-                  int time, byte * back, int shape
+                  int time, uint8_t * back, int shape
                 )
 {
    int dx;
@@ -3590,12 +3591,12 @@ void DoEndCinematic ( void )
    int x,y;
    int shape;
    int time1,time2;
-   byte * tmp;
-   byte * sky;
-   byte * bkgnd;
+   uint8_t * tmp;
+   uint8_t * sky;
+   uint8_t * bkgnd;
    int i;
 
-   byte pal[768];
+   uint8_t pal[768];
 	EnableScreenStretch();
 
    viewwidth = 320;//MAXSCREENWIDTH;
@@ -3653,7 +3654,7 @@ fadeworld:
       VGAWRITEMAP(x&3);
       for (y=0;y<200;y++)
          {
-         *((byte *)bufferofs+ylookup[y]+x)=*tmp++;
+         *((uint8_t *)bufferofs+ylookup[y]+x)=*tmp++;
          }
       }
    tmp=sky;
@@ -3662,7 +3663,7 @@ fadeworld:
       VGAWRITEMAP(x&3);
       for (y=0;y<200;y++)
          {
-         *((byte *)bufferofs+ylookup[y]+x)=*tmp++;
+         *((uint8_t *)bufferofs+ylookup[y]+x)=*tmp++;
          }
       }
 
@@ -3725,7 +3726,7 @@ fadeworld:
       VGAWRITEMAP(x&3);
       for (y=0;y<200;y++)
          {
-         *((byte *)bufferofs+ylookup[y]+x)=*tmp++;
+         *((uint8_t *)bufferofs+ylookup[y]+x)=*tmp++;
          }
       }
    tmp=sky;
@@ -3734,7 +3735,7 @@ fadeworld:
       VGAWRITEMAP(x&3);
       for (y=0;y<200;y++)
          {
-         *((byte *)bufferofs+ylookup[y]+x)=*tmp++;
+         *((uint8_t *)bufferofs+ylookup[y]+x)=*tmp++;
          }
       }
 
@@ -3899,7 +3900,7 @@ static char     youWin8Msg[] =
 
 typedef struct {
   char  name[11];
-  byte  numframes;
+  uint8_t  numframes;
 } ExplosionInfoType;
 
 ExplosionInfoType ExplosionInfo[NUMEXPLOSIONTYPES]=
@@ -3912,10 +3913,10 @@ ExplosionInfoType ExplosionInfo[NUMEXPLOSIONTYPES]=
 
 
 typedef struct {
-  byte  which;
-  byte  frame;
-  byte  x;
-  byte  y;
+  uint8_t  which;
+  uint8_t  frame;
+  uint8_t  x;
+  uint8_t  y;
 } ExplosionType;
 
 #define MAXTRANSMITTEREXPLOSIONS 30
@@ -3984,7 +3985,7 @@ void DrawTransmitterExplosions ( void )
 
 void DoTransmitterExplosion ( void )
 {
-   byte * back;
+   uint8_t * back;
    int i;
 
    VL_ClearVideo(0);
@@ -4033,7 +4034,7 @@ void ShowTransmitter ( void )
 
 void ShowFinalDoor ( void )
 {
-   byte pal[768];
+   uint8_t pal[768];
 
    MenuFadeOut();
 
@@ -4050,7 +4051,7 @@ void ShowFinalDoor ( void )
 
 void ShowFinalFire ( void )
 {
-   byte pal[768];
+   uint8_t pal[768];
 
    MenuFadeOut();
 
@@ -4108,7 +4109,7 @@ void ShowFinalFire ( void )
    VL_FadeOut (0, 255, 0, 0, 0, 30);
 }
 
-void ScrollString ( int cy, char * string, byte * bkgnd, int scrolltime, int pausetime )
+void ScrollString ( int cy, char * string, uint8_t * bkgnd, int scrolltime, int pausetime )
 {
    int x,y;
    int width,height;
@@ -4137,7 +4138,7 @@ void ScrollString ( int cy, char * string, byte * bkgnd, int scrolltime, int pau
 
 void DoBurningCastle ( void )
 {
-   byte * back;
+   uint8_t * back;
 
    LastScan=0;
    VL_ClearVideo(0);
@@ -4157,7 +4158,7 @@ void DoBurningCastle ( void )
 
 void DoFailedScreen ( void )
 {
-   byte * back;
+   uint8_t * back;
 
    back=SafeMalloc(800*linewidth);
 
@@ -4173,7 +4174,7 @@ void DoFailedScreen ( void )
 
 void DoTryAgainScreen ( void )
 {
-   byte * back;
+   uint8_t * back;
 
    back=SafeMalloc(800*linewidth);
 
@@ -4221,7 +4222,7 @@ void UpdateWorldExplosions ( void )
 
 void DestroyEarth ( void )
 {
-   byte * back;
+   uint8_t * back;
    int i;
 
    VL_ClearVideo(0);
@@ -4269,7 +4270,7 @@ bool DestroyedAllEggs ( void )
 
 void DoSanNicolas ( void )
 {
-   byte pal[768];
+   uint8_t pal[768];
 
    LastScan=0;
    VL_ClearVideo(0);
@@ -4285,7 +4286,7 @@ void DoSanNicolas ( void )
 
 void PlayerQuestionScreen ( void )
 {
-   byte * back;
+   uint8_t * back;
 
    back=SafeMalloc(800*linewidth);
 
@@ -4331,7 +4332,7 @@ void PlayerQuestionScreen ( void )
 void DoYouWin ( void )
 {
    pic_t * pic;
-   byte * back;
+   uint8_t * back;
 
    back=SafeMalloc(800*linewidth);
    LastScan=0;
@@ -4351,7 +4352,7 @@ void DoYouWin ( void )
 void DoFinalEnd ( void )
 {
    pic_t * pic;
-   byte * back;
+   uint8_t * back;
 
    back=SafeMalloc(800*linewidth);
    LastScan=0;
@@ -4587,7 +4588,7 @@ static char     playersCutMsg[] =
 
 void DIPCredits ( void )
 {
-   byte * back;
+   uint8_t * back;
 
    back=SafeMalloc(800*linewidth);
 
@@ -4804,8 +4805,8 @@ void DoInBetweenCinematic (int yoffset, int lump, int delay, char * string )
 
 typedef struct CreditType {
   char  text[80];
-  byte  font;
-  byte  endy;
+  uint8_t  font;
+  uint8_t  endy;
 } CreditType;
 
 CreditType FirstCredits[NUMFIRSTCREDITMESSAGES] =
@@ -4892,7 +4893,7 @@ void DrawPreviousCredits ( int num, CreditType * Credits )
 //******************************************************************************
 
 extern bool dopefish;
-void WarpCreditString ( int time, byte * back, int num, CreditType * Credits)
+void WarpCreditString ( int time, uint8_t * back, int num, CreditType * Credits)
 {
    int dy;
    int cy;
@@ -4966,7 +4967,7 @@ void DoCreditScreen ( void )
 {
    int trilogo;
    int time;
-   byte * bkgnd;
+   uint8_t * bkgnd;
    font_t * oldfont;
    int i;
 	EnableScreenStretch();
@@ -5077,7 +5078,7 @@ void DoMicroStoryScreen ( void )
    VL_FadeOut (0, 255, 0, 0, 0, 20);
 }
 
-void  DrawMenuPost (int height, byte * src, byte * buf)
+void  DrawMenuPost (int height, uint8_t * src, uint8_t * buf)
 {
 	int frac = hp_startfrac;
 	while (height--) {
@@ -5088,7 +5089,7 @@ void  DrawMenuPost (int height, byte * src, byte * buf)
 	}
 }
 
-void  DrawMapPost (int height, byte * src, byte * buf)
+void  DrawMapPost (int height, uint8_t * src, uint8_t * buf)
 {
 	int frac = 0;
 	while (height--) {
@@ -5099,7 +5100,7 @@ void  DrawMapPost (int height, byte * src, byte * buf)
 	}
 }
 
-void DrawRotRow(int count, byte * dest, byte * src)
+void DrawRotRow(int count, uint8_t * dest, uint8_t * src)
 {
 	unsigned eax, ecx, edx;
 //	unsigned a, b, c,d;
@@ -5139,7 +5140,7 @@ void DrawRotRow(int count, byte * dest, byte * src)
 	}
 }
 
-void DrawMaskedRotRow(int count, byte * dest, byte * src)
+void DrawMaskedRotRow(int count, uint8_t * dest, uint8_t * src)
 {
 	unsigned eax;
 	unsigned xfrac, yfrac;
@@ -5163,11 +5164,11 @@ void DrawMaskedRotRow(int count, byte * dest, byte * src)
 	}
 }
 
-void DrawSkyPost (byte * buf, byte * src, int height)
+void DrawSkyPost (uint8_t * buf, uint8_t * src, int height)
 {
 	{
 	int i = 0;
-	byte *const orig_src = src;
+	uint8_t *const orig_src = src;
 	// org code
 		while (height--) {
 			*buf = shadingtable[*src];

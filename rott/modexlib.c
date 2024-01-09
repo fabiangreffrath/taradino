@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdarg.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -41,20 +42,20 @@ extern bool iG_aimCross;
 extern bool sdl_fullscreen;
 extern int iG_X_center;
 extern int iG_Y_center;
-byte  *iG_buf_center;
+uint8_t  *iG_buf_center;
   
 int    linewidth;
 //int    ylookup[MAXSCREENHEIGHT];
 int    ylookup[600];//just set to max res
-byte  *page1start;
-byte  *page2start;
-byte  *page3start;
+uint8_t  *page1start;
+uint8_t  *page2start;
+uint8_t  *page3start;
 int    screensize;
-byte  *bufferofs;
-byte  *displayofs;
+uint8_t  *bufferofs;
+uint8_t  *displayofs;
 bool graphicsmode=false;
-byte  *bufofsTopLimit;
-byte  *bufofsBottomLimit;
+uint8_t  *bufofsTopLimit;
+uint8_t  *bufofsBottomLimit;
 
 void DrawCenterAim ();
 
@@ -274,7 +275,7 @@ void VL_SetVGAPlaneMode ( void )
 =
 =======================
 */
-void VL_CopyPlanarPage ( byte * src, byte * dest )
+void VL_CopyPlanarPage ( uint8_t * src, uint8_t * dest )
 {
       memcpy(dest,src,screensize);
 }
@@ -286,7 +287,7 @@ void VL_CopyPlanarPage ( byte * src, byte * dest )
 =
 =======================
 */
-void VL_CopyPlanarPageToMemory ( byte * src, byte * dest )
+void VL_CopyPlanarPageToMemory ( uint8_t * src, uint8_t * dest )
 {
       memcpy(dest,src,screensize);
 }
@@ -298,7 +299,7 @@ void VL_CopyPlanarPageToMemory ( byte * src, byte * dest )
 =
 =======================
 */
-void VL_CopyBufferToAll ( byte *buffer )
+void VL_CopyBufferToAll ( uint8_t *buffer )
 {
 }
 
@@ -324,9 +325,9 @@ void VL_CopyDisplayToHidden ( void )
 =================
 */
 
-void VL_ClearBuffer (byte *buf, byte color)
+void VL_ClearBuffer (uint8_t *buf, uint8_t color)
 {
-  memset((byte *)buf,color,screensize);
+  memset((uint8_t *)buf,color,screensize);
 }
 
 /*
@@ -339,7 +340,7 @@ void VL_ClearBuffer (byte *buf, byte color)
 =================
 */
 
-void VL_ClearVideo (byte color)
+void VL_ClearVideo (uint8_t color)
 {
   memset (sdl_surface->pixels, color, iGLOBAL_SCREENWIDTH*iGLOBAL_SCREENHEIGHT);
 }
@@ -410,7 +411,7 @@ void EnableScreenStretch(void)
    }
 	
    displayofs = unstretch_sdl_surface->pixels +
-	(displayofs - (byte *)sdl_surface->pixels);
+	(displayofs - (uint8_t *)sdl_surface->pixels);
    bufferofs  = unstretch_sdl_surface->pixels;
    page1start = unstretch_sdl_surface->pixels;
    page2start = unstretch_sdl_surface->pixels;
@@ -423,7 +424,7 @@ void DisableScreenStretch(void)
    if (iGLOBAL_SCREENWIDTH <= 320 || !StretchScreen) return;
 	
    displayofs = sdl_surface->pixels +
-	(displayofs - (byte *)unstretch_sdl_surface->pixels);
+	(displayofs - (uint8_t *)unstretch_sdl_surface->pixels);
    bufferofs  = sdl_surface->pixels;
    page1start = sdl_surface->pixels;
    page2start = sdl_surface->pixels;

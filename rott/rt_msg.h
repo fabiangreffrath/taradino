@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_msg_public
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #define MSG_PERMANENT     0x80
 #define MSG_NODELETE      0x40
@@ -47,8 +48,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 typedef struct msgt
 {
-  byte active;
-  byte flags;
+  uint8_t active;
+  uint8_t flags;
   int  tictime;
   char * text;
 } messagetype;

@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _modexlib_public
 
 #include <stdbool.h>
+#include <stdint.h>
 #include "WinRott.h"
 #include "rt_def.h"
 
@@ -41,25 +42,25 @@ extern  bool StretchScreen;
 //extern  int      ylookup[MAXSCREENHEIGHT];      // Table of row offsets
 extern  int      ylookup[600];      // just set to max res
 extern  int      linewidth;
-extern  byte    *page1start;
-extern  byte    *page2start;
-extern  byte    *page3start;
+extern  uint8_t    *page1start;
+extern  uint8_t    *page2start;
+extern  uint8_t    *page3start;
 extern  int      screensize;
-extern  byte    *bufferofs;
-extern  byte    *displayofs;
+extern  uint8_t    *bufferofs;
+extern  uint8_t    *displayofs;
 extern  bool  graphicsmode;
 
 
 void  GraphicsMode ( void );
 void  SetTextMode ( void );
 void  VL_SetVGAPlaneMode ( void );
-void  VL_ClearBuffer (byte *buf, byte color);
-void  VL_ClearVideo (byte color);
+void  VL_ClearBuffer (uint8_t *buf, uint8_t color);
+void  VL_ClearVideo (uint8_t color);
 void  VL_DePlaneVGA (void);
 void  VL_CopyDisplayToHidden ( void );
-void  VL_CopyBufferToAll ( byte *buffer );
-void  VL_CopyPlanarPage ( byte * src, byte * dest );
-void  VL_CopyPlanarPageToMemory ( byte * src, byte * dest );
+void  VL_CopyBufferToAll ( uint8_t *buffer );
+void  VL_CopyPlanarPage ( uint8_t * src, uint8_t * dest );
+void  VL_CopyPlanarPageToMemory ( uint8_t * src, uint8_t * dest );
 void  XFlipPage ( void );
 void  WaitVBL( void );
 void  TurnOffTextCursor ( void );

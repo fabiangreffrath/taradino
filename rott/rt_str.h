@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_str_public
 
 #include <stdbool.h>
+#include <stdint.h>
 #include "lumpy.h"
 
 
@@ -119,7 +120,7 @@ void US_CenterWindow (int w, int h);
 void DrawIString (unsigned short int x, unsigned short int y, const char *string, int flags);
 void DrawIntensityString (unsigned short int x, unsigned short int y, const char *string, int color);
 void VW_MeasureIntensityPropString (const char *string, int *width, int *height);
-byte GetIntensityColor (byte pix);
+uint8_t GetIntensityColor (uint8_t pix);
 
 #include "myprint.h"
 

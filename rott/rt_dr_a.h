@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_dr_a_public
 #define _rt_dr_a_public
 
+#include <stdint.h>
+
 //***************************************************************************
 //
 //    RT_DR_A.ASM - Low level draw stuff, DrawPost
@@ -29,9 +31,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 void SetMode240(void);
 void RefreshClear(void);
 void DrawPost (int height, char * column, char * buf);
-void  DrawHeightPost (int height, byte * src, byte * buf); // IN rt_dr_a.asm
-void R_DrawWallColumn (byte * buf);
-void  DrawMenuPost (int height, byte * src, byte * buf); // IN rt_dr_a.asm
-void  DrawMapPost (int height, byte * src, byte * buf); // IN rt_dr_a.asm
+void  DrawHeightPost (int height, uint8_t * src, uint8_t * buf); // IN rt_dr_a.asm
+void R_DrawWallColumn (uint8_t * buf);
+void  DrawMenuPost (int height, uint8_t * src, uint8_t * buf); // IN rt_dr_a.asm
+void  DrawMapPost (int height, uint8_t * src, uint8_t * buf); // IN rt_dr_a.asm
 
 #endif

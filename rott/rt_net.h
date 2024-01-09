@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_net_public
 
 #include <stdbool.h>
+#include <stdint.h>
 #include "develop.h"
 #include "rottnet.h"
 #include "rt_actor.h"
@@ -93,7 +94,7 @@ typedef struct DemoHeaderType {
 
 // Movement Queue Structure
 typedef struct MoveType {
-  byte  type;
+  uint8_t  type;
   int   time;
   short momx;
   short momy;
@@ -103,7 +104,7 @@ typedef struct MoveType {
 } MoveType;
 
 typedef struct NullMoveType {
-  byte  type;
+  uint8_t  type;
   int   time;
 } NullMoveType;
 
@@ -115,7 +116,7 @@ typedef struct {
 
 typedef struct {
 
-  byte CommandStates[MAXCMDS];
+  uint8_t CommandStates[MAXCMDS];
 
 } CommandStatusType;
 
@@ -123,18 +124,18 @@ typedef MoveType COM_SoundAndDeltaType;
 
 // uncomment for live remote ridicule
 typedef struct {
-  byte  type;
-  byte  data[COM_SOUND_BUFFERSIZE];
+  uint8_t  type;
+  uint8_t  data[COM_SOUND_BUFFERSIZE];
 //  char  data[COM_MAXTEXTSTRINGLENGTH];
 } COM_SoundType;
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   synctime;
 } COM_SyncType;
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   time;
   int   synctime;
   int   x;
@@ -145,22 +146,22 @@ typedef struct {
 } COM_CheckSyncType;
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   time;
-  byte  numpackets;
-  byte  data;
+  uint8_t  numpackets;
+  uint8_t  data;
 } COM_ServerHeaderType;
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   time;
-  byte   numpackets;
+  uint8_t   numpackets;
 } COM_RequestType;
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   time;
-  byte  towho;
+  uint8_t  towho;
   char  string[COM_MAXTEXTSTRINGLENGTH];
 } COM_TextType;
 
@@ -168,58 +169,58 @@ typedef struct {
 #define MSG_DIRECTED_TO_TEAM 254
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   time;
-  byte  player;
-  byte  num;
-  byte  towho;
+  uint8_t  player;
+  uint8_t  num;
+  uint8_t  towho;
 } COM_RemoteRidiculeType;
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   time;
-  byte  numpackets;
-  byte  data;
+  uint8_t  numpackets;
+  uint8_t  data;
 } COM_FixupType;
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   time;
 } COM_QuitType;
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   time;
 } COM_ExitType;
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   time;
 } COM_GameEndType;
 
 typedef struct {
-  byte  character;    // which character
-  byte  uniformcolor; // which color
+  uint8_t  character;    // which character
+  uint8_t  uniformcolor; // which color
   char  codename[MAXCODENAMELENGTH];  // codename
 } COM_PlayerDescriptionType;
 
 typedef struct {
-  byte  type;
-  byte  player;    // which player
-  byte  violence;
-  byte  Product;
+  uint8_t  type;
+  uint8_t  player;    // which player
+  uint8_t  violence;
+  uint8_t  Product;
   unsigned Version;
 
   COM_PlayerDescriptionType playerdescription;
 } COM_GamePlayerType;
 
 typedef struct {
-  byte  type;
-  byte  level;
+  uint8_t  type;
+  uint8_t  level;
   word  mapcrc;
-  byte  violence;
-  byte  Product;
-  byte  mode;
+  uint8_t  violence;
+  uint8_t  Product;
+  uint8_t  mode;
   unsigned Version;
   bool teamplay;
   specials SpecialsTimes;
@@ -231,33 +232,33 @@ typedef struct {
 } COM_GameMasterType;
 
 typedef struct {
-  byte  type;
-  byte  player; // which player
+  uint8_t  type;
+  uint8_t  player; // which player
 } COM_GameAckType;
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   time;
 } COM_EndGameType;
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   time;
 } COM_RespawnType;
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   time;
 } COM_PauseType;
 
 typedef struct {
-  byte  type;
+  uint8_t  type;
   int   time;
 } COM_UnPauseType;
 
 extern bool  demorecord,
 					 demoplayback;
-extern byte     *demoptr,
+extern uint8_t     *demoptr,
 					 *lastdemoptr,
                 *demobuffer;
 extern bool  demodone;

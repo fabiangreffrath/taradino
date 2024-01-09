@@ -1,5 +1,6 @@
 /* Routines from winrott needed for the highres support for the SDL port */
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include "WinRott.h"
@@ -71,9 +72,9 @@ extern int     viewsize;
 void MoveScreenUpLeft()
 {
 	int startX,startY,startoffset;
-    byte  *Ycnt,*b;
+    uint8_t  *Ycnt,*b;
 //   SetTextMode (  );
-    b=(byte *)bufferofs;
+    b=(uint8_t *)bufferofs;
 	b += (((iGLOBAL_SCREENHEIGHT-viewheight)/2)*iGLOBAL_SCREENWIDTH)+((iGLOBAL_SCREENWIDTH-viewwidth)/2);
 	if (viewsize == 8) {b += 8*iGLOBAL_SCREENWIDTH;}
 	startX = 3; //take 3 pixels to the right
@@ -88,9 +89,9 @@ void MoveScreenUpLeft()
 void MoveScreenDownLeft()
 {
 	int startX,startY,startoffset;
-    byte  *Ycnt,*b;
+    uint8_t  *Ycnt,*b;
 //   SetTextMode (  );
-    b=(byte *)bufferofs;
+    b=(uint8_t *)bufferofs;
 	b += (((iGLOBAL_SCREENHEIGHT-viewheight)/2)*iGLOBAL_SCREENWIDTH)+((iGLOBAL_SCREENWIDTH-viewwidth)/2);
 	if (viewsize == 8) {b += 8*iGLOBAL_SCREENWIDTH;}
 	startX = 3; //take 3 pixels to the right
@@ -106,9 +107,9 @@ void MoveScreenDownLeft()
 void MoveScreenUpRight()
 {
 	int startX,startY,startoffset;
-    byte  *Ycnt,*b;
+    uint8_t  *Ycnt,*b;
 //   SetTextMode (  );
-    b=(byte *)bufferofs;
+    b=(uint8_t *)bufferofs;
 
 	b += (((iGLOBAL_SCREENHEIGHT-viewheight)/2)*iGLOBAL_SCREENWIDTH)+((iGLOBAL_SCREENWIDTH-viewwidth)/2);
 	if (viewsize == 8) {b += 8*iGLOBAL_SCREENWIDTH;}
@@ -124,9 +125,9 @@ void MoveScreenUpRight()
 void MoveScreenDownRight()
 {
 	int startX,startY,startoffset;
-    byte  *Ycnt,*b;
+    uint8_t  *Ycnt,*b;
 //   SetTextMode (  );
-    b=(byte *)bufferofs;
+    b=(uint8_t *)bufferofs;
 
 	b += (((iGLOBAL_SCREENHEIGHT-viewheight)/2)*iGLOBAL_SCREENWIDTH)+((iGLOBAL_SCREENWIDTH-viewwidth)/2);
 	if (viewsize == 8) {b += 8*iGLOBAL_SCREENWIDTH;}

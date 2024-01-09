@@ -20,16 +20,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_fc_a_public
 #define _rt_fc_a_public
 
+#include <stdint.h>
+
 //***************************************************************************
 //
 //    RT_FC_A.ASM - Maprow stuff for floor and ceiling
 //
 //***************************************************************************
 
-void DrawSkyPost (byte * buf, byte * src, int height);
-void DrawRow(int count, byte * dest, byte * src);
-void DrawRotRow(int count, byte * dest, byte * src);
-void DrawMaskedRotRow(int count, byte * dest, byte * src);
+void DrawSkyPost (uint8_t * buf, uint8_t * src, int height);
+void DrawRow(int count, uint8_t * dest, uint8_t * src);
+void DrawRotRow(int count, uint8_t * dest, uint8_t * src);
+void DrawMaskedRotRow(int count, uint8_t * dest, uint8_t * src);
 
 #endif
 

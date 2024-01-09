@@ -19,6 +19,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #ifndef SBCONFIG_H
 #define SBCONFIG_H
+
+#include <stdint.h>
+
 /* ----------------------------------------------------------------------- */
 /* See the bottom of this file for a syntax diagram for the config file */
 

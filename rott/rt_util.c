@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "SDL.h"
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdarg.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -51,7 +52,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_cfg.h"
 
 int    egacolor[16];
-byte   *  origpal;
+uint8_t   *  origpal;
 FILE   *  errout;
 FILE   *  debugout;
 FILE   *  mapdebugout;
@@ -79,7 +80,7 @@ static unsigned char egargb[48]={ 0x00,0x00,0x00,
                             0xff,0xff,0x57,
 									 0xff,0xff,0xff};
 
-extern const byte * ROTT_ERR;
+extern const uint8_t * ROTT_ERR;
 
 #define SWAP(a,b) \
    {              \
@@ -243,13 +244,13 @@ void FindEGAColors ( void )
 //===========================================================================
 
 
-byte BestColor (int r, int g, int b, byte *palette)
+uint8_t BestColor (int r, int g, int b, uint8_t *palette)
 {
 	int	i;
 	long	dr, dg, db;
 	long	bestdistortion, distortion;
 	int	bestcolor;
-	byte	*pal;
+	uint8_t	*pal;
 
 //
 // let any color go to 0 as a last resort
@@ -610,7 +611,7 @@ void SafeRead (int handle, void *buffer, long count)
 		iocount = count > 0x8000 ? 0x8000 : count;
 		if (read (handle,buffer,iocount) != (int)iocount)
 			Error ("File read failure reading %ld bytes",count);
-		buffer = (void *)( (byte *)buffer + iocount );
+		buffer = (void *)( (uint8_t *)buffer + iocount );
 		count -= iocount;
 	}
 }
@@ -625,7 +626,7 @@ void SafeWrite (int handle, void *buffer, long count)
 		iocount = count > 0x8000 ? 0x8000 : count;
 		if (write (handle,buffer,iocount) != (int)iocount)
 			Error ("File write failure writing %ld bytes",count);
-		buffer = (void *)( (byte *)buffer + iocount );
+		buffer = (void *)( (uint8_t *)buffer + iocount );
 		count -= iocount;
 	}
 }
@@ -863,7 +864,7 @@ long ParseNum (char *str)
 
 short	SwapShort (short l)
 {
-	byte	b1,b2;
+	uint8_t	b1,b2;
 
 	b1 = l&255;
 	b2 = (l>>8)&255;
@@ -879,7 +880,7 @@ short	KeepShort (short l)
 
 int	SwapLong (int l)
 {
-	byte	b1,b2,b3,b4;
+	uint8_t	b1,b2,b3,b4;
 
 	b1 = l&255;
 	b2 = (l>>8)&255;
@@ -948,7 +949,7 @@ void GetPalette(char * palette)
 	}
 }
 
-void SetPalette ( byte * pal )
+void SetPalette ( uint8_t * pal )
 {
    VL_SetPalette (pal);
 }
@@ -1069,7 +1070,7 @@ void VL_GetColor  (int color, int *red, int *green, int *blue)
 =================
 */
 
-void VL_NormalizePalette (byte *palette)
+void VL_NormalizePalette (uint8_t *palette)
 {
    int   i;
 
@@ -1089,7 +1090,7 @@ void VL_NormalizePalette (byte *palette)
 =================
 */
 
-void VL_SetPalette (byte *palette)
+void VL_SetPalette (uint8_t *palette)
 {
    SDL_Color cmap[256];
    int i;
@@ -1118,7 +1119,7 @@ void VL_SetPalette (byte *palette)
 =================
 */
 
-void VL_GetPalette (byte *palette)
+void VL_GetPalette (uint8_t *palette)
 {
 	int i;
 	SDL_Palette *pal = VL_GetVideoSurface()->format->palette;

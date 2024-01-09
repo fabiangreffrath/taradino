@@ -20,14 +20,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _f_scale_public
 #define _f_scale_public
 
+#include <stdint.h>
+
 extern int cin_yl;
 extern int cin_yh;
 extern int cin_ycenter;
 extern int cin_iscale;
 extern int cin_texturemid;
-extern byte * cin_source;
+extern uint8_t * cin_source;
 
-void R_DrawFilmColumn (byte * buf);
-void DrawFilmPost (byte * buf, byte * src, int height);
+void R_DrawFilmColumn (uint8_t * buf);
+void DrawFilmPost (uint8_t * buf, uint8_t * src, int height);
 
 #endif

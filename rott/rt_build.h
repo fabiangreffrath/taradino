@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_build_public
 
 #include <stdbool.h>
+#include <stdint.h>
 
 //***************************************************************************
 //
@@ -29,7 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //***************************************************************************
 
 extern int Menuflipspeed;
-extern byte * intensitytable;
+extern uint8_t * intensitytable;
 
 void SetupMenuBuf ( void );
 void ShutdownMenuBuf ( void );
@@ -62,6 +63,6 @@ void MenuBufCPrint (const char *s);
 void MenuBufPrint (const char *s);
 void MenuTBufPrintLine (const char *s, int shade);
 
-void DrawMenuBufPicture (int x, int y, const byte * pic, int w, int h);
+void DrawMenuBufPicture (int x, int y, const uint8_t * pic, int w, int h);
 
 #endif

@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_sound_public
 
 #include <stdbool.h>
+#include <stdint.h>
 #include "music.h"
 #include "develop.h"
 
@@ -682,9 +683,9 @@ int MU_GetStoredPosition ( void );
 
 void MU_SetStoredPosition ( int position );
 
-void MU_LoadMusic (byte * buf, int size);
+void MU_LoadMusic (uint8_t * buf, int size);
 
-void MU_SaveMusic (byte ** buf, int * size);
+void MU_SaveMusic (uint8_t ** buf, int * size);
 
 bool MusicStarted( void );
 #endif

@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -1117,7 +1118,7 @@ static bool StartGame = false;
 static int  SaveGamesAvail[ NUMSAVEGAMES ];
 static char SaveGameNames[ NUMSAVEGAMES ][ 32 ];
 
-static byte *savedscreen;
+static uint8_t *savedscreen;
 static mapfileinfo_t * mapinfo;
 
 static void HideCursor
@@ -1139,7 +1140,7 @@ static void ShowCursor
    );
 void CP_DrawSelectedGame (int w);
 int HandleMenu (CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w));
-void DrawStoredGame ( byte * pic, int episode, int area );
+void DrawStoredGame ( uint8_t * pic, int episode, int area );
 void DrawCustomKeyboard (void);
 void DrawBattleModeName( int which );
 void DrawBattleModeDescription( int w );
@@ -1469,8 +1470,8 @@ void SetUpControlPanel (void)
 {
    int i;
    int j;
-   byte * b;
-   byte * s;
+   uint8_t * b;
+   uint8_t * s;
 
    int Xres = 640;
    int Yres = 400;
@@ -1498,14 +1499,14 @@ void SetUpControlPanel (void)
     
 	  if (iGLOBAL_SCREENWIDTH == 320) { 
 		  for (i=0;i<Xres;i+=2)	{	  
-			  b=(byte *)bufferofs+i;
+			  b=(uint8_t *)bufferofs+i;
 			  for (j=0;j<100;j++,s++,b+=(iGLOBAL_SCREENWIDTH<<1))
 				 *s=*b;
 		  }
 	  }	  
 	  if (iGLOBAL_SCREENWIDTH >= 640) { 
 		  for (i=0;i<Xres;i+=4)	{		  
-			  b=(byte *)bufferofs+i;//schrink screen to 1/2 size
+			  b=(uint8_t *)bufferofs+i;//schrink screen to 1/2 size
 			  for (j=0;j<(Yres/4);j++,s++,b+=(iGLOBAL_SCREENWIDTH<<1)*2)
 				 *s=*b;
 			  }
@@ -1637,7 +1638,7 @@ void CleanUpControlPanel (void)
 //******************************************************************************
 bool CP_CheckQuick
    (
-   byte scancode
+   uint8_t scancode
    )
 
    {
@@ -1682,7 +1683,7 @@ bool CP_CheckQuick
 //******************************************************************************
 void ControlPanel
    (
-   byte scancode
+   uint8_t scancode
    )
 
    {
@@ -3192,11 +3193,11 @@ void CP_DrawSelectedGame (int w)
 //
 //******************************************************************************
 
-void DrawStoredGame ( byte * pic, int episode, int area )
+void DrawStoredGame ( uint8_t * pic, int episode, int area )
 {
    char str[3];
    int level;
-   byte *shape;
+   uint8_t *shape;
 
 	shape = W_CacheLumpNum (W_GetNumForName ("newfnt1"), PU_CACHE, Cvt_font_t, 1);
 	newfont1 = (font_t *)shape;
@@ -3365,11 +3366,11 @@ void QuickSaveGame (void)
 {
    int i;
    int j;
-   byte * b;
-   byte * s;
+   uint8_t * b;
+   uint8_t * s;
    int which;
    gamestorage_t game;
-   byte * buf;
+   uint8_t * buf;
    int length;
 
    char   loadname[]="rottgam0.rot";
@@ -3391,7 +3392,7 @@ void QuickSaveGame (void)
    s=&game.picture[0];
    for (i=0;i<320;i+=2)
       {
-      b=(byte *)bufferofs+i;
+      b=(uint8_t *)bufferofs+i;
       for (j=0;j<100;j++,s++,b+=(iGLOBAL_SCREENWIDTH<<1))
          *s=*b;
       }
@@ -3434,7 +3435,7 @@ void QuickSaveGame (void)
 
 void UndoQuickSaveGame (void)
 {
-   byte * buf;
+   uint8_t * buf;
    char   loadname[]="rottgam0.rot";
    char   *filename;
    int length;
@@ -4111,7 +4112,7 @@ void Message (char *string)
          w = 0,
          mw = 0,
          i;
-   byte *shape;
+   uint8_t *shape;
 
 	shape = W_CacheLumpNum (W_GetNumForName ("newfnt1"), PU_CACHE, Cvt_font_t, 1);
 	newfont1 = (font_t *)shape;
@@ -4224,7 +4225,7 @@ void DrawNewGameDiff
 void DrawLoadSaveScreen (int loadsave)
 {
    int i;
-   byte *shape;
+   uint8_t *shape;
 
 	shape = W_CacheLumpNum (W_GetNumForName ("newfnt1"), PU_CACHE, Cvt_font_t, 1);
 	newfont1 = (font_t *)shape;
@@ -4267,7 +4268,7 @@ void DrawLoadSaveScreen (int loadsave)
 void DrawLoadSaveScreenAlt (int loadsave)
 {
    int i;
-   byte *shape;
+   uint8_t *shape;
 
 	shape = W_CacheLumpNum (W_GetNumForName ("newfnt1"), PU_CACHE, Cvt_font_t, 1);
 	newfont1 = (font_t *)shape;

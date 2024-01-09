@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include "rt_def.h"
@@ -84,7 +85,7 @@ bool           ludicrousgibs=false;
 
 short             colheight[15];
 
-byte              deathshapeoffset[8] = {0,7,7,8,8,9,8,7};
+uint8_t              deathshapeoffset[8] = {0,7,7,8,8,9,8,7};
 
 unsigned long     MAXFUNCTION,MINFUNCTION,MAXSTATE,MINSTATE;
 
@@ -97,7 +98,7 @@ objtype           *lastactive,*firstactive,**objlist;
 objtype           *firstareaactor[NUMAREAS+1],*lastareaactor[NUMAREAS+1];
 int               objcount;
 
-byte              RANDOMACTORTYPE[10];
+uint8_t              RANDOMACTORTYPE[10];
 
 #if (SHAREWARE == 0)
 _2Dpoint          SNAKEPATH[512];
@@ -249,19 +250,19 @@ static int        starthitpoints[4][NUMENEMIES+2] =
 static statobj_t  *touchsprite = NULL;
 
 
-static const byte dirdiff[8][8] = {{0,1,2,3,4,3,2,1},{1,0,1,2,3,4,3,2},
+static const uint8_t dirdiff[8][8] = {{0,1,2,3,4,3,2,1},{1,0,1,2,3,4,3,2},
 				{2,1,0,1,2,3,4,3},{3,2,1,0,1,2,3,4},
 				{4,3,2,1,0,1,2,3},{3,4,3,2,1,0,1,2},
 				{2,3,4,3,2,1,0,1},{1,2,3,4,3,2,1,0}};
 
-static const byte dirorder[8][2] = {{southeast,northeast},{east,north},
+static const uint8_t dirorder[8][2] = {{southeast,northeast},{east,north},
 				 {northeast,northwest},{north,west},
 				 {northwest,southwest},{west,south},
 				 {southwest,southeast},{south,east}};
 
 #if (SHAREWARE == 0)
 
-static const byte dirdiff16[16][16] = {
+static const uint8_t dirdiff16[16][16] = {
 				{0,1,2,3,4,5,6,7,8,7,6,5,4,3,2,1},
 				{1,0,1,2,3,4,5,6,7,8,7,6,5,4,3,2},
 				{2,1,0,1,2,3,4,5,6,7,8,7,6,5,4,3},
@@ -280,13 +281,13 @@ static const byte dirdiff16[16][16] = {
 				{1,2,3,4,5,6,7,8,7,6,5,4,3,2,1,0}};
 #endif
 
-static const byte dirorder16[16][2] = {
+static const uint8_t dirorder16[16][2] = {
 						 {15,1}  ,   {0,2},   {1,3},   {2,4},
 						  {3,5}  ,   {4,6},   {5,7},   {6,8},
 						  {7,9}  ,  {8,10},  {9,11}, {10,12},
 						  {11,13}, {12,14}, {13,15},  {14,0}};
 
-//static byte opposite16[16] = {8,9,10,11,12,13,14,15,0,1,2,3,4,5,6,7};
+//static uint8_t opposite16[16] = {8,9,10,11,12,13,14,15,0,1,2,3,4,5,6,7};
 
 #if (SHAREWARE == 0)
 
@@ -506,10 +507,10 @@ statobj_t* GetStaticForIndex(int index)
 
 
 
-void SaveActors(byte **buffer,int*size)
+void SaveActors(uint8_t **buffer,int*size)
 {objtype*temp,*tact;
  saved_actor_type dummy;
- byte*tptr;
+ uint8_t*tptr;
  int actorcount;
 
 
@@ -519,7 +520,7 @@ void SaveActors(byte **buffer,int*size)
 
 
  *size = sizeof(int) + sizeof(numplayers) + sizeof(misc_stuff) + objcount*sizeof(saved_actor_type);
- *buffer = (byte*)SafeMalloc(*size);
+ *buffer = (uint8_t*)SafeMalloc(*size);
  tptr = *buffer;
 
  memcpy(tptr,MISCVARS,sizeof(misc_stuff));
@@ -540,7 +541,7 @@ void SaveActors(byte **buffer,int*size)
 	//dummy.whichactor = temp->whichactor;
 	dummy.hitpoints = temp->hitpoints;
 	dummy.ticcount = temp->ticcount;
-	dummy.obclass = (byte)(temp->obclass);
+	dummy.obclass = (uint8_t)(temp->obclass);
 	dummy.stateindex = GetIndexForState(temp->state);
 	dummy.shapeoffset = temp->shapeoffset;
 	dummy.dirchoosetime = temp->dirchoosetime;
@@ -609,7 +610,7 @@ void SaveActors(byte **buffer,int*size)
 
 
 
-void LoadActors(byte *buffer,int size)
+void LoadActors(uint8_t *buffer,int size)
    {
    int numactors,i,playerindex;
    saved_actor_type dummy = {0};
@@ -12049,7 +12050,7 @@ void SelectChaseDir (objtype *ob)
 	int dx,dy,whichway,tx,ty,actrad,visible,
 		 realdiff;
 	dirtype dtry1,dtry2,tdir,olddir,next,prev,start,straight;
-	byte dirtried[9] = {0};
+	uint8_t dirtried[9] = {0};
 
 	olddir=ob->dir;
 	visible = CheckLine(ob,PLAYER[0],SIGHT);

@@ -18,6 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 #include <stdbool.h>
+#include <stdint.h>
 #include "rt_def.h"
 #include "rt_debug.h"
 #include "isr.h"
@@ -54,7 +55,7 @@ extern void DisplayMessage   (int num,int position);
 
 typedef struct {
    char code[15];
-   byte length;
+   uint8_t length;
 } CodeStruct;
 
 enum

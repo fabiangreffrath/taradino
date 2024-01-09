@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_menu_public
 
 #include <stdbool.h>
+#include <stdint.h>
 
 //******************************************************************************
 //
@@ -179,11 +180,11 @@ void AllocateSavedScreenPtr (void);
 void FreeSavedScreenPtr (void);
 void CleanUpControlPanel (void);
 void SetUpControlPanel (void);
-void ControlPanel (byte scancode);
+void ControlPanel (uint8_t scancode);
 menuitems CP_MainMenu( void );
 int getASCII ( void );
 void DoMainMenu (void);
-bool CP_CheckQuick (byte scancode);
+bool CP_CheckQuick (uint8_t scancode);
 void AdjustMenuStruct (void);
 void MenuFixup (void);
 void GetEpisode (int level);

@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // RT_FLOOR.C
 
 #include <stdbool.h>
+#include <stdint.h>
 #include "rt_def.h"
 #include "watcom.h"
 #include "rt_floor.h"
@@ -57,8 +58,8 @@ int		mr_xstep;
 int		mr_ystep;
 int		mr_xfrac;
 int		mr_yfrac;
-byte *   mr_dest;
-byte *   mr_src;
+uint8_t *   mr_dest;
+uint8_t *   mr_src;
 
 /*
 ==================
@@ -68,12 +69,12 @@ byte *   mr_src;
 ==================
 */
 
-static byte     *floor;
-static byte     *ceiling;
+static uint8_t     *floor;
+static uint8_t     *ceiling;
 //static int xstarts[MAXVIEWHEIGHT];
 static int xstarts[600];//set to max hight res
-static byte * skysegs[MAXSKYSEGS];
-static byte * skydata[MAXSKYDATA];
+static uint8_t * skysegs[MAXSKYSEGS];
+static uint8_t * skydata[MAXSKYDATA];
 static int      horizonheight;
 static int      centerskypost;
 static int      oldsky=-1;
@@ -81,7 +82,7 @@ static int      oldsky=-1;
 void DrawSky( void )
 {
 
-   byte * src;
+   uint8_t * src;
    int dest;
 //   int plane;
    int height;
@@ -116,7 +117,7 @@ void DrawSky( void )
                continue;
             ang=(angle+pixelangle[dest])&(FINEANGLES-1);
             src=skysegs[ang]-ofs;
-            DrawSkyPost((byte *)bufferofs + dest,src,height);
+            DrawSkyPost((uint8_t *)bufferofs + dest,src,height);
             }
          }
       }
@@ -132,7 +133,7 @@ void DrawSky( void )
 void DrawFullSky( void )
 {
 
-   byte * src;
+   uint8_t * src;
    int dest;
    int ang;
    int angle;
@@ -162,7 +163,7 @@ void DrawFullSky( void )
          {
          ang=(angle+pixelangle[dest])&(FINEANGLES-1);
          src=skysegs[ang]-ofs;
-         DrawSkyPost((byte *)bufferofs + dest,src,viewheight);
+         DrawSkyPost((uint8_t *)bufferofs + dest,src,viewheight);
          }
       }
 
@@ -176,7 +177,7 @@ void DrawFullSky( void )
 =
 ===================
 */
-void MakeSkyTile (byte * tile)
+void MakeSkyTile (uint8_t * tile)
 {
    int i,j;
    int srcstep;
@@ -203,8 +204,8 @@ void MakeSkyTile (byte * tile)
 */
 void MakeSkyData ( void )
 {
-   byte * temp;
-   byte * ptr;
+   uint8_t * temp;
+   uint8_t * ptr;
    int c;
 
    temp=SafeMalloc(256*800);
@@ -477,8 +478,8 @@ void SetFCLightLevel (int height)
 
 void DrawHLine (int xleft, int xright, int yp)
 {
-   byte * buf;
-   byte * dest;
+   uint8_t * buf;
+   uint8_t * dest;
    int startxfrac;
    int startyfrac;
    int height;
@@ -515,7 +516,7 @@ void DrawHLine (int xleft, int xright, int yp)
 	startyfrac = ((viewy>>1) - FixedMulShift(mr_xstep,scale,2))-
                 FixedMulShift(mr_ystep,(centerx-xleft),2);
 
-   dest=(byte *)bufferofs+ylookup[yp];
+   dest=(uint8_t *)bufferofs+ylookup[yp];
 
 /* TODO: horizontal isn't as easy as vertical in packed */
       {
@@ -591,7 +592,7 @@ void DrawPlanes( void )
       }
 }
 
-void DrawRow(int count, byte * dest, byte * src)
+void DrawRow(int count, uint8_t * dest, uint8_t * src)
 {
 	unsigned frac, fracstep;
 	int coord;

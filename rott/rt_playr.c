@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -266,11 +267,11 @@ static int turnaroundtime;
 //
 
 static int  DoubleClickTimer[ 3 ]   = { 0 };
-static byte DoubleClickCount[ 3 ]   = { 0 };
-static byte DoubleClickPressed[ 3 ] = { false };
+static uint8_t DoubleClickCount[ 3 ]   = { 0 };
+static uint8_t DoubleClickPressed[ 3 ] = { false };
 static int  JoyDblClickTimer[ 4 ]   = { 0 };
-static byte JoyDblClickCount[ 4 ]   = { 0 };
-static byte JoyDblClickPressed[ 4 ] = { false };
+static uint8_t JoyDblClickCount[ 4 ]   = { 0 };
+static uint8_t JoyDblClickPressed[ 4 ] = { false };
 
 
 static int PlayerRecording=-1;

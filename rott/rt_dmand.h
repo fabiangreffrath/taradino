@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_dmand_public
 
 #include <stdbool.h>
+#include <stdint.h>
 
 typedef enum {
    rs_nodata,
@@ -51,7 +52,7 @@ void SD_StopIncomingSound ( void );
 //
 //***************************************************************************
 
-void SD_UpdateIncomingSound ( byte * data, word length );
+void SD_UpdateIncomingSound ( uint8_t * data, word length );
 
 //***************************************************************************
 //
@@ -64,7 +65,7 @@ void SD_UpdateIncomingSound ( byte * data, word length );
 //
 //***************************************************************************
 
-recordstate SD_GetSoundData ( byte * data, word length );
+recordstate SD_GetSoundData ( uint8_t * data, word length );
 
 //***************************************************************************
 //

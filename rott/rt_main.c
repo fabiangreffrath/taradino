@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_def.h"
 #include "lumpy.h"
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -920,7 +921,7 @@ void Init_Tables (void)
 	int x,
 		 y;
 	unsigned *blockstart;
-	byte * shape;
+	uint8_t * shape;
 
    memset (&CWD[0], 0, 40);
    getcwd (CWD, 40);                      // get the current directory
@@ -1053,7 +1054,7 @@ void GameLoop (void)
 			EnableScreenStretch();
             if ((NoWait==false)&&(!modemgame))
                {
-               byte dimpal[768];
+               uint8_t dimpal[768];
                int i;
 
                for (i = 0; i < 0x300; i++)
@@ -1065,7 +1066,7 @@ void GameLoop (void)
                while ((!LastScan) && (!IN_GetMouseButtons()))
                   {
                   int i;
-                  byte *tempbuf;
+                  uint8_t *tempbuf;
                   MenuFadeOut();
                   ClearGraphicsScreen();
                   SetPalette(&dimpal[0]);
@@ -1344,7 +1345,7 @@ void GameLoop (void)
                {
                int shape;
                lbm_t * LBM;
-               byte *s;
+               uint8_t *s;
                patch_t *p;
                char str[50];
                int width, height;
@@ -2474,7 +2475,7 @@ void PlayCinematic (void)
    switch (gamestate.mapon)
    {
 #if (SHAREWARE == 0)
-      byte pal[768];
+      uint8_t pal[768];
       case 0:        // Start of EPISODE 1
 
          MU_StartSong ( song_cinematic1 );

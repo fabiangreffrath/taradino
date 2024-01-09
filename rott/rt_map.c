@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "rt_def.h"
 #include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 
 #include "sprites.h"
@@ -59,7 +60,7 @@ static int32_t xscale;
 static int32_t yscale;
 static int mapscale=2;
 static int oldw,oldh;
-static byte * skytile;
+static uint8_t * skytile;
 static int mapcolor=8;
 
 typedef struct PType {
@@ -143,16 +144,16 @@ void FixMapSeen( void )
 
 void DrawMap_Wall (int x, int y, int tile)
 {
-   byte * buf;
-   byte * b;
-   byte * source;
-   byte * s;
+   uint8_t * buf;
+   uint8_t * b;
+   uint8_t * source;
+   uint8_t * s;
    int i;
 
    x*=tilesize;
    y*=tilesize;
    
-   buf=(byte *)bufferofs+ylookup[y]+x;
+   buf=(uint8_t *)bufferofs+ylookup[y]+x;
 
    source=W_CacheLumpNum(tile,PU_CACHE, CvtNull, 1);
 
@@ -191,15 +192,15 @@ void DrawMap_AnimatedWall (int x, int y, int tile)
 
 void DrawMap_SkyTile (int x, int y)
 {
-   byte * buf;
-   byte * b;
-   byte * s;
+   uint8_t * buf;
+   uint8_t * b;
+   uint8_t * s;
    int i;
 
    x*=tilesize;
    y*=tilesize;
 
-   buf=(byte *)bufferofs+ylookup[y]+x;
+   buf=(uint8_t *)bufferofs+ylookup[y]+x;
 
       {
       s=skytile;
@@ -570,7 +571,7 @@ void SetupFullMap( void )
    // Clear area for map
 
    for (ty=37;ty<37+127;ty++)
-      memset((byte *)bufferofs+ylookup[ty]+96,0,128);
+      memset((uint8_t *)bufferofs+ylookup[ty]+96,0,128);
 }
 
 /*
@@ -587,7 +588,7 @@ void DrawFullMap( void )
    objtype * a;
    int mapx,mapy;
    int wall;
-   byte * buf;
+   uint8_t * buf;
 
    SetupFullMap();
 
@@ -595,7 +596,7 @@ void DrawFullMap( void )
 
    for (mapx=0;mapx<mapwidth;mapx++)
       {
-      buf=(byte *)bufferofs+ylookup[37]+((96+mapx));
+      buf=(uint8_t *)bufferofs+ylookup[37]+((96+mapx));
 
       for (mapy=0;mapy<mapheight;mapy++,buf+=iGLOBAL_SCREENWIDTH)
          {

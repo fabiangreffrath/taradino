@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_ted_private
 #define _rt_ted_private
 
+#include <stdint.h>
+
 #define  MAXPRECACHE    3500
 
 #include "rt_actor.h"
@@ -48,7 +50,7 @@ typedef struct
 {
         short   RLEWtag;
         int             headeroffsets[100];
-        byte            tileinfo[1];
+        uint8_t            tileinfo[1];
 } mapfiletype;
 
 

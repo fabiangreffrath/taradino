@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_vid_public
 
 #include <stdbool.h>
+#include <stdint.h>
 
 //***************************************************************************
 //
@@ -50,11 +51,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //***************************************************************************
 
-extern byte     *updateptr;
+extern uint8_t     *updateptr;
 extern unsigned mapwidthtable[64];
 extern unsigned uwidthtable[UPDATEHIGH];
 extern unsigned blockstarts[UPDATEWIDE*UPDATEHIGH];
-extern byte     update[UPDATESIZE];
+extern uint8_t     update[UPDATESIZE];
 extern bool  screenfaded;
 
 
@@ -63,8 +64,8 @@ extern bool  screenfaded;
 // PROTOTYPES
 //
 //***************************************************************************
-void VL_MemStrechedToScreen (byte *source, int width, int height, int x, int y);
-void VL_MemToScreen (byte *source, int width, int height, int x, int y);
+void VL_MemStrechedToScreen (uint8_t *source, int width, int height, int x, int y);
+void VL_MemToScreen (uint8_t *source, int width, int height, int x, int y);
 void DrawTiledRegion( int x, int y, int width, int height, int offx, int offy, pic_t *tile );
 void VWB_DrawPic (int x, int y, pic_t *pic);
 void VL_Bar (int x, int y, int width, int height, int color);
@@ -77,16 +78,16 @@ int VW_MarkUpdateBlock (int x1, int y1, int x2, int y2);
 void VW_UpdateScreen (void);
 
 void VL_FadeOut (int start, int end, int red, int green, int blue, int steps);
-void VL_FadeIn (int start, int end, byte *palette, int steps);
+void VL_FadeIn (int start, int end, uint8_t *palette, int steps);
 void VL_DecompressLBM (lbm_t *lbminfo, bool flip);
 void VL_FadeToColor (int time, int red, int green, int blue);
 void VWB_TBar (int x, int y, int width, int height);
 
-void SwitchPalette (byte * newpal, int steps);
+void SwitchPalette (uint8_t * newpal, int steps);
 void SetBorderColor (int color);
 
 void VL_DrawPostPic (int lumpnum);
-void VL_DrawLine (int x1, int y1, int x2, int y2, byte color);
+void VL_DrawLine (int x1, int y1, int x2, int y2, uint8_t color);
 
 #define MenuFadeOut()	VL_FadeOut (0, 255, 0, 0, 0, 10)
 #define MenuFadeIn()	   VL_FadeIn (0, 255, origpal, 10)

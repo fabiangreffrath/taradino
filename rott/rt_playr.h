@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_playr_public
 
 #include <stdbool.h>
+#include <stdint.h>
 #include "rt_actor.h"
 #include "rt_stat.h"
 #include "states.h"
@@ -113,7 +114,7 @@ typedef struct
         int                bulletweapon;
 		  signed char        HASBULLETWEAPON[3];
         int                attackframe,attackcount,weaponframe;
-        byte               player;
+        uint8_t               player;
         int                topspeed;
         int                dmomx;
         int                dmomy;
@@ -126,7 +127,7 @@ typedef struct
 		  signed short       playerheight;
 		  signed short       heightoffset;
 		  signed short       weaponheight;
-		  byte               weaponx,weapony;
+		  uint8_t               weaponx,weapony;
 		  word               batblast;
 		  signed char        NETCAPTURED;
 		  signed char        HASKNIFE;

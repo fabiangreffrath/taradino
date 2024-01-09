@@ -25,6 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_stat_public
 #define _rt_stat_public
 
+#include <stdint.h>
+
 #include "rt_ted.h"
 
 #define MAXSWITCHES     64
@@ -127,8 +129,8 @@ typedef enum {
 
 typedef struct awall
 {
-  byte active;
-  byte count;
+  uint8_t active;
+  uint8_t count;
   signed char ticcount;
   int  texture;
   int  basetexture;
@@ -137,15 +139,15 @@ typedef struct awall
 typedef struct statstruct
 {
 		  thingtype         which;
-		  byte              tilex,tiley;
+		  uint8_t              tilex,tiley;
 		  int32_t             x,y,z;
 		  int               shapenum;
 		  unsigned          flags;
 		  signed char       ticcount;
 		  signed char       ammo;
-		  byte              *visspot;
+		  uint8_t              *visspot;
 		  signed char       count;
-		  byte              numanims;
+		  uint8_t              numanims;
 		  stat_t            itemnumber;
 		  short int         hitpoints;
 		  short int         whichstat;
@@ -161,7 +163,7 @@ typedef struct statstruct
 
 typedef struct respstruct
 {
-		  byte              tilex,tiley;
+		  uint8_t              tilex,tiley;
 		  int               ticcount;
 		  stat_t            itemnumber;
 		  int               spawnz;
@@ -177,10 +179,10 @@ typedef struct
 		  int        picnum;
 		  stat_t     type;
 		  unsigned   flags;
-		  byte       tictime;
-		  byte       numanims;
-		  byte       hitpoints;
-		  byte       damage;
+		  uint8_t       tictime;
+		  uint8_t       numanims;
+		  uint8_t       hitpoints;
+		  uint8_t       damage;
 		  signed char  ammo;
 } statinfo;
 
@@ -223,14 +225,14 @@ void SpawnSolidStatic (statobj_t * temp);
 void AnimateWalls(void);
 void DoSprites(void);
 
-void SaveAnimWalls(byte ** buf, int * size);
-void SaveStatics(byte ** buf, int * size);
+void SaveAnimWalls(uint8_t ** buf, int * size);
+void SaveStatics(uint8_t ** buf, int * size);
 
-void LoadAnimWalls(byte * buf, int size);
-void LoadStatics(byte * buf, int size);
+void LoadAnimWalls(uint8_t * buf, int size);
+void LoadStatics(uint8_t * buf, int size);
 
-void SaveSwitches(byte ** buf, int * size);
-void LoadSwitches(byte * buf, int size);
+void SaveSwitches(uint8_t ** buf, int * size);
+void LoadSwitches(uint8_t * buf, int size);
 
 void SpawnInertStatic (int x, int y, int z, int mtype);
 void SpawnStaticDamage(statobj_t * stat, int angle);

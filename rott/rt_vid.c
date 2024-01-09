@@ -18,6 +18,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -49,12 +50,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //******************************************************************************
 
-byte     *updateptr;
+uint8_t     *updateptr;
 unsigned mapwidthtable[64];
 unsigned uwidthtable[UPDATEHIGH];
 unsigned blockstarts[UPDATEWIDE*UPDATEHIGH];
-byte     update[UPDATESIZE];
-byte     palette1[256][3], palette2[256][3];
+uint8_t     update[UPDATESIZE];
+uint8_t     palette1[256][3], palette2[256][3];
 bool  screenfaded;
 
 //******************************************************************************
@@ -63,18 +64,18 @@ bool  screenfaded;
 //
 //******************************************************************************
 
-void VL_MemToScreen (byte *source, int width, int height, int x, int y)
+void VL_MemToScreen (uint8_t *source, int width, int height, int x, int y)
 {
 	/* TODO please optimize me */
 	
-	byte *ptr, *destline;
+	uint8_t *ptr, *destline;
 	int plane, i, j;
 	
 	ptr = source;
 	
 	for (plane = 0; plane < 4; plane++) {
 		for (j = 0; j < height; j++) {
-			destline = (byte *)(bufferofs+ylookup[y+j]+x);
+			destline = (uint8_t *)(bufferofs+ylookup[y+j]+x);
 
 			for (i = 0; i < width; i++) {
 //				if (ptr < bufferofs + toplimit) { //bnafix zxcvb
@@ -85,15 +86,15 @@ void VL_MemToScreen (byte *source, int width, int height, int x, int y)
 	}
 }
 // bna function start
-void VL_MemToScreenClipped (byte *source, int width, int height, int x, int y);
-void VL_MemToScreenClipped (byte *source, int width, int height, int x, int y)
+void VL_MemToScreenClipped (uint8_t *source, int width, int height, int x, int y);
+void VL_MemToScreenClipped (uint8_t *source, int width, int height, int x, int y)
 {
-	byte *ptr, *destline;
+	uint8_t *ptr, *destline;
 	int plane, i, j;//,toplimit;
 	ptr = source;
 	for (plane = 0; plane < 4; plane++) {
 		for (j = 0; j < height; j++) {
-			destline = (byte *)(bufferofs+ylookup[y+j]+x);
+			destline = (uint8_t *)(bufferofs+ylookup[y+j]+x);
 			for (i = 0; i < width; i++) {
 				if (*ptr != 255){
 					*(destline + i*4 + plane) = *ptr++;
@@ -104,9 +105,9 @@ void VL_MemToScreenClipped (byte *source, int width, int height, int x, int y)
 }
 
 //copy picture to mem (bufferofs) in doublesize
-void VL_MemStrechedToScreen (byte *source, int width, int height, int x, int y)
+void VL_MemStrechedToScreen (uint8_t *source, int width, int height, int x, int y)
 {
-	byte *ptr, *destline,*tmp,*o;
+	uint8_t *ptr, *destline,*tmp,*o;
 	int plane, i, j;
 	
 	tmp = bufferofs;
@@ -114,7 +115,7 @@ void VL_MemStrechedToScreen (byte *source, int width, int height, int x, int y)
 	
 	for (plane = 0; plane < 4; plane++) {
 		for (j = 0; j < height; j++) {
-			destline = (byte *)(bufferofs+(iGLOBAL_SCREENWIDTH*j)+ylookup[y+j]+x);
+			destline = (uint8_t *)(bufferofs+(iGLOBAL_SCREENWIDTH*j)+ylookup[y+j]+x);
 			o = ptr;
 			for (i = 0; i < width; i+=1) {
 				*(destline + i*4 + plane) = *ptr;
@@ -123,7 +124,7 @@ void VL_MemStrechedToScreen (byte *source, int width, int height, int x, int y)
 			}
 			ptr = o;
 
-			destline = (byte *)(bufferofs+iGLOBAL_SCREENWIDTH+(iGLOBAL_SCREENWIDTH*j)+ylookup[y+j]+x);
+			destline = (uint8_t *)(bufferofs+iGLOBAL_SCREENWIDTH+(iGLOBAL_SCREENWIDTH*j)+ylookup[y+j]+x);
 			for (i = 0; i < width; i+=1) {
 				*(destline + i*4 + plane) = *ptr;
 				destline++;
@@ -155,22 +156,22 @@ void DrawTiledRegion
    )
 
    {
-   byte  *source;
-   byte  *sourceoff;
+   uint8_t  *source;
+   uint8_t  *sourceoff;
    int    sourcex;
    int    sourcey;
    int    sourcewidth;
    int    sourceheight;
    int    plane;
    int    planesize;
-   byte  *start;
-   byte  *origdest;
-   byte  *dest;
+   uint8_t  *start;
+   uint8_t  *origdest;
+   uint8_t  *dest;
    int    startoffset;
    int    HeightIndex;
    int    WidthIndex;
 
-   start = ( byte * )( bufferofs +  x + ylookup[ y ] );
+   start = ( uint8_t * )( bufferofs +  x + ylookup[ y ] );
 
    source       = &tile->data;
    sourcewidth  = tile->width;
@@ -241,7 +242,7 @@ void VWB_DrawPic (int x, int y, pic_t *pic)
 {
    if (((iGLOBAL_SCREENWIDTH > 320) && !StretchScreen) ||
        VW_MarkUpdateBlock (x, y, x+(pic->width<<2)-1, y+(pic->height)-1))
-      VL_MemToScreen ((byte *)&pic->data, pic->width, pic->height, x, y);
+      VL_MemToScreen ((uint8_t *)&pic->data, pic->width, pic->height, x, y);
 }
 
 
@@ -254,7 +255,7 @@ void VWB_DrawPic (int x, int y, pic_t *pic)
 
 void VL_Bar (int x, int y, int width, int height, int color)
 {
-	byte *dest = (byte *)(bufferofs+ylookup[y]+x);
+	uint8_t *dest = (uint8_t *)(bufferofs+ylookup[y]+x);
 	
 	while (height--) {
 		memset(dest, color, width);
@@ -290,12 +291,12 @@ void VL_TBar (int x, int y, int width, int height)
 	int w = width;
 	
 	while (height--) {
-		byte *dest = (byte *)(bufferofs+ylookup[y]+x);
+		uint8_t *dest = (uint8_t *)(bufferofs+ylookup[y]+x);
 		
 		width = w;
 		
 		while (width--) {
-			byte pixel = *dest;
+			uint8_t pixel = *dest;
 			
 			pixel = *(colormap+(27<<8)+pixel);
 			
@@ -331,7 +332,7 @@ void VWB_TBar (int x, int y, int width, int height)
 
 void VL_Hlin (unsigned x, unsigned y, unsigned width, unsigned color)
 {
-	byte *dest = (byte*)(bufferofs+ylookup[y]+x);
+	uint8_t *dest = (uint8_t*)(bufferofs+ylookup[y]+x);
 	
 	memset(dest, color, width);
 }
@@ -345,7 +346,7 @@ void VL_Hlin (unsigned x, unsigned y, unsigned width, unsigned color)
 
 void VL_Vlin (int x, int y, int height, int color)
 {
-	byte *dest = (byte*)(bufferofs+ylookup[y]+x);
+	uint8_t *dest = (uint8_t*)(bufferofs+ylookup[y]+x);
 	
 	while (height--) {
 		*dest = color;
@@ -392,10 +393,10 @@ void VWB_Vlin (int y1, int y2, int x, int color)
 
 void VL_THlin (unsigned x, unsigned y, unsigned width, bool up)
 {
-	byte *dest = (byte*)(bufferofs+ylookup[y]+x);
+	uint8_t *dest = (uint8_t*)(bufferofs+ylookup[y]+x);
 	
 	while (width--) {
-		byte pixel = *dest;
+		uint8_t pixel = *dest;
 
 		if (up) {
 			pixel = *(colormap+(13<<8)+pixel);
@@ -419,10 +420,10 @@ void VL_THlin (unsigned x, unsigned y, unsigned width, bool up)
 
 void VL_TVlin (unsigned x, unsigned y, unsigned height, bool up)
 {
-	byte *dest = (byte*)(bufferofs+ylookup[y]+x);
+	uint8_t *dest = (uint8_t*)(bufferofs+ylookup[y]+x);
 	
 	while (height--) {
-		byte pixel = *dest;
+		uint8_t pixel = *dest;
 
 		if (up) {
 			pixel = *(colormap+(13<<8)+pixel);
@@ -492,7 +493,7 @@ int VW_MarkUpdateBlock (int x1, int y1, int x2, int y2)
          xt2,
          yt2,
          nextline;
-   byte  *mark;
+   uint8_t  *mark;
 
    xt1 = x1 >> PIXTOBLOCK;
    yt1 = y1 >> PIXTOBLOCK;
@@ -566,7 +567,7 @@ void VW_UpdateScreen (void)
 void VL_FadeOut (int start, int end, int red, int green, int blue, int steps)
 {
    int      i,j,orig,delta;
-   byte  *origptr, *newptr;
+   uint8_t  *origptr, *newptr;
 
    if (screenfaded)
       return;
@@ -625,7 +626,7 @@ void VL_FadeOut (int start, int end, int red, int green, int blue, int steps)
 void VL_FadeToColor (int time, int red, int green, int blue)
 {
    int      i,j,orig,delta;
-   byte  *origptr, *newptr;
+   uint8_t  *origptr, *newptr;
    int dmax,dmin;
 
    if (screenfaded)
@@ -689,7 +690,7 @@ void VL_FadeToColor (int time, int red, int green, int blue)
 =================
 */
 
-void VL_FadeIn (int start, int end, byte *palette, int steps)
+void VL_FadeIn (int start, int end, uint8_t *palette, int steps)
 {
    int      i,j,delta;
 
@@ -735,9 +736,9 @@ void VL_FadeIn (int start, int end, byte *palette, int steps)
 //
 //******************************************************************************
 
-void SwitchPalette (byte * newpal, int steps)
+void SwitchPalette (uint8_t * newpal, int steps)
 {
-   byte *temp;
+   uint8_t *temp;
 
    VL_FadeOut(0,255,0,0,0,steps>>1);
 
@@ -762,11 +763,11 @@ void SwitchPalette (byte * newpal, int steps)
 void VL_DecompressLBM (lbm_t *lbminfo, bool flip)
 {
    int  count;
-   byte b, rept;
-   byte *source = (byte *)&lbminfo->data;
-   byte *buf;
+   uint8_t b, rept;
+   uint8_t *source = (uint8_t *)&lbminfo->data;
+   uint8_t *buf;
    int  ht = lbminfo->height;
-   byte pal[768];
+   uint8_t pal[768];
    
    EnableScreenStretch();
    
@@ -776,7 +777,7 @@ void VL_DecompressLBM (lbm_t *lbminfo, bool flip)
 
    VW_MarkUpdateBlock (0, 0, 320, 200);
 
-   buf = (byte *)bufferofs;
+   buf = (uint8_t *)bufferofs;
 
    while (ht--)
    {
@@ -828,9 +829,9 @@ void SetBorderColor (int color)
 {
    // bna section start
 
-   byte  *cnt,*Ycnt,*b;
+   uint8_t  *cnt,*Ycnt,*b;
 
-   b=(byte *)bufferofs;
+   b=(uint8_t *)bufferofs;
 
    // color 56 could be used
 
@@ -891,7 +892,7 @@ void VL_DrawPostPic (int lumpnum)
 //
 //****************************************************************************
 
-void VL_DrawLine (int x1, int y1, int x2, int y2, byte color)
+void VL_DrawLine (int x1, int y1, int x2, int y2, uint8_t color)
 {
    int dx;
    int dy;
@@ -933,7 +934,7 @@ void VL_DrawLine (int x1, int y1, int x2, int y2, byte color)
    y1<<=16;
    while (count>0)
       {
-      *((byte *)bufferofs+(x1>>16)+(ylookup[y1>>16]))=color;
+      *((uint8_t *)bufferofs+(x1>>16)+(ylookup[y1>>16]))=color;
       x1+=xinc;
       y1+=yinc;
       count--;
@@ -949,11 +950,11 @@ void VL_DrawLine (int x1, int y1, int x2, int y2, byte color)
 
 void DrawXYPic (int x, int y, int shapenum)
 {
-   byte *buffer;
-   byte *buf;
+   uint8_t *buffer;
+   uint8_t *buf;
    int xx,yy;
    int plane;
-   byte *src;
+   uint8_t *src;
    pic_t *p;
 
    p = (pic_t *) W_CacheLumpNum (shapenum, PU_CACHE, Cvt_pic_t, 1);
@@ -963,9 +964,9 @@ void DrawXYPic (int x, int y, int shapenum)
    if ((y<0) || ((y+p->height)>=200))
       Error ("DrawXYPic: y is out of range\n");
 
-   buffer = (byte*)bufferofs+ylookup[y];
+   buffer = (uint8_t*)bufferofs+ylookup[y];
 
-   src=(byte *)&p->data;
+   src=(uint8_t *)&p->data;
 
    for (plane=x;plane<x+4;plane++)
       {

@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_com.h"
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 
 
@@ -162,7 +163,7 @@ void GetMessageOrder
    int  i;
    int  lowest;
    int  lowesttime;
-   byte done[ MAXMSGS ];
+   uint8_t done[ MAXMSGS ];
    bool found;
 
    memset( &done[ 0 ],    0, sizeof( done ) );
@@ -643,8 +644,8 @@ void UpdateModemMessage
    {
    int i;
 
-   Messages[ num ].text[ MSG.length - 1 ] = ( byte )c;
-   Messages[ num ].text[ MSG.length ]     = ( byte )'_';
+   Messages[ num ].text[ MSG.length - 1 ] = ( uint8_t )c;
+   Messages[ num ].text[ MSG.length ]     = ( uint8_t )'_';
    MSG.length++;
 
    for( i = 0; i < TotalMessages; i++ )
@@ -676,8 +677,8 @@ void ModemMessageDeleteChar
    int i;
 
    MSG.length--;
-   Messages[ num ].text[ MSG.length ]     = ( byte )0;
-   Messages[ num ].text[ MSG.length - 1 ] = ( byte )'_';
+   Messages[ num ].text[ MSG.length ]     = ( uint8_t )0;
+   Messages[ num ].text[ MSG.length - 1 ] = ( uint8_t )'_';
 
    for( i = 0; i < TotalMessages; i++ )
       {
@@ -765,7 +766,7 @@ void FinishModemMessage
    {
    if ( ( !MSG.inmenu ) && ( MSG.length > 0 ) )
       {
-      Messages[ num ].text[ MSG.length - 1 ] = ( byte )0;
+      Messages[ num ].text[ MSG.length - 1 ] = ( uint8_t )0;
       MSG.length--;
       }
 

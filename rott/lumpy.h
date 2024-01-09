@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _lumpy_
 #define _lumpy_
 
+#include <stdint.h>
+
 //****************************************************************************
 //
 // Public header for LUMPY typedefs
@@ -29,8 +31,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 typedef struct
 {
-   byte     width,height;
-   byte     data;
+   uint8_t     width,height;
+   uint8_t     data;
 } pic_t;
 
 #define CONVERT_ENDIAN_pic_t(pp) { }
@@ -39,7 +41,7 @@ typedef struct
 {
    short     width,height;
    short     orgx,orgy;
-   byte     data;
+   uint8_t     data;
 } lpic_t;
 
 #define CONVERT_ENDIAN_lpic_t(lp)            \
@@ -55,7 +57,7 @@ typedef struct
 	short height;
    char  width[256];
    short charofs[256];
-   byte  data;       // as much as required
+   uint8_t  data;       // as much as required
 } font_t;
 
 #define CONVERT_ENDIAN_font_t(fp)            \
@@ -71,8 +73,8 @@ typedef struct
 {
    short width;
    short height;
-   byte palette[768];
-   byte data;
+   uint8_t palette[768];
+   uint8_t data;
 } lbm_t;
 
 #define CONVERT_ENDIAN_lbm_t(lp)             \
@@ -131,12 +133,12 @@ typedef struct
 
 typedef struct
 {
-   byte  color;
+   uint8_t  color;
    short height;
    char  width[256];
    short charofs[256];
-   byte  pal[0x300];
-   byte  data;       // as much as required
+   uint8_t  pal[0x300];
+   uint8_t  data;       // as much as required
 } cfont_t;
 
 #define CONVERT_ENDIAN_cfont_t(pp)           \

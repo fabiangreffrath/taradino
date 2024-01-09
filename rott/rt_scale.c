@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "rt_def.h"
 #include "watcom.h"
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -54,8 +55,8 @@ int dc_invscale;
 int sprtopoffset;
 int dc_yl;
 int dc_yh;
-//byte * dc_firstsource;
-byte * dc_source;
+//uint8_t * dc_firstsource;
+uint8_t * dc_source;
 int centeryclipped;
 int transparentlevel=0;
 
@@ -160,14 +161,14 @@ void SetLightLevel (int height)
 =
 ==========================
 */
-void ScaleTransparentPost (byte * src, byte * buf, int level)
+void ScaleTransparentPost (uint8_t * src, uint8_t * buf, int level)
 {
    int  offset;
    int  length;
    int  topscreen;
    int  bottomscreen;
-   byte * oldlevel;
-   byte * seelevel;
+   uint8_t * oldlevel;
+   uint8_t * seelevel;
 
    whereami=25;
 
@@ -210,7 +211,7 @@ void ScaleTransparentPost (byte * src, byte * buf, int level)
 }
 
 
-void ScaleMaskedPost (byte * src, byte * buf)
+void ScaleMaskedPost (uint8_t * src, uint8_t * buf)
 {
    int  offset;
    int  length;
@@ -240,7 +241,7 @@ void ScaleMaskedPost (byte * src, byte * buf)
       }
 }
 
-void ScaleClippedPost (byte * src, byte * buf)
+void ScaleClippedPost (uint8_t * src, uint8_t * buf)
 {
    int  offset;
    int  length;
@@ -270,7 +271,7 @@ void ScaleClippedPost (byte * src, byte * buf)
       }
 }
 
-void ScaleSolidMaskedPost (int color, byte * src, byte * buf)
+void ScaleSolidMaskedPost (int color, uint8_t * src, uint8_t * buf)
 {
    int  offset;
    int  length;
@@ -302,14 +303,14 @@ void ScaleSolidMaskedPost (int color, byte * src, byte * buf)
 }
 
 
-void ScaleTransparentClippedPost (byte * src, byte * buf, int level)
+void ScaleTransparentClippedPost (uint8_t * src, uint8_t * buf, int level)
 {
    int  offset;
    int  length;
    int  topscreen;
    int  bottomscreen;
-   byte * oldlevel;
-   byte * seelevel;
+   uint8_t * oldlevel;
+   uint8_t * seelevel;
 
    whereami=29;
 
@@ -351,7 +352,7 @@ void ScaleTransparentClippedPost (byte * src, byte * buf, int level)
 }
 
 
-void ScaleMaskedWidePost (byte * src, byte * buf, int x, int width)
+void ScaleMaskedWidePost (uint8_t * src, uint8_t * buf, int x, int width)
 {
 	buf += x;
 	
@@ -361,7 +362,7 @@ void ScaleMaskedWidePost (byte * src, byte * buf, int x, int width)
 	}
 }
 
-void ScaleClippedWidePost (byte * src, byte * buf, int x, int width)
+void ScaleClippedWidePost (uint8_t * src, uint8_t * buf, int x, int width)
 {
 	buf += x;
 	
@@ -382,7 +383,7 @@ void ScaleClippedWidePost (byte * src, byte * buf, int x, int width)
 
 void ScaleShape (visobj_t * sprite)
 {
-   byte *shape;
+   uint8_t *shape;
    int      frac;
    patch_t *p;
    int      x1,x2;
@@ -443,7 +444,7 @@ void ScaleShape (visobj_t * sprite)
             {
             if (lastcolumn>=0)
                {
-               ScaleMaskedWidePost(((p->collumnofs[lastcolumn])+shape),(byte *)bufferofs,startx,width);
+               ScaleMaskedWidePost(((p->collumnofs[lastcolumn])+shape),(uint8_t *)bufferofs,startx,width);
                width=1;
                lastcolumn=-1;
                }
@@ -459,7 +460,7 @@ void ScaleShape (visobj_t * sprite)
             {
             if (lastcolumn>=0)
                {
-               ScaleMaskedWidePost(((p->collumnofs[lastcolumn])+shape),(byte *)bufferofs,startx,width);
+               ScaleMaskedWidePost(((p->collumnofs[lastcolumn])+shape),(uint8_t *)bufferofs,startx,width);
                width=1;
                startx=x1;
                lastcolumn=texturecolumn;
@@ -472,11 +473,11 @@ void ScaleShape (visobj_t * sprite)
             }
          }
       if (lastcolumn!=-1)
-         ScaleMaskedWidePost(((p->collumnofs[lastcolumn])+shape),(byte *)bufferofs,startx,width);
+         ScaleMaskedWidePost(((p->collumnofs[lastcolumn])+shape),(uint8_t *)bufferofs,startx,width);
       }
    else
       {
-      byte * b;
+      uint8_t * b;
       int    startfrac;
       int    startx;
 
@@ -494,9 +495,9 @@ void ScaleShape (visobj_t * sprite)
                   )
                   continue;
                if (x1==viewwidth-1)
-                  ScaleMaskedWidePost(((p->collumnofs[frac>>SFRACBITS])+shape),(byte *)bufferofs,x1,1);
+                  ScaleMaskedWidePost(((p->collumnofs[frac>>SFRACBITS])+shape),(uint8_t *)bufferofs,x1,1);
                else
-                  ScaleMaskedWidePost(((p->collumnofs[frac>>SFRACBITS])+shape),(byte *)bufferofs,x1,2);
+                  ScaleMaskedWidePost(((p->collumnofs[frac>>SFRACBITS])+shape),(uint8_t *)bufferofs,x1,2);
                }
             }
          }
@@ -505,7 +506,7 @@ void ScaleShape (visobj_t * sprite)
             {
             frac=startfrac;
 
-            b=(byte *)bufferofs+startx;
+            b=(uint8_t *)bufferofs+startx;
 
             for (x1=startx;x1<=x2;x1++, frac += dc_iscale,b++)
                {
@@ -529,13 +530,13 @@ void ScaleShape (visobj_t * sprite)
 
 void ScaleTransparentShape (visobj_t * sprite)
 {
-   byte *shape;
+   uint8_t *shape;
    int      frac;
    transpatch_t *p;
    int      x1,x2;
    int      tx;
    int      size;
-   byte * b;
+   uint8_t * b;
    int    startfrac;
    int    startx;
 
@@ -582,7 +583,7 @@ void ScaleTransparentShape (visobj_t * sprite)
       {
       frac=startfrac;
 
-     b=(byte *)bufferofs+startx;
+     b=(uint8_t *)bufferofs+startx;
 
       for (x1=startx;x1<=x2;x1++, frac += dc_iscale,b++)
          {
@@ -603,13 +604,13 @@ void ScaleTransparentShape (visobj_t * sprite)
 
 void ScaleSolidShape (visobj_t * sprite)
 {
-   byte *shape;
+   uint8_t *shape;
    int      frac;
    patch_t *p;
    int      x1,x2;
    int      tx;
    int      size;
-	byte * b;
+	uint8_t * b;
    int    startfrac;
    int    startx;
 
@@ -656,7 +657,7 @@ void ScaleSolidShape (visobj_t * sprite)
       {
 		frac=startfrac;
 
-      b=(byte *)bufferofs+startx;
+      b=(uint8_t *)bufferofs+startx;
 
       for (x1=startx;x1<=x2;x1++, frac += dc_iscale,b++)
          {
@@ -678,14 +679,14 @@ void ScaleSolidShape (visobj_t * sprite)
 
 void ScaleWeapon (int xoff, int y, int shapenum)
 {
-	byte *shape;
+	uint8_t *shape;
 	int      frac;
 	int      h;
 	patch_t *p;
 	int      x1,x2;
 	int      tx;
 	int      xcent;
-	byte * b;
+	uint8_t * b;
 	int    startfrac;
 	int    startx;
 
@@ -733,7 +734,7 @@ void ScaleWeapon (int xoff, int y, int shapenum)
 
       {
       frac=startfrac;
-      b=(byte *)bufferofs+startx;
+      b=(uint8_t *)bufferofs+startx;
       for (x1=startx; x1<=x2 ; x1++, frac += dc_iscale,b++)
          ScaleClippedPost(((p->collumnofs[frac>>SFRACBITS])+shape),b);
       }
@@ -752,13 +753,13 @@ void ScaleWeapon (int xoff, int y, int shapenum)
 
 void DrawUnScaledSprite (int x, int y, int shapenum, int shade)
 {
-   byte *shape;
+   uint8_t *shape;
    int      frac;
    patch_t *p;
    int      x1,x2;
    int      tx;
    int      xcent;
-   byte * b;
+   uint8_t * b;
    int    startfrac;
    int    startx;
         
@@ -806,7 +807,7 @@ void DrawUnScaledSprite (int x, int y, int shapenum, int shade)
 		{
 		frac=startfrac;
 
-                b=(byte *)bufferofs+startx;
+                b=(uint8_t *)bufferofs+startx;
 
 		for (x1=startx; x1<=x2 ; x1++, frac += dc_iscale,b++)
 			ScaleClippedPost(((p->collumnofs[frac>>SFRACBITS])+shape),b);
@@ -838,14 +839,14 @@ void DrawScreenSprite (int x, int y, int shapenum)
 
 void DrawPositionedScaledSprite (int x, int y, int shapenum, int height, int type)
 {
-	byte *shape;
+	uint8_t *shape;
 	int      frac;
 	patch_t *p;
 	transpatch_t *tp;
 	int      x1,x2;
 	int      tx;
 	int      xcent;
-	byte * b;
+	uint8_t * b;
 	int    startfrac;
 	int    startx;
 	int    size;
@@ -899,7 +900,7 @@ void DrawPositionedScaledSprite (int x, int y, int shapenum, int height, int typ
       {
       frac=startfrac;
 
-      b=(byte *)bufferofs+startx;
+      b=(uint8_t *)bufferofs+startx;
 
       for (x1=startx; x1<=x2 ; x1++, frac += dc_iscale,b++)
          if (type==0)
@@ -921,19 +922,19 @@ extern int G_gmasklump;
 void DrawScreenSizedSprite (int lump)
 {
 	//draws gasmask among other things zxcv
-   byte *shape,*src;
+   uint8_t *shape,*src;
    int      frac;
    patch_t *p;
    int      x1,x2;
    int      tx;
-   byte * b;
+   uint8_t * b;
    int    startfrac;
 
    int  offset;
    int  length;
    int  topscreen;
    int  bottomscreen;
-   byte  *cnt,*Ycnt;
+   uint8_t  *cnt,*Ycnt;
 
   // SetTextMode (  );
    whereami=39;
@@ -969,7 +970,7 @@ void DrawScreenSizedSprite (int lump)
 
       {
       frac=startfrac;
-      b=(byte *)bufferofs;
+      b=(uint8_t *)bufferofs;
 
 	  /////////////  BNA PATCH //////////////////////////////////////////////////////////
 	     //gmasklump=W_GetNumForName("p_gmask"); //=783
@@ -1014,7 +1015,7 @@ void DrawScreenSizedSprite (int lump)
 //
 //******************************************************************************
 
-void DrawNormalPost (byte * src, byte * buf)
+void DrawNormalPost (uint8_t * src, uint8_t * buf)
 {
    int  offset;
    int  length;
@@ -1032,9 +1033,9 @@ void DrawNormalPost (byte * src, byte * buf)
             length=*(src++);
             for (s=0;s<length;s++) {
                 // Spaced out a little for tracking a bug. Should be equivalent.
-                byte *saddr = src+s;
-                byte *daddr = buf + ylookup[offset + s];
-                byte val = *saddr;
+                uint8_t *saddr = src+s;
+                uint8_t *daddr = buf + ylookup[offset + s];
+                uint8_t val = *saddr;
                 *daddr = val;
 //                *(buf+ylookup[offset+s])=*(src+s);
             }
@@ -1053,11 +1054,11 @@ void DrawNormalPost (byte * src, byte * buf)
 
 void DrawNormalSprite (int x, int y, int shapenum)
 {
-   byte *buffer;
+   uint8_t *buffer;
    int cnt;
-   byte *shape;
+   uint8_t *shape;
    patch_t *p;
-   byte * b;
+   uint8_t * b;
    int startx;
 
    whereami=41;
@@ -1071,22 +1072,22 @@ void DrawNormalSprite (int x, int y, int shapenum)
       Error ("DrawNormalSprite: y is out of range y=%d\n",y-p->topoffset+p->height);
 
    startx=x-p->leftoffset;
-   buffer = (byte*)bufferofs+ylookup[y-p->topoffset];
+   buffer = (uint8_t*)bufferofs+ylookup[y-p->topoffset];
 
       {
       b=buffer+startx; 
      
       for (cnt = 0; cnt < p->width; cnt++,b++)
-         DrawNormalPost ((byte *)(p->collumnofs[cnt]+shape), b);
+         DrawNormalPost ((uint8_t *)(p->collumnofs[cnt]+shape), b);
       }
 }
 
-void R_DrawColumn (byte * buf)
+void R_DrawColumn (uint8_t * buf)
 {
 	// This is *NOT* 100% correct - DDOI
 	int count;
 	int frac, fracstep;
-	byte *dest;
+	uint8_t *dest;
 
 	count = dc_yh - dc_yl + 1;
 	if (count < 0) return;
@@ -1104,10 +1105,10 @@ void R_DrawColumn (byte * buf)
 	}
 }
 
-void R_TransColumn (byte * buf)
+void R_TransColumn (uint8_t * buf)
 {
 	int count;
-	byte *dest;
+	uint8_t *dest;
 
 	count = dc_yh - dc_yl + 1;
 	if (count < 0) return;
@@ -1121,12 +1122,12 @@ void R_TransColumn (byte * buf)
 	}
 }
 
-void R_DrawWallColumn (byte * buf)
+void R_DrawWallColumn (uint8_t * buf)
 {
 	// This is *NOT* 100% correct - DDOI
 	int count;
 	int frac, fracstep;
-	byte *dest;
+	uint8_t *dest;
 
 	count = dc_yh - dc_yl;
 	if (count < 0) return;
@@ -1146,13 +1147,13 @@ void R_DrawWallColumn (byte * buf)
 	}
 }
 
-void R_DrawClippedColumn (byte * buf)
+void R_DrawClippedColumn (uint8_t * buf)
 {
 	// This is *NOT* 100% correct - DDOI zxcv
 	int count;
 	int frac, fracstep;
-	byte *dest;
-//		byte *b;int y;
+	uint8_t *dest;
+//		uint8_t *b;int y;
 
 	count = dc_yh - dc_yl + 1;
 	if (count < 0) return;
@@ -1170,10 +1171,10 @@ void R_DrawClippedColumn (byte * buf)
 	}
 }
 
-void R_DrawSolidColumn (int color, byte * buf)
+void R_DrawSolidColumn (int color, uint8_t * buf)
 {
 	int count;
-	byte *dest;
+	uint8_t *dest;
 
 	count = dc_yh - dc_yl + 1;
 	if (count < 0) return;
@@ -1182,7 +1183,7 @@ void R_DrawSolidColumn (int color, byte * buf)
 
 	while (count--)
 	{
-		*dest = (byte)color;
+		*dest = (uint8_t)color;
 		dest += iGLOBAL_SCREENWIDTH;
 	}
 }

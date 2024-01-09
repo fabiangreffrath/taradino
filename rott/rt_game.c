@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -155,8 +156,8 @@ static int playeruniformcolor;
 #define BONUSBONUS   100000
 
 
-extern void VL_MemToScreenClipped (byte *source, int width, int height, int x, int y);
-void DrawPPic (int xpos, int ypos, int width, int height, byte *src, int num, bool up, bool bufferofsonly);
+extern void VL_MemToScreenClipped (uint8_t *source, int width, int height, int x, int y);
+void DrawPPic (int xpos, int ypos, int width, int height, uint8_t *src, int num, bool up, bool bufferofsonly);
 extern void    MoveScreenUpLeft();
 extern void    MoveScreenUpRight();
 extern void    MoveScreenDownLeft();
@@ -169,9 +170,9 @@ extern void    MoveScreenDownRight();
 
 void V_ReDrawBkgnd (int x, int y, int width, int height, bool shade)
 {
-   byte *src;
-   byte *dest;
-   byte *origdest;
+   uint8_t *src;
+   uint8_t *dest;
+   uint8_t *origdest;
    int j,
        k,
        planes,
@@ -181,7 +182,7 @@ void V_ReDrawBkgnd (int x, int y, int width, int height, bool shade)
    m = (x&3);
    mask = (1 << m);
 
-   origdest = (byte *)(bufferofs+ylookup[y]+x);
+   origdest = (uint8_t *)(bufferofs+ylookup[y]+x);
 
    if (VW_MarkUpdateBlock (x, y, x+width-1, y+height-1))
    {
@@ -376,12 +377,12 @@ void GameMemToScreen
    {
    if ( bufferofsonly )
       {
-      VL_MemToScreen( ( byte * )&source->data, source->width,
+      VL_MemToScreen( ( uint8_t * )&source->data, source->width,
          source->height, x, y );
       }
    else
       {
-      GM_MemToScreen( ( byte * )&source->data, source->width,
+      GM_MemToScreen( ( uint8_t * )&source->data, source->width,
          source->height, x, y );
       }
    }
@@ -410,10 +411,10 @@ void DrawPlayScreen (bool bufferofsonly)
 		  GameMemToScreen( shape, 320, 0, bufferofsonly );
 		  // delete hart in middle of topbar
 		  DrawPPic( 323,1, 8 >> 2, 16,
-				 ( byte * )&erase->data, 2, true, bufferofsonly );
+				 ( uint8_t * )&erase->data, 2, true, bufferofsonly );
 		  // delete bullet in end of topbar
 		  DrawPPic( 620,1, 8 >> 2, 16,
-				 ( byte * )&erase->data, 2, true, bufferofsonly );
+				 ( uint8_t * )&erase->data, 2, true, bufferofsonly );
 		  shape = ( pic_t * )W_CacheLumpName( "stat_bar", PU_CACHE, Cvt_pic_t, 1 );
 		  GameMemToScreen( shape, 0, 0, bufferofsonly );
 	   } else if (iGLOBAL_SCREENWIDTH == 320) {
@@ -460,10 +461,10 @@ void DrawPlayScreen (bool bufferofsonly)
 				 GameMemToScreen( shape, 0, (224*2)+16-ShowKillsYoffset, bufferofsonly );
 				 // delete bullet in middle of shape picture
 				 DrawPPic( 310, (224*2)+17-ShowKillsYoffset, 8 >> 2, 16,
-					 ( byte * )&erase->data, 2, true, bufferofsonly );
+					 ( uint8_t * )&erase->data, 2, true, bufferofsonly );
 				 // delete hart in middle of shape picture
 				 DrawPPic( 324, (224*2)+17-ShowKillsYoffset, 8 >> 2, 16,
-					 ( byte * )&erase->data, 2, true, bufferofsonly );
+					 ( uint8_t * )&erase->data, 2, true, bufferofsonly );
 
 			} else {
 				 GameMemToScreen( shape, 0, 184, bufferofsonly );
@@ -478,12 +479,12 @@ void DrawPlayScreen (bool bufferofsonly)
 			 shape = ( pic_t * )W_CacheLumpName( "demo", PU_CACHE, Cvt_pic_t, 1 );
 			 if (iGLOBAL_SCREENWIDTH == 640) {
 				 //DrawPPic( 148, 185, shape->width, shape->height,
-				 //   ( byte * )&shape->data, 1, true, bufferofsonly );bna
+				 //   ( uint8_t * )&shape->data, 1, true, bufferofsonly );bna
 				 DrawPPic( 148*2, 465, shape->width, shape->height,
-					( byte * )&shape->data, 1, true, bufferofsonly );
+					( uint8_t * )&shape->data, 1, true, bufferofsonly );
 			 } else {
 					DrawPPic( 148, 185, shape->width, shape->height,
-					( byte * )&shape->data, 1, true, bufferofsonly );		
+					( uint8_t * )&shape->data, 1, true, bufferofsonly );		
 			 }
 	  }
     }
@@ -555,7 +556,7 @@ void DrawPlayScreen (bool bufferofsonly)
 
       DrawMPPic( POWERUP1X, POWERUPY + powerupheight, shape->width,
          shape->height - powerupheight, powerupheight,
-         ( byte * )&shape->data, bufferofsonly );
+         ( uint8_t * )&shape->data, bufferofsonly );
       }
 
 
@@ -580,7 +581,7 @@ void DrawPlayScreen (bool bufferofsonly)
 
       DrawMPPic( POWERUP2X, POWERUPY + protectionheight, shape->width,
          shape->height - protectionheight, protectionheight,
-         ( byte * )&shape->data, bufferofsonly );
+         ( uint8_t * )&shape->data, bufferofsonly );
       }
    }
 
@@ -654,7 +655,7 @@ void DrawKills
          }
 
       DrawPPic( MEN_X, MEN_Y, pic->width, pic->height,
-         ( byte * )&pic->data, 1, true, bufferofsonly );
+         ( uint8_t * )&pic->data, 1, true, bufferofsonly );
 
       // Draw player's name
       if ( gamestate.teamplay )
@@ -683,7 +684,7 @@ void DrawKills
          {
          pic = W_CacheLumpName( "smalltri", PU_CACHE, Cvt_pic_t, 1 );
          DrawPPic( TRIAD_X - 1, TRIAD_Y - 2, pic->width, pic->height,
-            ( byte * )&pic->data, 1, true, bufferofsonly );
+            ( uint8_t * )&pic->data, 1, true, bufferofsonly );
          }
       else if ( ( gamestate.ShowScores ) &&
          ( DisplayPoints != bo_kills_infinite ) )
@@ -742,7 +743,7 @@ void DrawKills
          }
 
       DrawPPic( LEADER_X, LEADER_Y, pic->width, pic->height,
-         (byte *)&pic->data, 1, true, bufferofsonly );
+         (uint8_t *)&pic->data, 1, true, bufferofsonly );
 
       if ( ( gamestate.battlemode == battle_Tag ) ||
          ( gamestate.battlemode == battle_Hunter ) )
@@ -799,7 +800,7 @@ void DrawKills
     pic = blankfragpic;
     for (temp = iGLOBAL_SCREENWIDTH-pic->width-24;temp > pic->width; temp -= pic->width){	
 		  DrawPPic( temp, iKILLS_Y, pic->width, pic->height,
-			 (byte *)&pic->data, 1, true, bufferofsonly );
+			 (uint8_t *)&pic->data, 1, true, bufferofsonly );
 
 	}
 
@@ -831,7 +832,7 @@ void DrawKills
             }
          }
       DrawPPic( xpos, iKILLS_Y, pic->width, pic->height,
-         (byte *)&pic->data, 1, true, bufferofsonly );
+         (uint8_t *)&pic->data, 1, true, bufferofsonly );
 
       // Draw number of points
       if ( gamestate.ShowScores )
@@ -890,7 +891,7 @@ void DrawKills
 
       pic = blankfragpic;
       DrawPPic( xpos, iKILLS_Y, pic->width, pic->height,
-         (byte *)&pic->data, 1, true, bufferofsonly );
+         (uint8_t *)&pic->data, 1, true, bufferofsonly );
 
       // Advance to next position
 		xpos += KILLS_WIDTH;
@@ -1013,7 +1014,7 @@ void DrawPlayers
 void StatusDrawPic (unsigned x, unsigned y, pic_t *nums, bool bufferofsonly)
 {
    DrawMPPic (x, y, nums->width, nums->height, 0,
-             (byte *)&nums->data, bufferofsonly);
+             (uint8_t *)&nums->data, bufferofsonly);
 }
 
 //******************************************************************************
@@ -1025,7 +1026,7 @@ void StatusDrawPic (unsigned x, unsigned y, pic_t *nums, bool bufferofsonly)
 void StatusDrawColoredPic (unsigned x, unsigned y, pic_t *nums, bool bufferofsonly, int color)
 {
    DrawColoredMPPic (x, y, nums->width, nums->height, 0,
-             (byte *)&nums->data, bufferofsonly, color);
+             (uint8_t *)&nums->data, bufferofsonly, color);
 }
 
 //******************************************************************************
@@ -1038,7 +1039,7 @@ void StatusDrawColoredPic (unsigned x, unsigned y, pic_t *nums, bool bufferofson
 
 void DrawGameString (int x, int y, const char * str, bool bufferofsonly)
 {
-   byte *tempbuf;
+   uint8_t *tempbuf;
 
    px=x;
    py=y;
@@ -1067,7 +1068,7 @@ void DrawNumber (int x, int y, int width, int which, bool bufferofsonly)
 {
    unsigned length,c;
    char  *str;
-   byte z;
+   uint8_t z;
 
    switch (which)
    {
@@ -1441,7 +1442,7 @@ void StatusDrawTime
 
    {
 	DrawMPPic( x, y, timenums[ num ]->width, timenums[ num ]->height, 0,
-      ( byte * )&timenums[ num ]->data, bufferofsonly );
+      ( uint8_t * )&timenums[ num ]->data, bufferofsonly );
    }
 
 
@@ -1573,14 +1574,14 @@ void DrawTime
 //
 //******************************************************************************
 
-void DrawMPPic (int xpos, int ypos, int width, int height, int heightmod, byte *src, bool bufferofsonly)
+void DrawMPPic (int xpos, int ypos, int width, int height, int heightmod, uint8_t *src, bool bufferofsonly)
 {
    int olddest;
    int dest;
    int x;
    int y;
    int planes;
-   byte pixel;
+   uint8_t pixel;
 
    olddest = ylookup[ypos] + xpos;
 
@@ -1639,15 +1640,15 @@ void DrawMPPic (int xpos, int ypos, int width, int height, int heightmod, byte *
 //
 //******************************************************************************
 
-void DrawColoredMPPic (int xpos, int ypos, int width, int height, int heightmod, byte *src, bool bufferofsonly, int color)
+void DrawColoredMPPic (int xpos, int ypos, int width, int height, int heightmod, uint8_t *src, bool bufferofsonly, int color)
 {
    int olddest;
    int dest;
    int x;
    int y;
    int planes;
-   byte pixel;
-   byte * cmap;
+   uint8_t pixel;
+   uint8_t * cmap;
 
    cmap=playermaps[color]+(1<<12);
 
@@ -1796,14 +1797,14 @@ void DrawTriads
 //
 //******************************************************************************
 
-void DrawPPic (int xpos, int ypos, int width, int height, byte *src, int num, bool up, bool bufferofsonly)
+void DrawPPic (int xpos, int ypos, int width, int height, uint8_t *src, int num, bool up, bool bufferofsonly)
 {
    int olddest;
    int dest;
    int x;
    int y;
    int planes;
-   byte pixel;
+   uint8_t pixel;
    int k;
    int amt;
 
@@ -1883,7 +1884,7 @@ void DrawBarHealth
 
    if ( playstate == ex_died )
       {
-      DrawPPic( iGLOBAL_HEALTH_X, health_y, 8 >> 2, 16, ( byte * )&erase->data,
+      DrawPPic( iGLOBAL_HEALTH_X, health_y, 8 >> 2, 16, ( uint8_t * )&erase->data,
          10, true, bufferofsonly );
 
       return;
@@ -1902,26 +1903,26 @@ void DrawBarHealth
    if ( oldpercenthealth < 4 )
       {
       DrawPPic( iGLOBAL_HEALTH_X, health_y, 8 >> 2, 16,
-         ( byte * )&health[ 0 ]->data, oldpercenthealth,
+         ( uint8_t * )&health[ 0 ]->data, oldpercenthealth,
          true, bufferofsonly );
       }
    else if ( oldpercenthealth < 5 )
       {
       DrawPPic( iGLOBAL_HEALTH_X, health_y, 8 >> 2, 16,
-         (byte *)&health[ 1 ]->data, oldpercenthealth,
+         (uint8_t *)&health[ 1 ]->data, oldpercenthealth,
          true, bufferofsonly );
       }
    else
       {
       DrawPPic( iGLOBAL_HEALTH_X, health_y, 8 >> 2, 16,
-         ( byte * )&health[ 2 ]->data, oldpercenthealth,
+         ( uint8_t * )&health[ 2 ]->data, oldpercenthealth,
          true, bufferofsonly );
       }
 
    if ( oldpercenthealth < 10 )
       {
       DrawPPic( iGLOBAL_HEALTH_X + ( 8 * oldpercenthealth ), health_y,
-         8 >> 2, 16, ( byte * )&erase->data, 10 - oldpercenthealth,
+         8 >> 2, 16, ( uint8_t * )&erase->data, 10 - oldpercenthealth,
          true, bufferofsonly );
       }
    }
@@ -1952,7 +1953,7 @@ void DrawBarAmmo
       ammo_y -= KILLS_HEIGHT;
       }
 
-   DrawPPic ( iGLOBAL_AMMO_X, ammo_y + 1, 8 >> 2, 16, ( byte * )&erase->data,
+   DrawPPic ( iGLOBAL_AMMO_X, ammo_y + 1, 8 >> 2, 16, ( uint8_t * )&erase->data,
       10, false, bufferofsonly );
 
    if ( !ARMED( player->dirchoosetime ) )
@@ -1965,25 +1966,25 @@ void DrawBarAmmo
       )
       {
       DrawPPic( iGLOBAL_AMMO_X - 16, ammo_y, 24 >> 2, 16,
-         ( byte * )&ammo[ 0 ]->data, 1, true, bufferofsonly);
+         ( uint8_t * )&ammo[ 0 ]->data, 1, true, bufferofsonly);
 
       DrawPPic( iGLOBAL_AMMO_X - 32, ammo_y + 1, 8 >> 2, 16,
-         ( byte * )&erase->data, 2, true, bufferofsonly );
+         ( uint8_t * )&erase->data, 2, true, bufferofsonly );
       }
 #if (SHAREWARE == 0)
    else if ( locplayerstate->new_weapon == wp_dog )
       {
       DrawPPic( iGLOBAL_AMMO_X - 16, ammo_y, 24 >> 2, 16,
-         ( byte * )&ammo[12]->data, 1, true, bufferofsonly );
+         ( uint8_t * )&ammo[12]->data, 1, true, bufferofsonly );
 
       DrawPPic( iGLOBAL_AMMO_X - 32, ammo_y + 1, 8 >> 2, 16,
-         ( byte * )&erase->data, 2, true, bufferofsonly );
+         ( uint8_t * )&erase->data, 2, true, bufferofsonly );
       }
 #endif
    else
       {
       DrawPPic( iGLOBAL_AMMO_X, ammo_y + 1, 8 >> 2, 16,
-         ( byte * )&ammo[ locplayerstate->new_weapon]->data,
+         ( uint8_t * )&ammo[ locplayerstate->new_weapon]->data,
          locplayerstate->ammo, false, bufferofsonly );
       }
    }
@@ -1995,14 +1996,14 @@ void DrawBarAmmo
 //
 //******************************************************************************
 
-void SingleDrawPPic (int xpos, int ypos, int width, int height, byte *src, int num, bool up)
+void SingleDrawPPic (int xpos, int ypos, int width, int height, uint8_t *src, int num, bool up)
 {
-   byte *olddest;
-   byte *dest;
+   uint8_t *olddest;
+   uint8_t *dest;
    int x;
 	int y;
    int planes;
-   byte pixel;
+   uint8_t pixel;
    int k;
    int amt;
 
@@ -2011,7 +2012,7 @@ void SingleDrawPPic (int xpos, int ypos, int width, int height, byte *src, int n
    else
       amt = -8;
 
-   olddest = (byte *)(bufferofs - screenofs + ylookup[ypos] + xpos);
+   olddest = (uint8_t *)(bufferofs - screenofs + ylookup[ypos] + xpos);
 
    for (planes = 0; planes < 4; planes++)
    {
@@ -2101,17 +2102,17 @@ void DrawStats
    if ( oldpercenthealth < 4 )
       {
       SingleDrawPPic( iGLOBAL_HEALTH_X - 16, health_y, 8 >> 2, 16,
-         ( byte * )&health[ 3 ]->data, oldpercenthealth, true);
+         ( uint8_t * )&health[ 3 ]->data, oldpercenthealth, true);
       }
    else if ( oldpercenthealth < 5 )
       {
       SingleDrawPPic( iGLOBAL_HEALTH_X - 16, health_y, 8 >> 2, 16,
-         ( byte * )&health[ 4 ]->data, oldpercenthealth, true );
+         ( uint8_t * )&health[ 4 ]->data, oldpercenthealth, true );
       }
    else
       {
       SingleDrawPPic( iGLOBAL_HEALTH_X - 16, health_y, 8 >> 2, 16,
-         ( byte * )&health[ 5 ]->data, oldpercenthealth, true );
+         ( uint8_t * )&health[ 5 ]->data, oldpercenthealth, true );
       }
 
    if ( ARMED( consoleplayer ) )
@@ -2123,19 +2124,19 @@ void DrawStats
 
         {
          SingleDrawPPic( iGLOBAL_AMMO_X - 16, ammo_y, 24 >> 2, 16,
-            ( byte * )&ammo[13]->data, 1, true );
+            ( uint8_t * )&ammo[13]->data, 1, true );
          }
 #if (SHAREWARE == 0)
       else if ( locplayerstate->new_weapon == wp_dog )
          {
          SingleDrawPPic( iGLOBAL_AMMO_X - 16, ammo_y + 1, 24 >> 2, 16,
-            ( byte * )&ammo[25]->data, 1, true );
+            ( uint8_t * )&ammo[25]->data, 1, true );
          }
 #endif
       else
          {
          SingleDrawPPic( iGLOBAL_AMMO_X, ammo_y + 1, 8 >> 2, 16,
-            ( byte * )&ammo[13 + locplayerstate->new_weapon]->data,
+            ( uint8_t * )&ammo[13 + locplayerstate->new_weapon]->data,
             locplayerstate->ammo, false );
          }
       }
@@ -2151,24 +2152,24 @@ void DrawStats
 void DrawPauseXY (int x, int y)
 {
    pic_t *p;
-   byte *buftmp;
+   uint8_t *buftmp;
 
    buftmp = bufferofs;
 
    if (GamePaused == true)
    {
       p = (pic_t *) W_CacheLumpNum (W_GetNumForName ("paused"), PU_CACHE, Cvt_pic_t, 1);
-	  VL_MemToScreen ((byte *)&p->data, p->width, p->height,x, y);
+	  VL_MemToScreen ((uint8_t *)&p->data, p->width, p->height,x, y);
 	  //VWB_DrawPic (x, y, p);
 	  bufferofs = buftmp;
       DrawEpisodeLevel (x,y);
-	  //VL_MemToScreen ((byte *)&p->data, p->width, p->height,x, y);
+	  //VL_MemToScreen ((uint8_t *)&p->data, p->width, p->height,x, y);
 
    }
    else
    {
       p = (pic_t *) W_CacheLumpNum (W_GetNumForName ("wait"), PU_CACHE, Cvt_pic_t, 1);
-	  VL_MemToScreen ((byte *)&p->data, p->width, p->height,x, y);
+	  VL_MemToScreen ((uint8_t *)&p->data, p->width, p->height,x, y);
       //VWB_DrawPic (x, y, p);
    }
    bufferofs = buftmp;
@@ -2183,7 +2184,7 @@ void DrawPauseXY (int x, int y)
 void DrawPause (void)
 {
    pic_t *p;
-   byte *bufftemp = bufferofs;
+   uint8_t *bufftemp = bufferofs;
 
    bufferofs -= screenofs;
 
@@ -2194,7 +2195,7 @@ void DrawPause (void)
       DrawPauseXY( (iGLOBAL_SCREENWIDTH-(p->width<<2) ) >>1, (iGLOBAL_SCREENHEIGHT-p->height)>>1);//bna++
       //DrawPauseXY( (320-(p->width<<2) ) >>1, (200-p->height)>>1);
 /*
-	  //buf = (byte *) SafeMalloc (64000);
+	  //buf = (uint8_t *) SafeMalloc (64000);
 	  w = p->width;
 	  h = p->height;
 	  x = (iGLOBAL_SCREENWIDTH-((p->width)<<2) ) >>1;
@@ -2208,16 +2209,16 @@ void DrawPause (void)
 	  
 	 // memcpy(tmpPICbuf,bufftemp,iGLOBAL_SCREENWIDTH*iGLOBAL_SCREENHEIGHT);
 
-	  bufferofs = bufftemp;//(byte *)tmpPICbuf;//buf;//write picture in tmpbuf
-	  VL_MemToScreen ((byte *)&p->data, p->width, p->height,x, y);
+	  bufferofs = bufftemp;//(uint8_t *)tmpPICbuf;//buf;//write picture in tmpbuf
+	  VL_MemToScreen ((uint8_t *)&p->data, p->width, p->height,x, y);
 	  bufferofs = bufftemp;
 	  DrawEpisodeLevel (x,y);
 
 	  
-	  //VL_MemStrechedToScreen ((byte *)&p->data, p->width, p->height,(iGLOBAL_SCREENWIDTH-((p->width*2)<<2) ) >>1, (iGLOBAL_SCREENHEIGHT-(p->height*2))>>1);
+	  //VL_MemStrechedToScreen ((uint8_t *)&p->data, p->width, p->height,(iGLOBAL_SCREENWIDTH-((p->width*2)<<2) ) >>1, (iGLOBAL_SCREENHEIGHT-(p->height*2))>>1);
       //DrawEpisodeLevel (x,y);
 	  
-	  //VL_MemToScreen ((byte *)&p->data, p->width, p->height,0, 0);
+	  //VL_MemToScreen ((uint8_t *)&p->data, p->width, p->height,0, 0);
 	  //bufferofs = bufftemp;//move ptr back
 	  //write it back to bufferofs while streching
 
@@ -2368,7 +2369,7 @@ void GM_UpdateBonus
          shapenum = POWERUP2X;
          }
 
-      GM_MemToScreen( ( byte * )&eraseb->data, eraseb->width,
+      GM_MemToScreen( ( uint8_t * )&eraseb->data, eraseb->width,
          eraseb->height, shapenum, POWERUPY );
 
       return;
@@ -2400,7 +2401,7 @@ void GM_UpdateBonus
             }
          else
             {
-            GM_MemToScreen( ( byte * )&eraseb->data,
+            GM_MemToScreen( ( uint8_t * )&eraseb->data,
                eraseb->width, eraseb->height, POWERUP1X, POWERUPY );
 
             return;
@@ -2410,12 +2411,12 @@ void GM_UpdateBonus
 
          shape = ( pic_t * )W_CacheLumpNum( shapenum, PU_CACHE, Cvt_pic_t, 1 );
 
-         GM_MemToScreen( ( byte * )&eraseb->data, eraseb->width,
+         GM_MemToScreen( ( uint8_t * )&eraseb->data, eraseb->width,
             eraseb->height, POWERUP1X, POWERUPY );
 
          DrawMPPic( POWERUP1X, POWERUPY + powerupheight, shape->width,
             shape->height - powerupheight, powerupheight,
-            ( byte * )&shape->data, false );
+            ( uint8_t * )&shape->data, false );
          }
       }
    else
@@ -2439,12 +2440,12 @@ void GM_UpdateBonus
 
          shape = ( pic_t * )W_CacheLumpNum( shapenum, PU_CACHE, Cvt_pic_t, 1 );
 
-         GM_MemToScreen( ( byte * )&eraseb->data, eraseb->width,
+         GM_MemToScreen( ( uint8_t * )&eraseb->data, eraseb->width,
             eraseb->height, POWERUP2X, POWERUPY );
 
          DrawMPPic( POWERUP2X, POWERUPY + protectionheight,
             shape->width, shape->height - protectionheight,
-            protectionheight, ( byte * )&shape->data, false );
+            protectionheight, ( uint8_t * )&shape->data, false );
          }
       }
    }
@@ -2469,16 +2470,16 @@ void GM_UpdateBonus
 //
 //******************************************************************************
 
-void Drawpic (int xpos, int ypos, int width, int height, byte *src)
+void Drawpic (int xpos, int ypos, int width, int height, uint8_t *src)
 {
-   byte *olddest;
-   byte *dest;
+   uint8_t *olddest;
+   uint8_t *dest;
    int x;
    int y;
    int planes;
-   byte pixel;
+   uint8_t pixel;
 
-   olddest = (byte *)(bufferofs + ylookup[ypos] + xpos);
+   olddest = (uint8_t *)(bufferofs + ylookup[ypos] + xpos);
    for (planes = 0; planes < 4; planes++)
    {
       dest = olddest;
@@ -2520,16 +2521,16 @@ void  DrawEpisodeLevel (int x, int y)
    {
       ltoa (gamestate.episode, str, 10);
 
-      //bna-- Drawpic (x+29, y+16, 8>>2, 16, (byte *)&timenums[str[0]-'0']->data);
-	  VL_MemToScreenClipped ((byte *)&timenums[str[0]-'0']->data,  8>>2, 16, x+29, y+16);
+      //bna-- Drawpic (x+29, y+16, 8>>2, 16, (uint8_t *)&timenums[str[0]-'0']->data);
+	  VL_MemToScreenClipped ((uint8_t *)&timenums[str[0]-'0']->data,  8>>2, 16, x+29, y+16);
 
       if ((gamestate.mapon == 6) || (gamestate.mapon == 14) ||
           (gamestate.mapon == 22) || (gamestate.mapon == 32) ||
           (gamestate.mapon == 33))
       {
          p = (pic_t *) W_CacheLumpName ("tnumb", PU_CACHE, Cvt_pic_t, 1);
-         //Drawpic (x+40, y+16, 8>>2, 16, (byte *)&p->data);
-		 VL_MemToScreenClipped ((byte *)&p->data, 8>>2, 16, x+40, y+16);
+         //Drawpic (x+40, y+16, 8>>2, 16, (uint8_t *)&p->data);
+		 VL_MemToScreenClipped ((uint8_t *)&p->data, 8>>2, 16, x+40, y+16);
 
          if (gamestate.mapon == 6)
             level = 1;
@@ -2552,33 +2553,33 @@ void  DrawEpisodeLevel (int x, int y)
       ltoa (level, str, 10);
 
       if (level < 10){
-         //Drawpic (x+49, y+16, 8>>2, 16, (byte *)&timenums[str[0]-'0']->data);
-	     VL_MemToScreenClipped ((byte *)&timenums[str[0]-'0']->data, 8>>2, 16, x+49, y+16);
+         //Drawpic (x+49, y+16, 8>>2, 16, (uint8_t *)&timenums[str[0]-'0']->data);
+	     VL_MemToScreenClipped ((uint8_t *)&timenums[str[0]-'0']->data, 8>>2, 16, x+49, y+16);
       }else{
-         //Drawpic (x+49, y+16, 8>>2, 16, (byte *)&timenums[str[0]-'0']->data);
-		 VL_MemToScreenClipped ((byte *)&timenums[str[0]-'0']->data, 8>>2, 16, x+49, y+16);
-         //Drawpic (x+57, y+16, 8>>2, 16, (byte *)&timenums[str[1]-'0']->data);
-		 VL_MemToScreenClipped ((byte *)&timenums[str[1]-'0']->data, 8>>2, 16, x+57, y+16);
+         //Drawpic (x+49, y+16, 8>>2, 16, (uint8_t *)&timenums[str[0]-'0']->data);
+		 VL_MemToScreenClipped ((uint8_t *)&timenums[str[0]-'0']->data, 8>>2, 16, x+49, y+16);
+         //Drawpic (x+57, y+16, 8>>2, 16, (uint8_t *)&timenums[str[1]-'0']->data);
+		 VL_MemToScreenClipped ((uint8_t *)&timenums[str[1]-'0']->data, 8>>2, 16, x+57, y+16);
 
       }
    }
    else
    {
       p = (pic_t *) W_CacheLumpName ("battp", PU_CACHE, Cvt_pic_t, 1);
-      //Drawpic (x+16, y+15, 32>>2, 16, (byte *)&p->data);
-	  VL_MemToScreenClipped ((byte *)&p->data, 32>>2, 16, x+16, y+15);
+      //Drawpic (x+16, y+15, 32>>2, 16, (uint8_t *)&p->data);
+	  VL_MemToScreenClipped ((uint8_t *)&p->data, 32>>2, 16, x+16, y+15);
 
       level = abs(gamestate.mapon + 1);
       ltoa (level, str, 10);
 
       if (level < 10){
-         //Drawpic (x+49, y+16, 8>>2, 16, (byte *)&timenums[str[0]-'0']->data);
-	     VL_MemToScreenClipped ((byte *)&timenums[str[0]-'0']->data, 8>>2, 16, x+49, y+16);
+         //Drawpic (x+49, y+16, 8>>2, 16, (uint8_t *)&timenums[str[0]-'0']->data);
+	     VL_MemToScreenClipped ((uint8_t *)&timenums[str[0]-'0']->data, 8>>2, 16, x+49, y+16);
       }else {
-         //Drawpic (x+49, y+16, 8>>2, 16, (byte *)&timenums[str[0]-'0']->data);
-		 VL_MemToScreenClipped ((byte *)&timenums[str[0]-'0']->data, 8>>2, 16, x+49, y+16);
-         //Drawpic (x+57, y+16, 8>>2, 16, (byte *)&timenums[str[1]-'0']->data);
-		 VL_MemToScreenClipped ((byte *)&timenums[str[1]-'0']->data, 8>>2, 16, x+57, y+16);
+         //Drawpic (x+49, y+16, 8>>2, 16, (uint8_t *)&timenums[str[0]-'0']->data);
+		 VL_MemToScreenClipped ((uint8_t *)&timenums[str[0]-'0']->data, 8>>2, 16, x+49, y+16);
+         //Drawpic (x+57, y+16, 8>>2, 16, (uint8_t *)&timenums[str[1]-'0']->data);
+		 VL_MemToScreenClipped ((uint8_t *)&timenums[str[1]-'0']->data, 8>>2, 16, x+57, y+16);
       }
    }
 }
@@ -2590,18 +2591,18 @@ void  DrawEpisodeLevel (int x, int y)
 //
 //******************************************************************************
 
-void GM_MemToScreen (byte *source, int width, int height, int x, int y)
+void GM_MemToScreen (uint8_t *source, int width, int height, int x, int y)
 {
    int dest;
-   byte *dest1, *dest2, *dest3;
-   byte *screen1, *screen2, *screen3;
+   uint8_t *dest1, *dest2, *dest3;
+   uint8_t *screen1, *screen2, *screen3;
    int  plane;
 
    dest = ylookup[y]+x;
 
-   dest1 = (byte *)(dest+page1start);
-   dest2 = (byte *)(dest+page2start);
-   dest3 = (byte *)(dest+page3start);
+   dest1 = (uint8_t *)(dest+page1start);
+   dest2 = (uint8_t *)(dest+page2start);
+   dest3 = (uint8_t *)(dest+page3start);
 
    for (plane = 0; plane<4; plane++)
    {
@@ -3175,7 +3176,7 @@ void LevelCompleted
    int cnt;
 
    pic_t *tmpPic;
-//   byte *picbuf;
+//   uint8_t *picbuf;
 
    EndBonusNumBonuses = 0;
    EndBonusFirst      = true;
@@ -3289,7 +3290,7 @@ void LevelCompleted
 /*
 	//bna section  store picture  because its written on again
    // store screen first
-   picbuf = (byte *)SafeMalloc (64000);
+   picbuf = (uint8_t *)SafeMalloc (64000);
    memcpy(picbuf ,bufferofs ,64000);
 
    EnableScreenStretch();
@@ -4469,13 +4470,13 @@ player->yzangle=0;
 //
 //******************************************************************************
 
-static byte whichstr = 0;
+static uint8_t whichstr = 0;
 
 void DoLoadGameAction (void)
 {
    if ((SaveTime+1) < GetTicCount())
    {
-      byte *temp = bufferofs;
+      uint8_t *temp = bufferofs;
 
       bufferofs = displayofs;
       SaveTime = GetTicCount();
@@ -4504,7 +4505,7 @@ void DoLoadGameAction (void)
 //
 //******************************************************************************
 
-long DoCheckSum (byte *source, int size, long csum)
+long DoCheckSum (uint8_t *source, int size, long csum)
 {
    int i;
    long checksum;
@@ -4529,7 +4530,7 @@ long CalculateSaveGameCheckSum (char * filename)
    int handle;
    int lengthleft;
    int length;
-   byte * altbuffer;
+   uint8_t * altbuffer;
    long checksum;
 
    altbuffer=SafeMalloc(SAVECHECKSUMSIZE);
@@ -4565,7 +4566,7 @@ long CalculateSaveGameCheckSum (char * filename)
 // StoreBuffer
 //
 //******************************************************************************
-void StoreBuffer (int handle, byte * src, int size)
+void StoreBuffer (int handle, uint8_t * src, int size)
 {
    SafeWrite(handle,&size,sizeof(size));
    SafeWrite(handle,src,size);
@@ -4594,7 +4595,7 @@ bool SaveTheGame (int num, gamestorage_t * game)
 {
    char   loadname[]="rottgam0.rot";
    char   *filename;
-   byte   * altbuffer;
+   uint8_t   * altbuffer;
 	int    size;
    int    savehandle;
    int    crc;
@@ -4842,7 +4843,7 @@ bool SaveTheGame (int num, gamestorage_t * game)
 //
 //******************************************************************************
 
-void LoadTag (byte ** src, char * tag, int size)
+void LoadTag (uint8_t ** src, char * tag, int size)
 {
 	if (StringsNotEqual((char *)*src,(char *)tag,size)==true)
 		Error("Could not locate %s header in saved game file\n",tag);
@@ -4854,7 +4855,7 @@ void LoadTag (byte ** src, char * tag, int size)
 // LoadBuffer
 //
 //******************************************************************************
-int LoadBuffer (byte ** dest, byte ** src)
+int LoadBuffer (uint8_t ** dest, uint8_t ** src)
 {
 	int size;
 
@@ -4879,9 +4880,9 @@ bool LoadTheGame (int num, gamestorage_t * game)
 {
    char   loadname[]="rottgam0.rot";
    char   *filename;
-   byte   * loadbuffer;
-	byte   * bufptr;
-	byte   * altbuffer;
+   uint8_t   * loadbuffer;
+	uint8_t   * bufptr;
+	uint8_t   * altbuffer;
 	int    size;
 	int    totalsize;
 	int    checksum;
@@ -5230,8 +5231,8 @@ void GetSavedMessage (int num, char * message)
    gamestorage_t game;
    char   loadname[]="rottgam0.rot";
    char   *filename;
-   byte   * loadbuffer;
-   byte   * bufptr;
+   uint8_t   * loadbuffer;
+   uint8_t   * bufptr;
    int    size;
 
    if (num>15 || num<0)
@@ -5273,8 +5274,8 @@ void GetSavedHeader (int num, gamestorage_t * game)
 {
    char   loadname[]="rottgam0.rot";
    char   *filename;
-   byte   * loadbuffer;
-   byte   * bufptr;
+   uint8_t   * loadbuffer;
+   uint8_t   * bufptr;
    int    size;
 
    if (num>15 || num<0)

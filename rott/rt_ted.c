@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_def.h"
 #include "rt_sound.h"
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -234,7 +235,7 @@ void ShutdownPreCache( void )
 {
 
    CachingStarted=false;
-   SafeFree((byte *)cachelist);
+   SafeFree((uint8_t *)cachelist);
 }
 
 
@@ -1073,7 +1074,7 @@ void PreCache( void )
    int lastmem=0;
    int lastcache=0;
    int ticdelay = 0;
-   byte *tempbuf;
+   uint8_t *tempbuf;
 
    double Gs = (iGLOBAL_SCREENWIDTH*100.0/320.0) / 100.0;
 
@@ -1421,7 +1422,7 @@ void ReadROTTMap
    long   compressed;
    long   expanded;
    int    plane;
-   byte  *buffer;
+   uint8_t  *buffer;
    size_t mapsoffset;
 
    CheckRTLVersion( filename );
@@ -1759,7 +1760,7 @@ void LoadTedMap
    int     plane;
    int     i;
    int     maphandle;
-   byte   *buffer;
+   uint8_t   *buffer;
    maptype mapheader;
    char    name[ 200 ];
    mapfiletype *tinf;
@@ -3198,7 +3199,7 @@ void SetupDoors (void)
    int j, i;
    word *map;
 	word tile;
-   byte locked;
+   uint8_t locked;
 
    map = mapplanes[0];
 
@@ -5246,7 +5247,7 @@ void SetupRandomActors(void)
 {int i,j;
  word *map,tile;
  int starti,totalrandom=0,count=0,ambush,locindex,orig;
- byte actorpresent[10]={0},index=0,randomtype,used[100]={0};
+ uint8_t actorpresent[10]={0},index=0,randomtype,used[100]={0};
  _2Dpoint randloc[100];
 
 

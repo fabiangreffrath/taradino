@@ -21,15 +21,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_sound_private
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #define SOUNDTYPES 2
 
 typedef struct
 {
    int     snds[SOUNDTYPES];
-   byte    flags;
-   byte    priority;
-   byte    count;
+   uint8_t    flags;
+   uint8_t    priority;
+   uint8_t    count;
    int     prevhandle;
    int     prevdistance;
    void   *chunk;
@@ -104,8 +105,8 @@ typedef enum {
 
 typedef struct
 {
-   byte    loopflag;
-   byte    songtype;
+   uint8_t    loopflag;
+   uint8_t    songtype;
    char    lumpname[9];
    char    songname[40];
 } song_t;

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -118,10 +119,10 @@ char getch(void)
 }
 
 /* from Dan Olson */
-void put_dos2ansi(byte attrib)
+void put_dos2ansi(uint8_t attrib)
 {
 	int lookup[] = {30,34,32,36,31,35,33,37};
-	byte fore,back,blink=0,intens=0;
+	uint8_t fore,back,blink=0,intens=0;
 	
 	fore = attrib&15;	/* bits 0-3 */
 	back = attrib&112; /* bits 4-6 */
@@ -147,7 +148,7 @@ void put_dos2ansi(byte attrib)
 		printf ("\033[%d;25;%dm\033[%dm", intens, fore, back);
 }
 
-void DisplayTextSplash(byte *text, int l)
+void DisplayTextSplash(uint8_t *text, int l)
 {
 	int i;
 	int bound = 80*l*2;

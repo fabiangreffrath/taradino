@@ -26,6 +26,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_view_public
 
 #include <stdbool.h>
+#include <stdint.h>
+
 #include "modexlib.h"
 
 #define HEIGHTFRACTION 6
@@ -75,16 +77,16 @@ typedef enum
    pc_orange
    } playercolors;
 
-extern byte * playermaps[MAXPLAYERCOLORS];
+extern uint8_t * playermaps[MAXPLAYERCOLORS];
 //extern short  pixelangle[MAXVIEWWIDTH];
 extern short  pixelangle[800];
-extern byte   gammatable[GAMMAENTRIES];
+extern uint8_t   gammatable[GAMMAENTRIES];
 extern int    gammaindex;
-extern byte   uniformcolors[MAXPLAYERCOLORS];
+extern uint8_t   uniformcolors[MAXPLAYERCOLORS];
 
-extern  byte mapmasks1[4][9];                   // Map Mask for post scaling
-extern  byte mapmasks2[4][9];                   // Map Mask for post scaling
-extern  byte mapmasks3[4][9];                   // Map Mask for post scaling
+extern  uint8_t mapmasks1[4][9];                   // Map Mask for post scaling
+extern  uint8_t mapmasks2[4][9];                   // Map Mask for post scaling
+extern  uint8_t mapmasks3[4][9];                   // Map Mask for post scaling
 
 extern  int normalshade;                        // Normal shading level for stuff
 extern  int maxshade;                           // max shading level
@@ -100,9 +102,9 @@ extern  int    centerx;
 extern  int centery;
 extern  int centeryfrac;
 extern  int fulllight;
-extern  byte * colormap;
-extern  byte * greenmap;
-extern  byte * redmap;
+extern  uint8_t * colormap;
+extern  uint8_t * greenmap;
+extern  uint8_t * redmap;
 extern  int weaponscale;
 extern  int viewsize;
 extern  int focalwidth;

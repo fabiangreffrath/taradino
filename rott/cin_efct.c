@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "w_wad.h"
 #include "z_zone.h"
 #include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 
 #include "modexlib.h"
@@ -231,7 +232,7 @@ paletteevent * SpawnCinematicPalette ( char * name )
 =
 =================
 */
-void ScaleFilmPost (byte * src, byte * buf)
+void ScaleFilmPost (uint8_t * src, uint8_t * buf)
 {
    int  offset;
    int  length;
@@ -271,7 +272,7 @@ void ScaleFilmPost (byte * src, byte * buf)
 */
 void DrawFlic ( flicevent * flic )
 {
-   byte * curpal;
+   uint8_t * curpal;
    char flicname[40];
 
    curpal = SafeMalloc (768);
@@ -334,8 +335,8 @@ void PrecacheFlic (flicevent * flic)
 
 void DrawCinematicBackground ( backevent * back )
 {
-   byte * src;
-   byte * buf;
+   uint8_t * src;
+   uint8_t * buf;
    lpic_t * pic;
    int i;
    int offset;
@@ -351,7 +352,7 @@ void DrawCinematicBackground ( backevent * back )
       DrawClearBuffer ();
 
    {
-      buf=(byte *)bufferofs+ylookup[back->yoffset];
+      buf=(uint8_t *)bufferofs+ylookup[back->yoffset];
       offset=(back->currentoffset>>FRACTIONBITS);
 
       for (i=0;i<iGLOBAL_SCREENWIDTH;i++,offset++,buf++)
@@ -377,8 +378,8 @@ void DrawCinematicBackground ( backevent * back )
 
 void DrawCinematicMultiBackground ( backevent * back )
 {
-   byte * src;
-   byte * buf;
+   uint8_t * src;
+   uint8_t * buf;
    int i;
    int offset;
    int height;
@@ -391,7 +392,7 @@ void DrawCinematicMultiBackground ( backevent * back )
       DrawClearBuffer ();
 
    {
-      buf=(byte *)bufferofs+ylookup[back->yoffset];
+      buf=(uint8_t *)bufferofs+ylookup[back->yoffset];
       offset=(back->currentoffset>>FRACTIONBITS);
 
       for (i=0;i<iGLOBAL_SCREENWIDTH;i++,offset++,buf++)
@@ -417,9 +418,9 @@ void DrawCinematicMultiBackground ( backevent * back )
 
 void DrawCinematicBackdrop ( backevent * back )
 {
-   byte * src;
-   byte * shape;
-   byte * buf;
+   uint8_t * src;
+   uint8_t * shape;
+   uint8_t * buf;
    patch_t * p;
    int i;
    int offset;
@@ -433,7 +434,7 @@ void DrawCinematicBackdrop ( backevent * back )
    toppost=-p->topoffset+back->yoffset;
 
       {
-      buf=(byte *)bufferofs;
+      buf=(uint8_t *)bufferofs;
       offset=(back->currentoffset>>FRACTIONBITS);
 
       for (i=0;i<iGLOBAL_SCREENWIDTH;i++,offset++,buf++)
@@ -479,13 +480,13 @@ void PrecacheBack ( backevent * back )
 */
 void DrawCinematicSprite ( spriteevent * sprite )
 {
-   byte   *shape;
+   uint8_t   *shape;
    int    frac;
    patch_t *p;
    int    x1,x2;
    int    tx;
    int    xcent;
-   byte * buf;
+   uint8_t * buf;
    int    height;
 
    height = sprite->scale >> FRACTIONBITS;
@@ -499,7 +500,7 @@ void DrawCinematicSprite ( spriteevent * sprite )
 
    cin_ycenter=sprite->y >> FRACTIONBITS;
    cin_invscale = (height<<FRACTIONBITS)/p->origsize;
-   buf=(byte *)bufferofs;
+   buf=(uint8_t *)bufferofs;
    tx=-p->leftoffset;
    xcent=(sprite->x & 0xffff0000)-(height<<(FRACTIONBITS-1))+(FRACTIONUNIT>>1);
 
@@ -562,7 +563,7 @@ void PrecacheCinematicSprite ( spriteevent * sprite )
 
 void DrawPalette (paletteevent * event)
 {
-   byte * pal;
+   uint8_t * pal;
 
    pal=W_CacheLumpName(event->name,PU_CACHE, CvtNull, 1);
    XFlipPage ();
@@ -594,8 +595,8 @@ void PrecachePalette (paletteevent * event)
 
 void DrawFadeout ( void )
 {
-   byte origpal[768];
-   byte newpal[768];
+   uint8_t origpal[768];
+   uint8_t newpal[768];
    int      i,j;
 
    CinematicGetPalette (&origpal[0]);
@@ -635,7 +636,7 @@ void DrawBlankScreen ( void )
 */
 void DrawClearBuffer ( void )
 {
-  memset((byte *)bufferofs,0,iGLOBAL_SCREENWIDTH*iGLOBAL_SCREENHEIGHT);
+  memset((uint8_t *)bufferofs,0,iGLOBAL_SCREENWIDTH*iGLOBAL_SCREENHEIGHT);
 }
 
 /*
@@ -826,15 +827,15 @@ void PrecacheCinematicEffect ( enum_eventtype type, void * effect )
 
 void ProfileDisplay ( void )
 {
-   byte * buf;
+   uint8_t * buf;
    int i;
-   byte src[200];
+   uint8_t src[200];
    int width = StretchScreen? 320:iGLOBAL_SCREENWIDTH;
 
    DrawClearBuffer ();
 
       {
-      buf=(byte *)bufferofs;
+      buf=(uint8_t *)bufferofs;
 
       for (i=0;i<width;i++,buf++)
          {
@@ -853,8 +854,8 @@ void ProfileDisplay ( void )
 
 void DrawPostPic ( int lumpnum )
 {
-   byte * src;
-   byte * buf;
+   uint8_t * src;
+   uint8_t * buf;
    lpic_t * pic;
    int i;
    int height;
@@ -865,7 +866,7 @@ void DrawPostPic ( int lumpnum )
    height = pic->height;
 
       {
-      buf=(byte *)bufferofs;
+      buf=(uint8_t *)bufferofs;
 
       src=&(pic->data);
 

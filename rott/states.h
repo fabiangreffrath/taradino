@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _states_public
 #define _states_public
 
+#include <stdint.h>
+
 #include "develop.h"
 
 #if (SHAREWARE == 0)
@@ -44,7 +46,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 typedef struct  statestruct
 {
-		  byte            rotate;
+		  uint8_t            rotate;
 		  short           shapenum;  // a shapenum of -1 means get from ob->temp1
 		  short           tictime;
 		  void            (*think) ();

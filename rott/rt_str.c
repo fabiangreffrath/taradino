@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //******************************************************************************
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -83,7 +84,7 @@ static char strbuf[MaxString];
 void VW_DrawClippedString (int x, int y, const char *string)
 {
    int   width,height,ht;
-   byte  *source;
+   uint8_t  *source;
    int   ch;
    int   oy;
 
@@ -95,7 +96,7 @@ void VW_DrawClippedString (int x, int y, const char *string)
       {
       ch -= 31;
       width = CurrentFont->width[ch];
-      source = ((byte *)CurrentFont)+CurrentFont->charofs[ch];
+      source = ((uint8_t *)CurrentFont)+CurrentFont->charofs[ch];
       while (width--)
          {
          if ((x>=0) && (x<iGLOBAL_SCREENWIDTH))
@@ -108,7 +109,7 @@ void VW_DrawClippedString (int x, int y, const char *string)
                if ((y>=0) && (y<iGLOBAL_SCREENHEIGHT))
                   {
                   if (*source>0)
-                     *((byte *)(bufferofs+ylookup[y]+x)) = *source;
+                     *((uint8_t *)(bufferofs+ylookup[y]+x)) = *source;
                   }
                source++;
                y++;
@@ -164,19 +165,19 @@ void US_ClippedPrint (int x, int y, const char *string)
 
 void VW_DrawPropString (const char *string)
 {
-   byte  pix;
+   uint8_t  pix;
    int   width,step,height,ht;
-   byte  *source, *dest, *origdest;
+   uint8_t  *source, *dest, *origdest;
    int   ch;
 
    ht = CurrentFont->height;
-   dest = origdest = (byte *)(bufferofs+ylookup[py]+px);
+   dest = origdest = (uint8_t *)(bufferofs+ylookup[py]+px);
 
    while ((ch = (unsigned char)*string++)!=0)
    {
       ch -= 31;
       width = step = CurrentFont->width[ch];
-      source = ((byte *)CurrentFont)+CurrentFont->charofs[ch];
+      source = ((uint8_t *)CurrentFont)+CurrentFont->charofs[ch];
       while (width--)
       {
          height = ht;
@@ -229,20 +230,20 @@ void VWB_DrawPropString  (const char *string)
 
 void VW_DrawIPropString (const char *string)
 {
-   byte  pix;
+   uint8_t  pix;
    int   width,step,height,ht;
-   byte  *source, *dest, *origdest;
+   uint8_t  *source, *dest, *origdest;
    int   ch;
 
 
    ht = CurrentFont->height;
-   dest = origdest = (byte *)(bufferofs+ylookup[py]+px);
+   dest = origdest = (uint8_t *)(bufferofs+ylookup[py]+px);
 
    while ((ch = (unsigned char)*string++)!=0)
    {
       ch -= 31;
       width = step = CurrentFont->width[ch];
-      source = ((byte *)CurrentFont)+CurrentFont->charofs[ch];
+      source = ((uint8_t *)CurrentFont)+CurrentFont->charofs[ch];
       while (width--)
       {
          height = ht;
@@ -296,7 +297,7 @@ void VWL_MeasureString (const char *s, int *width, int *height, const font_t *fo
    *height = font->height;
 
    for (*width = 0; *s; s++)
-      *width += font->width[(*((byte *)s))-31];   // proportional width
+      *width += font->width[(*((uint8_t *)s))-31];   // proportional width
 }
 
 //******************************************************************************
@@ -310,7 +311,7 @@ void VWL_MeasureIntensityString (const char *s, int *width, int *height, const c
    *height = font->height;
 
    for (*width = 0; *s; s++)
-      *width += font->width[(*((byte *)s))-31];   // proportional width
+      *width += font->width[(*((uint8_t *)s))-31];   // proportional width
 }
 
 //******************************************************************************
@@ -1296,7 +1297,7 @@ void US_DrawWindow (int x, int y, int w, int h)
         sy,
         sw,
         sh;
-   byte * shape;
+   uint8_t * shape;
 
    pic_t *Win1;
    pic_t *Win2;
@@ -1396,11 +1397,11 @@ void US_CenterWindow (int w, int h)
 //
 //******************************************************************************
 
-byte GetIntensityColor (byte pix)
+uint8_t GetIntensityColor (uint8_t pix)
 {
    if ((fontcolor<0) || (fontcolor>255))
       Error("Intensity Color out of range\n");
-   return ((byte) intensitytable[(pix<<8)+fontcolor]);
+   return ((uint8_t) intensitytable[(pix<<8)+fontcolor]);
 }
 
 
@@ -1415,23 +1416,23 @@ byte GetIntensityColor (byte pix)
 void DrawIntensityChar  ( char ch )
    {
 
-   byte  pix;
+   uint8_t  pix;
    int   width;
    int   height;
    int   ht;
-   byte  *source;
-   byte  *dest;
-   byte  *origdest;
+   uint8_t  *source;
+   uint8_t  *dest;
+   uint8_t  *origdest;
 
    ht = IFont->height;
 
-   origdest = ( byte * )( bufferofs + ylookup[ py ] + px );
+   origdest = ( uint8_t * )( bufferofs + ylookup[ py ] + px );
 
    dest = origdest;
 
    ch -= 31;
    width = IFont->width[ (unsigned char)ch ];
-   source = ( ( byte * )IFont ) + IFont->charofs[ (unsigned char)ch ];
+   source = ( ( uint8_t * )IFont ) + IFont->charofs[ (unsigned char)ch ];
 
    if ((iGLOBAL_SCREENWIDTH <= 320)||(StretchScreen == true)){
 	   while( width-- )

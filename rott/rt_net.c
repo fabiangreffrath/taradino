@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -80,7 +81,7 @@ bool    remoteridicule = false;
 */
 bool  demorecord,
 			demoplayback;
-byte     *demoptr,
+uint8_t     *demoptr,
 			*lastdemoptr,
          *demobuffer=NULL;
 bool  demodone = false;
@@ -268,7 +269,7 @@ void InitializeGameCommands( void )
                size=( (numplayers * GetTypeSize(COM_TEXT)) +
                       GetTypeSize(COM_SOUNDANDDELTA) +
                       sizeof(COM_ServerHeaderType) -
-                      sizeof(byte)
+                      sizeof(uint8_t)
                     );
                ServerCommand(j)=SafeMalloc( size );
                memset(ServerCommand(j),COM_DELTANULL,size);
@@ -505,7 +506,7 @@ void StartupClientControls ( void )
       size=( (numplayers * GetTypeSize(COM_TEXT)) +
                GetTypeSize(COM_SOUNDANDDELTA) +
                sizeof(COM_ServerHeaderType) -
-               sizeof(byte)
+               sizeof(uint8_t)
             );
 
       for (j=0;j<numplayers;j++)
@@ -988,7 +989,7 @@ int GetPacketSize (void * pkt)
          break;
       case COM_SERVER:
          size=sizeof(COM_ServerHeaderType);
-         size-=sizeof(byte);
+         size-=sizeof(uint8_t);
          break;
       case COM_GAMEDESC:
          size=sizeof(COM_GamePlayerType);
@@ -1030,9 +1031,9 @@ int GetPacketSize (void * pkt)
 
 int GetTypeSize (int type)
 {
-   byte pkt[2];
+   uint8_t pkt[2];
 
-   pkt[0]=(byte)type;
+   pkt[0]=(uint8_t)type;
    return ( GetPacketSize(&(pkt[0])) );
 }
 
@@ -1045,7 +1046,7 @@ int GetTypeSize (int type)
 int GetServerPacketSize (void * pkt)
 {
    int i;
-   byte * ptr;
+   uint8_t * ptr;
    COM_ServerHeaderType * serverpkt;
 
    serverpkt=(COM_ServerHeaderType *)pkt;
@@ -1057,7 +1058,7 @@ int GetServerPacketSize (void * pkt)
          {
          ptr+=GetPacketSize(ptr);
          }
-      return ((byte *)ptr-(byte *)pkt);
+      return ((uint8_t *)ptr-(uint8_t *)pkt);
       }
    else
       return GetPacketSize(pkt);
@@ -1110,7 +1111,7 @@ void BroadcastServerPacket (void * pkt, int size)
 //      if ((standalone==false) && (i==consoleplayer))
 //         ProcessPacket(pkt,i);
 //      else
-         WritePacket((byte *)pkt,size,i);
+         WritePacket((uint8_t *)pkt,size,i);
       }
 }
 
@@ -1140,9 +1141,9 @@ void ResendLocalPackets (int time, int dest, int numpackets)
       }
    else
       {
-      byte * tempbuf;
-      byte * tempptr;
-      byte * tempstart;
+      uint8_t * tempbuf;
+      uint8_t * tempptr;
+      uint8_t * tempstart;
       COM_FixupType * fixup;
       int i;
       int starti;
@@ -1214,9 +1215,9 @@ void ResendServerPackets (int time, int dest, int numpackets)
       }
    else
       {
-      byte * tempbuf;
-      byte * tempptr;
-      byte * tempstart;
+      uint8_t * tempbuf;
+      uint8_t * tempptr;
+      uint8_t * tempstart;
       COM_FixupType * fixup;
       int i;
       int starti;
@@ -1310,7 +1311,7 @@ void FixupPacket (void * pkt, int src)
    COM_FixupType * fix;
    int i;
    int time;
-   byte * ptr;
+   uint8_t * ptr;
 
    fix=(COM_FixupType *)pkt;
 
@@ -1381,7 +1382,7 @@ void ProcessSoundAndDeltaPacket (void * pkt, int src)
 {
    MoveType * packet;
    COM_SoundType * sndpkt;
-   byte oldtype;
+   uint8_t oldtype;
 
    packet = (MoveType *)pkt;
 
@@ -1512,7 +1513,7 @@ void ProcessPacket (void * pkt, int src)
 
 void AddServerSubPacket(COM_ServerHeaderType * serverpkt)
 {
-   byte * pkt;
+   uint8_t * pkt;
    int i;
 
    ServerCommandStatus(serverpkt->time)=cs_ready;
@@ -1849,7 +1850,7 @@ void SendFullServerPacket ( void )
 {
    int i;
    int size;
-   byte * pkt;
+   uint8_t * pkt;
    COM_ServerHeaderType * spkt;
    int timeindex;
    int playerstatus[MAXPLAYERS];
@@ -1883,7 +1884,7 @@ void SendFullServerPacket ( void )
       pkt+=size;
       ClientCommandNumberStatus(i,timeindex)=cs_notarrived;
       }
-   BroadcastServerPacket((void *)spkt,(pkt-(byte *)spkt));
+   BroadcastServerPacket((void *)spkt,(pkt-(uint8_t *)spkt));
    serverupdatetime+=controldivisor;
 
    for (i=0;i<numplayers;i++)
@@ -2376,7 +2377,7 @@ void UpdatePlayerObj ( int player )
 
 void SendPlayerDescription( void )
 {
-   byte * temp;
+   uint8_t * temp;
    COM_GamePlayerType * desc;
    int length;
 
@@ -2386,7 +2387,7 @@ void SendPlayerDescription( void )
    memset(temp,0,length);
 
    desc=(COM_GamePlayerType *)temp;
-   desc->type=(byte)COM_GAMEDESC;
+   desc->type=(uint8_t)COM_GAMEDESC;
 	desc->player=consoleplayer;
    desc->violence=gamestate.violence;
    desc->Version = gamestate.Version;
@@ -2409,7 +2410,7 @@ void SendPlayerDescription( void )
 
 void SendGameDescription( void )
 {
-   byte * temp;
+   uint8_t * temp;
    COM_GameMasterType * desc;
    int length;
    int i;
@@ -2420,7 +2421,7 @@ void SendGameDescription( void )
    memset(temp,0,length);
 
    desc=(COM_GameMasterType *)temp;
-   desc->type=(byte)COM_GAMEMASTER;
+   desc->type=(uint8_t)COM_GAMEMASTER;
    desc->level=gamestate.mapon;
    desc->mapcrc=GetMapCRC (gamestate.mapon);
    desc->mode=gamestate.battlemode;
@@ -2540,7 +2541,7 @@ void SetPlayerDescription( void * pkt )
 
 void SendGameAck( void )
 {
-   byte * temp;
+   uint8_t * temp;
    int length;
    COM_GameAckType * desc;
 
@@ -2563,12 +2564,12 @@ void SendGameAck( void )
 
 void SendGameStart( void )
 {
-   byte * temp;
+   uint8_t * temp;
    int length;
 
    length=DUMMYPACKETSIZE;
    temp=SafeMalloc(length);
-   *(temp)=(byte)COM_GAMEPLAY;
+   *(temp)=(uint8_t)COM_GAMEPLAY;
 
    if (IsServer==false)
       {
@@ -2744,13 +2745,13 @@ void GetDemoFilename (int demonumber, char **filename)
     qm = strrchr(path, '?'); // "DEMO?_?.DMO"[6]
     if (qm)
     {
-        *qm = (char)('0' + (byte)gamestate.violence);
+        *qm = (char)('0' + (uint8_t)gamestate.violence);
     }
 
     qm = strrchr(path, '?'); // "DEMO?_?.DMO"[4]
     if (qm)
     {
-        *qm = (char)('0' + (byte)demonumber);
+        *qm = (char)('0' + (uint8_t)demonumber);
     }
 
     *filename = M_FileCaseExists(path);

@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //****************************************************************************
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
@@ -102,7 +103,7 @@ bool stereoreversed   = false;
 int     DefaultDifficulty      = 2;
 int     DefaultPlayerCharacter = 0;
 int     DefaultPlayerColor     = 0;
-byte    passwordstring[20];
+uint8_t    passwordstring[20];
 
 MacroList CommbatMacros[MAXMACROS];
 
@@ -943,7 +944,7 @@ void CheckVendor (void)
    int filecrc;
    int size;
    int lump;
-   byte * vendor;
+   uint8_t * vendor;
    char *filename;
 
    filename = M_StringJoin(ApogeePath, PATH_SEP_STR, VENDORDOC, NULL);
