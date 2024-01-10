@@ -32,12 +32,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 extern "C" {
 #endif
 
-#if defined(REALMODE)
-#define FAR __far
-#else
-#define FAR
-#endif
-
 //---------------------------------------------------------------------------
 // Constants
 
@@ -122,17 +116,17 @@ typedef union {
  * Function Prototypes                                                     *
  * ======================================================================= */
 
-short SpwOpenDriver(SpwPacket FAR *packet);
+short SpwOpenDriver(SpwPacket *packet);
 short SpwCloseDriver(void);
 
-short SpwOpenDevice(short device, SpwPacket FAR *packet);
+short SpwOpenDevice(short device, SpwPacket *packet);
 short SpwCloseDevice(short device);
 
 short SpwEnableDevice(short device);
 short SpwDisableDevice(short device);
 
-short SpwGetForce(short device, SpwPacket FAR *packet);
-short SpwGetButton(short device, SpwPacket FAR *packet);
+short SpwGetForce(short device, SpwPacket *packet);
+short SpwGetButton(short device, SpwPacket *packet);
 
 /* ======================================================================= *
  * Convience functions                                                     *
@@ -189,7 +183,7 @@ typedef struct {
 
 
 
-short SpwSimpleGet(short devNum, SpwRawData FAR *splayer);
+short SpwSimpleGet(short devNum, SpwRawData *splayer);
 short SpwSimpleOpen(short devNum);
 short SpwSimpleClose(short devNum);
 

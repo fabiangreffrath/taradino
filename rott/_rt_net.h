@@ -22,6 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <stdbool.h>
 
+#include "rt_net.h"
+
 #define DEMOBUFFSIZE 50000
 
 #define FASTSPEED (0xB000)

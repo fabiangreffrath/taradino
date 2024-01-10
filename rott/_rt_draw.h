@@ -21,6 +21,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_draw_private
 
 #include <stdbool.h>
+#include "rt_actor.h"
+#include "rt_draw.h"
 #include "develop.h"
 
 #define MINZ                            0x2700

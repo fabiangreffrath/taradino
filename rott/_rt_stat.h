@@ -22,6 +22,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <stdint.h>
 
+#include "rt_stat.h"
+
 void        AddStatic(statobj_t*);
 void        AddAnimStatic(statobj_t*);
 void        PreCacheStaticSounds(int);

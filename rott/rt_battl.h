@@ -34,6 +34,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <stdbool.h>
 
+#include "rottnet.h"
+
 #define BIT_MASK( bit_number )   ( 1 << ( bit_number ) )
 #define MINUTES_TO_GAMECOUNT( minutes ) \
    ( ( minutes ) * 60 * VBLCOUNTER )

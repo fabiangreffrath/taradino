@@ -26,6 +26,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_str_private
 #define _rt_str_private
 
+#include "lumpy.h"
+
 //******************************************************************************
 //
 // PROTOTYPES

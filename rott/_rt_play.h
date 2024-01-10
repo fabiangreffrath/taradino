@@ -20,6 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_playr_private
 #define _rt_playr_private
 
+#include "rt_actor.h"
 #include "watcom.h"
 //double dTopYZANGLELIMIT; in winrott.c
 #define TopYZANGLELIMIT  (44*FINEANGLES/360)//bna added

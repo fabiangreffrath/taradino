@@ -13,8 +13,6 @@
 #include <string.h>
 #include <assert.h>
 
-#define cdecl
-
 #include "SDL.h"
 #include "SDL_mixer.h"
 
@@ -385,7 +383,7 @@ void MUSIC_StopFade(void)
 } // MUSIC_StopFade
 
 
-void MUSIC_RerouteMidiChannel(int channel, int cdecl (*function)( int event, int c1, int c2 ))
+void MUSIC_RerouteMidiChannel(int channel, int (*function)( int event, int c1, int c2 ))
 {
     musdebug("STUB ... MUSIC_RerouteMidiChannel().\n");
 } // MUSIC_RerouteMidiChannel
