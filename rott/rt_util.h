@@ -106,10 +106,10 @@ void AbortCheck (char * abortstring);
 
 struct dosdate_t
 {
-    unsigned char day;
-    unsigned char month;
+    uint8_t day;
+    uint8_t month;
     unsigned int year;
-    unsigned char dayofweek;
+    uint8_t dayofweek;
 };
 
 void _dos_getdate(struct dosdate_t *date);

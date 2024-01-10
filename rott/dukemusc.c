@@ -142,7 +142,7 @@ char *MUSIC_ErrorString(int ErrorNumber)
 static int music_initialized = 0;
 static int music_context = 0;
 static int music_loopflag = MUSIC_PlayOnce;
-static unsigned char *music_songdata = NULL;
+static uint8_t *music_songdata = NULL;
 static Mix_Music *music_musicchunk = NULL;
 
 int MUSIC_Init(int SoundCard, int Address)
@@ -265,7 +265,7 @@ int MUSIC_StopSong(void)
 } // MUSIC_StopSong
 
 
-int MUSIC_PlaySong(unsigned char *song, int loopflag)
+int MUSIC_PlaySong(uint8_t *song, int loopflag)
 {
     //SDL_RWops *rw;
 
@@ -293,7 +293,7 @@ musdebug("Need to use PlaySongROTT.  :(");
 } // MUSIC_PlaySong
 
 // ROTT Special - SBF
-int MUSIC_PlaySongROTT(unsigned char *song, int size, int loopflag)
+int MUSIC_PlaySongROTT(uint8_t *song, int size, int loopflag)
 {
     char *filename;
     int handle;
@@ -389,7 +389,7 @@ void MUSIC_RerouteMidiChannel(int channel, int (*function)( int event, int c1, i
 } // MUSIC_RerouteMidiChannel
 
 
-void MUSIC_RegisterTimbreBank(unsigned char *timbres)
+void MUSIC_RegisterTimbreBank(uint8_t *timbres)
 {
     musdebug("STUB ... MUSIC_RegisterTimbreBank().\n");
 } // MUSIC_RegisterTimbreBank

@@ -6,8 +6,6 @@
 #include "WinRott.h"
 #include "modexlib.h"
 
-//typedef unsigned char byte;
-
 int iGLOBAL_SCREENWIDTH  = 640;//bna
 int iGLOBAL_SCREENHEIGHT = 480;//bna
 int iGLOBAL_SCREENBWIDE ;

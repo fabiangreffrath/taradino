@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define SIZE_OF_RANDOM_TABLE   2048
 
-static const unsigned char RandomTable[ SIZE_OF_RANDOM_TABLE ] =
+static const uint8_t RandomTable[ SIZE_OF_RANDOM_TABLE ] =
    {
    107,   65,  179,   81,  212,    1,   34,  230,
    167,  142,   82,   27,   62,   88,  140,  119,

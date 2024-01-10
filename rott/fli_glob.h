@@ -17,6 +17,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-void PlayFlic ( char * name, unsigned char * buffer, int usefile, int loop);
+void PlayFlic ( char * name, uint8_t * buffer, int usefile, int loop);
 
 

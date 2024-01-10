@@ -64,8 +64,8 @@ static int FX_Installed = 0;
 
 typedef struct
 {
-    unsigned char left;
-    unsigned char right;
+    uint8_t left;
+    uint8_t right;
 } Pan;
 
 static Pan MV_PanTable[MV_NumPanPositions][63 + 1];

@@ -75,10 +75,10 @@ int   MUSIC_SongPlaying( void );
 void  MUSIC_Continue( void );
 void  MUSIC_Pause( void );
 int   MUSIC_StopSong( void );
-int   MUSIC_PlaySong( unsigned char *song, int loopflag );
+int   MUSIC_PlaySong( uint8_t *song, int loopflag );
 
 // ROTT Special - SBF
-int   MUSIC_PlaySongROTT(unsigned char *song, int size, int loopflag);
+int   MUSIC_PlaySongROTT(uint8_t *song, int size, int loopflag);
 
 void  MUSIC_SetContext( int context );
 int   MUSIC_GetContext( void );
@@ -91,6 +91,6 @@ int   MUSIC_FadeVolume( int tovolume, int milliseconds );
 int   MUSIC_FadeActive( void );
 void  MUSIC_StopFade( void );
 void  MUSIC_RerouteMidiChannel( int channel, int ( *function )( int event, int c1, int c2 ) );
-void  MUSIC_RegisterTimbreBank( unsigned char *timbres );
+void  MUSIC_RegisterTimbreBank( uint8_t *timbres );
 
 #endif

@@ -92,7 +92,7 @@ void VW_DrawClippedString (int x, int y, const char *string)
 
    oy=y;
 
-   while ((ch = (unsigned char)*string++)!=0)
+   while ((ch = (uint8_t)*string++)!=0)
       {
       ch -= 31;
       width = CurrentFont->width[ch];
@@ -173,7 +173,7 @@ void VW_DrawPropString (const char *string)
    ht = CurrentFont->height;
    dest = origdest = (uint8_t *)(bufferofs+ylookup[py]+px);
 
-   while ((ch = (unsigned char)*string++)!=0)
+   while ((ch = (uint8_t)*string++)!=0)
    {
       ch -= 31;
       width = step = CurrentFont->width[ch];
@@ -239,7 +239,7 @@ void VW_DrawIPropString (const char *string)
    ht = CurrentFont->height;
    dest = origdest = (uint8_t *)(bufferofs+ylookup[py]+px);
 
-   while ((ch = (unsigned char)*string++)!=0)
+   while ((ch = (uint8_t)*string++)!=0)
    {
       ch -= 31;
       width = step = CurrentFont->width[ch];
@@ -1431,8 +1431,8 @@ void DrawIntensityChar  ( char ch )
    dest = origdest;
 
    ch -= 31;
-   width = IFont->width[ (unsigned char)ch ];
-   source = ( ( uint8_t * )IFont ) + IFont->charofs[ (unsigned char)ch ];
+   width = IFont->width[ (uint8_t)ch ];
+   source = ( ( uint8_t * )IFont ) + IFont->charofs[ (uint8_t)ch ];
 
    if ((iGLOBAL_SCREENWIDTH <= 320)||(StretchScreen == true)){
 	   while( width-- )

@@ -63,7 +63,7 @@ static bool MapDebugStarted=false;
 
 extern SDL_Surface *VL_GetVideoSurface (void);
 
-static unsigned char egargb[48]={ 0x00,0x00,0x00,
+static uint8_t egargb[48]={ 0x00,0x00,0x00,
 									 0x00,0x00,0xab,
                             0x00,0xab,0x00,
                             0x00,0xab,0xab,
