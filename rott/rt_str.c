@@ -490,11 +490,11 @@ void US_BufPrint (const char *string)
 
 //******************************************************************************
 //
-// US_PrintUnsigned () - Prints an unsigned long int
+// US_PrintUnsigned () - Prints an unsigned long
 //
 //******************************************************************************
 
-void US_PrintUnsigned (unsigned long int n)
+void US_PrintUnsigned (unsigned long n)
 {
    char  buffer[32];
 
@@ -507,7 +507,7 @@ void US_PrintUnsigned (unsigned long int n)
 //
 //******************************************************************************
 
-void US_PrintSigned (long int n)
+void US_PrintSigned (long n)
 {
    char  buffer[32];
 

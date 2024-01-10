@@ -2010,22 +2010,22 @@ int SetupCheckForPacket ( void )
                break;
             case COM_GAMEDESC:
                if (standalone==true)
-                  printf("Received GameDescription from player#%ld\n",(long int)rottcom->remotenode);
+                  printf("Received GameDescription from player#%ld\n",(long)rottcom->remotenode);
                WritePacket(&ROTTpacket[0],GetPacketSize(pkt),0); // Send to player 0
                break;
             case COM_GAMEACK:
                if (standalone==true)
-                  printf("Received GameAcknowledgement from player#%ld\n",(long int)rottcom->remotenode);
+                  printf("Received GameAcknowledgement from player#%ld\n",(long)rottcom->remotenode);
                WritePacket(&ROTTpacket[0],GetPacketSize(pkt),0); // Send to player 0
                break;
             case COM_GAMEMASTER:
                if (standalone==true)
-                  printf("Received GameMasterPacket from player#%ld\n",(long int)rottcom->remotenode);
+                  printf("Received GameMasterPacket from player#%ld\n",(long)rottcom->remotenode);
                BroadcastServerPacket(&ROTTpacket[0],GetPacketSize(pkt)); // Send to all
                break;
             case COM_GAMEPLAY:
                if (standalone==true)
-                  printf("Received StartGamePacket from player#%ld\n",(long int)rottcom->remotenode);
+                  printf("Received StartGamePacket from player#%ld\n",(long)rottcom->remotenode);
                BroadcastServerPacket(&ROTTpacket[0],GetPacketSize(pkt)); // Send to all
                retval=scfp_done;
                break;

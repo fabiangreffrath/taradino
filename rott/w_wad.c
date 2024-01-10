@@ -212,7 +212,7 @@ void W_InitMultipleFiles (char **filenames)
            Error("W_InitFiles: lumpcache malloc failed size=%d\n",numlumps<<2);
 
         if (!quiet)
-           printf("W_Wad: Wad Manager Started NUMLUMPS=%ld\n",(long int)numlumps);
+           printf("W_Wad: Wad Manager Started NUMLUMPS=%ld\n",(long)numlumps);
         W_CheckWADIntegrity ();
 }
 
