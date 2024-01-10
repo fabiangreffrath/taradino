@@ -78,7 +78,7 @@ typedef  struct
 extern int PlayerSnds[5];
 
 //extern int SHAKETICS;
-extern unsigned short SHAKETICS;//bna++
+extern uint16_t SHAKETICS;//bna++
 extern int damagecount;
 
 extern HighScore   Scores[MaxScores];

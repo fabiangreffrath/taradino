@@ -58,8 +58,8 @@ typedef struct {
 
 typedef struct {
 	long				timestamp;						// time of event
-	unsigned short	period;							// period since last MOVEMENT
-	unsigned short button;							// button pressed mask
+	uint16_t	period;							// period since last MOVEMENT
+	uint16_t button;							// button pressed mask
 	short          tx;								// Translation X
 	short          ty;								//					Y
 	short          tz;								//					Z
@@ -72,8 +72,8 @@ typedef struct {
 
 typedef struct {
 	long           timestamp;						// time of event
-	unsigned short period;							// period since last BUTTON
-	unsigned short button;							// button pressed mask
+	uint16_t period;							// period since last BUTTON
+	uint16_t button;							// button pressed mask
 } SpwButtonPacket;
 
 

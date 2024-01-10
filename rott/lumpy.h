@@ -90,7 +90,7 @@ typedef struct
    short          height;
    short          leftoffset;       // pixels to the left of origin
    short          topoffset;        // pixels above the origin
-   unsigned short collumnofs[320];  // only [width] used, the [0] is &collumnofs[width]
+   uint16_t collumnofs[320];  // only [width] used, the [0] is &collumnofs[width]
 } patch_t;
 
 #define CONVERT_ENDIAN_patch_t(pp)           \

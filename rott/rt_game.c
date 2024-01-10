@@ -76,7 +76,7 @@ int PlayerSnds[5] = {SD_PLAYERTCSND, SD_PLAYERTBSND, SD_PLAYERDWSND,
                      SD_PLAYERLNSND, SD_PLAYERIPFSND};
 
 
-unsigned short SHAKETICS = 0xFFFF;//bna++
+uint16_t SHAKETICS = 0xFFFF;//bna++
 //int SHAKETICS   = 0xFFFF;
 int damagecount = 0;
 HighScore   Scores[MaxScores] =
