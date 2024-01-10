@@ -84,7 +84,7 @@ typedef struct elevator
   int16_t dx,dy;
   int16_t esx,esy,edx,edy;
   int16_t door1,door2;
-  signed char state;
+  int8_t state;
   int16_t doortoopen;
   int16_t doorclosing;
   int16_t ticcount;
@@ -103,7 +103,7 @@ typedef struct doorstruct
 		  uint8_t        lock;
 		  uint8_t        flags;
 		  int16_t   ticcount;
-		  signed char eindex;
+		  int8_t eindex;
 		  bool     vertical;
 		  int         soundhandle;
 		  int         position;
@@ -163,7 +163,7 @@ typedef struct mwall
 {
   thingtype      which;
   uint8_t      tilex,tiley;
-  signed char areanumber;
+  int8_t areanumber;
   int16_t toptexture;
   int16_t midtexture;
   int16_t bottomtexture;
@@ -180,7 +180,7 @@ typedef struct animmwall
 {
   uint16_t     num;
   uint8_t     count;
-  signed char ticcount;
+  int8_t ticcount;
   struct animmwall *next;
   struct animmwall *prev;
 

@@ -548,7 +548,7 @@ void SaveActors(uint8_t **buffer,int*size)
 	dummy.door_to_open = temp->door_to_open;
 	dummy.targetx = temp->targettilex;
 	dummy.targety = temp->targettiley;
-	dummy.dir = (signed char)temp->dir;
+	dummy.dir = (int8_t)temp->dir;
 	dummy.angle = temp->angle;
 	dummy.yzangle = temp->yzangle;
 	dummy.speed = temp->speed;

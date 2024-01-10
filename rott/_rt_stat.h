@@ -47,12 +47,12 @@ typedef struct sas
 {
   int          x,y,z;
   int          flags;
-  signed char  ticcount;
+  int8_t  ticcount;
   int          hitpoints;
   int16_t    shapenum;
-  signed char  ammo;
-  signed char  count;
-  signed char  itemnumber;
+  int8_t  ammo;
+  int8_t  count;
+  int8_t  itemnumber;
   int16_t    areanumber;
   int16_t    whichstat;
   uint8_t         numanims;

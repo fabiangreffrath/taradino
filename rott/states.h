@@ -50,7 +50,7 @@ typedef struct  statestruct
 		  int16_t           shapenum;  // a shapenum of -1 means get from ob->temp1
 		  int16_t           tictime;
 		  void            (*think) ();
-		  signed char     condition;
+		  int8_t     condition;
 		  struct  statestruct     *next;
 } statetype;
 

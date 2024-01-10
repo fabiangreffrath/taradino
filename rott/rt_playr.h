@@ -104,7 +104,7 @@ typedef struct
         int                lives;
         int                health;
         int                triads;
-		  signed char        ammo;
+		  int8_t        ammo;
 		  int16_t              poweruptime;
 		  int16_t              protectiontime;
         int                new_weapon;
@@ -112,7 +112,7 @@ typedef struct
         int                weapon;
         int                missileweapon;
         int                bulletweapon;
-		  signed char        HASBULLETWEAPON[3];
+		  int8_t        HASBULLETWEAPON[3];
         int                attackframe,attackcount,weaponframe;
         uint8_t               player;
         int                topspeed;
@@ -129,8 +129,8 @@ typedef struct
 		  int16_t       weaponheight;
 		  uint8_t               weaponx,weapony;
 		  uint16_t               batblast;
-		  signed char        NETCAPTURED;
-		  signed char        HASKNIFE;
+		  int8_t        NETCAPTURED;
+		  int8_t        HASKNIFE;
         int                oldweapon, oldmissileweapon;
 		  int16_t       weapondowntics,weaponuptics;
 		  int                soundtime;

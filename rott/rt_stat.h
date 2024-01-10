@@ -132,7 +132,7 @@ typedef struct awall
 {
   uint8_t active;
   uint8_t count;
-  signed char ticcount;
+  int8_t ticcount;
   int  texture;
   int  basetexture;
 } animwall_t;
@@ -144,10 +144,10 @@ typedef struct statstruct
 		  int32_t             x,y,z;
 		  int               shapenum;
 		  uint32_t          flags;
-		  signed char       ticcount;
-		  signed char       ammo;
+		  int8_t       ticcount;
+		  int8_t       ammo;
 		  uint8_t              *visspot;
-		  signed char       count;
+		  int8_t       count;
 		  uint8_t              numanims;
 		  stat_t            itemnumber;
 		  int16_t         hitpoints;
@@ -184,7 +184,7 @@ typedef struct
 		  uint8_t       numanims;
 		  uint8_t       hitpoints;
 		  uint8_t       damage;
-		  signed char  ammo;
+		  int8_t  ammo;
 } statinfo;
 
 extern  statobj_t       *lastactivestat,*firstactivestat;

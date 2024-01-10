@@ -26,8 +26,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 typedef struct tp
  {
-  signed char actionindex;
-  signed char swapactionindex;
+  int8_t actionindex;
+  int8_t swapactionindex;
   int         whichobj;
   uint8_t        tictime;
   uint8_t        ticcount;

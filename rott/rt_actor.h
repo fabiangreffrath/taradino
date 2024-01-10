@@ -230,7 +230,7 @@ typedef struct objstruct
 		  int32_t                    drawx,drawy;
 		  classtype                obclass;
 		  statetype *              state;
-		  signed char              door_to_open;
+		  int8_t              door_to_open;
 		  uint8_t                     areanumber;
 		  int16_t             shapeoffset;
 		  int                      targettilex,targettiley;
