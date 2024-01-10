@@ -59,7 +59,7 @@ messagetype Messages[MAXMSGS];
 static int  UpdateMessageBackground;
 static int  MessageSystemStarted=0;
 static int  LastMessageTime;
-static bool EraseMessage[ MAXMSGS ];
+static int EraseMessage[ MAXMSGS ];
 static int     MessageOrder[ MAXMSGS ];
 static int     TotalMessages = 0;
 static int     MsgPos = 0;

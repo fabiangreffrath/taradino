@@ -773,7 +773,7 @@ void SetupWads( void )
 					fread(buf,3,3,f);//is the 3 first letters RTL (RTC)
 				    if (((strstr(buf,"RTL") != 0)||strstr(buf,"RTC") != 0)) {
 						GameLevels.file = strdup(tempstr);
-						GameLevels.avail++;
+						GameLevels.avail = true;
 						buf = safe_realloc(buf, 32 + strlen(tempstr));
 						strcpy (buf,"Adding ");
 						strcat (buf,tempstr);
@@ -812,7 +812,7 @@ NoRTL:;
 					fread(buf,3,3,f);//is the 3 first letters RTL (RTC)
 				    if (((strstr(buf,"RTL") != 0)||strstr(buf,"RTC") != 0)) {
 						BattleLevels.file = strdup(tempstr);
-						BattleLevels.avail++;
+						BattleLevels.avail = true;
 						buf = safe_realloc(buf, 32 + strlen(tempstr));
 						strcpy (buf,"Adding ");
 						strcat (buf,tempstr);
