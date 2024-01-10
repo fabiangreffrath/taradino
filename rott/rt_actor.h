@@ -223,16 +223,16 @@ typedef struct objstruct
         int                      shapenum;
 		  uint32_t                 flags;
 		  int16_t                    ticcount;
-		  signed int16_t             hitpoints;
+		  int16_t             hitpoints;
 		  uint16_t                     whichactor;
 
-		  signed int16_t             dirchoosetime;
+		  int16_t             dirchoosetime;
 		  int32_t                    drawx,drawy;
 		  classtype                obclass;
 		  statetype *              state;
 		  signed char              door_to_open;
 		  uint8_t                     areanumber;
-		  signed int16_t             shapeoffset;
+		  int16_t             shapeoffset;
 		  int                      targettilex,targettiley;
 
 

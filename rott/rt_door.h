@@ -164,9 +164,9 @@ typedef struct mwall
   thingtype      which;
   uint8_t      tilex,tiley;
   signed char areanumber;
-  signed int16_t toptexture;
-  signed int16_t midtexture;
-  signed int16_t bottomtexture;
+  int16_t toptexture;
+  int16_t midtexture;
+  int16_t bottomtexture;
   uint16_t      flags;
   bool   vertical;
   int       sidepic;
