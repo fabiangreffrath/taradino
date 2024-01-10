@@ -117,8 +117,8 @@ void US_CenterWindow (int w, int h);
 // Intensity font rtns
 //
 
-void DrawIString (unsigned short int x, unsigned short int y, const char *string, int flags);
-void DrawIntensityString (unsigned short int x, unsigned short int y, const char *string, int color);
+void DrawIString (unsigned short x, unsigned short y, const char *string, int flags);
+void DrawIntensityString (unsigned short x, unsigned short y, const char *string, int color);
 void VW_MeasureIntensityPropString (const char *string, int *width, int *height);
 uint8_t GetIntensityColor (uint8_t pix);
 

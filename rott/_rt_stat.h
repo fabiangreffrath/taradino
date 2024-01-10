@@ -49,12 +49,12 @@ typedef struct sas
   int          flags;
   signed char  ticcount;
   int          hitpoints;
-  short int    shapenum;
+  short    shapenum;
   signed char  ammo;
   signed char  count;
   signed char  itemnumber;
-  short int    areanumber;
-  short int    whichstat;
+  short    areanumber;
+  short    whichstat;
   uint8_t         numanims;
   int          linked_to;
 }saved_stat_type;

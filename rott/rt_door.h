@@ -102,7 +102,7 @@ typedef struct doorstruct
 		  uint16_t        basetexture;
 		  uint8_t        lock;
 		  uint8_t        flags;
-		  short int   ticcount;
+		  short   ticcount;
 		  signed char eindex;
 		  bool     vertical;
 		  int         soundhandle;

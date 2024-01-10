@@ -237,8 +237,8 @@ typedef struct objstruct
 
 
 		  dirtype                  dir;
-		  short int                angle;
-		  short int                yzangle;
+		  short                angle;
+		  short                yzangle;
 
 		  int                      soundhandle;
 		  int                      speed;
