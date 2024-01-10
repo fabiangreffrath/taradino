@@ -48,7 +48,7 @@ typedef struct
 
 typedef struct
 {
-        short   RLEWtag;
+        int16_t   RLEWtag;
         int             headeroffsets[100];
         uint8_t            tileinfo[1];
 } mapfiletype;

@@ -83,7 +83,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 bool           ludicrousgibs=false;
 
-short             colheight[15];
+int16_t             colheight[15];
 
 uint8_t              deathshapeoffset[8] = {0,7,7,8,8,9,8,7};
 
@@ -615,7 +615,7 @@ void LoadActors(uint8_t *buffer,int size)
    int numactors,i,playerindex;
    saved_actor_type dummy = {0};
    objtype *temp;
-   short *targetindices,*whateverindices;
+   int16_t *targetindices,*whateverindices;
 
    InitActorList();
 
@@ -633,8 +633,8 @@ void LoadActors(uint8_t *buffer,int size)
 
 
    objlist = (objtype**)SafeMalloc(numactors*sizeof(objtype*));
-   targetindices = (short*)SafeMalloc(numactors*sizeof(short));
-   whateverindices = (short*)SafeMalloc(numactors*sizeof(short));
+   targetindices = (int16_t*)SafeMalloc(numactors*sizeof(int16_t));
+   whateverindices = (int16_t*)SafeMalloc(numactors*sizeof(int16_t));
 
    for(i=0;i<numactors;i++)
       {
@@ -4478,7 +4478,7 @@ void T_PlayDead(objtype *ob)
    }
 
 
-void AdjustAngle(int maxadjust, short *currangle,int targetangle)
+void AdjustAngle(int maxadjust, int16_t *currangle,int targetangle)
    {
    int dangle,i,magangle;
 

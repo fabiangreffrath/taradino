@@ -62,7 +62,7 @@ extern int fandc;
 //
 // math tables
 //
-extern short    tantable[FINEANGLES];
+extern int16_t    tantable[FINEANGLES];
 extern int32_t    sintable[FINEANGLES+FINEANGLEQUAD+1];
 extern int32_t    *costable;
 

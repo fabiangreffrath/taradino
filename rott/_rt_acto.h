@@ -257,10 +257,10 @@ typedef struct  sat
 	int          temp1,temp2,temp3;
 	int          whateverindex,targetindex;
 
-	short        ticcount;
-	short        shapeoffset;
-	short        stateindex;
-	short        dirchoosetime;
+	int16_t        ticcount;
+	int16_t        shapeoffset;
+	int16_t        stateindex;
+	int16_t        dirchoosetime;
 
 	uint8_t         areanumber;
 	uint8_t         obclass;

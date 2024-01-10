@@ -199,16 +199,16 @@ typedef struct
 #define bo_normal_respawn_time 30
 
 extern bool  BATTLEMODE;
-extern short    WhoKilledWho[ MAXPLAYERS ][ MAXPLAYERS ];
-extern short    BATTLE_Points[ MAXPLAYERS ];
-extern short    BATTLE_PlayerOrder[ MAXPLAYERS ];
+extern int16_t    WhoKilledWho[ MAXPLAYERS ][ MAXPLAYERS ];
+extern int16_t    BATTLE_Points[ MAXPLAYERS ];
+extern int16_t    BATTLE_PlayerOrder[ MAXPLAYERS ];
 extern int      BATTLE_NumCollectorItems;
 extern int      PointGoal;
 extern int      DisplayPoints;
 extern int      BATTLE_It;
 extern bool  BATTLE_ShowKillCount;
-extern short    BATTLE_Team[ MAXPLAYERS ];
-extern short    BATTLE_TeamLeader[ MAXPLAYERS ];
+extern int16_t    BATTLE_Team[ MAXPLAYERS ];
+extern int16_t    BATTLE_TeamLeader[ MAXPLAYERS ];
 extern int      BATTLE_NumberOfTeams;
 extern bool  UpdateKills;
 

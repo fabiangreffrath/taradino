@@ -47,8 +47,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 typedef struct  statestruct
 {
 		  uint8_t            rotate;
-		  short           shapenum;  // a shapenum of -1 means get from ob->temp1
-		  short           tictime;
+		  int16_t           shapenum;  // a shapenum of -1 means get from ob->temp1
+		  int16_t           tictime;
 		  void            (*think) ();
 		  signed char     condition;
 		  struct  statestruct     *next;

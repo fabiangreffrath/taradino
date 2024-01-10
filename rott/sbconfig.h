@@ -39,8 +39,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 /* ----------------------------------------------------------------------- */
 
 typedef struct {
-	short low; 			/* range of input values this warp covers */
-	short high;
+	int16_t low; 			/* range of input values this warp covers */
+	int16_t high;
 	int32_t mult;		/* multiplier to be applied to this range */
 } WarpRange;
 
@@ -83,8 +83,8 @@ WarpRecord *SbConfigGetWarpRange(char *rngName);
 /*
  * Warp a value based on the given warp range
  */
-int32_t SbFxConfigWarp(WarpRecord *warp, short value);  /* returns integer */
-long    SbConfigWarp(WarpRecord *warp, short value);  /* returns integer */
+int32_t SbFxConfigWarp(WarpRecord *warp, int16_t value);  /* returns integer */
+long    SbConfigWarp(WarpRecord *warp, int16_t value);  /* returns integer */
 
 /* ----------------------------------------------------------------------- */
 /* Lexical Definitions:

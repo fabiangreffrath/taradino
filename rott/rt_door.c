@@ -4032,7 +4032,7 @@ void SaveDoors (uint8_t ** buf, int * size)
    uint8_t doorflag;
    uint8_t doorlocked;
    signed char dooreindex;
-   short doortime;
+   int16_t doortime;
    int unitsize;
    uint8_t *ptr;
 
@@ -4097,7 +4097,7 @@ void LoadDoors (uint8_t * buf, int size)
    uint8_t doorflag;
    uint8_t doorlocked;
    signed char dooreindex;
-   short doortime;
+   int16_t doortime;
    uint8_t *ptr;
    int unitsize;
    int num;

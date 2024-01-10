@@ -80,15 +80,15 @@ typedef enum
 }masked_walls;
 
 typedef struct elevator
-{ short sx,sy;
-  short dx,dy;
-  short esx,esy,edx,edy;
-  short door1,door2;
+{ int16_t sx,sy;
+  int16_t dx,dy;
+  int16_t esx,esy,edx,edy;
+  int16_t door1,door2;
   signed char state;
-  short doortoopen;
-  short doorclosing;
-  short ticcount;
-  short nextaction;
+  int16_t doortoopen;
+  int16_t doorclosing;
+  int16_t ticcount;
+  int16_t nextaction;
 }elevator_t;
 
 
@@ -102,7 +102,7 @@ typedef struct doorstruct
 		  uint16_t        basetexture;
 		  uint8_t        lock;
 		  uint8_t        flags;
-		  short   ticcount;
+		  int16_t   ticcount;
 		  signed char eindex;
 		  bool     vertical;
 		  int         soundhandle;
@@ -164,9 +164,9 @@ typedef struct mwall
   thingtype      which;
   uint8_t      tilex,tiley;
   signed char areanumber;
-  signed short toptexture;
-  signed short midtexture;
-  signed short bottomtexture;
+  signed int16_t toptexture;
+  signed int16_t midtexture;
+  signed int16_t bottomtexture;
   uint16_t      flags;
   bool   vertical;
   int       sidepic;

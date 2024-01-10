@@ -81,8 +81,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // Demo Delta Structure
 typedef struct DemoType {
   int   time;
-  short momx;
-  short momy;
+  int16_t momx;
+  int16_t momy;
   uint16_t  dangle;
   uint16_t  buttons;
 } DemoType;
@@ -96,8 +96,8 @@ typedef struct DemoHeaderType {
 typedef struct MoveType {
   uint8_t  type;
   int   time;
-  short momx;
-  short momy;
+  int16_t momx;
+  int16_t momy;
   uint16_t  dangle;
   uint16_t  buttons;
   char  Sounddata[0];

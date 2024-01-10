@@ -78,8 +78,8 @@ typedef enum
    } playercolors;
 
 extern uint8_t * playermaps[MAXPLAYERCOLORS];
-//extern short  pixelangle[MAXVIEWWIDTH];
-extern short  pixelangle[800];
+//extern int16_t  pixelangle[MAXVIEWWIDTH];
+extern int16_t  pixelangle[800];
 extern uint8_t   gammatable[GAMMAENTRIES];
 extern int    gammaindex;
 extern uint8_t   uniformcolors[MAXPLAYERCOLORS];

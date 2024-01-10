@@ -87,11 +87,11 @@ specials BattleSpecialsTimes =
       60  // mercury mode respawn
       };
 
-short WhoKilledWho[ MAXPLAYERS ][ MAXPLAYERS ];
-short BATTLE_Points[ MAXPLAYERS ];
-short BATTLE_PlayerOrder[ MAXPLAYERS ];
-short BATTLE_Team[ MAXPLAYERS ];
-short BATTLE_TeamLeader[ MAXPLAYERS ];
+int16_t WhoKilledWho[ MAXPLAYERS ][ MAXPLAYERS ];
+int16_t BATTLE_Points[ MAXPLAYERS ];
+int16_t BATTLE_PlayerOrder[ MAXPLAYERS ];
+int16_t BATTLE_Team[ MAXPLAYERS ];
+int16_t BATTLE_TeamLeader[ MAXPLAYERS ];
 int   BATTLE_NumberOfTeams;
 int   BATTLE_NumCollectorItems;
 int   PointGoal;

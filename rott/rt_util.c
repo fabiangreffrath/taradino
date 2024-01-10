@@ -862,7 +862,7 @@ long ParseNum (char *str)
 #define SwapLong IntelLong
 #endif
 
-short	SwapShort (short l)
+int16_t	SwapShort (int16_t l)
 {
 	uint8_t	b1,b2;
 
@@ -872,7 +872,7 @@ short	SwapShort (short l)
 	return (b1<<8) + b2;
 }
 
-short	KeepShort (short l)
+int16_t	KeepShort (int16_t l)
 {
 	return l;
 }
@@ -906,7 +906,7 @@ void SwapIntelLong(int *l)
     *l = IntelLong(*l);
 }
 
-void SwapIntelShort(short *s)
+void SwapIntelShort(int16_t *s)
 {
     *s = IntelShort(*s);
 }
@@ -919,7 +919,7 @@ void SwapIntelLongArray(int *l, int num)
     }
 }
 
-void SwapIntelShortArray(short *s, int num)
+void SwapIntelShortArray(int16_t *s, int num)
 {
     while (num--) {
         SwapIntelShort(s);

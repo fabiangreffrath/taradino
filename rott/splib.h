@@ -42,9 +42,9 @@ extern "C" {
 
 typedef struct {
 	char           copyright[TSR_MAX_LENGTH];	// driver copyright
-	short          major;							// driver version number
-	short				minor;
-	short				count;							// # of available devices
+	int16_t          major;							// driver version number
+	int16_t				minor;
+	int16_t				count;							// # of available devices
 } SpwDrvOpenPacket;
 
 
@@ -60,12 +60,12 @@ typedef struct {
 	long				timestamp;						// time of event
 	uint16_t	period;							// period since last MOVEMENT
 	uint16_t button;							// button pressed mask
-	short          tx;								// Translation X
-	short          ty;								//					Y
-	short          tz;								//					Z
-	short          rx;								// Rotation X
-	short          ry;								//				Y
-	short          rz;								//				Z
+	int16_t          tx;								// Translation X
+	int16_t          ty;								//					Y
+	int16_t          tz;								//					Z
+	int16_t          rx;								// Rotation X
+	int16_t          ry;								//				Y
+	int16_t          rz;								//				Z
 } SpwForcePacket;
 
 
@@ -116,17 +116,17 @@ typedef union {
  * Function Prototypes                                                     *
  * ======================================================================= */
 
-short SpwOpenDriver(SpwPacket *packet);
-short SpwCloseDriver(void);
+int16_t SpwOpenDriver(SpwPacket *packet);
+int16_t SpwCloseDriver(void);
 
-short SpwOpenDevice(short device, SpwPacket *packet);
-short SpwCloseDevice(short device);
+int16_t SpwOpenDevice(int16_t device, SpwPacket *packet);
+int16_t SpwCloseDevice(int16_t device);
 
-short SpwEnableDevice(short device);
-short SpwDisableDevice(short device);
+int16_t SpwEnableDevice(int16_t device);
+int16_t SpwDisableDevice(int16_t device);
 
-short SpwGetForce(short device, SpwPacket *packet);
-short SpwGetButton(short device, SpwPacket *packet);
+int16_t SpwGetForce(int16_t device, SpwPacket *packet);
+int16_t SpwGetButton(int16_t device, SpwPacket *packet);
 
 /* ======================================================================= *
  * Convience functions                                                     *
@@ -161,31 +161,31 @@ enum SpwEventType {
  * ----------------------------------------------------------------------- */
 
 typedef struct {
-	short new;
-   short cur;
-   short old;
+	int16_t new;
+   int16_t cur;
+   int16_t old;
 } SpwButtonRec;
 
 
 
 typedef struct {
-	short 		 tx;			/* Current Translation vector */
-   short 		 ty;
-   short 		 tz;
-   short 		 rx;			/* Current Rotation vector    */
-   short 		 ry;
-   short        rz;
+	int16_t 		 tx;			/* Current Translation vector */
+   int16_t 		 ty;
+   int16_t 		 tz;
+   int16_t 		 rx;			/* Current Rotation vector    */
+   int16_t 		 ry;
+   int16_t        rz;
    SpwButtonRec buttons;   /* Current Button Record      */
-   short			 newData;   /* An SpEventType mask of newData, 0 if none */
+   int16_t			 newData;   /* An SpEventType mask of newData, 0 if none */
 } SpwRawData;
 
 #endif
 
 
 
-short SpwSimpleGet(short devNum, SpwRawData *splayer);
-short SpwSimpleOpen(short devNum);
-short SpwSimpleClose(short devNum);
+int16_t SpwSimpleGet(int16_t devNum, SpwRawData *splayer);
+int16_t SpwSimpleOpen(int16_t devNum);
+int16_t SpwSimpleClose(int16_t devNum);
 
 /* ======================================================================= *
  * Compiler & Memory Mode Wrappers.                                        *

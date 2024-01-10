@@ -137,7 +137,7 @@ typedef enum
 
 typedef struct bas
  {
-  short operate,
+  int16_t operate,
         see,
         fire,
         hit,
@@ -222,23 +222,23 @@ typedef struct objstruct
 		  int32_t                    x,y,z;
         int                      shapenum;
 		  uint32_t                 flags;
-		  short                    ticcount;
-		  signed short             hitpoints;
+		  int16_t                    ticcount;
+		  signed int16_t             hitpoints;
 		  uint16_t                     whichactor;
 
-		  signed short             dirchoosetime;
+		  signed int16_t             dirchoosetime;
 		  int32_t                    drawx,drawy;
 		  classtype                obclass;
 		  statetype *              state;
 		  signed char              door_to_open;
 		  uint8_t                     areanumber;
-		  signed short             shapeoffset;
+		  signed int16_t             shapeoffset;
 		  int                      targettilex,targettiley;
 
 
 		  dirtype                  dir;
-		  short                angle;
-		  short                yzangle;
+		  int16_t                angle;
+		  int16_t                yzangle;
 
 		  int                      soundhandle;
 		  int                      speed;
