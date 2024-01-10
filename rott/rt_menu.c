@@ -3804,7 +3804,7 @@ void DefineKey
          key = LastScan;
          LastScan = 0;
 
-         buttonscan[ (unsigned int)order[ handlewhich ] ] = key;
+         buttonscan[ (uint32_t)order[ handlewhich ] ] = key;
 
          strcpy( &NormalKeyNames[ handlewhich ][ KEYNAMEINDEX ],
             IN_GetScanName( key ) );
@@ -4880,7 +4880,7 @@ void DrawCustomKeyboard (void)
    for( i = 0; i < NormalKeyItems.amount; i++ )
       {
       strcpy( &NormalKeyNames[ i ][ KEYNAMEINDEX ],
-         IN_GetScanName( buttonscan[ (unsigned int)order[ i ] ] ) );
+         IN_GetScanName( buttonscan[ (uint32_t)order[ i ] ] ) );
       }
 
    MN_GetCursorLocation( &NormalKeyItems, &NormalKeyMenu[ 0 ] );
@@ -8110,12 +8110,12 @@ void ShowBattleOptions
       }
 
    strcpy( text, string );
-   if ( options->Gravity < (unsigned int)temp )
+   if ( options->Gravity < (uint32_t)temp )
       {
       strcat( text, "-" );
       }
 
-   if ( options->Gravity > (unsigned int)temp )
+   if ( options->Gravity > (uint32_t)temp )
       {
       strcat( text, "+" );
       }

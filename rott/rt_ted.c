@@ -97,7 +97,7 @@ int  lastlevelloaded=-1;
 bool insetupgame;
 bool ISRTL = false;
 
-unsigned MapSpecials = 0;
+uint32_t MapSpecials = 0;
 
 char LevelName[80];
 
@@ -1235,7 +1235,7 @@ DisableScreenStretch();
 ======================
 */
 
-void CA_RLEWexpand (uint16_t *source, uint16_t *dest,long length, unsigned rlewtag)
+void CA_RLEWexpand (uint16_t *source, uint16_t *dest,long length, uint32_t rlewtag)
 {
         uint16_t  value,count,i;
         uint16_t          *end;
@@ -1281,7 +1281,7 @@ void CheckRTLVersion
    {
    int  filehandle;
    char RTLSignature[ 4 ];
-   unsigned int RTLVersion;
+   uint32_t RTLVersion;
 
    filehandle = SafeOpenRead( filename );
 

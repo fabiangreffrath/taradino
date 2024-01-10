@@ -111,7 +111,7 @@ void GiveWeapon (objtype * ob, int weapon);
 void GiveMissileWeapon(objtype * ob, int which);
 void GiveLives (int newlives);
 
-void UpdateScore (unsigned int num);
+void UpdateScore (uint32_t num);
 void UpdateLives (int num);
 
 void DrawTimeXY( int x, int y, int sec, bool bufferofsonly );
@@ -144,7 +144,7 @@ void DrawPause (void);
 void DrawPauseXY (int x, int y);
 
 void DrawColoredMPPic (int xpos, int ypos, int width, int height, int heightmod, uint8_t *src, bool bufferofsonly, int color);
-void StatusDrawColoredPic (unsigned x, unsigned y, pic_t *nums, bool bufferofsonly, int color);
+void StatusDrawColoredPic (uint32_t x, uint32_t y, pic_t *nums, bool bufferofsonly, int color);
 
 void ClearTriads (playertype * pstate);
 #endif

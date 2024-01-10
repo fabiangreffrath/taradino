@@ -77,9 +77,9 @@ int updatecrc(int crc, int c)
 //
 //******************************************************************************
 
-uint16_t CalculateCRC (uint8_t *source, unsigned size)
+uint16_t CalculateCRC (uint8_t *source, uint32_t size)
 {
-   unsigned i;
+   uint32_t i;
    int checksum;
 	int tmp;
 

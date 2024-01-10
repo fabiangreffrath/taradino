@@ -1011,7 +1011,7 @@ void DrawPlayers
 //
 //******************************************************************************
 
-void StatusDrawPic (unsigned x, unsigned y, pic_t *nums, bool bufferofsonly)
+void StatusDrawPic (uint32_t x, uint32_t y, pic_t *nums, bool bufferofsonly)
 {
    DrawMPPic (x, y, nums->width, nums->height, 0,
              (uint8_t *)&nums->data, bufferofsonly);
@@ -1023,7 +1023,7 @@ void StatusDrawPic (unsigned x, unsigned y, pic_t *nums, bool bufferofsonly)
 //
 //******************************************************************************
 
-void StatusDrawColoredPic (unsigned x, unsigned y, pic_t *nums, bool bufferofsonly, int color)
+void StatusDrawColoredPic (uint32_t x, uint32_t y, pic_t *nums, bool bufferofsonly, int color)
 {
    DrawColoredMPPic (x, y, nums->width, nums->height, 0,
              (uint8_t *)&nums->data, bufferofsonly, color);
@@ -1066,7 +1066,7 @@ void DrawGameString (int x, int y, const char * str, bool bufferofsonly)
 
 void DrawNumber (int x, int y, int width, int which, bool bufferofsonly)
 {
-   unsigned length,c;
+   uint32_t length,c;
    char  *str;
    uint8_t z;
 
@@ -1111,7 +1111,7 @@ void DrawNumber (int x, int y, int width, int which, bool bufferofsonly)
       z--;
    }
 
-   c = length <= (unsigned)width ? 0 : length-width;
+   c = length <= (uint32_t)width ? 0 : length-width;
    while (c < length)
    {
       switch (which)
@@ -1434,9 +1434,9 @@ void DrawKeys
 
 void StatusDrawTime
    (
-   unsigned x,
-   unsigned y,
-   unsigned num,
+   uint32_t x,
+   uint32_t y,
+   uint32_t num,
    bool  bufferofsonly
    )
 
@@ -1698,7 +1698,7 @@ void DrawColoredMPPic (int xpos, int ypos, int width, int height, int heightmod,
 //
 //******************************************************************************
 
-void UpdateScore (unsigned int num)
+void UpdateScore (uint32_t num)
 {
    if (num > 999999999)
    {

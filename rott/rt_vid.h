@@ -52,9 +52,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //***************************************************************************
 
 extern uint8_t     *updateptr;
-extern unsigned mapwidthtable[64];
-extern unsigned uwidthtable[UPDATEHIGH];
-extern unsigned blockstarts[UPDATEWIDE*UPDATEHIGH];
+extern uint32_t mapwidthtable[64];
+extern uint32_t uwidthtable[UPDATEHIGH];
+extern uint32_t blockstarts[UPDATEWIDE*UPDATEHIGH];
 extern uint8_t     update[UPDATESIZE];
 extern bool  screenfaded;
 

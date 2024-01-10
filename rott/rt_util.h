@@ -108,7 +108,7 @@ struct dosdate_t
 {
     uint8_t day;
     uint8_t month;
-    unsigned int year;
+    uint32_t year;
     uint8_t dayofweek;
 };
 

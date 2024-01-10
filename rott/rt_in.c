@@ -940,7 +940,7 @@ bool  btnstate[8];
 
 void IN_StartAck (void)
 {
-   unsigned i,
+   uint32_t i,
             buttons = 0;
 
 //
@@ -972,7 +972,7 @@ void IN_StartAck (void)
 
 bool IN_CheckAck (void)
 {
-   unsigned i,
+   uint32_t i,
             buttons = 0;
 
 //
@@ -1055,7 +1055,7 @@ bool IN_UserInput (long delay)
 
 uint8_t IN_JoyButtons (void)
 {
-   unsigned joybits = 0;
+   uint32_t joybits = 0;
 
    joybits = sdl_sticks_joybits;
 

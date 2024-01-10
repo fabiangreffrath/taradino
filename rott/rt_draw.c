@@ -929,7 +929,7 @@ void DrawScaleds (void)
 
 			 visptr->h1=pheight-statptr->z;
 
-			 if ((statptr->itemnumber != (unsigned int)-1) &&
+			 if ((statptr->itemnumber != (uint32_t)-1) &&
 				  (statptr->flags&FL_HEIGHTFLIPPABLE)
 				 )
 				 {
@@ -2273,7 +2273,7 @@ void InterpolateDoor (visobj_t * plane)
          if ((i>=0 && i<viewwidth) && (bot!=0) && (posts[i].wallheight<=(height>>DHEIGHTFRACTION)) )
             {
             dc_invscale=height>>(HEIGHTFRACTION+DHEIGHTFRACTION-10);
-            dc_iscale = 0xffffffffu/(unsigned)dc_invscale;
+            dc_iscale = 0xffffffffu/(uint32_t)dc_invscale;
             dc_texturemid=((pheight-nominalheight+p->topoffset)<<SFRACBITS)+(SFRACUNIT>>1);
             sprtopoffset=centeryfrac - FixedMul(dc_texturemid,dc_invscale);
 
@@ -2394,7 +2394,7 @@ void InterpolateMaskedWall (visobj_t * plane)
          if ((i>=0 && i<viewwidth) && (bot!=0) && (posts[i].wallheight<=(height>>DHEIGHTFRACTION)) )
             {
             dc_invscale=height>>(HEIGHTFRACTION+DHEIGHTFRACTION-10);
-            dc_iscale = 0xffffffffu/(unsigned)dc_invscale;
+            dc_iscale = 0xffffffffu/(uint32_t)dc_invscale;
             dc_texturemid=((pheight-nominalheight+topoffset)<<SFRACBITS)+(SFRACUNIT>>1);
             sprtopoffset=centeryfrac - FixedMul(dc_texturemid,dc_invscale);
 
@@ -3028,7 +3028,7 @@ void ApogeeTitle (void)
 #define APOGEESTARTY 0
 #define APOGEEENDY   100
 
-#define APOGEESCALESTART ((unsigned)FINEANGLES<<4)
+#define APOGEESCALESTART ((uint32_t)FINEANGLES<<4)
 #define APOGEESCALEEND (FINEANGLES)
 #define APOGEESONGTIME (124-1)
 
@@ -5102,8 +5102,8 @@ void  DrawMapPost (int height, uint8_t * src, uint8_t * buf)
 
 void DrawRotRow(int count, uint8_t * dest, uint8_t * src)
 {
-	unsigned eax, ecx, edx;
-//	unsigned a, b, c,d;
+	uint32_t eax, ecx, edx;
+//	uint32_t a, b, c,d;
 
 	ecx = mr_yfrac;
 	edx = mr_xfrac;
@@ -5142,8 +5142,8 @@ void DrawRotRow(int count, uint8_t * dest, uint8_t * src)
 
 void DrawMaskedRotRow(int count, uint8_t * dest, uint8_t * src)
 {
-	unsigned eax;
-	unsigned xfrac, yfrac;
+	uint32_t eax;
+	uint32_t xfrac, yfrac;
 	
 	xfrac = mr_xfrac;
 	yfrac = mr_yfrac;

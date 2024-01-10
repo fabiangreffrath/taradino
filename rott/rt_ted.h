@@ -93,12 +93,12 @@ typedef struct
 
 typedef struct
    {
-   unsigned used;
-   unsigned CRC;
-   unsigned RLEWtag;
-   unsigned MapSpecials;
-   unsigned planestart[ NUMPLANES ];
-   unsigned planelength[ NUMPLANES ];
+   uint32_t used;
+   uint32_t CRC;
+   uint32_t RLEWtag;
+   uint32_t MapSpecials;
+   uint32_t planestart[ NUMPLANES ];
+   uint32_t planelength[ NUMPLANES ];
    char     Name[ ALLOCATEDLEVELNAMELENGTH ];
    } RTLMAP;
 

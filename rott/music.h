@@ -54,9 +54,9 @@ typedef struct
    {
    unsigned long tickposition;
    unsigned long milliseconds;
-   unsigned int  measure;
-   unsigned int  beat;
-   unsigned int  tick;
+   uint32_t  measure;
+   uint32_t  beat;
+   uint32_t  tick;
    } songposition;
 
 #define MUSIC_LoopSong ( 1 == 1 )

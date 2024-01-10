@@ -36,7 +36,7 @@ typedef struct memblock {
   struct memblock *next,*prev;
   size_t size;
   void **user;
-  unsigned id;
+  uint32_t id;
   pu_tag tag;
 } memblock_t;
 

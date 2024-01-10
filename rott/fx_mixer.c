@@ -287,7 +287,7 @@ int FX_Shutdown(void)
 extern int SoundNumber(int x);
 
 int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
-            unsigned mixrate)
+            uint32_t mixrate)
 {
     int i;
 

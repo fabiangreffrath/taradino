@@ -198,7 +198,7 @@ void ReadUnsigned (const char * s1, unsigned long * val)
 
    temp = (int)(*val);
    ReadInt (s1,&temp);
-   *val = (unsigned) temp;
+   *val = (uint32_t) temp;
 }
 
 //******************************************************************************
@@ -291,7 +291,7 @@ extern char    pword[ 13 ];
 void ConvertStringToPasswordString ( char * string )
 {
    int i;
-   unsigned int j;
+   uint32_t j;
    char temp[3];
 
    memset(temp,0,sizeof(temp));

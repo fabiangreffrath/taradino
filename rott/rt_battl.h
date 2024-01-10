@@ -177,23 +177,23 @@ enum
 //
 typedef struct
 	{
-	unsigned Gravity;
-	unsigned Speed;
-	unsigned Ammo;
-	unsigned HitPoints;
-	unsigned SpawnDangers;
-	unsigned SpawnHealth;
-	unsigned SpawnWeapons;
-   unsigned SpawnMines;
-   unsigned RespawnItems;
-   unsigned WeaponPersistence;
-   unsigned RandomWeapons;
-   unsigned FriendlyFire;
-	unsigned LightLevel;
+	uint32_t Gravity;
+	uint32_t Speed;
+	uint32_t Ammo;
+	uint32_t HitPoints;
+	uint32_t SpawnDangers;
+	uint32_t SpawnHealth;
+	uint32_t SpawnWeapons;
+   uint32_t SpawnMines;
+   uint32_t RespawnItems;
+   uint32_t WeaponPersistence;
+   uint32_t RandomWeapons;
+   uint32_t FriendlyFire;
+	uint32_t LightLevel;
 	int      Kills;
 	int      DangerDamage;
-	unsigned TimeLimit;
-   unsigned RespawnTime;
+	uint32_t TimeLimit;
+   uint32_t RespawnTime;
    } battle_type;
 
 #define bo_normal_respawn_time 30

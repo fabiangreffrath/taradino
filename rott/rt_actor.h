@@ -221,7 +221,7 @@ typedef struct objstruct
 		  uint8_t                     tilex,tiley;
 		  int32_t                    x,y,z;
         int                      shapenum;
-		  unsigned                 flags;
+		  uint32_t                 flags;
 		  short                    ticcount;
 		  signed short             hitpoints;
 		  uint16_t                     whichactor;
@@ -370,7 +370,7 @@ void     SpawnDeadGuard (int tilex, int tiley);
 void     SpawnWallfire(int tilex, int tiley, int dir);
 void     SpawnMissile(objtype*,classtype,int,int,statetype*,int);
 
-void     InitHitRect (objtype *ob, unsigned radius);
+void     InitHitRect (objtype *ob, uint32_t radius);
 void     NewState (objtype *ob, statetype *state);
 void     SelectPathDir(objtype*);
 void     SelectChaseDir (objtype *ob);
@@ -403,7 +403,7 @@ void     T_Roll(objtype*);
 void     T_BossDied (objtype *ob);
 bool  QuickSpaceCheck(objtype*,int,int);
 void     PushWallMove(int num);
-void     SpawnNewObj(unsigned,unsigned,statetype*,classtype);
+void     SpawnNewObj(uint32_t,uint32_t,statetype*,classtype);
 void     SpawnSpring(int,int);
 void     SpawnFourWayGun(int,int);
 void     SpawnSnake(int tilex,int tiley);

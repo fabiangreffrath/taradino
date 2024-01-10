@@ -83,7 +83,7 @@ typedef struct
 
 typedef struct
    {
-   unsigned Version;
+   uint32_t Version;
    // Variable for which version of the game can be played
    version_type Product;
 

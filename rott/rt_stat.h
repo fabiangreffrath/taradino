@@ -143,7 +143,7 @@ typedef struct statstruct
 		  uint8_t              tilex,tiley;
 		  int32_t             x,y,z;
 		  int               shapenum;
-		  unsigned          flags;
+		  uint32_t          flags;
 		  signed char       ticcount;
 		  signed char       ammo;
 		  uint8_t              *visspot;
@@ -179,7 +179,7 @@ typedef struct
 		  short      heightoffset;
 		  int        picnum;
 		  stat_t     type;
-		  unsigned   flags;
+		  uint32_t   flags;
 		  uint8_t       tictime;
 		  uint8_t       numanims;
 		  uint8_t       hitpoints;

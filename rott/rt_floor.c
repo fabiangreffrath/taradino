@@ -594,7 +594,7 @@ void DrawPlanes( void )
 
 void DrawRow(int count, uint8_t * dest, uint8_t * src)
 {
-	unsigned frac, fracstep;
+	uint32_t frac, fracstep;
 	int coord;
 
 	frac = (mr_yfrac<<16) + (mr_xfrac&0xffff);

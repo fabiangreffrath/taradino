@@ -247,7 +247,7 @@ enum {
 
 typedef struct  sat
  { int          x,y,z;
-	unsigned     flags;
+	uint32_t     flags;
 	int          hitpoints;
 	int          targetx,targety;
 	int          angle;

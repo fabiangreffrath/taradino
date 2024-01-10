@@ -103,7 +103,7 @@ void GraphicsMode ( void )
 	uint32_t flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
 	uint32_t pixel_format;
 
-	unsigned int rmask, gmask, bmask, amask;
+	uint32_t rmask, gmask, bmask, amask;
 	int bpp;
 
 	if (SDL_InitSubSystem (SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
@@ -160,7 +160,7 @@ void GraphicsMode ( void )
 
 void ToggleFullScreen (void)
 {
-	unsigned int flags = 0;
+	uint32_t flags = 0;
 
 	sdl_fullscreen = !sdl_fullscreen;
 

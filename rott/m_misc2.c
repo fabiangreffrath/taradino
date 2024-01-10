@@ -152,9 +152,9 @@ char *M_FileCaseExists(const char *path)
 
 bool M_StrToInt(const char *str, int *result)
 {
-    return sscanf(str, " 0x%x", (unsigned int *) result) == 1
-        || sscanf(str, " 0X%x", (unsigned int *) result) == 1
-        || sscanf(str, " 0%o", (unsigned int *) result) == 1
+    return sscanf(str, " 0x%x", (uint32_t *) result) == 1
+        || sscanf(str, " 0X%x", (uint32_t *) result) == 1
+        || sscanf(str, " 0%o", (uint32_t *) result) == 1
         || sscanf(str, " %d", result) == 1;
 }
 

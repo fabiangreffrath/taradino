@@ -73,7 +73,7 @@ void W_AddFile (char *_filename)
 {
         wadinfo_t               header;
         lumpinfo_t              *lump_p;
-        unsigned                i;
+        uint32_t                i;
         int                     handle, length;
         int                     startlump;
         filelump_t              *fileinfo, singleinfo;
@@ -141,7 +141,7 @@ void W_AddFile (char *_filename)
         lumpinfo = safe_realloc(lumpinfo, numlumps * sizeof(*lumpinfo));
         lump_p = &lumpinfo[startlump];
 
-        for (i=startlump ; i<(unsigned int)numlumps ; i++,lump_p++, fileinfo++)
+        for (i=startlump ; i<(uint32_t)numlumps ; i++,lump_p++, fileinfo++)
         {
                 fileinfo->filepos = IntelLong(LONG(fileinfo->filepos));
                 fileinfo->size = IntelLong(LONG(fileinfo->size));

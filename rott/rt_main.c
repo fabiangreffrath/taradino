@@ -920,7 +920,7 @@ void Init_Tables (void)
 	int i;
 	int x,
 		 y;
-	unsigned *blockstart;
+	uint32_t *blockstart;
 	uint8_t * shape;
 
    memset (&CWD[0], 0, 40);
@@ -942,7 +942,7 @@ void Init_Tables (void)
 			*blockstart++ = iG_SCREENWIDTH*16*y+x*TILEWIDTH;
 
 	for (i = 0; i < 0x300; i++)
-		*(origpal+(unsigned int)i) = (*(origpal+(unsigned int)i))>>2;
+		*(origpal+(uint32_t)i) = (*(origpal+(uint32_t)i))>>2;
 
 	// Cache in fonts
 	shape = W_CacheLumpNum (W_GetNumForName ("smallfont"), PU_STATIC, Cvt_font_t, 1);

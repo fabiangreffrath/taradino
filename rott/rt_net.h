@@ -209,7 +209,7 @@ typedef struct {
   uint8_t  player;    // which player
   uint8_t  violence;
   uint8_t  Product;
-  unsigned Version;
+  uint32_t Version;
 
   COM_PlayerDescriptionType playerdescription;
 } COM_GamePlayerType;
@@ -221,7 +221,7 @@ typedef struct {
   uint8_t  violence;
   uint8_t  Product;
   uint8_t  mode;
-  unsigned Version;
+  uint32_t Version;
   bool teamplay;
   specials SpecialsTimes;
   battle_type options;

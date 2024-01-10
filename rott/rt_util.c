@@ -604,7 +604,7 @@ int SafeOpenRead (char *_filename)
 
 void SafeRead (int handle, void *buffer, long count)
 {
-	unsigned	iocount;
+	uint32_t	iocount;
 
 	while (count)
 	{
@@ -619,7 +619,7 @@ void SafeRead (int handle, void *buffer, long count)
 
 void SafeWrite (int handle, void *buffer, long count)
 {
-	unsigned	iocount;
+	uint32_t	iocount;
 
 	while (count)
 	{
@@ -633,7 +633,7 @@ void SafeWrite (int handle, void *buffer, long count)
 
 void SafeWriteString (int handle, char * buffer)
 {
-	unsigned	iocount;
+	uint32_t	iocount;
 
    iocount=strlen(buffer);
 	if (write (handle,buffer,iocount) != (int)iocount)
