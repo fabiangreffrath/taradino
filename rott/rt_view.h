@@ -92,7 +92,7 @@ extern  int baseminshade;
 extern  int basemaxshade;
 extern  int    viewheight;
 extern  int    viewwidth;
-extern  longword heightnumerator;
+extern  unsigned int heightnumerator;
 extern  fixed  scale;
 extern  int    screenofs;
 extern  int    centerx;
