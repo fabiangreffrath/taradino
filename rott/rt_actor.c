@@ -1400,7 +1400,7 @@ void GetMomenta(objtype *target, objtype *source, int *newmomx,
 
 
 
-void SpawnNewObj (unsigned tilex, unsigned tiley, statetype *state, classtype which)
+void SpawnNewObj (unsigned int tilex, unsigned int tiley, statetype *state, classtype which)
    {
    int newarea;
 
@@ -4476,7 +4476,7 @@ void T_PlayDead(objtype *ob)
    }
 
 
-void AdjustAngle(int maxadjust, short int *currangle,int targetangle)
+void AdjustAngle(int maxadjust, short *currangle,int targetangle)
    {
    int dangle,i,magangle;
 
@@ -8478,7 +8478,7 @@ void T_Heinrich_Out_of_Control(objtype*ob)
          {
          ob->dir = dirorder[ob->dir][PREV];
          ob->angle = dirangle8[ob->dir];
-         if (ob->dir == (unsigned)ob->temp2)
+         if (ob->dir == (unsigned int)ob->temp2)
             {
             if (ob->temp1 > 1)
                ob->temp1--;
@@ -8648,7 +8648,7 @@ void T_KristLeft(objtype*ob)
  ActorMovement(ob);
  if (!ob->ticcount)
   {SD_PlaySoundRTP(SD_KRISTTURNSND,ob->x,ob->y);
-	if (ob->dir != (unsigned)ob->temp1)
+	if (ob->dir != (unsigned int)ob->temp1)
 	 ob->dir = dirorder[ob->dir][NEXT];
 	else
 	 {ob->temp1 = 0;
@@ -8663,7 +8663,7 @@ void T_KristRight(objtype*ob)
  ActorMovement(ob);
  if (!ob->ticcount)
   {SD_PlaySoundRTP(SD_KRISTTURNSND,ob->x,ob->y);
-	if (ob->dir != (unsigned)ob->temp1)
+	if (ob->dir != (unsigned int)ob->temp1)
 	 ob->dir = dirorder[ob->dir][PREV];
 	else
 	 {ob->temp1 = 0;
@@ -9035,7 +9035,7 @@ findplayer:
       {
       tdir = (ob->temp1 & 0xf);
 
-      if ((head->dir == (unsigned)tdir) && (ob->dir == (unsigned)tdir)) // increment
+      if ((head->dir == (unsigned int)tdir) && (ob->dir == (unsigned int)tdir)) // increment
       // tried dir if robot will attempt to move at tdir =>
       // head and body are at move try dir
          {//Debug("\ntrying next queue dir %d",tdir);
@@ -9254,7 +9254,7 @@ void T_NME_SpinFire(objtype*ob)
  head = (objtype*)(ob->whatever);
  wheels = (objtype*)(ob->target);
 
- if (ob->dir != (unsigned)ob->targettilex)
+ if (ob->dir != (unsigned int)ob->targettilex)
   {ob->dir = head->dir = wheels->dir = dirorder16[ob->dir][ob->temp3];
 	return;
   }
@@ -9568,7 +9568,7 @@ void SelectSnakeDir (objtype *ob)
 
  spot = MAPSPOT(ob->tilex,ob->tiley,1)-ICONARROWS;
 
- if ((spot >= 0) && (spot<= 7) && ((ob->dir!=(unsigned)spot)||(!(ob->flags & FL_DONE))))
+ if ((spot >= 0) && (spot<= 7) && ((ob->dir!=(unsigned int)spot)||(!(ob->flags & FL_DONE))))
 	{ centerx= (ob->tilex << 16) + HALFGLOBAL1;
 	  centery= (ob->tiley << 16) + HALFGLOBAL1;
 	  dx = abs(centerx - ob->x);
@@ -9792,7 +9792,7 @@ void T_DarkSnakeChase(objtype*ob)
 
    angle = AngleBetween(ob,PLAYER[0]);
    tdir = angletodir[angle];
-   if (Near(ob,PLAYER[0],6) && (ob->dir == (unsigned)tdir) && (!(ob->state->condition & SF_DOWN)))
+   if (Near(ob,PLAYER[0],6) && (ob->dir == (unsigned int)tdir) && (!(ob->state->condition & SF_DOWN)))
       {
       NewState(ob,&s_snakefire1);
       SD_PlaySoundRTP(SD_SNAKEREADYSND,ob->x,ob->y);

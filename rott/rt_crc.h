@@ -20,5 +20,5 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_def.h"
 
 int updatecrc(int,int);
-word CalculateCRC (byte *source, unsigned size);
+unsigned short CalculateCRC (byte *source, unsigned int size);
 

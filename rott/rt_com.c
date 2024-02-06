@@ -181,7 +181,7 @@ void InitROTTNET (void)
 
    if (!quiet)
       {
-      printf("ROTTNET: consoleplayer=%ld\n",(long int)rottcom->consoleplayer);
+      printf("ROTTNET: consoleplayer=%ld\n",(long)rottcom->consoleplayer);
       }
 }
 
@@ -195,8 +195,8 @@ void InitROTTNET (void)
 
 boolean ReadPacket (void)
 {
-   word   crc;
-   word   sentcrc;
+   unsigned short   crc;
+   unsigned short   sentcrc;
 
    // Set command (Get Packet)
 	rottcom->command=CMD_GET;
@@ -214,10 +214,10 @@ boolean ReadPacket (void)
    if (rottcom->remotenode!=-1)
       {
       // calculate crc on packet
-      crc=CalculateCRC ((byte *)&rottcom->data[0], rottcom->datalength-sizeof(word));
+      crc=CalculateCRC ((byte *)&rottcom->data[0], rottcom->datalength-sizeof(unsigned short));
 
       // get crc inside packet
-      sentcrc=*((word *)(&rottcom->data[rottcom->datalength-sizeof(word)]));
+      sentcrc=*((unsigned short *)(&rottcom->data[rottcom->datalength-sizeof(unsigned short)]));
 
       // are the crcs the same?
       if (crc!=sentcrc)
@@ -255,7 +255,7 @@ boolean ReadPacket (void)
 
 void WritePacket (void * buffer, int len, int destination)
 {
-   word      crc;
+   unsigned short      crc;
 
     if (!rottcom)
         return;
@@ -266,7 +266,7 @@ void WritePacket (void * buffer, int len, int destination)
    // set destination
    rottcom->remotenode=destination;
 
-   if (len>(int)(MAXCOMBUFFERSIZE-sizeof(word)))
+   if (len>(int)(MAXCOMBUFFERSIZE-sizeof(unsigned short)))
       {
       Error("WritePacket: Overflowed buffer\n");
       }
@@ -278,10 +278,10 @@ void WritePacket (void * buffer, int len, int destination)
    crc=CalculateCRC (buffer, len);
 
    // put CRC into realmode buffer packet
-   *((word *)&rottcom->data[len])=crc;
+   *((unsigned short *)&rottcom->data[len])=crc;
 
    // set size of realmode packet including crc
-   rottcom->datalength=len+sizeof(word);
+   rottcom->datalength=len+sizeof(unsigned short);
 
    if (*((byte *)buffer)==0)
        Error("Packet type = 0\n");
@@ -447,7 +447,7 @@ void ComSetTime ( void )
             else if (i!=consoleplayer)
                SyncTime(i);
             if (standalone==true)
-               printf("ComSetTime: player#%ld\n",(long int)i);
+               printf("ComSetTime: player#%ld\n",(long)i);
             }
          }
       else

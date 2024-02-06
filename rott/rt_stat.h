@@ -140,16 +140,16 @@ typedef struct statstruct
 		  byte              tilex,tiley;
 		  fixed             x,y,z;
 		  int               shapenum;
-		  unsigned          flags;
+		  unsigned int          flags;
 		  signed char       ticcount;
 		  signed char       ammo;
 		  byte              *visspot;
 		  signed char       count;
 		  byte              numanims;
 		  stat_t            itemnumber;
-		  short int         hitpoints;
-		  short int         whichstat;
-		  short int         areanumber;
+		  short         hitpoints;
+		  short         whichstat;
+		  short         areanumber;
 
 		  intptr_t          linked_to;
 		  struct statstruct *statnext;
@@ -176,7 +176,7 @@ typedef struct
 		  short      heightoffset;
 		  int        picnum;
 		  stat_t     type;
-		  unsigned   flags;
+		  unsigned int   flags;
 		  byte       tictime;
 		  byte       numanims;
 		  byte       hitpoints;

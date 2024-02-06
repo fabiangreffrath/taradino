@@ -347,12 +347,12 @@ void SetPlaneViewSize (void)
 
 	if (MAPSPOT(1,0,0) >= 234)
     {
-    word crud;
+    unsigned short crud;
 	 sky = (MAPSPOT(1,0,0) - 233);
     if ((sky<1) || (sky>6))
        Error("Illegal Sky Tile = %d\n",sky);
     ceilingnum=1;
-	 crud=(word)MAPSPOT(1,0,1);
+	 crud=(unsigned short)MAPSPOT(1,0,1);
 	 if ((crud>=90) && (crud<=97))
 	    horizonheight=crud-89;
     else if ((crud>=450) && (crud<=457))
@@ -362,7 +362,7 @@ void SetPlaneViewSize (void)
 
     // Check for lightnign icon
 
-	 crud=(word)MAPSPOT(4,0,1);
+	 crud=(unsigned short)MAPSPOT(4,0,1);
 	 if (crud==377)
        lightning=true;
     }
@@ -592,7 +592,7 @@ void DrawPlanes( void )
 
 void DrawRow(int count, byte * dest, byte * src)
 {
-   unsigned xfrac, yfrac;
+   unsigned int xfrac, yfrac;
    int coord;
 
    xfrac = mr_xfrac;

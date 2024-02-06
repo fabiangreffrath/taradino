@@ -4333,7 +4333,7 @@ int CalibrateJoystick
    #define CALX   45
    #define CALY   22
 
-   word xmax, ymax, xmin, ymin, jb;
+   unsigned short xmax, ymax, xmin, ymin, jb;
    int  checkbits;
    int  status;
    boolean done;
@@ -4674,7 +4674,7 @@ void WaitKeyUp (void)
 void ReadAnyControl (ControlInfo *ci)
 {
    int mouseactive = 0;
-   word buttons = 0;
+   unsigned short buttons = 0;
 //   struct Spw_IntPacket packet;
 
 

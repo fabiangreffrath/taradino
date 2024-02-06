@@ -79,7 +79,7 @@ int whereami=-1;
 
 byte * shadingtable;
 
-word   tilemap[MAPSIZE][MAPSIZE]; // wall values only
+unsigned short   tilemap[MAPSIZE][MAPSIZE]; // wall values only
 byte   spotvis[MAPSIZE][MAPSIZE];
 byte   mapseen[MAPSIZE][MAPSIZE];
 unsigned long * lights;
@@ -2271,7 +2271,7 @@ void InterpolateDoor (visobj_t * plane)
          if ((i>=0 && i<viewwidth) && (bot!=0) && (posts[i].wallheight<=(height>>DHEIGHTFRACTION)) )
             {
             dc_invscale=height>>(HEIGHTFRACTION+DHEIGHTFRACTION-10);
-            dc_iscale = 0xffffffffu/(unsigned)dc_invscale;
+            dc_iscale = 0xffffffffu/(unsigned int)dc_invscale;
             dc_texturemid=((pheight-nominalheight+p->topoffset)<<SFRACBITS)+(SFRACUNIT>>1);
             sprtopoffset=centeryfrac - FixedMul(dc_texturemid,dc_invscale);
 
@@ -2392,7 +2392,7 @@ void InterpolateMaskedWall (visobj_t * plane)
          if ((i>=0 && i<viewwidth) && (bot!=0) && (posts[i].wallheight<=(height>>DHEIGHTFRACTION)) )
             {
             dc_invscale=height>>(HEIGHTFRACTION+DHEIGHTFRACTION-10);
-            dc_iscale = 0xffffffffu/(unsigned)dc_invscale;
+            dc_iscale = 0xffffffffu/(unsigned int)dc_invscale;
             dc_texturemid=((pheight-nominalheight+topoffset)<<SFRACBITS)+(SFRACUNIT>>1);
             sprtopoffset=centeryfrac - FixedMul(dc_texturemid,dc_invscale);
 
@@ -3026,7 +3026,7 @@ void ApogeeTitle (void)
 #define APOGEESTARTY 0
 #define APOGEEENDY   100
 
-#define APOGEESCALESTART ((unsigned)FINEANGLES<<4)
+#define APOGEESCALESTART ((unsigned int)FINEANGLES<<4)
 #define APOGEESCALEEND (FINEANGLES)
 #define APOGEESONGTIME (124-1)
 
@@ -3142,7 +3142,7 @@ void RotationFun ( void )
    int   angle;
    int   scale;
    int   x,y;
-   word  buttons;
+   unsigned short  buttons;
 
    //save off fastcounter
 
@@ -5100,8 +5100,8 @@ void  DrawMapPost (int height, byte * src, byte * buf)
 
 void DrawRotRow(int count, byte * dest, byte * src)
 {
-	unsigned eax, ecx, edx;
-//	unsigned a, b, c,d;
+	unsigned int eax, ecx, edx;
+//	unsigned int a, b, c,d;
 
 	ecx = mr_yfrac;
 	edx = mr_xfrac;
@@ -5140,8 +5140,8 @@ void DrawRotRow(int count, byte * dest, byte * src)
 
 void DrawMaskedRotRow(int count, byte * dest, byte * src)
 {
-	unsigned eax;
-	unsigned xfrac, yfrac;
+	unsigned int eax;
+	unsigned int xfrac, yfrac;
 	
 	xfrac = mr_xfrac;
 	yfrac = mr_yfrac;

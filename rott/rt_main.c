@@ -646,7 +646,7 @@ void CheckCommandLineParameters( void )
          if (numplayers>MAXPLAYERS)
             Error("Too many players.\n");
          if (!quiet)
-	     printf("Playing %ld player ROTT\n",(long int)numplayers);
+	     printf("Playing %ld player ROTT\n",(long)numplayers);
          modemgame=true;
          if (rottcom->gametype==NETWORK_GAME)
             {
@@ -680,7 +680,7 @@ void CheckCommandLineParameters( void )
           timelimitenabled = true;
           timelimit = ParseNum(_argv[i + 1]);
           if (!quiet)
-             printf("Time Limit = %ld Seconds\n",(long int)timelimit);
+             printf("Time Limit = %ld Seconds\n",(long)timelimit);
           timelimit *= VBLCOUNTER;
           break;
 
@@ -918,7 +918,7 @@ void Init_Tables (void)
 	int i;
 	int x,
 		 y;
-	unsigned *blockstart;
+	unsigned int *blockstart;
 	byte * shape;
 
    memset (&CWD[0], 0, 40);

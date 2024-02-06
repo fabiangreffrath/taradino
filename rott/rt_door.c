@@ -485,7 +485,7 @@ void  RemoveTouchplateAction(touchplatetype *tplate,int index)
 
 
 
-void  Link_To_Touchplate(word touchlocx, word touchlocy, void (*maction)(intptr_t), void (*swapaction)(intptr_t), intptr_t wobj, int delaytime)
+void  Link_To_Touchplate(unsigned short touchlocx, unsigned short touchlocy, void (*maction)(intptr_t), void (*swapaction)(intptr_t), intptr_t wobj, int delaytime)
 {touchplatetype *temp;
  int index;
 
@@ -1801,7 +1801,7 @@ void DoorOpen (int door)
 void DoorOpening (int door)
 {
 	int		area1,area2;
-	word  	*map;
+	unsigned short  	*map;
 	long	   position;
 	int      tilex,tiley;
 
@@ -1869,7 +1869,7 @@ void DoorOpening (int door)
 void DoorClosing (int door)
 {
 	int		area1,area2;
-	word	   *map;
+	unsigned short	   *map;
 	long	   position;
 	int		tilex,tiley;
 	doorobj_t *dptr;
@@ -1968,7 +1968,7 @@ int IsMaskedWall (int tilex, int tiley)
 
 
 void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
-{word *map;
+{unsigned short *map;
  int area1, area2;
  int up,dn,lt,rt;
  int himask;
@@ -3164,7 +3164,7 @@ void SpawnPushWall (int tilex, int tiley, int lock, int texture, int dir, int ty
 	   PreCacheLump(texture,PU_CACHEWALLS,cache_pic_t);
    lastpwallobj->areanumber = GetAreaNumber(tilex,tiley,lastpwallobj->dir);
 
-   MAPSPOT (tilex, tiley, 0)=(word)(lastpwallobj->areanumber+AREATILE);
+   MAPSPOT (tilex, tiley, 0)=(unsigned short)(lastpwallobj->areanumber+AREATILE);
 
    switch(type)
       {
@@ -3356,7 +3356,7 @@ void ConnectPushWall (int pwall)
 	int      checky;
 	int		area1,area2;
 	int		area3,area4;
-	word  	*map;
+	unsigned short  	*map;
 	pwallobj_t * pw;
 
 	pw=pwallobjlist[pwall];
@@ -3593,7 +3593,7 @@ void WallPushing (int pwall)
 		if ((area<=0) || (area>NUMAREAS))
 			{
 			area=pw->areanumber;
-			MAPSPOT (pw->tilex, pw->tiley, 0)=(word)(pw->areanumber+AREATILE);
+			MAPSPOT (pw->tilex, pw->tiley, 0)=(unsigned short)(pw->areanumber+AREATILE);
 			}
 		// block crossed into a new block
 		//
@@ -3689,7 +3689,7 @@ void WallMoving (int pwall)
 		if ((area<=0) || (area>NUMAREAS))
 			{
 			area=pw->areanumber;
-			MAPSPOT (pw->tilex, pw->tiley, 0)=(word)(pw->areanumber+AREATILE);
+			MAPSPOT (pw->tilex, pw->tiley, 0)=(unsigned short)(pw->areanumber+AREATILE);
 			}
 		// block crossed into a new block
 		//
@@ -3736,7 +3736,7 @@ void WallMoving (int pwall)
 			if ((area<=0) || (area>NUMAREAS))
 				{
 				area=pw->areanumber;
-				MAPSPOT (pw->tilex, pw->tiley, 0)=(word)(pw->areanumber+AREATILE);
+				MAPSPOT (pw->tilex, pw->tiley, 0)=(unsigned short)(pw->areanumber+AREATILE);
 				}
 
 			if (areabyplayer[area] && (abs(spot-pw->dir)==4))
@@ -3897,7 +3897,7 @@ void LoadPushWalls(byte * bufptr, int sz)
      area = MAPSPOT(new.tilex,new.tiley,0)-AREATILE;
      if ((area<=0) || (area>NUMAREAS))
         {
-        MAPSPOT (new.tilex, new.tiley, 0)=(word)(pw->areanumber+AREATILE);
+        MAPSPOT (new.tilex, new.tiley, 0)=(unsigned short)(pw->areanumber+AREATILE);
         }
 
      pw->tilex=new.tilex;
@@ -4001,7 +4001,7 @@ void LoadMaskedWalls(byte * bufptr, int sz)
 
   for (i=0;i<maskednum;i++)
      {
-     word flags;	// Endianness fix thanks to DrLex - DDOI
+     unsigned short flags;	// Endianness fix thanks to DrLex - DDOI
 
      mw=maskobjlist[i];
      size=sizeof(mw->flags);
@@ -4030,7 +4030,7 @@ void SaveDoors (byte ** buf, int * size)
    byte doorflag;
    byte doorlocked;
    signed char dooreindex;
-   short int doortime;
+   short doortime;
    int unitsize;
    byte *ptr;
 
@@ -4095,7 +4095,7 @@ void LoadDoors (byte * buf, int size)
    byte doorflag;
    byte doorlocked;
    signed char dooreindex;
-   short int doortime;
+   short doortime;
    byte *ptr;
    int unitsize;
    int num;

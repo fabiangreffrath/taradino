@@ -48,7 +48,7 @@ byte * colormap;
 } visobj_t;
 
 
-extern  word             tilemap[MAPSIZE][MAPSIZE];    // wall values only
+extern  unsigned short             tilemap[MAPSIZE][MAPSIZE];    // wall values only
 extern  byte             spotvis[MAPSIZE][MAPSIZE];
 
 extern int tics;

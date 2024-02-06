@@ -71,7 +71,7 @@ byte Joy_xb,
      Joy_yb,
      Joy_xs,
      Joy_ys;
-word Joy_x,
+unsigned short Joy_x,
      Joy_y;
 
 
@@ -83,10 +83,10 @@ ModemMessage MSG;
 static SDL_Joystick* sdl_joysticks[MaxJoys];
 static int sdl_mouse_delta_x = 0;
 static int sdl_mouse_delta_y = 0;
-static word sdl_mouse_button_mask = 0;
+static unsigned short sdl_mouse_button_mask = 0;
 static int sdl_total_sticks = 0;
-static word *sdl_stick_button_state = NULL;
-static word sdl_sticks_joybits = 0;
+static unsigned short *sdl_stick_button_state = NULL;
+static unsigned short sdl_sticks_joybits = 0;
 static int sdl_mouse_grabbed = 0;
 extern boolean sdl_fullscreen;
 
@@ -453,13 +453,13 @@ void INL_GetMouseDelta(int *x,int *y)
 //
 //******************************************************************************
 
-word IN_GetMouseButtons
+unsigned short IN_GetMouseButtons
    (
    void
    )
 
    {
-   word buttons = 0;
+   unsigned short buttons = 0;
 
    IN_PumpEvents();
 
@@ -500,7 +500,7 @@ void IN_IgnoreMouseButtons
 //
 //******************************************************************************
 
-void IN_GetJoyAbs (word joy, word *xp, word *yp)
+void IN_GetJoyAbs (unsigned short joy, unsigned short *xp, unsigned short *yp)
 {
    Joy_x  = Joy_y = 0;
    Joy_xs = joy? 2 : 0;       // Find shift value for x axis
@@ -534,9 +534,9 @@ void JoyStick_Vals (void)
 //
 //******************************************************************************
 
-void INL_GetJoyDelta (word joy, int *dx, int *dy)
+void INL_GetJoyDelta (unsigned short joy, int *dx, int *dy)
 {
-   word        x, y;
+   unsigned short        x, y;
    JoystickDef *def;
 
    IN_GetJoyAbs (joy, &x, &y);
@@ -598,9 +598,9 @@ void INL_GetJoyDelta (word joy, int *dx, int *dy)
 //
 //******************************************************************************
 
-word INL_GetJoyButtons (word joy)
+unsigned short INL_GetJoyButtons (unsigned short joy)
 {
-   word  result = 0;
+   unsigned short  result = 0;
 
    if (joy < sdl_total_sticks)
        result = sdl_stick_button_state[joy];
@@ -633,7 +633,7 @@ boolean INL_StartMouse (void)
 //
 //******************************************************************************
 
-void INL_SetJoyScale (word joy)
+void INL_SetJoyScale (unsigned short joy)
 {
    JoystickDef *def;
 
@@ -653,9 +653,9 @@ void INL_SetJoyScale (word joy)
 //
 //******************************************************************************
 
-void IN_SetupJoy (word joy, word minx, word maxx, word miny, word maxy)
+void IN_SetupJoy (unsigned short joy, unsigned short minx, unsigned short maxx, unsigned short miny, unsigned short maxy)
 {
-   word     d,r;
+   unsigned short     d,r;
    JoystickDef *def;
 
    def = &JoyDefs[joy];
@@ -686,9 +686,9 @@ void IN_SetupJoy (word joy, word minx, word maxx, word miny, word maxy)
 //******************************************************************************
 
 
-boolean INL_StartJoy (word joy)
+boolean INL_StartJoy (unsigned short joy)
 {
-   word x,y;
+   unsigned short x,y;
 
    if (!SDL_WasInit(SDL_INIT_JOYSTICK))
    {
@@ -698,11 +698,11 @@ boolean INL_StartJoy (word joy)
 
        if ((sdl_stick_button_state == NULL) && (sdl_total_sticks > 0))
        {
-           sdl_stick_button_state = (word *) malloc(sizeof (word) * sdl_total_sticks);
+           sdl_stick_button_state = (unsigned short *) malloc(sizeof (unsigned short) * sdl_total_sticks);
            if (sdl_stick_button_state == NULL)
                SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
            else
-               memset(sdl_stick_button_state, '\0', sizeof (word) * sdl_total_sticks);
+               memset(sdl_stick_button_state, '\0', sizeof (unsigned short) * sdl_total_sticks);
        }
        SDL_JoystickEventState(SDL_ENABLE);
    }
@@ -733,7 +733,7 @@ boolean INL_StartJoy (word joy)
 //
 //******************************************************************************
 
-void INL_ShutJoy (word joy)
+void INL_ShutJoy (unsigned short joy)
 {
    JoysPresent[joy] = false;
    if (joy < sdl_total_sticks) SDL_JoystickClose (sdl_joysticks[joy]);
@@ -753,7 +753,7 @@ void IN_Startup (void)
    boolean checkjoys,
            checkmouse;
 
-   word    i;
+   unsigned short    i;
 
    if (IN_Started==true)
       return;
@@ -811,7 +811,7 @@ sdl_mouse_grabbed = 1;
 
 void IN_Shutdown (void)
 {
-   word  i;
+   unsigned short  i;
 
    if (IN_Started==false)
       return;
@@ -848,7 +848,7 @@ void IN_ClearKeysDown (void)
 void IN_ReadControl (int player, ControlInfo *info)
 {
    boolean     realdelta = false;
-   word        buttons;
+   unsigned short        buttons;
    int         dx,dy;
    Motion      mx,my;
    ControlType type;
@@ -938,7 +938,7 @@ boolean  btnstate[8];
 
 void IN_StartAck (void)
 {
-   unsigned i,
+   unsigned int i,
             buttons = 0;
 
 //
@@ -970,7 +970,7 @@ void IN_StartAck (void)
 
 boolean IN_CheckAck (void)
 {
-   unsigned i,
+   unsigned int i,
             buttons = 0;
 
 //
@@ -1053,7 +1053,7 @@ boolean IN_UserInput (long delay)
 
 byte IN_JoyButtons (void)
 {
-   unsigned joybits = 0;
+   unsigned int joybits = 0;
 
    joybits = sdl_sticks_joybits;
 

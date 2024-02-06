@@ -63,7 +63,7 @@ typedef struct
 { thingtype   which;
   byte        flags;
   byte        hitpoints;
-  word        tile;
+  unsigned short        tile;
   byte        tilex,tiley;
 
 
@@ -90,12 +90,12 @@ typedef struct
 
 typedef struct
    {
-   unsigned used;
-   unsigned CRC;
-   unsigned RLEWtag;
-   unsigned MapSpecials;
-   unsigned planestart[ NUMPLANES ];
-   unsigned planelength[ NUMPLANES ];
+   unsigned int used;
+   unsigned int CRC;
+   unsigned int RLEWtag;
+   unsigned int MapSpecials;
+   unsigned int planestart[ NUMPLANES ];
+   unsigned int planelength[ NUMPLANES ];
    char     Name[ ALLOCATEDLEVELNAMELENGTH ];
    } RTLMAP;
 
@@ -125,9 +125,9 @@ extern  wall_t walls[MAXWALLTILES];
 extern str_clock Clocks[MAXCLOCKS];
 extern int LightsInArea[NUMAREAS+1];
 extern int numclocks;
-extern word ELEVATORLOCATION;
+extern unsigned short ELEVATORLOCATION;
 
-extern unsigned short int *mapplanes[3];
+extern unsigned short *mapplanes[3];
 extern int gunsstart;
 extern int elevatorstart;
 extern int spritestop;
@@ -170,7 +170,7 @@ void PrintTileStats (void);
 void GetMapInfo (mapfileinfo_t * mapinfo);
 void GetMapFileName ( char * filename );
 void SetBattleMapFileName ( char * filename );
-word GetMapCRC ( int num );
+unsigned short GetMapCRC ( int num );
 
 int GetNextMap ( int tilex, int tiley );
 void Illuminate();
