@@ -27,7 +27,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "lumpy.h"
 #include "w_wad.h"
 #include "z_zone.h"
-#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -49,7 +48,7 @@ void DrawClearBuffer ( void );
 ===============
 */
 
-flicevent * SpawnCinematicFlic ( char * name, bool loop, bool usefile )
+flicevent * SpawnCinematicFlic ( char * name, bool8_t loop, bool8_t usefile )
 {
    flicevent * flic;
 
@@ -281,7 +280,7 @@ void DrawFlic ( flicevent * flic )
 
    DrawFadeout ( );
 
-   if (flic->usefile==false)
+   if (flic->usefile==FALSE)
       {
       W_CacheLumpName(flic->name,PU_CACHE, CvtNull, 1);
       strcpy(flicname,flic->name);
@@ -295,7 +294,7 @@ void DrawFlic ( flicevent * flic )
 // med
 //   PlayFlic ( flicname, buf, flic->usefile, flic->loop);
 
-   if (flic->loop==true)
+   if (flic->loop==TRUE)
       ClearCinematicAbort();
 
    DrawFadeout ( );
@@ -319,7 +318,7 @@ void DrawFlic ( flicevent * flic )
 
 void PrecacheFlic (flicevent * flic)
 {
-   if (flic->usefile==false)
+   if (flic->usefile==FALSE)
       {
       W_CacheLumpName(flic->name,PU_CACHE, CvtNull, 1);
       }
@@ -647,16 +646,16 @@ void DrawClearBuffer ( void )
 ===============
 */
 
-bool UpdateCinematicBack ( backevent * back )
+bool8_t UpdateCinematicBack ( backevent * back )
 {
    back->duration--;
 
    if (back->duration<0)
-      return false;
+      return FALSE;
 
    back->currentoffset += back->dx;
 
-   return true;
+   return TRUE;
 }
 
 /*
@@ -666,12 +665,12 @@ bool UpdateCinematicBack ( backevent * back )
 =
 =================
 */
-bool UpdateCinematicSprite ( spriteevent * sprite )
+bool8_t UpdateCinematicSprite ( spriteevent * sprite )
 {
    sprite->duration--;
 
    if (sprite->duration<0)
-      return false;
+      return FALSE;
 
    sprite->framedelay--;
 
@@ -687,7 +686,7 @@ bool UpdateCinematicSprite ( spriteevent * sprite )
    sprite->y+=sprite->dy;
    sprite->scale+=sprite->dscale;
 
-   return true;
+   return TRUE;
 }
 
 /*
@@ -697,7 +696,7 @@ bool UpdateCinematicSprite ( spriteevent * sprite )
 =
 =================
 */
-bool UpdateCinematicEffect ( enum_eventtype type, void * effect )
+bool8_t UpdateCinematicEffect ( enum_eventtype type, void * effect )
 {
    switch (type)
       {
@@ -713,20 +712,20 @@ bool UpdateCinematicEffect ( enum_eventtype type, void * effect )
          return UpdateCinematicSprite ( (spriteevent *) effect );
          break;
       case flic:
-         return true;
+         return TRUE;
          break;
       case palette:
       case fadeout:
       case blankscreen:
       case clearbuffer:
-         return true;
+         return TRUE;
          break;
       case cinematicend:
-         cinematicdone=true;
-         return true;
+         cinematicdone=TRUE;
+         return TRUE;
          break;
       }
-   return true;
+   return TRUE;
 }
 /*
 =================
@@ -735,54 +734,54 @@ bool UpdateCinematicEffect ( enum_eventtype type, void * effect )
 =
 =================
 */
-bool DrawCinematicEffect ( enum_eventtype type, void * effect )
+bool8_t DrawCinematicEffect ( enum_eventtype type, void * effect )
 {
    switch (type)
       {
       case background_noscrolling:
       case background_scrolling:
          DrawCinematicBackground ( (backevent *) effect );
-         return true;
+         return TRUE;
          break;
       case background_multi:
          DrawCinematicMultiBackground ( (backevent *) effect );
-         return true;
+         return TRUE;
          break;
       case backdrop_scrolling:
       case backdrop_noscrolling:
          DrawCinematicBackdrop ( (backevent *) effect );
-         return true;
+         return TRUE;
          break;
       case sprite_background:
       case sprite_foreground:
          DrawCinematicSprite ( (spriteevent *) effect );
-         return true;
+         return TRUE;
          break;
       case flic:
          DrawFlic ( (flicevent *) effect );
-         return false;
+         return FALSE;
          break;
       case palette:
          DrawPalette ( (paletteevent *) effect );
-         return false;
+         return FALSE;
          break;
       case fadeout:
          DrawFadeout ();
-         return false;
+         return FALSE;
          break;
       case blankscreen:
          DrawBlankScreen ();
-         return false;
+         return FALSE;
          break;
       case clearbuffer:
          DrawClearBuffer ();
-         return false;
+         return FALSE;
          break;
       case cinematicend:
-         return true;
+         return TRUE;
          break;
       }
-   return true;
+   return TRUE;
 }
 
 /*

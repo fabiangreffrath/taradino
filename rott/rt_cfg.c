@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //****************************************************************************
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -67,9 +66,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //******************************************************************************
 
 extern int G_weaponscale;
-extern bool iG_aimCross;
+extern bool8_t iG_aimCross;
 
-bool WriteSoundFile   = true;
+bool8_t WriteSoundFile   = TRUE;
 
 int     FXMode           = 0;
 int     MusicMode        = 0;
@@ -77,28 +76,28 @@ int     MusicMode        = 0;
 int     MUvolume         = 196;
 int     FXvolume         = 196;
 
-bool mouseenabled     = 1;
-bool usemouselook     = 0;
+bool8_t mouseenabled     = 1;
+bool8_t usemouselook     = 0;
 int     inverse_mouse    = 1; //set  to -1 to invert mouse
-bool sdl_fullscreen   = 1;
+bool8_t sdl_fullscreen   = 1;
 
-bool joystickenabled  = 0;
-bool joypadenabled    = 0;
+bool8_t joystickenabled  = 0;
+bool8_t joypadenabled    = 0;
 int     joystickport     = 0;
 int     mouseadjustment  = 5;
 int     threshold        = 1;
 int     NumVoices        = 4;
 int     NumChannels      = 1;
 int     NumBits          = 8;
-bool AutoDetailOn     = true;
+bool8_t AutoDetailOn     = TRUE;
 int     DoubleClickSpeed = 20;
-bool BobbinOn         = true;
+bool8_t BobbinOn         = TRUE;
 int     Menuflipspeed    = 15;
 int     DetailLevel      = 2;         //HI DETAIL
 int     fandc            = 1;
 int     blanktime        = (2*60*VBLCOUNTER);
-bool ConfigLoaded     = false;
-bool stereoreversed   = false;
+bool8_t ConfigLoaded     = FALSE;
+bool8_t stereoreversed   = FALSE;
 
 int     DefaultDifficulty      = 2;
 int     DefaultPlayerCharacter = 0;
@@ -160,12 +159,12 @@ void ReadScores (void)
 
 void ReadInt (const char * s1, int * val)
 {
-   GetToken (true);
+   GetToken (TRUE);
    if (!strcmpi (token,s1))
       {
-      if (TokenAvailable()==true)
+      if (TokenAvailable()==TRUE)
          {
-         GetToken(false);
+         GetToken(FALSE);
          *val=ParseNum(token);
          }
       }
@@ -177,13 +176,13 @@ void ReadInt (const char * s1, int * val)
 //
 //******************************************************************************
 
-void ReadBoolean (const char * s1, bool * val)
+void ReadBoolean (const char * s1, bool8_t * val)
 {
    int temp;
 
    temp = (int)(*val);
    ReadInt (s1,&temp);
-   *val = (bool) temp;
+   *val = (bool8_t) temp;
 }
 
 //******************************************************************************
@@ -207,9 +206,9 @@ void ReadUnsigned (const char * s1, unsigned long * val)
 //
 //******************************************************************************
 
-bool ParseSoundFile (void)
+bool8_t ParseSoundFile (void)
 {
-   bool retval = true;
+   bool8_t retval = TRUE;
    int version    = 0;
 
    ReadInt("Version",&version);
@@ -249,7 +248,7 @@ bool ParseSoundFile (void)
       ReadBoolean ("StereoReverse",&stereoreversed);
    }
    else
-      retval = false;
+      retval = FALSE;
 
    return (retval);
 }
@@ -276,7 +275,7 @@ void SetSoundDefaultValues
    NumVoices   = 8;
    NumChannels = 2;
    NumBits     = 16;
-   stereoreversed = false;
+   stereoreversed = FALSE;
    }
 
 extern char    pword[ 13 ];
@@ -394,10 +393,10 @@ void ConvertPasswordToPasswordString ( void )
 //
 //******************************************************************************
 
-bool ParseConfigFile (void)
+bool8_t ParseConfigFile (void)
 {
 //   int temp;
-   bool retval = true;
+   bool8_t retval = TRUE;
    int version    = 0;
 
    ReadInt("Version",&version);
@@ -557,29 +556,29 @@ bool ParseConfigFile (void)
       ReadInt( "DefaultPlayerColor", &DefaultPlayerColor );
 
       // Get Password string
-      GetToken (true);
+      GetToken (TRUE);
       if (!stricmp (token, "SecretPassword"))
          {
-         GetTokenEOL (false);
+         GetTokenEOL (FALSE);
          ConvertStringToPasswordString ( &name[0] );
          }
 
       if (!MousePresent)
-         mouseenabled = false;
+         mouseenabled = FALSE;
 
       if (!JoysPresent[joystickport])
-         joystickenabled = false;
+         joystickenabled = FALSE;
 
       // precaution
 
       if (!joyxmin || !joyxmax || !joyymin || !joyymax)
-         joystickenabled = false;
+         joystickenabled = FALSE;
 
       if (joystickenabled)
          IN_SetupJoy (joystickport, joyxmin, joyxmax, joyymin, joyymax);
    }
    else
-      retval = false;
+      retval = FALSE;
 
    return (retval);
 }
@@ -590,9 +589,9 @@ bool ParseConfigFile (void)
 // ParseBattleFile ()
 //
 //******************************************************************************
-bool ParseBattleFile (void)
+bool8_t ParseBattleFile (void)
 {
-   bool retval = true;
+   bool8_t retval = TRUE;
    int version    = 0;
    int index;
    int temp;
@@ -600,7 +599,7 @@ bool ParseBattleFile (void)
 
    ReadInt("Version",&version);
    if (version != ROTTVERSION)
-      retval = false;
+      retval = FALSE;
    else
       {
       ReadBoolean( "ShowKillCount", &BATTLE_ShowKillCount );
@@ -808,8 +807,8 @@ void SetBattleDefaultValues (void)
    BATTLE_Options[ battle_Collector ].SpawnWeapons = 0;
    BATTLE_Options[ battle_Collector ].FriendlyFire = 0;
    BATTLE_Options[ battle_Tag ].SpawnWeapons       = 0;
-   battlegibs=false;
-   BATTLE_ShowKillCount = true;
+   battlegibs=FALSE;
+   BATTLE_ShowKillCount = TRUE;
    }
 
 //******************************************************************************
@@ -824,10 +823,10 @@ void SetConfigDefaultValues (void)
    //  no config file, so select default values
    //
    if (MousePresent)
-      mouseenabled = true;
+      mouseenabled = TRUE;
 
-   joystickenabled = false;
-   joypadenabled   = false;
+   joystickenabled = FALSE;
+   joypadenabled   = FALSE;
    joystickport    = 0;
    viewsize        = 7;
    mouseadjustment = 5;
@@ -880,7 +879,7 @@ void ReadConfig (void)
       {
       LoadScriptFile (filename);
 
-      if (ParseSoundFile () == false)
+      if (ParseSoundFile () == FALSE)
          {
          DeleteSoundFile();
          }
@@ -897,7 +896,7 @@ void ReadConfig (void)
       {
       LoadScriptFile(filename);
 
-      if (ParseConfigFile () == false)
+      if (ParseConfigFile () == FALSE)
          {
          unlink (filename);          // Delete CONFIG.ROT
          }
@@ -912,14 +911,14 @@ void ReadConfig (void)
       {
       LoadScriptFile(filename);
 
-      if (ParseBattleFile() == false)
+      if (ParseBattleFile() == FALSE)
          {
          unlink (filename);          // Delete BATTLE.ROT
          }
 
       Z_Free(scriptbuffer);
       }
-   ConfigLoaded = true;
+   ConfigLoaded = TRUE;
    free(filename);
 }
 
@@ -939,7 +938,7 @@ void ReadConfig (void)
 
 void CheckVendor (void)
 {
-   bool saveout=false;
+   bool8_t saveout=FALSE;
    int wadcrc;
    int filecrc;
    int size;
@@ -958,12 +957,12 @@ void CheckVendor (void)
       size=W_LumpLength(lump);
       wadcrc = CalculateCRC (vendor, size);
       if (wadcrc != filecrc)
-         saveout=true;
+         saveout=TRUE;
       }
    else
-      saveout=true;
+      saveout=TRUE;
 
-   if (saveout==true)
+   if (saveout==TRUE)
       {
       lump=W_GetNumForName(VENDORLUMP);
       vendor = W_CacheLumpNum(lump,PU_CACHE, CvtNull, 1);
@@ -1843,10 +1842,10 @@ void WriteConfig (void)
 void GetAlternatePath (char * tokenstr, AlternateInformation *info)
 {
    info->path = ".";
-   GetToken (true);
+   GetToken (TRUE);
    if (!stricmp (token, tokenstr))
       {
-      GetTokenEOL (false);
+      GetTokenEOL (FALSE);
       info->path = strdup(name);
       }
 }
@@ -1863,16 +1862,16 @@ void GetAlternateFile (char * tokenstr, AlternateInformation *info)
    // Read in remote sound file
    //
    info->file = "foo.foo";
-   GetToken (true);
+   GetToken (TRUE);
    if (!stricmp (token, tokenstr))
       {
-      if (TokenAvailable()==true)
+      if (TokenAvailable()==TRUE)
          {
-         GetToken (false);
+         GetToken (FALSE);
          if (stricmp (token, "~"))
             {
             #if (SHAREWARE == 0)
-            info->avail = true;
+            info->avail = TRUE;
             info->file = strdup(token);
             #else
             printf("Alternate file %s ignored.\n",token);
@@ -1895,25 +1894,25 @@ void ReadSETUPFiles (void)
    char *filename;
    int i;
 
-   RemoteSounds.avail   = false;
-//   PlayerGraphics.avail = false;
-   GameLevels.avail     = false;
-   BattleLevels.avail   = false;
+   RemoteSounds.avail   = FALSE;
+//   PlayerGraphics.avail = FALSE;
+   GameLevels.avail     = FALSE;
+   BattleLevels.avail   = FALSE;
 
    filename = M_StringJoin(ApogeePath, PATH_SEP_STR, CONFIG, NULL);
    if (access (filename, F_OK) == 0)
    {
       LoadScriptFile (filename);
 
-      GetTokenEOL (true);     //MODEMNAME
-      GetTokenEOL (true);     //MODEMINITSTR
-      GetTokenEOL (true);     //MODEMHANGUP
-      GetTokenEOL (true);     //RATE
-      GetTokenEOL (true);     //COMPORT
-      GetTokenEOL (true);     //IRQ
-      GetTokenEOL (true);     //UART
-      GetTokenEOL (true);     //PULSE
-      GetTokenEOL (true);     //AUTOMATICDIALOUT
+      GetTokenEOL (TRUE);     //MODEMNAME
+      GetTokenEOL (TRUE);     //MODEMINITSTR
+      GetTokenEOL (TRUE);     //MODEMHANGUP
+      GetTokenEOL (TRUE);     //RATE
+      GetTokenEOL (TRUE);     //COMPORT
+      GetTokenEOL (TRUE);     //IRQ
+      GetTokenEOL (TRUE);     //UART
+      GetTokenEOL (TRUE);     //PULSE
+      GetTokenEOL (TRUE);     //AUTOMATICDIALOUT
 
       GetAlternatePath ("REMOTESOUNDPATH", &RemoteSounds);
 //      GetAlternatePath ("PLAYERGRAPHICSPATH", &PlayerGraphics);
@@ -1921,11 +1920,11 @@ void ReadSETUPFiles (void)
       GetAlternatePath ("BATTLELEVELPATH", &BattleLevels);
 
       // Get CodeName
-      GetToken (true);
+      GetToken (TRUE);
       if (stricmp (token, "CODENAME"))
          Error ("Can't find %s token.\n", "CODENAME");
 
-      GetTokenEOL (false);
+      GetTokenEOL (FALSE);
       memset (&CodeName[0], 0, sizeof (CodeName));
       if (stricmp (name, "~"))
          {
@@ -1934,19 +1933,19 @@ void ReadSETUPFiles (void)
          for (i=0;i<MAXCODENAMELENGTH-1;i++)
             CodeName[i]=name[i];
          }
-      GetTokenEOL (true);     //NUMPLAYERS
-      GetTokenEOL (true);     //NETWORKSOCKET
-      GetTokenEOL (true);     //DEFAULT
+      GetTokenEOL (TRUE);     //NUMPLAYERS
+      GetTokenEOL (TRUE);     //NETWORKSOCKET
+      GetTokenEOL (TRUE);     //DEFAULT
       for (i=0;i<14;i++)
-         GetTokenEOL (true);  //NUMBERLIST
+         GetTokenEOL (TRUE);  //NUMBERLIST
 
       memset (CommbatMacros, 0, sizeof(CommbatMacros) );
 
       for (i=0;i<MAXMACROS;i++)
          {
-         GetToken (true);
+         GetToken (TRUE);
 
-         GetTokenEOL (true);
+         GetTokenEOL (TRUE);
 
          if (name[0] != '~')
             {
@@ -1964,7 +1963,7 @@ void ReadSETUPFiles (void)
    {
       LoadScriptFile (filename);
 
-      GetTokenEOL (true);     //PHONENUMBER
+      GetTokenEOL (TRUE);     //PHONENUMBER
 
       GetAlternateFile ("REMOTESOUNDFILE", &RemoteSounds);
 //      GetAlternateFile ("PLAYERGRAPHICSFILE", &PlayerGraphics);

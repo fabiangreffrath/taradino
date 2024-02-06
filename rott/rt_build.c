@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // RT_BUILD.C
 
 #include "rt_def.h"
-#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 #include "watcom.h"
@@ -63,9 +62,9 @@ static int titleshadedir=1;
 static int titleyoffset=0;
 static char titlestring[40]="\0";
 static int readytoflip;
-static bool MenuBufStarted=false;
+static bool8_t MenuBufStarted=FALSE;
 static int mindist=0x2700;
-static bool BackgroundDrawn=false;
+static bool8_t BackgroundDrawn=FALSE;
 
 static plane_t planelist[MAXPLANES],*planeptr;
 
@@ -401,7 +400,7 @@ void ClearMenuBuf ( void )
 {
    uint8_t * shape;
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called ClearMenuBuf without menubuf started\n");
 
    shape=W_CacheLumpName(MENUBACKNAME,PU_CACHE, Cvt_patch_t, 1);
@@ -417,12 +416,12 @@ void ClearMenuBuf ( void )
 
 void ShutdownMenuBuf ( void )
 {
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       return;
-   MenuBufStarted=false;
+   MenuBufStarted=FALSE;
    SafeFree(menubuffers[0]);
    SafeFree(menubuffers[1]);
-   if (loadedgame==false)
+   if (loadedgame==FALSE)
       SetViewSize(viewsize);
 }
 
@@ -442,9 +441,9 @@ void SetupMenuBuf ( void )
 #define PLANEY (0x40000)
 #define PLANEW2 (0x5a827)
 
-   if (MenuBufStarted==true)
+   if (MenuBufStarted==TRUE)
       return;
-   MenuBufStarted=true;
+   MenuBufStarted=TRUE;
 
    // No top offsets like in game
 
@@ -497,7 +496,7 @@ void SetupMenuBuf ( void )
    menubuffers[1]=SafeMalloc(TEXTUREW*TEXTUREHEIGHT);
    menubuf=menubuffers[0];
    ClearMenuBuf();
-   BackgroundDrawn=false;
+   BackgroundDrawn=FALSE;
 }
 
 
@@ -507,18 +506,18 @@ void SetupMenuBuf ( void )
 //
 //******************************************************************************
 
-void PositionMenuBuf( int angle, int distance, bool drawbackground )
+void PositionMenuBuf( int angle, int distance, bool8_t drawbackground )
 {
    int px,py;
    font_t * oldfont;
    int width,height;
 
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called PositionMenuBuf without menubuf started\n");
    CalcTics();
    SetupPlanes();
-   if ((drawbackground==true) || (BackgroundDrawn==false))
+   if ((drawbackground==TRUE) || (BackgroundDrawn==FALSE))
       {
       VL_DrawPostPic (W_GetNumForName("trilogo"));
       }
@@ -536,10 +535,10 @@ void PositionMenuBuf( int angle, int distance, bool drawbackground )
    titleshade+=titleshadedir;
    if (abs(titleshade-16)>6)
       titleshadedir=-titleshadedir;
-   if (BackgroundDrawn==false)
+   if (BackgroundDrawn==FALSE)
       {
       VL_CopyDisplayToHidden();
-      BackgroundDrawn=true;
+      BackgroundDrawn=TRUE;
       }
 }
 
@@ -553,7 +552,7 @@ void RefreshMenuBuf( int time )
 {
    int i;
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called RefreshMenuBuf without menubuf started\n");
 
    if (readytoflip)
@@ -561,8 +560,8 @@ void RefreshMenuBuf( int time )
 
    for (i=0;i<=time;i+=tics)
       {
-      //PositionMenuBuf (0,NORMALVIEW,false);
-      PositionMenuBuf (0,NORMALVIEW,true);//bna++ in not true bg in menu is no redrawn
+      //PositionMenuBuf (0,NORMALVIEW,FALSE);
+      PositionMenuBuf (0,NORMALVIEW,TRUE);//bna++ in not TRUE bg in menu is no redrawn
       }
 }
 
@@ -604,7 +603,7 @@ void ScaleMenuBufPost (uint8_t * src, int topoffset, uint8_t * buf)
 
 void SetAlternateMenuBuf ( void )
 {
-  if (MenuBufStarted==false)
+  if (MenuBufStarted==FALSE)
      Error("Called SetAlternateMenuBuf without menubuf started\n");
 
   alternatemenubuf^=1;
@@ -620,7 +619,7 @@ void SetAlternateMenuBuf ( void )
 
 void SetMenuTitle ( const char * menutitle )
 {
-  if (MenuBufStarted==false)
+  if (MenuBufStarted==FALSE)
      Error("Called SetMenuTitle without menubuf started\n");
   strcpy(menutitles[alternatemenubuf],menutitle);
   if (readytoflip==0)
@@ -638,7 +637,7 @@ void DrawMenuBufPicture (int x, int y, const uint8_t * pic, int w, int h)
    uint8_t *buffer;
    int i;
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called DrawMenuBufPictoure without menubuf started\n");
 
    if ((x<0) || (x+w>=TEXTUREW))
@@ -667,7 +666,7 @@ void DrawMenuBufItem (int x, int y, int shapenum)
    uint8_t *shape;
    patch_t *p;
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called DrawMenuBufItem without menubuf started\n");
 
    shape = W_CacheLumpNum (shapenum, PU_CACHE, Cvt_patch_t, 1);
@@ -730,7 +729,7 @@ void DrawIMenuBufItem (int x, int y, int shapenum, int color)
    patch_t *p;
 
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called DrawIMenuBufItem without menubuf started\n");
 
    shape = W_CacheLumpNum (shapenum, PU_CACHE, Cvt_patch_t, 1);
@@ -831,7 +830,7 @@ void EraseMenuBufRegion (int x, int y, int width, int height)
    int xx,yy;
    uint8_t * shape;
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called EraseMenuBufRegion without menubuf started\n");
 
    if ((x<0) || (x+width>=TEXTUREW))
@@ -870,7 +869,7 @@ void DrawTMenuBufPic (int x, int y, int shapenum)
    uint8_t *shape;
    pic_t *p;
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called DrawTMenuBufPic without menubuf started\n");
 
    shadingtable=colormap+(25<<8);
@@ -915,7 +914,7 @@ void DrawTMenuBufItem (int x, int y, int shapenum)
    patch_t *p;
 
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called DrawTMenuBufItem without menubuf started\n");
 
    shape = W_CacheLumpNum (shapenum, PU_CACHE, Cvt_patch_t, 1);
@@ -949,7 +948,7 @@ void DrawColoredMenuBufItem (int x, int y, int shapenum, int color)
    patch_t *p;
 
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called DrawColoredMenuBufItem without menubuf started\n");
 
    shape = W_CacheLumpNum (shapenum, PU_CACHE, Cvt_patch_t, 1);
@@ -985,7 +984,7 @@ void DrawMenuBufPic (int x, int y, int shapenum)
    uint8_t *src;
    pic_t *p;
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called DrawMenuBufPic without menubuf started\n");
 
    shape = W_CacheLumpNum (shapenum, PU_CACHE, Cvt_pic_t, 1);
@@ -1028,7 +1027,7 @@ void DrawTMenuBufBox ( int x, int y, int width, int height )
    int   yy;
    int   pixel;
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called DrawTMenuBufBox without menubuf started\n");
 
    shadingtable = colormap + ( 25 << 8 );
@@ -1060,7 +1059,7 @@ void DrawTMenuBufBox ( int x, int y, int width, int height )
 //
 //******************************************************************************
 
-void DrawTMenuBufHLine (int x, int y, int width, bool up)
+void DrawTMenuBufHLine (int x, int y, int width, bool8_t up)
 {
    uint8_t *buffer;
    uint8_t *buf;
@@ -1118,7 +1117,7 @@ void DrawTMenuBufHLine (int x, int y, int width, bool up)
 //
 //******************************************************************************
 
-void DrawTMenuBufVLine (int x, int y, int height, bool up)
+void DrawTMenuBufVLine (int x, int y, int height, bool8_t up)
 {
    uint8_t *buffer;
    uint8_t *buf;
@@ -1169,7 +1168,7 @@ void DrawMenuBufPropString (int px, int py, const char *string)
    int   ch;
 
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called DrawMenuBufPropString without menubuf started\n");
 
    ht = CurrentFont->height;
@@ -1215,7 +1214,7 @@ void DrawMenuBufIString (int px, int py, const char *string, int color)
    uint8_t  *source, *dest, *origdest;
    int   ch;
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called DrawMenuBufPropString without menubuf started\n");
 
    if ( ( color < 0 ) || ( color > 255 ) )
@@ -1290,7 +1289,7 @@ void DrawTMenuBufPropString (int px, int py, const char *string)
    int   ch;
 
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called DrawTMenuBufPropString without menubuf started\n");
 
    ht = CurrentFont->height;
@@ -1482,7 +1481,7 @@ void FlipMenuBuf ( void )
    int time;
    int flip;
 
-   if (MenuBufStarted==false)
+   if (MenuBufStarted==FALSE)
       Error("Called FlipMenuBuf without menubuf started\n");
 
    if (!readytoflip)
@@ -1507,7 +1506,7 @@ void FlipMenuBuf ( void )
       titleyoffset=0;
       for (i=0;i<time;i+=tics)
          {
-         PositionMenuBuf(h>>8,NORMALVIEW,true);
+         PositionMenuBuf(h>>8,NORMALVIEW,TRUE);
          h+=dh*tics;
          y+=dy*tics;
          titleyoffset=y>>8;
@@ -1523,7 +1522,7 @@ void FlipMenuBuf ( void )
          }
       }
    titleyoffset=0;
-   BackgroundDrawn=false;
+   BackgroundDrawn=FALSE;
 }
 
 

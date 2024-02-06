@@ -17,7 +17,6 @@
 //      [FG] miscellaneous helper functions from Chocolate Doom.
 //
 
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,7 +39,7 @@ void M_MakeDirectory(const char *path)
 
 // Check if a file exists
 
-bool M_FileExists(const char *filename)
+bool8_t M_FileExists(const char *filename)
 {
     FILE *fstream;
 
@@ -49,7 +48,7 @@ bool M_FileExists(const char *filename)
     if (fstream != NULL)
     {
         fclose(fstream);
-        return true;
+        return TRUE;
     }
     else
     {
@@ -150,7 +149,7 @@ char *M_FileCaseExists(const char *path)
     return NULL;
 }
 
-bool M_StrToInt(const char *str, int *result)
+bool8_t M_StrToInt(const char *str, int *result)
 {
     return sscanf(str, " 0x%x", (uint32_t *) result) == 1
         || sscanf(str, " 0X%x", (uint32_t *) result) == 1
@@ -323,7 +322,7 @@ char *M_StringReplace(const char *haystack, const char *needle,
 // Safe string copy function that works like OpenBSD's strlcpy().
 // Returns true if the string was not truncated.
 
-bool M_StringCopy(char *dest, const char *src, size_t dest_size)
+bool8_t M_StringCopy(char *dest, const char *src, size_t dest_size)
 {
     size_t len;
 
@@ -334,7 +333,7 @@ bool M_StringCopy(char *dest, const char *src, size_t dest_size)
     }
     else
     {
-        return false;
+        return FALSE;
     }
 
     len = strlen(dest);
@@ -344,7 +343,7 @@ bool M_StringCopy(char *dest, const char *src, size_t dest_size)
 // Safe string concat function that works like OpenBSD's strlcat().
 // Returns true if string not truncated.
 
-bool M_StringConcat(char *dest, const char *src, size_t dest_size)
+bool8_t M_StringConcat(char *dest, const char *src, size_t dest_size)
 {
     size_t offset;
 
@@ -359,13 +358,13 @@ bool M_StringConcat(char *dest, const char *src, size_t dest_size)
 
 // Returns true if 's' ends with the specified suffix.
 
-bool M_StringEndsWith(const char *s, const char *suffix)
+bool8_t M_StringEndsWith(const char *s, const char *suffix)
 {
     return strlen(s) >= strlen(suffix)
         && strcmp(s + strlen(s) - strlen(suffix), suffix) == 0;
 }
 
-bool M_StringCaseEndsWith(const char *s, const char *suffix)
+bool8_t M_StringCaseEndsWith(const char *s, const char *suffix)
 {
     return strlen(s) >= strlen(suffix)
         && strcasecmp(s + strlen(s) - strlen(suffix), suffix) == 0;

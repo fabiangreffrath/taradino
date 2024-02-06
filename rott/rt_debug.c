@@ -17,7 +17,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#include <stdbool.h>
 #include <stdint.h>
 #include "rt_def.h"
 #include "rt_debug.h"
@@ -47,7 +46,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "w_wad.h"
 
 extern int		iDemoNames;
-extern bool iG_aimCross;
+extern bool8_t iG_aimCross;
 
 
 extern void DisplayMessage   (int num,int position);
@@ -340,7 +339,7 @@ void EnableCheatCodes (void)
 
 void ResetCheatCodes (void)
 {
-//	godmode = false;
+//	godmode = FALSE;
 }
 
 /*
@@ -388,7 +387,7 @@ void DoWarp (void)
 {
 /*
 	char str[10];
-	bool esc;
+	bool8_t esc;
 	int level;
 
    CurrentFont = smallfont;
@@ -402,7 +401,7 @@ void DoWarp (void)
 
    ShutdownClientControls();
 
-   esc = !US_LineInput (px, py, str, NULL, true, 2, 25, 13);
+   esc = !US_LineInput (px, py, str, NULL, TRUE, 2, 25, 13);
 
    if (!esc)
    {
@@ -446,7 +445,7 @@ void DoWarp (void)
 		shape =  ( pic_t * )W_CacheLumpName( "backtile", PU_CACHE, Cvt_pic_t, 1 );
 		DrawTiledRegion( 0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32, 0, 16, shape );
 		DisableScreenStretch();//dont strech when we go BACK TO GAME
-		DrawPlayScreen(true);//repaint ammo and life stat
+		DrawPlayScreen(TRUE);//repaint ammo and life stat
 		VW_UpdateScreen ();//update screen
   }
    //bna section end
@@ -476,7 +475,7 @@ void DoWarp (void)
    else
       {
 	   DisableScreenStretch();//dont strech when we go BACK TO GAME
-      SetupScreen(true);
+      SetupScreen(TRUE);
       }
 
    StartupClientControls();
@@ -513,12 +512,12 @@ void DoJukeBox  (void)
 		shape =  ( pic_t * )W_CacheLumpName( "backtile", PU_CACHE, Cvt_pic_t, 1 );
 		DrawTiledRegion( 0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32, 0, 16, shape );
 		DisableScreenStretch();//dont strech when we go BACK TO GAME
-		DrawPlayScreen(true);//repaint ammo and life stat
+		DrawPlayScreen(TRUE);//repaint ammo and life stat
 		VW_UpdateScreen ();//update screen
   }
    //bna section end
 
-   SetupScreen(true);
+   SetupScreen(TRUE);
 
    while( Keyboard[ sc_Escape ] )
       {
@@ -554,7 +553,7 @@ void DoNormalThing (void)
 	InitializeWeapons(locplayerstate);
 	locplayerstate->keys = 0;
 
-   DrawPlayScreen (false);
+   DrawPlayScreen (FALSE);
 }
 
 
@@ -575,7 +574,7 @@ void DoItemCheat (void)
 	HealPlayer (99, player);
 
 	locplayerstate->keys = 0xF;
-	DrawKeys (false);
+	DrawKeys (FALSE);
 
    player->flags &= ~(FL_GASMASK|FL_BPV|FL_AV);
    CheatSpawnItem(stat_bulletproof);
@@ -603,7 +602,7 @@ void DoSomeItemCheat (void)
    HealPlayer (40, player);
 
    locplayerstate->keys = 0x7;
-	DrawKeys (false);
+	DrawKeys (FALSE);
 }
 
 
@@ -747,7 +746,7 @@ void HurtPlayer (void)
 ================
 */
 
-void SetLightDiminish (bool off)
+void SetLightDiminish (bool8_t off)
 {
 	if (off)
 	{
@@ -770,7 +769,7 @@ void SetLightDiminish (bool off)
 ================
 */
 
-void SetFog (bool on)
+void SetFog (bool8_t on)
 {
 	if (on)
 	{
@@ -800,14 +799,14 @@ void SetFog (bool on)
 
 void ToggleMissileCam (void)
 {
-   if (missilecam==false)
+   if (missilecam==FALSE)
       {
-      missilecam=true;
+      missilecam=TRUE;
       AddMessage ("Missile Cam \\cOn", MSG_CHEAT);
       }
    else
       {
-      missilecam=false;
+      missilecam=FALSE;
       AddMessage ("Missile Cam \\cOff", MSG_CHEAT);
       }
 }
@@ -822,14 +821,14 @@ void ToggleMissileCam (void)
 
 void ToggleHUD (void)
 {
-   if (HUD==false)
+   if (HUD==FALSE)
       {
-      HUD=true;
+      HUD=TRUE;
       AddMessage ("HUD \\cOn", MSG_CHEAT);
       }
    else
       {
-      HUD=false;
+      HUD=FALSE;
       AddMessage ("HUD \\cOff", MSG_CHEAT);
       }
 }
@@ -859,7 +858,7 @@ void EndLevel (void)
 ================
 */
 
-void FloorandCeiling (bool off)
+void FloorandCeiling (bool8_t off)
 {
 	if (off)
 	{
@@ -937,7 +936,7 @@ void OutfitPlayer ()
    AddMessage ("Outfit Player!", MSG_CHEAT);
 
 	locplayerstate->keys = 0xF;
-	DrawKeys (false);
+	DrawKeys (FALSE);
 	HealPlayer (99, player);
 
    /*
@@ -999,17 +998,17 @@ void RestartCurrentLevel (void)
 void EndDemo ( void )
 {
 	char str[10];
-	bool esc;
+	bool8_t esc;
 	int demonumber;
 
-   if (demorecord==false)
+   if (demorecord==FALSE)
       return;
 
    ShutdownClientControls();
 
    CurrentFont = smallfont;
 
-   demorecord = false;
+   demorecord = FALSE;
    US_CenterWindow (26, 4);
    US_CPrint ("Save demo as:");
    US_Print  ("\n");
@@ -1017,7 +1016,7 @@ void EndDemo ( void )
 
    VW_UpdateScreen();
 
-   esc = !US_LineInput (px, py, str, NULL, true, 1, 25, 13);
+   esc = !US_LineInput (px, py, str, NULL, TRUE, 1, 25, 13);
 
    if (!esc)
    {
@@ -1051,7 +1050,7 @@ void EndDemo ( void )
 void RecordDemoQuery ( void )
 {
    char str[10];
-	bool esc;
+	bool8_t esc;
 	int level;
 
    ShutdownClientControls();
@@ -1071,7 +1070,7 @@ void RecordDemoQuery ( void )
 
    VW_UpdateScreen();
 
-   esc = !US_LineInput (px, py, str, NULL, true, 2, 25, 13);
+   esc = !US_LineInput (px, py, str, NULL, TRUE, 2, 25, 13);
 
    if (!esc)
       {
@@ -1107,7 +1106,7 @@ void RecordDemoQuery ( void )
 void PlaybackDemoQuery ( void )
 {
    char str[10];
-	bool esc;
+	bool8_t esc;
 	int level;
 
    ShutdownClientControls();
@@ -1120,14 +1119,14 @@ void PlaybackDemoQuery ( void )
 
    VW_UpdateScreen ();
 
-   esc = !US_LineInput (px, py, str, NULL, true, 1, 25, 13);
+   esc = !US_LineInput (px, py, str, NULL, TRUE, 1, 25, 13);
 
    if (!esc)
    {
       level = ParseNum (str);
       if ((level > 0) && (level < 5))
          {
-         if (DemoExists (level) == true)
+         if (DemoExists (level) == TRUE)
             LoadDemo (level);
          }
    }
@@ -1276,7 +1275,7 @@ void CheckCode (int which)
 
          case TOMHALLMODE:
          case TOMHALLMODEALT:
-            gamestate.autorun = true;
+            gamestate.autorun = TRUE;
             AddMessage("Autorun enabled!",MSG_CHEAT);
          break;
 
@@ -1287,22 +1286,22 @@ void CheckCode (int which)
 
          case LIGHTDIMON:
          case LIGHTDIMONALT:
-            SetLightDiminish (false);
+            SetLightDiminish (FALSE);
          break;
 
          case LIGHTDIMOFF:
          case LIGHTDIMOFFALT:
-            SetLightDiminish (true);
+            SetLightDiminish (TRUE);
          break;
 
          case FOGON:
          case FOGONALT:
-            SetFog (true);
+            SetFog (TRUE);
          break;
 
 			case FOGOFF:
          case FOGOFFALT:
-            SetFog (false);
+            SetFog (FALSE);
          break;
 
          case QUITGAME:
@@ -1317,12 +1316,12 @@ void CheckCode (int which)
 
          case FANDCOFF:
          case FANDCOFFALT:
-            FloorandCeiling (false);
+            FloorandCeiling (FALSE);
          break;
 
          case FANDCON:
          case FANDCONALT:
-            FloorandCeiling (true);
+            FloorandCeiling (TRUE);
          break;
 
 
@@ -1446,7 +1445,7 @@ void CheckCode (int which)
             ShutdownClientControls();
             RotationFun();
             StartupClientControls();
-            SetupScreen( true );
+            SetupScreen( TRUE );
             break;
          case DEMORECORD:
             RecordDemoQuery();
@@ -1462,7 +1461,7 @@ void CheckCode (int which)
                {
 
                ludicrousgibs ^= 1;
-               if (ludicrousgibs == true)
+               if (ludicrousgibs == TRUE)
                   AddMessage("EKG mode on!",MSG_GAME);
                else
                   AddMessage("EKG mode off!",MSG_GAME);
@@ -1493,7 +1492,7 @@ void CheckCode (int which)
 void CheckDebug (void)
 {
 	int which;
-	if (DebugOk == false)
+	if (DebugOk == FALSE)
 		{
       CheckCode (0);      // Check for Debug switch only
       CheckCode (1);      // Check for Debug switch only
@@ -1502,11 +1501,11 @@ void CheckDebug (void)
       }
 	else
       {
-      if (demoplayback==true)
+      if (demoplayback==TRUE)
          {
          return;
          }
-      else if (demorecord==true)
+      else if (demorecord==TRUE)
          {
          CheckCode (DEMORECORD);
          CheckCode (DEMOEND);

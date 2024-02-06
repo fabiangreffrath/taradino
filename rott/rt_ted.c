@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "rt_def.h"
 #include "rt_sound.h"
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -68,7 +67,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // GLOBAL VARIABLES
 //========================================
 
-extern bool  UseBaseMarker;
+extern bool8_t  UseBaseMarker;
 
 teamtype TEAM[MAXPLAYERS];
 int numareatiles[NUMAREAS+1];
@@ -94,8 +93,8 @@ int  mapwidth;
 int  mapheight;
 int  lastlevelloaded=-1;
 
-bool insetupgame;
-bool ISRTL = false;
+bool8_t insetupgame;
+bool8_t ISRTL = FALSE;
 
 uint32_t MapSpecials = 0;
 
@@ -107,7 +106,7 @@ char LevelName[80];
 
 static cachetype * cachelist;
 static uint16_t cacheindex;
-static bool CachingStarted=false;
+static bool8_t CachingStarted=FALSE;
 char * ROTTMAPS;
 char * BATTMAPS;
 
@@ -216,7 +215,7 @@ void SortPreCache( void )
 void SetupPreCache( void )
 {
 
-   CachingStarted=true;
+   CachingStarted=TRUE;
    cacheindex=0;
    cachelist=(cachetype *)SafeMalloc(MAXPRECACHE*(sizeof(cachetype)));
    DrawPreCache();
@@ -234,7 +233,7 @@ void SetupPreCache( void )
 void ShutdownPreCache( void )
 {
 
-   CachingStarted=false;
+   CachingStarted=FALSE;
    SafeFree((uint8_t *)cachelist);
 }
 
@@ -251,7 +250,7 @@ void PreCacheLump( int lump, int level, int type ) // added type
 {
    int i;
 
-   if (CachingStarted==false)
+   if (CachingStarted==FALSE)
       return;
    if (!W_LumpLength(lump))
       {
@@ -284,7 +283,7 @@ void PreCacheGroup( int start, int end, int type ) // added type
    int k;
    int found;
 
-   if (CachingStarted==false)
+   if (CachingStarted==FALSE)
       return;
    k=cacheindex;
    for (j=start;j<=end;j++)
@@ -835,7 +834,7 @@ void MiscPreCache( void )
 	SD_PreCacheSoundGroup(SD_PLAYERBURNEDSND,SD_PLAYERLANDSND);
 	SD_PreCacheSoundGroup(SD_EXPLODEFLOORSND,SD_EXPLODESND);
 
-   if (lightning==true)
+   if (lightning==TRUE)
       SD_PreCacheSound(SD_LIGHTNINGSND);
 
    SD_PreCacheSound(SD_BODYLANDSND);
@@ -900,7 +899,7 @@ void MiscPreCache( void )
 ========================
 */
 
-bool IsChristmas(void)
+bool8_t IsChristmas(void)
    {
    struct dosdate_t date;
 
@@ -909,9 +908,9 @@ bool IsChristmas(void)
    if (((date.day == 24) || (date.day == 25)) &&      //Christmas
        (date.month == 12)
       )
-      return true;
+      return TRUE;
 
-   return false;
+   return FALSE;
 
    }
 
@@ -963,10 +962,10 @@ void CheckHolidays(void)
 =
 ======================
 */
-extern bool dopefish;
+extern bool8_t dopefish;
 void DrawPreCache( void )
 {
-   if (loadedgame==false)
+   if (loadedgame==FALSE)
       {
       char temp[80];
       int width, height, num;
@@ -976,7 +975,7 @@ void DrawPreCache( void )
 			{
          VL_DrawPostPic (W_GetNumForName("trilogo"));
          VWB_TBar ( 30, 23, 260, 82 );
-         ShowBattleOptions( false, 56, 26 );
+         ShowBattleOptions( FALSE, 56, 26 );
 
          DrawPlayers ();
          }
@@ -1035,7 +1034,7 @@ void DrawPreCache( void )
 
       num = (RandomNumber ("PreCacheString", 0)) % MAXSILLYSTRINGS;
 
-      if ((dopefish==true) || (tedlevel == true))
+      if ((dopefish==TRUE) || (tedlevel == TRUE))
          strcpy (temp, &(CacheStrings[num][0]));
       else
          strcpy (temp, &(LevelName[0]));
@@ -1091,9 +1090,9 @@ void PreCache( void )
 #define  PRECACHELED2Y 12
 */
 
-   if (CachingStarted==false)
+   if (CachingStarted==FALSE)
       {
-      if (loadedgame==false)
+      if (loadedgame==FALSE)
          {
          ClearGraphicsScreen();
          MenuFadeIn ();
@@ -1105,7 +1104,7 @@ void PreCache( void )
 
    SortPreCache();
 
-   if (loadedgame==false)
+   if (loadedgame==FALSE)
       {
 		maxheapsize=Z_HeapSize();
       total=0;
@@ -1158,9 +1157,9 @@ void PreCache( void )
             ticdelay--;
             if (ticdelay==0)
                {
-               extern bool dopefish;
+               extern bool8_t dopefish;
 
-               if ( dopefish==true )
+               if ( dopefish==TRUE )
                   {
                   SD_PlayPitchedSound ( SD_DOPEFISHSND, 255, 0 );
                   }
@@ -1515,11 +1514,11 @@ int GetNextMap ( int tilex, int tiley )
    {
    uint16_t next;
    uint16_t icon;
-   bool done;
+   bool8_t done;
 
    next = MAPSPOT( tilex, tiley, 2 );
    icon = MAPSPOT( tilex, tiley, 1 );
-   done=false;
+   done=FALSE;
    if ( ( ( icon != EXITTILE ) && ( icon != SECRETEXITTILE ) ) ||
       ( ( ( next&0xff00 ) != 0xe200 ) && ( ( next&0xff00 ) != 0xe400 ) ) )
       {
@@ -1535,12 +1534,12 @@ int GetNextMap ( int tilex, int tiley )
                ( ( ( next&0xff00 ) == 0xe200 ) ||
                ( ( next&0xff00 ) == 0xe400 ) ) )
                {
-               done=true;
+               done=TRUE;
                break;
                }
             }
 
-         if ( done == true )
+         if ( done == TRUE )
             {
             break;
             }
@@ -1625,11 +1624,11 @@ void GetMapFileInfo
 */
 void GetMapFileName ( char * filename )
 {
-   if ( ( BATTLEMODE ) && (BattleLevels.avail == true) )
+   if ( ( BATTLEMODE ) && (BattleLevels.avail == TRUE) )
       {
       strcpy(filename,BattleLevels.file);
       }
-   else if (GameLevels.avail == true)
+   else if (GameLevels.avail == TRUE)
       {
       strcpy(filename,GameLevels.file);
       }
@@ -1652,7 +1651,7 @@ void GetMapFileName ( char * filename )
 */
 void SetBattleMapFileName ( char * filename )
 {
-   BattleLevels.avail = true;
+   BattleLevels.avail = TRUE;
    BattleLevels.file = strdup(filename);
 }
 
@@ -1701,7 +1700,7 @@ uint16_t GetMapCRC
 
 void GetAlternateMapInfo (mapfileinfo_t * mapinfo, AlternateInformation *info)
 {
-   if (UL_ChangeDirectory (info->path) == false)
+   if (UL_ChangeDirectory (info->path) == FALSE)
       Error ("ERROR : Can't change to alternate directory %s!\n", info->path);
 
    GetMapFileInfo (mapinfo, info->file);
@@ -1722,11 +1721,11 @@ void GetMapInfo
    )
 
    {
-   if ( ( BATTLEMODE ) && ( BattleLevels.avail == true ) )
+   if ( ( BATTLEMODE ) && ( BattleLevels.avail == TRUE ) )
       {
       GetAlternateMapInfo( mapinfo, &BattleLevels );
       }
-   else if ( GameLevels.avail == true )
+   else if ( GameLevels.avail == TRUE )
       {
       GetAlternateMapInfo( mapinfo, &GameLevels );
       }
@@ -1863,7 +1862,7 @@ void LoadTedMap
 
 void LoadAlternateMap (AlternateInformation *info, int mapnum)
 {
-   if (UL_ChangeDirectory (info->path) == false)
+   if (UL_ChangeDirectory (info->path) == FALSE)
       Error ("ERROR : Can't change to alternate directory %s!\n",info->path);
 
    ReadROTTMap (info->file, mapnum);
@@ -1884,15 +1883,15 @@ void LoadROTTMap
    )
 
    {
-   if ( tedlevel == true )
+   if ( tedlevel == TRUE )
       {
       LoadTedMap( "rot", mapnum );
       }
-   else if ( ( BATTLEMODE ) && ( BattleLevels.avail == true ) )
+   else if ( ( BATTLEMODE ) && ( BattleLevels.avail == TRUE ) )
       {
       LoadAlternateMap( &BattleLevels, mapnum );
       }
-   else if ( GameLevels.avail == true )
+   else if ( GameLevels.avail == TRUE )
       {
       LoadAlternateMap( &GameLevels, mapnum );
       }
@@ -1967,7 +1966,7 @@ void SetupWalls( void )
 			   map++;
 			   continue;
 			   }
-			if ((loadedgame == false) && (MAPSPOT(i,j,2) == 0xeeee))
+			if ((loadedgame == FALSE) && (MAPSPOT(i,j,2) == 0xeeee))
 				{_2Dpoint *tdptr;
 
 				 tdptr = &(MISCVARS->EPOP[MISCVARS->nextpop]);
@@ -2077,7 +2076,7 @@ uint16_t GetNearestAreaNumber ( int tilex, int tiley )
 void SetupWindows ( void )
 {
    int i,j;
-   bool skythere;
+   bool8_t skythere;
 
    skythere = SkyExists();
 
@@ -2090,7 +2089,7 @@ void SetupWindows ( void )
          if (IsWindow(i,j))
             {
             actorat[i][j]=0;
-            if (skythere==true)
+            if (skythere==TRUE)
                {
                tilemap[i][j]|=0x2000;
                }
@@ -2337,7 +2336,7 @@ void RespawnPlayerobj(objtype *ob)
      }
 
  oldsetupgame = insetupgame;
- insetupgame = true;
+ insetupgame = TRUE;
  FindEmptyTile(&nx,&ny);
  insetupgame = oldsetupgame;
  RevivePlayerobj(nx,ny,ndir,ob);
@@ -2593,8 +2592,8 @@ void SetupPlayers( void )
       Error( "No spawn locations found on map." );
       }
 
-   /*modemgame=true;
-   gamestate.teamplay = true;
+   /*modemgame=TRUE;
+   gamestate.teamplay = TRUE;
    PLAYERSTATE[0].uniformcolor = 2;
    PLAYERSTATE[1].uniformcolor = 2;
    numplayers = 2;
@@ -2613,7 +2612,7 @@ void SetupPlayers( void )
 			SpawnPlayerobj(FIRST.x,FIRST.y,FIRST.dir,0);
 		}
 
-   else if (gamestate.teamplay == true)
+   else if (gamestate.teamplay == TRUE)
 	  SetupTeams();
 
 	else
@@ -3488,7 +3487,7 @@ void LinkElevatorDiskGroups(void)
    int maxplatformheight[30]={-1};
    int num_distinct_max_heights=0;
    int i;
-   bool newdiskheight;
+   bool8_t newdiskheight;
 
 
  #define M_ISELEVDISK(actor) \
@@ -3501,17 +3500,17 @@ void LinkElevatorDiskGroups(void)
       if (!M_ISELEVDISK(diskfinder1))
          continue;
 
-      newdiskheight = true;
+      newdiskheight = TRUE;
       for(i=0;i<num_distinct_max_heights;i++)
          {
          if (maxplatformheight[i] == diskfinder1->temp2)
             {
-            newdiskheight = false;
+            newdiskheight = FALSE;
             break;
             }
          }
 
-      if (newdiskheight == true)
+      if (newdiskheight == TRUE)
          maxplatformheight[num_distinct_max_heights++] = diskfinder1->temp2;
 
       }
@@ -3520,7 +3519,7 @@ void LinkElevatorDiskGroups(void)
    for(i=0;i<num_distinct_max_heights;i++)
       {
 
-      SpawnDisk(64,64,0,true);
+      SpawnDisk(64,64,0,TRUE);
       master = new;
       master->temp2 = maxplatformheight[i];
 
@@ -3661,7 +3660,7 @@ void SetupInanimateActors (void)
             case 465:
             case 466:
 
-               SpawnDisk(i,j,tile-462,false);
+               SpawnDisk(i,j,tile-462,FALSE);
                break;
 
             case 285:
@@ -4080,7 +4079,7 @@ void PrintMapStats (void)
    int size;
    int total;
 
-   if (MAPSTATS==false)
+   if (MAPSTATS==FALSE)
       return;
 
    OpenMapDebug();
@@ -4114,12 +4113,12 @@ void PrintMapStats (void)
 }
 
 
-bool IsWeapon(int tile)
+bool8_t IsWeapon(int tile)
 {
  if ((tile >= 46) && (tile <= 56))
-   return true;
+   return TRUE;
 
- return  false;
+ return  FALSE;
 
 }
 
@@ -4236,7 +4235,7 @@ void PrintTileStats (void)
    int hardtotal;
    int tally[1000];
 
-   if (TILESTATS==false)
+   if (TILESTATS==FALSE)
       return;
 
    OpenMapDebug();
@@ -4271,7 +4270,7 @@ void PrintTileStats (void)
       {
 	   for(i=0;i<mapwidth;i++)
 			{
-         if (IsWall(i,j)==true)
+         if (IsWall(i,j)==TRUE)
             tally[(*map)]++;
          map++;
          }
@@ -4292,7 +4291,7 @@ void PrintTileStats (void)
       {
 	   for(i=0;i<mapwidth;i++)
 			{
-         if (IsDoor(i,j)==true)
+         if (IsDoor(i,j)==TRUE)
             tally[(*map)]++;
          map++;
          }
@@ -4313,8 +4312,8 @@ void PrintTileStats (void)
       {
 	   for(i=0;i<mapwidth;i++)
 			{
-         if (IsMaskedWall(i,j)==true)
-            if (IsPlatform(i,j)==false)
+         if (IsMaskedWall(i,j)==TRUE)
+            if (IsPlatform(i,j)==FALSE)
                tally[(*map)]++;
          map++;
          }
@@ -4334,7 +4333,7 @@ void PrintTileStats (void)
       {
 	   for(i=0;i<mapwidth;i++)
 			{
-         if (IsPlatform(i,j)==true)
+         if (IsPlatform(i,j)==TRUE)
             tally[(*map)]++;
          map++;
          }
@@ -5000,11 +4999,11 @@ void SetupGameLevel (void)
 	int crud;
 	int i;
 
-	insetupgame=true;
+	insetupgame=TRUE;
 
    InitializeRNG ();
 
-	if ((demoplayback==true) || (demorecord==true))
+	if ((demoplayback==TRUE) || (demorecord==TRUE))
       SetRNGindex ( 0 );
 
    if (gamestate.randomseed!=-1)
@@ -5059,8 +5058,8 @@ void SetupGameLevel (void)
 	gamestate.missiletotal  = gamestate.missilecount  = 0;
 	gamestate.democratictotal = gamestate.democraticcount = 0;
 	gamestate.planttotal    = gamestate.plantcount    = 0;
-	gamestate.DODEMOCRATICBONUS1 = true;
-	gamestate.DOGROUNDZEROBONUS  = false;
+	gamestate.DODEMOCRATICBONUS1 = TRUE;
+	gamestate.DOGROUNDZEROBONUS  = FALSE;
 
 	if (gamestate.mapon == 30)
 	 SNAKELEVEL = 1;
@@ -5072,7 +5071,7 @@ void SetupGameLevel (void)
 	InitAreas();
 	InitDoorList();
 	InitElevators();
-	if (loadedgame==false)
+	if (loadedgame==FALSE)
 		{
 		InitStaticList ();
 		InitActorList();
@@ -5116,7 +5115,7 @@ void SetupGameLevel (void)
 	SetupClocks();
 	SetupAnimatedWalls();
 
-	if (loadedgame==false)
+	if (loadedgame==FALSE)
 		{
 		SetupSwitches();
 		SetupStatics ();
@@ -5162,12 +5161,12 @@ void SetupGameLevel (void)
 	LoftSprites();
 
 	SetPlaneViewSize();
-	if (loadedgame==false)
+	if (loadedgame==FALSE)
 		{
 		ConnectAreas();
 		PreCache();
 		SetupPlayScreen();
-		SetupScreen(false);
+		SetupScreen(FALSE);
 	}
 
         if (BATTLEMODE) {
@@ -5180,9 +5179,9 @@ void SetupGameLevel (void)
             }
         }
         
-	insetupgame=false;
+	insetupgame=FALSE;
 
-	tedlevel = false;   // turn it off once we have done any ted stuff
+	tedlevel = FALSE;   // turn it off once we have done any ted stuff
 	
 	EnableScreenStretch();
 }
@@ -5216,7 +5215,7 @@ void InitializePlayerstates(void)
 	 ResetPlayerstate(pstate);
 	 }
 
- NewGame = false;
+ NewGame = FALSE;
 
 }
 
@@ -5858,7 +5857,7 @@ void SetupStatics(void)
 
 				case 44:
 						SpawnStatic(i,j,tile-23,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 					{
 						gamestate.healthtotal ++;
 						gamestate.democratictotal ++;
@@ -5871,7 +5870,7 @@ void SetupStatics(void)
 				case 38:
 				case 39:
 						SpawnStatic(i,j,tile-23,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.healthtotal ++;
 					break;
 
@@ -5919,7 +5918,7 @@ void SetupStatics(void)
 
 
 						SpawnStatic(i,j,tile-23,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.missiletotal ++;
 					break;
 				case 47:
@@ -5971,7 +5970,7 @@ void SetupStatics(void)
 									  W_GetNumForName("BAZOOKA4"),
 									  cache_patch_t);
 						SpawnStatic(i,j,tile-23,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.missiletotal ++;
 					break;
 				case 51:
@@ -5984,7 +5983,7 @@ void SetupStatics(void)
 									  W_GetNumForName("FBOMB4"),
 									  cache_patch_t);
 						SpawnStatic(i,j,tile-23,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.missiletotal ++;
 					break;
 				case 52:
@@ -5995,7 +5994,7 @@ void SetupStatics(void)
 									  W_GetNumForName("HSEEK4"),
 									  cache_patch_t);
 						SpawnStatic(i,j,tile-23,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.missiletotal ++;
 					break;
 				case 53:
@@ -6006,7 +6005,7 @@ void SetupStatics(void)
 									  W_GetNumForName("DRUNK4"),
 									  cache_patch_t);
 						SpawnStatic(i,j,tile-23,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.missiletotal ++;
 					break;
 				case 54:
@@ -6024,7 +6023,7 @@ void SetupStatics(void)
 									  W_GetNumForName("SKEL48"),
 									  cache_patch_t);
 						SpawnStatic(i,j,tile-23,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.missiletotal ++;
 					break;
 				case 55:
@@ -6039,7 +6038,7 @@ void SetupStatics(void)
 									  W_GetNumForName("SPLIT4"),
 									  cache_patch_t);
 						SpawnStatic(i,j,tile-23,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.missiletotal ++;
 					break;
 				case 56:
@@ -6061,7 +6060,7 @@ void SetupStatics(void)
 									  W_GetNumForName("KSPHERE4"),
 									  cache_patch_t);
 						SpawnStatic(i,j,tile-23,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.missiletotal ++;
 					break;
 
@@ -6171,7 +6170,7 @@ void SetupStatics(void)
 									  cache_patch_t);
 
 						SpawnStatic(i,j,stat_godmode,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.supertotal ++;
 					break;
 
@@ -6193,31 +6192,31 @@ void SetupStatics(void)
 									  W_GetNumForName("DOGPAW4"),
 									  cache_patch_t);
 						SpawnStatic(i,j,stat_dogmode,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.supertotal ++;
 					break;
 
 				case 254:
 						SpawnStatic(i,j,stat_fleetfeet,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.supertotal ++;
 					break;
 
 				case 255:
 						SpawnStatic(i,j,stat_random,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.supertotal ++;
 					break;
 
 				case 260:
 						SpawnStatic(i,j,stat_elastic,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.supertotal ++;
 					break;
 
 				case 261:
 						SpawnStatic(i,j,stat_mushroom,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						{
 						gamestate.supertotal ++;
 						gamestate.democratictotal ++;
@@ -6242,17 +6241,17 @@ void SetupStatics(void)
 
 				case 270:
 						SpawnStatic(i,j,stat_bulletproof,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.supertotal ++;
 					break;
 				case 271:
 						SpawnStatic(i,j,stat_asbesto,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.supertotal ++;
 					break;
 				case 272:
 						SpawnStatic(i,j,stat_gasmask,spawnz);
-					if (loadedgame == false)
+					if (loadedgame == FALSE)
 						gamestate.supertotal ++;
 					break;
 				case 461:

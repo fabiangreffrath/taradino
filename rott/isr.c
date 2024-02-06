@@ -27,7 +27,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 ============================================================================
 */
-#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -50,9 +49,9 @@ volatile int Keystate[MAXKEYBOARDSCAN];
 volatile int Keyhead;
 volatile int Keytail;
 
-volatile bool PausePressed = false;
-volatile bool PanicPressed = false;
-int KeyboardStarted=false;
+volatile bool8_t PausePressed = FALSE;
+volatile bool8_t PanicPressed = FALSE;
+int KeyboardStarted=FALSE;
 
 const int ASCIINames[] =          // Unshifted ASCII for scan codes
 {

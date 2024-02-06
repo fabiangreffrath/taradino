@@ -26,7 +26,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_main_public
 #define _rt_main_public
 
-#include <stdbool.h>
 #include "develop.h"
 #include "rt_def.h"
 #include "rottnet.h"
@@ -104,40 +103,40 @@ typedef struct
 	int     battlemode;
 	int     battleoption;
 	int     randomseed;
-   bool teamplay;
-	bool DODEMOCRATICBONUS1;
-	bool DOGROUNDZEROBONUS;
+   bool8_t teamplay;
+	bool8_t DODEMOCRATICBONUS1;
+	bool8_t DOGROUNDZEROBONUS;
 	int     autorun;
 
 	// Battle Options
    battle_type BattleOptions;
 
-   bool SpawnCollectItems;
-	bool SpawnEluder;
-	bool SpawnDeluder;
-   bool ShowScores;
-	bool PlayerHasGun[ MAXPLAYERS ];
+   bool8_t SpawnCollectItems;
+	bool8_t SpawnEluder;
+	bool8_t SpawnDeluder;
+   bool8_t ShowScores;
+	bool8_t PlayerHasGun[ MAXPLAYERS ];
    specials SpecialsTimes;
    } gametype;
 
 
 extern  int      doublestep;
-extern  bool  tedlevel;
+extern  bool8_t  tedlevel;
 extern  int      tedlevelnum;
 extern  int      tedx;
 extern  int      tedy;
-extern  bool  fizzlein;
+extern  bool8_t  fizzlein;
 extern  int      pheight;
 extern  int      NoSound;
 extern  int      timelimit;
-extern  bool  timelimitenabled;
-extern  bool  noecho;
-extern  bool  demoexit;
-extern  bool  quiet;
+extern  bool8_t  timelimitenabled;
+extern  bool8_t  noecho;
+extern  bool8_t  demoexit;
+extern  bool8_t  quiet;
 
 extern gametype  gamestate;
-extern bool DebugOk;
-extern  bool newlevel;
+extern bool8_t DebugOk;
+extern  bool8_t newlevel;
 
 void QuitGame( void );
 void PlayCinematic (void);
@@ -153,15 +152,15 @@ extern  int polltime;
 extern  int oldpolltime;
 extern  volatile int oldtime;
 void PauseLoop ( void );
-void SaveScreen (bool inhmenu);
+void SaveScreen (bool8_t inhmenu);
 void SetupWads( void );
 
-extern bool SCREENSHOTS;
-extern bool COMPUTELEVELSIZE;
-extern bool MONOPRESENT;
-extern bool MAPSTATS;
-extern bool TILESTATS;
-extern bool HUD;
+extern bool8_t SCREENSHOTS;
+extern bool8_t COMPUTELEVELSIZE;
+extern bool8_t MONOPRESENT;
+extern bool8_t MAPSTATS;
+extern bool8_t TILESTATS;
+extern bool8_t HUD;
 
 extern char CWD[40];
 

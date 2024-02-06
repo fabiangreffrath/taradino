@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_menu_public
 #define _rt_menu_public
 
-#include <stdbool.h>
 #include <stdint.h>
 
 //******************************************************************************
@@ -99,10 +98,10 @@ enum
 //******************************************************************************
 
 extern char*colorname[];
-extern bool NewGame;
+extern bool8_t NewGame;
 
 extern CP_itemtype MainMenu[];
-extern bool pickquick;
+extern bool8_t pickquick;
 
 extern cfont_t *IFont;
 extern font_t *CurrentFont;
@@ -122,7 +121,7 @@ extern int px;
 extern int py;
 extern int bufferheight;
 extern int bufferwidth;
-extern bool loadedgame;
+extern bool8_t loadedgame;
 extern int FXMode;
 extern int MusicMode;
 
@@ -131,14 +130,14 @@ extern font_t *smallfont;
 extern font_t *bigfont;
 
 
-extern bool AutoDetailOn;
-extern bool DoubleClickOn;
-extern bool BobbinOn;
+extern bool8_t AutoDetailOn;
+extern bool8_t DoubleClickOn;
+extern bool8_t BobbinOn;
 extern int     Menuflipspeed;
 extern int     DetailLevel;
 
-extern bool          ingame;
-extern bool          inmenu;
+extern bool8_t          ingame;
+extern bool8_t          inmenu;
 extern int              scancode;
 
 extern int quicksaveslot;
@@ -172,7 +171,7 @@ typedef enum
 int  CP_ColorSelection(void);
 void CP_BattleMode(void);
 void DisplayInfo (int which);
-bool CP_DisplayMsg (char *s, int number);
+bool8_t CP_DisplayMsg (char *s, int number);
 void Message (char *string);
 void DrawMenu (CP_iteminfo *item_i, CP_itemtype *items);
 void DrawMainMenu(void);
@@ -184,7 +183,7 @@ void ControlPanel (uint8_t scancode);
 menuitems CP_MainMenu( void );
 int getASCII ( void );
 void DoMainMenu (void);
-bool CP_CheckQuick (uint8_t scancode);
+bool8_t CP_CheckQuick (uint8_t scancode);
 void AdjustMenuStruct (void);
 void MenuFixup (void);
 void GetEpisode (int level);
@@ -209,9 +208,9 @@ void BattleTeams( void );
 void CP_BattleMenu (void);
 void CP_BattleModes (void);
 void CP_ModemGameMessage ( int player );
-void ShowBattleOptions( bool inmenu, int PosX, int PosY );
+void ShowBattleOptions( bool8_t inmenu, int PosX, int PosY );
 void SetMenuHeader( char *header );
-int  HandleMultiPageCustomMenu( char **names, int amount, int curpos, char *title, void ( *routine )( int w ), void ( *redrawfunc )( void ), bool exitonselect );
+int  HandleMultiPageCustomMenu( char **names, int amount, int curpos, char *title, void ( *routine )( int w ), void ( *redrawfunc )( void ), bool8_t exitonselect );
 int CP_LevelSelectionMenu ( void );
 int CP_EnterCodeNameMenu ( void );
 void QuickSaveGame (void);

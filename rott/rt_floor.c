@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 // RT_FLOOR.C
 
-#include <stdbool.h>
 #include <stdint.h>
 #include "rt_def.h"
 #include "watcom.h"
@@ -93,7 +92,7 @@ void DrawSky( void )
 
    angle=viewangle;
 
-   if ((fog==0) && (lightning==true))
+   if ((fog==0) && (lightning==TRUE))
       shadingtable=colormap+((basemaxshade-6-lightninglevel)<<8);
    else
       shadingtable=colormap+(1<<12);
@@ -141,7 +140,7 @@ void DrawFullSky( void )
 
    angle=viewangle;
 
-   if ((fog==0) && (lightning==true))
+   if ((fog==0) && (lightning==TRUE))
       shadingtable=colormap+((basemaxshade-5-lightninglevel)<<8);
    else
       shadingtable=colormap+(1<<12);
@@ -306,15 +305,15 @@ int GetFloorCeilingLump ( int num )
 ===================
 */
 
-bool SkyExists (void)
+bool8_t SkyExists (void)
 {
    if (MAPSPOT(1,0,0) >= 234)
       {
-      return true;
+      return TRUE;
       }
    else
       {
-      return false;
+      return FALSE;
       }
 
 }
@@ -345,7 +344,7 @@ void SetPlaneViewSize (void)
       oldsky=-1;
       }
 
-   lightning=false;
+   lightning=FALSE;
 
 	if (MAPSPOT(1,0,0) >= 234)
     {
@@ -366,7 +365,7 @@ void SetPlaneViewSize (void)
 
 	 crud=(uint16_t)MAPSPOT(4,0,1);
 	 if (crud==377)
-       lightning=true;
+       lightning=TRUE;
     }
 	else
 	 ceilingnum = MAPSPOT(1,0,0)-197;

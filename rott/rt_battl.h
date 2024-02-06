@@ -32,7 +32,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef __RT_BATTLE_public
 #define __RT_BATTLE_public
 
-#include <stdbool.h>
 
 #include "rottnet.h"
 
@@ -198,7 +197,7 @@ typedef struct
 
 #define bo_normal_respawn_time 30
 
-extern bool  BATTLEMODE;
+extern bool8_t  BATTLEMODE;
 extern int16_t    WhoKilledWho[ MAXPLAYERS ][ MAXPLAYERS ];
 extern int16_t    BATTLE_Points[ MAXPLAYERS ];
 extern int16_t    BATTLE_PlayerOrder[ MAXPLAYERS ];
@@ -206,11 +205,11 @@ extern int      BATTLE_NumCollectorItems;
 extern int      PointGoal;
 extern int      DisplayPoints;
 extern int      BATTLE_It;
-extern bool  BATTLE_ShowKillCount;
+extern bool8_t  BATTLE_ShowKillCount;
 extern int16_t    BATTLE_Team[ MAXPLAYERS ];
 extern int16_t    BATTLE_TeamLeader[ MAXPLAYERS ];
 extern int      BATTLE_NumberOfTeams;
-extern bool  UpdateKills;
+extern bool8_t  UpdateKills;
 
 // Located in RT_MENU.C
 extern battle_type    BATTLE_Options[ battle_NumBattleModes ];

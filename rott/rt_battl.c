@@ -29,7 +29,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
    (c) Copyright 1994 Apogee Software.  All Rights Reserved.
 **********************************************************************/
 
-#include <stdbool.h>
 #include <string.h>
 #include "rt_def.h"
 #include "rottnet.h"
@@ -57,12 +56,12 @@ static int NumberOfPlayers;
 static int BattleRound;
 static int BattleMode;
 
-static bool RoundOver;
-static bool KillsEndGame;
-static bool KeepTrackOfKills;
-bool UpdateKills;
+static bool8_t RoundOver;
+static bool8_t KillsEndGame;
+static bool8_t KeepTrackOfKills;
+bool8_t UpdateKills;
 
-static bool SwapFlag;
+static bool8_t SwapFlag;
 
 static battle_type BattleOptions;
 
@@ -98,9 +97,9 @@ int   PointGoal;
 int   DisplayPoints;
 int   BATTLE_It;
 
-bool BATTLE_ShowKillCount;
+bool8_t BATTLE_ShowKillCount;
 
-bool BATTLEMODE = false;
+bool8_t BATTLEMODE = FALSE;
 
 /*---------------------------------------------------------------------
 	Function: BATTLE_Init
@@ -133,16 +132,16 @@ void BATTLE_Init
    #endif
 
 	Timer   = 0;
-	RoundOver = false;
+	RoundOver = FALSE;
 
 	BattleRound = -1;
    BATTLE_It = 0;
 
 	BattleMode = battlemode;
 
-	BATTLEMODE = false;
+	BATTLEMODE = FALSE;
 
-   UpdateKills = true;
+   UpdateKills = TRUE;
 
 	gamestate.BattleOptions.Gravity       = NORMAL_GRAVITY;
 	gamestate.BattleOptions.Speed         = bo_normal_speed;
@@ -153,14 +152,14 @@ void BATTLE_Init
 	gamestate.BattleOptions.DangerDamage  = bo_danger_normal;
 	gamestate.BattleOptions.TimeLimit     = bo_time_infinite;
    gamestate.BattleOptions.RespawnTime   = bo_normal_respawn_time;
-   gamestate.BattleOptions.RandomWeapons = false;
-   gamestate.BattleOptions.FriendlyFire  = true;
-   gamestate.BattleOptions.WeaponPersistence = false;
-	gamestate.BattleOptions.SpawnMines    = false;
+   gamestate.BattleOptions.RandomWeapons = FALSE;
+   gamestate.BattleOptions.FriendlyFire  = TRUE;
+   gamestate.BattleOptions.WeaponPersistence = FALSE;
+	gamestate.BattleOptions.SpawnMines    = FALSE;
 
 	if ( BattleMode != battle_StandAloneGame )
 		{
-		BATTLEMODE = true;
+		BATTLEMODE = TRUE;
 
       if ( gamestate.Product == ROTT_SHAREWARE )
          {
@@ -192,14 +191,14 @@ void BATTLE_Init
       gamestate.BattleOptions.WeaponPersistence = BattleOptions.WeaponPersistence;
       }
 
-	gamestate.ShowScores                 = true;
-	gamestate.BattleOptions.SpawnHealth  = true;
-	gamestate.BattleOptions.SpawnWeapons = true;
-   gamestate.BattleOptions.SpawnDangers = true;
-	gamestate.SpawnCollectItems          = false;
-	gamestate.SpawnEluder                = false;
-	gamestate.SpawnDeluder               = false;
-	gamestate.BattleOptions.RespawnItems = false;
+	gamestate.ShowScores                 = TRUE;
+	gamestate.BattleOptions.SpawnHealth  = TRUE;
+	gamestate.BattleOptions.SpawnWeapons = TRUE;
+   gamestate.BattleOptions.SpawnDangers = TRUE;
+	gamestate.SpawnCollectItems          = FALSE;
+	gamestate.SpawnEluder                = FALSE;
+	gamestate.SpawnDeluder               = FALSE;
+	gamestate.BattleOptions.RespawnItems = FALSE;
 
 	NumberOfPlayers = numplayers;
 
@@ -253,17 +252,17 @@ void BATTLE_Init
 
 	for( index = 0; index < MAXPLAYERS; index++ )
 		{
-		gamestate.PlayerHasGun[ index ] = true;
+		gamestate.PlayerHasGun[ index ] = TRUE;
 		}
 
-	KillsEndGame = true;
-	KeepTrackOfKills = true;
+	KillsEndGame = TRUE;
+	KeepTrackOfKills = TRUE;
 
 	switch( BattleMode )
 		{
 		case battle_StandAloneGame :
-			KillsEndGame      = false;
-			KeepTrackOfKills  = false;
+			KillsEndGame      = FALSE;
+			KeepTrackOfKills  = FALSE;
 			break;
 
 		case battle_Normal :
@@ -275,33 +274,33 @@ void BATTLE_Init
 		case battle_Collector :
 			for( index = 0; index < MAXPLAYERS; index++ )
 				{
-				gamestate.PlayerHasGun[ index ] = false;
+				gamestate.PlayerHasGun[ index ] = FALSE;
 				}
-			KillsEndGame     = false;
-			KeepTrackOfKills = false;
-			gamestate.BattleOptions.SpawnHealth  = false;
-			gamestate.BattleOptions.SpawnWeapons = false;
-			gamestate.SpawnCollectItems          = true;
+			KillsEndGame     = FALSE;
+			KeepTrackOfKills = FALSE;
+			gamestate.BattleOptions.SpawnHealth  = FALSE;
+			gamestate.BattleOptions.SpawnWeapons = FALSE;
+			gamestate.SpawnCollectItems          = TRUE;
 			break;
 
 		case battle_Scavenger :
-			KillsEndGame     = false;
-			KeepTrackOfKills = false;
-			gamestate.BattleOptions.SpawnWeapons = true;
-			gamestate.BattleOptions.SpawnHealth  = true;
-			gamestate.SpawnCollectItems          = true;
+			KillsEndGame     = FALSE;
+			KeepTrackOfKills = FALSE;
+			gamestate.BattleOptions.SpawnWeapons = TRUE;
+			gamestate.BattleOptions.SpawnHealth  = TRUE;
+			gamestate.SpawnCollectItems          = TRUE;
 			break;
 
 		case battle_Hunter :
          PointGoal *= BATTLE_NumberOfTeams;
-			KillsEndGame      = false;
-			KeepTrackOfKills  = true;
+			KillsEndGame      = FALSE;
+			KeepTrackOfKills  = TRUE;
          BATTLE_It = 0;
          for( index = 0; index < NumberOfPlayers; index++ )
             {
             if ( BATTLE_Team[ index ] == 0 )
                {
-               gamestate.PlayerHasGun[ index ] = false;
+               gamestate.PlayerHasGun[ index ] = FALSE;
                }
             }
 			break;
@@ -309,38 +308,38 @@ void BATTLE_Init
 		case battle_Tag :
 			for( index = 0; index < MAXPLAYERS; index++ )
 				{
-				gamestate.PlayerHasGun[ index ] = false;
+				gamestate.PlayerHasGun[ index ] = FALSE;
 				}
 
-			gamestate.BattleOptions.SpawnHealth  = false;
-			gamestate.BattleOptions.SpawnWeapons = false;
-			gamestate.BattleOptions.SpawnDangers = true;
-			KeepTrackOfKills = true;
-			KillsEndGame     = true;
+			gamestate.BattleOptions.SpawnHealth  = FALSE;
+			gamestate.BattleOptions.SpawnWeapons = FALSE;
+			gamestate.BattleOptions.SpawnDangers = TRUE;
+			KeepTrackOfKills = TRUE;
+			KillsEndGame     = TRUE;
 			break;
 
 		case battle_Eluder :
-			KeepTrackOfKills   = false;
-			KillsEndGame       = false;
+			KeepTrackOfKills   = FALSE;
+			KillsEndGame       = FALSE;
 
 			for( index = 0; index < MAXPLAYERS; index++ )
 				{
-				gamestate.PlayerHasGun[ index ] = false;
+				gamestate.PlayerHasGun[ index ] = FALSE;
 				}
 
-			gamestate.BattleOptions.SpawnWeapons = false;
-			gamestate.SpawnEluder                = true;
+			gamestate.BattleOptions.SpawnWeapons = FALSE;
+			gamestate.SpawnEluder                = TRUE;
 			break;
 
 		case battle_Deluder :
-			KeepTrackOfKills    = false;
-			KillsEndGame        = false;
-			gamestate.SpawnDeluder = true;
+			KeepTrackOfKills    = FALSE;
+			KillsEndGame        = FALSE;
+			gamestate.SpawnDeluder = TRUE;
 			break;
 
 		case battle_CaptureTheTriad :
-         KillsEndGame     = false;
-         KeepTrackOfKills = false;
+         KillsEndGame     = FALSE;
+         KeepTrackOfKills = FALSE;
 			break;
 		}
 
@@ -348,34 +347,34 @@ void BATTLE_Init
 		{
 		if ( BattleOptions.RespawnItems )
 			{
-			gamestate.BattleOptions.RespawnItems = true;
+			gamestate.BattleOptions.RespawnItems = TRUE;
 			}
 
 		if ( !BattleOptions.SpawnDangers )
 			{
-			gamestate.BattleOptions.SpawnDangers = false;
+			gamestate.BattleOptions.SpawnDangers = FALSE;
 			}
 
 		if ( !BattleOptions.SpawnHealth )
 			{
-			gamestate.BattleOptions.SpawnHealth = false;
+			gamestate.BattleOptions.SpawnHealth = FALSE;
 			}
 
 		if ( !BattleOptions.SpawnWeapons )
 			{
-			gamestate.BattleOptions.SpawnWeapons = false;
+			gamestate.BattleOptions.SpawnWeapons = FALSE;
 			}
 
 		if ( gamestate.BattleOptions.Kills == bo_kills_blind )
 			{
-			gamestate.ShowScores = false;
+			gamestate.ShowScores = FALSE;
 			}
 
       GRAVITY = gamestate.BattleOptions.Gravity;
 
       if ( gamestate.BattleOptions.Kills == bo_kills_infinite )
          {
-         KillsEndGame = false;
+         KillsEndGame = FALSE;
          }
 		}
 
@@ -474,15 +473,15 @@ void BATTLE_Shutdown
    int index2;
 
    Timer             = 0;
-   RoundOver         = false;
+   RoundOver         = FALSE;
    BattleRound       = 0;
    BattleMode        = battle_StandAloneGame;
-   BATTLEMODE        = false;
+   BATTLEMODE        = FALSE;
    NumberOfPlayers   = 1;
    BATTLE_NumberOfTeams = 1;
    PointGoal         = 0;
-   KillsEndGame      = false;
-   KeepTrackOfKills  = false;
+   KillsEndGame      = FALSE;
+   KeepTrackOfKills  = FALSE;
 
    for( index = 0; index < MAXPLAYERS; index++ )
       {
@@ -491,20 +490,20 @@ void BATTLE_Shutdown
          {
          WhoKilledWho[ index ][ index2 ] = 0;
          }
-		gamestate.PlayerHasGun[ index ] = true;
+		gamestate.PlayerHasGun[ index ] = TRUE;
 		}
-	gamestate.BattleOptions.SpawnHealth  = true;
-	gamestate.BattleOptions.SpawnWeapons = true;
-	gamestate.BattleOptions.SpawnDangers = true;
-   gamestate.BattleOptions.RandomWeapons = false;
-   gamestate.BattleOptions.FriendlyFire  = true;
-   gamestate.BattleOptions.WeaponPersistence = false;
-	gamestate.BattleOptions.SpawnMines    = false;
+	gamestate.BattleOptions.SpawnHealth  = TRUE;
+	gamestate.BattleOptions.SpawnWeapons = TRUE;
+	gamestate.BattleOptions.SpawnDangers = TRUE;
+   gamestate.BattleOptions.RandomWeapons = FALSE;
+   gamestate.BattleOptions.FriendlyFire  = TRUE;
+   gamestate.BattleOptions.WeaponPersistence = FALSE;
+	gamestate.BattleOptions.SpawnMines    = FALSE;
 
-	gamestate.ShowScores        = true;
-	gamestate.SpawnCollectItems = false;
-	gamestate.SpawnEluder       = false;
-	gamestate.SpawnDeluder      = false;
+	gamestate.ShowScores        = TRUE;
+	gamestate.SpawnCollectItems = FALSE;
+	gamestate.SpawnEluder       = FALSE;
+	gamestate.SpawnDeluder      = FALSE;
 	}
 
 
@@ -525,7 +524,7 @@ static battle_status BATTLE_StartRound
 
 	Timer     = 0;
 	TimeLimit = INFINITE;
-	RoundOver = false;
+	RoundOver = FALSE;
 
 	if ( !BATTLEMODE )
 		{
@@ -554,7 +553,7 @@ static battle_status BATTLE_StartRound
 		{
 		for( index = 0; index < MAXPLAYERS; index++ )
 			{
-			gamestate.PlayerHasGun[ index ] = true;
+			gamestate.PlayerHasGun[ index ] = TRUE;
 			}
 
 		if ( ( gamestate.BattleOptions.Kills != bo_kills_infinite ) &&
@@ -568,7 +567,7 @@ static battle_status BATTLE_StartRound
          {
          if ( BATTLE_Team[ index ] == BATTLE_It )
             {
-            gamestate.PlayerHasGun[ index ] = false;
+            gamestate.PlayerHasGun[ index ] = FALSE;
             }
          }
 		}
@@ -619,7 +618,7 @@ battle_status BATTLE_CheckGameStatus
          if ( ( TimeLimit != INFINITE ) &&
             ( Timer > TimeLimit ) )
             {
-            RoundOver = true;
+            RoundOver = TRUE;
 
             if ( BattleMode == battle_Hunter )
                {
@@ -634,7 +633,7 @@ battle_status BATTLE_CheckGameStatus
                status = battle_out_of_time;
                }
 
-            UpdateKills = true;
+            UpdateKills = TRUE;
             }
 
          if ( UpdateKills )
@@ -642,9 +641,9 @@ battle_status BATTLE_CheckGameStatus
             BATTLE_SortPlayerRanks();
             if ( gamestate.ShowScores )
                {
-               DrawKills (false);
+               DrawKills (FALSE);
                }
-            UpdateKills = false;
+            UpdateKills = FALSE;
             }
 
          if ( RoundOver )
@@ -667,7 +666,7 @@ battle_status BATTLE_CheckGameStatus
                if ( BattleOptions.FriendlyFire )
                   {
                   BATTLE_Points[ team ]--;
-                  UpdateKills = true;
+                  UpdateKills = TRUE;
                   }
                break;
 
@@ -676,7 +675,7 @@ battle_status BATTLE_CheckGameStatus
                if ( BattleOptions.FriendlyFire )
                   {
                   BATTLE_Points[ team ]++;
-                  UpdateKills = true;
+                  UpdateKills = TRUE;
                   }
                break;
             }
@@ -696,12 +695,12 @@ battle_status BATTLE_CheckGameStatus
             #endif
             }
          BATTLE_Points[ team ]++;
-         UpdateKills = true;
+         UpdateKills = TRUE;
 
          BATTLE_NumCollectorItems--;
          if ( BATTLE_NumCollectorItems <= 0 )
             {
-            RoundOver = true;
+            RoundOver = TRUE;
             return( battle_end_game );
             }
          break;
@@ -722,12 +721,12 @@ battle_status BATTLE_CheckGameStatus
             }
 
          BATTLE_Points[ team ]++;
-         UpdateKills = true;
+         UpdateKills = TRUE;
 
          if ( ( gamestate.BattleOptions.Kills != bo_kills_infinite ) &&
             ( BATTLE_Points[ team ] >= PointGoal ) )
             {
-            RoundOver = true;
+            RoundOver = TRUE;
             return( battle_end_game );
             }
          RespawnEluder();
@@ -749,12 +748,12 @@ battle_status BATTLE_CheckGameStatus
             }
 
          BATTLE_Points[ team ]++;
-         UpdateKills = true;
+         UpdateKills = TRUE;
 
          if ( ( gamestate.BattleOptions.Kills != bo_kills_infinite ) &&
             ( BATTLE_Points[ team ] >= PointGoal ) )
             {
-            RoundOver = true;
+            RoundOver = TRUE;
             return( battle_end_game );
             }
          RespawnEluder();
@@ -776,12 +775,12 @@ battle_status BATTLE_CheckGameStatus
             }
 
          BATTLE_Points[ team ]++;
-         UpdateKills = true;
+         UpdateKills = TRUE;
 
          if ( ( gamestate.BattleOptions.Kills != bo_kills_infinite ) &&
             ( BATTLE_Points[ team ] >= PointGoal ) )
             {
-            RoundOver = true;
+            RoundOver = TRUE;
             return( battle_end_game );
             }
          break;
@@ -815,7 +814,7 @@ void BATTLE_SortPlayerRanks
    int j;
    int temp;
 
-   SwapFlag = false;
+   SwapFlag = FALSE;
 
    if ( BattleMode == battle_Tag )
       {
@@ -826,7 +825,7 @@ void BATTLE_SortPlayerRanks
             if ( BATTLE_Points[ BATTLE_PlayerOrder[ i ] ] >
                BATTLE_Points[ BATTLE_PlayerOrder[ j ] ] )
                {
-               SwapFlag = true;
+               SwapFlag = TRUE;
                temp = BATTLE_PlayerOrder[ i ];
                BATTLE_PlayerOrder[ i ] = BATTLE_PlayerOrder[ j ];
                BATTLE_PlayerOrder[ j ] = temp;
@@ -843,7 +842,7 @@ void BATTLE_SortPlayerRanks
             if ( BATTLE_Points[ BATTLE_PlayerOrder[ i ] ] <
                BATTLE_Points[ BATTLE_PlayerOrder[ j ] ] )
                {
-               SwapFlag = true;
+               SwapFlag = TRUE;
                temp = BATTLE_PlayerOrder[ i ];
                BATTLE_PlayerOrder[ i ] = BATTLE_PlayerOrder[ j ];
                BATTLE_PlayerOrder[ j ] = temp;
@@ -865,7 +864,7 @@ void BATTLE_SortPlayerRanks
          }
    #endif
 
-   if ( ( SwapFlag == true ) && ( gamestate.ShowScores ) &&
+   if ( ( SwapFlag == TRUE ) && ( gamestate.ShowScores ) &&
       ( SHOW_TOP_STATUS_BAR() || SHOW_KILLS() ) )
       {
       SD_Play ( SD_ENDBONUS1SND );
@@ -1003,7 +1002,7 @@ battle_status BATTLE_PlayerKilledPlayer
          BATTLE_Points[ killerteam ]      += points;
          WhoKilledWho[ killer ][ victim ] += points;
          }
-      UpdateKills = true;
+      UpdateKills = TRUE;
       }
    else if ( BattleMode == battle_Tag )
       {
@@ -1011,13 +1010,13 @@ battle_status BATTLE_PlayerKilledPlayer
          {
          WhoKilledWho[ killer ][ victim ]++;
          BATTLE_Points[ victimteam ]++;
-         UpdateKills = true;
+         UpdateKills = TRUE;
          BATTLE_It   = victimteam;
 
          if ( ( gamestate.BattleOptions.Kills != bo_kills_infinite ) &&
             ( BATTLE_Points[ victimteam ] >= PointGoal ) )
             {
-            RoundOver = true;
+            RoundOver = TRUE;
             status = battle_end_game;
             }
          }
@@ -1048,13 +1047,13 @@ battle_status BATTLE_PlayerKilledPlayer
                   if ( BattleOptions.FriendlyFire )
                      {
                      BATTLE_Points[ killerteam ]--;
-                     UpdateKills = true;
+                     UpdateKills = TRUE;
                      }
                   }
                else
                   {
                   BATTLE_Points[ killerteam ]++;
-                  UpdateKills = true;
+                  UpdateKills = TRUE;
                   }
                }
             break;
@@ -1086,14 +1085,14 @@ battle_status BATTLE_PlayerKilledPlayer
                      if ( BattleOptions.FriendlyFire )
                         {
                         BATTLE_Points[ killerteam ]--;
-                        UpdateKills = true;
+                        UpdateKills = TRUE;
                         }
                      }
                   }
                else
                   {
                   BATTLE_Points[ killerteam ]++;
-                  UpdateKills = true;
+                  UpdateKills = TRUE;
                   }
                }
             break;
@@ -1110,7 +1109,7 @@ battle_status BATTLE_PlayerKilledPlayer
 
    if ( ( KillsEndGame ) && ( BATTLE_Points[ killerteam ] >= PointGoal ) )
       {
-      RoundOver = true;
+      RoundOver = TRUE;
       status = battle_end_game;
       }
 

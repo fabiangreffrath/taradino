@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_dmand_public
 #define _rt_dmand_public
 
-#include <stdbool.h>
 #include <stdint.h>
 
 typedef enum {
@@ -73,7 +72,7 @@ recordstate SD_GetSoundData ( uint8_t * data, uint16_t length );
 //
 //***************************************************************************
 
-bool SD_SoundDataReady ( void );
+bool8_t SD_SoundDataReady ( void );
 
 //***************************************************************************
 //
@@ -97,7 +96,7 @@ void SD_ClearRecordingActive ( void );
 //
 //***************************************************************************
 
-bool SD_RecordingActive ( void );
+bool8_t SD_RecordingActive ( void );
 
 //***************************************************************************
 //
@@ -105,7 +104,7 @@ bool SD_RecordingActive ( void );
 //
 //***************************************************************************
 
-bool SD_StartRecordingSound ( void );
+bool8_t SD_StartRecordingSound ( void );
 
 //***************************************************************************
 //

@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "rt_def.h"
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 #include "sprites.h"
@@ -569,7 +568,7 @@ void InitStaticList (void)
 
 
 	memset(sprites,0,sizeof(sprites));
-	if (loadedgame==false)
+	if (loadedgame==FALSE)
 		{
 		memset(switches,0,sizeof(switches));
 		lastswitch = &switches[0];
@@ -722,7 +721,7 @@ void DoLights (int tilex, int tiley)
 ===============
 */
 
-bool TurnOffLight0 (int tilex, int tiley)
+bool8_t TurnOffLight0 (int tilex, int tiley)
 {
    if ( IsLight(tilex-1,tiley  ) ||
         IsLight(tilex-1,tiley-1) ||
@@ -732,9 +731,9 @@ bool TurnOffLight0 (int tilex, int tiley)
         IsLight(tilex+1,tiley+1) ||
         IsLight(tilex  ,tiley+1) ||
 		  IsLight(tilex-1,tiley+1) )
-		return (false);
+		return (FALSE);
 	else
-		return (true);
+		return (TRUE);
 }
 
 /*
@@ -745,7 +744,7 @@ bool TurnOffLight0 (int tilex, int tiley)
 ===============
 */
 
-bool TurnOffLight1 (int tilex, int tiley, int i, int j)
+bool8_t TurnOffLight1 (int tilex, int tiley, int i, int j)
 {
 	int tempi = 2*i;
 	int tempy = 2*j;
@@ -758,9 +757,9 @@ bool TurnOffLight1 (int tilex, int tiley, int i, int j)
         IsLight(tilex+tempi,tiley+tempy) ||
         IsLight(tilex+tempi,tiley+j) ||
 	     IsLight(tilex+tempi,tiley))
-		return (false);
+		return (FALSE);
 	else
-		return (true);
+		return (TRUE);
 }
 
 
@@ -772,7 +771,7 @@ bool TurnOffLight1 (int tilex, int tiley, int i, int j)
 ===============
 */
 
-bool TurnOffLight2 (int tilex, int tiley, int j)
+bool8_t TurnOffLight2 (int tilex, int tiley, int j)
 {
 	int tempy = 2*j;
 
@@ -784,9 +783,9 @@ bool TurnOffLight2 (int tilex, int tiley, int j)
         IsLight(tilex+1    ,tiley) ||
         IsLight(tilex+1    ,tiley+j) ||
 	     IsLight(tilex+1    ,tiley+tempy))
-		return (false);
+		return (FALSE);
 	else
-		return (true);
+		return (TRUE);
 }
 
 
@@ -798,7 +797,7 @@ bool TurnOffLight2 (int tilex, int tiley, int j)
 ===============
 */
 
-bool TurnOffLight3 (int tilex, int tiley, int i)
+bool8_t TurnOffLight3 (int tilex, int tiley, int i)
 {
 	int tempx = 2*i;
 
@@ -810,9 +809,9 @@ bool TurnOffLight3 (int tilex, int tiley, int i)
         IsLight(tilex      ,tiley+1) ||
         IsLight(tilex+i    ,tiley+1) ||
 	     IsLight(tilex+tempx,tiley+1))
-		return (false);
+		return (FALSE);
 	else
-		return (true);
+		return (TRUE);
 }
 
 
@@ -1111,7 +1110,7 @@ int BaseMarkerZ;//bna++
 
 void SpawnStatic (int tilex, int tiley, int mtype, int zoffset)
 {statobj_t * temp;
- bool onetimer;
+ bool8_t onetimer;
 
 
 

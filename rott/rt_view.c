@@ -33,7 +33,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "modexlib.h"
 #include "rt_menu.h"
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -60,7 +59,7 @@ extern int G_weaponscale;
 
 int    StatusBar = 0;
 int    lightninglevel=0;
-bool  lightning=false;
+bool8_t  lightning=FALSE;
 int    normalshade;
 int    darknesslevel;
 int    maxshade;
@@ -130,7 +129,7 @@ static int      lightningtime=0;
 static int      lightningdelta=0;
 static int      lightningdistance=0;
 static int      lightningsoundtime=0;
-static bool  periodic=false;
+static bool8_t  periodic=FALSE;
 static int      periodictime=0;
 
 void SetViewDelta ( void );
@@ -405,7 +404,7 @@ void DrawCPUJape
    VW_MeasurePropString( YourComputerSucksString, &width, &height );
 
    DrawGameString( 160 - width / 2, 100 + 48 / 2 + 2,
-      YourComputerSucksString, true );
+      YourComputerSucksString, TRUE );
    }
 
 
@@ -417,7 +416,7 @@ void DrawCPUJape
 ==========================
 */
 
-void SetupScreen ( bool flip )
+void SetupScreen ( bool8_t flip )
 {
    pic_t *shape;
 
@@ -435,8 +434,8 @@ void SetupScreen ( bool flip )
       DrawCPUJape();
       }
 
-   DrawPlayScreen (true);
-   if (flip==true)
+   DrawPlayScreen (TRUE);
+   if (flip==TRUE)
       {
       ThreeDRefresh();
       VL_CopyDisplayToHidden();
@@ -481,7 +480,7 @@ void LoadColorMap( void )
 
 // Get player colormaps
 
-//   if (modemgame==true)
+//   if (modemgame==TRUE)
       {
       lump = W_GetNumForName("playmaps")+1;
       for (i=0;i<MAXPLAYERCOLORS;i++)
@@ -513,7 +512,7 @@ void SetupLightLevels ( void )
 {
    int glevel;
 
-   periodic=false;
+   periodic=FALSE;
 	fog=0;
 	lightsource=0;
 
@@ -657,7 +656,7 @@ void UpdateLightLevel (int area)
    int targetmax;
    int numtiles;
 
-   if (fog==true)
+   if (fog==TRUE)
       return;
 
    numtiles=(numareatiles[area]>>5)-2;
@@ -735,12 +734,12 @@ int GetIlluminationDelta (void)
 */
 void UpdateLightning (void)
 {
-   if (periodic==true)
+   if (periodic==TRUE)
       {
       UpdatePeriodicLighting();
       return;
       }
-   if ((fog==1) || (lightning==false))
+   if ((fog==1) || (lightning==FALSE))
       return;
 
    if (lightningtime<=0)
@@ -815,8 +814,8 @@ void UpdatePeriodicLighting (void)
 */
 void SetModemLightLevel ( int type )
 {
-   periodic=false;
-   fulllight=false;
+   periodic=FALSE;
+   fulllight=FALSE;
    switch (type)
       {
       case bo_light_dark:
@@ -847,7 +846,7 @@ void SetModemLightLevel ( int type )
          MAPSPOT(2,0,1)=(uint16_t)104;
          MAPSPOT(3,0,1)=(uint16_t)139;
          SetupLightLevels ();
-         periodic=true;
+         periodic=TRUE;
          break;
       case bo_light_lightning:
          if (sky!=0)
@@ -857,7 +856,7 @@ void SetModemLightLevel ( int type )
             MAPSPOT(3,0,1)=(uint16_t)139;
             MAPSPOT(2,0,1)=(uint16_t)104;
             SetupLightLevels ();
-            lightning=true;
+            lightning=TRUE;
             }
          break;
       }

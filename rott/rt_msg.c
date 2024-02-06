@@ -34,7 +34,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_net.h"
 #include "rt_com.h"
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -64,7 +63,7 @@ static int     MessageOrder[ MAXMSGS ];
 static int     TotalMessages = 0;
 static int     MsgPos = 0;
 
-bool MessagesEnabled = true;
+bool8_t MessagesEnabled = TRUE;
 
 int StringLength (char *string)
 {
@@ -108,13 +107,13 @@ void InitializeMessages
 
    {
    int i;
-   bool start;
+   bool8_t start;
 
-   start = false;
+   start = FALSE;
 
    if ( MessageSystemStarted == 0 )
       {
-      start = true;
+      start = TRUE;
       MessageSystemStarted = 1;
       memset( Messages, 0, sizeof( Messages ) );
       }
@@ -131,7 +130,7 @@ void InitializeMessages
          }
       }
 
-   MSG.messageon = false;
+   MSG.messageon = FALSE;
 
    LastMessageTime = 0;
    UpdateMessageBackground = 0;
@@ -164,14 +163,14 @@ void GetMessageOrder
    int  lowest;
    int  lowesttime;
    uint8_t done[ MAXMSGS ];
-   bool found;
+   bool8_t found;
 
    memset( &done[ 0 ],    0, sizeof( done ) );
    memset( MessageOrder, -1, sizeof( MessageOrder ) );
 
    for( TotalMessages = 0; TotalMessages < MAXMSGS; TotalMessages++ )
       {
-      found = false;
+      found = FALSE;
       lowesttime = 1000;
       lowest = 0;
 
@@ -182,7 +181,7 @@ void GetMessageOrder
             {
             lowesttime = Messages[ i ].tictime;
             lowest = i;
-            found = true;
+            found = TRUE;
             }
          }
 
@@ -212,16 +211,16 @@ void DeleteMessage
    {
    int i;
    int msg;
-   bool found;
+   bool8_t found;
 
-   found = false;
+   found = FALSE;
    for( i = 0; i < TotalMessages; i++ )
       {
       msg = MessageOrder[ i ];
 
       if ( msg == num )
          {
-         found = true;
+         found = TRUE;
          }
 
       if ( found )
@@ -329,7 +328,7 @@ void SetMessage
    int i;
    int msg;
    int length;
-   bool found;
+   bool8_t found;
 
    if (iGLOBAL_SCREENWIDTH >= 640){
 		CurrentFont = newfont1;//smallfont;
@@ -365,13 +364,13 @@ void SetMessage
    memcpy( Messages[ num ].text, text, length );
 
    GetMessageOrder();
-   found = false;
+   found = FALSE;
    for( i = 0; i < TotalMessages; i++ )
       {
       msg = MessageOrder[ i ];
       if ( msg == num )
          {
-         found = true;
+         found = TRUE;
          }
       else if ( found )
          {
@@ -434,7 +433,7 @@ void UpdateMessages
    messagetics = GetTicCount() - LastMessageTime;
    LastMessageTime = GetTicCount();
 
-   if ( GamePaused == true )
+   if ( GamePaused == TRUE )
       {
       return;
       }
@@ -761,7 +760,7 @@ void DrawPlayerSelectionMenu
 void FinishModemMessage
    (
    int num,
-   bool send
+   bool8_t send
    )
    {
    if ( ( !MSG.inmenu ) && ( MSG.length > 0 ) )
@@ -770,18 +769,18 @@ void FinishModemMessage
       MSG.length--;
       }
 
-   if ( ( send == true ) && ( ( MSG.length > 0 ) ||
+   if ( ( send == TRUE ) && ( ( MSG.length > 0 ) ||
       ( MSG.remoteridicule != -1 ) ) )
       {
       if ( ( MSG.directed ) && ( !MSG.inmenu ) )
          {
          DrawPlayerSelectionMenu();
-         MSG.messageon = true;
-         MSG.inmenu = true;
+         MSG.messageon = TRUE;
+         MSG.inmenu = TRUE;
          return;
          }
 
-      MSG.messageon = false;
+      MSG.messageon = FALSE;
       if ( MSG.remoteridicule != -1 )
          {
          AddRemoteRidiculeCommand( consoleplayer, MSG.towho,

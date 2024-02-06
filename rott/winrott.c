@@ -1,5 +1,4 @@
 /* Routines from winrott needed for the highres support for the SDL port */
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,7 +23,7 @@ double dTopYZANGLELIMIT;
 int iG_X_center;
 int iG_Y_center;
 
-bool iG_aimCross = 0;
+bool8_t iG_aimCross = 0;
 
 extern int  viewheight;
 extern int  viewwidth;

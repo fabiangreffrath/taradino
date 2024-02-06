@@ -268,7 +268,7 @@ int FX_SetupCard(int SoundCard, fx_device *device)
     // [FG] let SDL_Mixer do the actual sound mixing
     Mix_AllocateChannels(MAX_CHANNELS);
 
-    FX_Installed = true;
+    FX_Installed = TRUE;
 
     return FX_Ok;
 }

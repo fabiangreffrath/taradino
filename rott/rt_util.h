@@ -26,7 +26,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_util_public
 #define _rt_util_public
 
-#include <stdbool.h>
 #include <stdint.h>
 
 #define ERRORVERSIONROW 1
@@ -42,7 +41,7 @@ extern  int      _argc;
 extern  char **  _argv;
 
 void  markgetch( void );
-bool StringsNotEqual (char * s1, char * s2, int length);
+bool8_t StringsNotEqual (char * s1, char * s2, int length);
 void  GetPalette(char * pal);
 void  ClearGraphicsScreen( void );
 void  ClearBuffer( char * buf, int size );
@@ -100,8 +99,8 @@ int   SideOfLine(int x1, int y1, int x2, int y2, int x3, int y3);
 void hsort(char * base, int nel, int width, int (*compare)(), void (*switcher)());
 
 char * UL_GetPath (char * path, char *dir);
-bool UL_ChangeDirectory (char *path);
-bool UL_ChangeDrive (char *drive);
+bool8_t UL_ChangeDirectory (char *path);
+bool8_t UL_ChangeDrive (char *drive);
 void AbortCheck (char * abortstring);
 
 struct dosdate_t

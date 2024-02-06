@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_game_public
 #define _rt_game_public
 
-#include <stdbool.h>
 #include <stdint.h>
 
 //***************************************************************************
@@ -93,19 +92,19 @@ extern int SaveTime;
 void SetupPlayScreen (void);
 void SD_PreCache (void);
 void GameMemToScreen( pic_t *source, int x, int y, int bufferofsonly );
-void DrawPlayScreen (bool bufferofsonly);
+void DrawPlayScreen (bool8_t bufferofsonly);
 
-void DrawKills (bool bufferofsonly);
+void DrawKills (bool8_t bufferofsonly);
 void DrawPlayers ( void );
-void DrawGameString (int x, int y, const char * str, bool bufferofsonly);
-void DrawNumber (int x, int y, int width, int which, bool bufferofsonly);
+void DrawGameString (int x, int y, const char * str, bool8_t bufferofsonly);
+void DrawNumber (int x, int y, int width, int which, bool8_t bufferofsonly);
 void TakeDamage (int points, objtype *attacker);
 void HealPlayer (int points, objtype * ob);
-void DrawLives (bool bufferofsonly);
+void DrawLives (bool8_t bufferofsonly);
 void GiveExtraMan (void);
-void DrawScore (bool bufferofsonly);
+void DrawScore (bool8_t bufferofsonly);
 void GivePoints (long points);
-void DrawKeys (bool bufferofsonly);
+void DrawKeys (bool8_t bufferofsonly);
 void GiveKey (int key);
 void GiveWeapon (objtype * ob, int weapon);
 void GiveMissileWeapon(objtype * ob, int which);
@@ -114,25 +113,25 @@ void GiveLives (int newlives);
 void UpdateScore (uint32_t num);
 void UpdateLives (int num);
 
-void DrawTimeXY( int x, int y, int sec, bool bufferofsonly );
-void DrawTime (bool bufferofsonly);
+void DrawTimeXY( int x, int y, int sec, bool8_t bufferofsonly );
+void DrawTime (bool8_t bufferofsonly);
 
-bool SaveTheGame (int num, gamestorage_t * game);
-bool LoadTheGame (int num, gamestorage_t * game);
+bool8_t SaveTheGame (int num, gamestorage_t * game);
+bool8_t LoadTheGame (int num, gamestorage_t * game);
 void GetSavedMessage (int num, char * message);
 void GetSavedHeader (int num, gamestorage_t * game);
 
 void DrawHighScores (void);
-void CheckHighScore (long score, uint16_t other, bool INMENU);
+void CheckHighScore (long score, uint16_t other, bool8_t INMENU);
 void LevelCompleted ( exit_t playstate );
 void BattleLevelCompleted ( int localplayer );
 void Died (void);
 void ScreenShake (void);
 void UpdateTriads (objtype * ob, int num);
-void DrawTriads (bool bufferofsonly);
+void DrawTriads (bool8_t bufferofsonly);
 void DrawStats (void);
-void DrawBarHealth (bool bufferonly);
-void DrawBarAmmo (bool bufferonly);
+void DrawBarHealth (bool8_t bufferonly);
+void DrawBarAmmo (bool8_t bufferonly);
 void GM_DrawBonus (int which);
 
 void DrawEpisodeLevel ( int x, int y );
@@ -143,8 +142,8 @@ int GetLevel (int episode, int mapon);
 void DrawPause (void);
 void DrawPauseXY (int x, int y);
 
-void DrawColoredMPPic (int xpos, int ypos, int width, int height, int heightmod, uint8_t *src, bool bufferofsonly, int color);
-void StatusDrawColoredPic (uint32_t x, uint32_t y, pic_t *nums, bool bufferofsonly, int color);
+void DrawColoredMPPic (int xpos, int ypos, int width, int height, int heightmod, uint8_t *src, bool8_t bufferofsonly, int color);
+void StatusDrawColoredPic (uint32_t x, uint32_t y, pic_t *nums, bool8_t bufferofsonly, int color);
 
 void ClearTriads (playertype * pstate);
 #endif

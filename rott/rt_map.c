@@ -18,7 +18,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 #include "rt_def.h"
-#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -824,7 +823,7 @@ void ShutdownMapper ( void )
    VL_ClearVideo (0);
    viewwidth=oldw;
    viewheight=oldh;
-   SetupScreen (true);
+   SetupScreen (TRUE);
 
    if (sky!=0)
       SafeFree(skytile);
@@ -845,7 +844,7 @@ void DoMap (int cx, int cy)
    int x,y;
    int dx;
    int dy;
-   bool done;
+   bool8_t done;
    int quitkey=sc_Escape;
    ControlInfo control;
 
@@ -853,7 +852,7 @@ EnableScreenStretch();//bna++
 
    ShutdownClientControls();
 
-   done=false;
+   done=FALSE;
 
    while (Keyboard[sc_Tab])
       IN_UpdateKeyboard ();
@@ -867,7 +866,7 @@ EnableScreenStretch();//bna++
 
    ChangeMapScale(&x, &y, mapscale);
 
-   while (done==false)
+   while (done==FALSE)
      {
      IN_UpdateKeyboard ();
      if ((Keyboard[sc_Tab]) || (Keyboard[sc_Escape]))
@@ -876,7 +875,7 @@ EnableScreenStretch();//bna++
            quitkey=sc_Tab;
         else
            quitkey=sc_Escape;
-        done=true;
+        done=TRUE;
         }
      if ( Keyboard[ sc_Home ] )
         {
@@ -923,7 +922,7 @@ EnableScreenStretch();//bna++
         }
      if (Keyboard[sc_CapsLock] && Keyboard[sc_X])
         {
-        SaveScreen(true);
+        SaveScreen(TRUE);
         }
      if (Keyboard[sc_Comma])
         {
@@ -970,7 +969,7 @@ EnableScreenStretch();//bna++
 	   DrawTiledRegion( 0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32, 0, 16, shape );//bna++
 	   DisableScreenStretch();//dont strech when we go BACK TO GAME
 	   VW_UpdateScreen ();
-	   DrawPlayScreen(true);//repaint ammo and life stat
+	   DrawPlayScreen(TRUE);//repaint ammo and life stat
 
   }
    while (Keyboard[quitkey])

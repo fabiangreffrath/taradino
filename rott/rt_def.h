@@ -35,6 +35,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <stdint.h>
 
+typedef uint8_t bool8_t;
+#define FALSE 0
+#define TRUE 1
+
 #ifdef _WIN32
   #define PATH_SEP_CHAR '\\'
   #define PATH_SEP_STR  "\\"

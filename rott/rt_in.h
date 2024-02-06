@@ -26,7 +26,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_in_public
 #define _rt_in_public
 
-#include <stdbool.h>
 #include <stdint.h>
 #include "develop.h"
 #include "rottnet.h"
@@ -83,7 +82,7 @@ typedef  enum
 
 typedef  struct
 {
-	bool     button0,
+	bool8_t     button0,
 					button1,
 					button2,
 					button3;
@@ -126,9 +125,9 @@ typedef struct
 
 typedef struct
 {
-   bool messageon;
-   bool directed;
-   bool inmenu;
+   bool8_t messageon;
+   bool8_t directed;
+   bool8_t inmenu;
    int     remoteridicule;
    int     towho;
    int     textnum;
@@ -142,13 +141,13 @@ typedef struct
 //
 //***************************************************************************
 
-extern bool MousePresent;
-extern bool JoysPresent[MaxJoys];
-extern bool JoyPadPresent;
+extern bool8_t MousePresent;
+extern bool8_t JoysPresent[MaxJoys];
+extern bool8_t JoyPadPresent;
 extern int     mouseadjustment;
 extern int     threshold;
 
-extern bool  Paused;
+extern bool8_t  Paused;
 extern volatile int LastScan;
 /* extern KeyboardDef KbdDefs;
 extern JoystickDef JoyDefs[];
@@ -179,10 +178,10 @@ extern const char ScanChars[128];
 void INL_GetMouseDelta(int *x,int *y);
 uint16_t IN_GetMouseButtons (void);
 void IN_IgnoreMouseButtons( void );
-bool INL_StartMouse (void);
+bool8_t INL_StartMouse (void);
 void INL_ShutMouse (void);
 void IN_Startup(void);
-void IN_Default (bool gotit, ControlType in);
+void IN_Default (bool8_t gotit, ControlType in);
 void IN_Shutdown (void);
 void IN_SetKeyHook(void (*hook)());
 void IN_ClearKeysDown (void);
@@ -191,16 +190,16 @@ void IN_SetControlType (int player, ControlType type);
 ScanCode IN_WaitForKey (void);
 char IN_WaitForASCII (void);
 void IN_StartAck (void);
-bool IN_CheckAck (void);
+bool8_t IN_CheckAck (void);
 void IN_Ack (void);
-bool IN_UserInput (long delay);
+bool8_t IN_UserInput (long delay);
 void IN_GetJoyAbs (uint16_t joy, uint16_t *xp, uint16_t *yp);
 void INL_GetJoyDelta (uint16_t joy, int *dx, int *dy);
 uint16_t INL_GetJoyButtons (uint16_t joy);
 //uint16_t IN_GetJoyButtonsDB (uint16_t joy);
 void INL_SetJoyScale (uint16_t joy);
 void IN_SetupJoy (uint16_t joy, uint16_t minx, uint16_t maxx, uint16_t miny, uint16_t maxy);
-bool INL_StartJoy (uint16_t joy);
+bool8_t INL_StartJoy (uint16_t joy);
 void INL_ShutJoy (uint16_t joy);
 uint8_t IN_JoyButtons (void);
 void IN_UpdateKeyboard (void);

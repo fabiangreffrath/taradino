@@ -52,7 +52,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  SD_PlaySoundRTP(SD_SELECTWPNSND,ob->x,ob->y);\
  pstate->weapondowntics = WEAPONS[pstate->weapon].screenheight/GMOVE;\
  if ((ob==player) && SHOW_BOTTOM_STATUS_BAR() )\
-	 DrawBarAmmo (false);            \
+	 DrawBarAmmo (FALSE);            \
 }
 
 

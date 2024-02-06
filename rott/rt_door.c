@@ -40,7 +40,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "develop.h"
 #include "rt_rand.h"
 #include "engine.h"
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -89,7 +88,7 @@ int            pwallnum;
 
 uint8_t	         areaconnect[NUMAREAS][NUMAREAS];
 
-bool	      areabyplayer[NUMAREAS];
+bool8_t	      areabyplayer[NUMAREAS];
 
 
 // Local Variables
@@ -256,12 +255,12 @@ void KillAnimatedMaskedWall ( animmaskedwallobj_t * temp )
 
 void DoAnimatedMaskedWalls ( void )
 {
-   bool done;
+   bool8_t done;
    animmaskedwallobj_t * temp;
 
    for(temp=FIRSTANIMMASKEDWALL;temp;)
       {
-      done=false;
+      done=FALSE;
       temp->ticcount-=tics;
       while (temp->ticcount<0)
          {
@@ -270,11 +269,11 @@ void DoAnimatedMaskedWalls ( void )
          maskobjlist[temp->num]->bottomtexture++;
          if (temp->count==0)
             {
-            done=true;
+            done=TRUE;
             break;
             }
          }
-      if (done==true)
+      if (done==TRUE)
          {
          animmaskedwallobj_t * temp2;
 
@@ -540,45 +539,45 @@ void ClockLink (void (*saction)(intptr_t), void (*eaction)(intptr_t), intptr_t w
 }
 
 
-void DisplayMessageForAction(touchplatetype *temp, bool *wallmessage,
-                             bool *doormessage, bool*columnmessage)
+void DisplayMessageForAction(touchplatetype *temp, bool8_t *wallmessage,
+                             bool8_t *doormessage, bool8_t*columnmessage)
    {
 
    if ((temp->action == ActivatePushWall) ||
       (temp->action == ActivateMoveWall)
       )
       {
-      if (*wallmessage == false)
+      if (*wallmessage == FALSE)
          {
          if (temp->clocktype)
             AddMessage("Time-delay wall moves.",MSG_GAME);
          else
             AddMessage("A wall moves.",MSG_GAME);
-         *wallmessage = true;
+         *wallmessage = TRUE;
          }
       }
 
    else if (temp->action == LinkedCloseDoor)
       {
-      if (*doormessage == false)
+      if (*doormessage == FALSE)
          {
          if (temp->clocktype)
             AddMessage("Time-delay door closes.",MSG_GAME);
          else
             AddMessage("A door closes.",MSG_GAME);
-         *doormessage = true;
+         *doormessage = TRUE;
          }
       }
 
    else if (temp->action == LinkedOpenDoor)
       {
-      if (*doormessage == false)
+      if (*doormessage == FALSE)
          {
          if (temp->clocktype)
             AddMessage("Time-delay door opens.",MSG_GAME);
          else
             AddMessage("A door opens.",MSG_GAME);
-         *doormessage = true;
+         *doormessage = TRUE;
          }
       }
 
@@ -588,13 +587,13 @@ void DisplayMessageForAction(touchplatetype *temp, bool *wallmessage,
 
       if (M_ISACTOR(tempactor) && (tempactor->obclass == pillarobj))
          {
-         if (*columnmessage == false)
+         if (*columnmessage == FALSE)
             {
             if (temp->clocktype)
                AddMessage("Time-delay column moves.",MSG_GAME);
             else
                AddMessage("A column moves.",MSG_GAME);
-            *columnmessage = true;
+            *columnmessage = TRUE;
             }
          }
       }
@@ -606,16 +605,16 @@ void TriggerStuff(void)
    int i,touchcomplete,j;
    int playeron;
    void (*tempact)(intptr_t);
-   bool wallmessage,doormessage,columnmessage;
+   bool8_t wallmessage,doormessage,columnmessage;
 
    for(i=0;i<lasttouch;i++)
       {
-      playeron = false;
+      playeron = FALSE;
       for( j = 0; j < numplayers; j++ )
          {
          if ( i == touchindices[ PLAYER[ j ]->tilex ][ PLAYER[ j ]->tiley ] - 1 )
             {
-            playeron = true;
+            playeron = TRUE;
             break;
             }
          }
@@ -641,17 +640,17 @@ void TriggerStuff(void)
          if (!playeron)
             {
             for(temp = touchplate[i];temp;temp = temp->nextaction)
-               temp->triggered=false;
+               temp->triggered=FALSE;
             TRIGGER[i] = 0;
-            touchplate[i]->done = false;
+            touchplate[i]->done = FALSE;
             }
          }
 
       else
          {
-         wallmessage = false;
-         doormessage = false;
-         columnmessage = false;
+         wallmessage = FALSE;
+         doormessage = FALSE;
+         columnmessage = FALSE;
 
          for(temp = touchplate[i];temp;temp = temp->nextaction)
             {
@@ -678,7 +677,7 @@ void TriggerStuff(void)
                   temp->action = temp->swapaction;
                   temp->swapaction = tempact;
                   temp->ticcount = temp->tictime;
-                  temp->triggered = true;
+                  temp->triggered = TRUE;
                   }
 
                else
@@ -705,12 +704,12 @@ void TriggerStuff(void)
             touchplate[i]->complete = 1; // this touchplate is out of commission
          else
             {
-            touchplate[i]->done = true;
+            touchplate[i]->done = TRUE;
             for(temp = touchplate[i];temp;temp = temp->nextaction)
                {
                if (temp->action && (!temp->triggered))
                   {
-                  touchplate[i]->done = false;
+                  touchplate[i]->done = FALSE;
                   break;
                   }
                }
@@ -722,30 +721,30 @@ void TriggerStuff(void)
 
 //==================== Tile stuff ====================================
 
-bool CheckTile(int x, int y)
+bool8_t CheckTile(int x, int y)
 {
 
 	if ((x < 2) || (x > (MAPSIZE-1)) || (y < 2) || (y > (MAPSIZE - 1)))
-	  return false;
+	  return FALSE;
 
 	if (actorat[x][y])
 	  {objtype *check = (objtype*)(actorat[x][y]);
 		if (insetupgame)
-		  return false;
+		  return FALSE;
 		if (!(M_ISACTOR(check) && (check->obclass == playerobj)))
-		  return false;
+		  return FALSE;
      }
    if (DiskAt(x,y))
-      return false;
+      return FALSE;
    if (sprites[x][y])
-		return false;
-	if ((tilemap[x][y]) && (IsPlatform(x,y)==false))
-		return false;
+		return FALSE;
+	if ((tilemap[x][y]) && (IsPlatform(x,y)==FALSE))
+		return FALSE;
 	if ((AREANUMBER(x,y)<=0) || (AREANUMBER(x,y)>NUMAREAS))
-		return false;
+		return FALSE;
    if (IsWindow(x,y))
-      return false;
-   return true;
+      return FALSE;
+   return TRUE;
 }
 
 
@@ -864,7 +863,7 @@ void RecursiveConnect (int areanumber)
 	{
 		if (areaconnect[areanumber][i] && !areabyplayer[i])
 		{
-			areabyplayer[i] = true;
+			areabyplayer[i] = TRUE;
 			RecursiveConnect (i);
 		}
 	}
@@ -890,7 +889,7 @@ void ConnectAreas (void)
    memset (areabyplayer,0,sizeof(areabyplayer));
    for (i=0;i<numplayers;i++)
       {
-      areabyplayer[PLAYER[i]->areanumber] = true;
+      areabyplayer[PLAYER[i]->areanumber] = TRUE;
       RecursiveConnect (PLAYER[i]->areanumber);
       }
 	for(temp=FIRSTACTOR;temp;temp=temp->next)
@@ -1088,7 +1087,7 @@ void SpawnDoor (int tilex, int tiley, int lock, int texture)
    // make the door space solid
    //
 
-   if (loadedgame==false)
+   if (loadedgame==FALSE)
       actorat[tilex][tiley] = lastdoorobj;
 
    if (IsDoor(tilex,tiley-1)) up=2;
@@ -1108,21 +1107,21 @@ void SpawnDoor (int tilex, int tiley, int lock, int texture)
    else rt=0;
 
    if ((up==1) && (dn==1))
-		lastdoorobj->vertical = true;
+		lastdoorobj->vertical = TRUE;
    else if ((lt==1) && (rt==1))
-		lastdoorobj->vertical = false;
+		lastdoorobj->vertical = FALSE;
    else if ((up>0) && (dn>0))
-		lastdoorobj->vertical = true;
+		lastdoorobj->vertical = TRUE;
    else if ((lt>0) && (rt>0))
-		lastdoorobj->vertical = false;
+		lastdoorobj->vertical = FALSE;
    else if (up>0)
-		lastdoorobj->vertical = true;
+		lastdoorobj->vertical = TRUE;
    else if (dn>0)
-		lastdoorobj->vertical = true;
+		lastdoorobj->vertical = TRUE;
    else if (lt>0)
-		lastdoorobj->vertical = false;
+		lastdoorobj->vertical = FALSE;
    else if (rt>0)
-		lastdoorobj->vertical = false;
+		lastdoorobj->vertical = FALSE;
 
    switch (texture)
       {
@@ -1246,7 +1245,7 @@ void SpawnDoor (int tilex, int tiley, int lock, int texture)
    PreCacheLump(lastdoorobj->sidepic,PU_CACHEWALLS,cache_pic_t);
    PreCacheLump(lastdoorobj->alttexture,PU_CACHEWALLS,cache_pic_t);
 
-	if (lastdoorobj->vertical==true)
+	if (lastdoorobj->vertical==TRUE)
 	{
       if (up==1)
 		   tilemap[tilex][tiley-1] |= 0x4000;
@@ -1296,7 +1295,7 @@ void MakeWideDoorVisible ( int doornum )
    dr=doorobjlist[doornum];
 
    dx=0;dy=0;
-   if (dr->vertical==true)
+   if (dr->vertical==TRUE)
       dy=1;
    else
       dx=1;
@@ -1358,14 +1357,14 @@ void LockLinkedDoor (int door)
 =====================
 */
 
-bool IsDoorLinked (int door)
+bool8_t IsDoorLinked (int door)
 {
 	doorobj_t*dptr;
 
 	dptr = doorobjlist[door];
    if (dptr->lock==5)
-      return true;
-   return false;
+      return TRUE;
+   return FALSE;
 }
 
 
@@ -1397,7 +1396,7 @@ void FixDoorAreaNumbers ( void )
 		rt = ((rt>0) && (rt<=NUMAREAS));
 
 
-		if (doorobjlist[i]->vertical==true)
+		if (doorobjlist[i]->vertical==TRUE)
 			{
          if (rt)
 				MAPSPOT(tilex,tiley,0) = MAPSPOT(tilex+1,tiley,0);
@@ -1449,7 +1448,7 @@ void OpenDoor (int door)
 =====================
 */
 
-bool DoorUnBlocked (int door)
+bool8_t DoorUnBlocked (int door)
 {
 	int	tilex,tiley;
 	objtype *check;
@@ -1466,27 +1465,27 @@ bool DoorUnBlocked (int door)
 	check = (objtype*)actorat[tilex][tiley];
 
 	if (check && (check->which == ACTOR))
-		return false;
+		return FALSE;
 
-	if (dptr->vertical==true)
+	if (dptr->vertical==TRUE)
 	{
 		check = (objtype*)actorat[tilex-1][tiley];
 		if (check && (check->which==ACTOR) && ((check->x+MINDIST) >> TILESHIFT) == tilex )
-			return false;
+			return FALSE;
 		check = (objtype*)actorat[tilex+1][tiley];
 		if (check && (check->which==ACTOR) && ((check->x-MINDIST) >> TILESHIFT) == tilex )
-			return false;
+			return FALSE;
 	}
-	else if (dptr->vertical==false)
+	else if (dptr->vertical==FALSE)
 	{
 		check = (objtype*)actorat[tilex][tiley-1];
 		if (check && (check->which==ACTOR) && ((check->y+MINDIST) >> TILESHIFT) == tiley )
-			return false;
+			return FALSE;
 		check = (objtype*)actorat[tilex][tiley+1];
 		if (check && (check->which==ACTOR) && ((check->y-MINDIST) >> TILESHIFT) == tiley )
-			return false;
+			return FALSE;
 	}
-   return true;
+   return TRUE;
 }
 
 
@@ -1500,7 +1499,7 @@ bool DoorUnBlocked (int door)
 =====================
 */
 
-bool DoorReadyToClose(int door)
+bool8_t DoorReadyToClose(int door)
 {
 	doorobj_t*dptr;
 	int dx,dy;
@@ -1511,13 +1510,13 @@ bool DoorReadyToClose(int door)
 	dptr = doorobjlist[door];
 
 	if (dptr->action==dr_closed)
-		return true;
+		return TRUE;
 
-	if (DoorUnBlocked(door)==false)
-		return false;
+	if (DoorUnBlocked(door)==FALSE)
+		return FALSE;
 
 	dx=0;dy=0;
-	if (dptr->vertical==true)
+	if (dptr->vertical==TRUE)
 		dy=1;
 	else
 		dx=1;
@@ -1531,8 +1530,8 @@ bool DoorReadyToClose(int door)
 		dr2=doorobjlist[num];
 		if (!(dr2->flags&DF_MULTI))
 			break;
-		if (DoorUnBlocked(num)==false)
-			return false;
+		if (DoorUnBlocked(num)==FALSE)
+			return FALSE;
 		tx+=dx;
 		ty+=dy;
 		}
@@ -1546,12 +1545,12 @@ bool DoorReadyToClose(int door)
 		dr2=doorobjlist[num];
 		if (!(dr2->flags&DF_MULTI))
 			break;
-		if (DoorUnBlocked(num)==false)
-			return false;
+		if (DoorUnBlocked(num)==FALSE)
+			return FALSE;
 		tx-=dx;
 		ty-=dy;
 		}
-	return true;
+	return TRUE;
 }
 
 
@@ -1602,7 +1601,7 @@ void CloseDoor (int door)
 =====================
 */
 
-void OperateDoor (int keys, int door, bool localplayer )
+void OperateDoor (int keys, int door, bool8_t localplayer )
 {
 	int	lock;
 	doorobj_t*dptr;
@@ -1679,7 +1678,7 @@ void LinkedOpenDoor (intptr_t door)
 
 void LinkedCloseDoor (intptr_t door)
 {
-   if (DoorReadyToClose(door)==true)
+   if (DoorReadyToClose(door)==TRUE)
       UtilizeDoor(door,CloseDoor);
 }
 
@@ -1705,7 +1704,7 @@ void UtilizeDoor (int door,void (*action)(int))
    action(door);
 
    dx=0;dy=0;
-   if (dptr->vertical==true)
+   if (dptr->vertical==TRUE)
       dy=1;
    else
       dx=1;
@@ -1761,7 +1760,7 @@ void UseDoor (int door)
 	case dr_opening:
 		SD_StopSound(doorobjlist[door]->soundhandle);
 	case dr_open:
-      if (DoorReadyToClose(door)==true)
+      if (DoorReadyToClose(door)==TRUE)
          UtilizeDoor(door,CloseDoor);
 		break;
 	}
@@ -1786,7 +1785,7 @@ void DoorOpen (int door)
  dptr->ticcount += 1;
  if ((dptr->ticcount >= OPENTICS) &&
      (!(dptr->flags & DF_TIMED)) &&
-     (DoorReadyToClose(door)==true))
+     (DoorReadyToClose(door)==TRUE))
     UtilizeDoor(door,CloseDoor);
 }
 
@@ -1817,7 +1816,7 @@ void DoorOpening (int door)
 	//
 		map = &MAPSPOT(tilex,tiley,0);
 
-		if (doorobjlist[door]->vertical==true)
+		if (doorobjlist[door]->vertical==TRUE)
 		{
 			area1 =	*(map+1);
 			area2 =	*(map-1);
@@ -1831,7 +1830,7 @@ void DoorOpening (int door)
 		area2 -= AREATILE;
 		areaconnect[area1][area2]++;
 		areaconnect[area2][area1]++;
-		if ((insetupgame==false) && (loadedgame==false))
+		if ((insetupgame==FALSE) && (loadedgame==FALSE))
 			ConnectAreas ();
 	   if (areabyplayer[area1])
     	   {
@@ -1909,7 +1908,7 @@ void DoorClosing (int door)
          dptr->soundhandle=SD_PlaySoundRTP ( SD_DOORHITSND, dptr->tilex<<16, dptr->tiley<<16 );
          }
 
-      if (dptr->vertical==true)
+      if (dptr->vertical==TRUE)
 		{
 			area1 =	*(map+1);
 			area2 =	*(map-1);
@@ -1974,10 +1973,10 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
  int area1, area2;
  int up,dn,lt,rt;
  int himask;
- bool sidepic;
+ bool8_t sidepic;
  int side, middle, above, bottom;
  maskedwallobj_t * lastmaskobj;
- bool metal;
+ bool8_t metal;
 
 	himask=W_GetNumForName("HMSKSTRT")+1;
 
@@ -1985,7 +1984,7 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
 	memset(maskobjlist[maskednum],0,sizeof(maskedwallobj_t));
 	lastmaskobj=maskobjlist[maskednum];
 
-   sidepic=true;
+   sidepic=TRUE;
 
 	lastmaskobj->tilex = tilex;
 	lastmaskobj->tiley = tiley;
@@ -2012,26 +2011,26 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
    else rt=0;
 
    if ((up==1) && (dn==1))
-		lastmaskobj->vertical = true;
+		lastmaskobj->vertical = TRUE;
    else if ((lt==1) && (rt==1))
-		lastmaskobj->vertical = false;
+		lastmaskobj->vertical = FALSE;
    else if ((up>0) && (dn>0))
-		lastmaskobj->vertical = true;
+		lastmaskobj->vertical = TRUE;
    else if ((lt>0) && (rt>0))
-		lastmaskobj->vertical = false;
+		lastmaskobj->vertical = FALSE;
    else if (up>0)
-		lastmaskobj->vertical = true;
+		lastmaskobj->vertical = TRUE;
    else if (dn>0)
-		lastmaskobj->vertical = true;
+		lastmaskobj->vertical = TRUE;
    else if (lt>0)
-		lastmaskobj->vertical = false;
+		lastmaskobj->vertical = FALSE;
    else if (rt>0)
-		lastmaskobj->vertical = false;
+		lastmaskobj->vertical = FALSE;
 
    tilemap[tilex][tiley] = maskednum | 0xc000;
 	map = &MAPSPOT(tilex,tiley,0);
 
-	if (lastmaskobj->vertical==true)
+	if (lastmaskobj->vertical==TRUE)
 		{
 		area1 =	*(map+1);
 		area2 =	*(map-1);
@@ -2061,11 +2060,11 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
       {
       if (MAPSPOT(tilex,tiley,0)==21)
          {
-         metal=true;
+         metal=TRUE;
 			actorat[tilex][tiley]=0;
          }
       else
-         metal=false;
+         metal=FALSE;
       }
 
 
@@ -2264,21 +2263,21 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
          break;
 
       case mw_railing:
-         sidepic = false;
+         sidepic = FALSE;
          middle = -1;
          above  = -1;
          bottom = W_GetNumForName("RAILING");
          break;
 
       case mw_hiswitchon:
-         sidepic = false;
+         sidepic = FALSE;
          middle = himask+1;
          above = himask+3;
          bottom = himask;
          break;
 
       case mw_hiswitchoff:
-         sidepic = false;
+         sidepic = FALSE;
          middle = himask+1;
          above = himask+2;
          bottom = himask;
@@ -2304,11 +2303,11 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
          break;
 
       case mw_platform1:
-         sidepic = false;
+         sidepic = FALSE;
          bottom = -1;
          middle = -1;
          above  = himask+10;
-         if (metal==true)
+         if (metal==TRUE)
             {
             bottom = -1;
             middle = -1;
@@ -2316,11 +2315,11 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
             }
          break;
       case mw_platform2:
-         sidepic = false;
+         sidepic = FALSE;
          bottom = himask+8;
          middle = -1;
          above = -1;
-         if (metal==true)
+         if (metal==TRUE)
             {
             bottom = himask+14;
             middle = -1;
@@ -2330,11 +2329,11 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
             lastmaskobj->flags|=MW_BOTTOMFLIPPING;
          break;
       case mw_platform3:
-         sidepic = false;
+         sidepic = FALSE;
          bottom = himask+8;
          middle = -1;
          above = himask+10;
-         if (metal==true)
+         if (metal==TRUE)
             {
             bottom = himask+14;
             middle = -1;
@@ -2344,11 +2343,11 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
             lastmaskobj->flags|=MW_BOTTOMFLIPPING;
          break;
       case mw_platform4:
-         sidepic = false;
+         sidepic = FALSE;
          bottom = himask+12;
          middle = himask+7;
          above = himask+7;
-         if (metal==true)
+         if (metal==TRUE)
             {
             bottom = -1;
             middle = himask+15;
@@ -2356,11 +2355,11 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
             }
          break;
       case mw_platform5:
-         sidepic = false;
+         sidepic = FALSE;
          bottom = himask+12;
          middle = himask+7;
          above = himask+5;
-         if (metal==true)
+         if (metal==TRUE)
             {
             bottom = -1;
             middle = himask+15;
@@ -2370,11 +2369,11 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
             lastmaskobj->flags|=MW_TOPFLIPPING;
          break;
       case mw_platform6:
-         sidepic = false;
+         sidepic = FALSE;
          bottom = himask+4;
          middle = himask+7;
          above = himask+5;
-         if (metal==true)
+         if (metal==TRUE)
             {
             bottom = himask+14;
             middle = himask+15;
@@ -2384,17 +2383,17 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
             lastmaskobj->flags|=MW_TOPFLIPPING;
          break;
       case mw_platform7:
-         sidepic = false;
+         sidepic = FALSE;
          bottom = himask+4;
          middle = himask+7;
          above = himask+5;
          if ((up==1) || (dn==1))
-            lastmaskobj->vertical=true;
+            lastmaskobj->vertical=TRUE;
          else if ((lt==1) || (rt==1))
-            lastmaskobj->vertical=false;
+            lastmaskobj->vertical=FALSE;
          else
             Error("Perpendicular platform used with no wall near it\n");
-         if (metal==true)
+         if (metal==TRUE)
             {
             bottom = himask+14;
             middle = himask+15;
@@ -2422,10 +2421,10 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
    lastmaskobj->toptexture=above;
    lastmaskobj->bottomtexture=bottom;
 
-   if (sidepic == true)
+   if (sidepic == TRUE)
       {
       lastmaskobj->sidepic=side;
-      if (lastmaskobj->vertical==true)
+      if (lastmaskobj->vertical==TRUE)
          {
          if (up==1)
             tilemap[tilex][tiley-1] |= 0x4000;
@@ -2453,7 +2452,7 @@ void SpawnMaskedWall (int tilex, int tiley, int which, int flags)
          }
       SD_PreCacheSound(SD_GLASSBREAKSND);
 		}
-   if (sidepic==true)
+   if (sidepic==TRUE)
       {
       PreCacheLump(lastmaskobj->sidepic,PU_CACHEWALLS,cache_pic_t);
       }
@@ -2505,7 +2504,7 @@ void FixMaskedWallAreaNumbers ( void )
 		lt = ((lt>0) && (lt<=NUMAREAS));
 		rt = ((rt>0) && (rt<=NUMAREAS));
 
-		if (maskobjlist[i]->vertical==true)
+		if (maskobjlist[i]->vertical==TRUE)
 			{
 			if (rt)
 				MAPSPOT(tilex,tiley,0) = MAPSPOT(tilex+1,tiley,0);
@@ -2586,7 +2585,7 @@ int UpdateMaskedWall (int num)
    if (result==1)
       {
       SpawnAnimatedMaskedWall(num);
-      if (loadedgame==false)
+      if (loadedgame==FALSE)
 	      SD_PlaySoundRTP(SD_GLASSBREAKSND,mw->tilex<<16,mw->tiley<<16);
       if (mw->flags&MW_MULTI)
          {
@@ -2596,7 +2595,7 @@ int UpdateMaskedWall (int num)
          maskedwallobj_t * mw2;
 
          dx=0;dy=0;
-         if (mw->vertical==true)
+         if (mw->vertical==TRUE)
             dy=1;
          else
             dx=1;
@@ -2613,7 +2612,7 @@ int UpdateMaskedWall (int num)
             if (r==1)
                {
                SpawnAnimatedMaskedWall(num);
-               if (loadedgame==false)
+               if (loadedgame==FALSE)
 	               SD_PlaySoundRTP(SD_GLASSBREAKSND,mw2->tilex<<16,mw2->tiley<<16);
                }
             i++;
@@ -2631,7 +2630,7 @@ int UpdateMaskedWall (int num)
             if (r==1)
                {
                SpawnAnimatedMaskedWall(num);
-               if (loadedgame==false)
+               if (loadedgame==FALSE)
 	               SD_PlaySoundRTP(SD_GLASSBREAKSND,mw2->tilex<<16,mw2->tiley<<16);
                }
             i++;
@@ -2663,36 +2662,36 @@ void ExecuteElevatorStopActions(elevator_t *eptr, int teleport_location,
    Teleport(eptr,teleport_location);
    eptr->ticcount = OPENTICS;
    eptr->doortoopen = -1;
-   if (MISCVARS->elevatormusicon == true)
+   if (MISCVARS->elevatormusicon == TRUE)
       {
       MU_StartSong(song_level);
       MU_RestoreSongPosition();
-      MISCVARS->elevatormusicon = false;
+      MISCVARS->elevatormusicon = FALSE;
 
       }
    }
 
 
-bool PlayerInElevator(elevator_t *eptr)
+bool8_t PlayerInElevator(elevator_t *eptr)
    {
    if (eptr->state == ev_mts)
       {
       if ((eptr->dx == player->tilex) && (eptr->dy == player->tiley))
-         return true;
+         return TRUE;
       }
    else if (eptr->state == ev_mtd)
       {
       if ((eptr->sx == player->tilex) && (eptr->sy == player->tiley))
-         return true;
+         return TRUE;
       }
 
-   return false;
+   return FALSE;
 
    }
 
 #define SHOULD_START_ELEVATOR_MUSIC(eptr)                              \
-        ((demoplayback == false) && (demorecord == false) &&           \
-         (MusicStarted() == true) &&                                   \
+        ((demoplayback == FALSE) && (demorecord == FALSE) &&           \
+         (MusicStarted() == TRUE) &&                                   \
          (!BATTLEMODE) && \
          (!(player->flags & FL_GODMODE)) &&\
          (GameRandomNumber("elevator music",0) < 25) && \
@@ -2715,7 +2714,7 @@ void SetElevatorOperationTime(elevator_t*eptr)
       {
       MU_StoreSongPosition();
       MU_StartSong(song_elevator);
-      MISCVARS->elevatormusicon = true;
+      MISCVARS->elevatormusicon = TRUE;
       eptr->ticcount = ELEVATORMUSICTIME;
       }
 
@@ -2965,14 +2964,14 @@ int SetNextAction(elevator_t*eptr,int action)
 
  if (action)
 	{if (!DoorReadyToClose(eptr->door1))
-	  return false;
+	  return FALSE;
 
 	 eptr->nextaction = ev_mtd;
 	 dn = eptr->door1;
 	}
  else
 	{if (!DoorReadyToClose(eptr->door2))
-	  return false;
+	  return FALSE;
 
 	 eptr->nextaction = ev_mts;
 	 dn = eptr->door2;
@@ -2984,7 +2983,7 @@ int SetNextAction(elevator_t*eptr,int action)
   CloseDoor(dn);
  doorobjlist[dn]->flags |= DF_ELEVLOCKED;
 
- return true;
+ return TRUE;
 }
 
 
@@ -3191,7 +3190,7 @@ void SpawnPushWall (int tilex, int tiley, int lock, int texture, int dir, int ty
    else
       {
       tilemap[tilex][tiley] = texture|0x800;
-      if ((loadedgame==false) && (type==0))
+      if ((loadedgame==FALSE) && (type==0))
          gamestate.secrettotal++;
       }
 
@@ -3212,7 +3211,7 @@ void SpawnPushWall (int tilex, int tiley, int lock, int texture, int dir, int ty
 =
 =====================
 */
-void OperatePushWall (int pwall, int dir, bool localplayer )
+void OperatePushWall (int pwall, int dir, bool8_t localplayer )
 {
    pwallobj_t * pw;
 
@@ -3383,7 +3382,7 @@ void ConnectPushWall (int pwall)
 		areaconnect[area1][area2]++;
 		areaconnect[area2][area1]++;
 
-		if ((insetupgame==false) && (loadedgame==false))
+		if ((insetupgame==FALSE) && (loadedgame==FALSE))
 			ConnectAreas ();
 		}
 	if (((area3>0) && (area3<NUMAREAS)) &&
@@ -3392,7 +3391,7 @@ void ConnectPushWall (int pwall)
 		areaconnect[area3][area4]++;
 		areaconnect[area4][area3]++;
 
-		if ((insetupgame==false) && (loadedgame==false))
+		if ((insetupgame==FALSE) && (loadedgame==FALSE))
 			ConnectAreas ();
 		}
 }
@@ -3456,7 +3455,7 @@ void SetupPushWall (int pwall)
 	}
 	if (pw->action==pw_pushing)
 		{
-      if (loadedgame==false)
+      if (loadedgame==FALSE)
          pw->soundhandle=SD_PlaySoundRTP ( SD_PUSHWALLSND, pw->x, pw->y );
       pw->state=(0x20000L/speed);
 		}
@@ -3718,7 +3717,7 @@ void WallMoving (int pwall)
             lbm_t *LBM;
 
             LBM = (lbm_t *) W_CacheLumpNum (W_GetNumForName ("imfree"), PU_CACHE, Cvt_lbm_t, 1);
-            VL_DecompressLBM (LBM,true);
+            VL_DecompressLBM (LBM,TRUE);
             VW_UpdateScreen ();
             I_Delay (2000);
             }

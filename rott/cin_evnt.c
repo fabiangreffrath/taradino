@@ -18,7 +18,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <stdbool.h>
 #include "cin_glob.h"
 #include "cin_evnt.h"
 #include "cin_efct.h"
@@ -36,7 +35,7 @@ eventtype * lastevent;
 // LOCALS
 
 static int numevents=0;
-static bool eventsystemstarted=false;
+static bool8_t eventsystemstarted=FALSE;
 
 
 /*
@@ -121,9 +120,9 @@ eventtype * GetNewEvent ( void )
 
 void StartupEvents ( void )
 {
-   if (eventsystemstarted==true)
+   if (eventsystemstarted==TRUE)
       return;
-   eventsystemstarted=true;
+   eventsystemstarted=TRUE;
    firstevent = NULL;
    lastevent  = NULL;
 
@@ -142,9 +141,9 @@ void ShutdownEvents ( void )
 {
    eventtype * event;
 
-   if (eventsystemstarted==false)
+   if (eventsystemstarted==FALSE)
       return;
-   eventsystemstarted=false;
+   eventsystemstarted=FALSE;
 
    event=firstevent;
    while (event != NULL)
@@ -192,11 +191,11 @@ enum_eventtype GetEventType ( void )
 {
    // Get Event Token
 
-   GetToken (false);
+   GetToken (FALSE);
 
    if (!strcmpi (token,"BACKGROUND"))
       {
-      GetToken (false);
+      GetToken (FALSE);
       if (!strcmpi (token,"SCROLL"))
          {
          return background_scrolling;
@@ -216,7 +215,7 @@ enum_eventtype GetEventType ( void )
       }
    else if (!strcmpi (token,"BACKDROP"))
       {
-      GetToken (false);
+      GetToken (FALSE);
       if (!strcmpi (token,"SCROLL"))
          {
          return backdrop_scrolling;
@@ -282,18 +281,18 @@ void ParseBack ( eventtype * event )
    char name2[10] = {0};
    int width = 0;
 
-   GetToken (false);
+   GetToken (FALSE);
    strcpy(&(name[0]),token);
 
    if (event->effecttype==background_multi)
       {
-      GetToken (false);
+      GetToken (FALSE);
       strcpy(&(name2[0]),token);
       }
 
-   GetToken (false);
+   GetToken (FALSE);
    int duration=ParseNum(token);
-   GetToken (false);
+   GetToken (FALSE);
    int yoffset=ParseNum(token);
    if (
        (event->effecttype==background_noscrolling) ||
@@ -321,9 +320,9 @@ void ParseBack ( eventtype * event )
        (event->effecttype==background_multi)
       )
       {
-      GetToken (false);
+      GetToken (FALSE);
       startx=ParseNum(token);
-      GetToken (false);
+      GetToken (FALSE);
       endx=ParseNum(token);
       }
 
@@ -349,25 +348,25 @@ void ParseSprite ( eventtype * event )
    int x,y,scale;
    int endx,endy,endscale;
 
-   GetToken (false);
+   GetToken (FALSE);
    strcpy(&(name[0]),token);
-   GetToken (false);
+   GetToken (FALSE);
    duration=ParseNum(token);
-   GetToken (false);
+   GetToken (FALSE);
    numframes=ParseNum(token);
-   GetToken (false);
+   GetToken (FALSE);
    framedelay=ParseNum(token);
-   GetToken (false);
+   GetToken (FALSE);
    x=ParseNum(token);
-   GetToken (false);
+   GetToken (FALSE);
    y=ParseNum(token);
-   GetToken (false);
+   GetToken (FALSE);
    scale=ParseNum(token);
-   GetToken (false);
+   GetToken (FALSE);
    endx=ParseNum(token);
-   GetToken (false);
+   GetToken (FALSE);
    endy=ParseNum(token);
-   GetToken (false);
+   GetToken (FALSE);
    endscale=ParseNum(token);
 
    event->effect = SpawnCinematicSprite ( name, duration, numframes,
@@ -386,32 +385,32 @@ void ParseSprite ( eventtype * event )
 void ParseFlic ( eventtype * event )
 {
    char name[10];
-   bool loop;
-   bool usefile;
+   bool8_t loop;
+   bool8_t usefile;
 
-   GetToken (false);
+   GetToken (FALSE);
    strcpy(&(name[0]),token);
 
-   GetToken (false);
+   GetToken (FALSE);
    if (!strcmpi (token,"LOOP"))
       {
-      loop = true;
+      loop = TRUE;
       }
    else if (!strcmpi (token,"NOLOOP"))
       {
-      loop = false;
+      loop = FALSE;
       }
    else
       Error("ParseFlic: Illegal or missing flic loop token %s\n",token);
 
-   GetToken (false);
+   GetToken (FALSE);
    if (!strcmpi (token,"FILE"))
       {
-      usefile=true;
+      usefile=TRUE;
       }
    else if (!strcmpi (token,"LUMP"))
       {
-      usefile=false;
+      usefile=FALSE;
       }
    else
       Error("ParseFlic: Illegal or missing flic use token %s\n",token);
@@ -430,7 +429,7 @@ void ParsePalette ( eventtype * event )
 {
    char name[10];
 
-   GetToken (false);
+   GetToken (FALSE);
    strcpy(&(name[0]),token);
 
    event->effect = SpawnCinematicPalette ( name );

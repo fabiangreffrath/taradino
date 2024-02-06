@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -81,7 +80,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
    }
 
 
-bool           ludicrousgibs=false;
+bool8_t           ludicrousgibs=FALSE;
 
 int16_t             colheight[15];
 
@@ -170,10 +169,10 @@ basic_actor_sounds  BAS[NUMCLASSES+3] =
 
 //========================== Local Variables ==================================================
 
-extern bool dopefish;
+extern bool8_t dopefish;
 
 
-bool Masterdisk;
+bool8_t Masterdisk;
 
 static objtype    *SNAKEHEAD,*SNAKEEND,*PARTICLE_GENERATOR,*EXPLOSIONS;
 #if (SHAREWARE == 0)
@@ -430,20 +429,20 @@ static int     STOPSPEED         =    0x200;
 static int     PLAYERFRICTION    =    0xe000;
 static int     ACTORFRICTION     =    0xf000;
 static int     DIAGADJUST        =    0xb504;
-static bool MissileSound      =    true;
+static bool8_t MissileSound      =    TRUE;
 
 
 
 
-bool FirstExplosionState(statetype *state)
+bool8_t FirstExplosionState(statetype *state)
    {
       if ((state == &s_explosion1) ||
           (state == &s_grexplosion1) ||
           (state == &s_staticexplosion1)
          )
-         return true;
+         return TRUE;
       else
-         return false;
+         return FALSE;
    }
 
 
@@ -924,7 +923,7 @@ void A_Steal(objtype*ob)
       PLAYER[0]->flags &= ~FL_GASMASK;
       PLAYERSTATE[0].protectiontime = 1;
       ob->temp3 = stat_gasmask;
-      GM_UpdateBonus (PLAYERSTATE[0].poweruptime, true);
+      GM_UpdateBonus (PLAYERSTATE[0].poweruptime, TRUE);
 
       }
    else if(PLAYER[0]->flags & FL_BPV)
@@ -932,7 +931,7 @@ void A_Steal(objtype*ob)
       PLAYER[0]->flags &= ~FL_BPV;
       PLAYERSTATE[0].protectiontime = 1;
       ob->temp3 = stat_bulletproof;
-      GM_UpdateBonus (PLAYERSTATE[0].poweruptime, true);
+      GM_UpdateBonus (PLAYERSTATE[0].poweruptime, TRUE);
 
       }
    else if(PLAYER[0]->flags & FL_AV)
@@ -940,7 +939,7 @@ void A_Steal(objtype*ob)
       PLAYER[0]->flags &= ~FL_AV;
       PLAYERSTATE[0].protectiontime = 1;
       ob->temp3 = stat_asbesto;
-      GM_UpdateBonus (PLAYERSTATE[0].poweruptime, true);
+      GM_UpdateBonus (PLAYERSTATE[0].poweruptime, TRUE);
 
       }
    else if (PLAYERSTATE[0].missileweapon != -1)
@@ -958,7 +957,7 @@ void A_Steal(objtype*ob)
       PLAYERSTATE[0].missileweapon = -1;
 
       if ( SHOW_BOTTOM_STATUS_BAR() )
-         DrawBarAmmo (false);
+         DrawBarAmmo (FALSE);
 
       }
    }
@@ -1216,8 +1215,8 @@ void InitActorList (void)
 
    memset(&RANDOMACTORTYPE[0],0,sizeof(RANDOMACTORTYPE));
    FindAddresses();
-   MissileSound = true;
-   Masterdisk = false;
+   MissileSound = TRUE;
+   Masterdisk = FALSE;
 
 }
 
@@ -1692,16 +1691,16 @@ void SpawnPatrol (classtype which, int tilex, int tiley, int dir)
 
 
 
-void SpawnDisk(int tilex, int tiley, int type, bool master)
+void SpawnDisk(int tilex, int tiley, int type, bool8_t master)
 {int zoffset;
 
 
 
- if (master == true)
+ if (master == TRUE)
    {
-   Masterdisk = true;
+   Masterdisk = TRUE;
    SpawnNewObj(tilex,tiley,&s_diskmaster,diskobj);
-   Masterdisk = false;
+   Masterdisk = FALSE;
    new->flags |= FL_MASTER;
    new->momentumz = -(DISKMOMZ << 16);
    new->flags |= FL_SYNCED;
@@ -2296,7 +2295,7 @@ void SpawnFirebomb(objtype*ob,int damage,int which)
 
    for (i=low;i<=high;i++)
       {
-      MissileSound = false;
+      MissileSound = FALSE;
       /*
       if (((which == 0) && ((low == 5) || (low == 6))) ||
           ((which == 6) && ((i==4) || (i==5)))
@@ -2337,7 +2336,7 @@ void SpawnFirebomb(objtype*ob,int damage,int which)
 
          }
 
-      MissileSound = true;
+      MissileSound = TRUE;
 
 
       SD_PlaySoundRTP(SD_EXPLODEFLOORSND,ob->x,ob->y);
@@ -2520,7 +2519,7 @@ void MissileHitActor(objtype *owner, objtype *missile, objtype *victim,
          if (pstate->protectiontime < 1)
             pstate->protectiontime = 1;
          if (victim==player)
-            GM_UpdateBonus (pstate->protectiontime, false);
+            GM_UpdateBonus (pstate->protectiontime, FALSE);
 
          return;  // asbestos vest prevents victim damage
          }
@@ -2570,12 +2569,12 @@ void MissileHitActor(objtype *owner, objtype *missile, objtype *victim,
 
       if ((owner->obclass == playerobj) && (victim->flags & FL_HBM))
          {
-            MISCVARS->supergibflag = true;
+            MISCVARS->supergibflag = TRUE;
          //GivePoints(starthitpoints[gamestate.difficulty][victim->obclass]*5);
          }
 
       Collision(victim,owner,hitmomx,hitmomy);
-      MISCVARS->supergibflag = false;
+      MISCVARS->supergibflag = FALSE;
       if ((tcl == blitzguardobj) && (owner->obclass == playerobj))
          victim->flags |= FL_TARGET;
 
@@ -2645,7 +2644,7 @@ void MissileHit (objtype *ob,void *hitwhat)
       ZEROMOM;
 
    if (tcl == b_darianobj)
-      MISCVARS->ESAU_SHOOTING  = false;
+      MISCVARS->ESAU_SHOOTING  = FALSE;
 
    switch(ocl)
       {
@@ -2680,7 +2679,7 @@ void MissileHit (objtype *ob,void *hitwhat)
       case p_firewallobj:
 
          if (tcl == playerobj)
-            gamestate.DOGROUNDZEROBONUS = true;
+            gamestate.DOGROUNDZEROBONUS = TRUE;
          NewState(ob,&s_explosion1);
          damage = 2*((random>>3)+50);
          break;
@@ -2760,7 +2759,7 @@ void MissileHit (objtype *ob,void *hitwhat)
 
       case netobj:
          ob->state=NULL;
-         MISCVARS->NET_IN_FLIGHT = false;
+         MISCVARS->NET_IN_FLIGHT = FALSE;
          if (tempactor == PLAYER[0])
             {
             if ((tempactor->flags & FL_GODMODE) ||
@@ -2776,7 +2775,7 @@ void MissileHit (objtype *ob,void *hitwhat)
                NewState(PLAYER[0],&s_player);
                PLAYERSTATE[0].attackframe = PLAYERSTATE[0].weaponframe = 0;
                PLAYERSTATE[0].batblast = 0;
-               if (PLAYERSTATE[0].HASKNIFE == false)
+               if (PLAYERSTATE[0].HASKNIFE == FALSE)
                   AddMessage("Wiggle left and right to get out of net!",
                              MSG_GAME);
                }
@@ -3267,15 +3266,15 @@ void SpawnSuperFatalityGibs(objtype *ob,objtype *attacker)
    int i;
 
 
-   if ((MISCVARS->supergibflag == true) &&
-       ((crazygibs == 9) || (ludicrousgibs == true))
+   if ((MISCVARS->supergibflag == TRUE) &&
+       ((crazygibs == 9) || (ludicrousgibs == TRUE))
       )
 
       {
       int olddirect = MISCVARS->directgibs;
 
-      MISCVARS->directgibs = false;
-      if (ludicrousgibs == false)
+      MISCVARS->directgibs = FALSE;
+      if (ludicrousgibs == FALSE)
          {
          if (attacker == player)
             {
@@ -3286,11 +3285,11 @@ void SpawnSuperFatalityGibs(objtype *ob,objtype *attacker)
          }
       else
          {
-         MISCVARS->randgibspeed = true;
+         MISCVARS->randgibspeed = TRUE;
 //         SpawnParticles(ob,GUTS,75);
 //MED
          SpawnParticles(ob,GUTS,150);
-         MISCVARS->randgibspeed = false;
+         MISCVARS->randgibspeed = FALSE;
          }
       SpawnParticles(ob,GUTS,40);
       MISCVARS->directgibs = olddirect;
@@ -3315,7 +3314,7 @@ void SpawnSuperFatalityGibs(objtype *ob,objtype *attacker)
 
 
 
-bool Vicious_Annihilation(objtype *ob, objtype *attacker)
+bool8_t Vicious_Annihilation(objtype *ob, objtype *attacker)
    {
    if ((ob->flags & FL_HBM) && (gamestate.violence >= vl_high))
       {
@@ -3331,28 +3330,28 @@ bool Vicious_Annihilation(objtype *ob, objtype *attacker)
          numgibs = (GameRandomNumber("excessive guts",0) & 7) + 4;
          //SoftError("\nnumgibs = %d,gamestate.difficulty = %d",numgibs,gamestate.difficulty);
          prevlast = LASTACTOR;
-         MISCVARS->fulllightgibs = true;
+         MISCVARS->fulllightgibs = TRUE;
          SpawnParticles(ob,GUTS,numgibs);
-         MISCVARS->fulllightgibs = false;
+         MISCVARS->fulllightgibs = FALSE;
          for(prevlast = prevlast->next;prevlast;prevlast = prevlast->next)
             prevlast->momentumz += (prevlast->momentumz >> 1);
 
          if ((GameRandomNumber("super gib chance",0) < 100) ||
-             (ludicrousgibs == true)
+             (ludicrousgibs == TRUE)
             )
             {
-            MISCVARS->directgibs = true;
+            MISCVARS->directgibs = TRUE;
 //MED
             MISCVARS->gibgravity = GRAVITY/2;
 //            MISCVARS->gibgravity = GRAVITY*2;
-            MISCVARS->fulllightgibs = true;
+            MISCVARS->fulllightgibs = TRUE;
             SpawnSuperFatalityGibs(ob,attacker);
-            MISCVARS->fulllightgibs = false;
+            MISCVARS->fulllightgibs = FALSE;
             MISCVARS->gibgravity = -1;
-            MISCVARS->directgibs = false;
+            MISCVARS->directgibs = FALSE;
             }
          }
-      return true;
+      return TRUE;
 
       }
 
@@ -3365,7 +3364,7 @@ bool Vicious_Annihilation(objtype *ob, objtype *attacker)
       ob->momentumx = ob->momentumy = ob->momentumz = 0;
       KillActor(ob);
       NewState(ob,&s_vaporized1);
-      return true;
+      return TRUE;
       }
 
    if (ob->flags & FL_SKELETON)
@@ -3376,10 +3375,10 @@ bool Vicious_Annihilation(objtype *ob, objtype *attacker)
       ob->momentumx = ob->momentumy = ob->momentumz = 0;
       NewState(ob,&s_skeleton1);
       SD_PlaySoundRTP(SD_ACTORBURNEDSND,ob->x,ob->y);
-      return true;
+      return TRUE;
       }
 
-   return false;
+   return FALSE;
 
    }
 
@@ -3422,9 +3421,9 @@ void BeginEnemyFatality(objtype *ob,objtype *attacker)
 
       NewState(ob,&s_explosion1);
       MISCVARS->gibgravity = GRAVITY/2;
-      MISCVARS->fulllightgibs = true;
+      MISCVARS->fulllightgibs = TRUE;
       SpawnParticles(ob,gt_sparks,100);
-      MISCVARS->fulllightgibs = false;
+      MISCVARS->fulllightgibs = FALSE;
       MISCVARS->gibgravity = -1;
       }
    else
@@ -3490,7 +3489,7 @@ void BeginPlayerFatality(objtype *ob,objtype *attacker)
    if (BATTLEMODE)
       SD_PlaySoundRTP (SD_PLAYERTCDEATHSND+(pstate->player),ob->x,ob->y);
 
-   if (Vicious_Annihilation(ob,attacker) == false)
+   if (Vicious_Annihilation(ob,attacker) == FALSE)
       {
       if (LOW_VIOLENCE_DEATH_SHOULD_BE_SET(ob))
          SET_DEATH_SHAPEOFFSET(ob);
@@ -3670,7 +3669,7 @@ gib_t RandomGutsType(void)
 void SpawnParticles(objtype*ob,int which,int numparticles)
    {
    int randphi,randtheta,i,nspeed;
-   bool eyespawned = false;
+   bool8_t eyespawned = FALSE;
    int gibtype;
    int randadj;
 
@@ -3749,7 +3748,7 @@ void SpawnParticles(objtype*ob,int which,int numparticles)
          NewState(new,new->state);
          }
 
-      if (MISCVARS->directgibs == true)
+      if (MISCVARS->directgibs == TRUE)
          {
          int dx,dy,dz;
 
@@ -3766,11 +3765,11 @@ void SpawnParticles(objtype*ob,int which,int numparticles)
          }
 
 
-      if ((eyespawned == false) && (which == GUTS) &&
+      if ((eyespawned == FALSE) && (which == GUTS) &&
             (ob->obclass != playerobj)
          )
          {
-         eyespawned = true;
+         eyespawned = TRUE;
          new->flags |= FL_EYEBALL;
          }
 
@@ -3783,7 +3782,7 @@ void SpawnParticles(objtype*ob,int which,int numparticles)
       new->temp3 = (MISCVARS->gibgravity == -1)?(GRAVITY):(MISCVARS->gibgravity);
 
       new->speed = nspeed>>1;
-//      if (MISCVARS->randgibspeed == true)
+//      if (MISCVARS->randgibspeed == TRUE)
 //         new->speed += (randadj << 11);
          //if (ob->state == &s_snakefireworks)
       new->z = ob->z;
@@ -3793,7 +3792,7 @@ void SpawnParticles(objtype*ob,int which,int numparticles)
       Set_3D_Momenta(new,new->speed,randtheta,randphi);
       new->momentumz <<= 6;
       new->flags |= (FL_NOFRICTION|FL_CRAZY|FL_ABP|FL_NEVERMARK);
-      if (MISCVARS->fulllightgibs == true)
+      if (MISCVARS->fulllightgibs == TRUE)
          new->flags |= FL_FULLLIGHT;
       new->dir = west;
       new->whatever = ob;
@@ -4083,7 +4082,7 @@ void T_Convert(objtype*ob)
          playertype *pstate;
 
          M_LINKSTATE(ob,pstate);
-         if ((pstate->falling == true) ||
+         if ((pstate->falling == TRUE) ||
              (!ob->momentumz)
             )
             NewState(ob,&s_ashwait);
@@ -4866,7 +4865,7 @@ void MissileMovement(objtype*ob)
 
 #define DetonateMissile(x,y) \
 {MissileHit(x,y);             \
- return false;                 \
+ return FALSE;                 \
 }                                \
 
 #define QuietDetonate(ob)            \
@@ -4876,10 +4875,10 @@ void MissileMovement(objtype*ob)
    if (ob == missobj)                \
       missobj = NULL;                \
    NewState(ob,&s_megaremove);       \
-   return false;                     \
+   return FALSE;                     \
    }
 
-bool MissileTryMove(objtype*ob,int tryx,int tryy,int tryz)
+bool8_t MissileTryMove(objtype*ob,int tryx,int tryy,int tryz)
 {
  int             tilexlow,tileylow,tilexhigh,tileyhigh,x,y,
                  trytilex,trytiley,dx,dy,dzt,dztp1,radius,
@@ -4891,7 +4890,7 @@ bool MissileTryMove(objtype*ob,int tryx,int tryy,int tryz)
  doorobj_t       *tempdoor;
  int             doorn;
  statobj_t       *tempstat;
- bool         areatried[NUMAREAS] = {0};
+ bool8_t         areatried[NUMAREAS] = {0};
 
  sprrad = 0x4500;
  actrad = ACTORSIZE+0x2800;
@@ -4921,7 +4920,7 @@ bool MissileTryMove(objtype*ob,int tryx,int tryy,int tryz)
         }
      /*
      else
-        return true;
+        return TRUE;
         */
      /*
      else
@@ -4930,7 +4929,7 @@ bool MissileTryMove(objtype*ob,int tryx,int tryy,int tryz)
         if (missobj == ob)
            missobj = NULL;
 
-        return false;
+        return FALSE;
         }
       */
     }
@@ -4942,7 +4941,7 @@ bool MissileTryMove(objtype*ob,int tryx,int tryy,int tryz)
        StartFirewall(ob,nominalheight);
     else
        MissileHit(ob,NULL);
-    return false;
+    return FALSE;
     }
 
  //=============================================//
@@ -4963,7 +4962,7 @@ bool MissileTryMove(objtype*ob,int tryx,int tryy,int tryz)
   goto walls;
 
  area = ob->areanumber;
- areatried[area] = true;
+ areatried[area] = TRUE;
 actors:
  for(temp=firstareaactor[area];temp;temp=temp->nextinarea)
       {
@@ -5028,7 +5027,7 @@ actors:
                if (((ocl == p_kesobj) || (ocl == p_godballobj)) && (tcl < pillarobj))
                   continue;
                else
-                  return false;
+                  return FALSE;
                }
             random = GameRandomNumber("empower darkmonk",0);
 #if (SHAREWARE == 0)
@@ -5060,7 +5059,7 @@ actors:
             temp->speed = 5*SPDPATROL;
             NewState(temp,&s_darkmonkreact);
 #endif
-            return false;
+            return FALSE;
             }
 
       else if (tcl < roboguardobj)
@@ -5076,7 +5075,7 @@ actors:
                if (temp->flags & FL_AV)
                   {pstate->protectiontime = 1;
                   if (temp==player)
-                     GM_UpdateBonus (pstate->protectiontime, false);
+                     GM_UpdateBonus (pstate->protectiontime, FALSE);
                   continue;
                   }
 
@@ -5110,7 +5109,7 @@ actors:
 #endif
          }
 
-      return false;
+      return FALSE;
 
       }
 
@@ -5119,9 +5118,9 @@ actors:
       for (x=tilexlow;x<=tilexhigh;x++)
          {
          area = AREANUMBER(x,y);
-         if (ValidAreanumber(area) && (areatried[area]==false))
+         if (ValidAreanumber(area) && (areatried[area]==FALSE))
             {
-            areatried[area] = true;
+            areatried[area] = TRUE;
             goto actors;
             }
          }
@@ -5154,7 +5153,7 @@ walls:
 
          DetonateMissile(ob,tempwall);
          //MissileHit(ob,tempwall);
-         //return false;
+         //return FALSE;
 			}
 
 
@@ -5202,7 +5201,7 @@ walls:
            if (!(ob->flags & FL_ISFIRE))
               {
               StartFirewall(ob,tempstat->z - MINSTATZDIFF);
-              return false;
+              return FALSE;
               }
            }
 
@@ -5215,7 +5214,7 @@ walls:
            DetonateMissile(ob,tempstat);
            }
         //MissileHit(ob,tempstat);
-        //return false;
+        //return FALSE;
         }
 	 }
 
@@ -5261,7 +5260,7 @@ walls:
       else
          DetonateMissile(ob,NULL);
       //MissileHit(ob,tempwall);
-      //return false;
+      //return FALSE;
       }
 
 
@@ -5276,12 +5275,12 @@ walls:
      if (tempdoor->position>=0x8000)
 			 {
 			 if (ob->z>maxheight-64)
-				 return true;
+				 return TRUE;
 			 }
      DetonateMissile(ob,tempdoor);
      }
 
-  return true;
+  return TRUE;
 
 
 }
@@ -5609,7 +5608,7 @@ void RespawnEluder(void)
 void SpawnCollector(int tilex, int tiley)
 {
  #if (SHAREWARE == 0)
- if ( dopefish==true )
+ if ( dopefish==TRUE )
     {
     SpawnNewObj(tilex,tiley,&s_scottwander1,collectorobj);
     }
@@ -5652,7 +5651,7 @@ void SelectDoorDir(objtype*ob)
 	  ob->temp2 = 0;
 	  ob->temp1 = 20;
     #if (SHAREWARE == 0)
-    if ( dopefish==true )
+    if ( dopefish==TRUE )
        {
        NewState(ob,&s_scottwander1);
        }
@@ -5713,7 +5712,7 @@ void SelectDoorDir(objtype*ob)
 }
 
 
-bool EluderCaught(objtype*ob)
+bool8_t EluderCaught(objtype*ob)
 {
  objtype *temp;
  int dx,dy,dz;
@@ -5748,12 +5747,12 @@ bool EluderCaught(objtype*ob)
 		  SD_PlaySoundRTP(SD_GETBONUSSND,ob->x,ob->y);
 		  MakeActive(new);
 		  NewState(ob,&s_megaremove);
-		  return true;
+		  return TRUE;
 		 }
 
 	}
 
- return false;
+ return FALSE;
 }
 
 
@@ -5777,7 +5776,7 @@ void T_CollectorFindDoor(objtype*ob)
  else
     {
     #if (SHAREWARE == 0)
-    if ( dopefish==true )
+    if ( dopefish==TRUE )
        {
        NewState(ob,&s_scottwander1);
        }
@@ -5808,7 +5807,7 @@ void T_CollectorFindDoor(objtype*ob)
 		  ob->temp2 = 0;
 		  ob->temp1 = 35;
         #if (SHAREWARE == 0)
-        if ( dopefish==true )
+        if ( dopefish==TRUE )
            {
            NewState(ob,&s_scottwander1);
            }
@@ -5903,7 +5902,7 @@ void T_CollectorWander(objtype*ob)
    else
       {
       #if (SHAREWARE == 0)
-      if ( dopefish==true )
+      if ( dopefish==TRUE )
          {
          NewState(ob,&s_scottwanderdoor1);
          }
@@ -5964,29 +5963,29 @@ void T_CollectorWander(objtype*ob)
 
 
 
-bool CheckDoor(objtype *ob,doorobj_t * door,int trytilex,int trytiley)
-{bool doorok=false;
+bool8_t CheckDoor(objtype *ob,doorobj_t * door,int trytilex,int trytiley)
+{bool8_t doorok=FALSE;
 
 
  switch(ob->dir)
 	{case north:
 	  if ((ob->tiley == (door->tiley + 1)) && (trytilex == ob->tilex))
-		 doorok = true;
+		 doorok = TRUE;
 	  break;
 
 	 case east:
 	  if ((ob->tilex == (door->tilex - 1)) &&	(trytiley == ob->tiley))
-		doorok = true;
+		doorok = TRUE;
 	  break;
 
 	 case south:
 	  if ((ob->tiley == (door->tiley - 1)) &&	(trytilex == ob->tilex))
-		doorok = true;
+		doorok = TRUE;
 	  break;
 
 	 case west:
 	  if ((ob->tilex == (door->tilex + 1)) &&	(trytiley == ob->tiley))
-		doorok = true;
+		doorok = TRUE;
 	  break;
 	default:
 	    ;
@@ -5996,13 +5995,13 @@ bool CheckDoor(objtype *ob,doorobj_t * door,int trytilex,int trytiley)
   if (doorok)
    {SetTilePosition(ob,ob->tilex,ob->tiley);
     SetVisiblePosition(ob,ob->x,ob->y);
-	 return true;
+	 return TRUE;
 	}
-  return false;
+  return FALSE;
 }
 
 
-bool WallCheck(int tryx,int tryy)
+bool8_t WallCheck(int tryx,int tryy)
 {int tilexlow,tilexhigh,tileylow,tileyhigh,y,x;
 
  tilexlow = (int)((tryx -PLAYERSIZE) >>TILESHIFT);
@@ -6017,15 +6016,15 @@ bool WallCheck(int tryx,int tryy)
 	{//tempwall = (wall_t*)actorat[x][y];
 	 //if (tempwall && M_ISWALL(tempwall))
 	 if (tilemap[x][y])
-	  return false;
+	  return FALSE;
 	}
 
- return true;
+ return TRUE;
 
 }
 
 
-bool QuickSpaceCheck(objtype*ob,int tryx, int tryy)
+bool8_t QuickSpaceCheck(objtype*ob,int tryx, int tryy)
 {int xlow,xhigh,ylow,yhigh,x,y,dx,dy;
  objtype* temp;
 
@@ -6043,7 +6042,7 @@ bool QuickSpaceCheck(objtype*ob,int tryx, int tryy)
 		  (sprites[x][y] && (sprites[x][y]->flags & FL_BLOCK))
 
 			|| tilemap[x][y])
-		return false;
+		return FALSE;
 	}
 
  for(temp=firstareaactor[ob->areanumber];temp;temp=temp->nextinarea)
@@ -6061,10 +6060,10 @@ bool QuickSpaceCheck(objtype*ob,int tryx, int tryy)
 		continue;
 	 if (temp->whatever == ob->whatever)
 		continue;
-	 return false;
+	 return FALSE;
 	}
 
- return true;
+ return TRUE;
 
 
 }
@@ -6208,7 +6207,7 @@ movement_status CheckOtherActors(objtype*ob,int tryx,int tryy,int tryz)
    int areatried[NUMAREAS]={0};
    int tilexlow,tilexhigh,tileylow,tileyhigh;
    int radius,actrad,oldrad;
-   bool bouncer,pusher,thinkingactor,zstoppable,ACTORSTOP;
+   bool8_t bouncer,pusher,thinkingactor,zstoppable,ACTORSTOP;
    int dzt,dztp1,checkz;
    int x,y,dx,dy;
    int ocl,tcl;
@@ -6253,7 +6252,7 @@ movement_status CheckOtherActors(objtype*ob,int tryx,int tryy,int tryz)
 
    area = ob->areanumber;
    areatried[area] = 1;
-   ACTORSTOP = false;
+   ACTORSTOP = FALSE;
    oldrad = actrad;
 
  actors:
@@ -6401,7 +6400,7 @@ movement_status CheckOtherActors(objtype*ob,int tryx,int tryy,int tryz)
          CheckProximitySpecials(ob,listrover);
 
 
-         ACTORSTOP = true;
+         ACTORSTOP = TRUE;
          if (!ob->momentumz)
             return NO_MOVEMENT;
 
@@ -6421,7 +6420,7 @@ movement_status CheckOtherActors(objtype*ob,int tryx,int tryy,int tryz)
 
 
 
-   if (ACTORSTOP==true)
+   if (ACTORSTOP==TRUE)
      return Z_MOVEMENT_ONLY;
 
    return OK_TO_CONTINUE;
@@ -6433,7 +6432,7 @@ movement_status CheckRegularWalls(objtype *ob,int tryx,int tryy,int tryz)
    {
    int tilexlow,tilexhigh,tileylow,tileyhigh,x,y,radius;
    classtype ocl;
-   bool ISPLAYER=false;
+   bool8_t ISPLAYER=FALSE;
 
    ocl = ob->obclass;
 
@@ -6456,7 +6455,7 @@ movement_status CheckRegularWalls(objtype *ob,int tryx,int tryy,int tryz)
    else
          {
          radius = PLAYERSIZE;
-         ISPLAYER = true;
+         ISPLAYER = TRUE;
          }
 
 
@@ -6474,7 +6473,7 @@ movement_status CheckRegularWalls(objtype *ob,int tryx,int tryy,int tryz)
          tempwall = (wall_t*)actorat[x][y];
          if (tempwall)
             {
-            if (tempwall->which==WALL)// && IsWindow(x,y)==false)
+            if (tempwall->which==WALL)// && IsWindow(x,y)==FALSE)
                {
                if (ocl == boulderobj)
                   {
@@ -6493,7 +6492,7 @@ movement_status CheckRegularWalls(objtype *ob,int tryx,int tryy,int tryz)
                   SD_PlaySoundRTP(SD_PLAYERBURNEDSND,ob->x,ob->y);
                   }
 
-               //return false;
+               //return FALSE;
                if ((ocl == inertobj) &&
                    (ob->dirchoosetime == GIBVALUE) &&
 
@@ -6546,9 +6545,9 @@ movement_status CheckStaticObjects(objtype *ob,int tryx,int tryy,int tryz)
   int dx,dy,dzt,dztp1,x,y;
   statobj_t*tempstat;
   int sprrad,oldsrad,sprtrad;
-  bool specialstat=false,widestat=false,zstoppable;
+  bool8_t specialstat=FALSE,widestat=FALSE,zstoppable;
   int sprxlow,sprxhigh,sprylow,spryhigh;
-  bool SPRSTOP;
+  bool8_t SPRSTOP;
   classtype ocl;
 
   ocl = ob->obclass;
@@ -6578,7 +6577,7 @@ movement_status CheckStaticObjects(objtype *ob,int tryx,int tryy,int tryz)
   if (spryhigh > (MAPSIZE-1))
      spryhigh = MAPSIZE-1;
 
-  SPRSTOP = false;
+  SPRSTOP = FALSE;
   sprrad = 0x4500;
   zstoppable = (!(ob->flags & FL_DYING));
   oldsrad = sprrad;
@@ -6600,14 +6599,14 @@ movement_status CheckStaticObjects(objtype *ob,int tryx,int tryy,int tryz)
                         (tempstat->itemnumber == stat_disk)
                        );
 
-            if ((tempstat->flags & FL_BLOCK) || (specialstat==true))
+            if ((tempstat->flags & FL_BLOCK) || (specialstat==TRUE))
                {
-               if ((specialstat==true) && (ocl !=playerobj) &&
+               if ((specialstat==TRUE) && (ocl !=playerobj) &&
                    (ob->state->think != T_Collide)
                   )
                   sprrad += 0x5000;
 
-               if (widestat==true)
+               if (widestat==TRUE)
                   sprrad += 0x3b00;
 
 
@@ -6646,7 +6645,7 @@ movement_status CheckStaticObjects(objtype *ob,int tryx,int tryy,int tryz)
                   }
 #endif
 
-               if (specialstat==true)
+               if (specialstat==TRUE)
                   continue;
 
 
@@ -6680,14 +6679,14 @@ movement_status CheckStaticObjects(objtype *ob,int tryx,int tryy,int tryz)
 #endif
                   }
                //ob->momentumz=0;
-               //return false;
-               SPRSTOP=true;
+               //return FALSE;
+               SPRSTOP=TRUE;
                if (!ob->momentumz)
                   return NO_MOVEMENT;
                }
             }
          }
-  if (SPRSTOP == true)
+  if (SPRSTOP == TRUE)
      return Z_MOVEMENT_ONLY;
 
   return OK_TO_CONTINUE;
@@ -6724,7 +6723,7 @@ movement_status CheckStaticObjects(objtype *ob,int tryx,int tryy,int tryz)
    int centerx = ((trytilex<<16) + 0x8000);         \
    int centery = ((trytiley<<16) + 0x8000);         \
                                                     \
-   if (blocker->vertical==false)                    \
+   if (blocker->vertical==FALSE)                    \
       {                                             \
       int dyt = centery - ob->y;                    \
       int dytp1 = centery - tryy;                   \
@@ -6752,13 +6751,13 @@ movement_status CheckStaticObjects(objtype *ob,int tryx,int tryy,int tryz)
 movement_status CheckMaskedWalls(objtype *ob,int tryx,int tryy,int tryz)
   {
   int trytilex,trytiley;
-  bool MWALLSTOP;
+  bool8_t MWALLSTOP;
   int ISPLAYER = (ob->obclass == playerobj);
   classtype ocl = ob->obclass;
 
   trytilex = (tryx >> TILESHIFT);
   trytiley = (tryy >> TILESHIFT);
-  MWALLSTOP = false;
+  MWALLSTOP = FALSE;
  //for (y=tileylow;y<=tileyhigh;y++)
  // for (x=tilexlow;x<=tilexhigh;x++)
 
@@ -6780,14 +6779,14 @@ movement_status CheckMaskedWalls(objtype *ob,int tryx,int tryy,int tryz)
 					  {
 					  if (ob->z < nominalheight)
                     {
-                    MWALLSTOP = true;
+                    MWALLSTOP = TRUE;
                     if (!ob->momentumz)
                        return NO_MOVEMENT;
 						  }
 					  }
 				  else
                  {
-                 MWALLSTOP = true;
+                 MWALLSTOP = TRUE;
                  if (!ob->momentumz)
                     return NO_MOVEMENT;
 					  }
@@ -6799,13 +6798,13 @@ movement_status CheckMaskedWalls(objtype *ob,int tryx,int tryy,int tryz)
 					if (mw->flags & MW_ABOVEPASSABLE)
 						{if (mw->flags & MW_MIDDLEPASSABLE) // ==> not bottom
                       {if (ob->z > LOWFALLCLIPZ+MAXSTEPHEIGHT)
-                         MWALLSTOP = true;
+                         MWALLSTOP = TRUE;
                        else if (tryz >= LOWFALLCLIPZ)
                          ClipHeight(ob,LOWFALLCLIPZ);
 							 }
 						 else if (mw->flags & MW_BOTTOMPASSABLE)
                       {if ((ob->z > HIGHFALLCLIPZ+MAXSTEPHEIGHT) && (ob->z < LOWRISECLIPZ))
-                         MWALLSTOP = true;
+                         MWALLSTOP = TRUE;
                        else if (ob->z <= HIGHFALLCLIPZ+MAXSTEPHEIGHT)
                          {if (tryz >= HIGHFALLCLIPZ)
                             ClipHeight(ob,HIGHFALLCLIPZ);
@@ -6816,7 +6815,7 @@ movement_status CheckMaskedWalls(objtype *ob,int tryx,int tryy,int tryz)
 							 }
 						 else // ==> above only
                       {if (ob->z > HIGHFALLCLIPZ+MAXSTEPHEIGHT)
-                         MWALLSTOP = true;
+                         MWALLSTOP = TRUE;
                        else if (tryz >= HIGHFALLCLIPZ)
                          ClipHeight(ob,HIGHFALLCLIPZ);
                       }
@@ -6829,12 +6828,12 @@ movement_status CheckMaskedWalls(objtype *ob,int tryx,int tryy,int tryz)
 									ob->momentumz = 0;
 								}
                       else if (tryz <= HIGHRISECLIPZ)
-                        MWALLSTOP = true;
+                        MWALLSTOP = TRUE;
 							}
 
 						 else  //==> middle only
                      {if (ob->z > LOWFALLCLIPZ+MAXSTEPHEIGHT)
-                         MWALLSTOP = true;
+                         MWALLSTOP = TRUE;
                       else if (tryz >= LOWFALLCLIPZ)
                          ClipHeight(ob,LOWFALLCLIPZ)
                       else
@@ -6843,14 +6842,14 @@ movement_status CheckMaskedWalls(objtype *ob,int tryx,int tryy,int tryz)
 									  ob->momentumz = 0;
 								  }
                          else if (tryz <= HIGHRISECLIPZ)
-                           MWALLSTOP = true;
+                           MWALLSTOP = TRUE;
 								}
 							}
 
 						}
 					else // ==> bottompassable only
                   {if (ob->z < LOWRISECLIPZ)
-                         MWALLSTOP = true;
+                         MWALLSTOP = TRUE;
                    else if (tryz < LOWRISECLIPZ)
 							 ob->momentumz = 0;
 						}
@@ -6879,21 +6878,21 @@ movement_status CheckMaskedWalls(objtype *ob,int tryx,int tryy,int tryz)
                  }
               else
                  {
-                 MWALLSTOP = true;
+                 MWALLSTOP = TRUE;
                  if (!ob->momentumz)
                     return NO_MOVEMENT;
                  }
               }
           else
               {
-              MWALLSTOP = true;
+              MWALLSTOP = TRUE;
               if (!ob->momentumz)
                  return NO_MOVEMENT;
               }
 			 }
        }
 
-  if (MWALLSTOP == true)
+  if (MWALLSTOP == TRUE)
     return Z_MOVEMENT_ONLY;
 
   return OK_TO_CONTINUE;
@@ -6976,7 +6975,7 @@ movement_status CheckDoors(objtype *ob,int tryx,int tryy,int tryz)
 
 
 
-bool ActorTryMove(objtype*ob,int tryx, int tryy, int tryz)
+bool8_t ActorTryMove(objtype*ob,int tryx, int tryy, int tryz)
    {
 
    movement_status (*reduced_movement_check[3])(objtype*,int,int,int)=
@@ -7000,7 +6999,7 @@ bool ActorTryMove(objtype*ob,int tryx, int tryy, int tryz)
    movement_status movement_check_result;
    int             numcheckfunctions;
    int             i;
-   bool         xyblocked;
+   bool8_t         xyblocked;
 
 
 
@@ -7009,13 +7008,13 @@ bool ActorTryMove(objtype*ob,int tryx, int tryy, int tryz)
       {
       ob->z = -28;
       ob->momentumz = 0;
-      return false;
+      return FALSE;
       }
 
    if ((!InMapBounds(tryx>>16,tryy>>16)) ||
        ((ob->obclass != playerobj) && (IsWindow((tryx>>16),(tryy>>16))))
       )
-      return false;
+      return FALSE;
 
    switch(ob->obclass)
       {
@@ -7033,21 +7032,21 @@ bool ActorTryMove(objtype*ob,int tryx, int tryy, int tryz)
       }
 
 
-   for(xyblocked=false,i=0;i<numcheckfunctions;i++)
+   for(xyblocked=FALSE,i=0;i<numcheckfunctions;i++)
       {
       movement_check_result = movement_function[i](ob,tryx,tryy,tryz);
       if (movement_check_result == Z_MOVEMENT_ONLY)
-         xyblocked = true;
+         xyblocked = TRUE;
 
       else if (movement_check_result == NO_MOVEMENT)
-         return false;
+         return FALSE;
       }
 
-   if (xyblocked == true)
-      return false;
+   if (xyblocked == TRUE)
+      return FALSE;
 
 
-   return true;
+   return TRUE;
 
    }
 
@@ -7059,7 +7058,7 @@ void PushWallMove(int num)
  int             dx,dy;
  int             actrad;
  objtype         *temp;
- bool         pushem;
+ bool8_t         pushem;
  int             tryx,tryy,areanumber,trytilex,trytiley;
 
 
@@ -7107,7 +7106,7 @@ void PushWallMove(int num)
 
 		 }
 
-	 pushem=false;
+	 pushem=FALSE;
 	 switch (pwall->dir)
 			{
 
@@ -7115,43 +7114,43 @@ void PushWallMove(int num)
 
 			case north:
             if ((temp->y<pwall->y) && (dx<PWALLTOL))
-					pushem=true;
+					pushem=TRUE;
 				break;
 			case east:
             if ((temp->x>pwall->x) && (dy<PWALLTOL))
-					pushem=true;
+					pushem=TRUE;
 				break;
 			case northeast:
             if ((temp->y<pwall->y) && (dx<PWALLTOL))
-					pushem=true;
+					pushem=TRUE;
             else if ((temp->x>pwall->x) && (dy<PWALLTOL))
-					pushem=true;
+					pushem=TRUE;
 				break;
 			case northwest:
             if ((temp->y<pwall->y) && (dx<PWALLTOL))
-					pushem=true;
+					pushem=TRUE;
             else if ((temp->x<pwall->x) && (dy<PWALLTOL))
-					pushem=true;
+					pushem=TRUE;
 				break;
 			case south:
             if ((temp->y>pwall->y) && (dx<PWALLTOL))
-					pushem=true;
+					pushem=TRUE;
 				break;
 			case west:
             if ((temp->x<pwall->x) && (dy<PWALLTOL))
-					pushem=true;
+					pushem=TRUE;
 				break;
 			case southeast:
             if ((temp->y>pwall->y) && (dx<PWALLTOL))
-					pushem=true;
+					pushem=TRUE;
             else if ((temp->x>pwall->x) && (dy<PWALLTOL))
-					pushem=true;
+					pushem=TRUE;
 				break;
 			case southwest:
             if ((temp->y>pwall->y) && (dx<PWALLTOL))
-					pushem=true;
+					pushem=TRUE;
             else if ((temp->x<pwall->x) && (dy<PWALLTOL))
-					pushem=true;
+					pushem=TRUE;
 				break;
 			default:
             //Error ("Pushwall #%d has an illegal direction %d \n",num,pwall->dir);
@@ -7759,7 +7758,7 @@ void T_EsauWait(objtype*ob)
    int dist;
 
    dist = FindDistance(ob->tilex-PLAYER[0]->tilex,ob->tiley-PLAYER[0]->tiley);
-   MISCVARS->ESAU_SHOOTING = false;
+   MISCVARS->ESAU_SHOOTING = FALSE;
 
    if (ob->dirchoosetime)
       ob->dirchoosetime --;
@@ -7813,8 +7812,8 @@ void T_EsauRise(objtype*ob)
          MISCVARS->EPOP[ob->temp3].x = MISCVARS->EPOP[ob->temp3].y = 0;
 
       ob->dirchoosetime= (GameRandomNumber("T_EsauRise",0) % 35) + 17;
-      MISCVARS->ESAU_HIDING = false;
-      MISCVARS->ESAU_SHOOTING = true;
+      MISCVARS->ESAU_HIDING = FALSE;
+      MISCVARS->ESAU_SHOOTING = TRUE;
       ob->flags |= FL_SHOOTABLE;
       }
    }
@@ -7832,8 +7831,8 @@ void T_EsauChase(objtype*ob)
       {
       if (MISCVARS->DSTATE == ESAU_USING_HOLES)
          {
-         MISCVARS->ESAU_HIDING = true;
-         MISCVARS->ESAU_SHOOTING = false;
+         MISCVARS->ESAU_HIDING = TRUE;
+         MISCVARS->ESAU_SHOOTING = FALSE;
          SD_PlaySoundRTP(SD_DARIANHIDESND,ob->x,ob->y);
          NewState(ob,&s_dariansink1);
          ob->flags &= ~FL_SHOOTABLE;
@@ -8339,7 +8338,7 @@ void T_HeinrichChase(objtype*ob)
 {
  int   dx,dy,dist,chance,perpangle;
 // statetype *temp;
- bool doorok;
+ bool8_t doorok;
 
  CheckRunover(ob);
 
@@ -9196,7 +9195,7 @@ void T_NME_HeadShoot(objtype*ob)
 }
 
 
-bool NMEspincheck(objtype*ob)
+bool8_t NMEspincheck(objtype*ob)
    {
    int dx,dy,dz;
 
@@ -9212,9 +9211,9 @@ bool NMEspincheck(objtype*ob)
       else
          NewState((objtype*)(ob->whatever),&s_NMEhead2);
       ob->dirchoosetime = 1;
-      return true;
+      return TRUE;
       }
-   return false;
+   return FALSE;
    }
 
 
@@ -10441,7 +10440,7 @@ void DamagePlayerActor(objtype *ob, int damage)
       {
       damagecount += damage;
       if ( SHOW_BOTTOM_STATUS_BAR() )
-         DrawBarHealth (false);
+         DrawBarHealth (FALSE);
       }
 
    if (pstate->health<=0)
@@ -10498,7 +10497,7 @@ void DamageNonPlayerActor(objtype *ob,int damage)
          NewState((objtype*)(ob->whatever),&s_NMEhead2);
       }
 #endif
-   MISCVARS->madenoise = true;
+   MISCVARS->madenoise = TRUE;
    }
 
 
@@ -10637,11 +10636,11 @@ void DamageStaticObject(statobj_t*tempstat,int damage)
                SD_PlaySoundRTP(SD_ACTORSQUISHSND,tempstat->x,tempstat->y);
                SpawnGroundExplosion(tempstat->x,tempstat->y,tempstat->z);
                //MISCVARS->gibgravity = GRAVITY/2;
-               MISCVARS->fulllightgibs = true;
+               MISCVARS->fulllightgibs = TRUE;
                SetGibSpeed(0x4000);
                SpawnSlowParticles(GUTS,30,tempstat->x, tempstat->y,tempstat->z);
                ResetGibSpeed();
-               MISCVARS->fulllightgibs = false;
+               MISCVARS->fulllightgibs = FALSE;
                //MISCVARS->gibgravity = -1;
                RemoveStatic(tempstat);
                break;
@@ -10715,7 +10714,7 @@ void DamageThing (void *thing, int damage)
          {
          tempstat = (statobj_t*)thing;
 
-         MISCVARS->madenoise = true;
+         MISCVARS->madenoise = TRUE;
          if (!(tempstat->flags & FL_SHOOTABLE))
             return;
          DamageStaticObject(tempstat,damage);
@@ -10874,7 +10873,7 @@ void T_MoveColumn(objtype* ob)
 
 
 
-bool NextToDoor(objtype*ob)
+bool8_t NextToDoor(objtype*ob)
 {
   int tilex,tiley,centerx,centery,dx,dy;
 
@@ -10886,17 +10885,17 @@ bool NextToDoor(objtype*ob)
 	{centery = (tiley << TILESHIFT) + HALFGLOBAL1;
 	 dy = abs(ob->y - centery);
 	 if (dy < 0x2000)
-		return true;
+		return TRUE;
 	}
 
   if (M_ISDOOR(tilex,tiley+1) || M_ISDOOR(tilex,tiley-1))
 	{centerx = (tilex << TILESHIFT) + HALFGLOBAL1;
 	 dx = abs(ob->x - centerx);
 	 if (dx < 0x2000)
-		return true;
+		return TRUE;
 	}
 
-  return false;
+  return FALSE;
 }
 
 
@@ -11036,7 +11035,7 @@ void T_Chase (objtype *ob)
 	int   dx,dy,dz,dist,chance;
 	classtype ocl;
 	statetype *temp;
-	bool doorok;
+	bool8_t doorok;
 
 	ocl = ob->obclass;
 
@@ -11100,7 +11099,7 @@ void T_Chase (objtype *ob)
 			  if ((ocl == overpatrolobj) && (!Near(ob,PLAYER[0],3)) &&
 					(!PLAYERSTATE[0].NETCAPTURED) && (!MISCVARS->NET_IN_FLIGHT))
 				  {NewState(ob,&s_opbolo1);
-					MISCVARS->NET_IN_FLIGHT = true;
+					MISCVARS->NET_IN_FLIGHT = TRUE;
 					return;
 				  }
 #endif
@@ -11171,7 +11170,7 @@ void SpawnMissile(objtype* shooter,classtype nobclass,int nspeed,int nangle,stat
    if (nobclass != inertobj)
       {
       MakeLastInArea(new);
-      if (MissileSound == true)
+      if (MissileSound == TRUE)
          new->soundhandle = SD_PlaySoundRTP(BAS[new->obclass].operate,new->x,new->y);
       }
 
@@ -11635,7 +11634,7 @@ void A_Shoot (objtype *ob)
 	ob->angle=savedangle;
 	sound = BAS[ob->obclass].fire;
 	SD_PlaySoundRTP(sound,ob->x,ob->y);
-	MISCVARS->madenoise = true;
+	MISCVARS->madenoise = TRUE;
 	if ((!(ob->flags& FL_HASAUTO)) || (!ob->temp3))
 	 ob->target = NULL;
   }
@@ -11776,7 +11775,7 @@ void  A_MissileWeapon(objtype *ob)
 	SpawnMissile(ob,nobclass,nspeed,AngleBetween(ob,PLAYER[0]),nstate,noffset);
 	new->z += zoffset;
 	SD_PlaySoundRTP(sound,ob->x,ob->y);
-	MISCVARS->madenoise = true;
+	MISCVARS->madenoise = TRUE;
 	if (ob->obclass == triadenforcerobj)
 	  {//new->flags |= (FL_SHOOTABLE);
 		new->temp1 = 0x50000;
@@ -12289,13 +12288,13 @@ void SelectPathDir (objtype *ob)
 =
 = If the sight is ok, check alertness and angle to see if they notice
 =
-= returns true if the player has been spoted
+= returns TRUE if the player has been spoted
 =
 ================
 */
 
 
-bool CheckSight (objtype *ob,void *atwhat)
+bool8_t CheckSight (objtype *ob,void *atwhat)
 {
 	long     deltax,deltay;
 	objtype * what;
@@ -12303,7 +12302,7 @@ bool CheckSight (objtype *ob,void *atwhat)
 // don't bother tracing a line if the area isn't connected to the player's
 //
 	if (!areabyplayer[ob->areanumber])
-		return false;
+		return FALSE;
 
 //
 // if the player is real close, sight is automatic
@@ -12314,7 +12313,7 @@ bool CheckSight (objtype *ob,void *atwhat)
 
 	if ((deltax > -MINSIGHT) && (deltax < MINSIGHT)	&&
 		 (deltay > -MINSIGHT) && (deltay < MINSIGHT))
-		return true;
+		return TRUE;
 
 //
 // see if they are looking in the right direction
@@ -12323,22 +12322,22 @@ bool CheckSight (objtype *ob,void *atwhat)
 	{
 	case north:
 		if (deltay > 0)
-			return false;
+			return FALSE;
 		break;
 
 	case east:
 		if (deltax < 0)
-			return false;
+			return FALSE;
 		break;
 
 	case south:
 		if (deltay < 0)
-			return false;
+			return FALSE;
 		break;
 
 	case west:
 		if (deltax > 0)
-			return false;
+			return FALSE;
 		break;
 	default:
 	    ;
@@ -12458,25 +12457,25 @@ void FirstSighting (objtype *ob)
 =
 = Called by actors that ARE NOT chasing the player.  If the player
 = is detected (by sight, noise, or proximity), the actor is put into
-= it's combat frame and true is returned.
+= it's combat frame and TRUE is returned.
 =
 = Incorporates a random reaction delay
 =
 ===============
 */
 
-bool SightPlayer (objtype *ob)
+bool8_t SightPlayer (objtype *ob)
    {
 	//if (ob->flags & FL_ATTACKMODE)
 	  //Error ("An instance of %s in ATTACKMODE called SightPlayer!",debugstr[ob->obclass]);
 
 	if (!areabyplayer[ob->areanumber])
-      return false;
+      return FALSE;
 
    if (ob->obclass == b_robobossobj)
       {
       if (!(CheckSight(ob,player) || Near(ob,player,6)))
-         return false;
+         return FALSE;
 
       }
 
@@ -12486,7 +12485,7 @@ bool SightPlayer (objtype *ob)
       if (!CheckSight (ob,PLAYER[0]))
          {
          //SoftError("\n failed from ambush in SightPlayer");
-         return false;
+         return FALSE;
          }
       ob->flags &= ~FL_AMBUSH;
       }
@@ -12495,7 +12494,7 @@ bool SightPlayer (objtype *ob)
       if (ob->temp3 == SNEAKY)
          {
          if (!Near(ob,PLAYER[0],2))
-            return false;
+            return FALSE;
          }
       else if (!((MISCVARS->madenoise) ||
                  (CheckSight (ob,player)) ||
@@ -12504,13 +12503,13 @@ bool SightPlayer (objtype *ob)
               )
          {
          //SoftError("\n failed from SightPlayer");
-         return false;
+         return FALSE;
          }
       }
 
 	FirstSighting (ob);
 
-	return true;
+	return TRUE;
    }
 
 
@@ -12519,14 +12518,14 @@ bool SightPlayer (objtype *ob)
 =
 = CheckLine
 =
-= Returns true if a straight line between two obs is unobstructed
+= Returns TRUE if a straight line between two obs is unobstructed
 =
 =====================
 */
 
 
 
-bool CheckLine (void *from, void *to, int condition)
+bool8_t CheckLine (void *from, void *to, int condition)
 {
 	objtype   *tempactor,*ob,*orig;
 	statobj_t *checksprite;
@@ -12566,7 +12565,7 @@ bool CheckLine (void *from, void *to, int condition)
 	desttiley=desty>>16;
 
 	if ((desttilex == orig->tilex) && (desttiley == orig->tiley))
-	  return true;
+	  return TRUE;
 
 
 	dx=destx-orig->x;
@@ -12580,7 +12579,7 @@ bool CheckLine (void *from, void *to, int condition)
 		#if (0)
 		 Debug("\nfailed from yzangle");
 		#endif
-		return false;
+		return FALSE;
 	  }
 
 	//angle = atan2_appx(dx,dy);
@@ -12644,7 +12643,7 @@ bool CheckLine (void *from, void *to, int condition)
 			Error("out of bounds in check line, grid[0] = %d, grid[1] = %d",grid[0],grid[1]);
         */
 		if ((grid[0]==desttilex) && (grid[1]==desttiley))
-			return true;
+			return TRUE;
 		tempactor = (objtype*)actorat[grid[0]][grid[1]];
 		value = tilemap[grid[0]][grid[1]];
 		checksprite = sprites[grid[0]][grid[1]];
@@ -12665,12 +12664,12 @@ bool CheckLine (void *from, void *to, int condition)
                   if (dptr->vertical)
                      {
                      if (abs(dx) > abs(x-orig->x))
-                        return false;
+                        return FALSE;
                      }
                   else
                      {
                      if (abs(dy) > abs(orig->y-y))
-                        return false;
+                        return FALSE;
                      }
 						}
 					}
@@ -12683,20 +12682,20 @@ bool CheckLine (void *from, void *to, int condition)
                       #if (0)
                       SoftError("\nfailed from shootable mask");
                     #endif
-							 return false;
+							 return FALSE;
 							}
                   else if ( maskobjlist[value&0x3ff]->flags & MW_WEAPONBLOCKING )
 							{
                       #if (0)
                       SoftError("\nfailed from block mask");
                       #endif
-							 return false;
+							 return FALSE;
 							}
 						}
                else if ((condition == MISSILE) &&
                         ( maskobjlist[value&0x3ff]->flags & MW_BLOCKING )
                        )
-                  return false;
+                  return FALSE;
 					}
 				}
 			else
@@ -12708,7 +12707,7 @@ bool CheckLine (void *from, void *to, int condition)
 
             SoftError("\nfailed from normal wall");
              #endif
-            return false;
+            return FALSE;
 				}
 			}
 		if (condition == SHOOT)
@@ -12718,12 +12717,12 @@ bool CheckLine (void *from, void *to, int condition)
 				(tempactor != ob)) //&&
 //   			(InRange(orig,tempactor,
 //             FindDistance(orig->x-tempactor->x,orig->y-tempactor->y) )
-//             ==true) )
+//             ==TRUE) )
 			  {
             #if (0)
              SoftError("\nfailed from actor");
             #endif
-				return false;
+				return FALSE;
 			  }
 			}
 
@@ -12732,13 +12731,13 @@ bool CheckLine (void *from, void *to, int condition)
           (checksprite->itemnumber!=stat_disk) &&
          (InRange(orig,(objtype *)checksprite,
 			 FindDistance(orig->x-checksprite->x,orig->y-checksprite->y) )
-			 ==true) )
+			 ==TRUE) )
 
 			{
           #if (0)
           SoftError("\nfailed from sprite");
           #endif
-			 return false;
+			 return FALSE;
 			}
 
 		if (tempactor && (tempactor->which == PWALL))
@@ -12746,7 +12745,7 @@ bool CheckLine (void *from, void *to, int condition)
         #if (0)
           SoftError("\nfailed from pushwall");
           #endif
-			 return false;
+			 return FALSE;
 			}
 		index=(cnt>=0);
 		cnt+=incr[index];
@@ -12798,7 +12797,7 @@ void ShootActor(objtype * shooter, objtype * target, int damage, int accuracy, i
          if (pstate->protectiontime < 1)
             pstate->protectiontime = 1;
          if (target==player)
-            GM_UpdateBonus (pstate->protectiontime, false);
+            GM_UpdateBonus (pstate->protectiontime, FALSE);
          return;
          }
 		else if ((target->flags&FL_GODMODE) || (target->flags&FL_DOGMODE) || godmode)
@@ -12814,7 +12813,7 @@ void ShootActor(objtype * shooter, objtype * target, int damage, int accuracy, i
 		return;
 		}
 	else if (tcl == b_darianobj)
-		 MISCVARS->ESAU_SHOOTING = false;
+		 MISCVARS->ESAU_SHOOTING = FALSE;
 	else if ((tcl == strikeguardobj) || (tcl == b_heinrichobj))
 		 target->target = shooter;
 
@@ -13089,7 +13088,7 @@ void RayShoot (objtype * shooter, int damage, int accuracy)
           (abs(checksprite->z-z)<32) &&
           (InRange(shooter,(objtype *)checksprite,
 			 FindDistance(shooter->x-checksprite->x,shooter->y-checksprite->y) )
-          ==true
+          ==TRUE
           )
          )
 			{
@@ -13105,7 +13104,7 @@ void RayShoot (objtype * shooter, int damage, int accuracy)
                 (tempactor->obclass!=diskobj) &&
                 (InRange(shooter,tempactor,
                  FindDistance(shooter->x-tempactor->x,shooter->y-tempactor->y) )
-                 ==true
+                 ==TRUE
                 )
                )
               {ShootActor(shooter, tempactor, damage, accuracy, angle);
@@ -13356,7 +13355,7 @@ static int WindDistance = 1000;
 static int WindCurrentDistance = 1000;
 static int WindHandle = -1;
 static int WindLastTic = -1;
-static int WindPlaying = false;
+static int WindPlaying = FALSE;
 static int WindPitch = 0;
 static int WindDestPitch = 0;
 static int WindPitchRate = 0;
@@ -13404,7 +13403,7 @@ void T_Wind
 
    if ( WindDistance < 255 )
       {
-      WindPlaying = true;
+      WindPlaying = TRUE;
       WindCurrentDistance = WindDistance;
       }
    else
@@ -13434,7 +13433,7 @@ void T_Wind
       else
          {
          SD_StopSound( WindHandle );
-         WindPlaying = false;
+         WindPlaying = FALSE;
          }
       }
    }
@@ -13462,7 +13461,7 @@ void StopWind
    WindCurrentDistance = 1000;
    WindHandle          = -1;
    WindLastTic         = -1;
-   WindPlaying         = false;
+   WindPlaying         = FALSE;
    WindPitch           = 0;
    WindDestPitch       = 0;
    WindPitchRate       = 0;

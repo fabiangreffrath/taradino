@@ -31,7 +31,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_util.h"
 #include "rt_rand.h"
 #include "watcom.h"
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,10 +54,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 static int soundstart;
 static int soundtype;
-int SD_Started=false;
-static bool PositionStored=false;
+int SD_Started=FALSE;
+static bool8_t PositionStored=FALSE;
 static int remotestart;
-static bool SoundsRemapped = false;
+static bool8_t SoundsRemapped = FALSE;
 
 int musicnums[ 11 ] = {
    -1, -1, -1, -1, -1, -1, SoundScape, -1, -1, -1, -1
@@ -132,7 +131,7 @@ int SD_SetupFXCard ( int * numvoices, int * numbits, int * numchannels)
    int status;
    int card;
 
-   if (SD_Started==true)
+   if (SD_Started==TRUE)
       SD_Shutdown();
 
    if ( ( FXMode < 0 ) || ( FXMode >= 11 ) )
@@ -161,7 +160,7 @@ int SD_SetupFXCard ( int * numvoices, int * numbits, int * numchannels)
 //
 //***************************************************************************
 
-int SD_Startup ( bool bombonerror )
+int SD_Startup ( bool8_t bombonerror )
 {
    int status;
    int card;
@@ -169,9 +168,9 @@ int SD_Startup ( bool bombonerror )
    int channels;
    int bits;
    int i;
-   extern bool IS8250;
+   extern bool8_t IS8250;
 
-   if (SD_Started==true)
+   if (SD_Started==TRUE)
       SD_Shutdown();
 
    if ( ( FXMode < 0 ) || ( FXMode >= 11 ) )
@@ -195,7 +194,7 @@ int SD_Startup ( bool bombonerror )
 
    if ( soundtype == fx_digital )
       {
-      if ( SoundsRemapped == false )
+      if ( SoundsRemapped == FALSE )
          {
          for( i = 0; i < SD_LASTSOUND; i++ )
             {
@@ -208,7 +207,7 @@ int SD_Startup ( bool bombonerror )
                   W_GetNameForNum( snd + soundstart ) );
                }
             }
-         SoundsRemapped = true;
+         SoundsRemapped = TRUE;
          }
       soundstart = 0;
       }
@@ -239,7 +238,7 @@ int SD_Startup ( bool bombonerror )
       return (status);
       }
 
-   if (stereoreversed == true)
+   if (stereoreversed == TRUE)
       {
       FX_SetReverseStereo(!FX_GetReverseStereo());
       }
@@ -247,7 +246,7 @@ int SD_Startup ( bool bombonerror )
    FX_SetCallBack( SD_MakeCacheable );
 
 
-   SD_Started=true;
+   SD_Started=TRUE;
 
    FX_SetVolume (FXvolume);
 
@@ -260,24 +259,24 @@ int SD_Startup ( bool bombonerror )
 //
 //***************************************************************************
 
-bool SD_SoundOkay ( int sndnum )
+bool8_t SD_SoundOkay ( int sndnum )
 {
-   if (SD_Started==false)
-      return false;
+   if (SD_Started==FALSE)
+      return FALSE;
 
    if (sndnum>=MAXSOUNDS)
       Error ("Illegal sound number, sound number = %d\n",sndnum);
 
    if (SoundOffset(sndnum)==-1)
-      return false;
+      return FALSE;
 
    if ( ( sounds[ sndnum ].flags & SD_PLAYONCE ) &&
       ( SD_SoundActive( sounds[ sndnum ].prevhandle ) ) )
       {
-      return false;
+      return FALSE;
       }
 
-   return true;
+   return TRUE;
 }
 
 //***************************************************************************
@@ -328,7 +327,7 @@ int SD_Play ( int sndnum )
    int voice;
    int pitch;
 
-   if ( SD_SoundOkay ( sndnum ) == false )
+   if ( SD_SoundOkay ( sndnum ) == FALSE )
       return 0;
 
    pitch = 0;
@@ -355,7 +354,7 @@ int SD_Play3D ( int sndnum, int angle, int distance )
    int voice;
    int pitch;
 
-   if ( SD_SoundOkay ( sndnum ) == false )
+   if ( SD_SoundOkay ( sndnum ) == FALSE )
       return 0;
 
    pitch = 0;
@@ -385,7 +384,7 @@ int SD_PlayPositionedSound ( int sndnum, int px, int py, int x, int y )
    int dy;
    int pitch;
 
-   if ( SD_SoundOkay ( sndnum ) == false )
+   if ( SD_SoundOkay ( sndnum ) == FALSE )
       return 0;
 
    dx=(x-px);
@@ -434,7 +433,7 @@ int SD_PlaySoundRTP ( int sndnum, int x, int y )
    int pitch;
 
 
-   if ( SD_SoundOkay ( sndnum ) == false )
+   if ( SD_SoundOkay ( sndnum ) == FALSE )
       return 0;
 
    dx=(x-player->x);
@@ -477,7 +476,7 @@ int SD_PlayPitchedSound ( int sndnum, int volume, int pitch )
    int voice;
    int distance;
 
-   if ( SD_SoundOkay ( sndnum ) == false )
+   if ( SD_SoundOkay ( sndnum ) == FALSE )
       return 0;
 
    distance = 255 - volume;
@@ -497,7 +496,7 @@ void SD_SetSoundPitch ( int sndnum, int pitch )
 {
    int status;
 
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       return;
 
    if (!FX_SoundActive(sndnum))
@@ -524,7 +523,7 @@ void SD_PanRTP ( int handle, int x, int y )
    int dy;
    int status;
 
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       return;
 
    if (!FX_SoundActive(handle))
@@ -565,7 +564,7 @@ void SD_SetPan ( int handle, int vol, int left, int right )
 {
    int status;
 
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       return;
 
    if (!FX_SoundActive(handle))
@@ -593,7 +592,7 @@ void SD_PanPositionedSound ( int handle, int px, int py, int x, int y )
    int dy;
    int status;
 
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       return;
 
    if (!FX_SoundActive(handle))
@@ -635,7 +634,7 @@ void SD_StopSound ( int handle )
 {
    int status;
 
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       return;
 
    status=FX_StopSound( handle);
@@ -656,7 +655,7 @@ void  SD_StopAllSounds ( void )
 {
    int status;
 
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       return;
 
    status=FX_StopAllSounds();
@@ -675,9 +674,9 @@ void  SD_StopAllSounds ( void )
 
 int SD_SoundActive ( int handle )
 {
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       {
-      return false;
+      return FALSE;
       }
    else
       {
@@ -714,11 +713,11 @@ void SD_WaitSound ( int handle )
 
 void SD_Shutdown (void)
 {
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       return;
 
    FX_Shutdown();
-   SD_Started=false;
+   SD_Started=FALSE;
 }
 
 
@@ -730,7 +729,7 @@ void SD_Shutdown (void)
 
 void SD_PreCacheSound ( int num )
 {
-   if ( SD_SoundOkay ( num ) == false )
+   if ( SD_SoundOkay ( num ) == FALSE )
       return;
 
    PreCacheLump(SoundNumber(num),PU_CACHESOUNDS/*+sounds[num].priority*/,cache_other);
@@ -746,7 +745,7 @@ void SD_PreCacheSoundGroup ( int lo, int hi )
 {
    int i;
 
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       return;
 
    for (i=lo;i<=hi;i++)
@@ -817,7 +816,7 @@ static song_t rottsongs[MAXSONGS] = {
 #endif
 
 static uint8_t * currentsong;
-static int MU_Started=false;
+static int MU_Started=FALSE;
 static int lastsongnumber=-1;
 int storedposition=0;
 
@@ -833,7 +832,7 @@ void MU_PlayJukeBoxSong
    )
 
    {
-   if ( ( MusicMode > 0 ) && ( MU_Started == true ) )
+   if ( ( MusicMode > 0 ) && ( MU_Started == TRUE ) )
       {
       SetMenuHeader( rottsongs[ which ].songname );
       MU_PlaySong( which );
@@ -853,7 +852,7 @@ void MU_JukeBoxRedraw
    )
 
    {
-   if ( ( MusicMode > 0 ) && ( MU_Started == true ) )
+   if ( ( MusicMode > 0 ) && ( MU_Started == TRUE ) )
       {
       SetMenuHeader( rottsongs[ lastsongnumber ].songname );
       }
@@ -881,7 +880,7 @@ void MU_JukeBoxMenu
       }
 
    HandleMultiPageCustomMenu( SongNames, MAXSONGS, lastsongnumber,
-      "Jukebox", MU_PlayJukeBoxSong, MU_JukeBoxRedraw, false );
+      "Jukebox", MU_PlayJukeBoxSong, MU_JukeBoxRedraw, FALSE );
 
    if ( rottsongs[ lastsongnumber ].loopflag == loop_no )
       {
@@ -894,7 +893,7 @@ void MU_JukeBoxMenu
 // MusicStarted - see if the music is started
 //
 //***************************************************************************
-bool MusicStarted( void )
+bool8_t MusicStarted( void )
 {
    return MU_Started;
 }
@@ -905,12 +904,12 @@ bool MusicStarted( void )
 //
 //***************************************************************************
 
-int MU_Startup ( bool bombonerror )
+int MU_Startup ( bool8_t bombonerror )
 {
    int status;
    int card;
 
-   if (MU_Started==true)
+   if (MU_Started==TRUE)
       {
       MU_StopSong();
       MU_Shutdown();
@@ -939,7 +938,7 @@ int MU_Startup ( bool bombonerror )
 
    currentsong=0;
 
-   MU_Started=true;
+   MU_Started=TRUE;
 
    MU_SetVolume (MUvolume);
 
@@ -954,10 +953,10 @@ int MU_Startup ( bool bombonerror )
 
 void MU_Shutdown (void)
 {
-   if (MU_Started==false)
+   if (MU_Started==FALSE)
       return;
    MUSIC_Shutdown();
-   MU_Started=false;
+   MU_Started=FALSE;
 }
 
 //***************************************************************************
@@ -990,7 +989,7 @@ void MU_PlaySong ( int num )
    int lump;
    int size;
    
-   if (MU_Started==false)
+   if (MU_Started==FALSE)
       return;
 
    if (num<0)
@@ -1024,7 +1023,7 @@ void MU_PlaySong ( int num )
 
 void MU_StopSong ( void )
 {
-   if (MU_Started==false)
+   if (MU_Started==FALSE)
       return;
 
    MUSIC_StopSong ();
@@ -1057,7 +1056,7 @@ void MU_FadeToSong ( int num, int time )
 {
    int t;
 
-   if (MU_Started==false)
+   if (MU_Started==FALSE)
       return;
 
    MU_FadeOut(time>>1);
@@ -1079,7 +1078,7 @@ void MU_FadeToSong ( int num, int time )
 
 void MU_FadeIn ( int num, int time )
 {
-   if (MU_Started==false)
+   if (MU_Started==FALSE)
       return;
 
    MUSIC_SetVolume(0);
@@ -1095,7 +1094,7 @@ void MU_FadeIn ( int num, int time )
 
 void MU_FadeOut ( int time )
 {
-   if (MU_Started==false)
+   if (MU_Started==FALSE)
       return;
    if (!MUSIC_SongPlaying())
       {
@@ -1115,7 +1114,7 @@ void MU_StartSong ( int songtype )
 {
    int songnum;
 
-   if (MU_Started==false)
+   if (MU_Started==FALSE)
       return;
 
    MU_StopSong();
@@ -1145,9 +1144,9 @@ void MU_StartSong ( int songtype )
 
 void MU_StoreSongPosition ( void )
 {
-   if (MU_Started==false)
+   if (MU_Started==FALSE)
       return;
-   PositionStored=true;
+   PositionStored=TRUE;
    storedposition=MUSIC_GetPosition();
 }
 
@@ -1159,11 +1158,11 @@ void MU_StoreSongPosition ( void )
 
 void MU_RestoreSongPosition ( void )
 {
-   if (MU_Started==false)
+   if (MU_Started==FALSE)
       return;
-   if (PositionStored==false)
+   if (PositionStored==FALSE)
       return;
-   PositionStored=false;
+   PositionStored=FALSE;
 
    MUSIC_SetPosition(storedposition);
 }
@@ -1190,11 +1189,11 @@ int MU_GetStoredPosition ( void )
 
 void MU_SetStoredPosition ( int position )
 {
-   if (MU_Started==false)
+   if (MU_Started==FALSE)
       return;
    if (position==-1)
       return;
-   PositionStored=true;
+   PositionStored=TRUE;
    storedposition=position;
 }
 
@@ -1208,7 +1207,7 @@ void MU_SetStoredPosition ( int position )
 
 int MU_GetSongPosition ( void )	
 {
-   if (MU_Started==false)
+   if (MU_Started==FALSE)
       return 0;
    return MUSIC_GetPosition();
 }
@@ -1221,7 +1220,7 @@ int MU_GetSongPosition ( void )
 
 void MU_SetSongPosition ( int position )
 {
-   if (MU_Started==false)
+   if (MU_Started==FALSE)
       return;
    MUSIC_SetPosition(position);
 }
@@ -1312,7 +1311,7 @@ void MU_LoadMusic (uint8_t * buf, int size)
    uint8_t *ptr;
    int i;
    int songnumber;
-   bool differentsong=false;
+   bool8_t differentsong=FALSE;
    int vsize;
 
    //
@@ -1336,13 +1335,13 @@ void MU_LoadMusic (uint8_t * buf, int size)
    if (MU_GetSongNumber () != songnumber)
       {
       MU_PlaySong(songnumber);
-      differentsong=true;
+      differentsong=TRUE;
       }
 
    vsize=sizeof(i);
    memcpy(&i,ptr,vsize);
    ptr+=vsize;
-   if (differentsong==true)
+   if (differentsong==TRUE)
       {
       MU_SetSongPosition(i);
       }

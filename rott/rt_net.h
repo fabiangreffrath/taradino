@@ -26,7 +26,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_net_public
 #define _rt_net_public
 
-#include <stdbool.h>
 #include <stdint.h>
 #include "develop.h"
 #include "rottnet.h"
@@ -222,12 +221,12 @@ typedef struct {
   uint8_t  Product;
   uint8_t  mode;
   uint32_t Version;
-  bool teamplay;
+  bool8_t teamplay;
   specials SpecialsTimes;
   battle_type options;
   char  battlefilename[20];
   int   randomseed;
-  bool ludicrousgibs;
+  bool8_t ludicrousgibs;
   COM_PlayerDescriptionType players[MAXPLAYERS];
 } COM_GameMasterType;
 
@@ -256,12 +255,12 @@ typedef struct {
   int   time;
 } COM_UnPauseType;
 
-extern bool  demorecord,
+extern bool8_t  demorecord,
 					 demoplayback;
 extern uint8_t     *demoptr,
 					 *lastdemoptr,
                 *demobuffer;
-extern bool  demodone;
+extern bool8_t  demodone;
 extern int      predemo_violence;
 
 void     ControlPlayer (void);
@@ -287,7 +286,7 @@ void LoadDemo (int demonumber);
 void RecordDemo ( void );
 void SetupDemo ( void );
 void FreeDemo ( void );
-bool DemoExists (int demonumber);
+bool8_t DemoExists (int demonumber);
 
 void AddEndGameCommand ( void );
 void AddTextMessage ( char * message, int length, int towho );
@@ -302,22 +301,22 @@ void SyncToServer( void );
 void AddQuitCommand ( void );
 void AddExitCommand ( void );
 void AddGameEndCommand ( void );
-bool PlayerInGame ( int p );
-bool ConsoleIsServer ( void );
+bool8_t PlayerInGame ( int p );
+bool8_t ConsoleIsServer ( void );
 
-extern bool IsServer;
-extern bool standalone;
-extern bool    playerdead;
+extern bool8_t IsServer;
+extern bool8_t standalone;
+extern bool8_t    playerdead;
 
-extern bool    modemgame;
-extern bool    networkgame;
+extern bool8_t    modemgame;
+extern bool8_t    networkgame;
 extern int        numplayers;
 extern int        server;
 
-extern bool    GamePaused;
-extern bool    battlegibs;
+extern bool8_t    GamePaused;
+extern bool8_t    battlegibs;
 
-extern bool    remoteridicule;
+extern bool8_t    remoteridicule;
 
 int GamePacketSize( void );
 

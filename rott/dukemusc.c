@@ -6,7 +6,6 @@
  * Written by Ryan C. Gordon. (icculus@clutteredmind.org)
  */
 
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -226,7 +225,7 @@ void MUSIC_SetLoopFlag(int loopflag)
 
 int MUSIC_SongPlaying(void)
 {
-    return((Mix_PlayingMusic()) ? true : false);
+    return((Mix_PlayingMusic()) ? TRUE : FALSE);
 } // MUSIC_SongPlaying
 
 
@@ -373,7 +372,7 @@ int MUSIC_FadeVolume(int tovolume, int milliseconds)
 
 int MUSIC_FadeActive(void)
 {
-    return((Mix_FadingMusic() == MIX_FADING_OUT) ? true : false);
+    return((Mix_FadingMusic() == MIX_FADING_OUT) ? TRUE : FALSE);
 } // MUSIC_FadeActive
 
 

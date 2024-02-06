@@ -18,7 +18,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -58,20 +57,20 @@ int        controlupdatestartedtime=-1;
 int        controlupdatetime=-1;
 int        serverupdatetime=-1;
 int        controlupdatestarted=0;
-bool    GamePaused=false;
+bool8_t    GamePaused=FALSE;
 
-bool    modemgame;
-bool    networkgame;
+bool8_t    modemgame;
+bool8_t    networkgame;
 int        numplayers;
 int        server;
-bool    IsServer;
-bool    standalone;
-bool    restartgame=false;
-bool    respawnactive=false;
-bool    playerdead=false;
-bool    controlschanged=true;
-bool    battlegibs=false;
-bool    remoteridicule = false;
+bool8_t    IsServer;
+bool8_t    standalone;
+bool8_t    restartgame=FALSE;
+bool8_t    respawnactive=FALSE;
+bool8_t    playerdead=FALSE;
+bool8_t    controlschanged=TRUE;
+bool8_t    battlegibs=FALSE;
+bool8_t    remoteridicule = FALSE;
 /*
 =============================================================================
 
@@ -79,39 +78,39 @@ bool    remoteridicule = false;
 
 =============================================================================
 */
-bool  demorecord,
+bool8_t  demorecord,
 			demoplayback;
 uint8_t     *demoptr,
 			*lastdemoptr,
          *demobuffer=NULL;
-bool  demodone = false;
+bool8_t  demodone = FALSE;
 int      predemo_violence = -1;
 int oldmomx;
 int oldmomy;
 int oldspdang;
 
-static bool GameCommandsStarted=false;
+static bool8_t GameCommandsStarted=FALSE;
 
 static int oldcontrolbuf[3];
 static int oldbuttonbits;
 static CommandType * PlayerCmds[MAXPLAYERS];
 static CommandType * ClientCmds[MAXPLAYERS];
 
-static bool GotPlayersDesc[MAXPLAYERS];
-static bool PlayersReady[MAXPLAYERS];
+static bool8_t GotPlayersDesc[MAXPLAYERS];
+static bool8_t PlayersReady[MAXPLAYERS];
 static int     LastCommandTime[MAXPLAYERS];
 
 static CommandStatusType * CommandState[MAXPLAYERS+1];
 
-static bool InProcessServer=false;
+static bool8_t InProcessServer=FALSE;
 static int lastcontrolupdatetime;
 static int largesttime;
 static int PlayerStatus[MAXPLAYERS];
 //static int syncservertime;
-//static bool FixingPackets;
+//static bool8_t FixingPackets;
 static int controldivisor=1;
 static int nextupdatetime;
-static bool UpdateServer=true;
+static bool8_t UpdateServer=TRUE;
 
 void CheckForPacket ( void );
 void PrepareLocalPacket ( void );
@@ -143,19 +142,19 @@ int MaxSpeedForCharacter(playertype *pstate);
 // ConsoleIsServer()
 //
 //****************************************************************************
-bool ConsoleIsServer ( void )
+bool8_t ConsoleIsServer ( void )
 {
-   if (modemgame==true)
+   if (modemgame==TRUE)
       {
-      if (networkgame==true)
+      if (networkgame==TRUE)
          {
          if (rottcom->client==0)
             {
-            return true;
+            return TRUE;
             }
          }
       }
-   return false;
+   return FALSE;
 }
 
 //****************************************************************************
@@ -165,7 +164,7 @@ bool ConsoleIsServer ( void )
 //****************************************************************************
 int GamePacketSize( void )
 {
-   if ((remoteridicule == true) || (ConsoleIsServer() == true))
+   if ((remoteridicule == TRUE) || (ConsoleIsServer() == TRUE))
       {
       return GetTypeSize(COM_SOUNDANDDELTA);
       }
@@ -185,37 +184,37 @@ void InitializeGameCommands( void )
 
 	// default to player 0
 
-   if (GameCommandsStarted==true)
+   if (GameCommandsStarted==TRUE)
       return;
 
-   GameCommandsStarted=true;
+   GameCommandsStarted=TRUE;
 
-   if (modemgame==true)
+   if (modemgame==TRUE)
       controldivisor=rottcom->ticstep;
 
-   standalone=false;
-   IsServer=false;
+   standalone=FALSE;
+   IsServer=FALSE;
 
-   if (modemgame==true)
+   if (modemgame==TRUE)
       {
 		consoleplayer=rottcom->consoleplayer;
 
-      if (networkgame==true)
+      if (networkgame==TRUE)
          {
          if (rottcom->client==0)
             {
-            IsServer=true;
+            IsServer=TRUE;
             // turn it on absolutely for the server
-            remoteridicule = true;
+            remoteridicule = TRUE;
 				if (consoleplayer==0)
-               standalone=true;
+               standalone=TRUE;
             }
 			if (consoleplayer>0)
 				consoleplayer--; // playernumber fixup
          }
       }
 
-   if (standalone==false)
+   if (standalone==FALSE)
       {
       int size;
 
@@ -247,19 +246,19 @@ void InitializeGameCommands( void )
 
    CommandState[0]=(CommandStatusType *)SafeLevelMalloc(sizeof(CommandStatusType));
 
-   if (modemgame==true)
+   if (modemgame==TRUE)
       {
       for (i=0;i<numplayers;i++)
          {
          PlayerStatus[i]=player_ingame;
          }
-      if (networkgame==true)
+      if (networkgame==TRUE)
          {
          server=1;
 
          // initialize the Server
 
-         if (IsServer==true)
+         if (IsServer==TRUE)
             {
             server=0;
             ServerCmds=(CommandType *)SafeMalloc(sizeof(CommandType));
@@ -311,13 +310,13 @@ void ShutdownGameCommands( void )
    int i;
    int j;
 
-   if (GameCommandsStarted==false)
+   if (GameCommandsStarted==FALSE)
       return;
 
-   GameCommandsStarted=false;
+   GameCommandsStarted=FALSE;
 
 	// free up playercmds;
-   if (standalone==false)
+   if (standalone==FALSE)
       {
 	   for (i=0;i<numplayers;i++)
          {
@@ -339,7 +338,7 @@ void ShutdownGameCommands( void )
    SafeFree(CommandState[0]);
    CommandState[0]=NULL;
 
-   if (modemgame==true)
+   if (modemgame==TRUE)
       {
 
       // free up local commands
@@ -358,9 +357,9 @@ void ShutdownGameCommands( void )
 
       // free up Server
 
-      if (networkgame==true)
+      if (networkgame==TRUE)
          {
-         if (IsServer==true)
+         if (IsServer==TRUE)
             {
             for (j=0;j<MAXCMDS;j++)
                {
@@ -442,7 +441,7 @@ void StartupClientControls ( void )
 
    memset(oldcontrolbuf,-1,sizeof(oldcontrolbuf));
    oldbuttonbits=-1;
-   controlschanged=true;
+   controlschanged=TRUE;
 
    INL_GetMouseDelta(&i,&i);
 
@@ -456,14 +455,14 @@ void StartupClientControls ( void )
    CalcTics();
    CalcTics();
 
-//   FixingPackets=false;
+//   FixingPackets=FALSE;
 
 	memset (controlbuf, 0, sizeof (controlbuf));
    buttonbits = 0;
    lastpolltime=-1;
    IN_ClearKeyboardQueue ();
 
-   if (modemgame==true)
+   if (modemgame==TRUE)
       {
       controlupdatetime=controlsynctime+(VBLCOUNTER*2);
       SoftError("Controls started at %d\n",controlupdatetime);
@@ -498,11 +497,11 @@ void StartupClientControls ( void )
       }
 
    LastCommandTime[0]=controlupdatetime-controldivisor;
-   if (IsServer==true)
+   if (IsServer==TRUE)
       {
       int size;
 
-      UpdateServer=true;
+      UpdateServer=TRUE;
       size=( (numplayers * GetTypeSize(COM_TEXT)) +
                GetTypeSize(COM_SOUNDANDDELTA) +
                sizeof(COM_ServerHeaderType) -
@@ -520,7 +519,7 @@ void StartupClientControls ( void )
       for (i=0;i<MAXCMDS;i++)
          memset(ServerCommand(i),COM_DELTANULL,size);
       }
-   else if (modemgame==true)
+   else if (modemgame==TRUE)
       {
       int nump;
 
@@ -534,9 +533,9 @@ void StartupClientControls ( void )
       }
 
 
-   if ((demoplayback==false) && (standalone==false))
+   if ((demoplayback==FALSE) && (standalone==FALSE))
       {
-      if (modemgame==true)
+      if (modemgame==TRUE)
          {
          while (GetTicCount()<(controlupdatetime-10))
             {
@@ -547,7 +546,7 @@ void StartupClientControls ( void )
       largesttime=0;
       PollControls();
       }
-   if (standalone==true)
+   if (standalone==TRUE)
       printf("Packet Server started\n");
 }
 
@@ -559,7 +558,7 @@ void StartupClientControls ( void )
 //
 //****************************************************************************
 
-static bool InUCC=false;
+static bool8_t InUCC=FALSE;
 void UpdateClientControls ( void )
 {
    int time;
@@ -571,20 +570,20 @@ void UpdateClientControls ( void )
    if (InUCC)
       return;
    else
-      InUCC = true;
+      InUCC = TRUE;
 
    wami(6);
 
    lastcontrolupdatetime=GetTicCount();
 
-   if (standalone==false)
+   if (standalone==FALSE)
       {
       time=GetTicCount();
 
       // if we are a fixing the current packet stop update of deltas
       // in non-network games.
       if (
-           (networkgame == false) &&
+           (networkgame == FALSE) &&
            (ServerCommandStatus(oldpolltime)==cs_fixing)
          )
          {
@@ -594,11 +593,11 @@ void UpdateClientControls ( void )
       while (time>=controlupdatetime)
          {
          MoveType * Delta;
-         bool soundready;
+         bool8_t soundready;
 
          soundready = SD_SoundDataReady();
 
-         if (demoplayback==true)
+         if (demoplayback==TRUE)
             {
             UpdateDemoPlayback(controlupdatetime);
             }
@@ -612,16 +611,16 @@ void UpdateClientControls ( void )
              (buttonbits!=oldbuttonbits)
             )
             {
-            controlschanged=true;
+            controlschanged=TRUE;
             memcpy(&oldcontrolbuf[0],&controlbuf[0],sizeof(controlbuf));
             oldbuttonbits=buttonbits;
             }
          else
             {
-            controlschanged=false;
+            controlschanged=FALSE;
             }
 
-         if ((controlschanged==false) && (soundready==false))
+         if ((controlschanged==FALSE) && (soundready==FALSE))
             {
             NullMoveType * NullDelta;
 
@@ -639,12 +638,12 @@ void UpdateClientControls ( void )
 
             // See if we need to update sound packet
 
-            if (soundready==true)
+            if (soundready==TRUE)
                {
                COM_SoundType * sndpkt;
                recordstate status;
 
-               if (remoteridicule == false)
+               if (remoteridicule == FALSE)
                   Error("Attempt to record Remote Ridicule without adequate storage");
                sndpkt=(COM_SoundType *)Delta->Sounddata;
 
@@ -672,7 +671,7 @@ void UpdateClientControls ( void )
                      break;
                   }
                }
-            if (demorecord==true)
+            if (demorecord==TRUE)
                RecordDemoCmd();
             }
          PrepareLocalPacket();
@@ -680,27 +679,27 @@ void UpdateClientControls ( void )
          if (
               (controlupdatetime != -1) &&
               (controlupdatetime > (lastpolltime+MAXPOLLTICS)) &&
-              (demoplayback==false)
+              (demoplayback==FALSE)
             )
             {
             controlbuf[0] = controlbuf[1] = controlbuf[2] = 0;
             }
          }
       }
-   if (modemgame==true)
+   if (modemgame==TRUE)
       {
       CheckForPacket ();
       }
 
-   if ((standalone == false) && (IsServer==true) && (UpdateServer==true))
+   if ((standalone == FALSE) && (IsServer==TRUE) && (UpdateServer==TRUE))
       ProcessServer();
 
 // take out
-   if (modemgame==true)
+   if (modemgame==TRUE)
       {
 //TODO: Not sure if that's DEVELOPMENT code or not.
 //#if (DEVELOPMENT == 1)
-      if (PanicPressed==true)
+      if (PanicPressed==TRUE)
          {
          Error("Game Aborted. Scroll Lock pressed\n");
          }
@@ -709,7 +708,7 @@ void UpdateClientControls ( void )
          Error("Game Aborted. Insert->Q pressed\n");
       }
 
-   InUCC = false;
+   InUCC = FALSE;
 
    waminot();
 }
@@ -719,11 +718,11 @@ void UpdateClientControls ( void )
 // PlayerInGame()
 //
 //****************************************************************************
-bool PlayerInGame ( int p )
+bool8_t PlayerInGame ( int p )
 {
    if (PlayerStatus[p]!=player_ingame)
-      return false;
-   return true;
+      return FALSE;
+   return TRUE;
 }
 
 /*
@@ -742,7 +741,7 @@ bool PlayerInGame ( int p )
 void CheckForPacket ( void )
 {
    wami(7);
-   while (ReadPacket()==true)
+   while (ReadPacket()==TRUE)
       {
       if (badpacket==0)
          {
@@ -864,10 +863,10 @@ void AddPauseStateCommand ( int type )
 //****************************************************************************
 void AddRespawnCommand ( void )
 {
-   if (respawnactive==true)
+   if (respawnactive==TRUE)
       return;
 
-   respawnactive=true;
+   respawnactive=TRUE;
 
    ((COM_RespawnType *)NextLocalCommand())->type=COM_RESPAWN;
 
@@ -924,16 +923,16 @@ void PrepareLocalPacket ( void )
 
    pkt->time=controlupdatetime;
 
-   if (networkgame==false) // Whether it is a modem game or not we do this
+   if (networkgame==FALSE) // Whether it is a modem game or not we do this
       {
 		AddClientPacket (pkt, consoleplayer);
-      if (modemgame==false)
+      if (modemgame==FALSE)
          {
          ServerCommandStatus ( controlupdatetime ) = cs_ready;
          }
       }
 
-   if (modemgame==true)
+   if (modemgame==TRUE)
       SendPacket (pkt, server);
 
    controlupdatetime+=controldivisor;
@@ -1072,11 +1071,11 @@ int GetServerPacketSize (void * pkt)
 
 void SendPacket (void * pkt, int dest)
 {
-   if ((networkgame==false) && (PlayerStatus[dest]!=player_ingame))
+   if ((networkgame==FALSE) && (PlayerStatus[dest]!=player_ingame))
       return;
-   if ((IsServer==true) && (dest==server) && (standalone==false)) // must be client on top of server
+   if ((IsServer==TRUE) && (dest==server) && (standalone==FALSE)) // must be client on top of server
       ProcessPacket(pkt,dest);
-   else if ((IsServer==false) && (dest!=server) && (standalone==false)) // We shouldn't be sending as client to anyone else
+   else if ((IsServer==FALSE) && (dest!=server) && (standalone==FALSE)) // We shouldn't be sending as client to anyone else
       ComError("SendPacket:Problems\n");
    else
       WritePacket(pkt,GetPacketSize(pkt),dest);
@@ -1108,7 +1107,7 @@ void BroadcastServerPacket (void * pkt, int size)
       {
       if (PlayerStatus[i]!=player_ingame)
          continue;
-//      if ((standalone==false) && (i==consoleplayer))
+//      if ((standalone==FALSE) && (i==consoleplayer))
 //         ProcessPacket(pkt,i);
 //      else
          WritePacket((uint8_t *)pkt,size,i);
@@ -1148,7 +1147,7 @@ void ResendLocalPackets (int time, int dest, int numpackets)
       int i;
       int starti;
       int size;
-      bool done;
+      bool8_t done;
 
       // allocate some space
 
@@ -1159,9 +1158,9 @@ void ResendLocalPackets (int time, int dest, int numpackets)
       fixup->type=COM_FIXUP;
       tempstart=&(fixup->data);
 
-      done=false;
+      done=FALSE;
       i=0;
-      while (done==false)
+      while (done==FALSE)
          {
          tempptr=tempstart;
          starti=i;
@@ -1182,7 +1181,7 @@ void ResendLocalPackets (int time, int dest, int numpackets)
          fixup->numpackets=i-starti;
          WritePacket(tempbuf,tempptr-tempbuf,dest);
          if (i==numpackets)
-            done=true;
+            done=TRUE;
          }
 
       SafeFree(tempbuf);
@@ -1222,7 +1221,7 @@ void ResendServerPackets (int time, int dest, int numpackets)
       int i;
       int starti;
       int size;
-      bool done;
+      bool8_t done;
 
       // allocate some space
 
@@ -1233,9 +1232,9 @@ void ResendServerPackets (int time, int dest, int numpackets)
       fixup->type=COM_FIXUP;
       tempstart=&(fixup->data);
 
-      done=false;
+      done=FALSE;
       i=0;
-      while (done==false)
+      while (done==FALSE)
          {
          tempptr=tempstart;
          starti=i;
@@ -1256,7 +1255,7 @@ void ResendServerPackets (int time, int dest, int numpackets)
          fixup->numpackets=i-starti;
          WritePacket(tempbuf,tempptr-tempbuf,dest);
          if (i==numpackets)
-            done=true;
+            done=TRUE;
          }
 
       SafeFree(tempbuf);
@@ -1275,7 +1274,7 @@ void ResendPacket (void * pkt, int dest)
    int time;
    COM_RequestType * request;
 
-   if ((networkgame==false) && (PlayerStatus[dest]!=player_ingame))
+   if ((networkgame==FALSE) && (PlayerStatus[dest]!=player_ingame))
       return;
 
    request=(COM_RequestType * )pkt;
@@ -1284,12 +1283,12 @@ void ResendPacket (void * pkt, int dest)
    ComError( "RESEND request received at %d\n packet time=%d dest=%d numpackets=%d\n",
              GetTicCount(), time, dest, request->numpackets);
 
-   if (IsServer==true)
+   if (IsServer==TRUE)
       {
-      if ((dest==server) && (standalone==false))
+      if ((dest==server) && (standalone==FALSE))
          Error("Trying to resend packets to client on top of server\n");
       ComError( "RESEND SERVER serverupdatetime=%d\n",serverupdatetime);
-      if (IsServerCommandReady ( time ) == true)
+      if (IsServerCommandReady ( time ) == TRUE)
          ResendServerPackets(time,dest,request->numpackets);
       else
          ComError( "RESEND SERVER time=%d is not ready\n",time);
@@ -1324,7 +1323,7 @@ void FixupPacket (void * pkt, int src)
       if (time == (LastCommandTime[src]+controldivisor))
          LastCommandTime[src]=time;
 
-      if (IsServer==true)
+      if (IsServer==TRUE)
          {
          if (ClientCommandStatus(src, time)!=cs_fixing)
             {
@@ -1344,7 +1343,7 @@ void FixupPacket (void * pkt, int src)
             }
          else
             {
-            if (networkgame==true)
+            if (networkgame==TRUE)
                {
                AddServerSubPacket( (COM_ServerHeaderType *)ptr );
                }
@@ -1423,11 +1422,11 @@ void SyncToServer( void )
 {
    int diff;
 
-   if ((networkgame==false) && (consoleplayer==0))
+   if ((networkgame==FALSE) && (consoleplayer==0))
       return;
-   if (IsServer==true)
+   if (IsServer==TRUE)
       return;
-//   if (networkgame==true)
+//   if (networkgame==TRUE)
 //      {
 //      diff = (GetTicCount()-controldivisor-LastCommandTime[0])/controldivisor;
 //      SoftError("diff=%ld\n",diff);
@@ -1462,11 +1461,11 @@ void ProcessPacket (void * pkt, int src)
       case COM_RESPAWN:
       case COM_UNPAUSE:
       case COM_ENDGAME:
-//         if (FixingPackets==false)
+//         if (FixingPackets==FALSE)
          AddPacket(pkt,src);
          break;
       case COM_SOUNDANDDELTA:
-         if (remoteridicule == false )
+         if (remoteridicule == FALSE )
             {
             ((MoveType *)pkt)->type = COM_DELTA;
             }
@@ -1492,8 +1491,8 @@ void ProcessPacket (void * pkt, int src)
       case COM_GAMEDESC:
       case COM_GAMEACK:
       case COM_GAMEMASTER:
-         if (standalone==true)
-            restartgame=true;
+         if (standalone==TRUE)
+            restartgame=TRUE;
          break;
 
       case COM_START:
@@ -1556,7 +1555,7 @@ void AddServerPacket(void * pkt, int src)
 
    // Last good time can be set even for the client/server combo
 
-   if (standalone==true)
+   if (standalone==TRUE)
       {
       Error("standalone should not be here\n");
       }
@@ -1568,7 +1567,7 @@ void AddServerPacket(void * pkt, int src)
 
    serverpkt=(COM_ServerHeaderType *)pkt;
 
-//   if (networkgame==false)
+//   if (networkgame==FALSE)
 //      SyncToServer(serverpkt->time);
 
    LastCommandTime[src]+=controldivisor;
@@ -1639,7 +1638,7 @@ void AddSubPacket (void * pkt, int src)
 {
    MoveType * packet;
 
-   if (networkgame==false)
+   if (networkgame==FALSE)
       Error("Modem game should not be here in AddSubPacket\n");
 
    packet = (MoveType *) pkt;
@@ -1667,14 +1666,14 @@ void AddPacket (void * pkt, int src)
    // in modem game we fall through the first condition
    // all packets should be sequential
 
-   if ((IsServer==true) && (PlayerStatus[src]!=player_ingame))
+   if ((IsServer==TRUE) && (PlayerStatus[src]!=player_ingame))
       return;
    packet = (MoveType *) pkt;
 
-//   if ((networkgame==false) && (consoleplayer!=0))
+//   if ((networkgame==FALSE) && (consoleplayer!=0))
 //      SyncToServer();
 
-   if (!((src==server) && (standalone==false) && (IsServer==true)))
+   if (!((src==server) && (standalone==FALSE) && (IsServer==TRUE)))
       {
       LastCommandTime[src]+=controldivisor;
 
@@ -1683,11 +1682,11 @@ void AddPacket (void * pkt, int src)
          int numpackets;
 
          numpackets=packet->time-LastCommandTime[src];
-         if ( ( (networkgame==false) &&
+         if ( ( (networkgame==FALSE) &&
                (ServerCommandStatus(LastCommandTime[src])!=cs_fixing)
             )
             ||
-            ( (networkgame==true) &&
+            ( (networkgame==TRUE) &&
                (ClientCommandStatus(src,LastCommandTime[src])!=cs_fixing)
             )
             )
@@ -1703,7 +1702,7 @@ void AddPacket (void * pkt, int src)
          }
       }
 
-   if (networkgame==true)
+   if (networkgame==TRUE)
       {
       AddSubPacket ( packet, src );
       }
@@ -1729,9 +1728,9 @@ void RequestPacket (int time, int dest, int numpackets)
    request.time=time;
    request.numpackets=numpackets/controldivisor;
 
-   if (IsServer==true)
+   if (IsServer==TRUE)
       {
-      if ((dest==server) && (standalone==false))
+      if ((dest==server) && (standalone==FALSE))
          {
          Error("Requesting packet from client on top of server\n");
          }
@@ -1744,15 +1743,15 @@ void RequestPacket (int time, int dest, int numpackets)
       }
    else
       {
-      if ((networkgame==false) && (PlayerStatus[dest]!=player_ingame))
+      if ((networkgame==FALSE) && (PlayerStatus[dest]!=player_ingame))
          return;
       for (i=0;i<numpackets;i+=controldivisor)
          {
          ServerCommandStatus( (time+i) ) = cs_fixing;
          }
       }
-//   if (networkgame==false)
-//      FixingPackets=true;
+//   if (networkgame==FALSE)
+//      FixingPackets=TRUE;
 
    // send out the packet
 
@@ -1764,17 +1763,17 @@ void RequestPacket (int time, int dest, int numpackets)
 // IsServerCommandReady ()
 //
 //****************************************************************************
-bool IsServerCommandReady ( int time )
+bool8_t IsServerCommandReady ( int time )
 {
 
    if (
        (
         (COM_ServerHeaderType *)
          ServerCommand(CommandAddress (time) ) )->time==time)
-      return true;
+      return TRUE;
    else
       {
-      return false;
+      return FALSE;
       }
 }
 
@@ -1783,7 +1782,7 @@ bool IsServerCommandReady ( int time )
 // AreClientsReady ()
 //
 //****************************************************************************
-bool AreClientsReady ( void )
+bool8_t AreClientsReady ( void )
 {
    int i;
    int timeindex;
@@ -1797,16 +1796,16 @@ bool AreClientsReady ( void )
          continue;
       status=ClientCommandStatus(i, serverupdatetime);
       if (status==cs_notarrived)
-         return false;
+         return FALSE;
       else if (status==cs_fixing)
          {
 //         RequestPacket ( serverupdatetime , i , controldivisor );
-         return false;
+         return FALSE;
          }
       else if (((MoveType *)ClientCommand(i, timeindex))->time != serverupdatetime)
-         return false;
+         return FALSE;
       }
-   return true;
+   return TRUE;
 }
 
 //****************************************************************************
@@ -1814,16 +1813,16 @@ bool AreClientsReady ( void )
 // IsPlayerCommandReady ()
 //
 //****************************************************************************
-bool IsPlayerCommandReady (int num, int time)
+bool8_t IsPlayerCommandReady (int num, int time)
 {
    MoveType * cmd;
 
    cmd=(MoveType *)PlayerCommand(num,CommandAddress(time));
 
    if (cmd->time==time)
-      return true;
+      return TRUE;
    else
-      return false;
+      return FALSE;
 }
 
 //****************************************************************************
@@ -1891,9 +1890,9 @@ void SendFullServerPacket ( void )
       {
       if (playerstatus[i]!=-1)
          {
-         if ((standalone==false) && (consoleplayer==i))
+         if ((standalone==FALSE) && (consoleplayer==i))
             {
-            UpdateServer=false;
+            UpdateServer=FALSE;
             }
          else
             {
@@ -1914,44 +1913,44 @@ void SendFullServerPacket ( void )
 
 void ProcessServer ( void )
 {
-   bool done;
-   bool exit;
+   bool8_t done;
+   bool8_t exit;
    int i;
    int time;
 
-   if (InProcessServer==true)
+   if (InProcessServer==TRUE)
       return;
 
-   InProcessServer=true;
+   InProcessServer=TRUE;
 
    if (GetTicCount()<serverupdatetime)
       goto exitProcessServer;
 
    time=GetTicCount();
-   exit=false;
+   exit=FALSE;
 
    while (time>=serverupdatetime)
       {
       int savetime;
 
       savetime=GetTicCount()+NETWORKTIMEOUT;
-      done = false;
-		while (done == false)
+      done = FALSE;
+		while (done == FALSE)
          {
-         if (standalone==true)
+         if (standalone==TRUE)
             AbortCheck("GameServer aborted\n");
 
          done = AreClientsReady ();
 
-         if ( (standalone==false) && (serverupdatetime>=(controlupdatetime-controldivisor)) && (done==false) )
+         if ( (standalone==FALSE) && (serverupdatetime>=(controlupdatetime-controldivisor)) && (done==FALSE) )
             break;
 
          CheckForPacket ();
 
-         if (standalone==false)
+         if (standalone==FALSE)
             UpdateClientControls();
 
-         if (restartgame==true)
+         if (restartgame==TRUE)
             break;
          if (GetTicCount()>savetime)
             {
@@ -1968,22 +1967,22 @@ void ProcessServer ( void )
                }
             savetime=GetTicCount()+NETWORKTIMEOUT;
             }
-         if ((standalone==false) && (done==false))
+         if ((standalone==FALSE) && (done==FALSE))
             {
-            exit=true;
-            done=true;
+            exit=TRUE;
+            done=TRUE;
             }
          }
-      if (exit==true)
+      if (exit==TRUE)
          break;
-      if ( (serverupdatetime>=(controlupdatetime-controldivisor)) && (standalone==false))
+      if ( (serverupdatetime>=(controlupdatetime-controldivisor)) && (standalone==FALSE))
          break;
-      if (restartgame==true)
+      if (restartgame==TRUE)
          break;
       SendFullServerPacket();
       }
 exitProcessServer:
-   InProcessServer=false;
+   InProcessServer=FALSE;
 }
 
 
@@ -1996,35 +1995,35 @@ int SetupCheckForPacket ( void )
 {
    int retval=scfp_nodata;
 
-   if ((ReadPacket()==true) && (badpacket==0))
+   if ((ReadPacket()==TRUE) && (badpacket==0))
       {
       MoveType * pkt;
 
       retval=scfp_data;
       pkt=(MoveType *)&ROTTpacket[0];
-      if ((IsServer==true) && (standalone==true))
+      if ((IsServer==TRUE) && (standalone==TRUE))
          {
          switch (pkt->type)
             {
             case COM_GAMEEND:
                break;
             case COM_GAMEDESC:
-               if (standalone==true)
+               if (standalone==TRUE)
                   printf("Received GameDescription from player#%ld\n",(long)rottcom->remotenode);
                WritePacket(&ROTTpacket[0],GetPacketSize(pkt),0); // Send to player 0
                break;
             case COM_GAMEACK:
-               if (standalone==true)
+               if (standalone==TRUE)
                   printf("Received GameAcknowledgement from player#%ld\n",(long)rottcom->remotenode);
                WritePacket(&ROTTpacket[0],GetPacketSize(pkt),0); // Send to player 0
                break;
             case COM_GAMEMASTER:
-               if (standalone==true)
+               if (standalone==TRUE)
                   printf("Received GameMasterPacket from player#%ld\n",(long)rottcom->remotenode);
                BroadcastServerPacket(&ROTTpacket[0],GetPacketSize(pkt)); // Send to all
                break;
             case COM_GAMEPLAY:
-               if (standalone==true)
+               if (standalone==TRUE)
                   printf("Received StartGamePacket from player#%ld\n",(long)rottcom->remotenode);
                BroadcastServerPacket(&ROTTpacket[0],GetPacketSize(pkt)); // Send to all
                retval=scfp_done;
@@ -2046,10 +2045,10 @@ int SetupCheckForPacket ( void )
                 retval=scfp_gameready;
                 break;
             case COM_GAMEACK:
-					 PlayersReady[((COM_GameAckType *)pkt)->player]=true;
+					 PlayersReady[((COM_GameAckType *)pkt)->player]=TRUE;
                 break;
             case COM_GAMEDESC:
-					 GotPlayersDesc[((COM_GamePlayerType *)pkt)->player]=true;
+					 GotPlayersDesc[((COM_GamePlayerType *)pkt)->player]=TRUE;
                 SetPlayerDescription(pkt);
                 break;
             }
@@ -2066,20 +2065,20 @@ int SetupCheckForPacket ( void )
 //****************************************************************************
 void ServerLoop( void )
 {
-   bool done;
+   bool8_t done;
 
    while (1)
       {
       ShutdownClientControls();
-      restartgame=false;
+      restartgame=FALSE;
 
-      done=false;
-      while (done==false)
+      done=FALSE;
+      while (done==FALSE)
          {
          AbortCheck("SetupGameServer aborted\n");
 
          if (SetupCheckForPacket()==scfp_done)
-            done=true;
+            done=TRUE;
          }
       ComSetTime();
       StartupClientControls();
@@ -2087,7 +2086,7 @@ void ServerLoop( void )
          {
          ProcessServer();
          CalcTics();
-         if (restartgame==true)
+         if (restartgame==TRUE)
             break;
          }
       }
@@ -2111,7 +2110,7 @@ void ProcessPlayerCommand( int player )
 	else if (cmd->type==COM_RESPAWN)
       {
 		if (player==consoleplayer) // reset spawn state
-         respawnactive=false;
+         respawnactive=FALSE;
       RespawnPlayerobj(PLAYER[player]);
       }
 	else if (cmd->type==COM_ENDGAME)
@@ -2167,18 +2166,18 @@ void ProcessPlayerCommand( int player )
 	else if (cmd->type==COM_PAUSE)
       {
       MUSIC_Pause();
-      GamePaused=true;
+      GamePaused=TRUE;
       pausedstartedticcount = oldpolltime;
       }
 	else if (cmd->type==COM_UNPAUSE)
       {
-      GamePaused=false;
+      GamePaused=FALSE;
       MUSIC_Continue ();
-      if (RefreshPause == false)       // screen is blanked
+      if (RefreshPause == FALSE)       // screen is blanked
          {
          ShutdownScreenSaver();
-         SetupScreen (true);
-         RefreshPause = true;
+         SetupScreen (TRUE);
+         RefreshPause = TRUE;
          }
       }
 }
@@ -2225,9 +2224,9 @@ void ControlPlayerObj (objtype * ob)
 	playertype * pstate;
    int num;
    int savetime;
-//   bool asked;
+//   bool8_t asked;
 
-//   if (GamePaused==true)
+//   if (GamePaused==TRUE)
 //      return;
 
    M_LINKSTATE(ob,pstate);
@@ -2242,7 +2241,7 @@ void ControlPlayerObj (objtype * ob)
       {
       if (num==numplayers-1)
          nextupdatetime=oldpolltime+controldivisor;
-      if (networkgame==true)
+      if (networkgame==TRUE)
          savetime=GetTicCount()+NETWORKTIMEOUT;
       else
          savetime=GetTicCount()+MODEMTIMEOUT;
@@ -2250,7 +2249,7 @@ void ControlPlayerObj (objtype * ob)
       if (PlayerStatus[num]!=player_ingame)
          return;
 
-      //   asked=false;
+      //   asked=FALSE;
 
       // copy previous state of buttons
 
@@ -2266,11 +2265,11 @@ void ControlPlayerObj (objtype * ob)
             break;
             }
    //      else if ((ServerCommandStatus(oldpolltime)==cs_fixing) &&
-   //               (networkgame==false) &&
-   //               (asked==false)
+   //               (networkgame==FALSE) &&
+   //               (asked==FALSE)
    //              )
    //         {
-   //         asked=true;
+   //         asked=TRUE;
    //         RequestPacket(oldpolltime, server, controldivisor);
    //         }
          else
@@ -2281,9 +2280,9 @@ void ControlPlayerObj (objtype * ob)
          if (GetTicCount()>savetime)
             {
             SoftError("Client timeout oldpolltime=%d\n",oldpolltime);
-            if (IsServer==false)
+            if (IsServer==FALSE)
                RequestPacket(oldpolltime, server, controldivisor);
-            if (networkgame==true)
+            if (networkgame==TRUE)
                savetime=GetTicCount()+NETWORKTIMEOUT;
             else
                savetime=GetTicCount()+MODEMTIMEOUT;
@@ -2449,7 +2448,7 @@ void SendGameDescription( void )
    if (!networkgame)
       AssignTeams();
 
-   if (IsServer==false)
+   if (IsServer==FALSE)
       {
       WritePacket(temp,length,server);
       }
@@ -2571,7 +2570,7 @@ void SendGameStart( void )
    temp=SafeMalloc(length);
    *(temp)=(uint8_t)COM_GAMEPLAY;
 
-   if (IsServer==false)
+   if (IsServer==FALSE)
       {
       WritePacket(temp,length,server);
       }
@@ -2591,15 +2590,15 @@ void SendGameStart( void )
 void SetupGamePlayer ( void )
 {
    int savetime;
-   bool done;
-   bool gameready;
+   bool8_t done;
+   bool8_t gameready;
 
    savetime=GetTicCount();
 
-   done=false;
-   gameready=false;
+   done=FALSE;
+   gameready=FALSE;
 
-   while (done==false)
+   while (done==FALSE)
       {
 		// Setup individual player
       AbortCheck("SetupGamePlayer aborted\n");
@@ -2608,7 +2607,7 @@ void SetupGamePlayer ( void )
 		if (GetTicCount() >= savetime)
          {
          savetime=GetTicCount()+SETUPTIME;
-         if (gameready==false)
+         if (gameready==FALSE)
             SendPlayerDescription();
          else
             SendGameAck();
@@ -2616,10 +2615,10 @@ void SetupGamePlayer ( void )
       switch (SetupCheckForPacket())
          {
          case scfp_done:
-            done=true;
+            done=TRUE;
             break;
          case scfp_gameready:
-            gameready=true;
+            gameready=TRUE;
             break;
          }
       }
@@ -2636,15 +2635,15 @@ void SetupGamePlayer ( void )
 // AllPlayersReady ()
 //
 //****************************************************************************
-bool AllPlayersReady ( void )
+bool8_t AllPlayersReady ( void )
 {
    int i;
 
 	for (i=0;i<numplayers;i++)
-      if ((PlayersReady[i]==false) && (PlayerStatus[i]==player_ingame))
-         return false;
+      if ((PlayersReady[i]==FALSE) && (PlayerStatus[i]==player_ingame))
+         return FALSE;
 
-   return true;
+   return TRUE;
 }
 
 //****************************************************************************
@@ -2652,15 +2651,15 @@ bool AllPlayersReady ( void )
 // GotAllPlayerDescriptions ()
 //
 //****************************************************************************
-bool GotAllPlayerDescriptions ( void )
+bool8_t GotAllPlayerDescriptions ( void )
 {
    int i;
 
 	for (i=0;i<numplayers;i++)
-      if ((GotPlayersDesc[i]==false) && (PlayerStatus[i]==player_ingame))
-         return false;
+      if ((GotPlayersDesc[i]==FALSE) && (PlayerStatus[i]==player_ingame))
+         return FALSE;
 
-   return true;
+   return TRUE;
 }
 
 //****************************************************************************
@@ -2671,21 +2670,21 @@ bool GotAllPlayerDescriptions ( void )
 void SetupGameMaster ( void )
 {
    int savetime;
-   bool done;
+   bool8_t done;
 
-   memset(GotPlayersDesc,false,sizeof(GotPlayersDesc));
-	GotPlayersDesc[consoleplayer]=true;
+   memset(GotPlayersDesc,FALSE,sizeof(GotPlayersDesc));
+	GotPlayersDesc[consoleplayer]=TRUE;
 
-   memset(PlayersReady,false,sizeof(PlayersReady));
-	PlayersReady[consoleplayer]=true;
+   memset(PlayersReady,FALSE,sizeof(PlayersReady));
+	PlayersReady[consoleplayer]=TRUE;
 
    savetime=GetTicCount();
 
-   done=false;
+   done=FALSE;
 
    InitializeRNG ();
 
-   while (done==false)
+   while (done==FALSE)
       {
 		// Setup individual player
 
@@ -2695,14 +2694,14 @@ void SetupGameMaster ( void )
 		if (GetTicCount() >= savetime)
          {
          savetime=GetTicCount()+SETUPTIME;
-			if (GotAllPlayerDescriptions()==true)
+			if (GotAllPlayerDescriptions()==TRUE)
             SendGameDescription();
          }
-      if (AllPlayersReady ()==true)
+      if (AllPlayersReady ()==TRUE)
          {
          SendGameStart();
          SendGameStart();
-         done=true;
+         done=TRUE;
          }
       SetupCheckForPacket();
       }
@@ -2763,14 +2762,14 @@ void GetDemoFilename (int demonumber, char **filename)
 //
 //****************************************************************************
 
-bool DemoExists (int demonumber)
+bool8_t DemoExists (int demonumber)
 {
    char *demo = NULL;
-   bool ret = false;
+   bool8_t ret = FALSE;
 
    GetDemoFilename (demonumber, &demo);
    if (demo && access (demo, F_OK) == 0)
-      ret = true;
+      ret = TRUE;
    else
    {
       /* Saves the users violence level, only do this once, otherwise
@@ -2781,9 +2780,9 @@ bool DemoExists (int demonumber)
       gamestate.violence = 3;
       GetDemoFilename (demonumber, &demo);
       if (demo && access (demo, F_OK) == 0)
-         ret = true;
+         ret = TRUE;
       else
-         ret = false;
+         ret = FALSE;
    }
 
    free(demo);
@@ -2855,7 +2854,7 @@ void RecordDemo ( void )
    DemoHeader=(DemoHeaderType *)demoptr;
    demoptr+=sizeof(gamestate);
    memcpy(&(DemoHeader->demostate),&gamestate,sizeof(gamestate));
-   demorecord = true;
+   demorecord = TRUE;
    locplayerstate->player=0;
    InitializeWeapons(locplayerstate);
    ResetPlayerstate(locplayerstate);
@@ -2875,7 +2874,7 @@ void SetupDemo ( void )
 {
    DemoHeaderType * DemoHeader;
 
-   demoplayback = true;
+   demoplayback = TRUE;
    godmode=0;
 
    DemoHeader=(DemoHeaderType *)demoptr;
@@ -2894,8 +2893,8 @@ void SetupDemo ( void )
 
 void FreeDemo ( void )
 {
-   demoplayback = false;
-   demorecord = false;
+   demoplayback = FALSE;
+   demorecord = FALSE;
    SafeFree (demobuffer);
    demobuffer=NULL;
 }
@@ -2908,7 +2907,7 @@ void FreeDemo ( void )
 
 void CheckForDemoDone ( void )
 {
-	if ((demoplayback==true) && (demoptr >= lastdemoptr))
+	if ((demoplayback==TRUE) && (demoptr >= lastdemoptr))
 		{
       FreeDemo();
       playstate = ex_demodone;
@@ -2968,7 +2967,7 @@ void AddDemoCmd (void)
    //
 
    SoftError("Demo command played at %d\n",controlupdatetime);
-   if (demoplayback==true)
+   if (demoplayback==TRUE)
       {
       dtime=(DemoType *)demoptr;
       controlbuf[0]=dtime->momx<<1;

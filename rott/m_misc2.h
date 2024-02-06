@@ -19,28 +19,27 @@
 #ifndef __M_MISC2__
 #define __M_MISC2__
 
-#include <stdbool.h>
 #include <stdarg.h>
 
 #include "rt_def.h"
 
 void M_MakeDirectory(const char *path);
-bool M_FileExists(const char *file);
+bool8_t M_FileExists(const char *file);
 char *M_TempFile(const char *s);
 char *M_FileCaseExists(const char *file);
-bool M_StrToInt(const char *str, int *result);
+bool8_t M_StrToInt(const char *str, int *result);
 char *M_DirName(const char *path);
 const char *M_BaseName(const char *path);
 void M_ForceUppercase(char *text);
 void M_ForceLowercase(char *text);
 char *M_StringDuplicate(const char *orig);
-bool M_StringCopy(char *dest, const char *src, size_t dest_size);
-bool M_StringConcat(char *dest, const char *src, size_t dest_size);
+bool8_t M_StringCopy(char *dest, const char *src, size_t dest_size);
+bool8_t M_StringConcat(char *dest, const char *src, size_t dest_size);
 char *M_StringReplace(const char *haystack, const char *needle,
                       const char *replacement);
 char *M_StringJoin(const char *s, ...);
-bool M_StringEndsWith(const char *s, const char *suffix);
-bool M_StringCaseEndsWith(const char *s, const char *suffix);
+bool8_t M_StringEndsWith(const char *s, const char *suffix);
+bool8_t M_StringCaseEndsWith(const char *s, const char *suffix);
 int M_snprintf(char *buf, size_t buf_len, const char *s, ...) PRINTF_ATTR(3, 4);
 
 #endif

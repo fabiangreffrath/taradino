@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_sound_public
 #define _rt_sound_public
 
-#include <stdbool.h>
 #include <stdint.h>
 #include "music.h"
 #include "develop.h"
@@ -499,7 +498,7 @@ typedef enum {
 extern int SD_Started;
 
 int SD_SetupFXCard ( int * numvoices, int * numbits, int * numchannels);
-int SD_Startup ( bool bombonerror );
+int SD_Startup ( bool8_t bombonerror );
 int SD_Play ( int sndnum );
 void SD_Shutdown (void);
 
@@ -511,7 +510,7 @@ void SD_SetPan ( int handle, int vol, int left, int right );
 int SD_Play3D ( int sndnum, int angle, int distance );
 int SD_PlayPitchedSound ( int sndnum, int volume, int pitch );
 void SD_SetSoundPitch ( int sndnum, int pitch );
-bool SD_SoundOkay ( int sndnum );
+bool8_t SD_SoundOkay ( int sndnum );
 
 //***************************************************************************
 //
@@ -566,7 +565,7 @@ typedef enum {
 
 
 void MU_Shutdown ( void );
-int MU_Startup ( bool bombonerror );
+int MU_Startup ( bool8_t bombonerror );
 void MU_PlaySong ( int num );
 void MU_StopSong ( void );
 
@@ -687,5 +686,5 @@ void MU_LoadMusic (uint8_t * buf, int size);
 
 void MU_SaveMusic (uint8_t ** buf, int * size);
 
-bool MusicStarted( void );
+bool8_t MusicStarted( void );
 #endif

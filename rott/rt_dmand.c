@@ -18,7 +18,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <stdbool.h>
 #include <stdint.h>
 #include "rt_def.h"
 #include "rt_util.h"
@@ -29,18 +28,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "fx_man.h"
 #include "develop.h"
 
-static bool Recording=false;
-static bool Feeder=false;
+static bool8_t Recording=FALSE;
+static bool8_t Feeder=FALSE;
 static uint8_t * RecordingBuffer;
 static int Playingvoice;
 static int RecordingPointer;
 static int FeederPointer;
-static bool Playback=false;
-static bool Playing=false;
+static bool8_t Playback=FALSE;
+static bool8_t Playing=FALSE;
 static char * PlaybackBuffer;
 static int PlaybackPointer;
 static int PlayingPointer;
-static bool RecordingSemaphore=false;
+static bool8_t RecordingSemaphore=FALSE;
 
 //#define FX_StartDemandFeedPlayback MV_StartDemandFeedPlayback
 //#define FX_StartRecording          MV_StartRecording
@@ -54,7 +53,7 @@ static bool RecordingSemaphore=false;
 //***************************************************************************
 void SD_UpdatePlaybackSound ( char ** ptr, unsigned long * length )
    {
-   if ( Playing==false )
+   if ( Playing==FALSE )
       {
       *ptr = NULL;
       *length = 0;
@@ -64,11 +63,11 @@ void SD_UpdatePlaybackSound ( char ** ptr, unsigned long * length )
       {
       *ptr = NULL;
       *length = 0;
-      if (Playback==false)
+      if (Playback==FALSE)
          {
          FX_StopSound( Playingvoice );
          SafeFree ( PlaybackBuffer );
-         Playing=false;
+         Playing=FALSE;
          }
       return;
       }
@@ -96,16 +95,16 @@ void SD_UpdatePlaybackSound ( char ** ptr, unsigned long * length )
 
 void SD_StartIncomingSound ( void )
 {
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       return;
-   if ( ( Recording==true ) || ( Playback==true ) )
+   if ( ( Recording==TRUE ) || ( Playback==TRUE ) )
       {
       return;
       }
 
-   Playback=true;
+   Playback=TRUE;
    PlaybackBuffer = SafeMalloc (PLAYBACKBUFFERSIZE);
-   Playing = false;
+   Playing = FALSE;
    PlayingPointer = -1;
    PlaybackPointer = 0;
 
@@ -117,7 +116,7 @@ void SD_StartIncomingSound ( void )
    if (Playingvoice==0)
       {
       SafeFree(PlaybackBuffer);
-      Playback=false;
+      Playback=FALSE;
       }
 }
 
@@ -129,9 +128,9 @@ void SD_StartIncomingSound ( void )
 
 void SD_StopIncomingSound ( void )
 {
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       return;
-   Playback=false;
+   Playback=FALSE;
 }
 
 
@@ -145,10 +144,10 @@ void SD_UpdateIncomingSound ( uint8_t * ptr, uint16_t length )
 {
    int amount;
 
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       return;
 
-   if ( Playback==false )
+   if ( Playback==FALSE )
       {
       return;
       }
@@ -173,12 +172,12 @@ void SD_UpdateIncomingSound ( uint8_t * ptr, uint16_t length )
 
    if (PlayingPointer==-1)
       {
-      Playing=true;
+      Playing=TRUE;
       PlayingPointer=0;
       }
    if (PlaybackPointer==PlayingPointer)
       {
-      Playback=false;
+      Playback=FALSE;
       }
 }
 
@@ -193,7 +192,7 @@ void SD_UpdateRecordingSound ( char * ptr, int length )
    int amount;
 
    whereami = 69;
-   if ( Recording==false )
+   if ( Recording==FALSE )
       {
       return;
       }
@@ -217,15 +216,15 @@ void SD_UpdateRecordingSound ( char * ptr, int length )
                          (RECORDINGBUFFERSIZE - 1);
       }
    whereami = 72;
-   if (Feeder == false)
+   if (Feeder == FALSE)
       {
-      Feeder = true;
+      Feeder = TRUE;
       }
 
    whereami = 73;
    if (RecordingPointer==FeederPointer)
       {
-      Recording=false;
+      Recording=FALSE;
       }
    whereami = 74;
    }
@@ -236,21 +235,21 @@ void SD_UpdateRecordingSound ( char * ptr, int length )
 //
 //***************************************************************************
 
-bool SD_StartRecordingSound ( void )
+bool8_t SD_StartRecordingSound ( void )
 {
    int status=FX_Ok;
 
-   if (SD_Started==false)
-      return false;
-   if (remoteridicule == false)
-      return false;
-   if ( ( Recording==true ) || ( Playback==true ) || (Feeder==true))
+   if (SD_Started==FALSE)
+      return FALSE;
+   if (remoteridicule == FALSE)
+      return FALSE;
+   if ( ( Recording==TRUE ) || ( Playback==TRUE ) || (Feeder==TRUE))
       {
-      return false;
+      return FALSE;
       }
-   Recording=true;
+   Recording=TRUE;
    RecordingBuffer = SafeMalloc (RECORDINGBUFFERSIZE);
-   Feeder = false;
+   Feeder = FALSE;
    FeederPointer = -1;
    RecordingPointer = 0;
 
@@ -260,12 +259,12 @@ bool SD_StartRecordingSound ( void )
 
    if (status!=FX_Ok)
       {
-      Recording=false;
+      Recording=FALSE;
       SafeFree(RecordingBuffer);
-      return false;
+      return FALSE;
       }
 
-   return true;
+   return TRUE;
 }
 
 //***************************************************************************
@@ -276,14 +275,14 @@ bool SD_StartRecordingSound ( void )
 
 void SD_StopRecordingSound ( void )
 {
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       return;
-   if (Recording == true)
+   if (Recording == TRUE)
       {
 #if 0
       FX_StopRecord();
 #endif
-      Recording=false;
+      Recording=FALSE;
       }
 }
 
@@ -295,7 +294,7 @@ void SD_StopRecordingSound ( void )
 
 void SD_SetRecordingActive ( void )
 {
-   RecordingSemaphore=true;
+   RecordingSemaphore=TRUE;
 }
 
 //***************************************************************************
@@ -306,7 +305,7 @@ void SD_SetRecordingActive ( void )
 
 void SD_ClearRecordingActive ( void )
 {
-   RecordingSemaphore=false;
+   RecordingSemaphore=FALSE;
 }
 
 //***************************************************************************
@@ -315,7 +314,7 @@ void SD_ClearRecordingActive ( void )
 //
 //***************************************************************************
 
-bool SD_RecordingActive ( void )
+bool8_t SD_RecordingActive ( void )
 {
    return RecordingSemaphore;
 }
@@ -337,18 +336,18 @@ recordstate SD_GetSoundData ( uint8_t * data, uint16_t length )
    recordstate status=rs_data;
    int amount;
 
-   if (SD_Started==false)
+   if (SD_Started==FALSE)
       return rs_nodata;
 
-   if (Feeder==false)
+   if (Feeder==FALSE)
       return rs_nodata;
 
    if (FeederPointer==RecordingPointer)
       {
-      if (Recording==false)
+      if (Recording==FALSE)
          {
          SafeFree(RecordingBuffer);
-         Feeder=false;
+         Feeder=FALSE;
          return rs_endsound;
          }
       else
@@ -391,10 +390,10 @@ recordstate SD_GetSoundData ( uint8_t * data, uint16_t length )
 //
 //***************************************************************************
 
-bool SD_SoundDataReady ( void )
+bool8_t SD_SoundDataReady ( void )
 {
-   if (SD_Started==false)
-      return false;
+   if (SD_Started==FALSE)
+      return FALSE;
    return Feeder;
 }
 

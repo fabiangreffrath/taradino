@@ -22,7 +22,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _scriplib_public
 #define _scriplib_public
 
-#include <stdbool.h>
 
 #define	MAXTOKEN	128
 
@@ -30,14 +29,14 @@ extern	char	token[MAXTOKEN];
 extern	char	name[MAXTOKEN*2];
 extern	char	*scriptbuffer,*script_p,*scriptend_p;
 extern	int		scriptline;
-extern	bool	endofscript;
-extern   bool tokenready;      // only true if UnGetToken was just called
+extern	bool8_t	endofscript;
+extern   bool8_t tokenready;      // only TRUE if UnGetToken was just called
 
 
 void LoadScriptFile (char *filename);
-void GetToken (bool crossline);
-void GetTokenEOL (bool crossline);
+void GetToken (bool8_t crossline);
+void GetTokenEOL (bool8_t crossline);
 void UnGetToken (void);
-bool TokenAvailable (void);
+bool8_t TokenAvailable (void);
 
 #endif

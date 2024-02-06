@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_cfg_public
 #define _rt_cfg_public
 
-#include <stdbool.h>
 #include <stdint.h>
 
 //****************************************************************************
@@ -40,20 +39,20 @@ extern int     FXMode;
 extern int     MusicMode;
 extern int     MUvolume;
 extern int     FXvolume;
-extern bool mouseenabled;
-extern bool joystickenabled;
-extern bool joypadenabled;
+extern bool8_t mouseenabled;
+extern bool8_t joystickenabled;
+extern bool8_t joypadenabled;
 extern int     joystickport;
 extern int     mouseadjustment;
 extern int     threshold;
 extern int     NumVoices;
 extern int     NumChannels;
 extern int     NumBits;
-extern bool stereoreversed;
-extern bool AutoDetailOn;
+extern bool8_t stereoreversed;
+extern bool8_t AutoDetailOn;
 extern int     DoubleClickSpeed;
 extern int     fulllight;
-extern bool BobbinOn;
+extern bool8_t BobbinOn;
 extern int     Menuflipspeed;
 extern int     DetailLevel;
 extern int     fandc;
@@ -69,7 +68,7 @@ extern uint8_t    passwordstring[20];
 typedef struct
 {
    char *path;
-   bool avail;
+   bool8_t avail;
    char *file;
 } AlternateInformation;
 
@@ -97,7 +96,7 @@ extern MacroList CommbatMacros[MAXMACROS];
 void WriteBattleConfig(void);
 void ReadScores (void);
 void ReadInt (const char * s1, int * val);
-void ReadBoolean (const char * s1, bool * val);
+void ReadBoolean (const char * s1, bool8_t * val);
 void ReadConfig (void);
 void WriteParameter (int file, const char * s1, int val);
 void WriteScores (void);

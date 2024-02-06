@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //******************************************************************************
 
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -93,13 +92,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 int CP_Acknowledge;
 
-bool POK = false;
+bool8_t POK = FALSE;
 char    pword[ 13 ];
 
-bool ingame    = false;
-bool inmenu    = false;
-bool pickquick = false;
-bool NewGame   = false;
+bool8_t ingame    = FALSE;
+bool8_t inmenu    = FALSE;
+bool8_t pickquick = FALSE;
+bool8_t NewGame   = FALSE;
 
 //
 // Global window coords
@@ -123,7 +122,7 @@ font_t  *smallfont;
 font_t  *bigfont;
 font_t  *tinyfont;
 
-bool loadedgame = false;
+bool8_t loadedgame = FALSE;
 
 battle_type BATTLE_Options[ battle_NumBattleModes ];
 
@@ -146,7 +145,7 @@ char order[ 21 ] = {
 
 #define RETURNVAL    100
 
-static bool loadsavesound = false;
+static bool8_t loadsavesound = FALSE;
 static int numdone;
 
 static char *endStrings[ 7 ] =
@@ -312,7 +311,7 @@ static int DangerNums[ 3 ] =
 static int MenuNum = 0;
 static int handlewhich;
 static int CSTactive = 0;
-static bool INFXSETUP = false;
+static bool8_t INFXSETUP = FALSE;
 
 //
 // MENU CURSOR SHAPES
@@ -1113,7 +1112,7 @@ static int CUSTOM_y[ 7 ] = { 31, 0, 63, 0, 94, 0, 126 };
 //
 // Save globals
 //
-static bool StartGame = false;
+static bool8_t StartGame = FALSE;
 
 static int  SaveGamesAvail[ NUMSAVEGAMES ];
 static char SaveGameNames[ NUMSAVEGAMES ][ 32 ];
@@ -1421,7 +1420,7 @@ void ScanForSavedGames ()
 {
     char *path, *qm;
     int which;
-    bool found = false;
+    bool8_t found = FALSE;
 
     //
     // SEE WHICH SAVE GAME FILES ARE AVAILABLE & READ STRING IN
@@ -1440,7 +1439,7 @@ void ScanForSavedGames ()
 
         if (file)
         {
-            found = true;
+            found = TRUE;
             SaveGamesAvail[which] = 1;
             GetSavedMessage (which, &SaveGameNames[which][0]);
 
@@ -1483,13 +1482,13 @@ void SetUpControlPanel (void)
 
    // Copy the current save game screen (\xBD size) to this buffer
 
-   if (RefreshPause==false)
+   if (RefreshPause==FALSE)
       {
-      GamePaused=false;
+      GamePaused=FALSE;
       ThreeDRefresh();
       FlipPage();
       FlipPage();
-      GamePaused=true;
+      GamePaused=TRUE;
       }
 
 
@@ -1516,7 +1515,7 @@ void SetUpControlPanel (void)
 
 
 
-   if (modemgame == true)
+   if (modemgame == TRUE)
       {
       // Make battle mode active
       //
@@ -1555,9 +1554,9 @@ void GetMenuInfo (void)
 {
    ConvertPasswordStringToPassword ();
 
-   POK=true;
+   POK=TRUE;
    if (pword[0]==0)
-      POK=false;
+      POK=FALSE;
 }
 
 
@@ -1585,7 +1584,7 @@ void AllocateSavedScreenPtr (void)
    // Save the current game screen
 
    savedscreen = SafeMalloc(16000);
-   inmenu  = true;
+   inmenu  = TRUE;
    numdone = 0;
 }
 
@@ -1599,7 +1598,7 @@ void AllocateSavedScreenPtr (void)
 void FreeSavedScreenPtr (void)
 {
    SafeFree (savedscreen);
-   inmenu  = false;
+   inmenu  = FALSE;
 }
 
 
@@ -1613,7 +1612,7 @@ void CleanUpControlPanel (void)
 {
 	int   joyx, joyy;
 
-   if ((playstate==ex_resetgame) || (loadedgame==true))
+   if ((playstate==ex_resetgame) || (loadedgame==TRUE))
       ShutdownClientControls();
 
    // Free up saved screen image
@@ -1627,7 +1626,7 @@ void CleanUpControlPanel (void)
    if (mouseenabled)
       PollMouseMove ();    // Trying to kill movement
 
-   RefreshPause = true;
+   RefreshPause = TRUE;
 }
 
 
@@ -1636,19 +1635,19 @@ void CleanUpControlPanel (void)
 // CP_CheckQuick ()
 //
 //******************************************************************************
-bool CP_CheckQuick
+bool8_t CP_CheckQuick
    (
    uint8_t scancode
    )
 
    {
-   if (demoplayback==true)
+   if (demoplayback==TRUE)
       {
       switch ( scancode )
          {
          case sc_Escape:
-            inmenu = true;
-            return( true );
+            inmenu = TRUE;
+            return( TRUE );
             break;
          }
       }
@@ -1664,13 +1663,13 @@ bool CP_CheckQuick
          case sc_F8:
          case sc_F9:
          case sc_F10:
-            inmenu = true;
-            return( true );
+            inmenu = TRUE;
+            return( TRUE );
             break;
          }
       }
 
-   return( false );
+   return( FALSE );
    }
 
 
@@ -1690,9 +1689,9 @@ void ControlPanel
    if ( scancode == sc_Escape )
       {
       CP_MainMenu();
-      if ( ( playstate == ex_stillplaying ) && ( loadedgame == false ) )
+      if ( ( playstate == ex_stillplaying ) && ( loadedgame == FALSE ) )
          {
-         fizzlein = true;
+         fizzlein = TRUE;
          }
       return;
       }
@@ -1700,7 +1699,7 @@ void ControlPanel
    SetupMenuBuf();
 
    numdone = 0;
-   StartGame = false;
+   StartGame = FALSE;
  
    SetUpControlPanel();
    EnableScreenStretch();
@@ -1735,7 +1734,7 @@ void ControlPanel
          LastScan          = 0;
          Keyboard[ sc_F9 ] = 0;
 
-         loadsavesound = true;
+         loadsavesound = TRUE;
          CP_LoadGame( 1, 0 );
          break;
 
@@ -1752,14 +1751,14 @@ void ControlPanel
    CleanUpControlPanel();
    ShutdownMenuBuf();
 
-   if ( loadedgame == false )
+   if ( loadedgame == FALSE )
       {
-      SetupScreen( false );
-      fizzlein = true;
-      inmenu = false;
+      SetupScreen( FALSE );
+      fizzlein = TRUE;
+      inmenu = FALSE;
       }
 
-   loadsavesound = false;
+   loadsavesound = FALSE;
    }
 
 
@@ -1787,12 +1786,12 @@ menuitems CP_MainMenu
    //
    // Main menu loop.  "Exit options" or "New game" exits
    //
-   StartGame = false;
+   StartGame = FALSE;
    EnableScreenStretch();
 
    while( !StartGame )
       {
-      StartGame = false;
+      StartGame = FALSE;
 
       IN_ClearKeysDown();
 
@@ -1806,7 +1805,7 @@ menuitems CP_MainMenu
                playstate = ex_titles;
                }
 
-            StartGame = true;
+            StartGame = TRUE;
 			DisableScreenStretch();//bna++ shut off streech mode
             break;
 
@@ -1887,7 +1886,7 @@ int HandleMenu (CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w))
    int         newpos;
    volatile int timer;
    ControlInfo ci;
-   bool     playsnd = false;
+   bool8_t     playsnd = FALSE;
 
    handlewhich = item_i->curpos;
    x     = item_i->x;
@@ -2033,7 +2032,7 @@ int HandleMenu (CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w))
                {
                   y -= 6;
                   DrawHalfStep (x, y);
-                  playsnd = false;
+                  playsnd = FALSE;
 
                   RefreshMenuBuf (0);
 
@@ -2043,7 +2042,7 @@ int HandleMenu (CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w))
                }
                else
                {
-                  playsnd = true;
+                  playsnd = TRUE;
                   RefreshMenuBuf (0);
                }
 
@@ -2079,7 +2078,7 @@ int HandleMenu (CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w))
                {
                   y += 6;
                   DrawHalfStep(x,y);
-                  playsnd = false;
+                  playsnd = FALSE;
 
                   RefreshMenuBuf (0);
 
@@ -2089,7 +2088,7 @@ int HandleMenu (CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w))
                }
                else
                {
-                  playsnd = true;
+                  playsnd = TRUE;
                   RefreshMenuBuf (0);
                }
 
@@ -2226,7 +2225,7 @@ int HandleMenu (CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w))
       {
          if (Keyboard[sc_Delete] && SaveGamesAvail[handlewhich])
          {
-            if (CP_DisplayMsg ("Delete saved game?\nAre you sure?", 12) == true)
+            if (CP_DisplayMsg ("Delete saved game?\nAre you sure?", 12) == TRUE)
             {
                char loadname[] = "rottgam0.rot";
                char *filename;
@@ -2263,7 +2262,7 @@ int HandleMenu (CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w))
 
          if (Keyboard[sc_CapsLock] && Keyboard[sc_X])
          {
-            SaveScreen(true);
+            SaveScreen(TRUE);
          }
          else
             if (Keyboard[sc_CapsLock] && Keyboard[sc_Q])
@@ -2557,12 +2556,12 @@ void CP_OrderInfo
    int maxpage;
    int page;
    int key;
-   bool newpage;
+   bool8_t newpage;
 
 
 
    maxpage = W_GetNumForName( "ORDRSTOP" ) - W_GetNumForName( "ORDRSTRT" ) - 2;
-   newpage = false;
+   newpage = FALSE;
    page = 1;
 
    do
@@ -2593,7 +2592,7 @@ void CP_OrderInfo
             if ( page != 1 )
                {
                page = 1;
-               newpage = true;
+               newpage = TRUE;
                MN_PlayMenuSnd( SD_MOVECURSORSND );
                }
             break;
@@ -2602,7 +2601,7 @@ void CP_OrderInfo
             if ( page != maxpage )
                {
                page = maxpage;
-               newpage = true;
+               newpage = TRUE;
                MN_PlayMenuSnd( SD_MOVECURSORSND );
                }
             break;
@@ -2613,7 +2612,7 @@ void CP_OrderInfo
             if ( page > 1 )
                {
                page--;
-               newpage = true;
+               newpage = TRUE;
                MN_PlayMenuSnd( SD_MOVECURSORSND );
                }
             break;
@@ -2624,7 +2623,7 @@ void CP_OrderInfo
             if ( page < maxpage )
                {
                page++;
-               newpage = true;
+               newpage = TRUE;
                MN_PlayMenuSnd( SD_MOVECURSORSND );
                }
             break;
@@ -2647,7 +2646,7 @@ void CP_OrderInfo
 
 void CP_ViewScores (void)
 {
-   CheckHighScore (0, 0, true);
+   CheckHighScore (0, 0, TRUE);
 }
 
 
@@ -2698,7 +2697,7 @@ void CP_Quit ( int which )
 //
 //******************************************************************************
 
-bool CP_DisplayMsg
+bool8_t CP_DisplayMsg
    (
    char *s,
    int number
@@ -2724,11 +2723,11 @@ bool CP_DisplayMsg
 #define NO     "q_no\0"
 
    ControlInfo ci;
-   bool retval;
-   bool done;
-   bool YESON;
-   bool redraw;
-   bool blowout;
+   bool8_t retval;
+   bool8_t done;
+   bool8_t YESON;
+   bool8_t redraw;
+   bool8_t blowout;
    char   *temp;
    char   *active;
    char   *inactive;
@@ -2741,11 +2740,11 @@ bool CP_DisplayMsg
    int     t;
 
    W_H = 1;
-   retval  = false;
-   done    = false;
-   YESON   = true;
-   redraw  = false;
-   blowout = false;
+   retval  = FALSE;
+   done    = FALSE;
+   YESON   = TRUE;
+   redraw  = FALSE;
+   blowout = FALSE;
 
    IN_ClearKeysDown();
    IN_IgnoreMouseButtons();
@@ -2805,19 +2804,19 @@ bool CP_DisplayMsg
    WindowW = W_W;
    WindowH = W_H;
 
-   redraw = true;
+   redraw = TRUE;
 
    IFont = ( cfont_t * )W_CacheLumpName( FontNames[ mn_smallfont ],
       PU_CACHE, Cvt_cfont_t, 1 );
 /*
-   DrawSTMenuBuf( WindowX, L_Y, W_W, W_H, false );
+   DrawSTMenuBuf( WindowX, L_Y, W_W, W_H, FALSE );
    MenuBufCPrint( s );
 
-   DrawSTMenuBuf( Q_b1X, Q_bY, Q_bW, Q_bH, false );
+   DrawSTMenuBuf( Q_b1X, Q_bY, Q_bW, Q_bH, FALSE );
    DrawMenuBufIString( Q_b1X + 3, Q_Y + 46, "YES", NORMALCOLOR );
 //   DrawIMenuBufItem (PrintX, PrintY, W_GetNumForName (YES), NORMALCOLOR);
 
-   DrawSTMenuBuf( Q_b2X, Q_bY, Q_bW, Q_bH, true );
+   DrawSTMenuBuf( Q_b2X, Q_bY, Q_bW, Q_bH, TRUE );
    DrawMenuBufIString( Q_b2X + 2, Q_Y + 45, "NO", ACTIVECOLOR );
 //   DrawIMenuBufItem (PrintX, PrintY, W_GetNumForName (NO), ACTIVECOLOR);
 */
@@ -2833,40 +2832,40 @@ bool CP_DisplayMsg
          {
          MN_PlayMenuSnd( SD_MOVECURSORSND );
          YESON = 1;
-         redraw = true;
+         redraw = TRUE;
          }
       else if ( ( ci.dir == dir_East ) && ( YESON ) )
          {
          MN_PlayMenuSnd( SD_MOVECURSORSND );
          YESON = 0;
-         redraw = true;
+         redraw = TRUE;
          }
 
       if ( Keyboard[ sc_Y ] )
          {
          YESON  = 1;
-         redraw = true;
-         Keyboard[ sc_Enter ] = true;
-         blowout = true;
+         redraw = TRUE;
+         Keyboard[ sc_Enter ] = TRUE;
+         blowout = TRUE;
          }
       else if ( Keyboard[ sc_N ] )
          {
          YESON  = 0;
-         redraw = true;
-         Keyboard[ sc_Enter ] = true;
-         blowout = true;
+         redraw = TRUE;
+         Keyboard[ sc_Enter ] = TRUE;
+         blowout = TRUE;
          }
 
       if ( redraw )
          {
-         redraw = false;
+         redraw = FALSE;
 
          DrawMenuBufPic( Q_X, Q_Y, QUITPIC );
          DrawMenuBufPic( Q_X + 12, Q_Y + 11, tri );
 
          PrintX = Q_X + W_X;
          PrintY = Q_Y + W_Y + 2;
-         DrawSTMenuBuf( WindowX, L_Y, W_W, W_H, false );
+         DrawSTMenuBuf( WindowX, L_Y, W_W, W_H, FALSE );
          CurrentFont = tinyfont;
          MenuBufCPrint( s );
 
@@ -2885,11 +2884,11 @@ bool CP_DisplayMsg
             inactivex = Q_b1X;
             }
 
-         DrawSTMenuBuf( activex, Q_bY, Q_bW, Q_bH, false );
+         DrawSTMenuBuf( activex, Q_bY, Q_bW, Q_bH, FALSE );
          DrawMenuBufIString( activex + 3, Q_Y + 46, active, ACTIVECOLOR );
 //         DrawIMenuBufItem (PrintX, PrintY, W_GetNumForName (YES), NORMALCOLOR);
 
-         DrawSTMenuBuf( inactivex, Q_bY, Q_bW, Q_bH, true );
+         DrawSTMenuBuf( inactivex, Q_bY, Q_bW, Q_bH, TRUE );
          DrawMenuBufIString( inactivex + 2, Q_Y + 45, inactive, NORMALCOLOR );
 //         DrawIMenuBufItem (PrintX, PrintY, W_GetNumForName (NO), ACTIVECOLOR);
 
@@ -2902,23 +2901,23 @@ bool CP_DisplayMsg
       if ( ( Keyboard[ sc_Space ] || Keyboard[ sc_Enter ] ||
          ci.button0 ) && YESON )
          {
-         done   = true;
-         retval = true;
+         done   = TRUE;
+         retval = TRUE;
          MN_PlayMenuSnd( SD_SELECTSND );
          CP_Acknowledge = CP_YES;
          }
       else if ( Keyboard[ sc_Escape ] || ci.button1 )
          {
-         done   = true;
-         retval = false;
+         done   = TRUE;
+         retval = FALSE;
          CP_Acknowledge = CP_ESC;
          MN_PlayMenuSnd( SD_ESCPRESSEDSND );
          }
       else if ( ( Keyboard[ sc_Space ] || Keyboard[ sc_Enter ] ||
          ci.button0 ) && !YESON )
          {
-         done   = true;
-         retval = false;
+         done   = TRUE;
+         retval = FALSE;
          CP_Acknowledge = CP_NO;
 
          if ( Keyboard[ sc_N ] )
@@ -2943,7 +2942,7 @@ bool CP_DisplayMsg
    {
       PrintX = Q_X + W_X;
       PrintY = Q_Y + W_Y + 2;
-      DrawSTMenuBuf( WindowX, L_Y, W_W, W_H, false );
+      DrawSTMenuBuf( WindowX, L_Y, W_W, W_H, FALSE );
       CurrentFont = tinyfont;
       MenuBufCPrint( s );
       LastScan=0;
@@ -2969,17 +2968,17 @@ void EndGameStuff (void)
 {
    Z_FreeTags( PU_LEVELSTRUCT, PU_LEVELEND );
 
-	pickquick = false;
-   CheckHighScore (gamestate.score, gamestate.mapon+1, true);
+	pickquick = FALSE;
+   CheckHighScore (gamestate.score, gamestate.mapon+1, TRUE);
    locplayerstate->lives = 0;
    playstate = ex_died;
    damagecount = 0;
    SetBorderColor (0);
 
    AdjustMenuStruct ();
-   ingame = false;
+   ingame = FALSE;
 
-   GamePaused  = false;
+   GamePaused  = FALSE;
 }
 
 
@@ -3111,7 +3110,7 @@ void CP_NewGame
    MainMenu[ savegame ].active = CP_Active;
 
    gamestate.battlemode = battle_StandAloneGame;
-   StartGame = true;
+   StartGame = TRUE;
    DisableScreenStretch();
    playstate = ex_resetgame;
 
@@ -3134,17 +3133,17 @@ void CP_EndGame
    )
 
    {
-   bool action;
+   bool8_t action;
 
    SetMenuTitle( "End Game" );
    action = CP_DisplayMsg( ENDGAMESTR, 12 );
 
-   StartGame = false;
+   StartGame = FALSE;
    EnableScreenStretch();
    if ( action )
       {
       EndGameStuff ();
-      pickquick = false;
+      pickquick = FALSE;
       }
    }
 
@@ -3238,21 +3237,21 @@ int DoLoad (int which)
 
    if ((which >= 0) && SaveGamesAvail[which])
    {
-      loadedgame = true;
+      loadedgame = TRUE;
 
       if (loadsavesound)
          MN_PlayMenuSnd (SD_SELECTSND);
 
-      if (LoadTheGame (which, &game) == true)
+      if (LoadTheGame (which, &game) == TRUE)
       {
          MenuFixup ();
 		 DisableScreenStretch();
-         StartGame = true;
+         StartGame = TRUE;
 			exit      = 1;
       }
       else
       {
-         if (CP_DisplayMsg ("Saved Game is\n old or incompatible\nDelete it?", 12)==true)
+         if (CP_DisplayMsg ("Saved Game is\n old or incompatible\nDelete it?", 12)==TRUE)
          {
             char loadname[] = "rottgam0.rot";
             char *filename;
@@ -3272,7 +3271,7 @@ int DoLoad (int which)
             SaveGamesAvail[which] = 0;
          }
 
-         loadedgame = false;
+         loadedgame = FALSE;
          DrawLoadSaveScreenAlt (0);
       }
    }
@@ -3318,7 +3317,7 @@ int CP_LoadGame (int quick, int dieload)
          else
          {
             DrawLoadSaveScreen (0);
-            if (CP_DisplayMsg ("Quick load saved game?\nAre you sure?", 12) == true)
+            if (CP_DisplayMsg ("Quick load saved game?\nAre you sure?", 12) == TRUE)
             {
                DrawLoadSaveScreen (0);
                CP_DrawSelectedGame (which);
@@ -3407,7 +3406,7 @@ void QuickSaveGame (void)
       game.version = ROTTVERSION;
       strcpy (game.message, &SaveGameNames[which][0]);
 
-      if (SaveTheGame (which, &game) == true)
+      if (SaveTheGame (which, &game) == TRUE)
          {
          char str[50];
 
@@ -3513,7 +3512,7 @@ int CP_SaveGame ( void )
                                 77, 6);
 
          if (US_LineInput (LSM_X+LSItems.indent+2, LSM_Y+which*9+2,
-                           input, input, true, 22, 75, 0))
+                           input, input, TRUE, 22, 75, 0))
          {
             SaveGamesAvail[which] = 1;
             memcpy(&game.picture[0],savedscreen,16000);
@@ -3523,7 +3522,7 @@ int CP_SaveGame ( void )
             strcpy (game.message, input);
             strcpy (&SaveGameNames[which][0], input);
 
-            if (SaveTheGame(which,&game)==true)
+            if (SaveTheGame(which,&game)==TRUE)
                {
 					MainMenu[loadgame].active=CP_Active;
 
@@ -3740,14 +3739,14 @@ void DefineKey
    )
 
    {
-   bool tick;
-   bool picked;
+   bool8_t tick;
+   bool8_t picked;
    int     timer;
    int     x;
    int     y;
 
-   tick   = false;
-   picked = false;
+   tick   = FALSE;
+   picked = FALSE;
    timer  = GetTicCount();
 
    x = NORMALKEY_X + 97;
@@ -3809,7 +3808,7 @@ void DefineKey
          strcpy( &NormalKeyNames[ handlewhich ][ KEYNAMEINDEX ],
             IN_GetScanName( key ) );
 
-         picked = true;
+         picked = TRUE;
 
          WaitKeyUp();
          Keyboard[ key ] = 0;
@@ -4138,7 +4137,7 @@ void Message (char *string)
    WindowW = mw;
 
    EraseMenuBufRegion (WindowX-5, PrintY-5, (mw+14)&0xFFFC, h+10);
-	DrawSTMenuBuf (WindowX-5, PrintY-5, (mw+14)&0xFFFC, h+10, true);
+	DrawSTMenuBuf (WindowX-5, PrintY-5, (mw+14)&0xFFFC, h+10, TRUE);
 
    MenuBufCPrint (string);
    RefreshMenuBuf (0);
@@ -4306,7 +4305,7 @@ void DrawLoadSaveScreenAlt (int loadsave)
 void PrintLSEntry (int w)
 {
 
-   DrawSTMenuBuf (LSM_X+LSItems.indent, LSM_Y+1+w*9, 80, 7, false);
+   DrawSTMenuBuf (LSM_X+LSItems.indent, LSM_Y+1+w*9, 80, 7, FALSE);
 
    PrintX = LSM_X+LSItems.indent+2;
    PrintY = LSM_Y+(w*9)+2;
@@ -4338,7 +4337,7 @@ int CalibrateJoystick
    uint16_t xmax, ymax, xmin, ymin, jb;
    int  checkbits;
    int  status;
-   bool done;
+   bool8_t done;
 
    if ( joypadenabled )
       {
@@ -4357,7 +4356,7 @@ int CalibrateJoystick
       }
 
    status = 0;
-   done = false;
+   done = FALSE;
    while( !done )
       {
       SetAlternateMenuBuf();
@@ -4453,7 +4452,7 @@ int CalibrateJoystick
          joyymax = ymax;
 
          status = 1;
-         done = true;
+         done = TRUE;
          }
       else
          {
@@ -4544,7 +4543,7 @@ void DrawCtlButtons (void)
    int i,
        x,
        y;
-   static bool first = true;
+   static bool8_t first = TRUE;
    int button_on;
    int button_off;
 
@@ -4590,7 +4589,7 @@ void DrawCtlButtons (void)
             break;
          }
       }
-      first = false;
+      first = FALSE;
    }
 
    x = CTL_X+CtlItems.indent-18;
@@ -4717,7 +4716,7 @@ void ReadAnyControl (ControlInfo *ci)
          ci->button0 = buttons & 1;
          ci->button1 = buttons & 2;
          ci->button2 = buttons & 4;
-         ci->button3 = false;
+         ci->button3 = FALSE;
          mouseactive = 1;
          }
       }
@@ -4752,7 +4751,7 @@ void ReadAnyControl (ControlInfo *ci)
             ci->button3=jb&8;
          }
          else
-            ci->button2=ci->button3=false;
+            ci->button2=ci->button3=FALSE;
       }
    }
 }
@@ -4805,21 +4804,21 @@ void DisplayInfo (int which)
 //
 //******************************************************************************
 
-void DrawSTMenuBuf (int x, int y, int w, int h, bool up)
+void DrawSTMenuBuf (int x, int y, int w, int h, bool8_t up)
 {
    if (!up)
    {
-      DrawTMenuBufHLine (x,   y,   w+1, false);
-      DrawTMenuBufVLine (x,   y+1, h-1, false);
-      DrawTMenuBufHLine (x,   y+h, w+1, true);
-      DrawTMenuBufVLine (x+w, y+1, h-1, true);
+      DrawTMenuBufHLine (x,   y,   w+1, FALSE);
+      DrawTMenuBufVLine (x,   y+1, h-1, FALSE);
+      DrawTMenuBufHLine (x,   y+h, w+1, TRUE);
+      DrawTMenuBufVLine (x+w, y+1, h-1, TRUE);
    }
    else
    {
-      DrawTMenuBufHLine (x,   y,   w+1, true);
-      DrawTMenuBufVLine (x,   y+1, h-1, true);
-      DrawTMenuBufHLine (x,   y+h, w+1, false);
-      DrawTMenuBufVLine (x+w, y+1, h-1, false);
+      DrawTMenuBufHLine (x,   y,   w+1, TRUE);
+      DrawTMenuBufVLine (x,   y+1, h-1, TRUE);
+      DrawTMenuBufHLine (x,   y+h, w+1, FALSE);
+      DrawTMenuBufVLine (x+w, y+1, h-1, FALSE);
    }
 }
 
@@ -5006,7 +5005,7 @@ void MenuFixup
    MainMenu[ viewscores ].letter       = 'E';
    strcpy (MainMenuNames[ viewscores ] , "END GAME");
    MainMenu[ savegame ].active         = CP_Active;
-   ingame = true;
+   ingame = TRUE;
    }
 
 //******************************************************************************
@@ -5123,9 +5122,9 @@ void DrawExtOptionsMenu (void)
    FlipMenuBuf();
 }
 extern int inverse_mouse;
-extern bool usemouselook;
-extern bool iG_aimCross;
-extern bool sdl_fullscreen;
+extern bool8_t usemouselook;
+extern bool8_t iG_aimCross;
+extern bool8_t sdl_fullscreen;
 
 void CP_ExtOptionsMenu (void)
 {
@@ -5398,7 +5397,7 @@ void DrawBattleMenu (void)
    DisplayInfo (0);
 
    BATTLE_SetOptions( &BATTLE_Options[ gamestate.battlemode ] );
-   ShowBattleOptions( true, MENU_X, MENU_Y + 49 );
+   ShowBattleOptions( TRUE, MENU_X, MENU_Y + 49 );
 
    if (ingame && inmenu && (!numdone))
       RefreshMenuBuf (0);
@@ -5476,11 +5475,11 @@ void BattleGamePlayerSetup( void )
             pos = 2;
             if ( status )
                {
-               StartGame   = true;
+               StartGame   = TRUE;
 			      DisableScreenStretch();
                handlewhich = -2;
                playstate   = ex_resetgame;
-               BATTLEMODE  = true;
+               BATTLEMODE  = TRUE;
                // Show please wait
                CP_ModemGameMessage( consoleplayer );
                return;
@@ -5502,7 +5501,7 @@ void BattleNoTeams( void )
    BattleGamePlayerSetup();
    if ( StartGame )
       {
-      gamestate.teamplay = false;
+      gamestate.teamplay = FALSE;
       }
    }
 
@@ -5518,7 +5517,7 @@ void BattleTeams( void )
    BattleGamePlayerSetup();
    if ( StartGame )
       {
-      gamestate.teamplay = true;
+      gamestate.teamplay = TRUE;
       }
    }
 
@@ -5584,13 +5583,13 @@ void CP_BattleMenu (void)
 //
 //****************************************************************************
 
-extern bool dopefish;
+extern bool8_t dopefish;
 void MN_PlayMenuSnd (int which)
 {
-   if (INFXSETUP || (SD_Started == false))
+   if (INFXSETUP || (SD_Started == FALSE))
       return;
 #if (SHAREWARE==0)
-   if (dopefish==true)
+   if (dopefish==TRUE)
       {
       switch (which)
          {
@@ -5616,7 +5615,7 @@ void MN_PlayMenuSnd (int which)
 //
 //******************************************************************************
 
-bool SliderMenu
+bool8_t SliderMenu
    (
    int *number,
    int upperbound,
@@ -5636,8 +5635,8 @@ bool SliderMenu
    ControlInfo ci;
    Direction   lastdir;
    patch_t    *shape;
-   bool     returnval;
-   bool     moved;
+   bool8_t     returnval;
+   bool8_t     moved;
    unsigned long scale;
    int         exit;
    int         range;
@@ -5668,7 +5667,7 @@ bool SliderMenu
    scale = ( erasew + shape->leftoffset - shape->width ) << 16;
    range = upperbound - lowerbound;
 
-   DrawSTMenuBuf( erasex - 1, erasey - 1, erasew + 1, eraseh + 1, false );
+   DrawSTMenuBuf( erasex - 1, erasey - 1, erasew + 1, eraseh + 1, FALSE );
 
    DrawMenuBufItem( blkx + ( ( ( ( *number - lowerbound ) *
       scale ) / range ) >> 16 ), erasey, block );
@@ -5677,7 +5676,7 @@ bool SliderMenu
    FlipMenuBuf();
 
    exit  = 0;
-   moved = false;
+   moved = FALSE;
    timer = GetTicCount();
    lastdir = dir_None;
 
@@ -5703,7 +5702,7 @@ bool SliderMenu
                      *number = lowerbound;
                      }
 
-                  moved = true;
+                  moved = TRUE;
                   }
                break;
 
@@ -5718,7 +5717,7 @@ bool SliderMenu
                      *number = upperbound;
                      }
 
-                  moved = true;
+                  moved = TRUE;
                   }
                break;
 	    default:
@@ -5730,7 +5729,7 @@ bool SliderMenu
 
       if ( moved )
          {
-         moved = false;
+         moved = FALSE;
 
          EraseMenuBufRegion( erasex, erasey, erasew, eraseh );
 
@@ -5759,12 +5758,12 @@ bool SliderMenu
    if ( exit == 2 )
       {
       MN_PlayMenuSnd( SD_ESCPRESSEDSND );
-      returnval = false;
+      returnval = FALSE;
       }
    else
       {
       MN_PlayMenuSnd( SD_SELECTSND );
-      returnval = true;
+      returnval = TRUE;
       }
 
    WaitKeyUp ();
@@ -5940,7 +5939,7 @@ void CP_ViolenceLevel (void)
 {
    int which;
    char p1[13];
-   bool passok=false;
+   bool8_t passok=FALSE;
 
    if (ingame)
    	{
@@ -5955,11 +5954,11 @@ void CP_ViolenceLevel (void)
       CurrentFont = smallfont;
       DrawViolenceLevelPWord ();
 
-      if (US_lineinput (PBOXX+2, PBOXY+1, p1, NULL, true, 12, 110, 0))
+      if (US_lineinput (PBOXX+2, PBOXY+1, p1, NULL, TRUE, 12, 110, 0))
          {
          //compare user entered to password
-         if (StringsNotEqual (p1, pword, StringLength (p1)) == false)
-            passok=true;
+         if (StringsNotEqual (p1, pword, StringLength (p1)) == FALSE)
+            passok=TRUE;
          else
             {
             CP_ErrorMsg( "Violence Password", "Incorrect Password.",
@@ -5968,8 +5967,8 @@ void CP_ViolenceLevel (void)
          }
       }
    else
-      passok=true;
-   if (passok==true)
+      passok=TRUE;
+   if (passok==TRUE)
       {
       DrawViolenceLevel ();
       do
@@ -6017,7 +6016,7 @@ void DrawViolenceLevelPWord
       PU_CACHE, Cvt_cfont_t, 1 );
    DrawMenuBufIString( PWORDX, PWORDY, "ENTER PASSWORD", NORMALCOLOR );
 
-   DrawSTMenuBuf( PBOXX, PBOXY, PBOXW, PBOXH, false );
+   DrawSTMenuBuf( PBOXX, PBOXY, PBOXW, PBOXH, FALSE );
    FlipMenuBuf();
    }
 
@@ -6056,7 +6055,7 @@ void DrawPWMenu
       DrawMenuBufIString( PWORDX - 24, PWORDY, "ENTER PASSWORD", NORMALCOLOR );
       }
 
-   DrawSTMenuBuf( PBOXX, PBOXY, PBOXW, PBOXH, false );
+   DrawSTMenuBuf( PBOXX, PBOXY, PBOXW, PBOXH, FALSE );
    FlipMenuBuf();
    }
 
@@ -6071,32 +6070,32 @@ void CP_PWMenu (void)
    {
    char p1[13];
    char p2[13];
-   bool EnterNewPassword;
-   bool AskForNew;
-   bool RetypePassword;
+   bool8_t EnterNewPassword;
+   bool8_t AskForNew;
+   bool8_t RetypePassword;
 
    memset (p1, 0, 13);
    memset (p2, 0, 13);
 
    CurrentFont = smallfont;
 
-   EnterNewPassword = true;
+   EnterNewPassword = TRUE;
    if ( POK )
       {
       DrawPWMenu ();
 
       // get old password
       //
-      EnterNewPassword = false;
-      if (US_lineinput (PBOXX+2, PBOXY+1, p1, NULL, true, 12, PSTRW, 0))
+      EnterNewPassword = FALSE;
+      if (US_lineinput (PBOXX+2, PBOXY+1, p1, NULL, TRUE, 12, PSTRW, 0))
          {
          //compare user entered to old
          //
-         if (StringsNotEqual (p1, pword, StringLength (p1))==false)
+         if (StringsNotEqual (p1, pword, StringLength (p1))==FALSE)
             {
 
             // Password was correct so they may change it.
-            EnterNewPassword = true;
+            EnterNewPassword = TRUE;
             }
          else
             {
@@ -6112,8 +6111,8 @@ void CP_PWMenu (void)
 
       // get new password
       //
-		AskForNew = true;
-      RetypePassword = false;
+		AskForNew = TRUE;
+      RetypePassword = FALSE;
       while( AskForNew )
          {
          CurrentFont = smallfont;
@@ -6130,32 +6129,32 @@ void CP_PWMenu (void)
 //         DrawMenuBufPropString( PWORDX - 24, PWORDY, "ENTER NEW PASSWORD" );
 //         DrawMenuBufItem (PWORDX-24, PWORDY, W_GetNumForName ("mnewpass"));
 
-         DrawSTMenuBuf (PBOXX, PBOXY, PBOXW, PBOXH, false);
+         DrawSTMenuBuf (PBOXX, PBOXY, PBOXW, PBOXH, FALSE);
          FlipMenuBuf();
 
          memset (p1, 0, 13);
 
-         AskForNew = false;
-         if (US_lineinput (PBOXX+2, PBOXY+1, p1, NULL, true, 12, PSTRW, 0))
+         AskForNew = FALSE;
+         if (US_lineinput (PBOXX+2, PBOXY+1, p1, NULL, TRUE, 12, PSTRW, 0))
             {
             // Check for blank password
             if ( p1[ 0 ] == 0 )
                {
                if ( CP_DisplayMsg ( "Clear Password?\nAre you sure?", 12 ) )
                   {
-                  AskForNew = false;
+                  AskForNew = FALSE;
                   memset (pword, 0, 13);
                   WriteMenuInfo ();
-                  POK = false;
+                  POK = FALSE;
                   }
                else
                   {
-                  AskForNew = true;
+                  AskForNew = TRUE;
                   }
                }
             else
                {
-               RetypePassword = true;
+               RetypePassword = TRUE;
                }
             }
          }
@@ -6173,13 +6172,13 @@ void CP_PWMenu (void)
             PU_CACHE, Cvt_cfont_t, 1 );
          DrawMenuBufIString( PWORDX, PWORDY, "RETYPE PASSWORD", NORMALCOLOR );
 
-         DrawSTMenuBuf (PBOXX, PBOXY, PBOXW, PBOXH, false);
+         DrawSTMenuBuf (PBOXX, PBOXY, PBOXW, PBOXH, FALSE);
 
          FlipMenuBuf();
 
          // reenter password
          //
-         if ( US_lineinput (PBOXX+2, PBOXY+1, p2, NULL, true, 12, PSTRW, 0) )
+         if ( US_lineinput (PBOXX+2, PBOXY+1, p2, NULL, TRUE, 12, PSTRW, 0) )
             {
             // compare password and retyped password
             //
@@ -6191,10 +6190,10 @@ void CP_PWMenu (void)
 
                // If we have a null password, then we don't need to
                // ask for one.
-               POK = true;
+               POK = TRUE;
                if ( pword[ 0 ] == 0 )
                   {
-                  POK = false;
+                  POK = FALSE;
                   }
                }
             else
@@ -6531,7 +6530,7 @@ void CP_BattleModes ( void )
    DrawBattleModes ();
 
    damagecount = 0;
-   BATTLEMODE  = true;
+   BATTLEMODE  = TRUE;
 
    do
       {
@@ -6544,7 +6543,7 @@ void CP_BattleModes ( void )
 
    if ( !StartGame )
       {
-      BATTLEMODE = false;
+      BATTLEMODE = FALSE;
       gamestate.battlemode = battle_StandAloneGame;
       }
    }
@@ -6709,21 +6708,21 @@ int ColorMenu
    int timer;
    int baseshape;
    int status = 0;
-   bool update;
-   bool done;
+   bool8_t update;
+   bool8_t done;
 
    colorindex = DefaultPlayerColor;
    timer      = GetTicCount();
    baseshape  = W_GetNumForName( playerwadname[ locplayerstate->player ] );
 
-   update = false;
-   done   = false;
+   update = FALSE;
+   done   = FALSE;
    while( !done )
       {
       ReadAnyControl( &ci );
       if ( ( ci.dir == dir_East ) && ( ( GetTicCount() - timer ) > 5 ) )
          {
-         update = true;
+         update = TRUE;
          timer = GetTicCount();
 
          colorindex++;
@@ -6737,7 +6736,7 @@ int ColorMenu
 
       if ( ( ci.dir == dir_West ) && ( ( GetTicCount() - timer ) > 5 ) )
          {
-         update = true;
+         update = TRUE;
          timer = GetTicCount();
 
          colorindex--;
@@ -6750,7 +6749,7 @@ int ColorMenu
 
       if ( update )
          {
-         update = false;
+         update = FALSE;
          DefaultPlayerColor = colorindex;
          locplayerstate->uniformcolor = colorindex;
          text = colorname[ locplayerstate->uniformcolor ];
@@ -6770,13 +6769,13 @@ int ColorMenu
          Keyboard[ sc_Enter ] = 0;
          MN_PlayMenuSnd( SD_SELECTSND );
          status = 1;
-         done = true;
+         done = TRUE;
          }
       else if ( ci.button1 || Keyboard[ sc_Escape ] )
          {
          MN_PlayMenuSnd( SD_ESCPRESSEDSND );
          status = 0;
-         done = true;
+         done = TRUE;
          }
 
       RefreshMenuBuf( 0 );
@@ -6941,7 +6940,7 @@ void CP_ModemGameMessage (int player  )
 
    newfont1 = (font_t *)W_CacheLumpName( "newfnt1", PU_CACHE, Cvt_font_t, 1);
    CurrentFont = newfont1;
-   if ( modemgame == false )
+   if ( modemgame == FALSE )
       {
       WindowW = 288;
       WindowH = 158;
@@ -6956,7 +6955,7 @@ void CP_ModemGameMessage (int player  )
       PrintX = WindowX = 0;
       PrintY = WindowY = 50;
 
-      if (networkgame==true)
+      if (networkgame==TRUE)
          {
          PrintY = WindowY = 28;
          }
@@ -6972,11 +6971,11 @@ void CP_ModemGameMessage (int player  )
 
 if (gamestate.Product != ROTT_SITELICENSE)
 {
-      if (networkgame==true)
+      if (networkgame==TRUE)
          {
          for( i = 0; i < SITELINES; i++ )
             {
-            PrintBattleOption( true, 68, 77 + i * 8,
+            PrintBattleOption( TRUE, 68, 77 + i * 8,
                sitemessage[ i ] );
             }
          }
@@ -7018,17 +7017,17 @@ void DrawGravityMenu (void)
 
 	DrawMenu (&GravityItems, &GravityMenu[0]);
    DrawGravityOptionDescription( GravityItems.curpos );
-   PrintBattleOption( true, 32, 79,
+   PrintBattleOption( TRUE, 32, 79,
       "WARNING: High gravity has an unfortunate side effect in" );
-   PrintBattleOption( true, 32, 87,
+   PrintBattleOption( TRUE, 32, 87,
       "some levels.  It is possible to jump into an area that is" );
-   PrintBattleOption( true, 32, 95,
+   PrintBattleOption( TRUE, 32, 95,
       "impossible, or at least extremely difficult to get out" );
-   PrintBattleOption( true, 32, 103,
+   PrintBattleOption( TRUE, 32, 103,
       "of.  In these situations, the only thing you can do is" );
-   PrintBattleOption( true, 32, 111,
+   PrintBattleOption( TRUE, 32, 111,
       "kill your character, or find some kindly soul to do it" );
-   PrintBattleOption( true, 32, 119,
+   PrintBattleOption( TRUE, 32, 119,
       "for you.  If this fails, you'll just have to end your game." );
 
    DisplayInfo( 0 );
@@ -7158,24 +7157,24 @@ void DrawAmmoPerWeaponMenu
 
    DrawMenu( &AmmoPerWeaponItems, &AmmoPerWeaponMenu[ 0 ] );
 
-   PrintBattleOption( true, 32, 79,
+   PrintBattleOption( TRUE, 32, 79,
       "WARNING: Infinite ammo can seriously alter the balance of" );
-   PrintBattleOption( true, 32, 87,
+   PrintBattleOption( TRUE, 32, 87,
       "the game.  We recommend that you only use it occasionally." );
-   PrintBattleOption( true, 32, 95,
+   PrintBattleOption( TRUE, 32, 95,
       "It tends to only work well on small levels with lots of" );
-   PrintBattleOption( true, 32, 103,
+   PrintBattleOption( TRUE, 32, 103,
       "weapons, where the action is far more intense.  On large" );
-   PrintBattleOption( true, 32, 111,
+   PrintBattleOption( TRUE, 32, 111,
       "levels, you may find it causes people to wait in easily" );
-   PrintBattleOption( true, 32, 119,
+   PrintBattleOption( TRUE, 32, 119,
       "guardable areas and pick off anyone that comes in the room" );
-   PrintBattleOption( true, 32, 127,
+   PrintBattleOption( TRUE, 32, 127,
       "(creating an unfair advantage)." );
 
    if ( AmmoPerWeaponItems.curpos == 2 )
       {
-      PrintBattleOption( true, 102, 136, "You have been warned." );
+      PrintBattleOption( TRUE, 102, 136, "You have been warned." );
       }
 
    DrawAmmoOptionDescription( AmmoPerWeaponItems.curpos );
@@ -7208,7 +7207,7 @@ void CP_AmmoPerWeaponOptions
          if ( AmmoPerWeaponItems.curpos == 2 )
             {
             MN_PlayMenuSnd( SD_LIGHTNINGSND );
-            PrintBattleOption( true, 102, 136, "You have been warned." );
+            PrintBattleOption( TRUE, 102, 136, "You have been warned." );
             VL_FillPalette(255,255,255);
             VL_FadeIn(0,255,origpal,10);
             }
@@ -7319,7 +7318,7 @@ void DrawSpawnControlMenu
    MN_MakeActive( &SpawnItems, &SpawnMenu[ 0 ], SpawnItems.curpos );
 
 #if ( SHAREWARE == 1 )
-   BATTLE_Options[ gamestate.battlemode ].SpawnMines = false;
+   BATTLE_Options[ gamestate.battlemode ].SpawnMines = FALSE;
    SpawnMenu[ 3 ].active = CP_Inactive; // Mines
 #endif
 
@@ -7850,7 +7849,7 @@ void CP_TimeLimitOptions (void)
 
 void PrintBattleOption
    (
-   bool inmenu,
+   bool8_t inmenu,
    int x,
    int y,
    char *text
@@ -7873,7 +7872,7 @@ void PrintBattleOption
 
 void ShowBattleOption
    (
-   bool inmenu,
+   bool8_t inmenu,
    int PosX,
    int PosY,
    int column,
@@ -7900,7 +7899,7 @@ void ShowBattleOption
 
 void ShowBattleOptions
 	(
-   bool inmenu,
+   bool8_t inmenu,
    int PosX,
    int PosY
 	)
@@ -8194,11 +8193,11 @@ int HandleMultiPageCustomMenu
    char *title,
    void  ( *routine )( int w ),
    void ( *redrawfunc )( void ),
-   bool exitonselect
+   bool8_t exitonselect
    )
 
    {
-   bool redraw;
+   bool8_t redraw;
    int  page;
    int  cursorpos;
    int  maxpos;
@@ -8214,13 +8213,13 @@ int HandleMultiPageCustomMenu
    page      = curpos - cursorpos;
    MultiPageCustomItems.curpos = cursorpos + 2;
 
-   redraw = true;
+   redraw = TRUE;
 
    do
       {
       if ( redraw )
          {
-         redraw = false;
+         redraw = FALSE;
          MultiPageCustomMenu[ 0 ].active = CP_Active;
          MultiPageCustomMenu[ 1 ].active = CP_Active;
          if ( page == 0 )
@@ -8294,14 +8293,14 @@ int HandleMultiPageCustomMenu
          case 0 :
             page += MAXCUSTOM;
             which = 0;
-            redraw = true;
+            redraw = TRUE;
             break;
 
          case PAGEUP :
          case 1 :
             page -= MAXCUSTOM;
             which = 0;
-            redraw = true;
+            redraw = TRUE;
             break;
 
          default :
@@ -8384,7 +8383,7 @@ int CP_LevelSelectionMenu
 
    level = HandleMultiPageCustomMenu( LevelNames, numlevels,
       levelcursorpos[ whichlevels ], "Level Selection", NULL,
-      CP_LevelSelectionRedraw, true );
+      CP_LevelSelectionRedraw, TRUE );
 
    SafeFree( mapinfo );
 
@@ -8429,7 +8428,7 @@ void DrawEnterCodeNameMenu
    MenuBufCPrint( "Enter CodeName\n" );
    MenuBufCPrint( "maximum 8 letters\n" );
 
-   DrawSTMenuBuf( ( 288 - 92 ) / 2 - 2, 80 - 2, 92 + 4, 10 + 4, false );
+   DrawSTMenuBuf( ( 288 - 92 ) / 2 - 2, 80 - 2, 92 + 4, 10 + 4, FALSE );
 
    DrawMenuBufPropString( ( 288 - 92 ) / 2, 80, CodeName );
 
@@ -8459,7 +8458,7 @@ int CP_EnterCodeNameMenu
    strcpy(input,CodeName);
 
 
-   if (US_LineInput ((288-92)/2, 80, input, input, true, 8, 92, 0))
+   if (US_LineInput ((288-92)/2, 80, input, input, TRUE, 8, 92, 0))
       {
       strcpy (&locplayerstate->codename[0], input);
       strcpy (CodeName, input);

@@ -22,7 +22,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "SDL.h"
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdarg.h>
 #include <fcntl.h>
@@ -57,9 +56,9 @@ FILE   *  errout;
 FILE   *  debugout;
 FILE   *  mapdebugout;
 
-static bool SoftErrorStarted=false;
-static bool DebugStarted=false;
-static bool MapDebugStarted=false;
+static bool8_t SoftErrorStarted=FALSE;
+static bool8_t DebugStarted=FALSE;
+static bool8_t MapDebugStarted=FALSE;
 
 extern SDL_Surface *VL_GetVideoSurface (void);
 
@@ -196,14 +195,14 @@ int atan2_appx(int dx, int dy)
 // StringsNotEqual
 //
 //******************************************************************************
-bool StringsNotEqual (char * s1, char * s2, int length)
+bool8_t StringsNotEqual (char * s1, char * s2, int length)
 {
    int i;
 
    for (i=0;i<length;i++)
       if (s1[i]!=s2[i])
-         return true;
-   return false;
+         return TRUE;
+   return FALSE;
 }
 
 
@@ -334,13 +333,13 @@ void Error (char *error, ...)
 	sptr = script_p = scriptbuffer;
 	scriptend_p = script_p + size;
 	scriptline = 1;
-	endofscript = false;
-	tokenready = false;
+	endofscript = FALSE;
+	tokenready = FALSE;
 
    px = ERRORCOL;
    py = ERRORROW;
 
-   GetToken (true);
+   GetToken (TRUE);
    while (!endofscript)
    {
       if ((script_p - sptr) >= 60)
@@ -352,7 +351,7 @@ void Error (char *error, ...)
 
       UL_printf (token);
       px++;                //SPACE
-      GetToken (true);
+      GetToken (TRUE);
    }
 
    if (player!=NULL)
@@ -393,7 +392,7 @@ void SoftwareError (char *error, ...)
 {
 	va_list	argptr;
 
-	if (SoftErrorStarted==false)
+	if (SoftErrorStarted==FALSE)
       return;
 	va_start (argptr, error);
    vfprintf (errout, error, argptr);
@@ -416,7 +415,7 @@ void DebugError (char *error, ...)
 {
 	va_list	argptr;
 
-   if (DebugStarted==false)
+   if (DebugStarted==FALSE)
       return;
 	va_start (argptr, error);
    vfprintf (debugout, error, argptr);
@@ -435,7 +434,7 @@ void DebugError (char *error, ...)
 void OpenSoftError ( void )
 {
   errout = fopen(SOFTERRORFILE,"wt+");
-  SoftErrorStarted=true;
+  SoftErrorStarted=TRUE;
 }
 
 /*
@@ -449,7 +448,7 @@ void MapDebug (char *error, ...)
 {
 	va_list	argptr;
 
-   if (MapDebugStarted==false)
+   if (MapDebugStarted==FALSE)
       return;
 	va_start (argptr, error);
    vfprintf (mapdebugout, error, argptr);
@@ -467,12 +466,12 @@ void OpenMapDebug ( void )
 {
   char *filename;
 
-  if (MapDebugStarted==true)
+  if (MapDebugStarted==TRUE)
      return;
   filename = M_StringJoin(ApogeePath, PATH_SEP_STR, MAPDEBUGFILE, NULL);
   mapdebugout = fopen(filename,"wt+");
   free(filename);
-  MapDebugStarted=true;
+  MapDebugStarted=TRUE;
 }
 
 
@@ -486,7 +485,7 @@ void OpenMapDebug ( void )
 void StartupSoftError ( void )
 {
 #if (SOFTERROR == 1)
-  if (SoftErrorStarted==false)
+  if (SoftErrorStarted==FALSE)
      OpenSoftError();
 #endif
 }
@@ -500,20 +499,20 @@ void StartupSoftError ( void )
 */
 void ShutdownSoftError ( void )
 {
-  if (DebugStarted==true)
+  if (DebugStarted==TRUE)
      {
      fclose(debugout);
-     DebugStarted=false;
+     DebugStarted=FALSE;
      }
-  if (SoftErrorStarted==true)
+  if (SoftErrorStarted==TRUE)
      {
      fclose(errout);
-     SoftErrorStarted=false;
+     SoftErrorStarted=FALSE;
      }
-  if (MapDebugStarted==true)
+  if (MapDebugStarted==TRUE)
      {
      fclose(mapdebugout);
-     MapDebugStarted=false;
+     MapDebugStarted=FALSE;
      }
 }
 
@@ -644,7 +643,7 @@ void *SafeMalloc (long size)
 {
 	void *ptr;
 
-   if (zonememorystarted==false)
+   if (zonememorystarted==FALSE)
       Error("Called SafeMalloc without starting zone memory\n");
 	ptr = Z_Malloc (size,PU_STATIC,NULL);
 
@@ -658,7 +657,7 @@ void *SafeLevelMalloc (long size)
 {
 	void *ptr;
 
-   if (zonememorystarted==false)
+   if (zonememorystarted==FALSE)
       Error("Called SafeLevelMalloc without starting zone memory\n");
    ptr = Z_LevelMalloc (size,PU_STATIC,NULL);
 
@@ -1272,7 +1271,7 @@ static int i,n,stop;
 
 char * UL_GetPath (char * path, char *dir)
 {
-   bool done      = 0;
+   bool8_t done      = 0;
    char *dr          = dir;
    int cnt           = 0;
 
@@ -1291,7 +1290,7 @@ char * UL_GetPath (char * path, char *dir)
       dr++;
 
       if ((*path == SLASHES) || (*path == 0))
-         done = true;
+         done = TRUE;
    }
 
    *dr = 0;
@@ -1310,22 +1309,22 @@ char * UL_GetPath (char * path, char *dir)
 //    path - The path to change to.
 //
 // Returns
-//    true  - If successful.
-//    false - If unsuccessful.
+//    TRUE  - If successful.
+//    FALSE - If unsuccessful.
 //
 //******************************************************************************
 
-bool UL_ChangeDirectory (char *path)
+bool8_t UL_ChangeDirectory (char *path)
 {
 	if (!path || !*path) {
-		return true;
+		return TRUE;
 	}
 	
 	if (chdir (path) == -1) {
-	         return (false);
+	         return (FALSE);
 	}
 	
-	return true;
+	return TRUE;
 }
 
 
@@ -1341,16 +1340,16 @@ bool UL_ChangeDirectory (char *path)
 //    drive - The drive to change to.
 //
 // Returns
-//    true  - If drive change successful.
-//    false - If drive change unsuccessful.
+//    TRUE  - If drive change successful.
+//    FALSE - If drive change unsuccessful.
 //
 //******************************************************************************
 
-bool UL_ChangeDrive (char *drive)
+bool8_t UL_ChangeDrive (char *drive)
 {
 	STUB_FUNCTION;
 	
-	return false;
+	return FALSE;
 }
 
 

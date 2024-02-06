@@ -18,7 +18,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <stdbool.h>
 #include "cin_glob.h"
 #include "cin_def.h"
 #include "cin_actr.h"
@@ -31,7 +30,7 @@ actortype * lastcinematicactor;
 
 // LOCALS
 
-bool cinematicactorsystemstarted=false;
+bool8_t cinematicactorsystemstarted=FALSE;
 static int numcinematicactors;
 
 /*
@@ -130,9 +129,9 @@ actortype * GetNewCinematicActor ( void )
 
 void StartupCinematicActors ( void )
 {
-   if (cinematicactorsystemstarted==true)
+   if (cinematicactorsystemstarted==TRUE)
       return;
-   cinematicactorsystemstarted=true;
+   cinematicactorsystemstarted=TRUE;
    firstcinematicactor = NULL;
    lastcinematicactor  = NULL;
 
@@ -150,9 +149,9 @@ void StartupCinematicActors ( void )
 void ShutdownCinematicActors ( void )
 {
    actortype * actor;
-   if (cinematicactorsystemstarted==false)
+   if (cinematicactorsystemstarted==FALSE)
       return;
-   cinematicactorsystemstarted=false;
+   cinematicactorsystemstarted=FALSE;
 
    actor=firstcinematicactor;
    while (actor != NULL)
@@ -195,7 +194,7 @@ void UpdateCinematicActors ( void )
 
    for (actor=firstcinematicactor;actor != NULL;)
       {
-      if (UpdateCinematicEffect ( actor->effecttype, actor->effect ) == false)
+      if (UpdateCinematicEffect ( actor->effecttype, actor->effect ) == FALSE)
          {
          actortype * nextactor;
 
@@ -229,18 +228,18 @@ void DrawCinematicActors ( void )
 {
    actortype * actor;
    actortype * nextactor;
-   bool draw;
+   bool8_t draw;
    enum_drawphases sequence;
 #if DUMP
    int numactors=0;
 #endif
-   bool flippage=true;
+   bool8_t flippage=TRUE;
 
    for (sequence=screenfunctions;sequence<numdrawphases;sequence++)
       {
       for (actor=firstcinematicactor;actor != NULL;)
          {
-         draw=false;
+         draw=FALSE;
          switch (actor->effecttype)
             {
             case fadeout:
@@ -249,41 +248,41 @@ void DrawCinematicActors ( void )
             case cinematicend:
             case flic:
                if (sequence==screenfunctions)
-                  draw=true;
-               flippage=false;
+                  draw=TRUE;
+               flippage=FALSE;
                break;
             case palette:
                if (sequence==palettefunctions)
-                  draw=true;
-               flippage=false;
+                  draw=TRUE;
+               flippage=FALSE;
                break;
             case background_noscrolling:
             case background_scrolling:
             case background_multi:
                if (sequence==background)
-                  draw=true;
+                  draw=TRUE;
                break;
             case sprite_background:
                if (sequence==backgroundsprites)
-                  draw=true;
+                  draw=TRUE;
                break;
             case backdrop_noscrolling:
             case backdrop_scrolling:
                if (sequence==backdrop)
-                  draw=true;
+                  draw=TRUE;
                break;
             case sprite_foreground:
                if (sequence==foregroundsprites)
-                  draw=true;
+                  draw=TRUE;
                break;
             }
          nextactor=actor->next;
-         if (draw==true)
+         if (draw==TRUE)
             {
 #if DUMP
             printf("drawing type=%ld\n",actor->effecttype);
 #endif
-            if (DrawCinematicEffect ( actor->effecttype, actor->effect ) == false)
+            if (DrawCinematicEffect ( actor->effecttype, actor->effect ) == FALSE)
                {
                DeleteCinematicActor(actor);
                }
@@ -294,7 +293,7 @@ void DrawCinematicActors ( void )
          actor=nextactor;
          }
       }
-      if (flippage==true)
+      if (flippage==TRUE)
          XFlipPage ();
 #if DUMP
       printf("Total actors drawn=%ld\n",numactors);

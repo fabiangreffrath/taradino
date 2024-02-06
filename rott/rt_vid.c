@@ -17,7 +17,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,7 +55,7 @@ uint32_t uwidthtable[UPDATEHIGH];
 uint32_t blockstarts[UPDATEWIDE*UPDATEHIGH];
 uint8_t     update[UPDATESIZE];
 uint8_t     palette1[256][3], palette2[256][3];
-bool  screenfaded;
+bool8_t  screenfaded;
 
 //******************************************************************************
 //
@@ -391,7 +390,7 @@ void VWB_Vlin (int y1, int y2, int x, int color)
 //
 //******************************************************************************
 
-void VL_THlin (uint32_t x, uint32_t y, uint32_t width, bool up)
+void VL_THlin (uint32_t x, uint32_t y, uint32_t width, bool8_t up)
 {
 	uint8_t *dest = (uint8_t*)(bufferofs+ylookup[y]+x);
 	
@@ -418,7 +417,7 @@ void VL_THlin (uint32_t x, uint32_t y, uint32_t width, bool up)
 //
 //******************************************************************************
 
-void VL_TVlin (uint32_t x, uint32_t y, uint32_t height, bool up)
+void VL_TVlin (uint32_t x, uint32_t y, uint32_t height, bool8_t up)
 {
 	uint8_t *dest = (uint8_t*)(bufferofs+ylookup[y]+x);
 	
@@ -445,7 +444,7 @@ void VL_TVlin (uint32_t x, uint32_t y, uint32_t height, bool up)
 //
 //******************************************************************************
 
-void VWB_THlin (int x1, int x2, int y, bool up)
+void VWB_THlin (int x1, int x2, int y, bool8_t up)
 {
    if (VW_MarkUpdateBlock (x1,y,x2,y))
       VW_THlin (x1,x2,y,up);
@@ -458,7 +457,7 @@ void VWB_THlin (int x1, int x2, int y, bool up)
 //
 //******************************************************************************
 
-void VWB_TVlin (int y1, int y2, int x, bool up)
+void VWB_TVlin (int y1, int y2, int x, bool8_t up)
 {
    if (VW_MarkUpdateBlock (x,y1,x,y2))
       VW_TVlin (y1,y2,x,up);
@@ -609,7 +608,7 @@ void VL_FadeOut (int start, int end, int red, int green, int blue, int steps)
    VL_FillPalette (red,green,blue);
    VH_UpdateScreen();
 
-   screenfaded = true;
+   screenfaded = TRUE;
 }
 
 
@@ -676,7 +675,7 @@ void VL_FadeToColor (int time, int red, int green, int blue)
    VL_FillPalette (red>>2,green>>2,blue>>2);
    VH_UpdateScreen();
 
-   screenfaded = true;
+   screenfaded = TRUE;
 }
 
 
@@ -725,7 +724,7 @@ void VL_FadeIn (int start, int end, uint8_t *palette, int steps)
    VL_SetPalette (palette);
    VH_UpdateScreen();
 
-   screenfaded = false;
+   screenfaded = FALSE;
 }
 
 
@@ -760,7 +759,7 @@ void SwitchPalette (uint8_t * newpal, int steps)
 //
 //****************************************************************************
 
-void VL_DecompressLBM (lbm_t *lbminfo, bool flip)
+void VL_DecompressLBM (lbm_t *lbminfo, bool8_t flip)
 {
    int  count;
    uint8_t b, rept;
@@ -812,7 +811,7 @@ void VL_DecompressLBM (lbm_t *lbminfo, bool flip)
 	  }
    }
 
-   if (flip==true)
+   if (flip==TRUE)
       VW_UpdateScreen ();
 
    VL_FadeIn (0, 255, &pal[0], 15);

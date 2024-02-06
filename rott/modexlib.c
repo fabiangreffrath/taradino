@@ -18,7 +18,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdarg.h>
 #include <fcntl.h>
@@ -37,9 +36,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static void StretchMemPicture ();
 // GLOBAL VARIABLES
 
-bool StretchScreen=0;//bná++
-extern bool iG_aimCross;
-extern bool sdl_fullscreen;
+bool8_t StretchScreen=0;//bná++
+extern bool8_t iG_aimCross;
+extern bool8_t sdl_fullscreen;
 extern int iG_X_center;
 extern int iG_Y_center;
 uint8_t  *iG_buf_center;
@@ -53,7 +52,7 @@ uint8_t  *page3start;
 int    screensize;
 uint8_t  *bufferofs;
 uint8_t  *displayofs;
-bool graphicsmode=false;
+bool8_t graphicsmode=FALSE;
 uint8_t  *bufofsTopLimit;
 uint8_t  *bufofsBottomLimit;
 
@@ -452,7 +451,7 @@ static void StretchMemPicture ()
 }
 
 // bna function added start
-extern	bool ingame;
+extern	bool8_t ingame;
 int		iG_playerTilt;
 
 void DrawCenterAim ()
@@ -463,7 +462,7 @@ void DrawCenterAim ()
 	int color = percenthealth < 3 ? egacolor[RED] : percenthealth < 4 ? egacolor[YELLOW] : egacolor[GREEN];
 
 	if (iG_aimCross && !GamePaused){
-		if (( ingame == true )&&(iGLOBAL_SCREENWIDTH>320)){
+		if (( ingame == TRUE )&&(iGLOBAL_SCREENWIDTH>320)){
 			  if ((iG_playerTilt <0 )||(iG_playerTilt >iGLOBAL_SCREENHEIGHT/2)){
 					iG_playerTilt = -(2048 - iG_playerTilt);
 			  }

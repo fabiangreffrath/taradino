@@ -24,7 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //******************************************************************************
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -627,7 +626,7 @@ void US_CPrint (const char *string)
 
 static void USL_XORICursor (int x, int y, const char *s, int cursor, int color)
 {
-   static   bool  status;     // VGA doesn't XOR...
+   static   bool8_t  status;     // VGA doesn't XOR...
    char     buf[MaxString];
 
    int      w,h;
@@ -684,14 +683,14 @@ static void USL_XORICursor (int x, int y, const char *s, int cursor, int color)
 
 extern char * IN_GetScanName (ScanCode scan);
 
-bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
+bool8_t US_LineInput (int x, int y, char *buf, const char *def, bool8_t escok,
                       int maxchars, int maxwidth, int color)
 {
-   bool  redraw,
+   bool8_t  redraw,
             cursorvis,
             cursormoved,
             done,
-            result = false;
+            result = FALSE;
    char     s[MaxString],
             olds[MaxString];
    int      i,
@@ -723,8 +722,8 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
    *olds = '\0';
 
    cursor      = strlen (s);
-   cursormoved = redraw = true;
-   cursorvis   = done   = false;
+   cursormoved = redraw = TRUE;
+   cursorvis   = done   = FALSE;
 
    lasttime  = GetTicCount();
 
@@ -733,7 +732,7 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
 
    while (!done)
    {
-//      if (GameEscaped==true)
+//      if (GameEscaped==TRUE)
 //         PauseLoop ();
 
       IN_PumpEvents();
@@ -755,7 +754,7 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
          if (cursor)
             {
             cursor--;
-            cursormoved = true;
+            cursormoved = TRUE;
             MN_PlayMenuSnd (SD_MOVECURSORSND);
             }
          lastkey = key_None;
@@ -767,7 +766,7 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
          if (s[cursor])
             {
             cursor++;
-            cursormoved = true;
+            cursormoved = TRUE;
             MN_PlayMenuSnd (SD_MOVECURSORSND);
             }
          lastkey = key_None;
@@ -779,7 +778,7 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
          if ( cursor )
             {
             cursor = 0;
-            cursormoved = true;
+            cursormoved = TRUE;
             MN_PlayMenuSnd (SD_MOVECURSORSND);
             }
          Keyboard[sc_Home] = 0;
@@ -791,7 +790,7 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
          if ( cursor != (int)strlen (s) )
             {
             cursor = strlen (s);
-            cursormoved = true;
+            cursormoved = TRUE;
             MN_PlayMenuSnd (SD_MOVECURSORSND);
             }
          lastkey = key_None;
@@ -801,8 +800,8 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
 
       case sc_Return:
          strcpy (buf,s);
-         done = true;
-         result = true;
+         done = TRUE;
+         result = TRUE;
          lastkey = key_None;
          MN_PlayMenuSnd (SD_SELECTSND);
          break;
@@ -810,8 +809,8 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
       case sc_Escape:
          if (escok)
          {
-            done = true;
-            result = false;
+            done = TRUE;
+            result = FALSE;
             MN_PlayMenuSnd (SD_ESCPRESSEDSND);
          }
          lastkey = key_None;
@@ -823,8 +822,8 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
             {
             strcpy (s + cursor - 1,s + cursor);
             cursor--;
-            redraw = true;
-            cursormoved = true;
+            redraw = TRUE;
+            cursormoved = TRUE;
             MN_PlayMenuSnd (SD_MOVECURSORSND);
             }
          lastkey = key_None;
@@ -837,8 +836,8 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
          if (s[cursor])
          {
             strcpy (s + cursor,s + cursor + 1);
-            redraw = true;
-            cursormoved = true;
+            redraw = TRUE;
+            cursormoved = TRUE;
             MN_PlayMenuSnd (SD_MOVECURSORSND);
          }
          lastkey = key_None;
@@ -856,7 +855,7 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
          break;
       }
 
-//      if (GameEscaped==true)
+//      if (GameEscaped==TRUE)
 //         PauseLoop ();
 
       if (lastkey)
@@ -878,7 +877,7 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
             for (i = len + 1;i > cursor;i--)
                s[i] = s[i - 1];
             s[cursor++] = lastkey;
-            redraw = true;
+            redraw = TRUE;
 
             ls = Keyboard[sc_LShift];
             rs = Keyboard[sc_RShift];
@@ -890,7 +889,7 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
          }
       }
 
-//      if (GameEscaped==true)
+//      if (GameEscaped==TRUE)
 //         PauseLoop ();
 
       if (redraw)
@@ -911,26 +910,26 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
          px = x;
          py = y;
 
-         redraw = false;
+         redraw = FALSE;
       }
 
       if (cursormoved)
       {
-         cursorvis = false;
+         cursorvis = FALSE;
          lasttime = GetTicCount() - VBLCOUNTER;
 
-         cursormoved = false;
+         cursormoved = FALSE;
       }
       if (GetTicCount() - lasttime > VBLCOUNTER / 2)
       {
          lasttime = GetTicCount();
 
-         cursorvis ^= true;
+         cursorvis ^= TRUE;
       }
       if (cursorvis)
          USL_XORICursor (x, y, s, cursor, color);
 
-//      if (GameEscaped==true)
+//      if (GameEscaped==TRUE)
 //         PauseLoop ();
 
       if (color)
@@ -952,7 +951,7 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
          DrawMenuBufPropString (px, py, olds);
    }
 
-//   if (GameEscaped==true)
+//   if (GameEscaped==TRUE)
 //      PauseLoop ();
 
    if (color)
@@ -976,14 +975,14 @@ bool US_LineInput (int x, int y, char *buf, const char *def, bool escok,
 //
 ///******************************************************************************
 
-bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
+bool8_t US_lineinput (int x, int y, char *buf, const char *def, bool8_t escok,
                       int maxchars, int maxwidth, int color)
 {
-   bool  redraw,
+   bool8_t  redraw,
             cursorvis,
             cursormoved,
             done,
-            result = false;
+            result = FALSE;
    char     s[MaxString],
             xx[MaxString],
             olds[MaxString];
@@ -1017,8 +1016,8 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
    *olds = '\0';
 
    cursor      = strlen (s);
-   cursormoved = redraw = true;
-   cursorvis   = done   = false;
+   cursormoved = redraw = TRUE;
+   cursorvis   = done   = FALSE;
 
    lasttime  = GetTicCount();
 
@@ -1027,7 +1026,7 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
 
    while (!done)
    {
-//      if (GameEscaped == true)
+//      if (GameEscaped == TRUE)
 //         PauseLoop ();
 
       IN_PumpEvents();
@@ -1049,7 +1048,7 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
          if (cursor)
             {
             cursor--;
-            cursormoved = true;
+            cursormoved = TRUE;
             MN_PlayMenuSnd (SD_MOVECURSORSND);
             }
          lastkey = key_None;
@@ -1061,7 +1060,7 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
          if (s[cursor])
             {
             cursor++;
-            cursormoved = true;
+            cursormoved = TRUE;
             MN_PlayMenuSnd (SD_MOVECURSORSND);
             }
          lastkey = key_None;
@@ -1073,7 +1072,7 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
          if ( cursor != 0 )
             {
             cursor = 0;
-            cursormoved = true;
+            cursormoved = TRUE;
             MN_PlayMenuSnd (SD_MOVECURSORSND);
             }
          Keyboard[sc_Home] = 0;
@@ -1085,7 +1084,7 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
          if ( cursor != (int)strlen( s ) )
             {
             cursor = strlen (s);
-            cursormoved = true;
+            cursormoved = TRUE;
             MN_PlayMenuSnd (SD_MOVECURSORSND);
             }
          lastkey = key_None;
@@ -1094,8 +1093,8 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
 
       case sc_Return:
          strcpy (buf,s);
-         done = true;
-         result = true;
+         done = TRUE;
+         result = TRUE;
          lastkey = key_None;
          MN_PlayMenuSnd (SD_SELECTSND);
          break;
@@ -1103,8 +1102,8 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
       case sc_Escape:
          if (escok)
          {
-            done = true;
-            result = false;
+            done = TRUE;
+            result = FALSE;
             MN_PlayMenuSnd (SD_ESCPRESSEDSND);
          }
          lastkey = key_None;
@@ -1117,9 +1116,9 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
             strcpy (s + cursor - 1,s + cursor);
             strcpy (xx + cursor - 1,xx + cursor);
             cursor--;
-            redraw = true;
+            redraw = TRUE;
             MN_PlayMenuSnd (SD_MOVECURSORSND);
-            cursormoved = true;
+            cursormoved = TRUE;
             }
          lastkey = key_None;
          Keyboard[sc_BackSpace] = 0;
@@ -1132,8 +1131,8 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
             {
             strcpy (s + cursor,s + cursor + 1);
             strcpy (xx + cursor,xx + cursor + 1);
-            redraw = true;
-            cursormoved = true;
+            redraw = TRUE;
+            cursormoved = TRUE;
             MN_PlayMenuSnd (SD_MOVECURSORSND);
             }
          lastkey = key_None;
@@ -1151,7 +1150,7 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
          break;
       }
 
-//      if (GameEscaped==true)
+//      if (GameEscaped==TRUE)
 //         PauseLoop ();
 
       if (lastkey)
@@ -1174,7 +1173,7 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
                s[i] = s[i - 1];
             s[cursor]   = lastkey;
             xx[cursor++] = '*';
-            redraw = true;
+            redraw = TRUE;
 
             ls = Keyboard[sc_LShift];
             rs = Keyboard[sc_RShift];
@@ -1185,7 +1184,7 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
          }
       }
 
-//      if (GameEscaped==true)
+//      if (GameEscaped==TRUE)
 //         PauseLoop ();
 
       if (redraw)
@@ -1206,21 +1205,21 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
          px = x;
          py = y;
 
-         redraw = false;
+         redraw = FALSE;
       }
 
       if (cursormoved)
       {
-         cursorvis = false;
+         cursorvis = FALSE;
          lasttime = GetTicCount() - VBLCOUNTER;
 
-         cursormoved = false;
+         cursormoved = FALSE;
       }
       if (GetTicCount() - lasttime > VBLCOUNTER / 2)
       {
          lasttime = GetTicCount();
 
-         cursorvis ^= true;
+         cursorvis ^= TRUE;
       }
       if (cursorvis)
          USL_XORICursor (x, y, xx, cursor, color);
@@ -1244,7 +1243,7 @@ bool US_lineinput (int x, int y, char *buf, const char *def, bool escok,
          DrawMenuBufPropString (px, py, xx);
    }
 
-//   if (GameEscaped==true)
+//   if (GameEscaped==TRUE)
 //      PauseLoop ();
 
    if (color)
@@ -1434,7 +1433,7 @@ void DrawIntensityChar  ( char ch )
    width = IFont->width[ (uint8_t)ch ];
    source = ( ( uint8_t * )IFont ) + IFont->charofs[ (uint8_t)ch ];
 
-   if ((iGLOBAL_SCREENWIDTH <= 320)||(StretchScreen == true)){
+   if ((iGLOBAL_SCREENWIDTH <= 320)||(StretchScreen == TRUE)){
 	   while( width-- )
 	   {
 		  height = ht;
@@ -1510,7 +1509,7 @@ int GetColor (int num)
 //******************************************************************************
 
 static int oldfontcolor = 0;
-static bool highlight = false;
+static bool8_t highlight = FALSE;
 
 void DrawIString (uint16_t x, uint16_t y, const char *string, int flags)
 {
@@ -1527,9 +1526,9 @@ void DrawIString (uint16_t x, uint16_t y, const char *string, int flags)
          // Highlighting is done only for 1 word - if we get a "space"
          //  and highlight is on ...., reset variables.
          //
-         if ((ch == ' ') && (highlight == true))
+         if ((ch == ' ') && (highlight == TRUE))
          {
-            highlight = false;
+            highlight = FALSE;
             fontcolor = oldfontcolor;
             DrawIntensityChar (ch);
          }
@@ -1576,7 +1575,7 @@ void DrawIString (uint16_t x, uint16_t y, const char *string, int flags)
                else
                {
                   oldfontcolor = fontcolor;           // save off old font color
-                  highlight    = true;                // set highlight
+                  highlight    = TRUE;                // set highlight
                   fontcolor    = GetColor (temp);
                }
             }
@@ -1586,7 +1585,7 @@ void DrawIString (uint16_t x, uint16_t y, const char *string, int flags)
                if (ch == '`')
                {
                   oldfontcolor = fontcolor;        // save off old font color
-                  highlight    = true;             // set highlight
+                  highlight    = TRUE;             // set highlight
                   if (fontcolor < 8)               // only highlight the
                      fontcolor    = fontcolor-10;  //  lower colors
                }
@@ -1597,9 +1596,9 @@ void DrawIString (uint16_t x, uint16_t y, const char *string, int flags)
          DrawIntensityChar (ch);
    }
 
-   if (highlight == true)
+   if (highlight == TRUE)
    {
-      highlight = false;
+      highlight = FALSE;
       fontcolor = oldfontcolor;
    }
 }

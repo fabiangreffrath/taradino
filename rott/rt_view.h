@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_view_public
 #define _rt_view_public
 
-#include <stdbool.h>
 #include <stdint.h>
 
 #include "modexlib.h"
@@ -110,11 +109,11 @@ extern  int viewsize;
 extern  int focalwidth;
 extern  int yzangleconverter;
 extern  int lightninglevel;
-extern  bool  lightning;
+extern  bool8_t  lightning;
 extern  int    darknesslevel;
 
 void DrawCPUJape( void );
-void SetupScreen ( bool flip );
+void SetupScreen ( bool8_t flip );
 void ResetFocalWidth ( void );
 void ChangeFocalWidth ( int amount );
 void SetViewSize ( int size );

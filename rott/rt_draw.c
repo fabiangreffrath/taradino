@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "profile.h"
 #include "rt_def.h"
-#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 
@@ -308,7 +307,7 @@ void BuildTables (void)
 ========================
 */
 
-bool TransformObject (int x, int y, int *dispx, int *dispheight)
+bool8_t TransformObject (int x, int y, int *dispx, int *dispheight)
 {
 
   int32_t gx,gy,gxt,gyt,nx,ny;
@@ -328,7 +327,7 @@ bool TransformObject (int x, int y, int *dispx, int *dispheight)
   nx = gxt-gyt;
 
   if (nx<MINZ)
-     return false;
+     return FALSE;
 
   // the midpoint could put parts of the shape
   // into an adjacent wall
@@ -348,7 +347,7 @@ bool TransformObject (int x, int y, int *dispx, int *dispheight)
 
   *dispheight = heightnumerator/nx;
 
-  return true;
+  return TRUE;
 }
 
 
@@ -494,7 +493,7 @@ void TransformPoint (int x, int y, int * screenx, int * height, int * texture, i
 ========================
 */
 
-bool TransformSimplePoint (int x, int y, int * screenx, int * height, int * texture, int vertical)
+bool8_t TransformSimplePoint (int x, int y, int * screenx, int * height, int * texture, int vertical)
 {
 
   int32_t gxt,gyt,nx,ny;
@@ -516,7 +515,7 @@ bool TransformSimplePoint (int x, int y, int * screenx, int * height, int * text
   nx =gxt-gyt;
 
   if (nx<MINZ)
-     return false;
+     return FALSE;
 
 
 //
@@ -538,7 +537,7 @@ bool TransformSimplePoint (int x, int y, int * screenx, int * height, int * text
   else
      *texture=(x-*texture)&0xffff;
 
-  return true;
+  return TRUE;
 }
 
 
@@ -550,11 +549,11 @@ bool TransformSimplePoint (int x, int y, int * screenx, int * height, int * text
 ========================
 */
 
-bool TransformPlane (int x1, int y1, int x2, int y2, visobj_t * plane)
+bool8_t TransformPlane (int x1, int y1, int x2, int y2, visobj_t * plane)
 {
-  bool result2;
-  bool result1;
-  bool vertical;
+  bool8_t result2;
+  bool8_t result1;
+  bool8_t vertical;
   int txstart,txend;
 
   vertical=((x2-x1)==0);
@@ -563,11 +562,11 @@ bool TransformPlane (int x1, int y1, int x2, int y2, visobj_t * plane)
   txend=plane->textureend;
   result1=TransformSimplePoint(x1,y1,&(plane->x1),&(plane->h1),&(plane->texturestart),vertical);
   result2=TransformSimplePoint(x2,y2,&(plane->x2),&(plane->h2),&(plane->textureend),vertical);
-  if (result1==true)
+  if (result1==TRUE)
      {
      if (plane->x1>=viewwidth)
-        return false;
-     if (result2==false)
+        return FALSE;
+     if (result2==FALSE)
         {
         plane->textureend=txend;
         TransformPoint(x2,y2,&(plane->x2),&(plane->h2),&(plane->textureend),vertical);
@@ -575,12 +574,12 @@ bool TransformPlane (int x1, int y1, int x2, int y2, visobj_t * plane)
 	  }
   else
      {
-     if (result2==false)
-        return false;
+     if (result2==FALSE)
+        return FALSE;
      else
         {
         if (plane->x2<0)
-           return false;
+           return FALSE;
         plane->texturestart=txstart;
 		  TransformPoint(x1,y1,&(plane->x1),&(plane->h1),&(plane->texturestart),vertical);
         }
@@ -599,9 +598,9 @@ bool TransformPlane (int x1, int y1, int x2, int y2, visobj_t * plane)
   plane->viewheight=(plane->h1+plane->h2)>>1;
 
   if ((plane->viewheight>=(2000<<HEIGHTFRACTION)) || (plane->x1>=viewwidth-1) || (plane->x2<=0))
-     return false;
+     return FALSE;
 
-  return true;
+  return TRUE;
 }
 
 //==========================================================================
@@ -714,7 +713,7 @@ int   CalcRotate (objtype *ob)
 	else
 		angle =  (viewangle-ANG180)- dirangle8[ob->dir];
 
-	if (ob->state->rotate == true)
+	if (ob->state->rotate == TRUE)
 	  angle += ANGLES/16;
 	else if (ob->state->rotate == 16)
 	  angle += ANGLES/32;
@@ -800,7 +799,7 @@ void DrawScaleds (void)
   int   i,numvisible;
   int   gx,gy;
   uint8_t   *visspot;
-  bool result;
+  bool8_t result;
   statobj_t *statptr;
   objtype   *obj;
   maskedwallobj_t* tmwall;
@@ -857,7 +856,7 @@ void DrawScaleds (void)
 			  {
 			  visptr->shapenum++;
 			  }
-		  if ((visptr < &vislist[MAXVISIBLE-1]) && (result==true)) // don't let it overflo'
+		  if ((visptr < &vislist[MAXVISIBLE-1]) && (result==TRUE)) // don't let it overflo'
 			  visptr++;
 		  }
 	  }
@@ -891,7 +890,7 @@ void DrawScaleds (void)
 
 			 result = TransformObject (statptr->x,statptr->y,&(visptr->viewx),&(visptr->viewheight));
 
-			 if ((result==false) || (visptr->viewheight< (1<<(HEIGHTFRACTION+2))))
+			 if ((result==FALSE) || (visptr->viewheight< (1<<(HEIGHTFRACTION+2))))
 				 continue;                         // to close to the object
 			 statptr->flags |= FL_SEEN;
 
@@ -999,7 +998,7 @@ void DrawScaleds (void)
 
 //        result = TransformObject (obj->drawx, obj->drawy,&(visptr->viewx),&(visptr->viewheight));
         result = TransformObject (obj->x, obj->y,&(visptr->viewx),&(visptr->viewheight));
-        if ((result==false) || (visptr->viewheight< (1<<(HEIGHTFRACTION+2))))
+        if ((result==FALSE) || (visptr->viewheight< (1<<(HEIGHTFRACTION+2))))
 			  continue;                         // to close to the object
 		  if (obj->state->rotate)
 			  visptr->shapenum += CalcRotate (obj);
@@ -1784,7 +1783,7 @@ void TransformDoors( void )
 {
    int i;
    int numvisible;
-   bool result;
+   bool8_t result;
    int gx,gy;
    visobj_t visdoorlist[MAXVISIBLEDOORS],*doorptr;
 
@@ -1819,7 +1818,7 @@ void TransformDoors( void )
            else
               result=TransformPlane(gx,gy,gx+0xffff,gy,doorptr);
            }
-        if (result==true)
+        if (result==TRUE)
            {
            doorptr->viewx=0;
            doorptr->shapenum=doorobjlist[i]->texture;
@@ -1872,7 +1871,7 @@ void TransformPushWalls( void )
   uint8_t   *visspot;
   visobj_t *savedptr;
   int numvisible;
-  bool result;
+  bool8_t result;
 
    whereami=15;
   savedptr=visptr;
@@ -1905,7 +1904,7 @@ void TransformPushWalls( void )
               visptr->shapenum=pwallobjlist[i]->texture;
               visptr->shapesize=((pwallobjlist[i]->x>>16)<<7)+(pwallobjlist[i]->y>>16);
               visptr->viewx+=2;
-              if ((visptr < &vislist[MAXVISIBLE-1]) && (result==true)) // don't let it overflo'
+              if ((visptr < &vislist[MAXVISIBLE-1]) && (result==TRUE)) // don't let it overflo'
                  visptr++;
               visptr->texturestart=(gy-0x8000)&0xffff;
               visptr->textureend=visptr->texturestart;//-0xffff;
@@ -1919,7 +1918,7 @@ void TransformPushWalls( void )
               visptr->shapenum=pwallobjlist[i]->texture;
               visptr->shapesize=((pwallobjlist[i]->x>>16)<<7)+(pwallobjlist[i]->y>>16);
               visptr->viewx+=2;
-              if ((visptr < &vislist[MAXVISIBLE-1]) && (result==true)) // don't let it overflo'
+              if ((visptr < &vislist[MAXVISIBLE-1]) && (result==TRUE)) // don't let it overflo'
                  visptr++;
 				  visptr->texturestart=(gx-0x8000)&0xffff;
               visptr->textureend=visptr->texturestart;//-0xffff;
@@ -1938,7 +1937,7 @@ void TransformPushWalls( void )
               visptr->shapenum=pwallobjlist[i]->texture;
               visptr->shapesize=((pwallobjlist[i]->x>>16)<<7)+(pwallobjlist[i]->y>>16);
               visptr->viewx+=2;
-              if ((visptr < &vislist[MAXVISIBLE-1]) && (result==true)) // don't let it overflo'
+              if ((visptr < &vislist[MAXVISIBLE-1]) && (result==TRUE)) // don't let it overflo'
                  visptr++;
               visptr->texturestart=(gx-0x8000)&0xffff;
               visptr->textureend=visptr->texturestart;
@@ -1954,7 +1953,7 @@ void TransformPushWalls( void )
               visptr->shapenum=pwallobjlist[i]->texture;
               visptr->shapesize=((pwallobjlist[i]->x>>16)<<7)+(pwallobjlist[i]->y>>16);
               visptr->viewx+=2;
-              if ((visptr < &vislist[MAXVISIBLE-1]) && (result==true)) // don't let it overflo'
+              if ((visptr < &vislist[MAXVISIBLE-1]) && (result==TRUE)) // don't let it overflo'
                  visptr++;
               visptr->texturestart=(gy-0x8000)&0xffff;
               visptr->textureend=visptr->texturestart;
@@ -1966,7 +1965,7 @@ void TransformPushWalls( void )
         visptr->viewx+=2;
         visptr->shapenum=pwallobjlist[i]->texture;
         visptr->shapesize=((pwallobjlist[i]->x>>16)<<7)+(pwallobjlist[i]->y>>16);
-        if ((visptr < &vislist[MAXVISIBLE-1]) && (result==true)) // don't let it overflo'
+        if ((visptr < &vislist[MAXVISIBLE-1]) && (result==TRUE)) // don't let it overflo'
            visptr++;
         }
      }
@@ -2042,8 +2041,8 @@ void WallRefresh (void)
              (DiskAt(player->tilex,player->tiley))
            ) &&
            (!(player->flags & FL_DOGMODE)) &&
-           (BobbinOn==true) &&
-           (GamePaused==false)
+           (BobbinOn==TRUE) &&
+           (GamePaused==FALSE)
          )
 			{
          int mag;
@@ -2335,7 +2334,7 @@ void InterpolateMaskedWall (visobj_t * plane)
 	transpatch_t *p;
    patch_t *p2;
    patch_t *p3;
-   bool drawbottom,drawmiddle,drawtop;
+   bool8_t drawbottom,drawmiddle,drawtop;
    int topoffset;
 
    whereami=19;
@@ -2344,36 +2343,36 @@ void InterpolateMaskedWall (visobj_t * plane)
       return;
    if (plane->altshapenum>=0)
       {
-      drawmiddle=true;
+      drawmiddle=TRUE;
       shape2=W_CacheLumpNum(plane->altshapenum,PU_CACHE, Cvt_patch_t, 1);
       p2=(patch_t *)shape2;
       topoffset=p2->topoffset;
       }
    else
       {
-      drawmiddle=false;
+      drawmiddle=FALSE;
       }
    if (plane->viewx>=0)
       {
-      drawtop=true;
+      drawtop=TRUE;
       shape3=W_CacheLumpNum(plane->viewx,PU_CACHE, Cvt_patch_t, 1);
       p3=(patch_t *)shape3;
       topoffset=p3->topoffset;
       }
    else
       {
-      drawtop=false;
+      drawtop=FALSE;
       }
    if (plane->shapenum>=0)
       {
-      drawbottom=true;
+      drawbottom=TRUE;
       shape=W_CacheLumpNum(plane->shapenum,PU_CACHE, Cvt_transpatch_t, 1);
       p = (transpatch_t *)shape;
       topoffset=p->topoffset;
       }
    else
       {
-      drawbottom=false;
+      drawbottom=FALSE;
       }
 
    d1=(1<<(16+HEIGHTFRACTION)) / plane->h1;
@@ -2400,20 +2399,20 @@ void InterpolateMaskedWall (visobj_t * plane)
 
             texture=((top/bot)+(plane->texturestart>>4))>>6;
             SetLightLevel(height>>DHEIGHTFRACTION);
-            if (drawbottom==true)
+            if (drawbottom==TRUE)
                ScaleTransparentPost (p->collumnofs[texture]+shape,buf,(p->translevel+8));
 				for (j=0;j<levelheight-2;j++)
                {
                sprtopoffset-=(dc_invscale<<6);
                dc_texturemid+=(1<<22);
-               if (drawmiddle==true)
+               if (drawmiddle==TRUE)
                   ScaleMaskedPost (p2->collumnofs[texture]+shape2,buf);
                }
             if (levelheight>1)
                {
                sprtopoffset-=(dc_invscale<<6);
                dc_texturemid+=(1<<22);
-               if (drawtop==true)
+               if (drawtop==TRUE)
                   ScaleMaskedPost (p3->collumnofs[texture]+shape3,buf);
                }
             }
@@ -2543,7 +2542,7 @@ void      ThreeDRefresh (void)
    DrawMessages();
    bufferofs += screenofs;
 
-   if ( ((GamePaused==true) && (!Keyboard[sc_LShift])) ||
+   if ( ((GamePaused==TRUE) && (!Keyboard[sc_LShift])) ||
         (controlupdatestarted==0)
       )
       DrawPause ();
@@ -2551,15 +2550,15 @@ void      ThreeDRefresh (void)
 //
 // show screen and time last cycle
 //
-   if ((fizzlein==true) && (modemgame==false))
+   if ((fizzlein==TRUE) && (modemgame==FALSE))
    {
-      if (newlevel==true)
+      if (newlevel==TRUE)
          ShutdownClientControls();
       bufferofs-=screenofs;
-      DrawPlayScreen (true);
+      DrawPlayScreen (TRUE);
       RotateBuffer(0,FINEANGLES,FINEANGLES*8,FINEANGLES,(VBLCOUNTER*3)/4);
       bufferofs+=screenofs;
-      fizzlein = false;
+      fizzlein = FALSE;
       StartupClientControls();
    }
 
@@ -2567,7 +2566,7 @@ void      ThreeDRefresh (void)
 
    UpdateClientControls ();
 
-   if (HUD == true)
+   if (HUD == TRUE)
       DrawPlayerLocation();
 
    FlipPage();
@@ -2685,7 +2684,7 @@ void DoLoadGameSequence ( void )
 
    
    
-   fizzlein=false;
+   fizzlein=FALSE;
    x=(18+SaveGamePicX)<<16;
    y=(30+SaveGamePicY)<<16;
    time=VBLCOUNTER;
@@ -2696,7 +2695,7 @@ void DoLoadGameSequence ( void )
 
    destscreen=SafeMalloc(64000*8);//bna fixme
 
-   SetupScreen(false);
+   SetupScreen(FALSE);
    ThreeDRefresh();
 
    FlipPage();
@@ -2727,7 +2726,7 @@ void DoLoadGameSequence ( void )
    	//bna++ section
    shape =  ( pic_t * )W_CacheLumpName( "backtile", PU_CACHE, Cvt_pic_t, 1 );
    DrawTiledRegion( 0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32, 0, 16, shape );//bna++
-   DrawPlayScreen(false);
+   DrawPlayScreen(FALSE);
    DisableScreenStretch();
    SHAKETICS = 0xFFFF;
    //bna section end
@@ -2739,7 +2738,7 @@ void DoLoadGameSequence ( void )
 //
 //******************************************************************************
 uint8_t * RotatedImage;
-bool RotateBufferStarted = false;
+bool8_t RotateBufferStarted = FALSE;
 void StartupRotateBuffer ( int masked)
 {
 	int k;////zxcv
@@ -2747,10 +2746,10 @@ void StartupRotateBuffer ( int masked)
 
    iG_masked = masked;
 
-   if (RotateBufferStarted == true)
+   if (RotateBufferStarted == TRUE)
       return;
 
-   RotateBufferStarted = true;
+   RotateBufferStarted = TRUE;
 
    //   RotatedImage=SafeMalloc(131072);org
    //RotatedImage=SafeMalloc(131072*8);
@@ -2759,7 +2758,7 @@ void StartupRotateBuffer ( int masked)
    }else if (iGLOBAL_SCREENWIDTH == 640) { 
 		RotatedImage=SafeMalloc(131072*4);
    }
-//SetupScreen(false);//used these 2 to test screen size
+//SetupScreen(FALSE);//used these 2 to test screen size
 //VW_UpdateScreen ();
    if (masked==0) {
 	   if (iGLOBAL_SCREENWIDTH == 320) {
@@ -2777,7 +2776,7 @@ void StartupRotateBuffer ( int masked)
       //memset(RotatedImage,0xff,131072);//org
       //memset(RotatedImage,0xff,131072*8);
 
-      if ((masked == false)&&(iGLOBAL_SCREENWIDTH == 640)) {
+      if ((masked == FALSE)&&(iGLOBAL_SCREENWIDTH == 640)) {
 		DisableScreenStretch();
 		k=(28*512);//14336;
 		   for (a=0;a<iGLOBAL_SCREENHEIGHT;a++){
@@ -2787,7 +2786,7 @@ void StartupRotateBuffer ( int masked)
 			   }
 		   }
 
-	  }else if ((masked == true)||(iGLOBAL_SCREENWIDTH == 320)) {
+	  }else if ((masked == TRUE)||(iGLOBAL_SCREENWIDTH == 320)) {
 		  for (a=0;a<200;a++){
 			 for (b=0;b<320;b++)
 				*(RotatedImage+99+((a+28)<<9)+b)=*((uint8_t *)bufferofs+(a*linewidth)+b);
@@ -2809,10 +2808,10 @@ a=0=14436 a=1=14848 a=2=15360 a=3=15872  -> 512 i difference
 
 void ShutdownRotateBuffer ( void )
 {
-   if (RotateBufferStarted == false)
+   if (RotateBufferStarted == FALSE)
       return;
 
-   RotateBufferStarted = false;
+   RotateBufferStarted = FALSE;
    SafeFree(RotatedImage);
 }
 
@@ -2873,7 +2872,7 @@ void ScaleAndRotateBuffer (int startangle, int endangle, int startscale, int end
 	   shape =  ( pic_t * )W_CacheLumpName( "backtile", PU_CACHE, Cvt_pic_t, 1 );
 	   DrawTiledRegion( 0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32, 0, 16, shape );//bna++
 	   DisableScreenStretch();//dont strech when we go BACK TO GAME
-	   DrawPlayScreen(true);//repaint ammo and life stat
+	   DrawPlayScreen(TRUE);//repaint ammo and life stat
   }
 }
    //bna section end
@@ -2931,11 +2930,11 @@ void DrawRotatedScreen(int cx, int cy, uint8_t *destscreen, int angle, int scale
 //   c = c/2; //these values are to rotate degres or?
 //   s = s/2;
 //   xst & xct= start center values ;
-   if ((iGLOBAL_SCREENWIDTH == 320 )||(masked == true)) {
+   if ((iGLOBAL_SCREENWIDTH == 320 )||(masked == TRUE)) {
 	   xst = (((-cx)*s)+(128<<16))-(cy*c);
 	   xct = (((-cx)*c)+(256<<16)+(1<<18)-(1<<16))+(cy*s);
    }
-   else if ((iGLOBAL_SCREENWIDTH == 640 )&&(masked == false)) {
+   else if ((iGLOBAL_SCREENWIDTH == 640 )&&(masked == FALSE)) {
 	   xst = (((-cx)*s)+((268)<<16))-(cy*c);
 	   xct = (((-cx)*c)+((317)<<16)+(1<<18)-(1<<16))+(cy*s);
    }//y=268;x=317
@@ -3182,7 +3181,7 @@ void RotationFun ( void )
    ShutdownRotateBuffer ();
 }
 
-bool ScreenSaverStarted=false;
+bool8_t ScreenSaverStarted=FALSE;
 screensaver_t * ScreenSaver;
 #define PAUSETIME  (70)
 
@@ -3193,7 +3192,7 @@ screensaver_t * ScreenSaver;
 //******************************************************************************
 void SetupScreenSaverPhase ( void )
 {
-   if (ScreenSaverStarted==false)
+   if (ScreenSaverStarted==FALSE)
       return;
 
    if (ScreenSaver->phase==0)
@@ -3229,10 +3228,10 @@ void SetupScreenSaverPhase ( void )
 //******************************************************************************
 void StartupScreenSaver ( void )
 {
-   if (ScreenSaverStarted==true)
+   if (ScreenSaverStarted==TRUE)
       return;
 
-   ScreenSaverStarted=true;
+   ScreenSaverStarted=TRUE;
 
    StartupRotateBuffer (0);
 
@@ -3258,10 +3257,10 @@ void StartupScreenSaver ( void )
 //******************************************************************************
 void ShutdownScreenSaver ( void )
 {
-   if (ScreenSaverStarted==false)
+   if (ScreenSaverStarted==FALSE)
       return;
 
-   ScreenSaverStarted=false;
+   ScreenSaverStarted=FALSE;
 
    ShutdownRotateBuffer ();
    SafeFree(ScreenSaver);
@@ -4010,7 +4009,7 @@ void DoTransmitterExplosion ( void )
       UpdateTransmitterExplosions ();
       }
    VL_FadeOut (0, 255, 63, 63, 63, 150);
-   screenfaded=false;
+   screenfaded=FALSE;
    SD_Play(SD_PLAYERTCSND);
    SD_Play(SD_PLAYERTBSND);
    SD_Play(SD_PLAYERDWSND);
@@ -4247,7 +4246,7 @@ void DestroyEarth ( void )
       UpdateWorldExplosions ();
       }
    VL_FadeOut (0, 255, 63, 63, 63, 150);
-   screenfaded=false;
+   screenfaded=FALSE;
    if (gamestate.violence==vl_excessive)
       SD_Play(SD_YOUSUCKSND);
    VL_FadeOut (0, 255, 0, 0, 0, 50);
@@ -4256,16 +4255,16 @@ void DestroyEarth ( void )
    SafeFree(back);
 }
 
-bool DestroyedAllEggs ( void )
+bool8_t DestroyedAllEggs ( void )
 {
    statobj_t * temp;
 
    for(temp=FIRSTSTAT;temp;temp=temp->statnext)
       {
       if (temp->itemnumber==stat_tomlarva)
-         return false;
+         return FALSE;
       }
-   return true;
+   return TRUE;
 }
 
 void DoSanNicolas ( void )
@@ -4748,7 +4747,7 @@ void DoEndCinematic ( void )
    MU_StartSong(song_youwin);
    DoBurningCastle ();
    DoSanNicolas();
-   if (DestroyedAllEggs () == true)
+   if (DestroyedAllEggs () == TRUE)
       {
       PlayerQuestionScreen();
       DIPCredits();
@@ -4892,7 +4891,7 @@ void DrawPreviousCredits ( int num, CreditType * Credits )
 //
 //******************************************************************************
 
-extern bool dopefish;
+extern bool8_t dopefish;
 void WarpCreditString ( int time, uint8_t * back, int num, CreditType * Credits)
 {
    int dy;
@@ -4901,7 +4900,7 @@ void WarpCreditString ( int time, uint8_t * back, int num, CreditType * Credits)
    int y;
    int width;
    int height;
-   bool soundplayed;
+   bool8_t soundplayed;
 
 
    LastScan = 0;
@@ -4919,7 +4918,7 @@ void WarpCreditString ( int time, uint8_t * back, int num, CreditType * Credits)
 
    CalcTics();
 
-   soundplayed=false;
+   soundplayed=FALSE;
 
    while (time>0)
       {
@@ -4930,9 +4929,9 @@ void WarpCreditString ( int time, uint8_t * back, int num, CreditType * Credits)
       else
          CurrentFont=tinyfont;
       US_ClippedPrint (x, (cy>>16)+4, &Credits[num].text[0]);
-      if ( ((cy>>16)<196) && (soundplayed==false))
+      if ( ((cy>>16)<196) && (soundplayed==FALSE))
          {
-         if ((dopefish==true) && (SD_Started==true))
+         if ((dopefish==TRUE) && (SD_Started==TRUE))
             {
             int snd;
 
@@ -4940,7 +4939,7 @@ void WarpCreditString ( int time, uint8_t * back, int num, CreditType * Credits)
                {
                snd=(RandomNumber("DoCredits",0)+RandomNumber("DoCredits",0))%MAXSOUNDS;
                }
-            while (SD_SoundOkay ( snd ) == false);
+            while (SD_SoundOkay ( snd ) == FALSE);
             SD_Play ( snd );
             }
          else
@@ -4951,7 +4950,7 @@ void WarpCreditString ( int time, uint8_t * back, int num, CreditType * Credits)
 #else
             SD_Play ( SD_BAZOOKAFIRESND + (RandomNumber("DoCredits",1)%6) );
 #endif
-            soundplayed=true;
+            soundplayed=TRUE;
             }
          }
       FlipPage();
@@ -5108,7 +5107,7 @@ void DrawRotRow(int count, uint8_t * dest, uint8_t * src)
 	ecx = mr_yfrac;
 	edx = mr_xfrac;
 
-	if ((iGLOBAL_SCREENWIDTH == 320)||(iG_masked==true))  
+	if ((iGLOBAL_SCREENWIDTH == 320)||(iG_masked==TRUE))  
 	{
 		while (count--) {
 			eax = edx >> 16;

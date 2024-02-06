@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 // scriplib.c
 
-#include <stdbool.h>
 #include <fcntl.h>
 #include <string.h>
 
@@ -40,8 +39,8 @@ char    name[MAXTOKEN*2];
 char    scriptfilename[512];
 char    *scriptbuffer,*script_p,*scriptend_p;
 int     scriptline;
-bool endofscript;
-bool tokenready;                     // only true if UnGetToken was just called
+bool8_t endofscript;
+bool8_t tokenready;                     // only TRUE if UnGetToken was just called
 
 /*
 ==============
@@ -61,8 +60,8 @@ void LoadScriptFile (char *filename)
 	script_p = scriptbuffer;
 	scriptend_p = script_p + size;
 	scriptline = 1;
-	endofscript = false;
-	tokenready = false;
+	endofscript = FALSE;
+	tokenready = FALSE;
 }
 
 
@@ -74,9 +73,9 @@ void LoadScriptFile (char *filename)
 = Signals that the current token was not used, and should be reported
 = for the next GetToken.  Note that
 
-GetToken (true);
+GetToken (TRUE);
 UnGetToken ();
-GetToken (false);
+GetToken (FALSE);
 
 = could cross a line boundary.
 =
@@ -85,7 +84,7 @@ GetToken (false);
 
 void UnGetToken (void)
 {
-	tokenready = true;
+	tokenready = TRUE;
 }
 
 
@@ -97,13 +96,13 @@ void UnGetToken (void)
 ==============
 */
 
-void GetToken (bool crossline)
+void GetToken (bool8_t crossline)
 {
 	char    *token_p;
 
 	if (tokenready)                         // is a token allready waiting?
 	{
-		tokenready = false;
+		tokenready = FALSE;
 		return;
 	}
 
@@ -112,7 +111,7 @@ void GetToken (bool crossline)
 		if (!crossline)
          Error ("Line %i is incomplete\nin file %s\n",
                  scriptline,scriptfilename);
-		endofscript = true;
+		endofscript = TRUE;
 		return;
 	}
 
@@ -127,7 +126,7 @@ skipspace:
 			if (!crossline)
             Error ("Line %i is incomplete\nin file %s\n",
                    scriptline,scriptfilename);
-			endofscript = true;
+			endofscript = TRUE;
 			return;
 		}
 		if (*script_p++ == '\n')
@@ -144,7 +143,7 @@ skipspace:
 		if (!crossline)
          Error ("Line %i is incomplete\nin file %s\n",
                  scriptline,scriptfilename);
-		endofscript = true;
+		endofscript = TRUE;
 		return;
 	}
 
@@ -156,7 +155,7 @@ skipspace:
 		while (*script_p++ != '\n')
 			if (script_p >= scriptend_p)
 			{
-				endofscript = true;
+				endofscript = TRUE;
 				return;
 			}
 		goto skipspace;
@@ -190,13 +189,13 @@ skipspace:
 ==============
 */
 
-void GetTokenEOL (bool crossline)
+void GetTokenEOL (bool8_t crossline)
 {
    char    *name_p;
 
 	if (tokenready)                         // is a token allready waiting?
 	{
-		tokenready = false;
+		tokenready = FALSE;
 		return;
 	}
 
@@ -205,7 +204,7 @@ void GetTokenEOL (bool crossline)
 		if (!crossline)
          Error ("Line %i is incomplete\nin file %s\n",
                  scriptline,scriptfilename);
-      endofscript = true;
+      endofscript = TRUE;
 		return;
 	}
 
@@ -220,7 +219,7 @@ skipspace:
 			if (!crossline)
             Error ("Line %i is incomplete\nin file %s\n",
                    scriptline,scriptfilename);
-			endofscript = true;
+			endofscript = TRUE;
 			return;
 		}
 		if (*script_p++ == '\n')
@@ -237,7 +236,7 @@ skipspace:
 		if (!crossline)
          Error ("Line %i is incomplete\nin file %s\n",
                  scriptline,scriptfilename);
-		endofscript = true;
+		endofscript = TRUE;
 		return;
 	}
 
@@ -249,7 +248,7 @@ skipspace:
 		while (*script_p++ != '\n')
 			if (script_p >= scriptend_p)
 			{
-				endofscript = true;
+				endofscript = TRUE;
 				return;
 			}
 		goto skipspace;
@@ -280,34 +279,34 @@ skipspace:
 =
 = TokenAvailable
 =
-= Returns true if there is another token on the line
+= Returns TRUE if there is another token on the line
 =
 ==============
 */
 
-bool TokenAvailable (void)
+bool8_t TokenAvailable (void)
 {
 	char    *search_p;
 
 	search_p = script_p;
 
 	if (search_p >= scriptend_p)
-		return false;
+		return FALSE;
 
 	while ( *search_p <= 32)
 	{
 		if (*search_p == '\n')
-			return false;
+			return FALSE;
 		search_p++;
 		if (search_p == scriptend_p)
-			return false;
+			return FALSE;
 
 	}
 
 	if (*search_p == ';')
-		return false;
+		return FALSE;
 
-	return true;
+	return TRUE;
 }
 
 

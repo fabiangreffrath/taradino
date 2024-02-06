@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_door_public
 #define _rt_door_public
 
-#include <stdbool.h>
 #include <stdint.h>
 
 #include "rt_def.h"
@@ -104,7 +103,7 @@ typedef struct doorstruct
 		  uint8_t        flags;
 		  int16_t   ticcount;
 		  int8_t eindex;
-		  bool     vertical;
+		  bool8_t     vertical;
 		  int         soundhandle;
 		  int         position;
 		  enum    {dr_open,dr_closed,dr_opening,dr_closing}       action;
@@ -168,7 +167,7 @@ typedef struct mwall
   int16_t midtexture;
   int16_t bottomtexture;
   uint16_t      flags;
-  bool   vertical;
+  bool8_t   vertical;
   int       sidepic;
 
   struct mwall *next;
@@ -202,11 +201,11 @@ extern pwallobj_t          *pwallobjlist[MAXPWALLS];
 extern int                 pwallnum;
 																																			 // 0xffff = fully open
 extern uint8_t                areaconnect[NUMAREAS][NUMAREAS];
-extern bool             areabyplayer[NUMAREAS];
+extern bool8_t             areabyplayer[NUMAREAS];
 
 
 void ActivateAllPushWalls(void);
-bool CheckTile(int,int);
+bool8_t CheckTile(int,int);
 void FindEmptyTile(int*,int*);
 int  Number_of_Empty_Tiles_In_Area_Around(int,int);
 void AddTouchplateAction(touchplatetype*,int);
@@ -229,7 +228,7 @@ void SpawnDoor(int,int,int,int);
 void SpawnMaskedWall (int tilex, int tiley, int which, int flags);
 void OpenDoor(int);
 void CloseDoor(int);
-void OperateDoor (int keys, int door, bool localplayer );
+void OperateDoor (int keys, int door, bool8_t localplayer );
 void DoorOpen(int);
 void DoorOpening(int);
 void DoorClosing(int door);
@@ -238,7 +237,7 @@ void SpawnPushWall (int tilex, int tiley, int lock, int texture, int dir, int ty
 void MovePWalls(void);
 void WallPushing (int pwall);
 void PushWall (int pwall, int dir);
-void OperatePushWall (int pwall, int dir, bool localplayer );
+void OperatePushWall (int pwall, int dir, bool8_t localplayer );
 void ActivatePushWall (intptr_t pwall);
 void ActivateMoveWall (intptr_t pwall);
 int  UpdateMaskedWall (int num);

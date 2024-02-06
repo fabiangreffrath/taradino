@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_game_private
 #define _rt_game_private
 
-#include <stdbool.h>
 #include <stdint.h>
 
 //******************************************************************************
@@ -161,7 +160,7 @@ typedef struct {
 //
 //******************************************************************************
 
-void DrawMPPic (int xpos, int ypos, int width, int height, int heightmod, uint8_t *src, bool bufferofsonly);
+void DrawMPPic (int xpos, int ypos, int width, int height, int heightmod, uint8_t *src, bool8_t bufferofsonly);
 void DrawHighScores (void);
 void GM_MemToScreen (uint8_t *source, int width, int height, int x, int y);
 

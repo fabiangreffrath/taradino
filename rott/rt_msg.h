@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_msg_public
 #define _rt_msg_public
 
-#include <stdbool.h>
 #include <stdint.h>
 
 #define MSG_PERMANENT     0x80
@@ -56,7 +55,7 @@ typedef struct msgt
 
 extern messagetype Messages[MAXMSGS];
 
-extern bool MessagesEnabled;
+extern bool8_t MessagesEnabled;
 
 
 void RestoreMessageBackground( void );
@@ -68,7 +67,7 @@ int StringLength (char *string);
 void UpdateModemMessage (int num, char c);
 void ModemMessageDeleteChar (int num);
 void DeleteMessage ( int num );
-void FinishModemMessage( int num, bool send );
+void FinishModemMessage( int num, bool8_t send );
 void DeletePriorityMessage( int flags );
 
 #endif

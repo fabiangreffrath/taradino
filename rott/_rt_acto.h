@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_actor_private
 #define _rt_actor_private
 
-#include <stdbool.h>
 #include <stdint.h>
 
 #include "rt_actor.h"
@@ -280,11 +279,11 @@ typedef struct
 //========================== Function Prototypes ==============================
 
 void     MissileMovement(objtype*);
-bool  MissileTryMove(objtype*,int,int,int);
+bool8_t  MissileTryMove(objtype*,int,int,int);
 void     T_DarkSnakeChase(objtype*);
 void     HeatSeek(objtype*);
-bool  CheckDoor(objtype *ob,doorobj_t*,int,int);
-bool  NextToDoor(objtype*ob);
+bool8_t  CheckDoor(objtype *ob,doorobj_t*,int,int);
+bool8_t  NextToDoor(objtype*ob);
 void     MissileHit (objtype *ob,void*);
 int      Near(objtype*,void*,int);
 void     FirstSighting(objtype*);
@@ -296,8 +295,8 @@ void     SelectDodgeDir(objtype*);
 void     SelectRollDir (objtype*);
 void     SelectTouchDir(objtype*);
 void     SelectMineDir(objtype*);
-bool  WallCheck(int,int);
-bool  NMEspincheck(objtype*);
+bool8_t  WallCheck(int,int);
+bool8_t  NMEspincheck(objtype*);
 void     TurnActorIntoSprite(objtype*ob);
 void     ActivateEnemy(objtype*);
 #endif

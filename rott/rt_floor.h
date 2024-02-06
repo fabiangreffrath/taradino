@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_floor_public
 #define _rt_floor_public
 
-#include <stdbool.h>
 #include <stdint.h>
 
 //***************************************************************************
@@ -39,7 +38,7 @@ void DrawPlanes (void);
 void SetPlaneViewSize( void );
 void MakeSkyTile (uint8_t * tile);
 void DrawFullSky( void );
-bool SkyExists (void);
+bool8_t SkyExists (void);
 
 #endif
 

@@ -19,7 +19,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "rt_def.h"
 #include "lumpy.h"
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -78,53 +77,53 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 volatile int    oldtime;
 volatile int    gametime;
 
-bool         tedlevel;
+bool8_t         tedlevel;
 int             tedlevelnum;
 int             tedx=0;
 int             tedy=0;
-bool         warp;
+bool8_t         warp;
 int             warpx=0;
 int             warpy=0;
 int             warpa=0;
 int             NoSound;
 int             polltime;
 int             oldpolltime;
-bool         fizzlein = false;
+bool8_t         fizzlein = FALSE;
 int             pheight;
 
-bool SCREENSHOTS             = false;
-bool MONOPRESENT             = false;
-bool MAPSTATS                = false;
-bool TILESTATS               = false;
-bool HUD                     = false;
-bool IS8250                  = false;
+bool8_t SCREENSHOTS             = FALSE;
+bool8_t MONOPRESENT             = FALSE;
+bool8_t MAPSTATS                = FALSE;
+bool8_t TILESTATS               = FALSE;
+bool8_t HUD                     = FALSE;
+bool8_t IS8250                  = FALSE;
 
-bool dopefish;
+bool8_t dopefish;
 
-bool newlevel = false;
-bool infopause;
-bool quiet = false;
+bool8_t newlevel = FALSE;
+bool8_t infopause;
+bool8_t quiet = FALSE;
 
-bool DebugOk = false;
+bool8_t DebugOk = FALSE;
 
 #if (WHEREAMI==1)
 int programlocation=-1;
 #endif
 
-static bool turbo;
+static bool8_t turbo;
 
 static int NoWait;
 static int startlevel=0;
 static int demonumber=-1;
 
 char CWD[40];                          // curent working directory
-static bool quitactive = false;
+static bool8_t quitactive = FALSE;
 
 int timelimit;
 int maxtimelimit;
-bool timelimitenabled;
-bool demoexit;
-bool noecho;
+bool8_t timelimitenabled;
+bool8_t demoexit;
+bool8_t noecho;
 
 void CheckCommandLineParameters( void );
 void PlayTurboGame( void );
@@ -138,8 +137,8 @@ extern void crash_print (int);
 //extern char G_argv[30][80];
 int G_weaponscale;
 extern int iDropDemo;
-extern bool iG_aimCross;
-extern bool sdl_fullscreen;
+extern bool8_t iG_aimCross;
+extern bool8_t sdl_fullscreen;
 
 extern void ComSetTime ( void );
 extern void VH_UpdateScreen (void);
@@ -218,7 +217,7 @@ int main (int argc, char *argv[])
    IN_Startup ();
 
    InitializeGameCommands();
-   if (standalone==false)
+   if (standalone==FALSE)
       {
       ReadConfig ();
       ReadSETUPFiles ();
@@ -230,16 +229,16 @@ int main (int argc, char *argv[])
 
    SetRottScreenRes (iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
    
-//   if (modemgame==true)
+//   if (modemgame==TRUE)
 //      {
-//      SCREENSHOTS=true;
-//      if (standalone==false)
+//      SCREENSHOTS=TRUE;
+//      if (standalone==FALSE)
 //         {
 //         MenuFixup ();
 //         }
-//      MAPSTATS=true;
+//      MAPSTATS=TRUE;
 //      }
-   if (standalone==false)
+   if (standalone==FALSE)
       {
       int status2 = 0;
 
@@ -247,7 +246,7 @@ int main (int argc, char *argv[])
          {
          if (!quiet)
             printf( "MU_Startup: " );
-         MU_Startup(false);
+         MU_Startup(FALSE);
          if (!quiet)
             printf( "%s\n", MUSIC_ErrorString( MUSIC_Error ) );
          }
@@ -276,7 +275,7 @@ int main (int argc, char *argv[])
             {
             if (!quiet)
                printf( "SD_Startup: " );
-            SD_Startup(false);
+            SD_Startup(FALSE);
             if (!quiet)
                printf( "%s\n", FX_ErrorString( FX_Error ) );
             }
@@ -292,7 +291,7 @@ int main (int argc, char *argv[])
       InitializeMessages();
       LoadColorMap();
       }
-   if (infopause==true)
+   if (infopause==TRUE)
       {
       printf("\n< Press any key to continue >\n");
       getch();
@@ -301,7 +300,7 @@ int main (int argc, char *argv[])
    I_StartupKeyboard();
    locplayerstate = &PLAYERSTATE[consoleplayer];
 
-   if (standalone==true)
+   if (standalone==TRUE)
       ServerLoop();
 
    VL_SetVGAPlaneMode();
@@ -325,10 +324,10 @@ int main (int argc, char *argv[])
 
    if (turbo || tedlevel)
 		{
-      if (modemgame == true)
+      if (modemgame == TRUE)
          {
-         turbo = false;
-         NoWait = true;
+         turbo = FALSE;
+         NoWait = TRUE;
          }
       else
          {
@@ -338,23 +337,23 @@ int main (int argc, char *argv[])
    else
       {
 #if (SHAREWARE == 0)
-      if ( dopefish == true )
+      if ( dopefish == TRUE )
          {
          DopefishTitle();
          }
-      else if ( NoWait == false )
+      else if ( NoWait == FALSE )
          {
          ApogeeTitle();
          }
 #else
-      if ( NoWait == false )
+      if ( NoWait == FALSE )
          {
          if (W_CheckNumForName("svendor") != -1)
             {
             lbm_t * LBM;
 
             LBM = (lbm_t *) W_CacheLumpName( "svendor", PU_CACHE, Cvt_lbm_t, 1);
-            VL_DecompressLBM (LBM,true);
+            VL_DecompressLBM (LBM,TRUE);
             I_Delay(40);
             MenuFadeOut();
             }
@@ -445,30 +444,30 @@ void CheckCommandLineParameters( void )
                        "TIMELIMIT","MAXTIMELIMIT","NOECHO","DEMOEXIT","QUIET",NULL};
    int i,n;
 
-   infopause=false;
-   tedlevel=false;
-   NoWait=false;
-   NoSound=false;
-   turbo=false;
-   warp=false;
-   dopefish=false;
-   modemgame=false;
-   SCREENSHOTS=false;
-   MONOPRESENT=false;
-   MAPSTATS=false;
-   TILESTATS=false;
-   IS8250 = false;
-   vrenabled = false;
-   demoexit = false;
+   infopause=FALSE;
+   tedlevel=FALSE;
+   NoWait=FALSE;
+   NoSound=FALSE;
+   turbo=FALSE;
+   warp=FALSE;
+   dopefish=FALSE;
+   modemgame=FALSE;
+   SCREENSHOTS=FALSE;
+   MONOPRESENT=FALSE;
+   MAPSTATS=FALSE;
+   TILESTATS=FALSE;
+   IS8250 = FALSE;
+   vrenabled = FALSE;
+   demoexit = FALSE;
 
-   modemgame=false;
-   networkgame=false;
+   modemgame=FALSE;
+   networkgame=FALSE;
 	consoleplayer=0;
 	numplayers = 1;
    timelimit=-1;
-   timelimitenabled=false;
-   noecho = false;
-   quiet = false;
+   timelimitenabled=FALSE;
+   noecho = FALSE;
+   quiet = FALSE;
 
    if (
         (CheckParm("?\0")) ||
@@ -575,7 +574,7 @@ void CheckCommandLineParameters( void )
 #if (TEDLAUNCH==1)
        case 0:
          tedlevelnum = ParseNum(_argv[i + 1]);
-         tedlevel=true;
+         tedlevel=TRUE;
          if (i+3>=_argc)
             {
             tedx=0;
@@ -590,34 +589,34 @@ void CheckCommandLineParameters( void )
          break;
 #endif
        case 1:
-         NoWait = true;
+         NoWait = TRUE;
          break;
 		 case 2:
-         NoSound = true;
+         NoSound = TRUE;
          break;
        case 3:
-         turbo = true;
+         turbo = TRUE;
          break;
        case 4:
-         warp = true;
+         warp = TRUE;
          warpx=ParseNum(_argv[i + 1]);
          warpy=ParseNum(_argv[i + 2]);
          warpa=ParseNum(_argv[i + 3]);
          break;
        case 5:
-         dopefish=true;
+         dopefish=TRUE;
          break;
        case 6:
-         SCREENSHOTS = true;
+         SCREENSHOTS = TRUE;
          break;
        case 7:
-         MONOPRESENT = true;
+         MONOPRESENT = TRUE;
          break;
        case 8:
-         MAPSTATS = true;
+         MAPSTATS = TRUE;
          break;
        case 9:
-         TILESTATS = true;
+         TILESTATS = TRUE;
          break;
        case 10:
          SetTextMode ();
@@ -649,12 +648,12 @@ void CheckCommandLineParameters( void )
             Error("Too many players.\n");
          if (!quiet)
 	     printf("Playing %ld player ROTT\n",(long)numplayers);
-         modemgame=true;
+         modemgame=TRUE;
          if (rottcom->gametype==NETWORK_GAME)
             {
             if (!quiet)
                printf("NETWORK GAME\n");
-            networkgame=true;
+            networkgame=TRUE;
             }
          else
             {
@@ -663,7 +662,7 @@ void CheckCommandLineParameters( void )
             }
          break;
        case 12:
-         infopause=true;
+         infopause=TRUE;
          break;
        case 13:
           break;
@@ -671,15 +670,15 @@ void CheckCommandLineParameters( void )
           startlevel = (ParseNum(_argv[i + 1])-1);
           break;
        case 15:
-          IS8250 = true;
+          IS8250 = TRUE;
           break;
        case 16:
-          vrenabled = true;
+          vrenabled = TRUE;
           if (!quiet)
              printf("Virtual Reality Mode enabled\n");
           break;
        case 17:
-          timelimitenabled = true;
+          timelimitenabled = TRUE;
           timelimit = ParseNum(_argv[i + 1]);
           if (!quiet)
              printf("Time Limit = %ld Seconds\n",(long)timelimit);
@@ -691,13 +690,13 @@ void CheckCommandLineParameters( void )
           maxtimelimit *= VBLCOUNTER;
           break;
        case 19:
-          noecho = true;
+          noecho = TRUE;
           break;
        case 20:
-          demoexit = true;
+          demoexit = TRUE;
           break;
        case 21:
-          quiet = true;
+          quiet = TRUE;
           break;
       }
    }
@@ -773,7 +772,7 @@ void SetupWads( void )
 					fread(buf,3,3,f);//is the 3 first letters RTL (RTC)
 				    if (((strstr(buf,"RTL") != 0)||strstr(buf,"RTC") != 0)) {
 						GameLevels.file = strdup(tempstr);
-						GameLevels.avail = true;
+						GameLevels.avail = TRUE;
 						buf = safe_realloc(buf, 32 + strlen(tempstr));
 						strcpy (buf,"Adding ");
 						strcat (buf,tempstr);
@@ -812,7 +811,7 @@ NoRTL:;
 					fread(buf,3,3,f);//is the 3 first letters RTL (RTC)
 				    if (((strstr(buf,"RTL") != 0)||strstr(buf,"RTC") != 0)) {
 						BattleLevels.file = strdup(tempstr);
-						BattleLevels.avail = true;
+						BattleLevels.avail = TRUE;
 						buf = safe_realloc(buf, 32 + strlen(tempstr));
 						strcpy (buf,"Adding ");
 						strcat (buf,tempstr);
@@ -869,7 +868,7 @@ NoRTC:;
 
    // Check for Remote Ridicule WAD
 
-   if (RemoteSounds.avail == true)
+   if (RemoteSounds.avail == TRUE)
       {
       char  *src;
 
@@ -902,7 +901,7 @@ void PlayTurboGame
    )
 
    {
-   NewGame = true;
+   NewGame = TRUE;
    locplayerstate->player = DefaultPlayerCharacter;
    playstate = ex_resetgame;
    GameLoop();
@@ -982,7 +981,7 @@ int NumberOfTeams
       color = PLAYERSTATE[ index ].uniformcolor;
       if ( !team[ color ] )
          {
-         team[ color ] = true;
+         team[ color ] = TRUE;
          count++;
          }
       }
@@ -1029,9 +1028,9 @@ void GameLoop (void)
 
          Z_FreeTags (PU_LEVELSTRUCT, PU_LEVELEND);       // Free current level
 
-         ingame = false;
+         ingame = FALSE;
 
-         if ( networkgame == true )
+         if ( networkgame == TRUE )
             {
             AddGameEndCommand ();
             }
@@ -1052,7 +1051,7 @@ void GameLoop (void)
             BATTLE_Shutdown();
             MU_StartSong(song_title);
 			EnableScreenStretch();
-            if ((NoWait==false)&&(!modemgame))
+            if ((NoWait==FALSE)&&(!modemgame))
                {
                uint8_t dimpal[768];
                int i;
@@ -1070,13 +1069,13 @@ void GameLoop (void)
                   MenuFadeOut();
                   ClearGraphicsScreen();
                   SetPalette(&dimpal[0]);
-                  PlayMovie ("shartitl", true);
+                  PlayMovie ("shartitl", TRUE);
                   if ( ( LastScan ) || ( IN_GetMouseButtons() ) )
                      {
                      break;
                      }
 
-                  PlayMovie ("shartit2", true);
+                  PlayMovie ("shartit2", TRUE);
 
                   if ( ( LastScan ) || ( IN_GetMouseButtons() ) )
                      {
@@ -1100,7 +1099,7 @@ void GameLoop (void)
 
 					DoCreditScreen ();
                   if ((!LastScan) && (!IN_GetMouseButtons()))
-                     CheckHighScore (0, 0, false);
+                     CheckHighScore (0, 0, FALSE);
 #if (SHAREWARE==0)
                   if ((!LastScan) && (!IN_GetMouseButtons()))
                      {
@@ -1110,7 +1109,7 @@ void GameLoop (void)
                   if (
                       (!LastScan) &&
                       (!IN_GetMouseButtons()) &&
-                      (GameLevels.avail==false)
+                      (GameLevels.avail==FALSE)
                      )
                      {
                      if (demonumber==-1)
@@ -1118,12 +1117,12 @@ void GameLoop (void)
                      for (i=0;i<4;i++)
                         {
                         demonumber=(demonumber+1)%4;
-                        if (DemoExists (demonumber+1) == true)
+                        if (DemoExists (demonumber+1) == TRUE)
                            break;
                         }
-                     if (DemoExists (demonumber+1) == true)
+                     if (DemoExists (demonumber+1) == TRUE)
                         {
-                        ingame=true;
+                        ingame=TRUE;
                         LoadDemo (demonumber+1);
                         break;
                         }
@@ -1133,11 +1132,11 @@ void GameLoop (void)
 
             if (playstate != ex_demoplayback)
                {
-               if (demoexit == true)
+               if (demoexit == TRUE)
                   {
                   QuitGame();
                   }
-               NoWait = false;
+               NoWait = FALSE;
                SwitchPalette(origpal,35);
                CP_MainMenu();
 
@@ -1152,13 +1151,13 @@ void GameLoop (void)
 
             InitializeMessages();
 
-            fizzlein = true;
+            fizzlein = TRUE;
             BATTLE_GetSpecials();
             BATTLE_SetOptions( &BATTLE_Options[ gamestate.battlemode ] );
 
-            if ( modemgame == true )
+            if ( modemgame == TRUE )
                {
-               fizzlein = false;
+               fizzlein = FALSE;
 
                if ( consoleplayer == 0 )
                   {
@@ -1204,7 +1203,7 @@ void GameLoop (void)
 
             BATTLE_Init( gamestate.battlemode, numplayers );
 
-            NewGame = true;
+            NewGame = TRUE;
 
             if ( ( BATTLEMODE ) && ( BATTLE_ShowKillCount ) )
                {
@@ -1215,7 +1214,7 @@ void GameLoop (void)
                StatusBar &= ~STATUS_KILLS;
                }
 
-            if (loadedgame == false)
+            if (loadedgame == FALSE)
                {
                if ( !BATTLEMODE )
                   {
@@ -1227,7 +1226,7 @@ void GameLoop (void)
 
             IN_ClearKeyboardQueue();
 
-				SetupScreen (true);
+				SetupScreen (TRUE);
 
             MenuFixup ();
             playstate=ex_stillplaying;
@@ -1240,15 +1239,15 @@ void GameLoop (void)
             InitializeMessages();
 
             SHAKETICS = 0xFFFF;
-            if (modemgame==true)
+            if (modemgame==TRUE)
                {
                ComSetTime();
-               turbo = false;
+               turbo = FALSE;
                }
-            else if (turbo==true)
-               turbo=false;
+            else if (turbo==TRUE)
+               turbo=FALSE;
             else
-               newlevel=true;
+               newlevel=TRUE;
             PlayLoop ();
          break;
 
@@ -1276,16 +1275,16 @@ void GameLoop (void)
 
                Z_FreeTags (PU_LEVELSTRUCT, PU_LEVELEND);       // Free current level
 
-               if (CheckForQuickLoad()==false)
+               if (CheckForQuickLoad()==FALSE)
                   {
                   if (locplayerstate->lives < 0)
                      {
-                     if (timelimitenabled == false)
+                     if (timelimitenabled == FALSE)
                         {
-                        CheckHighScore (gamestate.score, gamestate.mapon+1, false);
+                        CheckHighScore (gamestate.score, gamestate.mapon+1, FALSE);
                         playstate = ex_titles;
                         AdjustMenuStruct ();
-                        ingame = false;
+                        ingame = FALSE;
                         locplayerstate->health     = MaxHitpointsForCharacter(locplayerstate);
                         gamestate.score            = 0;
                         locplayerstate->lives      = 3;
@@ -1301,7 +1300,7 @@ void GameLoop (void)
                      }
                   else
                      {
-                     fizzlein = true;
+                     fizzlein = TRUE;
                      SetupGameLevel ();
                      UpdateTriads(player,0);
                      playstate = ex_stillplaying;
@@ -1319,7 +1318,7 @@ void GameLoop (void)
 
             Z_FreeTags (PU_LEVELSTRUCT, PU_LEVELEND);       // Free current level
 
-            fizzlein = true;
+            fizzlein = TRUE;
             SetupGameLevel ();
 
             playstate = ex_stillplaying;
@@ -1334,7 +1333,7 @@ void GameLoop (void)
             ShutdownClientControls();
             TurnShakeOff();
             SHAKETICS = 0xffff;
-            if (timelimitenabled == false)
+            if (timelimitenabled == FALSE)
                {
                gamestate.TimeCount = 0;
                gamestate.frame=0;
@@ -1351,7 +1350,7 @@ void GameLoop (void)
                int width, height;
 
                LBM = (lbm_t *) W_CacheLumpName( "deadboss", PU_CACHE, Cvt_lbm_t, 1);
-               VL_DecompressLBM (LBM,false);
+               VL_DecompressLBM (LBM,FALSE);
                MenuFadeOut();
                switch (gamestate.mapon)
                   {
@@ -1408,14 +1407,14 @@ void GameLoop (void)
 
             NextLevel = GetNextMap(player->tilex,player->tiley);
 
-            demoplayback = false;
+            demoplayback = FALSE;
 
             Z_FreeTags (PU_LEVELSTRUCT, PU_LEVELEND);       // Free current level
             if (NextLevel != -1 )
                {
                gamestate.mapon = NextLevel;
                PlayCinematic();
-               fizzlein = true;
+               fizzlein = TRUE;
                SetupGameLevel ();
                playstate = ex_stillplaying;
                }
@@ -1426,14 +1425,14 @@ void GameLoop (void)
          break;
 
          case ex_demodone:
-            ingame=false;
+            ingame=FALSE;
             ShutdownClientControls();
             TurnShakeOff();
             SHAKETICS = 0xffff;
             gamestate.TimeCount = 0;
 	         gamestate.frame=0;
 
-            demoplayback = false;
+            demoplayback = FALSE;
 
             Z_FreeTags (PU_LEVELSTRUCT, PU_LEVELEND);       // Free current level
             if (predemo_violence != -1)
@@ -1449,9 +1448,9 @@ void GameLoop (void)
             DoEndCinematic();
             if (playstate==ex_gameover)
                {
-               CheckHighScore (gamestate.score, gamestate.mapon+1, false);
+               CheckHighScore (gamestate.score, gamestate.mapon+1, FALSE);
 
-               ingame = false;
+               ingame = FALSE;
                AdjustMenuStruct ();
                playstate = ex_titles;
                }
@@ -1464,7 +1463,7 @@ void GameLoop (void)
             RecordDemo();
             SetupGameLevel ();
 
-            fizzlein = true;
+            fizzlein = TRUE;
             playstate = ex_stillplaying;
          break;
 
@@ -1475,7 +1474,7 @@ void GameLoop (void)
             SetupDemo();
             SetupGameLevel ();
 
-            fizzlein = true;
+            fizzlein = TRUE;
             playstate = ex_stillplaying;
          break;
 	 default:
@@ -1485,7 +1484,7 @@ void GameLoop (void)
    waminot();
    }
 
-bool CheckForQuickLoad  (void )
+bool8_t CheckForQuickLoad  (void )
 
    {
 
@@ -1518,14 +1517,14 @@ bool CheckForQuickLoad  (void )
 
 void ShutDown ( void )
 {
-   if ( standalone == false )
+   if ( standalone == FALSE )
       {
       WriteConfig ();
       }
 
 //   if (
-//       (networkgame==false) &&
-//       (modemgame==true)
+//       (networkgame==FALSE) &&
+//       (modemgame==TRUE)
 //      )
 //      {
 //      ShutdownModemGame ();
@@ -1568,7 +1567,7 @@ void InitCharacter
 
    {
    locplayerstate->health = MaxHitpointsForCharacter( locplayerstate );
-   if (timelimitenabled == true)
+   if (timelimitenabled == TRUE)
       {
       locplayerstate->lives  = 1;
       }
@@ -1625,7 +1624,7 @@ void UpdateGameObjects ( void )
 
    UpdateClientControls ();
 
-   if (demoplayback == false)
+   if (demoplayback == FALSE)
        PollControls ();
 
    CalcTics ();
@@ -1675,7 +1674,7 @@ void UpdateGameObjects ( void )
             break;
             }
          }
-      if (timelimitenabled == true)
+      if (timelimitenabled == TRUE)
          {
          if (timelimit-gamestate.TimeCount>maxtimelimit)
             timelimit = maxtimelimit+gamestate.TimeCount;
@@ -1691,14 +1690,14 @@ void UpdateGameObjects ( void )
       ResetCurrentCommand();
 
       oldpolltime++;
-      if (GamePaused==true)
+      if (GamePaused==TRUE)
          break;
 		}
    actortime=GetFastTics()-atime;
 
    UpdateClientControls ();
 
-   if (noecho == false)
+   if (noecho == FALSE)
       {
       if ( player->flags & FL_SHROOMS )
          {
@@ -1725,7 +1724,7 @@ void PauseLoop ( void )
 	   {
       CheckUnPause();
       oldpolltime++;
-      if (GamePaused==false)
+      if (GamePaused==FALSE)
          {
    			//bna++ section
 		  if (( playstate == ex_stillplaying )&&(iGLOBAL_SCREENWIDTH > 320)){
@@ -1733,7 +1732,7 @@ void PauseLoop ( void )
 				shape =  ( pic_t * )W_CacheLumpName( "backtile", PU_CACHE, Cvt_pic_t, 1 );
 				DrawTiledRegion( 0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32, 0, 16, shape );
 				DisableScreenStretch();//dont strech when we go BACK TO GAME
-				DrawPlayScreen(true);//repaint ammo and life stat
+				DrawPlayScreen(TRUE);//repaint ammo and life stat
 				VW_UpdateScreen ();//update screen
 		  }
 		  StartupClientControls();
@@ -1743,14 +1742,14 @@ void PauseLoop ( void )
 		}
 
    CalcTics ();
-   if (demoplayback==false)
+   if (demoplayback==FALSE)
       PollControls ();
 
-   if ((RefreshPause == true) &&
-       (GamePaused == true) &&
+   if ((RefreshPause == TRUE) &&
+       (GamePaused == TRUE) &&
        ((GetTicCount() - pausedstartedticcount) >= blanktime))
       {
-      RefreshPause = false;
+      RefreshPause = FALSE;
       StartupScreenSaver();
       }
 }
@@ -1765,13 +1764,13 @@ void PlayLoop
    {
    volatile int atime;
 
-   bool canquit = true;
+   bool8_t canquit = TRUE;
    int     quittime = 0;
 
    wami(3);
 
 
-   if ( (loadedgame == false) && (timelimitenabled == false) )
+   if ( (loadedgame == FALSE) && (timelimitenabled == FALSE) )
       {
       gamestate.TimeCount = 0;
       gamestate.frame = 0;
@@ -1779,16 +1778,16 @@ void PlayLoop
 
 fromloadedgame:
 
-   GamePaused = false;
+   GamePaused = FALSE;
 
-	if ( loadedgame == false )
+	if ( loadedgame == FALSE )
       {
-    	DrawPlayScreen( true );
+    	DrawPlayScreen( TRUE );
 		missobj = NULL;
 		}
 	else
 		{
-		loadedgame = false;
+		loadedgame = FALSE;
       DoLoadGameSequence();
 		}
 
@@ -1797,7 +1796,7 @@ fromloadedgame:
 	tics      = 0;
 	SetFastTics(0);
 
-   if ( fizzlein == false )
+   if ( fizzlein == FALSE )
       {
       StartupClientControls();
       }
@@ -1859,13 +1858,13 @@ fromloadedgame:
 
       PollKeyboard();
 
-      MISCVARS->madenoise = false;
+      MISCVARS->madenoise = FALSE;
 
       AnimateWalls();
 
       UpdateClientControls();
 
-      if ( AutoDetailOn == true )
+      if ( AutoDetailOn == TRUE )
          {
    		AdaptDetail();
          }
@@ -1877,29 +1876,29 @@ fromloadedgame:
 
       UpdatePlayers();
 
-      DrawTime( false );
+      DrawTime( FALSE );
 
       UpdateClientControls();
 
       if ( ( !BATTLEMODE ) && ( CP_CheckQuick( LastScan ) ) )
 			{
-         bool escaped=false;
+         bool8_t escaped=FALSE;
 
          if (LastScan == sc_Escape)
             {
             MU_StoreSongPosition();
             MU_StartSong(song_menu);
-            escaped = true;
+            escaped = TRUE;
             }
          TurnShakeOff();
          StopWind();
          SetBorderColor( 0 );
          ShutdownClientControls();
-         if (demoplayback==true)
+         if (demoplayback==TRUE)
             {
             FreeDemo();
             playstate = ex_demodone;
-            if (demoexit==true)
+            if (demoexit==TRUE)
                {
                QuitGame();
                }
@@ -1911,7 +1910,7 @@ fromloadedgame:
          // set detail level
          doublestep = 2 - DetailLevel;
 
-         inmenu = false;
+         inmenu = FALSE;
 
          if ( playstate == ex_titles )
             {
@@ -1920,17 +1919,17 @@ fromloadedgame:
 
          if ( playstate == ex_stillplaying )
             {
-            SetupScreen( false );
+            SetupScreen( FALSE );
             }
 
-         if ( loadedgame == true )
+         if ( loadedgame == TRUE )
             {
             goto fromloadedgame;
             }
 
          if (
               ( playstate == ex_stillplaying ) &&
-              ( ( fizzlein == false ) ||
+              ( ( fizzlein == FALSE ) ||
                 ( GamePaused )
               )
             )
@@ -1940,8 +1939,8 @@ fromloadedgame:
 
          if (
               (playstate == ex_stillplaying) &&
-              (GamePaused == false) &&
-              (escaped == true)
+              (GamePaused == FALSE) &&
+              (escaped == TRUE)
             )
             {
             MU_StartSong(song_level);
@@ -1951,18 +1950,18 @@ fromloadedgame:
 
       if ( BATTLEMODE )
          {
-         if ( MSG.messageon == false )
+         if ( MSG.messageon == FALSE )
             {
             CheckRemoteRidicule( LastScan );
             }
-         if ( quitactive == false )
+         if ( quitactive == FALSE )
             {
             if ( ( LastScan == sc_Escape ) && ( canquit ) )
                {
-               quitactive = true;
+               quitactive = TRUE;
                quittime   = GetTicCount() + QUITTIMEINTERVAL;
 
-               if ( (consoleplayer == 0) || (networkgame == false) )
+               if ( (consoleplayer == 0) || (networkgame == FALSE) )
                   {
                   AddMessage( "Do you want to end this game? "
                      "(\\FY\\O/\\FN\\O)", MSG_QUIT );
@@ -1978,17 +1977,17 @@ fromloadedgame:
             {
             if ( GetTicCount() > quittime )
                {
-               quitactive = false;
+               quitactive = FALSE;
                }
             else if ( LastScan == sc_N )
                {
                DeletePriorityMessage( MSG_QUIT );
-               quitactive = false;
+               quitactive = FALSE;
                }
             else if ( LastScan == sc_Y )
                {
                DeletePriorityMessage( MSG_QUIT );
-               if ( (consoleplayer == 0) || (networkgame==false) )
+               if ( (consoleplayer == 0) || (networkgame==FALSE) )
                   {
                   AddEndGameCommand();
                   }
@@ -2085,11 +2084,11 @@ void PollKeyboard
    )
 
    {
-   static char autopressed = false;
+   static char autopressed = FALSE;
 
    wami(5);
 
-   if (demoplayback==true)
+   if (demoplayback==TRUE)
       {
       IN_UpdateKeyboard();
       }
@@ -2110,7 +2109,7 @@ void PollKeyboard
       {
       if ( !autopressed )
          {
-         autopressed = true;
+         autopressed = TRUE;
          gamestate.autorun ^= 1;
          if ( gamestate.autorun == 0 )
             {
@@ -2124,17 +2123,17 @@ void PollKeyboard
       }
    else
       {
-      autopressed = false;
+      autopressed = FALSE;
       }
 
-   if ( ( MSG.messageon == false ) && ( !quitactive ) )
+   if ( ( MSG.messageon == FALSE ) && ( !quitactive ) )
       {
       if ( ( Keyboard[ buttonscan[ bt_message ] ] ) && ( BATTLEMODE ) )
          {
          // Send message to all
-         MSG.messageon = true;
-         MSG.directed  = false;
-         MSG.inmenu    = false;
+         MSG.messageon = TRUE;
+         MSG.directed  = FALSE;
+         MSG.inmenu    = FALSE;
          MSG.remoteridicule = -1;
          MSG.towho     = MSG_DIRECTED_TO_ALL;
          MSG.textnum   = AddMessage( "_", MSG_MODEM );
@@ -2144,9 +2143,9 @@ void PollKeyboard
       else if ( ( Keyboard[ buttonscan[ bt_directmsg ] ] ) && ( BATTLEMODE ) )
          {
          // Send directed message
-         MSG.messageon = true;
-         MSG.directed  = true;
-         MSG.inmenu    = false;
+         MSG.messageon = TRUE;
+         MSG.directed  = TRUE;
+         MSG.inmenu    = FALSE;
          MSG.remoteridicule = -1;
          MSG.towho     = 0;
          MSG.textnum   = AddMessage( "_", MSG_MODEM );
@@ -2166,38 +2165,38 @@ void PollKeyboard
             // Show kill counts
             if ( SHOW_KILLS() )
                {
-               BATTLE_ShowKillCount = false;
+               BATTLE_ShowKillCount = FALSE;
                StatusBar &= ~STATUS_KILLS;
                }
             else
                {
                StatusBar |= STATUS_KILLS;
-               BATTLE_ShowKillCount = true;
+               BATTLE_ShowKillCount = TRUE;
                }
 
-            SetupScreen( true );
+            SetupScreen( TRUE );
             }
          }
 
       // Shrink screen
       if ( Keyboard[ sc_Minus ] )
          {
-         Keyboard[ sc_Minus ] = false; // HDG debounce
+         Keyboard[ sc_Minus ] = FALSE; // HDG debounce
          if ( viewsize > 0 )
             {
             viewsize--;
-            SetupScreen( true );
+            SetupScreen( TRUE );
             }
          }
 
       // Expand screen
       if ( Keyboard[ sc_Plus ] )
          {
-         Keyboard[ sc_Plus ] = false; // HDG debounce
+         Keyboard[ sc_Plus ] = FALSE; // HDG debounce
          if ( viewsize < MAXVIEWSIZES - 1 )
             {
             viewsize++;
-            SetupScreen( true );
+            SetupScreen( TRUE );
             }
          }
 
@@ -2205,7 +2204,7 @@ void PollKeyboard
       if ( ( Keyboard[ sc_F5 ] ) && ( ( !BATTLEMODE ) ||
          ( Keyboard[ sc_RShift ] ) ) )
          {
-         Keyboard[ sc_F5 ] = false;
+         Keyboard[ sc_F5 ] = FALSE;
          LastScan = 0;
          DetailLevel++;
          if ( DetailLevel > 2 )
@@ -2235,7 +2234,7 @@ void PollKeyboard
       if ( ( Keyboard[ sc_F7 ] ) && ( ( !BATTLEMODE ) ||
          ( Keyboard[ sc_RShift ] ) ) )
          {
-         Keyboard[ sc_F7 ] = false;
+         Keyboard[ sc_F7 ] = FALSE;
          LastScan = 0;
          MessagesEnabled = !MessagesEnabled;
          if ( !MessagesEnabled )
@@ -2250,7 +2249,7 @@ void PollKeyboard
 
       if ( ( Keyboard[ sc_F6 ] ) && ( !BATTLEMODE ) )
          {
-         Keyboard[ sc_F6 ] = false;
+         Keyboard[ sc_F6 ] = FALSE;
          if (Keyboard[sc_RShift])
             {
             ShutdownClientControls();
@@ -2261,7 +2260,7 @@ void PollKeyboard
             {
             ShutdownClientControls();
             LastScan=sc_F2;
-            inmenu = true;
+            inmenu = TRUE;
             ControlPanel( LastScan );
             StartupClientControls();
             }
@@ -2278,7 +2277,7 @@ void PollKeyboard
 //#if 0
       if ( ( Keyboard[ sc_F12 ] ) && ( !BATTLEMODE ) )
          {
-         Keyboard[ sc_F12 ] = false;
+         Keyboard[ sc_F12 ] = FALSE;
          LastScan = 0;
          DoBossKey();
          }
@@ -2376,7 +2375,7 @@ void PollKeyboard
          }
          else if ( Keyboard[ sc_Alt] && Keyboard[ sc_C ] )
             {
-            SaveScreen(false);
+            SaveScreen(FALSE);
             }
       }
 
@@ -2403,20 +2402,20 @@ void PollKeyboard
 //
 //****************************************************************************
 
-void SaveScreen (bool inhmenu)
+void SaveScreen (bool8_t inhmenu)
 {
     static int shot;
     char filename[16] = {0};
     int tries = 10000;
     char *screenshotname = NULL;
-    const bool oldHUD = HUD;
+    const bool8_t oldHUD = HUD;
     int err = 1;
 
     extern int VL_SaveBMP (const char *file);
 
-    HUD = false;
+    HUD = FALSE;
 
-    if (inhmenu == false)
+    if (inhmenu == FALSE)
     {
         ThreeDRefresh();
     }
@@ -2469,7 +2468,7 @@ void SaveScreen (bool inhmenu)
 void PlayCinematic (void)
 {
 
-   if ((tedlevel == true) || (turbo == true))
+   if ((tedlevel == TRUE) || (turbo == TRUE))
       return;
 
    switch (gamestate.mapon)

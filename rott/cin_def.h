@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _cin_def_public
 #define _cin_def_public
 
-#include <stdbool.h>
 #include <stdint.h>
 
 #define MAXCINEMATICEVENTS 100
@@ -65,8 +64,8 @@ typedef struct actortype
 typedef struct
    {
    char name[10];
-   bool loop;
-   bool usefile;
+   bool8_t loop;
+   bool8_t usefile;
    } flicevent;
 
 typedef struct

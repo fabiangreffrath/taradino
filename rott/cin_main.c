@@ -18,7 +18,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,7 +36,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "cin_evnt.h"
 #include "cin_efct.h"
 
-bool cinematicdone;
+bool8_t cinematicdone;
 static int cinematictime;
 static int cinematictics;
 static int cinematictictime;
@@ -81,7 +80,7 @@ void StartupCinematic ( void )
 {
    StartupEvents ();
    StartupCinematicActors ();
-   cinematicdone=false;
+   cinematicdone=FALSE;
    cinematictime=0;
    GetCinematicTics ();
    ClearCinematicAbort();
@@ -121,7 +120,7 @@ void ParseCinematicScript (void)
       //
       // get next command time
       //
-      GetToken (true);
+      GetToken (TRUE);
       if (endofscript)
          break;
       time+=ParseNum(token);
@@ -152,8 +151,8 @@ void CacheScriptFile (char *filename)
 	script_p = scriptbuffer;
 	scriptend_p = script_p + size;
 	scriptline = 1;
-	endofscript = false;
-	tokenready = false;
+	endofscript = FALSE;
+	tokenready = FALSE;
 }
 
 
@@ -165,7 +164,7 @@ void CacheScriptFile (char *filename)
 =================
 */
 
-void GrabCinematicScript (char const *basename, bool uselumpy)
+void GrabCinematicScript (char const *basename, bool8_t uselumpy)
 {
    char script[256];
 
@@ -174,7 +173,7 @@ void GrabCinematicScript (char const *basename, bool uselumpy)
 //
    strcpy (script, basename);
    strcat (script,".ms");
-   if (uselumpy==false)
+   if (uselumpy==FALSE)
       LoadScriptFile (script);
    else
       CacheScriptFile ((char *)basename);
@@ -205,7 +204,7 @@ void GetCinematicTics ( void )
 }
 
 
-void PlayMovie ( char * name, bool uselumpy )
+void PlayMovie ( char * name, bool8_t uselumpy )
 {
    int i;
 
@@ -214,7 +213,7 @@ void PlayMovie ( char * name, bool uselumpy )
 
    PrecacheCinematic ( );
    GetCinematicTics();
-   while (cinematicdone==false)
+   while (cinematicdone==FALSE)
       {
       cinematicdone=CinematicAbort();
 #if DUMP

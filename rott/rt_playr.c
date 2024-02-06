@@ -18,7 +18,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
@@ -128,9 +127,9 @@ playertype     PLAYERSTATE[MAXPLAYERS],*locplayerstate;
 
 gametype       gamestate;
 
-bool        godmode = false;
+bool8_t        godmode = FALSE;
 
-bool       missilecam=false;
+bool8_t       missilecam=FALSE;
 objtype       * missobj=NULL;
 // Player control variables
 
@@ -142,14 +141,14 @@ int JX = 0;
 int JY = 0;
 int CX = 0;
 int CY = 0;
-bool vrenabled = false;
+bool8_t vrenabled = FALSE;
 int VX = 0;
 int VY = 0;
 
 int oldcyberx = 0;
 int oldcybery = 0;
 int CYBERDEADRANGE = 6000;
-bool CYBERLOOKUP,CYBERLOOKDOWN;
+bool8_t CYBERLOOKUP,CYBERLOOKDOWN;
 
 int leftmom = 0;
 int rightmom = 0;
@@ -157,9 +156,9 @@ int lastmom = 0;
 int first    = 1;
 
 int pausedstartedticcount;
-bool RefreshPause = true;
+bool8_t RefreshPause = TRUE;
 
-bool  buttonpoll[NUMBUTTONS];
+bool8_t  buttonpoll[NUMBUTTONS];
 
 int      buttonscan[NUMBUTTONS] = {sc_Control, sc_Alt, sc_RShift, sc_Space,
 											  sc_PgUp,sc_PgDn,sc_Enter,sc_Delete,
@@ -227,7 +226,7 @@ williamdidthis WEAPONS[MAXWEAPONS] =
 
 void     CheckPlayerSpecials(objtype * ob);
 void     CheckWeaponStates(objtype * ob);
-bool  CheckSprite (statobj_t* ,int *);
+bool8_t  CheckSprite (statobj_t* ,int *);
 void     T_Tag (objtype *ob);
 void     T_Player (objtype *ob);
 void     T_BatBlast(objtype*ob);
@@ -242,17 +241,17 @@ void     Cmd_Use(objtype*);
 //void     ComError (char *error, ...);
 int      FinddTopYZANGLELIMITvalue(objtype *ob);
 
-statetype s_free = {false,0,0,T_Free,0,&s_free};
-statetype s_inelevator = {false,0,420,T_Player,0,&s_player};
+statetype s_free = {FALSE,0,0,T_Free,0,&s_free};
+statetype s_inelevator = {FALSE,0,420,T_Player,0,&s_player};
 
 #if (SHAREWARE == 0)
-statetype s_dogwait = {true,SERIALDOG_W11,50,T_Player,SF_DOGSTATE,&s_serialdog};
+statetype s_dogwait = {TRUE,SERIALDOG_W11,50,T_Player,SF_DOGSTATE,&s_serialdog};
 
-statetype s_doguse = {true,SERIALDOG_W11,140,T_DogUse,SF_DOGSTATE,&s_serialdog};
-statetype s_doglick = {true,SERIALDOG_W11,0,T_DogLick,SF_DOGSTATE,&s_doglick};
+statetype s_doguse = {TRUE,SERIALDOG_W11,140,T_DogUse,SF_DOGSTATE,&s_serialdog};
+statetype s_doglick = {TRUE,SERIALDOG_W11,0,T_DogLick,SF_DOGSTATE,&s_doglick};
 #endif
 
-statetype s_tag = {false,CASSATT_S1,20,T_Tag,0,&s_player};
+statetype s_tag = {FALSE,CASSATT_S1,20,T_Tag,0,&s_player};
 
 //
 // curent user input
@@ -268,10 +267,10 @@ static int turnaroundtime;
 
 static int  DoubleClickTimer[ 3 ]   = { 0 };
 static uint8_t DoubleClickCount[ 3 ]   = { 0 };
-static uint8_t DoubleClickPressed[ 3 ] = { false };
+static uint8_t DoubleClickPressed[ 3 ] = { FALSE };
 static int  JoyDblClickTimer[ 4 ]   = { 0 };
 static uint8_t JoyDblClickCount[ 4 ]   = { 0 };
-static uint8_t JoyDblClickPressed[ 4 ] = { false };
+static uint8_t JoyDblClickPressed[ 4 ] = { FALSE };
 
 
 static int PlayerRecording=-1;
@@ -292,7 +291,7 @@ void LoadPlayer ( void )
 {
 	memset (locplayerstate->buttonstate, 0, sizeof(locplayerstate->buttonstate));
    locplayerstate->anglefrac=player->angle<<ANGLEBITS;
-   areabyplayer[player->areanumber]=true;
+   areabyplayer[player->areanumber]=TRUE;
 	ConnectAreas();
 }
 
@@ -352,7 +351,7 @@ void ResetPlayerstate(playertype*pstate)
  MISCVARS->NET_IN_FLIGHT = 0;
  pstate->weaponuptics = 0;
  pstate->weapondowntics = 0;
- if ((insetupgame==false) || NewGame)
+ if ((insetupgame==FALSE) || NewGame)
 	 pstate->health = MaxHitpointsForCharacter(pstate);
  pstate->keys = 0;
 
@@ -373,7 +372,7 @@ void ResetPlayerstate(playertype*pstate)
 	pstate->playerheight = 40;
  else
 	pstate->playerheight = characters[pstate->player].height;
- pstate->falling = false;
+ pstate->falling = FALSE;
  memset (pstate->buttonstate, 0, sizeof(pstate->buttonstate));
  SetPlayerHorizon(pstate,NORMALYZANGLE);
 }
@@ -418,12 +417,12 @@ void SetupPlayerobj (int tilex, int tiley, int dir, objtype * ob)
 	ob->hitpoints = pstate->health;
 	pstate->anglefrac= (ob->angle<<ANGLEBITS);
 	pstate->angle=0;
-	areabyplayer[ob->areanumber]=true;
+	areabyplayer[ob->areanumber]=TRUE;
 
 
 	if (ob == player)
 		{
-		playerdead=false; // local player dead flag
+		playerdead=FALSE; // local player dead flag
 		}
 	if (!gamestate.SpawnEluder)
 	  ob->shapeoffset = pstate->player*REMOTEOFFSET;
@@ -513,7 +512,7 @@ void RevivePlayerobj (int tilex, int tiley, int dir, objtype*ob)
       NewState(ob,&s_serialdog);
 #endif
 	if (ob==player)
-		DrawPlayScreen(false);
+		DrawPlayScreen(FALSE);
    ob->momentumx = ob->momentumy = ob->momentumz = 0;
 }
 
@@ -935,7 +934,7 @@ void PlayerMissileAttack(objtype*ob)
    M_LINKSTATE(ob,pstate);
 
 
-   MISCVARS->madenoise = true;
+   MISCVARS->madenoise = TRUE;
    newmissiledata = &PlayerMissileData[pstate->missileweapon];
 
    // ready to annihilate this poor bastard
@@ -982,7 +981,7 @@ void PlayerMissileAttack(objtype*ob)
    //   new->z += 10;
 
    new->dirchoosetime = 5;
-   if (missilecam==true)
+   if (missilecam==TRUE)
       missobj=new;
    if (!MissileTryMove(new,new->x+new->momentumx,new->y+new->momentumy,new->z))
       {
@@ -998,7 +997,7 @@ void PlayerMissileAttack(objtype*ob)
 //====================================================================
 
 
-bool InRange (objtype *p, objtype *victim, int distance)
+bool8_t InRange (objtype *p, objtype *victim, int distance)
 {
 	int dx,dy;
 	int angle;
@@ -1020,9 +1019,9 @@ bool InRange (objtype *p, objtype *victim, int distance)
 	if (magangle > VANG180)
 		 magangle = ANGLES - magangle;
 	if (magangle<(75-(distance>>16)))
-		return true;
+		return TRUE;
 	else
-		return false;
+		return FALSE;
 }
 
 
@@ -1106,11 +1105,11 @@ void DogBlast(objtype*ob)
             DamageThing(temp,100);
             if ((temp->hitpoints<=0) && (temp->obclass < roboguardobj))
                {
-               MISCVARS->supergibflag = true;
+               MISCVARS->supergibflag = TRUE;
                temp->flags |= FL_HBM;
                }
             Collision(temp,ob,0,0);
-            MISCVARS->supergibflag = false;
+            MISCVARS->supergibflag = FALSE;
 
             if ((temp->obclass == playerobj) && (temp->flags & FL_DYING))
                BATTLE_PlayerKilledPlayer(battle_kill_with_missile,ob->dirchoosetime,temp->dirchoosetime);
@@ -1165,11 +1164,11 @@ void DogBlast(objtype*ob)
             DamageThing(temp,100);
             if ((temp->hitpoints<=0) && (temp->obclass < roboguardobj))
                {
-               MISCVARS->supergibflag = true;
+               MISCVARS->supergibflag = TRUE;
                temp->flags |= FL_HBM;
                }
             Collision(temp,ob,0,0);
-            MISCVARS->supergibflag = false;
+            MISCVARS->supergibflag = FALSE;
 
             if ((temp->obclass == playerobj) && (temp->flags & FL_DYING))
                BATTLE_PlayerKilledPlayer(battle_kill_with_missile,ob->dirchoosetime,temp->dirchoosetime);
@@ -1425,7 +1424,7 @@ void  GunAttack (objtype *ob)
 
 	M_LINKSTATE(ob,pstate);
 
-	MISCVARS->madenoise = true;
+	MISCVARS->madenoise = TRUE;
 
  switch (pstate->weapon)
 	{
@@ -1464,7 +1463,7 @@ void Cmd_Fire (objtype*ob)
 
    M_LINKSTATE(ob,pstate);
 
-//   pstate->buttonheld[bt_attack] = true;
+//   pstate->buttonheld[bt_attack] = TRUE;
 
    if (pstate->NETCAPTURED && (!pstate->HASKNIFE))
       return;
@@ -1475,7 +1474,7 @@ void Cmd_Fire (objtype*ob)
    pstate->attackframe = 0;
 
    if ((ob==player) && (pstate->weapon < wp_mp40) && (!pstate->NETCAPTURED))
-      gamestate.DODEMOCRATICBONUS1 = false;
+      gamestate.DODEMOCRATICBONUS1 = FALSE;
 
    if (!pstate->NETCAPTURED)
       {
@@ -1788,7 +1787,7 @@ void Cmd_Use (objtype*ob)
 	  }
 //      else
 //         SD_PlaySoundRTP (SD_NOWAYSND,ob->x,ob->y);
-//   pstate->buttonheld[bt_use] = true;
+//   pstate->buttonheld[bt_use] = TRUE;
 }
 
 
@@ -1818,7 +1817,7 @@ void PollKeyboardButtons (void)
    {
       if (Keystate[buttonscan[i]])
       {
-         buttonpoll[i] = true;
+         buttonpoll[i] = TRUE;
       }
    }
 }
@@ -1828,7 +1827,7 @@ void PollKeyboardButtons (void)
 // PollMouseButtons
 //
 //******************************************************************************
-extern bool usemouselook;
+extern bool8_t usemouselook;
 void PollMouseButtons (void)
    {
    int i;
@@ -1849,9 +1848,9 @@ void PollMouseButtons (void)
 //            ( DoubleClickCount[ i ] != 2 ) )
          if ( buttonmouse[ i ] != bt_nobutton )
             {
-            buttonpoll[ buttonmouse[ i ] ] = true;
+            buttonpoll[ buttonmouse[ i ] ] = TRUE;
 			//bna added
-			if ((i == 1)&&(usemouselook == true)){
+			if ((i == 1)&&(usemouselook == TRUE)){
 			//if rightclick set horizon to 512 (normall)
 				playertype * pstate;
 				pstate=&PLAYERSTATE[consoleplayer];
@@ -1872,7 +1871,7 @@ void PollMouseButtons (void)
             if ( !DoubleClickPressed[ i ] )
                {
                // Yes, take note of it
-               DoubleClickPressed[ i ] = true;
+               DoubleClickPressed[ i ] = TRUE;
 
                // Is this the first click, or a really late click?
                if ( ( DoubleClickCount[ i ] == 0 ) ||
@@ -1887,7 +1886,7 @@ void PollMouseButtons (void)
                else
                   {
                   // Second click
-                  buttonpoll[ buttonmouse[ i + 3 ] ] = true;
+                  buttonpoll[ buttonmouse[ i + 3 ] ] = TRUE;
                   DoubleClickTimer[ i ] = 0;
                   DoubleClickCount[ i ] = 2;
                   }
@@ -1898,7 +1897,7 @@ void PollMouseButtons (void)
                // until user releases it
                if ( DoubleClickCount[ i ] == 2 )
                   {
-                  buttonpoll[ buttonmouse[ i + 3 ] ] = true;
+                  buttonpoll[ buttonmouse[ i + 3 ] ] = TRUE;
                   }
                }
             }
@@ -1908,7 +1907,7 @@ void PollMouseButtons (void)
                {
                DoubleClickCount[ i ] = 0;
                }
-            DoubleClickPressed[ i ] = false;
+            DoubleClickPressed[ i ] = FALSE;
             }
          }
       }
@@ -1962,7 +1961,7 @@ void PollJoystickButtons
 //            ( JoyDblClickCount[ i ] != 2 ) )
          if ( buttonjoy[ i ] != bt_nobutton )
             {
-            buttonpoll[ buttonjoy[ i ] ] = true;
+            buttonpoll[ buttonjoy[ i ] ] = TRUE;
             }
          }
 
@@ -1975,7 +1974,7 @@ void PollJoystickButtons
             if ( !JoyDblClickPressed[ i ] )
                {
                // Yes, take note of it
-               JoyDblClickPressed[ i ] = true;
+               JoyDblClickPressed[ i ] = TRUE;
 
                // Is this the first click, or a really late click?
                if ( ( JoyDblClickCount[ i ] == 0 ) ||
@@ -1990,7 +1989,7 @@ void PollJoystickButtons
                else
                   {
                   // Second click
-                  buttonpoll[ buttonjoy[ i + 4 ] ] = true;
+                  buttonpoll[ buttonjoy[ i + 4 ] ] = TRUE;
                   JoyDblClickTimer[ i ] = 0;
                   JoyDblClickCount[ i ] = 2;
                   }
@@ -2001,7 +2000,7 @@ void PollJoystickButtons
                // until user releases it
                if ( JoyDblClickCount[ i ] == 2 )
                   {
-                  buttonpoll[ buttonjoy[ i + 4 ] ] = true;
+                  buttonpoll[ buttonjoy[ i + 4 ] ] = TRUE;
                   }
                }
             }
@@ -2011,7 +2010,7 @@ void PollJoystickButtons
                {
                JoyDblClickCount[ i ] = 0;
                }
-            JoyDblClickPressed[ i ] = false;
+            JoyDblClickPressed[ i ] = FALSE;
             }
          }
       }
@@ -2163,7 +2162,7 @@ void PollMouseMove (void)
       {//
       MY =  MOUSE_TZ_INPUT_SCALE*mouseymove;
 	  MY *= inverse_mouse;
-	  if (usemouselook == true){
+	  if (usemouselook == TRUE){
 		  if (MY > 0){
 				playertype * pstate;
 				pstate=&PLAYERSTATE[consoleplayer];
@@ -2176,15 +2175,15 @@ void PollMouseMove (void)
 				pstate=&PLAYERSTATE[consoleplayer];
 				//SetTextMode (  );
 				pstate->horizon += Ys * (2*sensitivity_scalar[mouseadjustment]);
-				//buttonpoll[ bt_horizonup ] = true;
+				//buttonpoll[ bt_horizonup ] = TRUE;
 		  }
 		  MY = 0;
 	  }else{
 		 // MY += FixedMul(MY,mouseadjustment*MOUSE_TZ_SENSITIVITY_SCALE);
 		  if (abs(mouseymove)>200)
 			 {
-			 buttonpoll[bt_run]=true;
-			 // buttonpoll[ bt_lookup ] = true;
+			 buttonpoll[bt_run]=TRUE;
+			 // buttonpoll[ bt_lookup ] = TRUE;
 			 }
 		  }
 	  }
@@ -2200,11 +2199,11 @@ void PollMouseMove (void)
       MX += FixedMul(MX,sensitivity_scalar[mouseadjustment]*MOUSE_RY_SENSITIVITY_SCALE);
    //   if (abs(MX) > MAXMOUSETURN)
      //   MX = MAXMOUSETURN*SGN(MX);
-	  if (usemouselook == true){
+	  if (usemouselook == TRUE){
 		  if (abs(mouseymove)>10)
 		  {
-			 buttonpoll[bt_run]=true;
-			  //buttonpoll[ bt_lookdown ] = true;
+			 buttonpoll[bt_run]=TRUE;
+			  //buttonpoll[ bt_lookdown ] = TRUE;
 		  }
 	  }
    }
@@ -2232,19 +2231,19 @@ void PollJoystickMove (void)
       {
       if (joyx >= threshold)
          {
-         buttonpoll[ di_east ] = true;
+         buttonpoll[ di_east ] = TRUE;
          }
       if (-joyx >= threshold)
          {
-         buttonpoll[ di_west ] = true;
+         buttonpoll[ di_west ] = TRUE;
          }
       if ( joyy >= threshold )
          {
-         buttonpoll[ di_south ] = true;
+         buttonpoll[ di_south ] = TRUE;
          }
       if ( -joyy >= threshold )
          {
-         buttonpoll[ di_north ] = true;
+         buttonpoll[ di_north ] = TRUE;
          }
       }
    else
@@ -2313,7 +2312,7 @@ void PollVirtualReality (void)
 //
 //******************************************************************************
 
-bool aimbuttonpressed=false;
+bool8_t aimbuttonpressed=FALSE;
 void PollMove (void)
 {
 	int angle;
@@ -2329,15 +2328,15 @@ void PollMove (void)
          {
          buttonpoll[bt_horizonup]=1;
          y=0;
-         aimbuttonpressed=true;
+         aimbuttonpressed=TRUE;
          }
       else if (y<0)
          {
          buttonpoll[bt_horizondown]=1;
          y=0;
-         aimbuttonpressed=true;
+         aimbuttonpressed=TRUE;
          }
-      else if (aimbuttonpressed==false)
+      else if (aimbuttonpressed==FALSE)
          {
          buttonpoll[bt_lookup]=1;
          buttonpoll[bt_lookdown]=1;
@@ -2345,7 +2344,7 @@ void PollMove (void)
       }
    else
       {
-      aimbuttonpressed=false;
+      aimbuttonpressed=FALSE;
       }
 
    if (player->flags & FL_FLEET)
@@ -2392,7 +2391,7 @@ void PollMove (void)
          first    = 1;
          lastmom^=1;
 			locplayerstate->NETCAPTURED = 0;
-			MISCVARS->NET_IN_FLIGHT = false;
+			MISCVARS->NET_IN_FLIGHT = FALSE;
          NewState(player, &s_player);
 			locplayerstate->weaponuptics = WEAPONS[locplayerstate->weapon].screenheight/GMOVE;
 			locplayerstate->weaponheight = locplayerstate->weaponuptics*GMOVE ;
@@ -2467,7 +2466,7 @@ void PollControls (void)
 {
    int   i;
 
-   if (standalone==true)
+   if (standalone==TRUE)
       return;
 
    lastpolltime=controlupdatetime;
@@ -2475,10 +2474,10 @@ void PollControls (void)
    memset (buttonpoll, 0, sizeof(buttonpoll));
 
    controlbuf[0] = controlbuf[1] = controlbuf[2] = 0;
-   CYBERLOOKUP = CYBERLOOKDOWN = false;
+   CYBERLOOKUP = CYBERLOOKDOWN = FALSE;
 
    if (gamestate.autorun==1)
-	   buttonpoll[bt_run] = true;
+	   buttonpoll[bt_run] = TRUE;
 
 
 //
@@ -2512,7 +2511,7 @@ void PollControls (void)
 	buttonbits = 0;
 	if (player->flags & FL_DYING) // Player has died
       {
-      if ((playerdead==true) &&
+      if ((playerdead==TRUE) &&
           ( buttonpoll[ bt_strafe ] ||
             buttonpoll[ bt_attack ] ||
             buttonpoll[ bt_use ] ||
@@ -2528,10 +2527,10 @@ void PollControls (void)
       controlbuf[0] = controlbuf[1] = controlbuf[2] = 0;
       }
 
-   if ((PausePressed==true) && (modemgame==false))
+   if ((PausePressed==TRUE) && (modemgame==FALSE))
       {
-      PausePressed=false;
-      if (GamePaused==true)
+      PausePressed=FALSE;
+      if (GamePaused==TRUE)
          AddPauseStateCommand(COM_UNPAUSE);
       else
          {
@@ -2581,7 +2580,7 @@ void ResetWeapons(objtype *ob)
  pstate->attackframe = pstate->weaponframe = 0;
 
  if ((ob==player) && SHOW_BOTTOM_STATUS_BAR() )
-	DrawBarAmmo (false);
+	DrawBarAmmo (FALSE);
 }
 
 
@@ -2637,7 +2636,7 @@ void SaveWeapons(objtype*ob)
 
 
 
-bool GivePowerup(objtype *ob,int flag,int time,int sound)
+bool8_t GivePowerup(objtype *ob,int flag,int time,int sound)
    {
    playertype *pstate;
 
@@ -2646,7 +2645,7 @@ bool GivePowerup(objtype *ob,int flag,int time,int sound)
        (ob->flags & FL_GODMODE) ||
        (ob->flags & FL_DOGMODE)
       )
-      return false;
+      return FALSE;
 
 
    M_LINKSTATE(ob,pstate);
@@ -2671,7 +2670,7 @@ bool GivePowerup(objtype *ob,int flag,int time,int sound)
    pstate->soundtime = 0;
    SD_PlaySoundRTP(sound,ob->x, ob->y);
    gamestate.supercount ++;
-   return true;
+   return TRUE;
 
    }
 
@@ -2683,25 +2682,25 @@ void GiveLifePoints(objtype *ob,int points)
 
    UpdateTriads (ob,points);
    if (ob==player)
-      DrawTriads (false);
+      DrawTriads (FALSE);
 
    }
 
 
-bool GiveBulletWeapon(objtype *ob,int bulletweapon,statobj_t*check)
+bool8_t GiveBulletWeapon(objtype *ob,int bulletweapon,statobj_t*check)
    {
    playertype *pstate;
 
    M_LINKSTATE(ob,pstate);
 
    if ((ob->flags & FL_DOGMODE) || (ob->flags & FL_GODMODE))
-      return false;
+      return FALSE;
 
    if (!ARMED(ob->dirchoosetime))
-      return false;
+      return FALSE;
 
    if (pstate->HASBULLETWEAPON[bulletweapon])
-      return false;
+      return FALSE;
 
    GiveWeapon(ob,bulletweapon);
    if ( gamestate.BattleOptions.WeaponPersistence )
@@ -2709,26 +2708,26 @@ bool GiveBulletWeapon(objtype *ob,int bulletweapon,statobj_t*check)
       LASTSTAT->z = check->z;
       }
    SD_PlaySoundRTP(SD_GETWEAPONSND,ob->x, ob->y);
-   return true;
+   return TRUE;
 
    }
 
 
-bool GivePlayerMissileWeapon(objtype *ob, playertype *pstate,
+bool8_t GivePlayerMissileWeapon(objtype *ob, playertype *pstate,
                                 statobj_t *check)
    {
    if  ((ob->flags & FL_DOGMODE) || (ob->flags & FL_GODMODE))
-      return false;
+      return FALSE;
 
 
    if (!ARMED(ob->dirchoosetime))
-      return false;
+      return FALSE;
 
    if ((GetWeaponForItem(check->itemnumber) == pstate->missileweapon) &&
        (check->ammo == stats[check->itemnumber].ammo) &&
        (pstate->ammo == stats[check->itemnumber].ammo)
       )
-      return false;
+      return FALSE;
 
    SD_PlaySoundRTP(SD_GETWEAPONSND,ob->x, ob->y);
    GiveMissileWeapon(ob,GetWeaponForItem(check->itemnumber));
@@ -2746,9 +2745,9 @@ bool GivePlayerMissileWeapon(objtype *ob, playertype *pstate,
    else
       pstate->ammo = check->ammo;
    if ((ob==player) && SHOW_BOTTOM_STATUS_BAR() )
-      DrawBarAmmo (false);
+      DrawBarAmmo (FALSE);
 
-   return true;
+   return TRUE;
 
    }
 
@@ -2877,11 +2876,11 @@ void GetBonus (objtype*ob,statobj_t *check)
 {
 	int heal;
 	playertype * pstate;
-   bool randompowerup;
+   bool8_t randompowerup;
 
 	M_LINKSTATE(ob,pstate);
 
-   randompowerup=false;
+   randompowerup=FALSE;
 
 randomlabel:
 	switch (check->itemnumber)
@@ -3006,27 +3005,27 @@ keys:
 		break;
 
 	case stat_twopistol:
-      if (GiveBulletWeapon(ob,wp_twopistol,check)==false)
+      if (GiveBulletWeapon(ob,wp_twopistol,check)==FALSE)
          return;
       LocalBonusMessage("You got an extra pistol.");
 
 		break;
 	case stat_mp40:
-      if (GiveBulletWeapon(ob,wp_mp40,check)==false)
+      if (GiveBulletWeapon(ob,wp_mp40,check)==FALSE)
          return;
       LocalBonusMessage("You picked up an MP40.");
 
       break;
 
 	case stat_bazooka:
-      if (GivePlayerMissileWeapon(ob,pstate,check)==false)
+      if (GivePlayerMissileWeapon(ob,pstate,check)==FALSE)
          return;
 
       LocalBonusMessage("You bagged a bazooka!");
       break;
 
    case stat_firebomb:
-      if (GivePlayerMissileWeapon(ob,pstate,check)==false)
+      if (GivePlayerMissileWeapon(ob,pstate,check)==FALSE)
          return;
 
       LocalBonusMessage("You found a Firebomb!");
@@ -3034,7 +3033,7 @@ keys:
 
 
 	case stat_heatseeker:
-      if (GivePlayerMissileWeapon(ob,pstate,check)==false)
+      if (GivePlayerMissileWeapon(ob,pstate,check)==FALSE)
          return;
 
       LocalBonusMessage("You have a Heat-seeker!");
@@ -3042,35 +3041,35 @@ keys:
 
 
 	case stat_drunkmissile:
-      if (GivePlayerMissileWeapon(ob,pstate,check)==false)
+      if (GivePlayerMissileWeapon(ob,pstate,check)==FALSE)
          return;
 
       LocalBonusMessage("You recovered a Drunk Missile!");
       break;
 
 	case stat_firewall:
-      if (GivePlayerMissileWeapon(ob,pstate,check)==false)
+      if (GivePlayerMissileWeapon(ob,pstate,check)==FALSE)
          return;
 
       LocalBonusMessage("You filched a FlameWall!");
       break;
 
 	case stat_splitmissile:
-      if (GivePlayerMissileWeapon(ob,pstate,check)==false)
+      if (GivePlayerMissileWeapon(ob,pstate,check)==FALSE)
          return;
 
       LocalBonusMessage("You snagged a Split Missile!");
       break;
 
 	case stat_kes:
-      if (GivePlayerMissileWeapon(ob,pstate,check)==false)
+      if (GivePlayerMissileWeapon(ob,pstate,check)==FALSE)
          return;
 
       LocalBonusMessage("You wield the Dark Staff!");
       break;
 
 	case stat_bat:
-      if (GivePlayerMissileWeapon(ob,pstate,check)==false)
+      if (GivePlayerMissileWeapon(ob,pstate,check)==FALSE)
          return;
 
       LocalBonusMessage("You picked up the Excalibat.");
@@ -3118,7 +3117,7 @@ keys:
 				check->itemnumber=stat_mushroom;
 				break;
 			}
-      randompowerup=true;
+      randompowerup=TRUE;
       LocalBonus1Message("Random powerup gives you . . .");
 		goto randomlabel;
 		break;
@@ -3146,7 +3145,7 @@ keys:
 
    case stat_elastic:
       if (GivePowerup(ob,FL_ELASTO,GetBonusTimeForItem(stat_elastic),
-                  SD_GETELASTSND) == false)
+                  SD_GETELASTSND) == FALSE)
          return;
       LocalBonusMessage("Elasto Mode!");
 
@@ -3155,7 +3154,7 @@ keys:
 
    case stat_fleetfeet:
       if (GivePowerup(ob,FL_FLEET,GetBonusTimeForItem(stat_fleetfeet),
-                  SD_GETFLEETSND) == false)
+                  SD_GETFLEETSND) == FALSE)
          return;
 
       LocalBonus1Message("Mercury Mode!");
@@ -3167,7 +3166,7 @@ keys:
 
    case stat_mushroom:
       if (GivePowerup(ob,FL_SHROOMS,GetBonusTimeForItem(stat_mushroom),
-                  SD_GETSHROOMSSND) == false)
+                  SD_GETSHROOMSSND) == FALSE)
          return;
       LocalBonusMessage("Shrooms Mode!");
 
@@ -3282,7 +3281,7 @@ keys:
         {if (pstate->team == check->hitpoints)
            return;
          ob->flags |= FL_DESIGNATED;
-         UpdateKills = true;
+         UpdateKills = TRUE;
          LocalBonusMessage( "You picked up a triad!  RUN!!!");
         }
       else
@@ -3364,7 +3363,7 @@ keys:
             sprites[check->tilex][check->tiley] = NULL;
          }
 
-      if (randompowerup==true)
+      if (randompowerup==TRUE)
          check->itemnumber = stat_random;
       RemoveStatic(check);
 	  }
@@ -3415,7 +3414,7 @@ void DropWeapon(objtype *ob)
  pstate->ammo = -1;
  pstate->missileweapon = -1;
  if ((ob==player) && SHOW_BOTTOM_STATUS_BAR() )
-	 DrawBarAmmo (false);
+	 DrawBarAmmo (FALSE);
 }
 
 
@@ -3447,7 +3446,7 @@ void Thrust ( objtype * ob )
            battle_no_event)
           {
           ob->flags &= ~FL_DESIGNATED;
-          UpdateKills = true;
+          UpdateKills = TRUE;
           otherteam = (pstate->team ^ 1);
           SpawnStatic(TEAM[otherteam].tilex,TEAM[otherteam].tiley,stat_collector,9);
           LASTSTAT->flags |= FL_COLORED;
@@ -4057,9 +4056,9 @@ void PlayerMove ( objtype * ob )
 		if (!(ob->flags & FL_DYING))
 			{
          pstate->health = 0;
-         pstate->falling=true;
+         pstate->falling=TRUE;
          if ((ob->flags & FL_GODMODE) || (ob->flags & FL_DOGMODE) ||
-             (gamestate.battlemode == battle_Eluder) || (godmode==true))
+             (gamestate.battlemode == battle_Eluder) || (godmode==TRUE))
             {
             KillActor(ob);
             NewState(ob,&s_remotedie1);
@@ -4122,9 +4121,9 @@ void  T_Tag (objtype *ob)
 /*
 	if (!ob->ticcount)
 	  {if ( pstate->buttonstate[bt_use] && !pstate->buttonheld[bt_use] )
-			pstate->buttonstate[bt_use] = false;
+			pstate->buttonstate[bt_use] = FALSE;
 		if ( pstate->buttonstate[bt_attack] && !pstate->buttonheld[bt_attack])
-			pstate->buttonstate[bt_attack] = false;
+			pstate->buttonstate[bt_attack] = FALSE;
 	  }
 */
 }
@@ -4310,7 +4309,7 @@ void  T_Attack (objtype *ob)
                pstate->weapondowntics = WEAPONS[pstate->weapon].screenheight/GMOVE;
 
                if ((ob==player) && SHOW_BOTTOM_STATUS_BAR() )
-                     DrawBarAmmo (false);
+                     DrawBarAmmo (FALSE);
 
                return;
                }
@@ -4387,7 +4386,7 @@ void  T_Attack (objtype *ob)
                   pstate->ammo--;
 
                if ((ob==player) && SHOW_BOTTOM_STATUS_BAR() )
-                  DrawBarAmmo (false);
+                  DrawBarAmmo (FALSE);
                }
    #if (SHAREWARE == 0)
             if (pstate->weapon == wp_kes)
@@ -4432,10 +4431,10 @@ void  T_BatBlast (objtype *ob)
 /*
 	if (!ob->ticcount)
 	 {if ( pstate->buttonstate[bt_use] && !pstate->buttonheld[bt_use] )
-		pstate->buttonstate[bt_use] = false;
+		pstate->buttonstate[bt_use] = FALSE;
 
 	  if ( pstate->buttonstate[bt_attack] && !pstate->buttonheld[bt_attack])
-		pstate->buttonstate[bt_attack] = false;
+		pstate->buttonstate[bt_attack] = FALSE;
 	 }
 */
 //
@@ -4461,7 +4460,7 @@ void  T_BatBlast (objtype *ob)
 			 if (!(ob->flags & FL_GODMODE) && (!godmode))
 				{pstate->ammo --;
              if ((ob==player) && SHOW_BOTTOM_STATUS_BAR() )
-						DrawBarAmmo (false);
+						DrawBarAmmo (FALSE);
 				}
 
 			 if (!pstate->ammo)
@@ -4502,10 +4501,10 @@ void  T_Free (objtype *ob)
 //Commented out until we find if it's valid
 /*
 	if ( locplayerstate->buttonstate[bt_use] && !locplayerstate->buttonheld[bt_use] )
-		locplayerstate->buttonstate[bt_use] = false;
+		locplayerstate->buttonstate[bt_use] = FALSE;
 
 	if ( locplayerstate->buttonstate[bt_attack] && !locplayerstate->buttonheld[bt_attack])
-		locplayerstate->buttonstate[bt_attack] = false;
+		locplayerstate->buttonstate[bt_attack] = FALSE;
 */
    Thrust(ob);
 
@@ -4526,7 +4525,7 @@ void  T_Free (objtype *ob)
 		else if (locplayerstate->weaponframe == 8)
 		 {
 			  locplayerstate->NETCAPTURED = -2;
-			  MISCVARS->NET_IN_FLIGHT = false;
+			  MISCVARS->NET_IN_FLIGHT = FALSE;
 			  NewState(ob,&s_player);
 			  locplayerstate->weapondowntics = FREE.screenheight/GMOVE;
 		  return;
@@ -4561,7 +4560,7 @@ void Switch_Who_Is_It_For_Tag(objtype *actor1,objtype *actor2)
       pstate2->weapondowntics = 0;
       actor1->flags |= FL_DIDTAG;
       actor2->flags |= FL_DESIGNATED;
-      UpdateKills = true;
+      UpdateKills = TRUE;
 
       actor1->flags &= ~FL_DESIGNATED;
       BATTLE_PlayerKilledPlayer(battle_player_tagged,
@@ -4659,7 +4658,7 @@ void CheckWeaponChange (objtype * ob)
          StartWeaponChange;
          //pstate->weapondowntics = WEAPONS[pstate->weapon].screenheight/GMOVE;
          //if ((ob==player) && SHOW_BOTTOM_STATUS_BAR() )
-			  //		DrawBarAmmo (false);
+			  //		DrawBarAmmo (FALSE);
 			}
 		else if (pstate->buttonstate[bt_swapweapon])
 #else
@@ -4765,7 +4764,7 @@ void SetWhoHaveWeapons(void)
             pstate->attackframe = pstate->weaponframe =
             pstate->batblast = 0;
             if (i == consoleplayer)
-               DrawBarAmmo(false);
+               DrawBarAmmo(FALSE);
             }
 			}
 		else
@@ -5093,7 +5092,7 @@ void CheckProtectionsAndPowerups(objtype *ob, playertype *pstate)
 		if (pstate->poweruptime < 0)
 			pstate->poweruptime = 0;
 		if (ob==player)
-			GM_UpdateBonus (pstate->poweruptime, true);
+			GM_UpdateBonus (pstate->poweruptime, TRUE);
 		}
 	else
 		{
@@ -5101,7 +5100,7 @@ void CheckProtectionsAndPowerups(objtype *ob, playertype *pstate)
 			{
 			ob->flags &= ~FL_NOFRICTION;
 			if (ob==player)
-				GM_UpdateBonus (pstate->poweruptime, true);
+				GM_UpdateBonus (pstate->poweruptime, TRUE);
 			SD_PlaySoundRTP(SD_LOSEMODESND,ob->x, ob->y);
 			}
 		else if (ob->flags & FL_GODMODE)
@@ -5157,7 +5156,7 @@ void CheckProtectionsAndPowerups(objtype *ob, playertype *pstate)
          pstate->protectiontime = 0;
          }
       if (ob==player)
-         GM_UpdateBonus (pstate->protectiontime, false);
+         GM_UpdateBonus (pstate->protectiontime, FALSE);
       }
    else
       ob->flags &= ~(FL_BPV|FL_AV|FL_GASMASK);
@@ -5451,13 +5450,13 @@ void CheckTemp2Codes(objtype *ob,playertype *pstate)
 
 void CheckRemoteRecording(objtype *ob,playertype *pstate)
    {
-   if (networkgame==true)
+   if (networkgame==TRUE)
 		{
 		if ( (pstate->buttonstate[bt_recordsound]) &&
 			  (!pstate->buttonheld[bt_recordsound])
 			)
 			{
-			if (SD_RecordingActive()==false)
+			if (SD_RecordingActive()==FALSE)
 				{
 				SD_SetRecordingActive ();
 				PlayerRecording=ob->dirchoosetime;
@@ -5472,7 +5471,7 @@ void CheckRemoteRecording(objtype *ob,playertype *pstate)
 					 (!pstate->buttonstate[bt_recordsound])
 				  )
 			{
-			if (SD_RecordingActive()==true)
+			if (SD_RecordingActive()==TRUE)
 				{
 				if (ob->dirchoosetime==PlayerRecording)
 					{
@@ -5547,7 +5546,7 @@ void  T_DogUse (objtype *ob)
 /*
   if (!ob->ticcount)
 	{if ( pstate->buttonstate[bt_use] && !pstate->buttonheld[bt_use] )
-		pstate->buttonstate[bt_use] = false;
+		pstate->buttonstate[bt_use] = FALSE;
 	}
 */
 
@@ -5569,7 +5568,7 @@ void  T_DogUse (objtype *ob)
 			  }
 			  break;
 		  case at_pulltrigger:
-			 pstate->buttonheld[bt_use]=false;
+			 pstate->buttonheld[bt_use]=FALSE;
           Cmd_Use(ob);
 			 break;
                   default:
@@ -5620,7 +5619,7 @@ void  T_DogLick (objtype *ob)
 /*
   if (!ob->ticcount)
 	{if ( pstate->buttonstate[bt_use] && !pstate->buttonheld[bt_use] )
-		pstate->buttonstate[bt_use] = false;
+		pstate->buttonstate[bt_use] = FALSE;
 	}
 */
 
@@ -5665,7 +5664,7 @@ void T_DeadWait(objtype*ob)
      {int otherteam = (pstate->team ^ 1);
 
       ob->flags &= ~FL_DESIGNATED;
-      UpdateKills = true;
+      UpdateKills = TRUE;
       SpawnStatic(TEAM[otherteam].tilex,TEAM[otherteam].tiley,stat_collector,9);
 		LASTSTAT->flags |= FL_COLORED;
       LASTSTAT->hitpoints = otherteam;
@@ -5684,10 +5683,10 @@ void T_DeadWait(objtype*ob)
    if (ob==player)
       {
       UpdateLightLevel(player->areanumber);
-      if ((pstate->falling==true) || (ob->momentumz==0))
+      if ((pstate->falling==TRUE) || (ob->momentumz==0))
          {
          if (BATTLEMODE)
-				playerdead=true;
+				playerdead=TRUE;
          else
 			   playstate = ex_died;
          }
@@ -5740,7 +5739,7 @@ void  T_Player (objtype *ob)
       CheckPlayerSpecials(ob);
       PlayerMove(ob);
       if (
-          (pstate->falling==true) ||
+          (pstate->falling==TRUE) ||
           (
            (!ob->momentumx) &&
            (!ob->momentumy) &&

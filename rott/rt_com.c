@@ -18,7 +18,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -52,7 +51,7 @@ int controlsynctime;
 
 // LOCAL VARIABLES
 
-static int    ComStarted=false;
+static int    ComStarted=FALSE;
 static int    transittimes[MAXPLAYERS];
 
 void SyncTime( int client );
@@ -85,9 +84,9 @@ void InitROTTNET (void)
 	int netarg;
 #endif
 
-	if (ComStarted==true)
+	if (ComStarted==TRUE)
 		return;
-	ComStarted=true;
+	ComStarted=TRUE;
 
 #ifndef _WIN32
 	/*
@@ -171,11 +170,11 @@ void InitROTTNET (void)
         
 #endif
 
-   remoteridicule = false;
+   remoteridicule = FALSE;
    remoteridicule = rottcom->remoteridicule;
    if (rottcom->ticstep != 1)
-      remoteridicule = false;
-   if (remoteridicule == true)
+      remoteridicule = FALSE;
+   if (remoteridicule == TRUE)
       {
       if (!quiet)
          printf("ROTTNET: LIVE Remote Ridicule Enabled\n");
@@ -195,7 +194,7 @@ void InitROTTNET (void)
 ================
 */
 
-bool ReadPacket (void)
+bool8_t ReadPacket (void)
 {
    uint16_t   crc;
    uint16_t   sentcrc;
@@ -227,23 +226,23 @@ bool ReadPacket (void)
          badpacket=1;
          SoftError("BADPKT at %d\n",GetTicCount());
          }
-      if (networkgame==false)
+      if (networkgame==FALSE)
          {
          rottcom->remotenode=server;
          }
       else
          {
-         if ((IsServer==true) && (rottcom->remotenode>0))
+         if ((IsServer==TRUE) && (rottcom->remotenode>0))
             rottcom->remotenode--;
          }
       memcpy(&ROTTpacket[0], &rottcom->data[0], rottcom->datalength);
 
 //      SoftError( "ReadPacket: time=%ld size=%ld src=%ld type=%d\n",GetTicCount(), rottcom->datalength,rottcom->remotenode,rottcom->data[0]);
 
-      return true;
+      return TRUE;
       }
    else // Not ready yet....
-      return false;
+      return FALSE;
 }
 
 
@@ -288,9 +287,9 @@ void WritePacket (void * buffer, int len, int destination)
    if (*((uint8_t *)buffer)==0)
        Error("Packet type = 0\n");
 
-   if (networkgame==true)
+   if (networkgame==TRUE)
       {
-      if (IsServer==true)
+      if (IsServer==TRUE)
          rottcom->remotenode++; // server fix-up
       }
 
@@ -311,17 +310,17 @@ void WritePacket (void * buffer, int len, int destination)
 =
 =============
 */
-bool ValidSyncPacket ( synctype * sync )
+bool8_t ValidSyncPacket ( synctype * sync )
 {
    if (ReadPacket() && (badpacket==0))
       {
       if (((syncpackettype *)&(ROTTpacket[0]))->type==COM_SYNC)
          {
          memcpy(&(sync->pkt),&(ROTTpacket[0]),sizeof(sync->pkt));
-         return true;
+         return TRUE;
          }
       }
-   return false;
+   return FALSE;
 }
 
 /*
@@ -347,11 +346,11 @@ void SendSyncPacket ( synctype * sync, int dest)
 =============
 */
 
-bool SlavePhaseHandler( synctype * sync )
+bool8_t SlavePhaseHandler( synctype * sync )
 {
-   bool done;
+   bool8_t done;
 
-   done=false;
+   done=FALSE;
 
    switch (sync->pkt.phase)
       {
@@ -370,7 +369,7 @@ bool SlavePhaseHandler( synctype * sync )
       case SYNC_PHASE5:
          ISR_SetTime(GetTicCount()-sync->pkt.delta);
          sync->sendtime=sync->pkt.clocktime;
-         done=true;
+         done=TRUE;
          break;
       }
    return done;
@@ -386,11 +385,11 @@ bool SlavePhaseHandler( synctype * sync )
 =============
 */
 
-bool MasterPhaseHandler( synctype * sync )
+bool8_t MasterPhaseHandler( synctype * sync )
 {
-   bool done;
+   bool8_t done;
 
-   done=false;
+   done=FALSE;
 
    switch (sync->pkt.phase)
       {
@@ -410,7 +409,7 @@ bool MasterPhaseHandler( synctype * sync )
          sync->pkt.delta=sync->pkt.clocktime-GetTicCount()+(sync->deltatime>>1);
          sync->sendtime=GetTicCount()+SYNCTIME;
          sync->pkt.clocktime=sync->sendtime;
-         done=true;
+         done=TRUE;
          break;
       }
    return done;
@@ -429,26 +428,26 @@ void ComSetTime ( void )
 {
    int i;
    syncpackettype * syncpacket;
-   bool done=false;
+   bool8_t done=FALSE;
 
    syncpacket=(syncpackettype *)SafeMalloc(sizeof(syncpackettype));
 
 
    // Sync clocks
 
-   if (networkgame==true)
+   if (networkgame==TRUE)
       {
-      if (IsServer==true)
+      if (IsServer==TRUE)
          {
          for (i=0;i<numplayers;i++)
             {
-            if (PlayerInGame(i)==false)
+            if (PlayerInGame(i)==FALSE)
                continue;
-            if (standalone==true)
+            if (standalone==TRUE)
                SyncTime(i);
             else if (i!=consoleplayer)
                SyncTime(i);
-            if (standalone==true)
+            if (standalone==TRUE)
                printf("ComSetTime: player#%ld\n",(long)i);
             }
          }
@@ -465,8 +464,8 @@ void ComSetTime ( void )
          SyncTime(server);
       }
 
-   if ( ( (networkgame==true) && (IsServer==true) ) ||
-        ( (networkgame==false) && (consoleplayer==0) )
+   if ( ( (networkgame==TRUE) && (IsServer==TRUE) ) ||
+        ( (networkgame==FALSE) && (consoleplayer==0) )
       ) // Master/Server
       {
       int nump;
@@ -475,7 +474,7 @@ void ComSetTime ( void )
       syncpacket->type=COM_START;
       syncpacket->clocktime=GetTicCount();
       controlsynctime=syncpacket->clocktime;
-      if (networkgame==true)
+      if (networkgame==TRUE)
          nump=numplayers;
       else
          nump=1;
@@ -494,12 +493,12 @@ void ComSetTime ( void )
          WritePacket( &(syncpacket->type) , sizeof(syncpackettype) , i );
          }
 
-      if (standalone==true)
+      if (standalone==TRUE)
          printf("ComSetTime: Start packets sent\n");
       }
    else // Slave/Client
       {
-      while (done==false)
+      while (done==FALSE)
          {
          AbortCheck("ComSetTime aborted as client");
 
@@ -509,12 +508,12 @@ void ComSetTime ( void )
             if (syncpacket->type==COM_START)
                {
                controlsynctime=syncpacket->clocktime;
-               done=true;
+               done=TRUE;
                }
             }
          }
       }
-   if (standalone==false)
+   if (standalone==FALSE)
       {
       AddMessage("All players synched.",MSG_SYSTEM);
       ThreeDRefresh();
@@ -539,10 +538,10 @@ void ComSetTime ( void )
 */
 void InitialMasterSync ( synctype * sync, int client )
 {
-   bool done=false;
+   bool8_t done=FALSE;
    int i;
 
-   if (networkgame==true)
+   if (networkgame==TRUE)
       {
       for (i=0;i<numplayers;i++)
          {
@@ -559,14 +558,14 @@ void InitialMasterSync ( synctype * sync, int client )
 
    sync->sendtime=GetTicCount()-SYNCTIME;
 
-   while (done==false)
+   while (done==FALSE)
       {
       sync->pkt.phase=SYNC_PHASE0;
 
       AbortCheck("Initial sync aborted as master");
 	   if ((sync->sendtime+SYNCTIME) <= GetTicCount())
          SendSyncPacket(sync,client);
-      if (ValidSyncPacket(sync)==true)
+      if (ValidSyncPacket(sync)==TRUE)
          {
          if (sync->pkt.phase==SYNC_PHASE0)
             {
@@ -578,7 +577,7 @@ void InitialMasterSync ( synctype * sync, int client )
                }
             time=GetTicCount();
             while (time+SYNCTIME>GetTicCount()) {}
-            done=true;
+            done=TRUE;
             }
          }
       }
@@ -593,12 +592,12 @@ void InitialMasterSync ( synctype * sync, int client )
 */
 void InitialSlaveSync ( synctype * sync )
 {
-   bool done=false;
+   bool8_t done=FALSE;
 
-   while (done==false)
+   while (done==FALSE)
       {
       AbortCheck("Initial sync aborted as slave");
-      if (ValidSyncPacket(sync)==true)
+      if (ValidSyncPacket(sync)==TRUE)
          {
          if (sync->pkt.phase==SYNC_MEMO)
             {
@@ -618,7 +617,7 @@ void InitialSlaveSync ( synctype * sync )
                {
                ReadPacket();
                }
-            done=true;
+            done=TRUE;
             }
          }
       }
@@ -638,20 +637,20 @@ void InitialSlaveSync ( synctype * sync )
 void SyncTime( int client )
 {
    int dtime[NUMSYNCPHASES];
-   bool done;
+   bool8_t done;
    int i;
    synctype * sync;
 
    sync=(synctype *)SafeMalloc(sizeof(synctype));
 
-   if ( ((networkgame==true) && (IsServer==true)) ||
-         ((networkgame==false) && (consoleplayer==0)) )
+   if ( ((networkgame==TRUE) && (IsServer==TRUE)) ||
+         ((networkgame==FALSE) && (consoleplayer==0)) )
       {
       // Master
 
       InitialMasterSync ( sync, client );
 
-      done=false;
+      done=FALSE;
 
       // Initial setup for Master
       // Initialize send time so as soon as we enter the loop, we send
@@ -659,7 +658,7 @@ void SyncTime( int client )
       sync->pkt.phase=SYNC_PHASE1;
       sync->sendtime=GetTicCount()-SYNCTIME;
 
-      while (done==false)
+      while (done==FALSE)
          {
          // Master
 
@@ -668,7 +667,7 @@ void SyncTime( int client )
 		   if ((sync->sendtime+SYNCTIME) <= GetTicCount())
             SendSyncPacket(sync,client);
 
-         while (ValidSyncPacket(sync)==true)
+         while (ValidSyncPacket(sync)==TRUE)
             {
 
             // find average delta
@@ -699,19 +698,19 @@ void SyncTime( int client )
 
       InitialSlaveSync ( sync );
 
-      done=false;
+      done=FALSE;
 
-      while (done==false)
+      while (done==FALSE)
          {
          // Slave
 
          AbortCheck("SyncTime aborted as slave");
 
-         while (ValidSyncPacket(sync)==true)
+         while (ValidSyncPacket(sync)==TRUE)
             {
             done = SlavePhaseHandler( sync );
 
-            if (done==false)
+            if (done==FALSE)
                SendSyncPacket(sync,server);
 
             }
@@ -726,8 +725,8 @@ void SyncTime( int client )
       {
       }
 
-   if ( ((networkgame==true) && (IsServer==true)) ||
-         ((networkgame==false) && (consoleplayer==0)) )
+   if ( ((networkgame==TRUE) && (IsServer==TRUE)) ||
+         ((networkgame==FALSE) && (consoleplayer==0)) )
       SetTransitTime( client, (sync->deltatime>>1));
 
    SafeFree(sync);
