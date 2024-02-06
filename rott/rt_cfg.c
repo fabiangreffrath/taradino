@@ -196,7 +196,7 @@ void ReadUnsigned (const char * s1, unsigned long * val)
 
    temp = (int)(*val);
    ReadInt (s1,&temp);
-   *val = (unsigned) temp;
+   *val = (unsigned int) temp;
 }
 
 //******************************************************************************

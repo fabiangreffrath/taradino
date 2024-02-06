@@ -592,7 +592,7 @@ void DrawPlanes( void )
 
 void DrawRow(int count, byte * dest, byte * src)
 {
-   unsigned xfrac, yfrac;
+   unsigned int xfrac, yfrac;
    int coord;
 
    xfrac = mr_xfrac;

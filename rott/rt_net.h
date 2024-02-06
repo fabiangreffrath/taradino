@@ -207,7 +207,7 @@ typedef struct {
   byte  player;    // which player
   byte  violence;
   byte  Product;
-  unsigned Version;
+  unsigned int Version;
 
   COM_PlayerDescriptionType playerdescription;
 } COM_GamePlayerType;
@@ -219,7 +219,7 @@ typedef struct {
   byte  violence;
   byte  Product;
   byte  mode;
-  unsigned Version;
+  unsigned int Version;
   boolean teamplay;
   specials SpecialsTimes;
   battle_type options;

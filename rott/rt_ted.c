@@ -95,7 +95,7 @@ int  lastlevelloaded=-1;
 boolean insetupgame;
 boolean ISRTL = false;
 
-unsigned MapSpecials = 0;
+unsigned int MapSpecials = 0;
 
 char LevelName[80];
 
@@ -1233,7 +1233,7 @@ DisableScreenStretch();
 ======================
 */
 
-void CA_RLEWexpand (word *source, word *dest,long length, unsigned rlewtag)
+void CA_RLEWexpand (word *source, word *dest,long length, unsigned int rlewtag)
 {
         word  value,count,i;
         word          *end;

@@ -72,7 +72,7 @@ void W_AddFile (char *_filename)
 {
         wadinfo_t               header;
         lumpinfo_t              *lump_p;
-        unsigned                i;
+        unsigned int                i;
         int                     handle, length;
         int                     startlump;
         filelump_t              *fileinfo, singleinfo;

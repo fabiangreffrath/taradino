@@ -76,9 +76,9 @@ int updatecrc(int crc, int c)
 //
 //******************************************************************************
 
-word CalculateCRC (byte *source, unsigned size)
+word CalculateCRC (byte *source, unsigned int size)
 {
-   unsigned i;
+   unsigned int i;
    int checksum;
 	int tmp;
 

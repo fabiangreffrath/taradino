@@ -918,7 +918,7 @@ void Init_Tables (void)
 	int i;
 	int x,
 		 y;
-	unsigned *blockstart;
+	unsigned int *blockstart;
 	byte * shape;
 
    memset (&CWD[0], 0, 40);

@@ -49,9 +49,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //******************************************************************************
 
 byte     *updateptr;
-unsigned mapwidthtable[64];
-unsigned uwidthtable[UPDATEHIGH];
-unsigned blockstarts[UPDATEWIDE*UPDATEHIGH];
+unsigned int mapwidthtable[64];
+unsigned int uwidthtable[UPDATEHIGH];
+unsigned int blockstarts[UPDATEWIDE*UPDATEHIGH];
 byte     update[UPDATESIZE];
 byte     palette1[256][3], palette2[256][3];
 boolean  screenfaded;
@@ -328,7 +328,7 @@ void VWB_TBar (int x, int y, int width, int height)
 //
 //******************************************************************************
 
-void VL_Hlin (unsigned x, unsigned y, unsigned width, unsigned color)
+void VL_Hlin (unsigned int x, unsigned int y, unsigned int width, unsigned int color)
 {
 	byte *dest = (byte*)(bufferofs+ylookup[y]+x);
 	
@@ -389,7 +389,7 @@ void VWB_Vlin (int y1, int y2, int x, int color)
 //
 //******************************************************************************
 
-void VL_THlin (unsigned x, unsigned y, unsigned width, boolean up)
+void VL_THlin (unsigned int x, unsigned int y, unsigned int width, boolean up)
 {
 	byte *dest = (byte*)(bufferofs+ylookup[y]+x);
 	
@@ -416,7 +416,7 @@ void VL_THlin (unsigned x, unsigned y, unsigned width, boolean up)
 //
 //******************************************************************************
 
-void VL_TVlin (unsigned x, unsigned y, unsigned height, boolean up)
+void VL_TVlin (unsigned int x, unsigned int y, unsigned int height, boolean up)
 {
 	byte *dest = (byte*)(bufferofs+ylookup[y]+x);
 	

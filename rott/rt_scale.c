@@ -413,7 +413,7 @@ void ScaleShape (visobj_t * sprite)
            }
 
 // dc_iscale=(1<<(16+6+HEIGHTFRACTION+size))/sprite->viewheight;
-   dc_iscale=0xffffffffu/(unsigned)dc_invscale;
+   dc_iscale=0xffffffffu/(unsigned int)dc_invscale;
    dc_texturemid=(((sprite->h1<<size) + p->topoffset)<<SFRACBITS);//+(SFRACUNIT>>1);
    sprtopoffset=centeryfrac -  FixedMul(dc_texturemid,dc_invscale);
    shadingtable=sprite->colormap;
@@ -562,7 +562,7 @@ void ScaleTransparentShape (visobj_t * sprite)
 			  }
 
 //   dc_iscale=(1<<(16+6+HEIGHTFRACTION+size))/sprite->viewheight;
-   dc_iscale=0xffffffffu/(unsigned)dc_invscale;
+   dc_iscale=0xffffffffu/(unsigned int)dc_invscale;
    dc_texturemid=(((sprite->h1<<size)+p->topoffset)<<SFRACBITS);//+(SFRACUNIT>>1);
    sprtopoffset=centeryfrac - FixedMul(dc_texturemid,dc_invscale);
    shadingtable=sprite->colormap;
@@ -636,7 +636,7 @@ void ScaleSolidShape (visobj_t * sprite)
            }
 
 //   dc_iscale=(1<<(16+6+HEIGHTFRACTION+size))/sprite->viewheight;
-   dc_iscale=0xffffffffu/(unsigned)dc_invscale;
+   dc_iscale=0xffffffffu/(unsigned int)dc_invscale;
    dc_texturemid=(((sprite->h1<<size)+p->topoffset)<<SFRACBITS);//+(SFRACUNIT>>1);
    sprtopoffset=centeryfrac - FixedMul(dc_texturemid,dc_invscale);
    shadingtable=sprite->colormap;
@@ -711,7 +711,7 @@ void ScaleWeapon (int xoff, int y, int shapenum)
         if (x2 < 0)
                 return;         // off the left side
 
-   dc_iscale=0xffffffffu/(unsigned)dc_invscale;
+   dc_iscale=0xffffffffu/(unsigned int)dc_invscale;
    dc_texturemid=(((p->origsize>>1)+p->topoffset)<<SFRACBITS)+(SFRACUNIT>>2);
    sprtopoffset=(centeryclipped<<16) - FixedMul(dc_texturemid,dc_invscale);
 
@@ -875,7 +875,7 @@ void DrawPositionedScaledSprite (int x, int y, int shapenum, int height, int typ
 		  if (x2 < 0)
 					 return;         // off the left side
 
-   dc_iscale=0xffffffffu/(unsigned)dc_invscale;
+   dc_iscale=0xffffffffu/(unsigned int)dc_invscale;
 //   dc_iscale=(1<<(16+6+size))/height;
    dc_texturemid=(((32<<size)+p->topoffset)<<SFRACBITS)+(SFRACUNIT>>1);
    sprtopoffset=(centeryclipped<<16) - FixedMul(dc_texturemid,dc_invscale);
@@ -959,7 +959,7 @@ void DrawScreenSizedSprite (int lump)
            return;         // off the left side
            }
 
-   dc_iscale=0xffffffffu/(unsigned)dc_invscale;
+   dc_iscale=0xffffffffu/(unsigned int)dc_invscale;
    dc_texturemid=(((p->origsize>>1) + p->topoffset)<<SFRACBITS)+(SFRACUNIT>>1);
    sprtopoffset=(centeryclipped<<16) -  FixedMul(dc_texturemid,dc_invscale);
 
@@ -1140,7 +1140,7 @@ void R_DrawWallColumn (byte * buf)
 
 	while (count--) {
 		//*dest = 6;
-		*dest = shadingtable[dc_source[(((unsigned)frac)>>26)]];
+		*dest = shadingtable[dc_source[(((unsigned int)frac)>>26)]];
 		dest += iGLOBAL_SCREENWIDTH;
 		frac += fracstep;
 	}
@@ -1164,7 +1164,7 @@ void R_DrawClippedColumn (byte * buf)
 	frac = dc_texturemid + (dc_yl-centeryclipped)*fracstep;
 
 	while (count--) {
-		*dest = shadingtable[dc_source[(((unsigned)frac)>>SFRACBITS)]];
+		*dest = shadingtable[dc_source[(((unsigned int)frac)>>SFRACBITS)]];
 		dest += iGLOBAL_SCREENWIDTH;
 		frac += fracstep;
 	}
