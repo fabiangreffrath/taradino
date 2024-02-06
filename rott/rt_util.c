@@ -355,18 +355,18 @@ void Error (char *error, ...)
 
    if (player!=NULL)
       {
-      printf ("Player X     = %lx\n", (long int)player->x);
-      printf ("Player Y     = %lx\n", (long int)player->y);
-      printf ("Player Angle = %lx\n\n", (long int)player->angle);
+      printf ("Player X     = %lx\n", (long)player->x);
+      printf ("Player Y     = %lx\n", (long)player->y);
+      printf ("Player Angle = %lx\n\n", (long)player->angle);
       }
-   printf ("Episode      = %ld\n", (long int)gamestate.episode);
+   printf ("Episode      = %ld\n", (long)gamestate.episode);
 
    if (gamestate.episode > 1)
       level = (gamestate.mapon+1) - ((gamestate.episode-1) << 3);
    else
       level = gamestate.mapon+1;
 
-   printf ("Area         = %ld\n", (long int)level);
+   printf ("Area         = %ld\n", (long)level);
 
    ShutDown();	// DDOI - moved this so that it doesn't try to access player
    		// which is freed by this function.

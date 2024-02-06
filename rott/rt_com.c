@@ -181,7 +181,7 @@ void InitROTTNET (void)
 
    if (!quiet)
       {
-      printf("ROTTNET: consoleplayer=%ld\n",(long int)rottcom->consoleplayer);
+      printf("ROTTNET: consoleplayer=%ld\n",(long)rottcom->consoleplayer);
       }
 }
 
@@ -447,7 +447,7 @@ void ComSetTime ( void )
             else if (i!=consoleplayer)
                SyncTime(i);
             if (standalone==true)
-               printf("ComSetTime: player#%ld\n",(long int)i);
+               printf("ComSetTime: player#%ld\n",(long)i);
             }
          }
       else

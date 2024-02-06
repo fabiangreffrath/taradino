@@ -127,7 +127,7 @@ extern int LightsInArea[NUMAREAS+1];
 extern int numclocks;
 extern word ELEVATORLOCATION;
 
-extern unsigned short int *mapplanes[3];
+extern unsigned short *mapplanes[3];
 extern int gunsstart;
 extern int elevatorstart;
 extern int spritestop;

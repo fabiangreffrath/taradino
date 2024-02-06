@@ -97,7 +97,7 @@ typedef struct doorstruct
 		  word        basetexture;
 		  byte        lock;
 		  byte        flags;
-		  short int   ticcount;
+		  short   ticcount;
 		  signed char eindex;
 		  boolean     vertical;
 		  int         soundhandle;

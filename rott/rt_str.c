@@ -488,11 +488,11 @@ void US_BufPrint (const char *string)
 
 //******************************************************************************
 //
-// US_PrintUnsigned () - Prints an unsigned long int
+// US_PrintUnsigned () - Prints an unsigned long
 //
 //******************************************************************************
 
-void US_PrintUnsigned (unsigned long int n)
+void US_PrintUnsigned (unsigned long n)
 {
    char  buffer[32];
 
@@ -505,7 +505,7 @@ void US_PrintUnsigned (unsigned long int n)
 //
 //******************************************************************************
 
-void US_PrintSigned (long int n)
+void US_PrintSigned (long n)
 {
    char  buffer[32];
 
@@ -1510,7 +1510,7 @@ int GetColor (int num)
 static int oldfontcolor = 0;
 static boolean highlight = false;
 
-void DrawIString (unsigned short int x, unsigned short int y, const char *string, int flags)
+void DrawIString (unsigned short x, unsigned short y, const char *string, int flags)
 {
    char ch;
    char temp;
@@ -1609,7 +1609,7 @@ void DrawIString (unsigned short int x, unsigned short int y, const char *string
 //
 //******************************************************************************
 
-void DrawIntensityString (unsigned short int x, unsigned short int y, const char *string, int color)
+void DrawIntensityString (unsigned short x, unsigned short y, const char *string, int color)
 {
    char ch;
 

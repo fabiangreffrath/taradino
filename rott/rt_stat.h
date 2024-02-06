@@ -147,9 +147,9 @@ typedef struct statstruct
 		  signed char       count;
 		  byte              numanims;
 		  stat_t            itemnumber;
-		  short int         hitpoints;
-		  short int         whichstat;
-		  short int         areanumber;
+		  short         hitpoints;
+		  short         whichstat;
+		  short         areanumber;
 
 		  intptr_t          linked_to;
 		  struct statstruct *statnext;

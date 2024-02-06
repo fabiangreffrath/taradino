@@ -4476,7 +4476,7 @@ void T_PlayDead(objtype *ob)
    }
 
 
-void AdjustAngle(int maxadjust, short int *currangle,int targetangle)
+void AdjustAngle(int maxadjust, short *currangle,int targetangle)
    {
    int dangle,i,magangle;
 
