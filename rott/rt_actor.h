@@ -220,7 +220,7 @@ typedef struct objstruct
 		  unsigned int                 flags;
 		  short                    ticcount;
 		  signed short             hitpoints;
-		  word                     whichactor;
+		  unsigned short                     whichactor;
 
 		  signed short             dirchoosetime;
 		  fixed                    drawx,drawy;

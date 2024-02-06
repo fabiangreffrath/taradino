@@ -1383,8 +1383,8 @@ void US_CenterWindow (int w, int h)
 //
 // TEXT FORMATTING COMMANDS - (Use EGA colors ONLY!)
 // -------------------------------------------------
-// /<hex digit> - Change the following word to <hex digit> color
-// `            - Highlights the following word with lighter color of fontcolor
+// /<hex digit> - Change the following unsigned short to <hex digit> color
+// `            - Highlights the following unsigned short with lighter color of fontcolor
 // /N<hex digit> - Change the fontcolor to a certain color
 //
 //==============================================================================
@@ -1522,7 +1522,7 @@ void DrawIString (unsigned short x, unsigned short y, const char *string, int fl
    {
       if ( !PERMANENT_MSG( flags ) )
       {
-         // Highlighting is done only for 1 word - if we get a "space"
+         // Highlighting is done only for 1 unsigned short - if we get a "space"
          //  and highlight is on ...., reset variables.
          //
          if ((ch == ' ') && (highlight == true))

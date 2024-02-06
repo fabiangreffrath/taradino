@@ -76,7 +76,7 @@ int updatecrc(int crc, int c)
 //
 //******************************************************************************
 
-word CalculateCRC (byte *source, unsigned int size)
+unsigned short CalculateCRC (byte *source, unsigned int size)
 {
    unsigned int i;
    int checksum;
@@ -90,7 +90,7 @@ word CalculateCRC (byte *source, unsigned int size)
 	   checksum=(checksum>>8)^crc16tab[tmp & 0xff];
       }
 
-   return ((word)checksum);
+   return ((unsigned short)checksum);
 
 }
 

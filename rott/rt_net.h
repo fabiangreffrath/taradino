@@ -81,8 +81,8 @@ typedef struct DemoType {
   int   time;
   short momx;
   short momy;
-  word  dangle;
-  word  buttons;
+  unsigned short  dangle;
+  unsigned short  buttons;
 } DemoType;
 
 // Demo Header Structure
@@ -96,8 +96,8 @@ typedef struct MoveType {
   int   time;
   short momx;
   short momy;
-  word  dangle;
-  word  buttons;
+  unsigned short  dangle;
+  unsigned short  buttons;
   char  Sounddata[0];
 } MoveType;
 
@@ -139,8 +139,8 @@ typedef struct {
   int   x;
   int   y;
   int   z;
-  word  angle;
-  word  randomindex;
+  unsigned short  angle;
+  unsigned short  randomindex;
 } COM_CheckSyncType;
 
 typedef struct {
@@ -215,7 +215,7 @@ typedef struct {
 typedef struct {
   byte  type;
   byte  level;
-  word  mapcrc;
+  unsigned short  mapcrc;
   byte  violence;
   byte  Product;
   byte  mode;

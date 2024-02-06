@@ -139,7 +139,7 @@ void SD_StopIncomingSound ( void )
 //
 //***************************************************************************
 
-void SD_UpdateIncomingSound ( byte * ptr, word length )
+void SD_UpdateIncomingSound ( byte * ptr, unsigned short length )
 {
    int amount;
 
@@ -330,7 +330,7 @@ boolean SD_RecordingActive ( void )
 //
 //***************************************************************************
 
-recordstate SD_GetSoundData ( byte * data, word length )
+recordstate SD_GetSoundData ( byte * data, unsigned short length )
 {
    recordstate status=rs_data;
    int amount;

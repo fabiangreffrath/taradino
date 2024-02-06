@@ -49,7 +49,7 @@ void SD_StopIncomingSound ( void );
 //
 //***************************************************************************
 
-void SD_UpdateIncomingSound ( byte * data, word length );
+void SD_UpdateIncomingSound ( byte * data, unsigned short length );
 
 //***************************************************************************
 //
@@ -62,7 +62,7 @@ void SD_UpdateIncomingSound ( byte * data, word length );
 //
 //***************************************************************************
 
-recordstate SD_GetSoundData ( byte * data, word length );
+recordstate SD_GetSoundData ( byte * data, unsigned short length );
 
 //***************************************************************************
 //

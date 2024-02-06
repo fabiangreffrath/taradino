@@ -112,7 +112,7 @@ typedef  struct
 
 typedef struct
 {
-   word  joyMinX,joyMinY,
+   unsigned short  joyMinX,joyMinY,
          threshMinX,threshMinY,
          threshMaxX,threshMaxY,
          joyMaxX,joyMaxY,
@@ -158,7 +158,7 @@ extern byte Joy_xb,
             Joy_yb,
             Joy_xs,
             Joy_ys;
-extern word Joy_x,
+extern unsigned short Joy_x,
             Joy_y;
 
 extern int LastLetter;
@@ -174,7 +174,7 @@ extern const char ScanChars[128];
 //***************************************************************************
 
 void INL_GetMouseDelta(int *x,int *y);
-word IN_GetMouseButtons (void);
+unsigned short IN_GetMouseButtons (void);
 void IN_IgnoreMouseButtons( void );
 boolean INL_StartMouse (void);
 void INL_ShutMouse (void);
@@ -191,14 +191,14 @@ void IN_StartAck (void);
 boolean IN_CheckAck (void);
 void IN_Ack (void);
 boolean IN_UserInput (long delay);
-void IN_GetJoyAbs (word joy, word *xp, word *yp);
-void INL_GetJoyDelta (word joy, int *dx, int *dy);
-word INL_GetJoyButtons (word joy);
-//word IN_GetJoyButtonsDB (word joy);
-void INL_SetJoyScale (word joy);
-void IN_SetupJoy (word joy, word minx, word maxx, word miny, word maxy);
-boolean INL_StartJoy (word joy);
-void INL_ShutJoy (word joy);
+void IN_GetJoyAbs (unsigned short joy, unsigned short *xp, unsigned short *yp);
+void INL_GetJoyDelta (unsigned short joy, int *dx, int *dy);
+unsigned short INL_GetJoyButtons (unsigned short joy);
+//unsigned short IN_GetJoyButtonsDB (unsigned short joy);
+void INL_SetJoyScale (unsigned short joy);
+void IN_SetupJoy (unsigned short joy, unsigned short minx, unsigned short maxx, unsigned short miny, unsigned short maxy);
+boolean INL_StartJoy (unsigned short joy);
+void INL_ShutJoy (unsigned short joy);
 byte IN_JoyButtons (void);
 void IN_UpdateKeyboard (void);
 void IN_ClearKeyboardQueue (void);

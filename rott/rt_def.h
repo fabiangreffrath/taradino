@@ -262,7 +262,6 @@ long filelength(int handle);
 
 
 typedef unsigned char           byte;
-typedef unsigned short      word;
 typedef int fixed;
 
 
