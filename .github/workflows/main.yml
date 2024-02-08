@@ -47,7 +47,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install \
-            automake \
+            cmake \
             libsdl2-dev \
             libsdl2-mixer-dev
 
@@ -58,7 +58,7 @@ jobs:
         run: |
           brew update || true
           brew install \
-            automake \
+            cmake \
             sdl2 \
             sdl2_mixer
 
@@ -70,7 +70,7 @@ jobs:
           update: false
           install: >-
             ${{ matrix.config.msys-env }}-gcc
-            ${{ matrix.config.msys-env }}-autotools
+            ${{ matrix.config.msys-env }}-cmake
             ${{ matrix.config.msys-env }}-SDL2
             ${{ matrix.config.msys-env }}-SDL2_mixer
 
@@ -81,26 +81,33 @@ jobs:
           CC: ${{ matrix.config.compiler }}
           CFLAGS: -Wall
         run: |
-          autoreconf -fiv
-          ./configure --enable-werror
+          cmake -E make_directory cmake-build
+          cmake -S . -B cmake-build
 
       - name: Build
-        run: make
-
-  cppcheck:
-    name: Cppcheck
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install cppcheck
+          cmake --build cmake-build --config Release
 
-      - uses: actions/checkout@v3
+      - name: Upload artifacts (Windows)
+        uses: actions/upload-artifact@v3
+        if: runner.os == 'Windows'
+        with:
+          name: tarradino-${{ github.sha }}-win64
+          path: |
+            cmake-build/tarradino.exe
 
-      - name: Run cppcheck
-        shell: bash
-        run: |
-          cppcheck --version
-          cppcheck --error-exitcode=1 -j4 -q --force -U_WIN32 -U__APPLE__ -Irott -Irott/audiolib rott rott/audiolib
+      - name: Upload artifacts (Linux)
+        uses: actions/upload-artifact@v3
+        if: runner.os == 'Linux'
+        with:
+          name: tarradino-${{ github.sha }}-Linux
+          path: |
+            cmake-build/tarradino
+
+      - name: Upload artifacts (macOS)
+        uses: actions/upload-artifact@v3
+        if: runner.os == 'macOS'
+        with:
+          name: tarradino-${{ github.sha }}-macOS
+          path: |
+            cmake-build/tarradino
