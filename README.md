@@ -19,38 +19,10 @@ library named SDL_mixer.
 
 ## Building
 
-### Linux
-
-Debian:
-```
-sudo apt-get install gcc build-essential cmake libsdl2-dev libsdl2-mixer-dev
-mkdir cmake-build && cd cmake-build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-sudo make
-```
-
-Arch:
-```
-sudo pacman -S gcc cmake sdl2 sdl2_mixer
-mkdir cmake-build && cd cmake-build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-sudo make
-```
-
-### Windows
-
-MSYS2 UCRT64:
-```
-pacman -S mingw-w64-ucrt-x86_64-cmake mingw-w64-ucrt-x86_64-SDL2  mingw-w64-ucrt-x86_64-SDL2_mixer
-mkdir cmake-build && cd cmake-build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-sudo make
-```
-
-### Haiku
+Building Tarradino requires GCC, CMake, the development packages for SDL2 and SDL2_Mixer.
+After installing, you can run the following commands to build:
 
 ```
-pkgman install gcc cmake libsdl2_devel sdl2_mixer_devel
 mkdir cmake-build && cd cmake-build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make
@@ -64,7 +36,7 @@ Copyright (C) 1994-1995 Apogee Software, Ltd.
 
 Copyright (C) 2002-2015 Steven Fuller, Ryan C. Gordon, John Hall, Dan Olson
 
-Copyright (C) 2024 Fabian Greffrath
+Copyright (C) 2006-2024 Fabian Greffrath
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
