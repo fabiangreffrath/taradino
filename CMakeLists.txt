@@ -1,8 +1,4 @@
 
-#
-# cmake setup
-#
-
 cmake_minimum_required(VERSION 3.5)
 project(tarradino
 	DESCRIPTION "SDL2 port of Rise of the Triad"
@@ -12,30 +8,14 @@ project(tarradino
 )
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
-#
-# options
-#
-
 option(TARRADINO_SHAREWARE "Build shareware version" OFF)
-
-#
-# requirements
-#
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_mixer REQUIRED)
 
-#
-# sources
-#
-
 file(GLOB TARRADINO_SOURCES
 	${PROJECT_SOURCE_DIR}/rott/*.c
 )
-
-#
-# executable
-#
 
 add_executable(tarradino ${TARRADINO_SOURCES})
 target_link_libraries(tarradino PUBLIC SDL2::Main SDL2::Mixer)
