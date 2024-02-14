@@ -82,7 +82,7 @@ jobs:
           CFLAGS: -Wall
         run: |
           cmake -E make_directory cmake-build
-          cmake -S . -B cmake-build
+          cmake -S . -B cmake-build -DTARADINO_SHAREWARE=ON -DTARADINO_WERROR=ON
 
       - name: Build
         run: |
@@ -92,22 +92,43 @@ jobs:
         uses: actions/upload-artifact@v3
         if: runner.os == 'Windows'
         with:
-          name: tarradino-${{ github.sha }}-win64
+          name: taradino-${{ github.sha }}-win64
           path: |
-            cmake-build/tarradino.exe
+            cmake-build/taradino.exe
+            cmake-build/taradino_shareware.exe
 
       - name: Upload artifacts (Linux)
         uses: actions/upload-artifact@v3
         if: runner.os == 'Linux'
         with:
-          name: tarradino-${{ github.sha }}-Linux
+          name: taradino-${{ github.sha }}-Linux
           path: |
-            cmake-build/tarradino
+            cmake-build/taradino
+            cmake-build/taradino_shareware
 
       - name: Upload artifacts (macOS)
         uses: actions/upload-artifact@v3
         if: runner.os == 'macOS'
         with:
-          name: tarradino-${{ github.sha }}-macOS
+          name: taradino-${{ github.sha }}-macOS
           path: |
-            cmake-build/tarradino
+            cmake-build/taradino
+            cmake-build/taradino_shareware
+
+  cppcheck:
+    name: Cppcheck
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install cppcheck
+
+      - uses: actions/checkout@v3
+
+      - name: Run cppcheck
+        shell: bash
+        run: |
+          cppcheck --version
+          cppcheck --error-exitcode=1 -j4 -q --force -U_WIN32 -U__APPLE__ -Irott rott
