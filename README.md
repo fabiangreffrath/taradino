@@ -1,5 +1,5 @@
 
-# Tarradino
+# Taradino
 
 This is a port of Apogee's 3D action title Rise of the Triad, originally
 released in 1994. This port duplicates the functionality of the original
@@ -15,11 +15,10 @@ library named SDL_mixer.
 - Demos go out of sync.
 - No netplay support.
 - Won't build with MSVC.
-- Some crashes in the sound mixer.
 
 ## Building
 
-Building Tarradino requires GCC, CMake, the development packages for SDL2 and SDL2_Mixer.
+Building Taradino requires GCC, CMake, the development packages for SDL2 and SDL2_Mixer.
 After installing, you can run the following commands to build:
 
 ```
