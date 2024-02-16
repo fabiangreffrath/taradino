@@ -76,16 +76,22 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - name: Configure
+      - name: Build shareware executable
         env:
           CC: ${{ matrix.config.compiler }}
           CFLAGS: -Wall
         run: |
           cmake -E make_directory cmake-build
-          cmake -S . -B cmake-build -DTARADINO_SHAREWARE=ON -DTARADINO_WERROR=ON
+          cmake -S . -B cmake-build --fresh -DTARADINO_SHAREWARE=ON -DTARADINO_WERROR=OFF -DTARADINO_SUFFIX=shareware
+          cmake --build cmake-build --config Release
 
-      - name: Build
+      - name: Build registered executable
+        env:
+          CC: ${{ matrix.config.compiler }}
+          CFLAGS: -Wall
         run: |
+          cmake -E make_directory cmake-build
+          cmake -S . -B cmake-build --fresh -DTARADINO_SHAREWARE=OFF -DTARADINO_WERROR=ON -UTARADINO_SUFFIX
           cmake --build cmake-build --config Release
 
       - name: Upload artifacts (Windows)
