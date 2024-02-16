@@ -11,6 +11,7 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 option(TARADINO_SHAREWARE "Build shareware version" OFF)
 option(TARADINO_WERROR "Enable -Werror on build" OFF)
 set(TARADINO_DATADIR "" CACHE STRING "Game data file directory")
+set(TARADINO_SUFFIX "" CACHE STRING "Executable file name suffix")
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_mixer REQUIRED)
@@ -34,4 +35,16 @@ endif()
 
 if(${TARADINO_DATADIR})
 	target_compile_definitions(taradino PRIVATE DATADIR="${TARADINO_DATADIR}")
+endif()
+
+string(LENGTH "${TARADINO_SUFFIX}" SUFFIX_LEN)
+if(SUFFIX_LEN GREATER 0)
+	string(CONCAT NEWNAME "${CMAKE_PROJECT_NAME}" "-" "${TARADINO_SUFFIX}")
+	if(WIN32)
+		string(APPEND NEWNAME ".exe")
+	endif()
+	add_custom_command(TARGET taradino POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E rename
+		"$<TARGET_FILE_DIR:taradino>/$<TARGET_FILE_NAME:taradino>"
+		"$<TARGET_FILE_DIR:taradino>/${NEWNAME}")
 endif()
