@@ -401,15 +401,7 @@ void DrawRottTitle ( void )
          memset (title,0,sizeof(title));
 
          if (gamestate.Product == ROTT_SHAREWARE)
-            {
-#if (DELUXE==1)
-            strcpy(title,"Lasersoft Deluxe Version");
-#elif (LOWCOST==1)
-            strcpy(title,"Episode One");
-#else
             strcpy(title,"Shareware Version");
-#endif
-            }
          else if (gamestate.Product == ROTT_SUPERCD)
              strcpy(title,"CD Version");
          else if (gamestate.Product == ROTT_SITELICENSE)
@@ -622,15 +614,7 @@ void CheckCommandLineParameters( void )
          printf ("Rise of the Triad  (c) 1995 Apogee Software\n");
 //MED
          if (gamestate.Product == ROTT_SHAREWARE)
-            {
-#if (DELUXE==1)
-            printf("Lasersoft Deluxe ");
-#elif (LOWCOST==1)
-            printf("Episode One ");
-#else
             printf("Shareware ");
-#endif
-            }
          else if (gamestate.Product == ROTT_SUPERCD)
             printf("CD ");
          else if (gamestate.Product == ROTT_SITELICENSE)
