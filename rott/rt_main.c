@@ -105,10 +105,6 @@ boolean quiet = false;
 
 boolean DebugOk = false;
 
-#if (WHEREAMI==1)
-int programlocation=-1;
-#endif
-
 static boolean turbo;
 
 static int NoWait;
@@ -976,8 +972,6 @@ void GameLoop (void)
 {
    int NextLevel;
 
-   wami(1);
-
 	while (1)
 	   {
       if ( playstate == ex_battledone )
@@ -1464,7 +1458,6 @@ void GameLoop (void)
 	     ;
          }
       }
-   waminot();
    }
 
 boolean CheckForQuickLoad  (void )
@@ -1595,12 +1588,9 @@ void UpdateGameObjects ( void )
 	objtype * ob,*temp;
    battle_status BattleStatus;
 
-   wami(2);
-
    if (controlupdatestarted==0)
       {
       return;
-      waminot();
       }
 
 	atime=GetFastTics();
@@ -1691,9 +1681,6 @@ void UpdateGameObjects ( void )
          FX_SetReverb( min( numareatiles[ player->areanumber ] >> 1, 90 ) );
          }
       }
-
-   waminot();
-
 }
 
 
@@ -1749,9 +1736,6 @@ void PlayLoop
 
    boolean canquit = true;
    int     quittime = 0;
-
-   wami(3);
-
 
    if ( (loadedgame == false) && (timelimitenabled == false) )
       {
@@ -1982,7 +1966,6 @@ fromloadedgame:
             }
          }
       }
-   waminot();
    }
 
 //******************************************************************************
@@ -1995,7 +1978,6 @@ void CheckRemoteRidicule ( int scancode )
 {
    int num=-1;
 
-   wami(4);
    switch (scancode)
    {
       case sc_F1:
@@ -2040,7 +2022,6 @@ void CheckRemoteRidicule ( int scancode )
       AddRemoteRidiculeCommand ( consoleplayer, MSG_DIRECTED_TO_ALL, num );
       LastScan=0;
       }
-   waminot();
 }
 
 //******************************************************************************
@@ -2068,8 +2049,6 @@ void PollKeyboard
 
    {
    static char autopressed = false;
-
-   wami(5);
 
    if (demoplayback==true)
       {
@@ -2375,8 +2354,6 @@ void PollKeyboard
          if (Keystate[0x45] == 3)
             Keystate[0x45] = 0;
       }
-
-   waminot();
    }
 
 //****************************************************************************
