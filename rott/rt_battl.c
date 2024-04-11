@@ -380,21 +380,6 @@ void BATTLE_Init
 
 	BATTLE_StartRound();
 
-   #if (BATTLEINFO == 1)
-      SoftError( "GRAVITY      = %d\n", GRAVITY );
-      SoftError( "BO_Gravity   = %d\n", BattleOptions.Gravity );
-      SoftError( "BO_Speed     = %d\n", BattleOptions.Speed );
-      SoftError( "BO_Ammo      = %d\n", BattleOptions.Ammo );
-      SoftError( "BO_HitPoints = %d\n", BattleOptions.HitPoints );
-      SoftError( "BO_Dangers   = %d\n", BattleOptions.SpawnDangers );
-      SoftError( "BO_Health    = %d\n", BattleOptions.SpawnHealth );
-      SoftError( "BO_Weapons   = %d\n", BattleOptions.SpawnWeapons );
-      SoftError( "BO_Respawn   = %d\n", BattleOptions.RespawnItems );
-      SoftError( "BO_Light     = %d\n", BattleOptions.LightLevel );
-      SoftError( "BO_Kills     = %d\n", BattleOptions.Kills );
-      SoftError( "BO_DangerDam = %d\n", BattleOptions.DangerDamage );
-      SoftError( "BO_TimeLimit = %d\n", BattleOptions.TimeLimit );
-   #endif
 	}
 
 
@@ -653,10 +638,6 @@ battle_status BATTLE_CheckGameStatus
          break;
 
       case battle_player_killed :
-         #if (BATTLEINFO == 1)
-            SoftError( "BATTLE_CheckGameStatus: Player %d Died", player );
-            SoftError( "---ticks = %d\n", Timer );
-         #endif
 
          switch( BattleMode )
             {
@@ -856,14 +837,6 @@ void BATTLE_SortPlayerRanks
          }
       }
 
-   #if (BATTLEINFO == 1)
-      for( i = 0; i < BATTLE_NumberOfTeams; i++ )
-         {
-         SoftError( "Sorted rank %d = player %d : Score = %d\n", i,
-            BATTLE_PlayerOrder[ i ], BATTLE_Points[ BATTLE_PlayerOrder[ i ] ] );
-         }
-   #endif
-
    if ( ( SwapFlag == true ) && ( gamestate.ShowScores ) &&
       ( SHOW_TOP_STATUS_BAR() || SHOW_KILLS() ) )
       {
@@ -890,14 +863,6 @@ battle_status BATTLE_PlayerKilledPlayer
    int status;
    int killerteam;
    int victimteam;
-
-   #if (BATTLEINFO == 1)
-      SoftError( "PlayerKilledPlayer:\nMode = %d\n", BattleMode );
-      SoftError( "Reason = %d\n", reason );
-      SoftError( "killer = %d, team = %d\n", killer, killerteam );
-      SoftError( "victim = %d, team = %d\n", victim, victimteam );
-      SoftError( "---ticks = %d\n", Timer );
-   #endif
 
    if ( ( killer < 0 ) || ( killer >= MAXPLAYERS ) )
       {

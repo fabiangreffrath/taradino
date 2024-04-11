@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _develop_public
 
 #define BATTLECHECK 0 // This should be turned off for release, on for beta
-#define BATTLEINFO  0 // This should be turned off for release
 
 #define BNACRASHPREVENT  1 //bna added 
 // Flavor selection (shareware, registered, cd version, site license) has moved to the Makefile
