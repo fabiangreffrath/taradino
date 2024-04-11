@@ -558,23 +558,6 @@ void CheckCommandLineParameters( void )
       n = US_CheckParm(_argv[i],PStrings);
       switch(n)
       {
-#if (TEDLAUNCH==1)
-       case 0:
-         tedlevelnum = ParseNum(_argv[i + 1]);
-         tedlevel=true;
-         if (i+3>=_argc)
-            {
-            tedx=0;
-            tedy=0;
-            }
-         else
-            {
-            tedx=ParseNum(_argv[i + 2]);
-            tedy=ParseNum(_argv[i + 3]);
-            }
-         MenuFixup ();
-         break;
-#endif
        case 1:
          NoWait = true;
          break;
