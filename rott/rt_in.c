@@ -30,7 +30,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "_rt_in.h"
 #include "isr.h"
 #include "rt_util.h"
-#include "rt_vh_a.h"
 #include "rt_cfg.h"
 #include "rt_msg.h"
 #include "rt_playr.h"
@@ -520,12 +519,6 @@ void IN_GetJoyAbs (unsigned short joy, unsigned short *xp, unsigned short *yp)
    *xp = Joy_x;
    *yp = Joy_y;
 }
-
-void JoyStick_Vals (void)
-{
-
-}
-
 
 //******************************************************************************
 //
