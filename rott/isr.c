@@ -31,7 +31,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdio.h>
 
 #include "rt_def.h"
-#include "task_man.h"
 #include "isr.h"
 #include "_isr.h"
 #include "rt_in.h"
