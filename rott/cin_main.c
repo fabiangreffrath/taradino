@@ -247,8 +247,9 @@ void R_DrawFilmColumn (byte * buf)
 	int frac, fracstep;
 	byte *dest;
 
-	count = cin_yh - cin_yl;
-	if (count < 0) return;
+	count = (cin_yh + 1) - cin_yl;
+	if (!count)
+		return;
 
 	dest = buf + ylookup[cin_yl];
 
