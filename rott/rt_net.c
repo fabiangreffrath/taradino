@@ -571,8 +571,6 @@ void UpdateClientControls ( void )
    else
       InUCC = true;
 
-   wami(6);
-
    lastcontrolupdatetime=GetTicCount();
 
    if (standalone==false)
@@ -708,8 +706,6 @@ void UpdateClientControls ( void )
       }
 
    InUCC = false;
-
-   waminot();
 }
 
 //****************************************************************************
@@ -739,7 +735,6 @@ boolean PlayerInGame ( int p )
 //****************************************************************************
 void CheckForPacket ( void )
 {
-   wami(7);
    while (ReadPacket()==true)
       {
       if (badpacket==0)
@@ -749,7 +744,6 @@ void CheckForPacket ( void )
       else
          RequestPacket (LastCommandTime[rottcom->remotenode]+controldivisor, rottcom->remotenode, controldivisor);
       }
-   waminot();
 }
 
 
@@ -916,8 +910,6 @@ void PrepareLocalPacket ( void )
 {
    MoveType * pkt;
 
-   wami(8);
-
    pkt=(MoveType *)NextLocalCommand();
 
    pkt->time=controlupdatetime;
@@ -935,7 +927,6 @@ void PrepareLocalPacket ( void )
       SendPacket (pkt, server);
 
    controlupdatetime+=controldivisor;
-   waminot();
 }
 
 

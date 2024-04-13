@@ -105,10 +105,6 @@ boolean quiet = false;
 
 boolean DebugOk = false;
 
-#if (WHEREAMI==1)
-int programlocation=-1;
-#endif
-
 static boolean turbo;
 
 static int NoWait;
@@ -401,15 +397,7 @@ void DrawRottTitle ( void )
          memset (title,0,sizeof(title));
 
          if (gamestate.Product == ROTT_SHAREWARE)
-            {
-#if (DELUXE==1)
-            strcpy(title,"Lasersoft Deluxe Version");
-#elif (LOWCOST==1)
-            strcpy(title,"Episode One");
-#else
             strcpy(title,"Shareware Version");
-#endif
-            }
          else if (gamestate.Product == ROTT_SUPERCD)
              strcpy(title,"CD Version");
          else if (gamestate.Product == ROTT_SITELICENSE)
@@ -570,23 +558,6 @@ void CheckCommandLineParameters( void )
       n = US_CheckParm(_argv[i],PStrings);
       switch(n)
       {
-#if (TEDLAUNCH==1)
-       case 0:
-         tedlevelnum = ParseNum(_argv[i + 1]);
-         tedlevel=true;
-         if (i+3>=_argc)
-            {
-            tedx=0;
-            tedy=0;
-            }
-         else
-            {
-            tedx=ParseNum(_argv[i + 2]);
-            tedy=ParseNum(_argv[i + 3]);
-            }
-         MenuFixup ();
-         break;
-#endif
        case 1:
          NoWait = true;
          break;
@@ -622,15 +593,7 @@ void CheckCommandLineParameters( void )
          printf ("Rise of the Triad  (c) 1995 Apogee Software\n");
 //MED
          if (gamestate.Product == ROTT_SHAREWARE)
-            {
-#if (DELUXE==1)
-            printf("Lasersoft Deluxe ");
-#elif (LOWCOST==1)
-            printf("Episode One ");
-#else
             printf("Shareware ");
-#endif
-            }
          else if (gamestate.Product == ROTT_SUPERCD)
             printf("CD ");
          else if (gamestate.Product == ROTT_SITELICENSE)
@@ -991,8 +954,6 @@ int NumberOfTeams
 void GameLoop (void)
 {
    int NextLevel;
-
-   wami(1);
 
 	while (1)
 	   {
@@ -1480,7 +1441,6 @@ void GameLoop (void)
 	     ;
          }
       }
-   waminot();
    }
 
 boolean CheckForQuickLoad  (void )
@@ -1611,12 +1571,9 @@ void UpdateGameObjects ( void )
 	objtype * ob,*temp;
    battle_status BattleStatus;
 
-   wami(2);
-
    if (controlupdatestarted==0)
       {
       return;
-      waminot();
       }
 
 	atime=GetFastTics();
@@ -1707,9 +1664,6 @@ void UpdateGameObjects ( void )
          FX_SetReverb( min( numareatiles[ player->areanumber ] >> 1, 90 ) );
          }
       }
-
-   waminot();
-
 }
 
 
@@ -1765,9 +1719,6 @@ void PlayLoop
 
    boolean canquit = true;
    int     quittime = 0;
-
-   wami(3);
-
 
    if ( (loadedgame == false) && (timelimitenabled == false) )
       {
@@ -1998,7 +1949,6 @@ fromloadedgame:
             }
          }
       }
-   waminot();
    }
 
 //******************************************************************************
@@ -2011,7 +1961,6 @@ void CheckRemoteRidicule ( int scancode )
 {
    int num=-1;
 
-   wami(4);
    switch (scancode)
    {
       case sc_F1:
@@ -2056,7 +2005,6 @@ void CheckRemoteRidicule ( int scancode )
       AddRemoteRidiculeCommand ( consoleplayer, MSG_DIRECTED_TO_ALL, num );
       LastScan=0;
       }
-   waminot();
 }
 
 //******************************************************************************
@@ -2084,8 +2032,6 @@ void PollKeyboard
 
    {
    static char autopressed = false;
-
-   wami(5);
 
    if (demoplayback==true)
       {
@@ -2391,8 +2337,6 @@ void PollKeyboard
          if (Keystate[0x45] == 3)
             Keystate[0x45] = 0;
       }
-
-   waminot();
    }
 
 //****************************************************************************
