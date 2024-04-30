@@ -4623,9 +4623,8 @@ void CheckWeaponChange (objtype * ob)
 	if ((ob->flags & FL_DOGMODE) || (ob->flags & FL_GODMODE))
 		return;
 
-#if (WEAPONCHEAT==1)
-		if (godmode && Keyboard[sc_Insert])
-			{
+	if (godmode && Keyboard[sc_Insert])
+		{
 			SD_Play(SD_SELECTWPNSND);
 
 			// FOR DEBUG only
@@ -4658,11 +4657,8 @@ void CheckWeaponChange (objtype * ob)
          //pstate->weapondowntics = WEAPONS[pstate->weapon].screenheight/GMOVE;
          //if ((ob==player) && SHOW_BOTTOM_STATUS_BAR() )
 			  //		DrawBarAmmo (false);
-			}
+		}
 		else if (pstate->buttonstate[bt_swapweapon])
-#else
-		if (pstate->buttonstate[bt_swapweapon])
-#endif
 		 {
 		  if ((pstate->weapon == pstate->bulletweapon) &&
 				(pstate->missileweapon != -1))

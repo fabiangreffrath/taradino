@@ -24,23 +24,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define CHECKPERIOD 20
 
-
-#if ( SHAREWARE == 1 )
-
-#if ( DELUXE == 1)
-#define WADCHECKSUM (54748)
-#elif ( LOWCOST == 1)
-#define WADCHECKSUM (12185)
-#else
-#define WADCHECKSUM (20567)
-#endif
-
-#else
-
-#define WADCHECKSUM (24222)
-
-#endif
-
 //===============
 //   TYPES
 //===============
