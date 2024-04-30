@@ -37,6 +37,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define MAX_CHANNELS 8
 
+#define CHECK_HANDLE(handle) \
+    if ((handle) < 0 || (handle) >= MAX_CHANNELS) \
+        return(FX_Error);
+
 static struct
 {
     sound_t *sfx;
@@ -117,6 +121,8 @@ static void MV_CalcPanTable(void)
 
 static int MV_SetPan(int handle, int vol, int left, int right)
 {
+    CHECK_HANDLE(handle);
+
     Mix_SetPanning(handle, left, right);
 
     return FX_Ok;
@@ -135,6 +141,8 @@ static int MV_Pan3D(int handle, int angle, int distance)
     int right;
     int mid;
     int volume;
+
+    CHECK_HANDLE(handle);
 
     if (distance < 0)
     {
@@ -190,7 +198,9 @@ char *FX_ErrorString(int ErrorNumber)
 
 int FX_StopSound(int handle)
 {
-    if (handle >= 0 && channels[handle].sfx)
+    CHECK_HANDLE(handle);
+
+    if (channels[handle].sfx)
     {
         Mix_HaltChannel(handle);
 
@@ -344,6 +354,8 @@ int FX_GetReverseStereo(void)
 
 int FX_SoundActive(int handle)
 {
+    CHECK_HANDLE(handle);
+
     return Mix_Playing(handle);
 }
 
@@ -377,6 +389,8 @@ int FX_VoiceAvailable(int priority)
 int FX_Play(int handle, int sndnum, int pitchoffset, int angle, int distance,
             int priority)
 {
+    CHECK_HANDLE(handle);
+
     FX_StopSound(handle);
 
     if (sounds[sndnum].chunk)
@@ -395,16 +409,22 @@ int FX_Play(int handle, int sndnum, int pitchoffset, int angle, int distance,
 
 int FX_SetPitch(int handle, int pitchoffset)
 {
+    CHECK_HANDLE(handle);
+
     return FX_Ok;
 }
 
 int FX_Pan3D(int handle, int angle, int distance)
 {
+    CHECK_HANDLE(handle);
+
     return MV_Pan3D(handle, angle, distance);
 }
 
 int FX_SetPan(int handle, int vol, int left, int right)
 {
+    CHECK_HANDLE(handle);
+
     return MV_SetPan(handle, vol, left, right);
 }
 
