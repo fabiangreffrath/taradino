@@ -370,54 +370,6 @@ int SD_Play3D ( int sndnum, int angle, int distance )
 
 //***************************************************************************
 //
-// SD_PlayPositionedSound - Play a positioned sample
-//
-//***************************************************************************
-
-int SD_PlayPositionedSound ( int sndnum, int px, int py, int x, int y )
-{
-   int voice;
-   int angle;
-   int distance;
-   int dx;
-   int dy;
-   int pitch;
-
-   if ( SD_SoundOkay ( sndnum ) == false )
-      return 0;
-
-   dx=(x-px);
-   dy=(py-y);
-
-   distance=FindDistance(dx,dy) >> SD_DISTANCESHIFT;
-
-   if (distance>255)
-      return 0;
-
-   if (distance!=0)
-      {
-      angle = ( atan2_appx(dx,dy) & (FINEANGLES-1) ) >> 6;
-      }
-   else
-      {
-      angle=0;
-      }
-
-   pitch = 0;
-
-   if ( !( sounds[ sndnum ].flags & SD_PITCHSHIFTOFF ) )
-      {
-      pitch = PitchOffset();
-      }
-
-   voice = SD_PlayIt ( sndnum, angle, distance, pitch );
-
-   return voice;
-
-}
-
-//***************************************************************************
-//
 // SD_PlaySoundRTP - Play a positioned sample relative to the player
 //
 //***************************************************************************
@@ -576,52 +528,6 @@ void SD_SetPan ( int handle, int vol, int left, int right )
         //TODO: This code does nothing.
       }
 }
-
-//***************************************************************************
-//
-// SD_PanPositioned Sound - pan a positioned sample
-//
-//***************************************************************************
-
-void SD_PanPositionedSound ( int handle, int px, int py, int x, int y )
-{
-   int angle;
-   int distance;
-   int dx;
-   int dy;
-   int status;
-
-   if (SD_Started==false)
-      return;
-
-   if (!FX_SoundActive(handle))
-      return;
-
-   dx=(x-px);
-   dy=(py-y);
-
-   distance=FindDistance(dx,dy) >> SD_DISTANCESHIFT;
-
-   if (distance>255)
-      return;
-
-   if (distance!=0)
-      {
-      angle = ( atan2_appx(dx,dy) & (FINEANGLES-1) ) >> 6;
-      }
-   else
-      {
-      angle = 0;
-      }
-
-   status=FX_Pan3D( handle, angle, distance );
-
-   if (status != FX_Ok)
-      {
-        //TODO: This code does nothing.
-      }
-}
-
 
 //***************************************************************************
 //

@@ -501,9 +501,7 @@ int SD_Startup ( boolean bombonerror );
 int SD_Play ( int sndnum );
 void SD_Shutdown (void);
 
-int SD_PlayPositionedSound ( int sndnum, int px, int py, int x, int y );
 int SD_PlaySoundRTP        ( int sndnum, int x, int y );
-void SD_PanPositionedSound ( int handle, int px, int py, int x, int y );
 void SD_PanRTP ( int handle, int x, int y );
 void SD_SetPan ( int handle, int vol, int left, int right );
 int SD_Play3D ( int sndnum, int angle, int distance );
