@@ -179,12 +179,12 @@ int GetLumpForTile(int tile);
 #define SGN(x)          ((x>0) ? (1) : ((x==0) ? (0) : (-1)))
 
 /*--------------------------------------------------------------------------*/
-int CompareTags(s1p,s2p) cachetype *s1p,*s2p;
+int CompareTags(cachetype *s1p, cachetype *s2p)
 {
       return SGN(s1p->lump-s2p->lump);
 }
 
-void SwitchCacheEntries(s1p,s2p) cachetype *s1p,*s2p;
+void SwitchCacheEntries(cachetype *s1p, cachetype *s2p)
 {
    cachetype temp;
 
@@ -3289,20 +3289,15 @@ void SetupDoorLinks (void)
    int  j,
         i,
         k;
-   unsigned short *map;
    int  clocklinked;
    int  clockx,clocky;
    int  doornumber;
 	unsigned short touchx,
 		  touchy;
 
-   map = mapplanes[0];
-
    for (j = 0; j < mapheight; j++)
       for (i = 0; i < mapwidth; i++)
       {
-         map++;
-
          if (MAPSPOT (i, j, 2))
          {
             if (IsDoor(i,j)==1)
