@@ -5938,6 +5938,7 @@ void  T_Player (objtype *ob)
       }
 #endif
 
+    SD_AllSoundsRTP();
 }
 
 

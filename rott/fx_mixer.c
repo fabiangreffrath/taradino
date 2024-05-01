@@ -44,6 +44,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static struct
 {
     sound_t *sfx;
+    int x, y;
 } channels[MAX_CHANNELS];
 
 static int FX_Installed = 0;
@@ -209,7 +210,7 @@ int FX_StopSound(int handle)
             channels[handle].sfx->count--;
         }
 
-        channels[handle].sfx = NULL;
+        memset(&channels[handle], 0, sizeof(channels[handle]));
     }
 
     return FX_Ok;
@@ -407,6 +408,16 @@ int FX_Play(int handle, int sndnum, int pitchoffset, int angle, int distance,
     return -1;
 }
 
+int FX_SetXY(int handle, int x, int y)
+{
+    CHECK_HANDLE(handle);
+
+    channels[handle].x = x;
+    channels[handle].y = y;
+
+    return FX_Ok;
+}
+
 int FX_SetPitch(int handle, int pitchoffset)
 {
     return FX_Ok;
@@ -429,6 +440,28 @@ int FX_StopAllSounds(void)
     for (i = 0; i < MAX_CHANNELS; i++)
     {
         FX_StopSound(i);
+    }
+
+    return FX_Ok;
+}
+
+int FX_AllSoundsRTP(void)
+{
+    int i;
+
+    for (i = 0; i < MAX_CHANNELS; i++)
+    {
+        if (FX_SoundActive(i))
+        {
+            if (channels[i].x || channels[i].y)
+            {
+                SD_PanRTP(i, channels[i].x, channels[i].y);
+            }
+        }
+        else
+        {
+            FX_StopSound(i);
+        }
     }
 
     return FX_Ok;

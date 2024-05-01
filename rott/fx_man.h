@@ -80,6 +80,9 @@ int FX_SoundActive( int handle );
 int FX_StopSound( int handle );
 int FX_StopAllSounds( void );
 
+int FX_SetXY(int handle, int x, int y);
+int FX_AllSoundsRTP(void);
+
 #if 0
 int FX_StartDemandFeedPlayback( void ( *function )( char **ptr, unsigned long *length ),
        int rate, int pitchoffset, int vol, int left, int right,
