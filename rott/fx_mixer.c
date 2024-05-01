@@ -409,22 +409,16 @@ int FX_Play(int handle, int sndnum, int pitchoffset, int angle, int distance,
 
 int FX_SetPitch(int handle, int pitchoffset)
 {
-    CHECK_HANDLE(handle);
-
     return FX_Ok;
 }
 
 int FX_Pan3D(int handle, int angle, int distance)
 {
-    CHECK_HANDLE(handle);
-
     return MV_Pan3D(handle, angle, distance);
 }
 
 int FX_SetPan(int handle, int vol, int left, int right)
 {
-    CHECK_HANDLE(handle);
-
     return MV_SetPan(handle, vol, left, right);
 }
 
