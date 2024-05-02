@@ -453,7 +453,7 @@ int FX_AllSoundsRTP(void)
     {
         if (FX_SoundActive(i))
         {
-            if (channels[i].x || channels[i].y)
+            if (channels[i].x | channels[i].y)
             {
                 SD_PanRTP(i, channels[i].x, channels[i].y);
             }
