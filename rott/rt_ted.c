@@ -179,13 +179,15 @@ int GetLumpForTile(int tile);
 #define SGN(x)          ((x>0) ? (1) : ((x==0) ? (0) : (-1)))
 
 /*--------------------------------------------------------------------------*/
-int CompareTags(cachetype *s1p, cachetype *s2p)
+int CompareTags(void *v1p, void *v2p)
 {
+      cachetype *s1p = (cachetype *) v1p, *s2p = (cachetype *) v2p;
       return SGN(s1p->lump-s2p->lump);
 }
 
-void SwitchCacheEntries(cachetype *s1p, cachetype *s2p)
+void SwitchCacheEntries(void *v1p, void *v2p)
 {
+   cachetype *s1p = (cachetype *) v1p, *s2p = (cachetype *) v2p;
    cachetype temp;
 
 	temp=*s1p;
