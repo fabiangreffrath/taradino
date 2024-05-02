@@ -94,7 +94,7 @@ void UL_DisplayMemoryError ( int memneeded );
 
 int   SideOfLine(int x1, int y1, int x2, int y2, int x3, int y3);
 
-void hsort(char * base, int nel, int width, int (*compare)(), void (*switcher)());
+void hsort(char * base, int nel, int width, int (*compare)(void *, void*), void (*switcher)(void *, void*));
 
 char * UL_GetPath (char * path, char *dir);
 boolean UL_ChangeDirectory (char *path);
