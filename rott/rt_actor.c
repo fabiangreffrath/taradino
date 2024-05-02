@@ -12541,7 +12541,7 @@ boolean CheckLine (void *from, void *to, int condition)
 	int value;
 	int dx,dy,dz;
 	int xydist;
-	int otx,oty,count=0;
+	int otx,oty;
 
 
 
@@ -12633,7 +12633,7 @@ boolean CheckLine (void *from, void *to, int condition)
 
 
    do
-		{count ++;
+		{
        /*
        if (count > 1000)
          Error("possible infinite loop in CheckLine");

@@ -299,7 +299,7 @@ int GetIndexForAction(void (*action)(intptr_t))
 
 
 void SaveTouchPlates(byte ** buffer,int *size)
-{int i,k;
+{int i;
  byte * tptr;
  touchplatetype *temp;
  saved_touch_type dummy;
@@ -318,7 +318,7 @@ void SaveTouchPlates(byte ** buffer,int *size)
 
  for(i=0;i<lasttouch;i++)
 	 {
-	 for(k=0,temp=touchplate[i];temp;k++,temp = temp->nextaction)
+	 for(temp=touchplate[i];temp;temp = temp->nextaction)
 		 {
 		 dummy.tictime = temp->tictime;
 		 dummy.ticcount = temp->ticcount;
