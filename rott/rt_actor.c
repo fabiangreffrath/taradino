@@ -3618,7 +3618,7 @@ void T_BossExplosions(objtype*ob)
 		 ob->dirchoosetime --;
 	  else
 		 {int randtime,randangle,randdist,sound;
-		  statetype *nstate;
+		  statetype *nstate = NULL;
 
 		  ob->temp1 --;
 		  randtime = GameRandomNumber("Boss Explosion Time",0);
