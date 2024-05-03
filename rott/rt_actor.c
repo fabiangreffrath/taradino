@@ -5014,9 +5014,6 @@ actors:
 
       if (!(ob->flags & FL_ISFIRE))
             {
-
-            int random;
-
             if (tcl != b_darkmonkobj)
                {
                MissileHit(ob,temp);
@@ -5028,9 +5025,8 @@ actors:
                else
                   return false;
                }
-            random = GameRandomNumber("empower darkmonk",0);
 #if (SHAREWARE == 0)
-
+            int random = GameRandomNumber("empower darkmonk",0);
             if (ocl == p_kesobj)
                {
                NewState(ob,&s_megaremove);
@@ -11456,17 +11452,16 @@ void T_AutoPath (objtype *ob)
 
   if (CheckLine(ob,PLAYER[0],SIGHT) && (Near(ob,PLAYER[0],4) || MISCVARS->madenoise))
 
-	 {int dx,dy,destdir,ocl;
+	 {int dx,dy,destdir;
 	  statetype *align,*wait;
 
-	  ocl = ob->obclass;
 	  dx = player->x - ob->x;
 	  dy = ob->y - player->y;
 	  destdir = (angletodir[atan2_appx(dx,dy)] << 1);
 	  ob->temp1 = destdir;
 	  ob->targettilex = ob->dir; //save old dir
 #if (SHAREWARE == 0)
-     if (ocl == wallopobj)
+     if (ob->obclass == wallopobj)
 		  {//if (ob->temp3)
 			 // Error("may be writing over temp3");
 			ob->temp3 = (GameRandomNumber("T_WallPath",0)%4) + 1;
