@@ -382,8 +382,8 @@ void PreCachePlayerSound(void)
 */
 void PreCacheActor( int actor, int which )
 {
-	int start;
-	int end;
+	int start = -1;
+	int end = -1;
 
 	switch (actor)
 		{
