@@ -508,6 +508,7 @@ int SD_Play3D ( int sndnum, int angle, int distance );
 int SD_PlayPitchedSound ( int sndnum, int volume, int pitch );
 void SD_SetSoundPitch ( int sndnum, int pitch );
 boolean SD_SoundOkay ( int sndnum );
+void SD_AllSoundsRTP(void);
 
 //***************************************************************************
 //

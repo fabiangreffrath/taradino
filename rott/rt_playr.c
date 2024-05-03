@@ -5938,6 +5938,8 @@ void  T_Player (objtype *ob)
       }
 #endif
 
+    // [FG] update all sound pannings relative to the player
+    SD_AllSoundsRTP();
 }
 
 

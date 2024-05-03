@@ -413,6 +413,8 @@ int SD_PlaySoundRTP ( int sndnum, int x, int y )
 
    voice = SD_PlayIt ( sndnum, angle, distance, pitch );
 
+   FX_SetXY(voice, x, y);
+
    return voice;
 }
 
@@ -499,10 +501,17 @@ void SD_PanRTP ( int handle, int x, int y )
 
    status = FX_Pan3D ( handle, angle, distance );
 
+   FX_SetXY(handle, x, y);
+
    if (status != FX_Ok)
       {
         //TODO: This code does nothing.
       }
+}
+
+void SD_AllSoundsRTP(void)
+{
+    FX_AllSoundsRTP();
 }
 
 //***************************************************************************
