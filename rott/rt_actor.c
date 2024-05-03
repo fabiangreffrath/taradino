@@ -7404,9 +7404,6 @@ void T_Special(objtype*ob)
 void SpawnBoulder(int tilex,int tiley,int dir)
 {
   #if (SHAREWARE == 1)
-    tilex = tilex;
-    tiley = tiley;
-    dir = dir;
     Error("Boulders aren't allowed in shareware!");
   #endif
 #if (SHAREWARE == 0)
@@ -7436,13 +7433,7 @@ void SpawnMultiSpriteActor(classtype actorclass, int tilex,int tiley,int dir)
 
 
 #if (SHAREWARE==1)
-
-      actorclass = actorclass;
-      tilex = tilex;
-      tiley = tiley;
-      dir  = dir;
       Error("\nSPRAY not allowed in shareware !");
-
 #else
 
    {
@@ -7481,8 +7472,6 @@ void SpawnSnake(int tilex,int tiley)
 {
 
 #if (SHAREWARE == 1)
-   tilex = tilex;
-   tiley = tiley;
    Error("snake not allowed in shareware!");
 #else
 
@@ -7505,11 +7494,6 @@ void SpawnSnake(int tilex,int tiley)
 void SpawnGunThingy(classtype which, int tilex, int tiley, int dir)
    {
 #if (SHAREWARE == 1)
-   which = which;
-   tilex = tilex;
-   tiley = tiley;
-   dir  = dir;
-
    Error("no emplacements allowed in shareware!");
 #else
    SpawnNewObj(tilex,tiley,&s_gunstand,which);
@@ -7532,8 +7516,6 @@ void SpawnGunThingy(classtype which, int tilex, int tiley, int dir)
 void SpawnFourWayGun(int tilex, int tiley)
 {
 #if (SHAREWARE == 1)
-   tilex = tilex;
-   tiley = tiley;
    Error("no 4-way emplacements allowed in shareware!");
 #else
 
