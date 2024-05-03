@@ -3456,7 +3456,6 @@ void WarpSprite (
    int dy;
    int cx;
    int cy;
-   int starttime;
 
    LastScan = 0;
 
@@ -3464,7 +3463,6 @@ void WarpSprite (
    dy=((endy-y)<<16)/time;
    cx=x<<16;
    cy=y<<16;
-   starttime=time;
 
    CalcTics();
 
@@ -3585,7 +3583,6 @@ char NextGameString2[] = "shall return";
 void DoEndCinematic ( void )
 {
    int trilogo;
-   int group;
    int world;
    int width;
    int height;
@@ -3609,7 +3606,6 @@ void DoEndCinematic ( void )
 
    trilogo=W_GetNumForName("trilogo");
    world=W_GetNumForName("ap_wrld");
-   group=W_GetNumForName("mmbk");
    VL_DrawPostPic (trilogo);
    PrepareBackground ( bkgnd );
 

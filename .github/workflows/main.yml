@@ -82,7 +82,7 @@ jobs:
           CFLAGS: -Wall
         run: |
           cmake -E make_directory cmake-build
-          cmake -S . -B cmake-build --fresh -DTARADINO_SHAREWARE=ON -DTARADINO_WERROR=OFF -DTARADINO_SUFFIX=shareware
+          cmake -S . -B cmake-build --fresh -DTARADINO_SHAREWARE=ON -DTARADINO_WERROR=ON -DTARADINO_SUFFIX=shareware
           cmake --build cmake-build --config Release
 
       - name: Build registered executable

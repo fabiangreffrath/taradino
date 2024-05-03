@@ -3618,7 +3618,7 @@ void T_BossExplosions(objtype*ob)
 		 ob->dirchoosetime --;
 	  else
 		 {int randtime,randangle,randdist,sound;
-		  statetype *nstate;
+		  statetype *nstate = NULL;
 
 		  ob->temp1 --;
 		  randtime = GameRandomNumber("Boss Explosion Time",0);
@@ -5014,9 +5014,6 @@ actors:
 
       if (!(ob->flags & FL_ISFIRE))
             {
-
-            int random;
-
             if (tcl != b_darkmonkobj)
                {
                MissileHit(ob,temp);
@@ -5028,9 +5025,8 @@ actors:
                else
                   return false;
                }
-            random = GameRandomNumber("empower darkmonk",0);
 #if (SHAREWARE == 0)
-
+            int random = GameRandomNumber("empower darkmonk",0);
             if (ocl == p_kesobj)
                {
                NewState(ob,&s_megaremove);
@@ -7408,9 +7404,6 @@ void T_Special(objtype*ob)
 void SpawnBoulder(int tilex,int tiley,int dir)
 {
   #if (SHAREWARE == 1)
-    tilex = tilex;
-    tiley = tiley;
-    dir = dir;
     Error("Boulders aren't allowed in shareware!");
   #endif
 #if (SHAREWARE == 0)
@@ -7440,13 +7433,7 @@ void SpawnMultiSpriteActor(classtype actorclass, int tilex,int tiley,int dir)
 
 
 #if (SHAREWARE==1)
-
-      actorclass = actorclass;
-      tilex = tilex;
-      tiley = tiley;
-      dir  = dir;
       Error("\nSPRAY not allowed in shareware !");
-
 #else
 
    {
@@ -7485,8 +7472,6 @@ void SpawnSnake(int tilex,int tiley)
 {
 
 #if (SHAREWARE == 1)
-   tilex = tilex;
-   tiley = tiley;
    Error("snake not allowed in shareware!");
 #else
 
@@ -7509,11 +7494,6 @@ void SpawnSnake(int tilex,int tiley)
 void SpawnGunThingy(classtype which, int tilex, int tiley, int dir)
    {
 #if (SHAREWARE == 1)
-   which = which;
-   tilex = tilex;
-   tiley = tiley;
-   dir  = dir;
-
    Error("no emplacements allowed in shareware!");
 #else
    SpawnNewObj(tilex,tiley,&s_gunstand,which);
@@ -7536,8 +7516,6 @@ void SpawnGunThingy(classtype which, int tilex, int tiley, int dir)
 void SpawnFourWayGun(int tilex, int tiley)
 {
 #if (SHAREWARE == 1)
-   tilex = tilex;
-   tiley = tiley;
    Error("no 4-way emplacements allowed in shareware!");
 #else
 
@@ -11456,17 +11434,16 @@ void T_AutoPath (objtype *ob)
 
   if (CheckLine(ob,PLAYER[0],SIGHT) && (Near(ob,PLAYER[0],4) || MISCVARS->madenoise))
 
-	 {int dx,dy,destdir,ocl;
+	 {int dx,dy,destdir;
 	  statetype *align,*wait;
 
-	  ocl = ob->obclass;
 	  dx = player->x - ob->x;
 	  dy = ob->y - player->y;
 	  destdir = (angletodir[atan2_appx(dx,dy)] << 1);
 	  ob->temp1 = destdir;
 	  ob->targettilex = ob->dir; //save old dir
 #if (SHAREWARE == 0)
-     if (ocl == wallopobj)
+     if (ob->obclass == wallopobj)
 		  {//if (ob->temp3)
 			 // Error("may be writing over temp3");
 			ob->temp3 = (GameRandomNumber("T_WallPath",0)%4) + 1;
