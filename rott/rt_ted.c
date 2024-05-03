@@ -5196,10 +5196,10 @@ void InitializePlayerstates(void)
 	 {
     pstate=&PLAYERSTATE[i];
     if (
-         (pstate->missileweapon == wp_godhand)
+         pstate->missileweapon == wp_godhand
 #if (SHAREWARE == 0)
          ||
-         (pstate->missileweapon == wp_dog)
+         pstate->missileweapon == wp_dog
 #endif
        )
 		 {
