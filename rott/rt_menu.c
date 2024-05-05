@@ -736,7 +736,7 @@ CP_MenuNames ExtOptionsNames[] =
    {
    "MOUSELOOK",
    "INVERSE MOUSE",
-   "CROSS HAIR",
+   "CROSSHAIR",
    "FULLSCREEN"
    };
 CP_iteminfo ExtOptionsItems = { 20, MENU_Y, 4, 0, 43, ExtOptionsNames, mn_largefont };
