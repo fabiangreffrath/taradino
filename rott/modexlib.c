@@ -214,7 +214,7 @@ void TurnOffTextCursor ( void )
 
 static Uint64 next_time = 0;
 
-static Uint64 time_start(void)
+static void time_start(void)
 {
 	next_time = SDL_GetTicks() + VBLCOUNTER;
 }
