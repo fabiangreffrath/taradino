@@ -148,6 +148,7 @@ static int music_context = 0;
 static int music_loopflag = MUSIC_PlayOnce;
 static unsigned char *music_songdata = NULL;
 static Mix_Music *music_musicchunk = NULL;
+static size_t music_songdatasize = 0;
 
 int MUSIC_Init(int SoundCard, int Address)
 {
@@ -239,7 +240,7 @@ void MUSIC_Continue(void)
     if (Mix_PausedMusic())
         Mix_ResumeMusic();
     else if (music_songdata)
-        MUSIC_PlaySong(music_songdata, MUSIC_PlayOnce);
+        MUSIC_PlaySong(music_songdata, music_songdatasize, MUSIC_PlayOnce);
 } // MUSIC_Continue
 
 
@@ -265,65 +266,37 @@ int MUSIC_StopSong(void)
 
     music_songdata = NULL;
     music_musicchunk = NULL;
+	music_songdatasize = 0;
     return(MUSIC_Ok);
 } // MUSIC_StopSong
 
-
-int MUSIC_PlaySong(unsigned char *song, int loopflag)
+int MUSIC_PlaySong(unsigned char *song, int size, int loopflag)
 {
-    //SDL_RWops *rw;
+	MUSIC_StopSong();
 
-    MUSIC_StopSong();
+	if (size < 1) {
+		return MUSIC_Error;
+	}
 
-    music_songdata = song;
+	// create rw
+	SDL_RWops *rw = SDL_RWFromConstMem(song, size);
+	if (rw == NULL) {
+		return MUSIC_Error;
+	}
 
-    // !!! FIXME: This could be a problem...SDL/SDL_mixer wants a RWops, which
-    // !!! FIXME:  is an i/o abstraction. Since we already have the MIDI data
-    // !!! FIXME:  in memory, we fake it with a memory-based RWops. None of
-    // !!! FIXME:  this is a problem, except the RWops wants to know how big
-    // !!! FIXME:  its memory block is (so it can do things like seek on an
-    // !!! FIXME:  offset from the end of the block), and since we don't have
-    // !!! FIXME:  this information, we have to give it SOMETHING.
-
-    /* !!! ARGH! There's no LoadMUS_RW  ?!
-    rw = SDL_RWFromMem((void *) song, (10 * 1024) * 1024);  // yikes.
-    music_musicchunk = Mix_LoadMUS_RW(rw);
-    Mix_PlayMusic(music_musicchunk, (loopflag == MUSIC_PlayOnce) ? 0 : -1);
-    */
-
-musdebug("Need to use PlaySongROTT.  :(");
-
-    return(MUSIC_Ok);
-} // MUSIC_PlaySong
-
-// ROTT Special - SBF
-int MUSIC_PlaySongROTT(unsigned char *song, int size, int loopflag)
-{
-    char *filename;
-    int handle;
-    
-    MUSIC_StopSong();
-
-    // save the file somewhere, so SDL_mixer can load it
-    filename = M_StringJoin(ApogeePath, PATH_SEP_STR, "tmpsong.mid", NULL);
-    handle = SafeOpenWrite(filename);
-    
-    SafeWrite(handle, song, size);
-    close(handle);
-    
-    music_songdata = song;
-
-    // finally, we can load it with SDL_mixer
-    music_musicchunk = Mix_LoadMUS(filename);
-    free(filename);
+    // load with SDL_mixer
+    music_musicchunk = Mix_LoadMUS_RW(rw, SDL_TRUE);
     if (music_musicchunk == NULL) {
         return MUSIC_Error;
     }
     
-    Mix_PlayMusic(music_musicchunk, (loopflag == MUSIC_PlayOnce) ? 0 : -1);
+    music_songdata = song;
+	music_songdatasize = size;
+
+	Mix_PlayMusic(music_musicchunk, (loopflag == MUSIC_PlayOnce) ? 0 : -1);
 
     return(MUSIC_Ok);
-} // MUSIC_PlaySongROTT
+} // MUSIC_PlaySong
 
 void MUSIC_SetContext(int context)
 {

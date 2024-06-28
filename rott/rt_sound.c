@@ -922,9 +922,9 @@ void MU_PlaySong ( int num )
    currentsong=W_CacheLumpNum(lump,PU_STATIC, CvtNull, 1);
 
    if (rottsongs[num].loopflag == loop_yes)
-      MUSIC_PlaySongROTT(currentsong,size,MUSIC_LoopSong);
+      MUSIC_PlaySong(currentsong,size,MUSIC_LoopSong);
    else
-      MUSIC_PlaySongROTT(currentsong,size,MUSIC_PlayOnce);
+      MUSIC_PlaySong(currentsong,size,MUSIC_PlayOnce);
 
    MU_SetVolume (MUvolume);
 }
