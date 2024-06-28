@@ -272,7 +272,11 @@ int MUSIC_StopSong(void)
 
 int MUSIC_PlaySong(unsigned char *song, int size, int loopflag)
 {
-    MUSIC_StopSong();
+	if (size < 1) {
+		return MUSIC_Error;
+	}
+
+	MUSIC_StopSong();
 
 	// create rw
 	SDL_RWops *rw = SDL_RWFromConstMem(song, size);
