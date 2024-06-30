@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // RT_FLOOR.C
 
 #include "rt_def.h"
-#include "watcom.h"
 #include "rt_floor.h"
 #include "rt_fc_a.h"
 #include "_rt_floo.h"
