@@ -24,11 +24,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdarg.h>
 
 #include "rt_def.h"
-#include "watcom.h"
 #include "rt_sound.h"
 #include "gmove.h"
 #include "states.h"
-#include "rt_sqrt.h"
 #include "rt_actor.h"
 #include "rt_main.h"
 #include "rt_playr.h"
@@ -1266,7 +1264,7 @@ void BatAttack(objtype*ob)
 		momy = -FixedMul(0x3000l,sintable[angle]);
 		if (levelheight > 2)
 		 {op = FixedMul(GRAVITY,(maxheight-100)<<16) << 1;
-		  temp->momentumz = -FixedSqrtHP(op);
+		  temp->momentumz = -FixedSqrt(op);
 		 }
 		temp->flags |= FL_NOFRICTION;
 		SD_PlaySoundRTP(SD_EXCALIHITSND,ob->x,ob->y);
@@ -5197,7 +5195,7 @@ void CheckFlying(objtype*ob,playertype *pstate)
       if (dist>0)
          {
          op = FixedMul(GRAVITY,(dist<<16)) << 1;
-         ob->momentumz = -FixedSqrtHP(op);
+         ob->momentumz = -FixedSqrt(op);
          SD_PlaySoundRTP(SD_FLYINGSND,ob->x,ob->y);
          }
       }

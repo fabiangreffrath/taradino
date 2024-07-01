@@ -28,7 +28,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_util.h"
 #include "modexlib.h"
 #include "profile.h"
-#include "watcom.h"
 #include "rt_str.h"
 #include "rt_draw.h"
 #include "rt_in.h"

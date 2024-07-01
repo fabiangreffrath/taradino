@@ -52,7 +52,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "gmove.h"
 #include "rt_com.h"
 #include "rt_net.h"
-#include "watcom.h"
 #include "rt_floor.h"
 #include "rt_msg.h"
 #include "rt_scale.h"
