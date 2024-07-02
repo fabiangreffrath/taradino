@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "cin_def.h"
 #include "cin_main.h"
 #include "f_scale.h"
-#include "watcom.h"
 #include "lumpy.h"
 #include "w_wad.h"
 #include "z_zone.h"

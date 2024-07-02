@@ -17,11 +17,18 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#ifndef _watcom_h_public
-#define _watcom_h_public
+#ifndef _rt_fixed_h_public
+#define _rt_fixed_h_public
+
+#include <stdint.h>
+
+typedef uint32_t ufixed;
+typedef int32_t fixed;
+
 fixed FixedMul(fixed a, fixed b);
 fixed FixedDiv2(fixed a, fixed b);
 fixed FixedScale(fixed orig, fixed factor, fixed divisor);
 fixed FixedMulShift(fixed a, fixed b, fixed shift);
+fixed FixedSqrt(fixed n);
 
 #endif

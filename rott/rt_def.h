@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdlib.h>
 #include <string.h>
 #include "develop.h"
+#include "rt_fixed.h"
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -262,7 +263,6 @@ long filelength(int handle);
 
 
 typedef unsigned char           byte;
-typedef int fixed;
 
 
 //////////////////////////////////////////////////////////////////////////
