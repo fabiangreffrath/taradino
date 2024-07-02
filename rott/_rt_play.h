@@ -20,21 +20,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_playr_private
 #define _rt_playr_private
 
-//double dTopYZANGLELIMIT; in winrott.c
-#define TopYZANGLELIMIT  (44*FINEANGLES/360)//bna added
-#define YZANGLELIMIT  (80*FINEANGLES/360)//bna--(30*FINEANGLES/360)
-/*
-//bna++ had to limit this or the sky would fuck up 
-#define TopYZANGLELIMIT  (6*FINEANGLES/360)//bna added
-#define YZANGLELIMIT  (40*FINEANGLES/360)//bna--(30*FINEANGLES/360)
-//partly fixed you can now se up but not down very much see rt_playr.c TopYZANGLELIMIT
-*/
+#include "rt_fixed.h"
 
-
-#define YZTILTSPEED   20*4//*2 = bna added
-#define SNAPBACKSPEED 10*15//*2 = bna added
-#define YZHORIZONSPEED 4*5//*2 = bna added
+#define YZANGLELIMIT  (30*FINEANGLES/360)
+#define YZTILTSPEED   20
+#define SNAPBACKSPEED 10
+#define YZHORIZONSPEED 4
 #define HORIZONYZOFFSET (FINEANGLES/4)
+
 #define SetPlayerHorizon(ps,hlevel)    \
     {                                  \
     if ((hlevel)>YZANGLELIMIT)           \
