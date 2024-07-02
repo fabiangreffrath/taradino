@@ -10,6 +10,7 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 option(TARADINO_SHAREWARE "Build shareware version" OFF)
 option(TARADINO_WERROR "Enable -Werror on build" OFF)
+option(TARADINO_INSTALL "Enable install target" OFF)
 set(TARADINO_DATADIR "" CACHE STRING "Game data file directory")
 set(TARADINO_SUFFIX "" CACHE STRING "Executable file name suffix")
 
@@ -20,31 +21,31 @@ file(GLOB TARADINO_SOURCES
 	${PROJECT_SOURCE_DIR}/rott/*.c
 )
 
-add_executable(taradino ${TARADINO_SOURCES})
-target_link_libraries(taradino PRIVATE SDL2::Main SDL2::Mixer)
-target_compile_definitions(taradino PRIVATE PACKAGE_STRING="${CMAKE_PROJECT_NAME} ${CMAKE_PROJECT_VERSION}")
-target_compile_definitions(taradino PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
+string(LENGTH "${TARADINO_SUFFIX}" SUFFIX_LEN)
+if(SUFFIX_LEN GREATER 0)
+	string(CONCAT TARADINO_EXEC "${CMAKE_PROJECT_NAME}" "-" "${TARADINO_SUFFIX}")
+else()
+	set(TARADINO_EXEC ${CMAKE_PROJECT_NAME})
+endif()
+
+add_executable(${TARADINO_EXEC} ${TARADINO_SOURCES})
+target_link_libraries(${TARADINO_EXEC} PRIVATE SDL2::Main SDL2::Mixer)
+target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_STRING="${TARADINO_EXEC} ${CMAKE_PROJECT_VERSION}")
+target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_TARNAME="${TARADINO_EXEC}")
 
 if(${TARADINO_SHAREWARE})
-	target_compile_definitions(taradino PRIVATE SHAREWARE=1)
+	target_compile_definitions(${TARADINO_EXEC} PRIVATE SHAREWARE=1)
 endif()
 
 if(${TARADINO_WERROR} AND NOT MSVC)
-	target_compile_options(taradino PRIVATE -Werror)
+	target_compile_options(${TARADINO_EXEC} PRIVATE -Werror)
 endif()
 
 if(${TARADINO_DATADIR})
-	target_compile_definitions(taradino PRIVATE DATADIR="${TARADINO_DATADIR}")
+	target_compile_definitions(${TARADINO_EXEC} PRIVATE DATADIR="${TARADINO_DATADIR}")
 endif()
 
-string(LENGTH "${TARADINO_SUFFIX}" SUFFIX_LEN)
-if(SUFFIX_LEN GREATER 0)
-	string(CONCAT NEWNAME "${CMAKE_PROJECT_NAME}" "-" "${TARADINO_SUFFIX}")
-	if(WIN32)
-		string(APPEND NEWNAME ".exe")
-	endif()
-	add_custom_command(TARGET taradino POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E rename
-		"$<TARGET_FILE_DIR:taradino>/$<TARGET_FILE_NAME:taradino>"
-		"$<TARGET_FILE_DIR:taradino>/${NEWNAME}")
+if(${TARADINO_INSTALL})
+	include(GNUInstallDirs)
+	install(TARGETS ${TARADINO_EXEC} DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
