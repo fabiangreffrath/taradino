@@ -298,8 +298,6 @@ int main (int argc, char *argv[])
       printf("\n< Press any key to continue >\n");
       getch();
       }
-   I_StartupTimer();
-   I_StartupKeyboard();
    locplayerstate = &PLAYERSTATE[consoleplayer];
 
    if (standalone==true)
@@ -1497,10 +1495,8 @@ void ShutDown ( void )
 //      }
 
    ShutdownClientControls();
-   I_ShutdownKeyboard();
    ShutdownGameCommands();
    MU_Shutdown();
-   I_ShutdownTimer();
    SD_Shutdown();
    IN_Shutdown ();
    ShutdownSoftError ();
@@ -1584,7 +1580,6 @@ void InitCharacter
 void UpdateGameObjects ( void )
 {
 	int j;
-	volatile int atime;
 	objtype * ob,*temp;
    battle_status BattleStatus;
 
@@ -1592,8 +1587,6 @@ void UpdateGameObjects ( void )
       {
       return;
       }
-
-	atime=GetFastTics();
 
    UpdateClientControls ();
 
@@ -1666,7 +1659,6 @@ void UpdateGameObjects ( void )
       if (GamePaused==true)
          break;
 		}
-   actortime=GetFastTics()-atime;
 
    UpdateClientControls ();
 
@@ -1732,7 +1724,6 @@ void PlayLoop
    )
 
    {
-   volatile int atime;
 
    boolean canquit = true;
    int     quittime = 0;
@@ -1758,10 +1749,7 @@ fromloadedgame:
       DoLoadGameSequence();
 		}
 
-   drawtime  = 0;
-   actortime = 0;
 	tics      = 0;
-	SetFastTics(0);
 
    if ( fizzlein == false )
       {
@@ -1795,8 +1783,6 @@ fromloadedgame:
          {
          PauseLoop();
 
-         atime = GetFastTics();
-
          if ( RefreshPause )
             {
             ThreeDRefresh();
@@ -1811,14 +1797,10 @@ fromloadedgame:
          if (controlupdatestarted == 1)
             UpdateGameObjects();
 
-         atime = GetFastTics();
-
          ThreeDRefresh();
          }
 
       SyncToServer();
-
-		drawtime = GetFastTics() - atime;
 
       // Don't allow player to quit if entering message
       canquit = !MSG.messageon;
