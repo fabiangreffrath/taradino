@@ -1,5 +1,5 @@
-rott.xpm: rott.png
+taradino.xpm: taradino.png
 	convert $^ $@
 
-rott.png: rott.svg
+taradino.png: taradino.svg
 	inkscape --export-png=$@ $^

@@ -1,16 +1,17 @@
-.TH ROTT 6 "2008-04-23" "1.0" "Rise of the Triad"
+.TH TARADINO 6 "2024-07-03" "1.1.3" "Taradino"
 
 .SH NAME
-rott \- Rise of the Triad
+@TARADINO_EXEC@ \- SDL2 port of Rise of the Triad
 
 .SH SYNOPSIS
-.B rott
+.B @TARADINO_EXEC@
 .RI [ options ]
 
 .SH DESCRIPTION
-.B ROTT
+.B TARADINO
 is a port of Apogee's 3D action title Rise of the Triad, originally released in 1994.
-This port duplicates the functionality of the original game on modern operating systems, including Linux, Win32, and Mac OS X.
+This port duplicates the functionality of the original game on modern operating systems, including Linux, Windows, and Mac OS X.
+Portability fixes include support for 64-bit and big-endian systems.
 
 .SH OPTIONS
 .TP
@@ -64,10 +65,10 @@ Turn off sound reverb.
 Exit program when demo is terminated.
 .TP
 .BR warp\  \fIlevel\fP
-Warp to specific ROTT level (next parameter is level to start on).
+Warp to specific level (next parameter is level to start on).
 .TP
 .BR timelimit\  \fItime\fP
-Play ROTT in time limit mode (next parameter is time in seconds).
+Play in time limit mode (next parameter is time in seconds).
 .TP
 .BR maxtimelimit\  \fItime\fP
 Maximum time to count down from (next parameter is time in seconds).
@@ -76,9 +77,13 @@ Maximum time to count down from (next parameter is time in seconds).
 ?
 
 .SH AUTHORS
-ROTT was created and published as shareware by Apogee Software, Ltd. and was published commercially by FormGen, Inc.
+Rise of the Triad was created and published as shareware by Apogee Software, Ltd. and was published commercially by FormGen, Inc.
 .PP
-The primary contributors to the icculus.org port are: Steven Fuller, Ryan C. Gordon, John Hall and Dan Olson.
+The primary contributors to the original icculus.org port are: Steven Fuller, Ryan C. Gordon, John Hall and Dan Olson.
+.PP
+The authors of the Taradino port are: Fabian Greffrath and erysdren.
 .PP
 This manual page was written by Fabian Greffrath <fabian@debian-unofficial.org>
 for the Debian project (but may be used by others).
+.PP
+This manual page was revised by erysdren <contact@erysdren.me>.
