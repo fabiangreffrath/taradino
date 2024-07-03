@@ -86,6 +86,12 @@ char *datadir = NULL;
 static char *datadirs[MAX_DATADIRS] = {0};
 static int num_datadirs = 0;
 
+const char **GetDataDirs(int *num)
+{
+	if (num) *num = num_datadirs;
+	return (const char **)datadirs;
+}
+
 static void AddDataDir(char *dir)
 {
     if (num_datadirs < MAX_DATADIRS)

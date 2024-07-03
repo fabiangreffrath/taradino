@@ -24,5 +24,6 @@ extern char *datadir;
 
 char *GetPrefDir (void);
 char *FindFileByName(const char *name);
+const char **GetDataDirs(int *num);
 
 #endif
