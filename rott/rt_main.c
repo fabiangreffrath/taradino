@@ -176,7 +176,7 @@ int main (int argc, char *argv[])
 
    if (!BATTMAPS)
    {
-        Error("Standard battle levels not found: %s!", STANDARDBATTLELEVELS);
+        FileNotFoundError(STANDARDBATTLELEVELS);
    }
    else
    {
@@ -189,7 +189,7 @@ int main (int argc, char *argv[])
 
         if (!ROTTMAPS)
         {
-            Error("Standard game levels not found: %s!", filename);
+            FileNotFoundError(filename);
         }
 
         free(filename);
@@ -815,17 +815,15 @@ NoRTC:;
 
 #endif
 
-   // Normal ROTT wads
+	// Normal ROTT wads
+	filename = M_StringJoin(datadir, PATH_SEP_STR, STANDARDGAMEWAD, NULL);
+	if ((newargs[argnum++] = M_FileCaseExists(filename)) == NULL)
+	{
+		free(filename);
+		FileNotFoundError(STANDARDGAMEWAD);
+	}
 
-#if (SHAREWARE)
-   filename = M_StringJoin(datadir, PATH_SEP_STR, "HUNTBGIN.WAD", NULL);
-#else
-   filename = M_StringJoin(datadir, PATH_SEP_STR, "DARKWAR.WAD", NULL);
-#endif
-   newargs [argnum++] = M_FileCaseExists(filename);
-   free(filename);
-
-//   newargs [argnum++] = "credits.wad";
+	free(filename);
 
    // Check for Remote Ridicule WAD
 
