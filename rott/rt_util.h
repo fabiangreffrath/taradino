@@ -44,6 +44,7 @@ void  GetPalette(char * pal);
 void  ClearGraphicsScreen( void );
 void  ClearBuffer( char * buf, int size );
 void  Error (char *error, ...) __attribute__((noreturn,format(printf,1,2)));
+void  FileNotFoundError(const char *name) __attribute__((noreturn));
 void  StartupSoftError ( void );
 void  ShutdownSoftError ( void );
 int   CheckParm (char *check);

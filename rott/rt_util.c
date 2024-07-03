@@ -47,6 +47,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_view.h"
 #include "modexlib.h"
 #include "rt_cfg.h"
+#include "rt_datadir.h"
 
 int    egacolor[16];
 byte   *  origpal;
@@ -296,6 +297,48 @@ void ClearBuffer( char * buf, int size )
 /*
 =================
 =
+= FileNotFoundError
+=
+= For when a required file is not found
+=
+=================
+*/
+
+void FileNotFoundError(const char *name)
+{
+	static char buffer[1024];
+	int len;
+	char *ptr;
+	const char **datadirs;
+	int num_datadirs;
+
+	datadirs = GetDataDirs(&num_datadirs);
+
+	SDL_snprintf(buffer, sizeof(buffer), "Required file not found: %s\n\nSearch paths:", name);
+	for (int i = 0; i < num_datadirs; i++)
+	{
+		// looks kinda weird to show in the list
+		if (datadirs[i][0] == '.')
+			continue;
+
+		len = SDL_strlen(buffer);
+		ptr = buffer + len;
+		SDL_snprintf(ptr, sizeof(buffer) - len, "\n%s", datadirs[i]);
+	}
+
+	fprintf(stderr, "%s\n", buffer);
+
+	ShutDown();
+
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, PACKAGE_STRING, buffer, NULL);
+	SDL_Quit();
+
+	exit (1);
+}
+
+/*
+=================
+=
 = Error
 =
 = For abnormal program terminations
@@ -303,78 +346,45 @@ void ClearBuffer( char * buf, int size )
 =================
 */
 
-void Error (char *error, ...)
+void Error(char *error, ...)
 {
-   char msgbuf[300];
-	va_list	argptr;
-   int size;
-   char * sptr;
-   int level;
-   static int inerror = 0;
+	static char msgbuf[1024];
+	va_list ap;
+	int level;
+	static int inerror = 0;
 
+	inerror++;
+	if (inerror > 1)
+		abort();
 
-   inerror++;
-   if (inerror > 1)
-      abort();
+	va_start(ap, error);
+	SDL_vsnprintf(msgbuf, sizeof(msgbuf), error, ap);
+	va_end(ap);
 
+	fprintf(stderr, "%s\n", msgbuf);
 
-	SetTextMode ();
-   memset (msgbuf, 0, 300);
+	if (player != NULL)
+	{
+		printf ("Player X     = %lx\n", (long)player->x);
+		printf ("Player Y     = %lx\n", (long)player->y);
+		printf ("Player Angle = %lx\n\n", (long)player->angle);
 
-	va_start (argptr, error);
-   vsprintf (&msgbuf[0], error, argptr);
-	va_end (argptr);
+		printf ("Episode      = %ld\n", (long)gamestate.episode);
 
-   scriptbuffer = &msgbuf[0];
-	size = strlen (msgbuf);
+		if (gamestate.episode > 1)
+			level = (gamestate.mapon+1) - ((gamestate.episode-1) << 3);
+		else
+			level = gamestate.mapon+1;
 
-	sptr = script_p = scriptbuffer;
-	scriptend_p = script_p + size;
-	scriptline = 1;
-	endofscript = false;
-	tokenready = false;
+		printf ("Area         = %ld\n", (long)level);
+	}
 
-   px = ERRORCOL;
-   py = ERRORROW;
+	ShutDown();
 
-   GetToken (true);
-   while (!endofscript)
-   {
-      if ((script_p - sptr) >= 60)
-      {
-         px = ERRORCOL;
-         py++;
-         sptr = script_p;
-      }
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, PACKAGE_STRING, msgbuf, NULL);
+	SDL_Quit();
 
-      UL_printf (token);
-      px++;                //SPACE
-      GetToken (true);
-   }
-
-   if (player!=NULL)
-      {
-      printf ("Player X     = %lx\n", (long)player->x);
-      printf ("Player Y     = %lx\n", (long)player->y);
-      printf ("Player Angle = %lx\n\n", (long)player->angle);
-      }
-   printf ("Episode      = %ld\n", (long)gamestate.episode);
-
-   if (gamestate.episode > 1)
-      level = (gamestate.mapon+1) - ((gamestate.episode-1) << 3);
-   else
-      level = gamestate.mapon+1;
-
-   printf ("Area         = %ld\n", (long)level);
-
-   ShutDown();	// DDOI - moved this so that it doesn't try to access player
-   		// which is freed by this function.
-
-   SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
-                            PACKAGE_STRING, msgbuf, NULL);
-   SDL_Quit();
-
-   exit (1);
+	exit (1);
 }
 
 //#if (SOFTERROR==1)
