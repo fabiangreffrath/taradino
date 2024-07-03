@@ -79,7 +79,9 @@ Maximum time to count down from (next parameter is time in seconds).
 .SH AUTHORS
 Rise of the Triad was created and published as shareware by Apogee Software, Ltd. and was published commercially by FormGen, Inc.
 .PP
-The primary contributors to the Taradino port are: Steven Fuller, Ryan C. Gordon, John Hall, Dan Olson, Fabian Greffrath, and erysdren.
+The primary contributors to the original icculus.org port are: Steven Fuller, Ryan C. Gordon, John Hall and Dan Olson.
+.PP
+The authors of the Taradino port are: Fabian Greffrath and erysdren.
 .PP
 This manual page was written by Fabian Greffrath <fabian@debian-unofficial.org>
 for the Debian project (but may be used by others).
