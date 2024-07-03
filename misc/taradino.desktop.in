@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=Taradino
+Name=@TARADINO_TITLE@
 Comment=SDL2 port of Rise of the Triad
 Icon=@TARADINO_EXEC@
 TryExec=@TARADINO_EXEC@

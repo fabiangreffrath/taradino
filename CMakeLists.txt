@@ -31,6 +31,12 @@ else()
 	set(TARADINO_EXEC ${CMAKE_PROJECT_NAME})
 endif()
 
+if(${TARADINO_SHAREWARE})
+	set(TARADINO_TITLE "Taradino (Shareware)")
+else()
+	set(TARADINO_TITLE "Taradino")
+endif()
+
 add_executable(${TARADINO_EXEC} ${TARADINO_SOURCES})
 target_link_libraries(${TARADINO_EXEC} PRIVATE SDL2::Main SDL2::Mixer)
 target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_STRING="${TARADINO_EXEC} ${CMAKE_PROJECT_VERSION}")
