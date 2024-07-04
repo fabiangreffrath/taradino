@@ -323,7 +323,7 @@ void FileNotFoundError(const char *name)
 		pos += M_snprintf(buffer + pos, sizeof(buffer) - pos, "\n%s", datadirs[i]);
 	}
 
-	Error(buffer);
+	Error("%s", buffer);
 }
 
 /*
