@@ -24,6 +24,10 @@
 #include <errno.h>
 #include <sys/stat.h>
 
+#ifdef _MSC_VER
+#include <direct.h>
+#endif
+
 #include "m_misc2.h"
 
 // Create a directory

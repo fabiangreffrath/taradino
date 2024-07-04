@@ -24,6 +24,7 @@
 int _argc;
 char **_argv;
 
+#ifndef _MSC_VER
 long filelength(int handle)
 {
 	struct stat buf;
@@ -35,6 +36,7 @@ long filelength(int handle)
 	
 	return buf.st_size;
 }
+#endif
 
 char *strlwr(char *s)
 {
@@ -161,7 +163,7 @@ void DisplayTextSplash(byte *text, int l)
 	printf ("\033[m");
 }
 
-#if !defined(__CYGWIN__) && !defined(__MINGW32__) && !defined(__HAIKU__)
+#if !defined(__CYGWIN__) && !defined(__MINGW32__) && !defined(__HAIKU__) && !defined(_MSC_VER)
 #include <execinfo.h>
 
 void print_stack (int level)

@@ -42,6 +42,12 @@ target_link_libraries(${TARADINO_EXEC} PRIVATE SDL2::Main SDL2::Mixer)
 target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_STRING="${TARADINO_EXEC} ${CMAKE_PROJECT_VERSION}")
 target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_TARNAME="${TARADINO_EXEC}")
 
+if(MSVC)
+	set_property(TARGET ${TARADINO_EXEC} PROPERTY C_STANDARD 17)
+	target_compile_options(${TARADINO_EXEC} PUBLIC -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_WARNINGS -Dstrcasecmp=_stricmp -Dalloca=_alloca)
+	target_compile_options(${TARADINO_EXEC} PRIVATE /wd4267 /wd4244)
+endif()
+
 if(${TARADINO_SHAREWARE})
 	target_compile_definitions(${TARADINO_EXEC} PRIVATE SHAREWARE=1)
 endif()
