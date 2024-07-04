@@ -306,34 +306,24 @@ void ClearBuffer( char * buf, int size )
 
 void FileNotFoundError(const char *name)
 {
-	static char buffer[1024];
-	int len;
-	char *ptr;
+	char buffer[1024];
 	const char **datadirs;
 	int num_datadirs;
+	int pos = 0;
 
 	datadirs = GetDataDirs(&num_datadirs);
 
-	SDL_snprintf(buffer, sizeof(buffer), "Required file not found: %s\n\nSearch paths:", name);
+	pos += M_snprintf(buffer, sizeof(buffer), "Required file not found: %s\n\nSearch paths:", name);
 	for (int i = 0; i < num_datadirs; i++)
 	{
 		// looks kinda weird to show in the list
 		if (datadirs[i][0] == '.')
 			continue;
 
-		len = SDL_strlen(buffer);
-		ptr = buffer + len;
-		SDL_snprintf(ptr, sizeof(buffer) - len, "\n%s", datadirs[i]);
+		pos += M_snprintf(buffer + pos, sizeof(buffer) - pos, "\n%s", datadirs[i]);
 	}
 
-	fprintf(stderr, "%s\n", buffer);
-
-	ShutDown();
-
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, PACKAGE_STRING, buffer, NULL);
-	SDL_Quit();
-
-	exit (1);
+	Error(buffer);
 }
 
 /*
@@ -348,7 +338,7 @@ void FileNotFoundError(const char *name)
 
 void Error(char *error, ...)
 {
-	static char msgbuf[1024];
+	char msgbuf[1024];
 	va_list ap;
 	int level;
 	static int inerror = 0;
@@ -365,18 +355,18 @@ void Error(char *error, ...)
 
 	if (player != NULL)
 	{
-		printf ("Player X     = %lx\n", (long)player->x);
-		printf ("Player Y     = %lx\n", (long)player->y);
-		printf ("Player Angle = %lx\n\n", (long)player->angle);
+		fprintf (stderr, "Player X     = %lx\n", (long)player->x);
+		fprintf (stderr, "Player Y     = %lx\n", (long)player->y);
+		fprintf (stderr, "Player Angle = %lx\n\n", (long)player->angle);
 
-		printf ("Episode      = %ld\n", (long)gamestate.episode);
+		fprintf (stderr, "Episode      = %ld\n", (long)gamestate.episode);
 
 		if (gamestate.episode > 1)
 			level = (gamestate.mapon+1) - ((gamestate.episode-1) << 3);
 		else
 			level = gamestate.mapon+1;
 
-		printf ("Area         = %ld\n", (long)level);
+		fprintf (stderr, "Area         = %ld\n", (long)level);
 	}
 
 	ShutDown();

@@ -817,13 +817,11 @@ NoRTC:;
 
 	// Normal ROTT wads
 	filename = M_StringJoin(datadir, PATH_SEP_STR, STANDARDGAMEWAD, NULL);
-	if ((newargs[argnum++] = M_FileCaseExists(filename)) == NULL)
-	{
-		free(filename);
-		FileNotFoundError(STANDARDGAMEWAD);
-	}
-
+	newargs[argnum] = M_FileCaseExists(filename);
 	free(filename);
+	if (newargs[argnum] == NULL)
+		FileNotFoundError(STANDARDGAMEWAD);
+	argnum++;
 
    // Check for Remote Ridicule WAD
 
