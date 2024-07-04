@@ -72,6 +72,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "music.h"
 #include "fx_man.h"
 
+#include "vgatext.h"
+
 volatile int    oldtime;
 volatile int    gametime;
 
@@ -140,6 +142,7 @@ extern void RottConsole ( void );
 extern void	ReadDelay(long delay);
 extern void RecordDemoQuery ( void );
 
+SDL_Window *VL_GetVideoWindow (void);
 
 int main (int argc, char *argv[])
 {
@@ -358,7 +361,6 @@ int main (int argc, char *argv[])
       }
 
    GameLoop();
-
 
    QuitGame();
    
@@ -1494,6 +1496,8 @@ void ShutDown ( void )
    ShutdownSoftError ();
    Z_ShutDown();
 //   _settextcursor (0x0607);
+
+   exit(0);
 }
 
 //===========================================================================
@@ -1507,11 +1511,19 @@ void QuitGame ( void )
       while (GetTicCount()==time) {}
       }
 
+#if (SHAREWARE == 1)
+   Uint16 *endscreen = W_CacheLumpName("SHAREEND", PU_CACHE, CvtNull, 1);
+#else
+   Uint16 *endscreen = W_CacheLumpName("REGEND", PU_CACHE, CvtNull, 1);
+#endif
+
+   vgatext_main(VL_GetVideoWindow(), endscreen);
+
    PrintMapStats();
    PrintTileStats();
    SetTextMode();
 
-   exit(0);
+   ShutDown();
 }
 
 void InitCharacter
