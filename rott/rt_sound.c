@@ -615,6 +615,8 @@ void SD_WaitSound ( int handle )
       if ((LastScan) || IN_GetMouseButtons())
          break;
       }
+
+      SD_StopSound(handle);
 }
 
 
