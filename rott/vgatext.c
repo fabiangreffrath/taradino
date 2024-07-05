@@ -93,7 +93,6 @@ int vgatext_main(SDL_Window *window, Uint16 *screen)
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
 	SDL_RenderPresent(renderer);
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 
 	// setup render surface
 	surface8 = SDL_CreateRGBSurface(0, 640, 400, 8, 0, 0, 0, 0);
