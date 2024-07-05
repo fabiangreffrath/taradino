@@ -24,7 +24,7 @@ SOFTWARE.
 
 #include "SDL.h"
 
-#include "vga8x16.h"
+#include "vga_font_cp437.h"
 
 #define BLINK_HZ ((1000 / 70) * 16)
 
@@ -58,7 +58,7 @@ static void render_cell(Uint8 *image, int pitch, Uint16 cell, SDL_bool noblink)
 				continue;
 
 			// write fgcolor
-			Uint8 *bitmap = &VGA8X16[code * 16];
+			Uint8 *bitmap = &VGA_FONT_CP437[code * 16];
 
 			if (bitmap[y] & 1 << abs(x - 7))
 				image[y * pitch + x] = fgcolor;
