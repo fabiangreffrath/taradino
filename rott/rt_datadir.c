@@ -15,10 +15,67 @@
     See the GNU General Public License for more details.
 */
 
-#include "SDL_filesystem.h"
+#include <sys/stat.h>
+
+#include "SDL.h"
 
 #include "m_misc2.h"
 #include "rt_util.h"
+
+/*
+ * storefronts
+ *
+ * retrieve ROTT data directories from various digital storefronts
+ *
+ * supported:
+ * - steam
+ * - heroic
+ * - gog
+ */
+
+#ifdef _WIN32
+
+/* format strings for potential data paths relative to a drive */
+/* TODO: use the registry to query some of these */
+static const char *storefront_paths[] = {
+	/* steam - classic rott */
+	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad Dark War\\Rise of the Triad - Dark War\\",
+	/* steam - ludicrous edition */
+	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad - Ludicrous Edition\\assets\\",
+	/* gog - classic rott */
+	"\\GOG Games\\Rise of the Triad\\"
+};
+
+#else
+
+/* format strings for potential data paths relative to $HOME */
+/* these are all the default or expected paths, if the user customized it, oh well... */
+static const char *storefront_paths[] = {
+	/* steam - classic rott */
+	"/.steam/steam/steamapps/common/Rise of the Triad Dark War/Rise of the Triad - Dark War/",
+	/* steam - ludicrous edition */
+	"/.steam/steam/steamapps/common/Rise of the Triad - Ludicrous Edition/assets/",
+	/* steam - ludicrous edition (savegames) */
+	"/.steam/steam/steamapps/compatdata/1421490/pfx/drive_c/users/steamuser/Saved Games/Nightdive Studios/Rise of the Triad - Ludicrous Edition/",
+	/* steam - ludicrous edition (user mapsets) */
+	"/.steam/steam/steamapps/compatdata/1421490/pfx/drive_c/users/steamuser/Saved Games/Nightdive Studios/Rise of the Triad - Ludicrous Edition/projects/",
+	/* heroic - classic rott */
+	"/Games/Heroic/Rise of the Triad/data/",
+	/* gog - classic rott (wine) */
+	"/.wine/drive_c/GOG Games/Rise of the Triad/",
+	/* gog - classic rott (native) */
+	"/GOG Games/Rise of the Triad Dark War/"
+};
+
+#endif
+
+static const int num_storefront_paths = sizeof(storefront_paths) / sizeof(const char *);
+
+/*
+ *
+ * we now return to your regularly scheduled programming
+ *
+ */
 
 static char *GetExeDir (void)
 {
@@ -163,6 +220,31 @@ static void AddXdgDirs(void)
 }
 #endif
 
+static void AddStorefrontDirs(void)
+{
+	struct stat st;
+	char path[1024];
+
+	for (int i = 0; i < num_storefront_paths; i++)
+	{
+#ifndef _WIN32
+		char *prefix = getenv("XDG_DATA_HOME");
+		if (prefix == NULL)
+			prefix = getenv("HOME");
+		if (prefix == NULL)
+			return;
+#else
+		const char prefix[] = "C:";
+#endif
+		snprintf(path, sizeof(path), "%s%s", prefix, storefront_paths[i]);
+
+		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
+		{
+			AddDataDir(M_StringDuplicate(path));
+		}
+	}
+}
+
 static void BuildDataDirList(void)
 {
     if (datadirs[0])
@@ -184,6 +266,8 @@ static void BuildDataDirList(void)
 #ifndef _WIN32
     AddXdgDirs();
 #endif
+
+	AddStorefrontDirs();
 }
 
 char *FindFileByName(const char *name)
