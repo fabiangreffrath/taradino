@@ -209,12 +209,11 @@ char *FindFileByName(const char *name)
         path = M_StringJoin(datadirs[i], PATH_SEP_STR, name, NULL);
 
         probe = M_FileCaseExists(path);
+        free(path);
         if (probe != NULL)
         {
             return probe;
         }
-
-        free(path);
     }
 
     // File not found

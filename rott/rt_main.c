@@ -857,6 +857,11 @@ NoRTC:;
    newargs [argnum++] = NULL;
 
    W_InitMultipleFiles(newargs);
+
+	for (int i = 0; i < argnum; i++)
+	{
+		free(newargs[i]);
+	}
 }
 
 void PlayTurboGame

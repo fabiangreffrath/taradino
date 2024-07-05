@@ -96,11 +96,11 @@ void UnGetToken (void)
 ==============
 */
 
-void GetToken (boolean crossline)
+void GetToken(boolean crossline)
 {
-	char    *token_p;
+	char *token_p;
 
-	if (tokenready)                         // is a token allready waiting?
+	if (tokenready) // is a token allready waiting?
 	{
 		tokenready = false;
 		return;
@@ -109,31 +109,23 @@ void GetToken (boolean crossline)
 	if (script_p >= scriptend_p)
 	{
 		if (!crossline)
-         Error ("Line %i is incomplete\nin file %s\n",
-                 scriptline,scriptfilename);
+			Error("Line %i is incomplete\nin file %s\n", scriptline,  scriptfilename);
+
 		endofscript = true;
 		return;
 	}
 
-//
-// skip space
-//
-skipspace:
-	while (*script_p <= 32)
+	//
+	// skip space
+	//
+	skipspace:
+	while (script_p < scriptend_p && *script_p <= 32)
 	{
-		if (script_p >= scriptend_p)
-		{
-			if (!crossline)
-            Error ("Line %i is incomplete\nin file %s\n",
-                   scriptline,scriptfilename);
-			endofscript = true;
-			return;
-		}
 		if (*script_p++ == '\n')
 		{
 			if (!crossline)
-            Error ("Line %i is incomplete\nin file %s\n",
-                  scriptline,scriptfilename);
+				Error("Line %i is incomplete\nin file %s\n", scriptline,  scriptfilename);
+
 			scriptline++;
 		}
 	}
@@ -141,40 +133,43 @@ skipspace:
 	if (script_p >= scriptend_p)
 	{
 		if (!crossline)
-         Error ("Line %i is incomplete\nin file %s\n",
-                 scriptline,scriptfilename);
+			Error("Line %i is incomplete\nin file %s\n", scriptline,  scriptfilename);
+
 		endofscript = true;
 		return;
 	}
 
-	if (*script_p == ';')   // semicolon is comment field
+	if (*script_p == ';') // semicolon is comment field
 	{
 		if (!crossline)
-         Error ("Line %i is incomplete\nin file %s\n",
-                 scriptline,scriptfilename);
-		while (*script_p++ != '\n')
-			if (script_p >= scriptend_p)
-			{
-				endofscript = true;
-				return;
-			}
+			Error("Line %i is incomplete\nin file %s\n", scriptline,  scriptfilename);
+
+		while (script_p < scriptend_p && *script_p != '\n')
+			script_p++;
+
+		if (script_p >= scriptend_p)
+		{
+			endofscript = true;
+			return;
+		}
+
 		goto skipspace;
 	}
 
-//
-// copy token
-//
+	//
+	// copy token
+	//
 	token_p = token;
 
-	while ( *script_p > 32 && *script_p != ';')
+	while (*script_p > 32 && *script_p != ';')
 	{
 		*token_p++ = *script_p++;
 		if (script_p == scriptend_p)
 			break;
 		if (token_p == &token[MAXTOKEN])
-         Error ("Token too large on line %i\nin file %s\n",
-                 scriptline,scriptfilename);
-   }
+			Error("Token too large on line %i\nin file %s\n", scriptline,
+				  scriptfilename);
+	}
 
 	*token_p = 0;
 }
