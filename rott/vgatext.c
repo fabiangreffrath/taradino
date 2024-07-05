@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <SDL2/SDL.h>
+#include "SDL.h"
 
 #include "vga8x16.h"
 
