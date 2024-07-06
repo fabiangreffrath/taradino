@@ -235,12 +235,22 @@ static void AddStorefrontDirs(void)
 	{
 #ifndef _WIN32
 		char *prefix = getenv("XDG_DATA_HOME");
+
 		if (prefix == NULL)
 			prefix = getenv("HOME");
+
 		if (prefix == NULL)
-			prefix = getpwuid(getuid())->pw_dir;
-		if (prefix == NULL)
-			return;
+		{
+			struct passwd *pwd = getpwuid(getuid());
+
+			if (pwd == NULL)
+			{
+				perror("getpwuid");
+				return;
+			}
+
+			prefix = pwd->pw_dir;
+		}
 #else
 		const char prefix[] = "C:";
 #endif
