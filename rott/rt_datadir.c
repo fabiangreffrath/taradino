@@ -231,35 +231,34 @@ static void AddStorefrontDirs(void)
 	struct stat st;
 	char path[1024];
 
+#ifndef _WIN32
+	char *prefix = getenv("XDG_DATA_HOME");
+
+	if (prefix == NULL)
+		prefix = getenv("HOME");
+
+	if (prefix == NULL)
+	{
+		struct passwd *pwd = getpwuid(getuid());
+
+		if (pwd == NULL)
+		{
+			perror("getpwuid");
+			return;
+		}
+
+		prefix = pwd->pw_dir;
+	}
+#else
+	const char prefix[] = "C:";
+#endif
+
 	for (int i = 0; i < num_storefront_paths; i++)
 	{
-#ifndef _WIN32
-		char *prefix = getenv("XDG_DATA_HOME");
-
-		if (prefix == NULL)
-			prefix = getenv("HOME");
-
-		if (prefix == NULL)
-		{
-			struct passwd *pwd = getpwuid(getuid());
-
-			if (pwd == NULL)
-			{
-				perror("getpwuid");
-				return;
-			}
-
-			prefix = pwd->pw_dir;
-		}
-#else
-		const char prefix[] = "C:";
-#endif
 		M_snprintf(path, sizeof(path), "%s%s", prefix, storefront_paths[i]);
 
 		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
-		{
 			AddDataDir(M_StringDuplicate(path));
-		}
 	}
 }
 
