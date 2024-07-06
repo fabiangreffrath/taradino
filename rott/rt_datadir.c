@@ -43,7 +43,9 @@ static const char *storefront_paths[] = {
 	/* steam - ludicrous edition */
 	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad - Ludicrous Edition\\assets\\",
 	/* gog - classic rott */
-	"\\GOG Games\\Rise of the Triad\\"
+	"\\GOG Games\\Rise of the Triad\\",
+	/* original ms-dos installers */
+	"\\ROTT\\"
 };
 
 #else
@@ -236,7 +238,7 @@ static void AddStorefrontDirs(void)
 #else
 		const char prefix[] = "C:";
 #endif
-		snprintf(path, sizeof(path), "%s%s", prefix, storefront_paths[i]);
+		M_snprintf(path, sizeof(path), "%s%s", prefix, storefront_paths[i]);
 
 		if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
 		{
