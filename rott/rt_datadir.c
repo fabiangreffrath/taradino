@@ -22,6 +22,10 @@
 #include "m_misc2.h"
 #include "rt_util.h"
 
+#ifndef _WIN32
+#include <pwd.h>
+#endif
+
 /*
  * storefronts
  *
@@ -233,6 +237,8 @@ static void AddStorefrontDirs(void)
 		char *prefix = getenv("XDG_DATA_HOME");
 		if (prefix == NULL)
 			prefix = getenv("HOME");
+		if (prefix == NULL)
+			prefix = getpwuid(getuid())->pw_dir;
 		if (prefix == NULL)
 			return;
 #else
