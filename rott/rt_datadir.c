@@ -46,6 +46,8 @@ static const char *storefront_paths[] = {
 	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad Dark War\\Rise of the Triad - Dark War\\",
 	/* steam - ludicrous edition */
 	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad - Ludicrous Edition\\assets\\",
+	/* gog - ludicrous edition */
+	"\\GOG Games\\Rise of the Triad - Ludicrous Edition\\",
 	/* gog - classic rott */
 	"\\GOG Games\\Rise of the Triad\\",
 	/* original ms-dos installers */
@@ -67,6 +69,10 @@ static const char *storefront_paths[] = {
 	"/.steam/steam/steamapps/compatdata/1421490/pfx/drive_c/users/steamuser/Saved Games/Nightdive Studios/Rise of the Triad - Ludicrous Edition/projects/",
 	/* heroic - classic rott */
 	"/Games/Heroic/Rise of the Triad/data/",
+	/* gog - ludicrous edition (wine) */
+	"/.wine/drive_c/GOG Games/Rise of the Triad - Ludicrous Edition/",
+	/* gog - ludicrous edition (native) */
+	"/GOG Games/Rise of the Triad - Ludicrous Edition/",
 	/* gog - classic rott (wine) */
 	"/.wine/drive_c/GOG Games/Rise of the Triad/",
 	/* gog - classic rott (native) */
