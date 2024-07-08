@@ -269,7 +269,7 @@ void BuildTables (void)
    memcpy(&gammatable[0],ptr,length*sizeof(byte));
    table=W_CacheLumpName("tables",PU_CACHE, CvtNull, 1);
 
-   costable = (fixed *)&(sintable[FINEANGLES/4]);
+   costable = &(sintable[FINEANGLES/4]);
 
    wstart=W_GetNumForName("WALLSTRT");
 #if (SHAREWARE==0)

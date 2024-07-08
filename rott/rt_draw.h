@@ -59,8 +59,8 @@ extern int fandc;
 // math tables
 //
 extern short    tantable[FINEANGLES];
-extern fixed    sintable[FINEANGLES+FINEANGLEQUAD+1];
-extern fixed    *costable;
+extern int    sintable[FINEANGLES+FINEANGLEQUAD+1];
+extern int    *costable;
 
 //
 // refresh variables
