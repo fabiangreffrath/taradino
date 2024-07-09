@@ -36,7 +36,6 @@ long filelength(int handle)
 	
 	return buf.st_size;
 }
-#endif
 
 char *strlwr(char *s)
 {
@@ -49,6 +48,7 @@ char *strlwr(char *s)
 	
 	return s;
 }
+#endif
 
 char *strupr(char *s)
 {

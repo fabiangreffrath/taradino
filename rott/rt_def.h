@@ -136,13 +136,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define arrlen(array) (sizeof(array) / sizeof(*array))
 
-char *strupr(char *);
-char *itoa(int, char *, int);
-char *ltoa(long, char *, int);
-char *ultoa(unsigned long, char *, int);
-char getch(void);
-long filelength(int handle);
-
 #ifndef _MSC_VER
 char *strupr(char *);
 char *itoa(int, char *, int);
