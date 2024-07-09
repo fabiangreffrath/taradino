@@ -508,7 +508,7 @@ void LoadColorMap( void )
 #define LIGHTLEVELEND  223
 void SetupLightLevels ( void )
 {
-   int glevel;
+   int glevel = 0;
 
    periodic=false;
 	fog=0;
