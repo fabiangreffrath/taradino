@@ -80,6 +80,11 @@ static SDL_Surface *argbbuffer;
 static SDL_Texture *texture;
 static SDL_Rect blit_rect = {0};
 
+SDL_Window *VL_GetVideoWindow (void)
+{
+	return screen;
+}
+
 SDL_Surface *VL_GetVideoSurface (void)
 {
 	return sdl_surface;
