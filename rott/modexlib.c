@@ -35,7 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static void StretchMemPicture ();
 // GLOBAL VARIABLES
 
-boolean StretchScreen=0;//bná++
+boolean StretchScreen=0;//bna++
 extern boolean iG_aimCross;
 extern boolean sdl_fullscreen;
 extern int iG_X_center;
@@ -106,7 +106,7 @@ void GraphicsMode ( void )
 	uint32_t flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
 	uint32_t pixel_format;
 
-	unsigned int rmask, gmask, bmask, amask;
+	uint32_t rmask, gmask, bmask, amask;
 	int bpp;
 
 	if (SDL_InitSubSystem (SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
