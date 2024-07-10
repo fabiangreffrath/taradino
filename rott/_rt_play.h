@@ -22,11 +22,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "rt_fixed.h"
 
-#define YZANGLELIMIT  (30*FINEANGLES/360)
 #define YZTILTSPEED   20
 #define SNAPBACKSPEED 10
 #define YZHORIZONSPEED 4
 #define HORIZONYZOFFSET (FINEANGLES/4)
+
+extern int YZANGLELIMIT;
 
 #define SetPlayerHorizon(ps,hlevel)    \
     {                                  \
