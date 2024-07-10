@@ -19,8 +19,6 @@ int iGLOBAL_AMMO_Y;
 int iGLOBAL_FOCALWIDTH;
 double dGLOBAL_FPFOCALWIDTH;
 
-double dTopYZANGLELIMIT;
-
 int iG_X_center;
 int iG_Y_center;
 
@@ -31,6 +29,7 @@ extern int  viewwidth;
 
 //----------------------------------------------------------------------
 #define FINEANGLES                        2048
+extern int YZANGLELIMIT;
 void SetRottScreenRes (int Width, int Height) 
 {
 	
@@ -49,7 +48,7 @@ void SetRottScreenRes (int Width, int Height)
 		iGLOBAL_AMMO_X = 300;
 		iGLOBAL_AMMO_Y = 184;
 
-		dTopYZANGLELIMIT = (44*FINEANGLES/360);;
+		YZANGLELIMIT = (30*FINEANGLES/360);
 	}
 	if (iGLOBAL_SCREENWIDTH == 640) {
 		iGLOBAL_FOCALWIDTH = 180;
@@ -59,7 +58,7 @@ void SetRottScreenRes (int Width, int Height)
 		iGLOBAL_AMMO_X = 600;//300*2;
 		iGLOBAL_AMMO_Y = 464;//480-16;
 
-		dTopYZANGLELIMIT = (42*FINEANGLES/360);;
+		YZANGLELIMIT = (60*FINEANGLES/360);
 	}
 }
 
