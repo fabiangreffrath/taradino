@@ -32,6 +32,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_net.h" // for GamePaused
 #include "myprint.h"
 
+#include "isr.h" // for VBLCOUNTER
+
 static void StretchMemPicture ();
 // GLOBAL VARIABLES
 
@@ -214,9 +216,29 @@ void TurnOffTextCursor ( void )
 =
 ====================
 */
+
+static Uint64 next_time = 0;
+
+static Uint64 time_left(void)
+{
+	Uint64 now = SDL_GetTicks();
+
+	if (next_time <= now)
+		return 0;
+	else
+		return next_time - now;
+}
+
 void WaitVBL( void )
 {
-	SDL_Delay (16667/1000);
+	// was:
+	// SDL_Delay (16667/1000);
+
+	if (next_time == 0)
+		next_time = SDL_GetTicks() + VBLCOUNTER;
+
+	SDL_Delay(time_left());
+	next_time += VBLCOUNTER;
 }
 
 /*
