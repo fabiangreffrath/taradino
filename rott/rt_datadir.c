@@ -68,13 +68,15 @@ char *GetPrefDir (void)
 
         M_MakeDirectory(dir);
 
-#if !(SHAREWARE == 1)
         result = dir;
+#if !(SHAREWARE == 1)
         dir = M_StringJoin(result, "darkwar", PATH_SEP_STR, NULL);
+#else
+        dir = M_StringJoin(result, "huntbgin", PATH_SEP_STR, NULL);
+#endif
         free(result);
 
         M_MakeDirectory(dir);
-#endif
     }
 
     return dir;

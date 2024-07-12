@@ -39,8 +39,8 @@ endif()
 
 add_executable(${TARADINO_EXEC} ${TARADINO_SOURCES})
 target_link_libraries(${TARADINO_EXEC} PRIVATE SDL2::Main SDL2::Mixer)
-target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_STRING="${TARADINO_EXEC} ${CMAKE_PROJECT_VERSION}")
-target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_TARNAME="${TARADINO_EXEC}")
+target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}")
+target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
 
 if(${TARADINO_SHAREWARE})
 	target_compile_definitions(${TARADINO_EXEC} PRIVATE SHAREWARE=1)
