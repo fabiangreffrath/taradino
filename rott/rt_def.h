@@ -28,10 +28,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "develop.h"
 #include "rt_fixed.h"
 
-#include <unistd.h>
 #include <sys/types.h>
 #include <limits.h>
+
+#ifndef _MSC_VER
+#include <unistd.h>
 #include <dirent.h>
+#else
+#include <io.h>
+#define R_OK 4
+#define W_OK 2
+#define F_OK 0
+#endif
+
 #include <ctype.h>
 
 #include <stdint.h>
@@ -46,6 +55,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
   #define LIST_SEP_CHAR ':'
   #define ROOTDIR       "/"
   #define CURDIR        "./"
+#endif
+
+#ifdef _MSC_VER
+#define __attribute__(...)
 #endif
 
 #if defined(__GNUC__) || defined(__clang__)
@@ -123,12 +136,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define arrlen(array) (sizeof(array) / sizeof(*array))
 
+#ifndef _MSC_VER
 char *strupr(char *);
 char *itoa(int, char *, int);
 char *ltoa(long, char *, int);
 char *ultoa(unsigned long, char *, int);
 char getch(void);
 long filelength(int handle);
+#endif
 
 #define STUB_FUNCTION fprintf(stderr,"STUB: %s at " __FILE__ ", line %d, thread %d\n",__FUNCTION__,__LINE__,getpid())
 

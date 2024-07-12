@@ -14,7 +14,6 @@ library named SDL_mixer.
 
 - Demos go out of sync.
 - No netplay support.
-- Won't build with MSVC.
 
 ## Building
 
