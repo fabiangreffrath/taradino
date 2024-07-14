@@ -1624,25 +1624,18 @@ void GetMapFileInfo
 */
 void GetMapFileName ( char * filename, size_t n )
 {
-	char *src, *ptr;
+	const char *src;
 
 	if (BATTLEMODE && BattleLevels.avail == true)
-		src = BattleLevels.file;
+		src = M_BaseName(BattleLevels.file);
 	else if (GameLevels.avail == true)
-		src = GameLevels.file;
-	else if ( BATTLEMODE )
-		src = BATTMAPS;
+		src = M_BaseName(GameLevels.file);
+	else if (BATTLEMODE)
+		src = M_BaseName(BATTMAPS);
 	else
-		src = ROTTMAPS;
+		src = M_BaseName(ROTTMAPS);
 
-	ptr = strrchr(src, PATH_SEP_CHAR);
-
-	if (ptr == NULL)
-		ptr = src;
-	else
-		ptr = ptr + 1;
-
-	strncpy(filename,ptr,n);
+	strncpy(filename,src,n);
 }
 
 /*
