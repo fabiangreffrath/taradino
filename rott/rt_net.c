@@ -2420,7 +2420,7 @@ void SendGameDescription( void )
    desc->teamplay = gamestate.teamplay;
    memcpy( &desc->SpecialsTimes, &gamestate.SpecialsTimes, sizeof( specials ) );
    BATTLE_GetOptions( &( desc->options ) );
-   GetMapFileName( &(desc->battlefilename[0]) );
+   GetMapFileName( &(desc->battlefilename[0]), sizeof(desc->battlefilename) );
    desc->randomseed=GetRNGindex ( );
    gamestate.randomseed=desc->randomseed;
    desc->ludicrousgibs=battlegibs;

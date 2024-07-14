@@ -7976,7 +7976,7 @@ void ShowBattleOptions
       }
    ShowBattleOption( inmenu, PosX, PosY, 0, 9, "Danger Damage", string );
 
-   GetMapFileName ( text );
+   GetMapFileName ( text, sizeof(text) );
    ShowBattleOption( inmenu, PosX, PosY, 0, 10, "Filename", text );
 
    itoa( numplayers, text, 10 );
