@@ -238,10 +238,7 @@ static void AddStorefrontDirs(void)
 	char path[1024];
 
 #ifndef _WIN32
-	char *prefix = getenv("XDG_DATA_HOME");
-
-	if (prefix == NULL)
-		prefix = getenv("HOME");
+	char *prefix = getenv("HOME");
 
 	if (prefix == NULL)
 	{
