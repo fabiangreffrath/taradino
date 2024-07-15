@@ -168,7 +168,7 @@ void PrintMapStats (void);
 void PrintTileStats (void);
 
 void GetMapInfo (mapfileinfo_t * mapinfo);
-void GetMapFileName ( char * filename );
+void GetMapFileName ( char * filename, size_t n );
 void SetBattleMapFileName ( char * filename );
 unsigned short GetMapCRC ( int num );
 
