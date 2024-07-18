@@ -205,6 +205,9 @@ void ReadUnsigned (const char * s1, unsigned long * val)
 //
 //******************************************************************************
 
+extern char MUSIC_SoundFonts[2048];
+extern boolean MUSIC_SoundFonts_Set;
+
 boolean ParseSoundFile (void)
 {
    boolean retval = true;
@@ -245,14 +248,21 @@ boolean ParseSoundFile (void)
       // Read in stereo reversal
 
       ReadBoolean ("StereoReverse",&stereoreversed);
+
+      // Read in soundfonts
+      GetToken (true);
+      if (stricmp (token, "SoundFonts") == 0)
+      {
+          GetTokenEOL (false);
+          strncpy (MUSIC_SoundFonts, token, sizeof(MUSIC_SoundFonts));
+          MUSIC_SoundFonts_Set = true;
+      }
    }
    else
       retval = false;
 
    return (retval);
 }
-
-
 
 //******************************************************************************
 //
@@ -275,6 +285,12 @@ void SetSoundDefaultValues
    NumChannels = 2;
    NumBits     = 16;
    stereoreversed = false;
+#if defined(SOUNDFONTS)
+   M_snprintf(MUSIC_SoundFonts, sizeof(MUSIC_SoundFonts), "%s", SOUNDFONTS);
+   MUSIC_SoundFonts_Set = true;
+#else
+   MUSIC_SoundFonts_Set = false;
+#endif
    }
 
 extern char    pword[ 13 ];
@@ -1498,6 +1514,14 @@ void WriteSoundConfig
    SafeWriteString(file,"; 0 no reversal\n");
    SafeWriteString(file,"; 1 reverse stereo\n");
    WriteParameter (file,"StereoReverse      ",stereoreversed);
+
+   // write out soundfonts
+   SafeWriteString(file,"\n;\n");
+   SafeWriteString(file,"; SoundFonts\n");
+   SafeWriteString(file,"; example: /usr/share/soundfonts/default.sf2\n");
+   SafeWriteString(file,"SoundFonts         ");
+   SafeWriteString(file,MUSIC_SoundFonts);
+   SafeWriteString(file,"\n");
 
    close (file);
    }

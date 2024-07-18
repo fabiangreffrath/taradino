@@ -150,6 +150,9 @@ static unsigned char *music_songdata = NULL;
 static Mix_Music *music_musicchunk = NULL;
 static size_t music_songdatasize = 0;
 
+char MUSIC_SoundFonts[2048];
+boolean MUSIC_SoundFonts_Set = false;
+
 int MUSIC_Init(int SoundCard, int Address)
 {
     init_debugging();
@@ -170,16 +173,17 @@ int MUSIC_Init(int SoundCard, int Address)
     } // if
 
     // add soundfonts
-    const char *soundfonts = Mix_GetSoundFonts();
-    if (soundfonts)
+    if (!MUSIC_SoundFonts_Set)
     {
-        printf("Using soundfonts path string \"%s\"\n", soundfonts);
-        Mix_SetSoundFonts(soundfonts);
+        const char *soundfonts = Mix_GetSoundFonts();
+        if (soundfonts)
+        {
+            M_snprintf(MUSIC_SoundFonts, sizeof(MUSIC_SoundFonts), "%s", soundfonts);
+        }
     }
-    else
-    {
-        fprintf(stderr, "Couldn't find any soundfonts!\n");
-    }
+
+    printf("Using soundfonts path string \"%s\"\n", MUSIC_SoundFonts);
+    Mix_SetSoundFonts(MUSIC_SoundFonts);
 
     music_initialized = 1;
     return(MUSIC_Ok);
