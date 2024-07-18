@@ -179,6 +179,7 @@ int MUSIC_Init(int SoundCard, int Address)
         if (soundfonts)
         {
             M_snprintf(MUSIC_SoundFonts, sizeof(MUSIC_SoundFonts), "%s", soundfonts);
+            MUSIC_SoundFonts_Set = true;
         }
     }
 
