@@ -50,7 +50,6 @@ volatile int Keytail;
 
 volatile boolean PausePressed = false;
 volatile boolean PanicPressed = false;
-int KeyboardStarted=false;
 
 const int ASCIINames[] =          // Unshifted ASCII for scan codes
 {
@@ -106,20 +105,6 @@ void ISR_SetTime(int settime)
 	ticbase = settime;
 }
 
-/* developer-only */
-
-int GetFastTics (void)
-{
-	/* STUB_FUNCTION; */
-	
-	return 0;
-}
-
-void SetFastTics (int settime)
-{
-	/* STUB_FUNCTION; */
-}
-
 /*
 ================
 =
@@ -139,37 +124,4 @@ void I_Delay ( int delay )
       {
       	IN_UpdateKeyboard();
       }
-}
-
-/*
-===============
-=
-= I_StartupTimer
-=
-===============
-*/
-
-void I_StartupTimer (void)
-{
-}
-
-void I_ShutdownTimer (void)
-{
-}
-
-/*
-===============
-=
-= I_StartupKeyboard
-=
-===============
-*/
-
-void I_StartupKeyboard (void)
-{
-}
-
-
-void I_ShutdownKeyboard (void)
-{
 }
