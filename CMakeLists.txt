@@ -11,7 +11,6 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 option(TARADINO_SHAREWARE "Build shareware version" OFF)
 option(TARADINO_WERROR "Enable -Werror on build" OFF)
 set(TARADINO_DATADIR "" CACHE STRING "Game data file directory")
-set(TARADINO_SOUNDFONTS "" CACHE STRING "Semicolon-separated list of soundfont files")
 set(TARADINO_SUFFIX "" CACHE STRING "Executable file name suffix")
 
 find_package(SDL2 REQUIRED)
@@ -61,10 +60,6 @@ endif()
 
 if(${TARADINO_DATADIR})
 	target_compile_definitions(${TARADINO_EXEC} PRIVATE DATADIR="${TARADINO_DATADIR}")
-endif()
-
-if(${TARADINO_SOUNDFONTS})
-	target_compile_definitions(${TARADINO_EXEC} PRIVATE SOUNDFONTS="${TARADINO_SOUNDFONTS}")
 endif()
 
 include(GNUInstallDirs)

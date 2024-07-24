@@ -150,8 +150,8 @@ static unsigned char *music_songdata = NULL;
 static Mix_Music *music_musicchunk = NULL;
 static size_t music_songdatasize = 0;
 
-char MUSIC_SoundFonts[2048];
-boolean MUSIC_SoundFonts_Set = false;
+static char MUSIC_SoundFonts[2048];
+static const char soundfonts_fallback[] = "/usr/share/soundfonts/default.sf2;/usr/share/sounds/sf2/default-GM.sf2;/usr/share/sounds/sf2/FluidR3_GM.sf2";
 
 int MUSIC_Init(int SoundCard, int Address)
 {
@@ -173,14 +173,14 @@ int MUSIC_Init(int SoundCard, int Address)
     } // if
 
     // add soundfonts
-    if (!MUSIC_SoundFonts_Set)
+    const char *soundfonts = Mix_GetSoundFonts();
+    if (soundfonts)
     {
-        const char *soundfonts = Mix_GetSoundFonts();
-        if (soundfonts)
-        {
-            M_snprintf(MUSIC_SoundFonts, sizeof(MUSIC_SoundFonts), "%s", soundfonts);
-            MUSIC_SoundFonts_Set = true;
-        }
+        M_snprintf(MUSIC_SoundFonts, sizeof(MUSIC_SoundFonts), "%s", soundfonts);
+    }
+    else
+    {
+        M_snprintf(MUSIC_SoundFonts, sizeof(MUSIC_SoundFonts), "%s", soundfonts_fallback);
     }
 
     printf("Using soundfonts path string \"%s\"\n", MUSIC_SoundFonts);
