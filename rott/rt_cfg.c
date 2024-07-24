@@ -252,8 +252,6 @@ boolean ParseSoundFile (void)
    return (retval);
 }
 
-
-
 //******************************************************************************
 //
 // SetSoundDefaultValues ()
