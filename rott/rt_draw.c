@@ -3278,7 +3278,7 @@ void UpdateScreenSaver ( void )
 		  ScreenSaver->pausey=RandomNumber ("pausey",0)%168;
       }else if (iGLOBAL_SCREENWIDTH == 640){
 		  ScreenSaver->pausex=RandomNumber ("pausex",0)%480;
-		  ScreenSaver->pausey=RandomNumber ("pausey",0)%403;
+		  ScreenSaver->pausey=RandomNumber ("pausey",0)%336;
 	  }
    }
    DrawPauseXY (ScreenSaver->pausex, ScreenSaver->pausey);

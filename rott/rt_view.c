@@ -106,17 +106,19 @@ byte   uniformcolors[MAXPLAYERCOLORS]={
 
 static char *YourComputerSucksString = "Buy a 486! :)";
 
-static int viewsizes[MAXVIEWSIZES*2]={ 80,48,
-                           128,72,
-                           160,88,
-                           192,104,
-                           224,120,
-                           256,136,
-                           288,152,
-                           320,168,
-                           320,184,
-                           320,200,
-                           320,200};
+static int viewsizes[MAXVIEWSIZES*2]={
+	80,48,
+	128,72,
+	160,88,
+	192,104,
+	224,120,
+	256,136,
+	288,152,
+	320,168,
+	320,184,
+	320,200,
+	320,200
+};
 
 static int ColorMapLoaded=0;
 

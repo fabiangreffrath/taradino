@@ -110,9 +110,9 @@ void GraphicsMode ( void )
 
 	screen = SDL_CreateWindow(NULL,
 	                          SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-	                          iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT,
+	                          640, 480,
 	                          flags);
-	SDL_SetWindowMinimumSize(screen, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+	SDL_SetWindowMinimumSize(screen, 640, 480);
 	SDL_SetWindowTitle(screen, PACKAGE_STRING);
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");

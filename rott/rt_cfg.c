@@ -1600,7 +1600,7 @@ void WriteConfig (void)
    // Write out resolution
    SafeWriteString(file,"\n;\n");
    SafeWriteString(file,"; Screen Resolution, supported resolutions: \n");
-   SafeWriteString(file,"; 320x200 and 640x480\n");
+   SafeWriteString(file,"; 320x200 and 640x400\n");
    WriteParameter(file,"ScreenWidth      ",iGLOBAL_SCREENWIDTH);
    WriteParameter(file,"ScreenHeight     ",iGLOBAL_SCREENHEIGHT);
 

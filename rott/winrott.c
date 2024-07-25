@@ -6,8 +6,9 @@
 
 //typedef unsigned char byte;
 
-int iGLOBAL_SCREENWIDTH  = 640;//bna
-int iGLOBAL_SCREENHEIGHT = 480;//bna
+int iGLOBAL_SCREENWIDTH  = 320;//bna
+int iGLOBAL_SCREENHEIGHT = 200;//bna
+int iGLOBAL_SCREENSCALE = 1;
 int iGLOBAL_SCREENBWIDE ;
 int iG_SCREENWIDTH;// default screen width in bytes
 
@@ -30,36 +31,24 @@ extern int  viewwidth;
 //----------------------------------------------------------------------
 #define FINEANGLES                        2048
 extern int YZANGLELIMIT;
-void SetRottScreenRes (int Width, int Height) 
+void SetRottScreenRes (int Width, int Height)
 {
-	
 	iGLOBAL_SCREENWIDTH = Width;
 	iGLOBAL_SCREENHEIGHT = Height;
-
+	iGLOBAL_SCREENSCALE = Width / 320;
 
     iGLOBAL_SCREENBWIDE = iGLOBAL_SCREENWIDTH*(96/320);
 	iG_SCREENWIDTH = iGLOBAL_SCREENWIDTH*(96/320);;// default screen width in bytes
 
-	if (iGLOBAL_SCREENWIDTH == 320) {
-		iGLOBAL_FOCALWIDTH = 160;
-		dGLOBAL_FPFOCALWIDTH = 160.0; 
-		iGLOBAL_HEALTH_X = 20;
-		iGLOBAL_HEALTH_Y = 185;
-		iGLOBAL_AMMO_X = 300;
-		iGLOBAL_AMMO_Y = 184;
+	iGLOBAL_FOCALWIDTH = 160;
+	dGLOBAL_FPFOCALWIDTH = 160.0;
 
-		YZANGLELIMIT = (30*FINEANGLES/360);
-	}
-	if (iGLOBAL_SCREENWIDTH == 640) {
-		iGLOBAL_FOCALWIDTH = 180;
-		dGLOBAL_FPFOCALWIDTH = 180.0 ;
-		iGLOBAL_HEALTH_X = 40;//20*2;
-		iGLOBAL_HEALTH_Y = 466;//(185*2)+16;
-		iGLOBAL_AMMO_X = 600;//300*2;
-		iGLOBAL_AMMO_Y = 464;//480-16;
+	iGLOBAL_HEALTH_X = 20 * iGLOBAL_SCREENSCALE;
+	iGLOBAL_HEALTH_Y = iGLOBAL_SCREENHEIGHT - 15;
+	iGLOBAL_AMMO_X = iGLOBAL_SCREENWIDTH - 20;
+	iGLOBAL_AMMO_Y = iGLOBAL_SCREENHEIGHT - 16;
 
-		YZANGLELIMIT = (60*FINEANGLES/360);
-	}
+	YZANGLELIMIT = ((30*iGLOBAL_SCREENSCALE)*FINEANGLES/360);
 }
 
 //----------------------------------------------------------------------
