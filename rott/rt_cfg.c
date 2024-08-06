@@ -428,6 +428,14 @@ boolean ParseConfigFile (void)
       ReadInt("ScreenWidth", &iGLOBAL_SCREENWIDTH);
       ReadInt("ScreenHeight", &iGLOBAL_SCREENHEIGHT);
 
+	if ((iGLOBAL_SCREENWIDTH != 320 && iGLOBAL_SCREENWIDTH != 640) ||
+		(iGLOBAL_SCREENHEIGHT != 200 && iGLOBAL_SCREENHEIGHT != 480))
+		{
+			printf("WARNING: Invalid screen resolution %dx%d. Reverting to 640x480.\n", iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+			iGLOBAL_SCREENWIDTH = 640;
+			iGLOBAL_SCREENHEIGHT = 480;
+		}
+
       // Read in ViewSize
 
       ReadInt("ViewSize",&viewsize);
