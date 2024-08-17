@@ -680,7 +680,6 @@ statetype * statetable[MAXSTATES]=
 
 
 
-#if (SHAREWARE == 0)
 &s_scottwander7,
 &s_scottwander6,
 &s_scottwander5,
@@ -1325,7 +1324,6 @@ statetype * statetable[MAXSTATES]=
 
 
 
-#endif //SHAREWARE
 
 };
 #endif

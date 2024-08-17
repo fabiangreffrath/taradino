@@ -146,11 +146,7 @@ typedef struct {
 
 #define MAXSAVEDGAMESIZE 120000
 
-#if (SHAREWARE == 0)
 #define WEAPON_IS_MAGICAL(x) (((x) == wp_dog) || ((x) == wp_godhand))
-#else
-#define WEAPON_IS_MAGICAL(x) ((x) == wp_godhand)
-#endif
 
 //******************************************************************************
 //

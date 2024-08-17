@@ -156,12 +156,7 @@ statinfo stats[NUMSTATS] =
 {0,EMPTY_STATUE1,stat_emptystatue,FL_BLOCK|FL_SHOOTABLE,0,0,50,0,0},
 {16,TOMLARVA1,stat_tomlarva,FL_ACTIVE|FL_SHOOTABLE|FL_BLOCK,2,4,150,0,0},
 {0,BULLETHOLE,stat_bullethole,FL_TRANSLUCENT,0,0,0,0,0},
-//MED
-#if (SHAREWARE == 1)
 {0,COLLECTOR1,stat_collector,FL_ACTIVE|FL_BONUS,2,8,-1,0,0},
-#else
-{0,DOPE1,stat_collector,FL_ACTIVE|FL_BONUS,2,8,-1,0,0},
-#endif
 {0,SPR_MINE1,stat_mine,FL_BONUS|FL_SHOOTABLE|FL_RESPAWN,0,0,10,0,0},
 {0,MISSMOKE1,stat_missmoke,FL_ACTIVE,6,4,0,0,0},
 {0,PLATFORM1,stat_disk,FL_BLOCK|FL_HEIGHTFLIPPABLE,0,0,0,0,0},
@@ -1113,7 +1108,8 @@ void SpawnStatic (int tilex, int tiley, int mtype, int zoffset)
 
 
 
-#if (SHAREWARE == 1)
+ if (gamestate.Product == ROTT_SHAREWARE)
+ {
    switch(mtype)
       {
       case stat_rlight:
@@ -1135,8 +1131,7 @@ void SpawnStatic (int tilex, int tiley, int mtype, int zoffset)
          break;
 
       }
-#endif
-
+ }
 
 
    if ( BATTLEMODE )
