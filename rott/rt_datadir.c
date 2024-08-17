@@ -136,7 +136,9 @@ static char *GetExeDir (void)
 char *GetPrefDir (void)
 {
     static char *dir;
-
+#ifdef __PSP__
+	dir = ".";
+#else
     if (dir == NULL)
     {
         char *result;
@@ -167,7 +169,7 @@ char *GetPrefDir (void)
 
         M_MakeDirectory(dir);
     }
-
+#endif // __PSP__
     return dir;
 }
 

@@ -18,9 +18,23 @@ add_library(ASAN::ASAN IMPORTED INTERFACE)
 target_compile_options(ASAN::ASAN INTERFACE -fsanitize=address $<$<NOT:$<COMPILE_LANG_AND_ID:C,MSVC>>:-fno-omit-frame-pointer>)
 target_link_options(ASAN::ASAN INTERFACE -fsanitize=address)
 
-find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
-find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
-find_package(SDL2_mixer REQUIRED CONFIG REQUIRED COMPONENTS SDL2_mixer)
+if(PSP)
+	include(FindPkgConfig)
+	pkg_search_module(SDL2 REQUIRED sdl2)
+	pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
+
+	add_library(SDL2::SDL2 IMPORTED INTERFACE)
+	target_include_directories(SDL2::SDL2 INTERFACE ${SDL2_INCLUDE_DIRS})
+	target_link_libraries(SDL2::SDL2 INTERFACE ${SDL2_LIBRARIES})
+
+	add_library(SDL2_mixer::SDL2_mixer IMPORTED INTERFACE)
+	target_include_directories(SDL2_mixer::SDL2_mixer INTERFACE ${SDL2_MIXER_INCLUDE_DIRS})
+	target_link_libraries(SDL2_mixer::SDL2_mixer INTERFACE ${SDL2_MIXER_LIBRARIES})
+else()
+	find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
+	find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
+	find_package(SDL2_mixer REQUIRED CONFIG REQUIRED COMPONENTS SDL2_mixer)
+endif()
 
 file(GLOB TARADINO_SOURCES "${PROJECT_SOURCE_DIR}/rott/*.c")
 
@@ -85,3 +99,13 @@ if(UNIX)
 	install(FILES ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.6 DESTINATION ${CMAKE_INSTALL_MANDIR}/man6)
 endif()
 install(TARGETS taradino DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+if(PSP)
+	create_pbp_file(
+		TARGET taradino
+		ICON_PATH NULL
+		BACKGROUND_PATH NULL
+		PREVIEW_PATH NULL
+		TITLE \"${TARADINO_TITLE}\"
+	)
+endif()
