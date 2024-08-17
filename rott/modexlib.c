@@ -123,7 +123,7 @@ void GraphicsMode ( void )
 
 	screen = SDL_CreateWindow(NULL,
 	                          SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-	                          iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT,
+	                          480, 272,
 	                          flags);
 	SDL_SetWindowMinimumSize(screen, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 	SDL_SetWindowTitle(screen, PACKAGE_STRING);

@@ -6,15 +6,15 @@ project(taradino
 	LANGUAGES C
 	VERSION 1.1.3
 )
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 option(TARADINO_SHAREWARE "Build shareware version" OFF)
 option(TARADINO_WERROR "Enable -Werror on build" OFF)
 set(TARADINO_DATADIR "" CACHE STRING "Game data file directory")
 set(TARADINO_SUFFIX "" CACHE STRING "Executable file name suffix")
 
-find_package(SDL2 REQUIRED)
-find_package(SDL2_mixer REQUIRED)
+include(FindPkgConfig)
+pkg_search_module(SDL2 REQUIRED sdl2)
+pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
 
 file(GLOB TARADINO_SOURCES
 	${PROJECT_SOURCE_DIR}/rott/*.c
@@ -38,7 +38,8 @@ else()
 endif()
 
 add_executable(${TARADINO_EXEC} ${TARADINO_SOURCES})
-target_link_libraries(${TARADINO_EXEC} PRIVATE SDL2::Main SDL2::Mixer)
+target_link_libraries(${TARADINO_EXEC} PRIVATE ${SDL2_LIBRARIES} ${SDL2_MIXER_LIBRARIES})
+target_include_directories(${TARADINO_EXEC} PRIVATE ${SDL2_INCLUDE_DIRS} ${SDL2_MIXER_INCLUDE_DIRS})
 target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}")
 target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
 
@@ -71,3 +72,13 @@ if(UNIX)
 	install(FILES ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.6 DESTINATION ${CMAKE_INSTALL_MANDIR}/man6)
 endif()
 install(TARGETS ${TARADINO_EXEC} DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+if(PSP)
+	create_pbp_file(
+		TARGET ${TARADINO_EXEC}
+		ICON_PATH NULL
+		BACKGROUND_PATH NULL
+		PREVIEW_PATH NULL
+		TITLE \"${TARADINO_TITLE}\"
+	)
+endif()
