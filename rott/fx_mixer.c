@@ -302,6 +302,7 @@ int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
 {
     int i;
 
+#if 0
     printf("\n Precaching all sound effects... ");
     for (i = 0; i < SD_LASTSOUND; i++)
     {
@@ -328,6 +329,7 @@ int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
         }
     }
     printf("done.");
+#endif
 
     printf("\n Calculating stereo panning... ");
     MV_CalcPanTable();

@@ -188,6 +188,7 @@ int SD_Startup ( boolean bombonerror )
          break;
       }
 
+#if 0
    if ( soundtype == fx_digital )
       {
       if ( SoundsRemapped == false )
@@ -207,6 +208,7 @@ int SD_Startup ( boolean bombonerror )
          }
       soundstart = 0;
       }
+#endif
 
    voices   = NumVoices;
    channels = NumChannels;
