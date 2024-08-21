@@ -391,12 +391,10 @@ static int sdl_joystick_button_filter(const SDL_Event *event)
 
 	if (event->type == SDL_JOYBUTTONDOWN)
 	{
-		printf("SDL_JOYBUTTONDOWN: %d\n", event->jbutton.button);
 		sdl_stick_button_state[event->jbutton.which] |= (1 << event->jbutton.button);
 	}
 	else if (event->type == SDL_JOYBUTTONUP)
 	{
-		printf("SDL_JOYBUTTONUP: %d\n", event->jbutton.button);
 		sdl_stick_button_state[event->jbutton.which] &= ~(1 << event->jbutton.button);
 	}
 
