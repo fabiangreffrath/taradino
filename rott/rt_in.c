@@ -398,8 +398,6 @@ static int sdl_joystick_button_filter(const SDL_Event *event)
 		sdl_stick_button_state[event->jbutton.which] &= ~(1 << event->jbutton.button);
 	}
 
-	fflush(stdout);
-
 	return 0;
 }
 
