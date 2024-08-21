@@ -85,7 +85,6 @@ static int sdl_mouse_delta_y = 0;
 static unsigned short sdl_mouse_button_mask = 0;
 static int sdl_total_sticks = 0;
 static unsigned short *sdl_stick_button_state = NULL;
-static unsigned short sdl_sticks_joybits = 0;
 static int sdl_mouse_grabbed = 0;
 extern boolean sdl_fullscreen;
 
