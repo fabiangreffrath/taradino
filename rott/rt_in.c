@@ -381,6 +381,29 @@ static int sdl_key_filter(const SDL_Event *event)
     return(0);
 } /* sdl_key_filter */
 
+static int sdl_joystick_button_filter(const SDL_Event *event)
+{
+	if (event->jbutton.which >= sdl_total_sticks)
+		return 0;
+
+	if (event->jbutton.button >= 16)
+		return 0;
+
+	if (event->type == SDL_JOYBUTTONDOWN)
+	{
+		printf("SDL_JOYBUTTONDOWN: %d\n", event->jbutton.button);
+		sdl_stick_button_state[event->jbutton.which] |= (1 << event->jbutton.button);
+	}
+	else if (event->type == SDL_JOYBUTTONUP)
+	{
+		printf("SDL_JOYBUTTONUP: %d\n", event->jbutton.button);
+		sdl_stick_button_state[event->jbutton.which] &= ~(1 << event->jbutton.button);
+	}
+
+	fflush(stdout);
+
+	return 0;
+}
 
 static int root_sdl_event_filter(const SDL_Event *event)
 {
@@ -395,6 +418,9 @@ static int root_sdl_event_filter(const SDL_Event *event)
         case SDL_MOUSEBUTTONUP:
         case SDL_MOUSEBUTTONDOWN:
             return(sdl_mouse_button_filter(event));
+        case SDL_JOYBUTTONUP:
+        case SDL_JOYBUTTONDOWN:
+            return(sdl_joystick_button_filter(event));
         case SDL_QUIT:
             /* !!! rcg TEMP */
             fprintf(stderr, "\n\n\nSDL_QUIT!\n\n\n");
@@ -509,8 +535,17 @@ void IN_GetJoyAbs (unsigned short joy, unsigned short *xp, unsigned short *yp)
 
    if (joy < sdl_total_sticks)
    {
-	   Joy_x = SDL_JoystickGetAxis (sdl_joysticks[joy], 0);
-	   Joy_y = SDL_JoystickGetAxis (sdl_joysticks[joy], 1);
+	   Sint32 jx, jy;
+
+	   jx = (Sint32)SDL_JoystickGetAxis (sdl_joysticks[joy], 0) + SDL_JOYSTICK_AXIS_MAX;
+	   jy = (Sint32)SDL_JoystickGetAxis (sdl_joysticks[joy], 1) + SDL_JOYSTICK_AXIS_MAX;
+
+	   jx = ((float)jx / 65536.0f) * MaxJoyValue;
+	   jy = ((float)jy / 65536.0f) * MaxJoyValue;
+
+	   Joy_x = (unsigned short)jx;
+	   Joy_y = (unsigned short)jy;
+
    } else {
 	   Joy_x = 0;
 	   Joy_y = 0;
@@ -1046,11 +1081,7 @@ boolean IN_UserInput (long delay)
 
 byte IN_JoyButtons (void)
 {
-   unsigned int joybits = 0;
-
-   joybits = sdl_sticks_joybits;
-
-   return (byte) joybits;
+	return (byte)sdl_stick_button_state[joystickport];
 }
 
 
