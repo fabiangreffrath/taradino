@@ -163,7 +163,7 @@ void DisplayTextSplash(byte *text, int l)
 	printf ("\033[m");
 }
 
-#if !defined(__CYGWIN__) && !defined(__MINGW32__) && !defined(__HAIKU__) && !defined(_MSC_VER)
+#if defined(HAVE_EXECINFO)
 #include <execinfo.h>
 
 void print_stack (int level)
