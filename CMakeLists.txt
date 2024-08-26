@@ -42,21 +42,6 @@ target_link_libraries(${TARADINO_EXEC} PRIVATE SDL2::Main SDL2::Mixer)
 target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}")
 target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
 
-# backtrace lookup from Yamagi Quake II
-# https://github.com/yquake2/yquake2/blob/master/CMakeLists.txt
-include(CheckFunctionExists)
-include(CheckLibraryExists)
-check_function_exists(backtrace HAVE_EXECINFO_SYS)
-IF (NOT HAVE_EXECINFO_SYS)
-	check_library_exists(execinfo backtrace "" HAVE_EXECINFO_LIB)
-	if (HAVE_EXECINFO_LIB)
-		target_link_libraries(${TARADINO_EXEC} PRIVATE execinfo)
-		target_compile_definitions(${TARADINO_EXEC} PRIVATE HAVE_EXECINFO)
-	endif()
-else()
-	target_compile_definitions(${TARADINO_EXEC} PRIVATE HAVE_EXECINFO)
-endif()
-
 if(MSVC)
 	set_property(TARGET ${TARADINO_EXEC} PROPERTY C_STANDARD 17)
 	# silence warnings about POSIX functions

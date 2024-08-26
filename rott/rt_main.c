@@ -132,8 +132,6 @@ void Init_Tables (void);
 void CheckRemoteRidicule ( int scancode );
 void SetRottScreenRes (int Width, int Height);
 
-extern void crash_print (int);
-
 //extern int G_argc;
 //extern char G_argv[30][80];
 int G_weaponscale;
@@ -154,8 +152,6 @@ int main (int argc, char *argv[])
     extern char *BATTMAPS, *ROTTMAPS;
 	_argc = argc;
 	_argv = argv;
-
-   signal (11, crash_print);
 
    ApogeePath = GetPrefDir();
 
