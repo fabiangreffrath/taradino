@@ -1648,7 +1648,7 @@ void GetMapFileName ( char * filename, size_t n )
 void SetBattleMapFileName ( char * filename )
 {
    BattleLevels.avail = true;
-   BattleLevels.file = strdup(filename);
+   BattleLevels.file = M_StringDuplicate(filename);
 }
 
 /*

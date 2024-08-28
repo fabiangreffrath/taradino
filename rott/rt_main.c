@@ -733,7 +733,7 @@ void SetupWads( void )
 			   }else{
 					fread(buf,3,3,f);//is the 3 first letters RTL (RTC)
 				    if (((strstr(buf,"RTL") != 0)||strstr(buf,"RTC") != 0)) {
-						GameLevels.file = strdup(tempstr);
+						GameLevels.file = M_StringDuplicate(tempstr);
 						GameLevels.avail++;
 						buf = safe_realloc(buf, 32 + strlen(tempstr));
 						strcpy (buf,"Adding ");
@@ -772,7 +772,7 @@ NoRTL:;
 			   }else{
 					fread(buf,3,3,f);//is the 3 first letters RTL (RTC)
 				    if (((strstr(buf,"RTL") != 0)||strstr(buf,"RTC") != 0)) {
-						BattleLevels.file = strdup(tempstr);
+						BattleLevels.file = M_StringDuplicate(tempstr);
 						BattleLevels.avail++;
 						buf = safe_realloc(buf, 32 + strlen(tempstr));
 						strcpy (buf,"Adding ");
@@ -836,7 +836,7 @@ NoRTC:;
       if (*src != '\\')
          strcat (tempstr,"\\\0");
       strcat (tempstr,RemoteSounds.file);
-      newargs [argnum++] = strdup(tempstr);
+      newargs [argnum++] = M_StringDuplicate(tempstr);
       }
    else
       {

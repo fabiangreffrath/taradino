@@ -1851,7 +1851,7 @@ void GetAlternatePath (char * tokenstr, AlternateInformation *info)
    if (!stricmp (token, tokenstr))
       {
       GetTokenEOL (false);
-      info->path = strdup(name);
+      info->path = M_StringDuplicate(name);
       }
 }
 
@@ -1877,7 +1877,7 @@ void GetAlternateFile (char * tokenstr, AlternateInformation *info)
             {
             #if (SHAREWARE == 0)
             info->avail = true;
-            info->file = strdup(token);
+            info->file = M_StringDuplicate(token);
             #else
             printf("Alternate file %s ignored.\n",token);
             info->file = "";
