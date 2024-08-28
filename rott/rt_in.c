@@ -84,7 +84,7 @@ static int sdl_mouse_delta_x = 0;
 static int sdl_mouse_delta_y = 0;
 static unsigned short sdl_mouse_button_mask = 0;
 static int sdl_total_sticks = 0;
-static unsigned short *sdl_stick_button_state = NULL;
+static unsigned short sdl_stick_button_state[MaxJoys];
 static int sdl_mouse_grabbed = 0;
 extern boolean sdl_fullscreen;
 
@@ -718,15 +718,6 @@ boolean INL_StartJoy (unsigned short joy)
        SDL_Init(SDL_INIT_JOYSTICK);
        sdl_total_sticks = SDL_NumJoysticks();
        if (sdl_total_sticks > MaxJoys) sdl_total_sticks = MaxJoys;
-
-       if ((sdl_stick_button_state == NULL) && (sdl_total_sticks > 0))
-       {
-           sdl_stick_button_state = (unsigned short *) malloc(sizeof (unsigned short) * sdl_total_sticks);
-           if (sdl_stick_button_state == NULL)
-               SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
-           else
-               memset(sdl_stick_button_state, '\0', sizeof (unsigned short) * sdl_total_sticks);
-       }
        SDL_JoystickEventState(SDL_ENABLE);
    }
 
