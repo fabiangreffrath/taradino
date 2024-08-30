@@ -1,0 +1,18 @@
+---
+Language: Cpp
+BasedOnStyle: Microsoft
+IndentAccessModifiers: false
+IndentCaseLabels: true
+IndentCaseBlocks: false
+IndentGotoLabels: false
+IndentPPDirectives: None
+IndentExternBlock: NoIndent
+IndentRequires: false
+UseTab: Always
+IndentWidth: 4
+TabWidth: 4
+SortIncludes: Never
+AlignEscapedNewlines: DontAlign
+ColumnLimit: 80
+Cpp11BracedListStyle: false
+---
