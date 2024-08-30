@@ -1641,6 +1641,29 @@ void GetMapFileName ( char * filename, size_t n )
 /*
 ======================
 =
+= GetMapFilePath
+=
+======================
+*/
+void GetMapFilePath ( char * filename, size_t n )
+{
+	const char *src;
+
+	if (BATTLEMODE && BattleLevels.avail == true)
+		src = BattleLevels.file;
+	else if (GameLevels.avail == true)
+		src = GameLevels.file;
+	else if (BATTLEMODE)
+		src = BATTMAPS;
+	else
+		src = ROTTMAPS;
+
+	strncpy(filename,src,n);
+}
+
+/*
+======================
+=
 = SetBattleMapFileName
 =
 ======================
@@ -1665,11 +1688,11 @@ unsigned short GetMapCRC
 
    {
    int  filehandle;
-   char filename[ 80 ];
+   char filename[ 256 ];
    RTLMAP RTLMap;
    size_t mapsoffset;
 
-   GetMapFileName( &filename[ 0 ], sizeof(filename) );
+   GetMapFilePath( &filename[ 0 ], sizeof(filename) );
    CheckRTLVersion( filename );
    filehandle = SafeOpenRead( filename );
    mapsoffset = GetMapArrayOffset( filehandle );
