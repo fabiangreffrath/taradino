@@ -33,6 +33,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "m_misc2.h"
 #include "develop.h"
 
+enum COLORS
+   {
+   BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, BROWN, LIGHTGRAY, DARKGRAY,
+   LIGHTBLUE, LIGHTGREEN, LIGHTCYAN, LIGHTRED, LIGHTMAGENTA, YELLOW, WHITE
+   };
+
 extern  int    egacolor[16];
 extern  byte   *  origpal;
 extern  int      _argc;

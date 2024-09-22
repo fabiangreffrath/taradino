@@ -24,7 +24,7 @@ SOFTWARE.
 
 #include "SDL.h"
 
-#include "vga_font_cp437.h"
+#include "vgafont.h"
 
 #define BLINK_HZ ((1000 / 70) * 16)
 

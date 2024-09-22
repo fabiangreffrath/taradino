@@ -41,7 +41,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_rand.h"
 #include "rt_game.h"
 #include "rt_draw.h"
-#include "myprint.h"
 #include "rt_debug.h"
 #include "rt_view.h"
 #include "rt_battl.h"
