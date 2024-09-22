@@ -120,6 +120,4 @@ void DrawIntensityString (unsigned short x, unsigned short y, const char *string
 void VW_MeasureIntensityPropString (const char *string, int *width, int *height);
 byte GetIntensityColor (byte pix);
 
-#include "myprint.h"
-
 #endif
