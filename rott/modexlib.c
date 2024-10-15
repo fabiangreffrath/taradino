@@ -387,6 +387,8 @@ void VL_DePlaneVGA (void)
 
 void VH_UpdateScreen (void)
 { 	
+	void *dst_pixels;
+	int dst_pitch;
 
 	if (StretchScreen){//bna++
 		StretchMemPicture ();
@@ -394,7 +396,13 @@ void VH_UpdateScreen (void)
 		DrawCenterAim ();
 	}
 	SDL_LowerBlit(VL_GetVideoSurface(), &blit_rect, argbbuffer, &blit_rect);
-	SDL_UpdateTexture(texture, NULL, argbbuffer->pixels, argbbuffer->pitch);
+
+	if (SDL_LockTexture(texture, NULL, &dst_pixels, &dst_pitch) == 0)
+	{
+		SDL_memcpy(dst_pixels, argbbuffer->pixels, argbbuffer->pitch * argbbuffer->h);
+		SDL_UnlockTexture(texture);
+	}
+
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
@@ -411,13 +419,22 @@ void VH_UpdateScreen (void)
 
 void XFlipPage ( void )
 {
- 	if (StretchScreen){//bna++
+	void *dst_pixels;
+	int dst_pitch;
+
+	if (StretchScreen){//bna++
 		StretchMemPicture ();
 	}else{
 		DrawCenterAim ();
 	}
    SDL_LowerBlit(sdl_surface, &blit_rect, argbbuffer, &blit_rect);
-   SDL_UpdateTexture(texture, NULL, argbbuffer->pixels, argbbuffer->pitch);
+
+   if (SDL_LockTexture(texture, NULL, &dst_pixels, &dst_pitch) == 0)
+   {
+	   SDL_memcpy(dst_pixels, argbbuffer->pixels, argbbuffer->pitch * argbbuffer->h);
+	   SDL_UnlockTexture(texture);
+   }
+
    SDL_RenderClear(renderer);
    SDL_RenderCopy(renderer, texture, NULL, NULL);
    SDL_RenderPresent(renderer);
