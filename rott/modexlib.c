@@ -105,10 +105,6 @@ void SetShowCursor(int show)
 void GraphicsMode ( void )
 {
 	uint32_t flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
-	uint32_t pixel_format;
-
-	uint32_t rmask, gmask, bmask, amask;
-	int bpp;
 
 	if (SDL_InitSubSystem (SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
@@ -143,16 +139,11 @@ void GraphicsMode ( void )
 	                                   0, 0, 0, 0);
 	SDL_FillRect(sdl_surface, NULL, 0);
 
-	pixel_format = SDL_GetWindowPixelFormat(screen);
-	SDL_PixelFormatEnumToMasks(pixel_format, &bpp,
-	                           &rmask, &gmask, &bmask, &amask);
-	argbbuffer = SDL_CreateRGBSurface(0,
-	                                  iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, bpp,
-	                                  rmask, gmask, bmask, amask);
+	argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 0, 0, SDL_PIXELFORMAT_ARGB8888);
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 	texture = SDL_CreateTexture(renderer,
-	                            pixel_format,
+	                            SDL_PIXELFORMAT_ARGB8888,
 	                            SDL_TEXTUREACCESS_STREAMING,
 	                            iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 
@@ -386,14 +377,18 @@ void VL_DePlaneVGA (void)
 
 void VH_UpdateScreen (void)
 { 	
-
 	if (StretchScreen){//bna++
 		StretchMemPicture ();
 	}else{
 		DrawCenterAim ();
 	}
-	SDL_LowerBlit(VL_GetVideoSurface(), &blit_rect, argbbuffer, &blit_rect);
-	SDL_UpdateTexture(texture, NULL, argbbuffer->pixels, argbbuffer->pitch);
+
+	if (SDL_LockTexture(texture, NULL, &argbbuffer->pixels, &argbbuffer->pitch) == 0)
+	{
+		SDL_LowerBlit(VL_GetVideoSurface(), &blit_rect, argbbuffer, &blit_rect);
+		SDL_UnlockTexture(texture);
+	}
+
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
@@ -410,13 +405,18 @@ void VH_UpdateScreen (void)
 
 void XFlipPage ( void )
 {
- 	if (StretchScreen){//bna++
+	if (StretchScreen){//bna++
 		StretchMemPicture ();
 	}else{
 		DrawCenterAim ();
 	}
-   SDL_LowerBlit(sdl_surface, &blit_rect, argbbuffer, &blit_rect);
-   SDL_UpdateTexture(texture, NULL, argbbuffer->pixels, argbbuffer->pitch);
+
+	if (SDL_LockTexture(texture, NULL, &argbbuffer->pixels, &argbbuffer->pitch) == 0)
+	{
+		SDL_LowerBlit(sdl_surface, &blit_rect, argbbuffer, &blit_rect);
+		SDL_UnlockTexture(texture);
+	}
+
    SDL_RenderClear(renderer);
    SDL_RenderCopy(renderer, texture, NULL, NULL);
    SDL_RenderPresent(renderer);
