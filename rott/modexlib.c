@@ -106,7 +106,6 @@ void SetShowCursor(int show)
 void GraphicsMode ( void )
 {
 	uint32_t flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
-	uint32_t pixel_format;
 
 	if (SDL_InitSubSystem (SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
 	{
@@ -141,12 +140,11 @@ void GraphicsMode ( void )
 	                                   0, 0, 0, 0);
 	SDL_FillRect(sdl_surface, NULL, 0);
 
-	pixel_format = SDL_GetWindowPixelFormat(screen);
-	argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 0, 0, pixel_format);
+	argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 0, 0, SDL_PIXELFORMAT_ARGB8888);
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 	texture = SDL_CreateTexture(renderer,
-	                            pixel_format,
+	                            SDL_PIXELFORMAT_ARGB8888,
 	                            SDL_TEXTUREACCESS_STREAMING,
 	                            iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 
