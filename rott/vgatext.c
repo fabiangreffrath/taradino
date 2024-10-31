@@ -162,10 +162,7 @@ int vgatext_main(SDL_Window *window, Uint16 *screen)
 	// main loop
 	while (!SDL_QuitRequested())
 	{
-		void *dst_pixels;
-		int dst_pitch;
 		SDL_Event event;
-
 		while (SDL_PollEvent(&event))
 		{
 			if (event.type == SDL_KEYDOWN || event.type == SDL_MOUSEBUTTONDOWN)
@@ -183,12 +180,7 @@ int vgatext_main(SDL_Window *window, Uint16 *screen)
 			next += BLINK_HZ;
 		}
 
-		if (SDL_LockTexture(texture, NULL, &dst_pixels, &dst_pitch) == 0)
-		{
-			SDL_memcpy(dst_pixels, (*windowsurface)->pixels, (*windowsurface)->pitch * (*windowsurface)->h);
-			SDL_UnlockTexture(texture);
-		}
-
+		SDL_UpdateTexture(texture, NULL, (*windowsurface)->pixels, (*windowsurface)->pitch);
 		SDL_RenderClear(renderer);
 		SDL_RenderCopy(renderer, texture, NULL, NULL);
 		SDL_RenderPresent(renderer);
