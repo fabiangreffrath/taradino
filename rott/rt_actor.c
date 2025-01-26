@@ -3283,9 +3283,7 @@ void SpawnSuperFatalityGibs(objtype *ob,objtype *attacker)
       else
          {
          MISCVARS->randgibspeed = true;
-//         SpawnParticles(ob,GUTS,75);
-//MED
-         SpawnParticles(ob,GUTS,150);
+         SpawnParticles(ob,GUTS,75);
          MISCVARS->randgibspeed = false;
          }
       SpawnParticles(ob,GUTS,40);
@@ -3755,9 +3753,7 @@ void SpawnParticles(objtype*ob,int which,int numparticles)
                      (randadj<<4);
          dz = 100 + (randadj<<3);
 
-//MED
-//         nspeed = 0x2800 + (randadj<<7);
-         nspeed = 0x2800;
+         nspeed = 0x2800 + (randadj<<7);
          randphi = atan2_appx(FindDistance(dx,dy),dz<<10);
          }
 
@@ -3778,9 +3774,9 @@ void SpawnParticles(objtype*ob,int which,int numparticles)
       new->temp2 = gibtype;
       new->temp3 = (MISCVARS->gibgravity == -1)?(GRAVITY):(MISCVARS->gibgravity);
 
-      new->speed = nspeed>>1;
-//      if (MISCVARS->randgibspeed == true)
-//         new->speed += (randadj << 11);
+      new->speed = nspeed;
+      if (MISCVARS->randgibspeed == true)
+         new->speed += (randadj << 11);
          //if (ob->state == &s_snakefireworks)
       new->z = ob->z;
       Fix(randphi);

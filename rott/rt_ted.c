@@ -5157,8 +5157,6 @@ void SetupGameLevel (void)
    
 	if (gamestate.SpawnEluder || gamestate.SpawnDeluder)
       {
-//MED
-      for (i=0;i<25;i++)
          RespawnEluder();
       }
 
