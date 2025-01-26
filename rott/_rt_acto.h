@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_actor_private
 #define _rt_actor_private
 
-#define MAXGIBS            600
+#define MAXGIBS            200
 #define HAAPT              24
 #define VAAPT              24
 #define GODHAPT            1024
@@ -43,7 +43,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define HIGHFALLCLIPZ      -5
 #define LOWRISECLIPZ       (nominalheight)
 #define HIGHRISECLIPZ      64
-#define NORMALGIBSPEED     0x2f00
+#define NORMALGIBSPEED     0x1f00
 
 #define FL_PLEADING        0x400
 #define FL_EYEBALL         0x400
