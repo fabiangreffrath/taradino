@@ -64,7 +64,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //******************************************************************************
 
-extern int G_weaponscale;
 extern boolean iG_aimCross;
 
 boolean WriteSoundFile   = true;
@@ -439,17 +438,6 @@ boolean ParseConfigFile (void)
       // Read in ViewSize
 
       ReadInt("ViewSize",&viewsize);
-
-      // Read in Weaponscale
-
-      ReadInt("Weaponscale",&G_weaponscale);//bna added
-	   if ((G_weaponscale <150)||(G_weaponscale>600)){
-		   if (iGLOBAL_SCREENWIDTH == 320){
-				G_weaponscale=168;
-		   }else if (iGLOBAL_SCREENWIDTH == 640){
-				G_weaponscale=299;
-		   }
-	   }
 
       // Read in MouseAdjustment
 
@@ -1622,23 +1610,6 @@ void WriteConfig (void)
    SafeWriteString(file,"; Size of View port.\n");
    SafeWriteString(file,"; (smallest) 0 - 10 (largest)\n");
    WriteParameter(file,"ViewSize         ",viewsize);
-
-   // Write out WEAPONSCALE  bna added
-
-   SafeWriteString(file,"\n;\n");
-   SafeWriteString(file,"; Size of Weaponscale.\n");
-   SafeWriteString(file,"; (smallest) 150 - 600 (largest)\n");
-   G_weaponscale = (weaponscale * 168 )/65536;
-
-   if ((G_weaponscale <150)||(G_weaponscale>600)){
-	   if (iGLOBAL_SCREENWIDTH == 320){
-			G_weaponscale=168;
-	   }else if (iGLOBAL_SCREENWIDTH == 640){
-			G_weaponscale=299;
-	   }
-   }
-   WriteParameter(file,"Weaponscale         ",G_weaponscale);
-
 
    // Write out MouseAdjustment
 
