@@ -52,9 +52,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 =============================================================================
 */
-extern int G_weaponscale;
-
-
 int    StatusBar = 0;
 int    lightninglevel=0;
 boolean  lightning=false;

@@ -134,7 +134,6 @@ void SetRottScreenRes (int Width, int Height);
 
 //extern int G_argc;
 //extern char G_argv[30][80];
-int G_weaponscale;
 extern int iDropDemo;
 extern boolean iG_aimCross;
 extern boolean sdl_fullscreen;
@@ -509,7 +508,6 @@ void CheckCommandLineParameters( void )
       printf ("         Shift            - Run/Turn faster\n");
       printf ("         Space            - Use/Open\n");
       printf ("         1-4              - Choose Weapon\n");
-      printf ("         5-6              - Scale Weapon Up/Down\n");
       printf ("         Enter            - Swap Weapon\n");
       printf ("         Backspace        - Turn 180\n");
       printf ("         Delete           - Drop Weapon\n");

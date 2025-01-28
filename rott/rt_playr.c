@@ -2537,18 +2537,6 @@ void PollControls (void)
    if (Keyboard[sc_Insert] && Keyboard[sc_X]){
 	      AddExitCommand();
    }
-//bna section
-   if (Keyboard[sc_5]){
-	//	 SetTextMode (  );
-      weaponscale +=  1000;
-	  //testval++;
-   }
-   if (Keyboard[sc_6]){
-	//	 SetTextMode (  );
-      weaponscale -=  1000;
-	  	//  testval--;
-   }
-//bna section end 
 
 
 
