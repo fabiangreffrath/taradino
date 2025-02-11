@@ -25,21 +25,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "w_wad.h"
 #include "z_zone.h"
 
-#include "fx_man.h"
 #include "_rt_soun.h"
+#include "fx_man.h"
 #include "rt_sound.h"
 
 #if (SHAREWARE == 0)
-#include "snd_reg.h"
+#  include "snd_reg.h"
 #else
-#include "snd_shar.h"
+#  include "snd_shar.h"
 #endif
 
 #define MAX_CHANNELS 8
 
-#define CHECK_HANDLE(handle) \
+#define CHECK_HANDLE(handle)                      \
     if ((handle) < 0 || (handle) >= MAX_CHANNELS) \
-        return(FX_Error);
+        return (FX_Error);
 
 static struct
 {
@@ -64,7 +64,7 @@ static int FX_Installed = 0;
 #define MV_MaxPanPosition  31
 #define MV_NumPanPositions (MV_MaxPanPosition + 1)
 
-#define MIX_VOLUME(volume)                                                     \
+#define MIX_VOLUME(volume) \
     ((max(0, min((volume), 255)) * (MV_MaxVolume + 1)) >> 8)
 
 typedef struct
@@ -194,7 +194,7 @@ void FX_SetVolume(int volume)
 
 char *FX_ErrorString(int ErrorNumber)
 {
-    return (char *) SDL_GetError();
+    return (char *)SDL_GetError();
 }
 
 int FX_StopSound(int handle)
@@ -256,7 +256,8 @@ int FX_SetupCard(int SoundCard, fx_device *device)
     }
 
     if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, GetSliceSize(),
-                            NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
+                            NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE)
+        < 0)
     {
         fprintf(stderr, "\n Couldn't open audio with desired format.");
         return FX_Error;
@@ -266,11 +267,11 @@ int FX_SetupCard(int SoundCard, fx_device *device)
     Mix_QuerySpec(&snd_samplerate, &mix_format, &mix_channels);
 
     printf("\n Configured audio device with %.1f kHz (%s%d%s), %d channels.",
-           (float) snd_samplerate / 1000,
+           (float)snd_samplerate / 1000,
            SDL_AUDIO_ISFLOAT(mix_format)    ? "F"
            : SDL_AUDIO_ISSIGNED(mix_format) ? "S"
                                             : "U",
-           (int) SDL_AUDIO_BITSIZE(mix_format),
+           (int)SDL_AUDIO_BITSIZE(mix_format),
            SDL_AUDIO_BITSIZE(mix_format) > 8
                ? (SDL_AUDIO_ISBIGENDIAN(mix_format) ? "MSB" : "LSB")
                : "",

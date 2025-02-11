@@ -36,49 +36,51 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "sndcards.h"
 
 typedef struct
-   {
-   int MaxVoices;
-   int MaxSampleBits;
-   int MaxChannels;
-   } fx_device;
+{
+    int MaxVoices;
+    int MaxSampleBits;
+    int MaxChannels;
+} fx_device;
 
 #define MonoFx   1
 #define StereoFx 2
 
 enum FX_ERRORS
-   {
-   FX_Warning = -2,
-   FX_Error = -1,
-   FX_Ok = 0,
-   FX_ASSVersion,
-   FX_BlasterError,
-   FX_SoundCardError,
-   FX_InvalidCard,
-   FX_MultiVocError,
-   FX_DPMI_Error
-   };
+{
+    FX_Warning = -2,
+    FX_Error = -1,
+    FX_Ok = 0,
+    FX_ASSVersion,
+    FX_BlasterError,
+    FX_SoundCardError,
+    FX_InvalidCard,
+    FX_MultiVocError,
+    FX_DPMI_Error
+};
 
-char *FX_ErrorString( int ErrorNumber );
-int   FX_SetupCard( int SoundCard, fx_device *device );
-int   FX_Init( int SoundCard, int numvoices, int numchannels, int samplebits, unsigned int mixrate );
-int   FX_Shutdown( void );
-int   FX_SetCallBack( void ( *function )( unsigned long ) );
-void  FX_SetVolume( int volume );
+char *FX_ErrorString(int ErrorNumber);
+int FX_SetupCard(int SoundCard, fx_device *device);
+int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
+            unsigned int mixrate);
+int FX_Shutdown(void);
+int FX_SetCallBack(void (*function)(unsigned long));
+void FX_SetVolume(int volume);
 
-void  FX_SetReverseStereo( int setting );
-int   FX_GetReverseStereo( void );
-void  FX_SetReverb( int reverb );
+void FX_SetReverseStereo(int setting);
+int FX_GetReverseStereo(void);
+void FX_SetReverb(int reverb);
 
-int FX_VoiceAvailable( int priority );
-int FX_SetPan( int handle, int vol, int left, int right );
-int FX_SetPitch( int handle, int pitchoffset );
+int FX_VoiceAvailable(int priority);
+int FX_SetPan(int handle, int vol, int left, int right);
+int FX_SetPitch(int handle, int pitchoffset);
 
-int FX_Play ( int handle, int sndnum, int pitchoffset, int angle, int distance, int priority );
+int FX_Play(int handle, int sndnum, int pitchoffset, int angle, int distance,
+            int priority);
 
-int FX_Pan3D( int handle, int angle, int distance );
-int FX_SoundActive( int handle );
-int FX_StopSound( int handle );
-int FX_StopAllSounds( void );
+int FX_Pan3D(int handle, int angle, int distance);
+int FX_SoundActive(int handle);
+int FX_StopSound(int handle);
+int FX_StopAllSounds(void);
 
 int FX_SetXY(int handle, int x, int y);
 int FX_AllSoundsRTP(void);
