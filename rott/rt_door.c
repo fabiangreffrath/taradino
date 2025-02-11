@@ -1063,6 +1063,7 @@ void SpawnDoor (int tilex, int tiley, int lock, int texture)
    if (!doorobjlist[doornum])
       Error("SpawnDoor: Failed on allocation of door %d ",doornum);
    memset(doorobjlist[doornum],0,sizeof(doorobj_t));
+   doorobjlist[doornum]->soundhandle = -1;
    lastdoorobj=doorobjlist[doornum];
 
    if (
@@ -3139,6 +3140,7 @@ void SpawnPushWall (int tilex, int tiley, int lock, int texture, int dir, int ty
 
    pwallobjlist[pwallnum]=(pwallobj_t*)Z_LevelMalloc(sizeof(pwallobj_t),PU_LEVELSTRUCT,NULL);
    memset(pwallobjlist[pwallnum],0,sizeof(pwallobj_t));
+   pwallobjlist[pwallnum]->soundhandle = -1;
    lastpwallobj=pwallobjlist[pwallnum];
 
 	lastpwallobj->x = (tilex<<16)+0x8000;

@@ -292,13 +292,13 @@ int SD_PlayIt ( int sndnum, int angle, int distance, int pitch )
          if (distance<=sounds[sndnum].prevdistance)
             FX_StopSound(sounds[sndnum].prevhandle);
          else
-            return 0;
+            return -1;
          }
       }
 
    if ((voice = FX_VoiceAvailable(sounds[sndnum].priority)) == -1)
       {
-      return( 0 );
+      return( -1 );
       }
 
    voice = FX_Play(voice, sndnum, pitch, angle, distance, sounds[sndnum].priority);
@@ -324,7 +324,7 @@ int SD_Play ( int sndnum )
    int pitch;
 
    if ( SD_SoundOkay ( sndnum ) == false )
-      return 0;
+      return -1;
 
    pitch = 0;
 
@@ -351,7 +351,7 @@ int SD_Play3D ( int sndnum, int angle, int distance )
    int pitch;
 
    if ( SD_SoundOkay ( sndnum ) == false )
-      return 0;
+      return -1;
 
    pitch = 0;
    if ( !( sounds[ sndnum ].flags & SD_PITCHSHIFTOFF ) )
@@ -382,7 +382,7 @@ int SD_PlaySoundRTP ( int sndnum, int x, int y )
 
 
    if ( SD_SoundOkay ( sndnum ) == false )
-      return 0;
+      return -1;
 
    dx=(x-player->x);
    dy=(player->y-y);
@@ -390,7 +390,7 @@ int SD_PlaySoundRTP ( int sndnum, int x, int y )
    distance=FindDistance(dx,dy) >> SD_DISTANCESHIFT;
 
    if (distance>255)
-      return 0;
+      return -1;
 
    if (distance!=0)
       {
@@ -427,7 +427,7 @@ int SD_PlayPitchedSound ( int sndnum, int volume, int pitch )
    int distance;
 
    if ( SD_SoundOkay ( sndnum ) == false )
-      return 0;
+      return -1;
 
    distance = 255 - volume;
 
@@ -449,7 +449,7 @@ void SD_SetSoundPitch ( int sndnum, int pitch )
    if (SD_Started==false)
       return;
 
-   if (!FX_SoundActive(sndnum))
+   if (FX_SoundActive(sndnum) == FX_Error)
       return;
 
    status=FX_SetPitch( sndnum, pitch );
@@ -476,7 +476,7 @@ void SD_PanRTP ( int handle, int x, int y )
    if (SD_Started==false)
       return;
 
-   if (!FX_SoundActive(handle))
+   if (FX_SoundActive(handle) == FX_Error)
       return;
 
    dx=(x-player->x);
@@ -524,7 +524,7 @@ void SD_SetPan ( int handle, int vol, int left, int right )
    if (SD_Started==false)
       return;
 
-   if (!FX_SoundActive(handle))
+   if (FX_SoundActive(handle) == FX_Error)
       return;
 
    status=FX_SetPan( handle, vol, left, right );
