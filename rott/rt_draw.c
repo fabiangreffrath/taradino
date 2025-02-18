@@ -3226,10 +3226,7 @@ void StartupScreenSaver ( void )
    ScreenSaver->pausetime=PAUSETIME;
 	ScreenSaver->pausex=120;
 	ScreenSaver->pausey=84;
-   if (iGLOBAL_SCREENWIDTH == 640){
-		ScreenSaver->pausex*=2;
-		ScreenSaver->pausey*=2;
-   }
+
    ScreenSaver->pausex=120;
    ScreenSaver->pausey=84;
    SetupScreenSaverPhase();
@@ -3317,11 +3314,7 @@ void UpdateScreenSaver ( void )
       ScreenSaver->pausetime=PAUSETIME;
 	  ScreenSaver->pausex=RandomNumber ("pausex",0)%240;
 	  ScreenSaver->pausey=RandomNumber ("pausey",0)%168;
-      if (iGLOBAL_SCREENWIDTH == 640){
-		  ScreenSaver->pausex*=2;
-		  ScreenSaver->pausey*=2;
-	  }
-   }
+    }
    DrawPauseXY (ScreenSaver->pausex, ScreenSaver->pausey);
 
    FlipPage();

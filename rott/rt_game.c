@@ -2199,7 +2199,7 @@ void DrawPause (void)
    {
 	  bufferofs = bufftemp;
       p = (pic_t *) W_CacheLumpNum (W_GetNumForName ("paused"), PU_CACHE, Cvt_pic_t, 1);
-      DrawPauseXY( (iGLOBAL_SCREENWIDTH-(p->width<<2) ) >>1, (iGLOBAL_SCREENHEIGHT-p->height)>>1);//bna++
+      DrawPauseXY( (ORIGWIDTH-(p->width<<2) ) >>1, (ORIGHEIGHT-p->height)>>1);//bna++
       //DrawPauseXY( (320-(p->width<<2) ) >>1, (200-p->height)>>1);
 /*
 	  //buf = (byte *) SafeMalloc (64000);
@@ -2280,7 +2280,7 @@ void DrawPause (void)
    else
    {
       p = (pic_t *) W_CacheLumpNum (W_GetNumForName ("wait"), PU_CACHE, Cvt_pic_t, 1);
-      DrawPauseXY( (iGLOBAL_SCREENWIDTH-(p->width<<2) ) >>1, (iGLOBAL_SCREENHEIGHT-p->height)>>1);//bna++
+      DrawPauseXY( (ORIGWIDTH-(p->width<<2) ) >>1, (ORIGHEIGHT-p->height)>>1);//bna++
       //DrawPauseXY( (320-(p->width<<2) ) >>1, (200-p->height)>>1);
    }
 //   VH_UpdateScreen () ;

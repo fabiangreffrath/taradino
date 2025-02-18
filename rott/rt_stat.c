@@ -1442,7 +1442,7 @@ void SpawnSolidStatic (statobj_t * temp)
 void PreCacheStaticSounds (int itemnumber)
 {
 
-	if (stats[itemnumber].flags & FL_SHOOTABLE)
+	if (itemnumber >= 0 && (stats[itemnumber].flags & FL_SHOOTABLE))
 	  SD_PreCacheSound(SD_ITEMBLOWSND);
 
 
