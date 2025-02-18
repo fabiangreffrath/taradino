@@ -971,6 +971,8 @@ void DrawPreCache( void )
       int width, height, num;
       char buf[30];
 
+	DisableScreenStretch();//bna++ shut off streech mode
+
       if ( BATTLEMODE )
 			{
          VL_DrawPostPic (W_GetNumForName("trilogo"));
