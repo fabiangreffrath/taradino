@@ -108,22 +108,22 @@ void FixMapSeen( void )
       for (i=0;i<MAPSIZE;i++)
          if (!mapseen[i][j])
             {
-            if (i==0 && ((mapseen[i][j+1] && j<MAPSIZE-1) || (mapseen[i][j-1] && j>0)) && mapseen[i+1][j])
+            if (i==0 && ((j<MAPSIZE-1 && mapseen[i][j+1]) || (j>0 && mapseen[i][j-1])) && mapseen[i+1][j])
                mapseen[i][j]=1;
-            else if (i==MAPSIZE-1 && mapseen[i-1][j] && ((mapseen[i][j+1] && j<MAPSIZE-1) || (mapseen[i][j-1] && j>0)))
+            else if (i==MAPSIZE-1 && mapseen[i-1][j] && ((j<MAPSIZE-1 && mapseen[i][j+1]) || (j>0 && mapseen[i][j-1])))
                mapseen[i][j]=1;
-            else if (j==0 && ((mapseen[i+1][j] && i<MAPSIZE-1) || (mapseen[i-1][j] && i>0)) && mapseen[i][j+1])
+            else if (j==0 && ((i<MAPSIZE-1 && mapseen[i+1][j]) || (i>0 && mapseen[i-1][j])) && mapseen[i][j+1])
                mapseen[i][j]=1;
-            else if (j==MAPSIZE-1 && mapseen[i][j-1] && ((mapseen[i+1][j] && i<MAPSIZE-1) || (mapseen[i-1][j] && i>0)))
+            else if (j==MAPSIZE-1 && mapseen[i][j-1] && ((i<MAPSIZE-1 && mapseen[i+1][j]) || (i>0 && mapseen[i-1][j])))
                mapseen[i][j]=1;
             else if (
-               (  ((mapseen[i-1][j]) && (mapseen[i][j+1]) && (!(tilemap[i-1][j+1])))
+               (  ((i > 0 && mapseen[i-1][j]) && (j < MAPSIZE - 1 && mapseen[i][j+1]) && (!(i > 0 && j < MAPSIZE - 1 && tilemap[i-1][j+1])))
                    ||
-                  ((mapseen[i-1][j]) && (mapseen[i][j-1]) && (!(tilemap[i-1][j-1])))
+                  ((i > 0 && mapseen[i-1][j]) && (j > 0 && mapseen[i][j-1]) && (!(i > 0 && j > 0 && tilemap[i-1][j-1])))
                    ||
-                  ((mapseen[i+1][j]) && (mapseen[i][j+1]) && (!(tilemap[i+1][j+1])))
+                  ((i < MAPSIZE - 1 && mapseen[i+1][j]) && (j < MAPSIZE - 1 && mapseen[i][j+1]) && (!(i < MAPSIZE - 1 && j < MAPSIZE - 1 && tilemap[i+1][j+1])))
                    ||
-                  ((mapseen[i+1][j]) && (mapseen[i][j-1]) && (!(tilemap[i+1][j-1])))
+                  ((i < MAPSIZE - 1 && mapseen[i+1][j]) && (j > 0 && mapseen[i][j-1]) && (!(i < MAPSIZE - 1 && j > 0 && tilemap[i+1][j-1])))
                ) &&
                tilemap[i][j])
                   mapseen[i][j]=1;
