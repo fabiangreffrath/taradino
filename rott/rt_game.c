@@ -363,7 +363,7 @@ void SetupPlayScreen
 //
 //******************************************************************************
 
-void GameMemToScreen
+static void GameMemToScreen
    (
    pic_t *source,
    int   x,
@@ -401,7 +401,7 @@ void DrawPlayScreen (boolean bufferofsonly)
 
    if ( SHOW_TOP_STATUS_BAR() )
       {
-	   if (iGLOBAL_SCREENWIDTH == 640) {
+	   if (0&&iGLOBAL_SCREENWIDTH == 640) {
 		   //use this as dummy pic to fill out missing bar
 		  shape = ( pic_t * ) W_CacheLumpName( "bottbar", PU_CACHE, Cvt_pic_t, 1 );
 		  //GameMemToScreen( shape, 0, 0, bufferofsonly );
@@ -414,7 +414,8 @@ void DrawPlayScreen (boolean bufferofsonly)
 				 ( byte * )&erase->data, 2, true, bufferofsonly );
 		  shape = ( pic_t * )W_CacheLumpName( "stat_bar", PU_CACHE, Cvt_pic_t, 1 );
 		  GameMemToScreen( shape, 0, 0, bufferofsonly );
-	   } else if (iGLOBAL_SCREENWIDTH == 320) {
+	   } else
+	   {
 		  
 		  //SetTextMode (  );
 		  shape = ( pic_t * )W_CacheLumpName( "stat_bar", PU_CACHE, Cvt_pic_t, 1 );
@@ -449,7 +450,7 @@ void DrawPlayScreen (boolean bufferofsonly)
       //else 
          {
 
-			if (iGLOBAL_SCREENWIDTH == 640) {
+			if (0&&iGLOBAL_SCREENWIDTH == 640) {
 				  //bna fix - not to good? but no one has 286 any more
 				  //statusbar dosent cover hole screen, because its a lump picture width max 320
 				  //first write dummy shape and next over it
@@ -474,7 +475,7 @@ void DrawPlayScreen (boolean bufferofsonly)
       if ( demoplayback )
       {
 			 shape = ( pic_t * )W_CacheLumpName( "demo", PU_CACHE, Cvt_pic_t, 1 );
-			 if (iGLOBAL_SCREENWIDTH == 640) {
+			 if (0&&iGLOBAL_SCREENWIDTH == 640) {
 				 //DrawPPic( 148, 185, shape->width, shape->height,
 				 //   ( byte * )&shape->data, 1, true, bufferofsonly );bna
 				 DrawPPic( 148*2, 465, shape->width, shape->height,
@@ -1573,6 +1574,7 @@ void DrawTime
 
 void DrawMPPic (int xpos, int ypos, int width, int height, int heightmod, byte *src, boolean bufferofsonly)
 {
+   const int hires = 2;
    int olddest;
    int dest;
    int x;
@@ -1580,13 +1582,13 @@ void DrawMPPic (int xpos, int ypos, int width, int height, int heightmod, byte *
    int planes;
    byte pixel;
 
-   olddest = ylookup[ypos] + xpos;
+   olddest = ylookup[ypos * hires] + xpos * hires;
 
    for (planes = 0; planes < 4; planes++)
    {
       dest = olddest;
 
-      dest += planes;
+      dest += planes * hires;
 
       for (y = 0; y < height; y++)
       {
@@ -1597,19 +1599,20 @@ void DrawMPPic (int xpos, int ypos, int width, int height, int heightmod, byte *
             if (pixel != 255)
             {
                if (bufferofsonly)
-                  *(dest+bufferofs) = pixel;
+                  memset(dest+bufferofs, pixel, hires);
                else
-               {
-                  *(dest+page1start) = pixel;
-                  *(dest+page2start) = pixel;
-                  *(dest+page3start) = pixel;
-               }
+                  memset(dest+page1start, pixel, hires);
+              
+              for (int h = 1; h < hires; h++)
+              {
+                memcpy(dest+bufferofs+linewidth, dest+bufferofs, hires);
+              }
             }
 
-            dest += 4;
+            dest += 4 * hires;
          }
 
-         dest += (linewidth-width*4);
+         dest += (linewidth-width*4) * hires;
       }
 
       if (heightmod)
@@ -1796,6 +1799,7 @@ void DrawTriads
 
 void DrawPPic (int xpos, int ypos, int width, int height, byte *src, int num, boolean up, boolean bufferofsonly)
 {
+   const int hires = 2;
    int olddest;
    int dest;
    int x;
@@ -1809,14 +1813,14 @@ void DrawPPic (int xpos, int ypos, int width, int height, byte *src, int num, bo
       amt = 8;
    else
       amt = -8;
-
-   olddest = ylookup[ypos] + xpos;
+  
+   olddest = ylookup[ypos * hires] + xpos * hires;
 
    for (planes = 0; planes < 4; planes++)
    {
       dest = olddest;
 
-      dest += planes;
+      dest += planes * hires;
 
       for (y = 0; y < height; y++)
       {
@@ -1829,20 +1833,21 @@ void DrawPPic (int xpos, int ypos, int width, int height, byte *src, int num, bo
                for (k = 0; k < num; k++)
                {
                   if (bufferofsonly)
-                     *(dest+bufferofs+(amt*k)) = pixel;
+                     memset(dest+bufferofs+(amt*k*hires), pixel, hires);
                   else
+                     memset(dest+page1start+(amt*k*hires), pixel, hires);
+
+                  for (int h = 1; h < hires; h++)
                   {
-                     *(dest+page1start+(amt*k)) = pixel;
-                     *(dest+page2start+(amt*k)) = pixel;
-                     *(dest+page3start+(amt*k)) = pixel;
+                    memcpy(dest+bufferofs+(amt*k*hires)+linewidth, dest+bufferofs+(amt*k*hires), hires);
                   }
                }
             }
 
-            dest += 4;
+            dest += 4 * hires;
          }
 
-         dest += (linewidth-width*4);
+         dest += (linewidth-width*4)*hires;
       }
    }
 }
@@ -1995,6 +2000,7 @@ void DrawBarAmmo
 
 void SingleDrawPPic (int xpos, int ypos, int width, int height, byte *src, int num, boolean up)
 {
+   const int hires = 2;
    byte *olddest;
    byte *dest;
    int x;
@@ -2009,13 +2015,13 @@ void SingleDrawPPic (int xpos, int ypos, int width, int height, byte *src, int n
    else
       amt = -8;
 
-   olddest = (byte *)(bufferofs - screenofs + ylookup[ypos] + xpos);
+   olddest = (byte *)(bufferofs - screenofs + ylookup[ypos * hires] + xpos * hires);
 
    for (planes = 0; planes < 4; planes++)
    {
       dest = olddest;
 
-      dest += planes;
+      dest += planes * hires;
 
       for (y = 0; y < height; y++)
       {
@@ -2027,14 +2033,18 @@ void SingleDrawPPic (int xpos, int ypos, int width, int height, byte *src, int n
             {
                for (k = 0; k < num; k++)
                {
-                  *(dest+(amt*k)) = pixel;
+                  memset(dest+(amt*k*hires), pixel, hires);
+                  for (int h = 1; h < hires; h++)
+                  {
+                    memcpy(dest+(amt*k*hires)+linewidth, dest+(amt*k*hires), hires);
+                  }
                }
             }
 
-            dest += 4;
+            dest += 4 * hires;
          }
 
-         dest += (linewidth-width*4);
+         dest += (linewidth-width*4) * hires;
       }
    }
 }
@@ -2590,33 +2600,7 @@ void  DrawEpisodeLevel (int x, int y)
 
 void GM_MemToScreen (byte *source, int width, int height, int x, int y)
 {
-   int dest;
-   byte *dest1, *dest2, *dest3;
-   byte *screen1, *screen2, *screen3;
-   int  plane;
-
-   dest = ylookup[y]+x;
-
-   dest1 = (byte *)(dest+page1start);
-   dest2 = (byte *)(dest+page2start);
-   dest3 = (byte *)(dest+page3start);
-
-   for (plane = 0; plane<4; plane++)
-   {
-      screen1 = dest1;
-      screen2 = dest2;
-      screen3 = dest3;
-      for (y = 0; y < height; y++, screen1 += linewidth,
-                                   screen2 += linewidth,
-                                   screen3 += linewidth, source+=width)
-      {
-	for (x = 0; x < width; x++) {
-		screen1[x*4+plane] = source[x];
-		screen2[x*4+plane] = source[x];
-		screen3[x*4+plane] = source[x];
-	}
-      }
-   }
+    VL_MemToScreen(source, width, height, x, y);
 }
 
 

@@ -7,7 +7,7 @@
 //typedef unsigned char byte;
 
 int iGLOBAL_SCREENWIDTH  = 640;//bna
-int iGLOBAL_SCREENHEIGHT = 480;//bna
+int iGLOBAL_SCREENHEIGHT = 400;//bna
 int iGLOBAL_SCREENBWIDE ;
 int iG_SCREENWIDTH;// default screen width in bytes
 
@@ -40,7 +40,6 @@ void SetRottScreenRes (int Width, int Height)
     iGLOBAL_SCREENBWIDE = iGLOBAL_SCREENWIDTH*(96/320);
 	iG_SCREENWIDTH = iGLOBAL_SCREENWIDTH*(96/320);;// default screen width in bytes
 
-	if (iGLOBAL_SCREENWIDTH == 320) {
 		iGLOBAL_FOCALWIDTH = 160;
 		dGLOBAL_FPFOCALWIDTH = 160.0; 
 		iGLOBAL_HEALTH_X = 20;
@@ -49,16 +48,13 @@ void SetRottScreenRes (int Width, int Height)
 		iGLOBAL_AMMO_Y = 184;
 
 		YZANGLELIMIT = (30*FINEANGLES/360);
-	}
 	if (iGLOBAL_SCREENWIDTH == 640) {
-		iGLOBAL_FOCALWIDTH = 180;
-		dGLOBAL_FPFOCALWIDTH = 180.0 ;
-		iGLOBAL_HEALTH_X = 40;//20*2;
-		iGLOBAL_HEALTH_Y = 466;//(185*2)+16;
-		iGLOBAL_AMMO_X = 600;//300*2;
-		iGLOBAL_AMMO_Y = 464;//480-16;
+//		iGLOBAL_HEALTH_X *= 2;
+//		iGLOBAL_HEALTH_Y *= 2;
+//		iGLOBAL_AMMO_X *= 2;
+//		iGLOBAL_AMMO_Y *= 2;
 
-		YZANGLELIMIT = (60*FINEANGLES/360);
+		YZANGLELIMIT *= 2;
 	}
 }
 

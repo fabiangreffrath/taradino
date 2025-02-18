@@ -251,6 +251,7 @@ void SetViewSize
    )
 
    {
+   const int hires = 2;
    int height;
    int maxheight;
    int screenx;
@@ -265,21 +266,6 @@ void SetViewSize
    }
 */
 
-	if ( iGLOBAL_SCREENWIDTH == 640) {
-		height = 0;//we use height as dummy cnt
-		viewsizes[height++]= 380; viewsizes[height++]= 336;
-        viewsizes[height++]= 428; viewsizes[height++]= 352;
-        viewsizes[height++]= 460; viewsizes[height++]= 368;
-        viewsizes[height++]= 492; viewsizes[height++]= 384;
-        viewsizes[height++]= 524; viewsizes[height++]= 400;
-        viewsizes[height++]= 556; viewsizes[height++]= 416;
-        viewsizes[height++]= 588; viewsizes[height++]= 432;
-        viewsizes[height++]= 640; viewsizes[height++]= 448;
-        viewsizes[height++]= 640; viewsizes[height++]= 464;
-        viewsizes[height++]= 640; viewsizes[height++]= 480;
-        viewsizes[height++]= 640; viewsizes[height++]= 480;
-	}
-
 	if ((size<0) || (size>=MAXVIEWSIZES)){//bna added
         printf("Illegal screen size = %d\n",size);
 		size = 8;//set default value
@@ -292,7 +278,10 @@ void SetViewSize
    viewwidth  = viewsizes[ size << 1 ];         // must be divisable by 16
    viewheight = viewsizes[ ( size << 1 ) + 1 ]; // must be even
 
-   maxheight = iGLOBAL_SCREENHEIGHT;
+    viewwidth *= hires;
+    viewheight *= hires;
+
+   maxheight = ORIGHEIGHT;
    topy      = 0;
 
    // Only keep the kills flag
@@ -333,22 +322,26 @@ void SetViewSize
    //   SetTextMode (  );
    //   viewheight=viewheight;
    height = viewheight;
-   if ( height > 168*iGLOBAL_SCREENHEIGHT/200 )
+   if ( height > 168 * hires )
    {
         // Prevent weapon from being scaled too big
-	    height = 168*iGLOBAL_SCREENHEIGHT/200;
+	    height = 168 * hires;
    }
 
-   weaponscale = ( height << 16 ) / 168;//( height << 16 ) = 170 * 65536
+   weaponscale = ( height << 16 ) / 168 ;//( height << 16 ) = 170 * 65536
 
   
    centerx     = viewwidth >> 1;
    centery     = viewheight >> 1;
    centeryfrac = (centery << 16);
-   yzangleconverter = ( 0xaf85 * viewheight ) / iGLOBAL_SCREENHEIGHT;
+   yzangleconverter = ( 0xaf85 * viewheight ) / SCREENWIDTH;
 
    // Center the view horizontally
-   screenx = ( iGLOBAL_SCREENWIDTH - viewwidth ) >> 1;
+   screenx = ( SCREENWIDTH - viewwidth ) >> 1;
+
+    maxheight *= hires;
+    topy *= hires;
+    
 
    if ( viewheight >= maxheight )
       {
@@ -360,6 +353,7 @@ void SetViewSize
       // Center the view vertically
       screeny = ( ( maxheight - viewheight ) >> 1 ) + topy;
       }
+
 
    // Calculate offset of view window
    screenofs = screenx + ylookup[ screeny ];

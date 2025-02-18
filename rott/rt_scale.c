@@ -1015,6 +1015,7 @@ void DrawScreenSizedSprite (int lump)
 
 void DrawNormalPost (byte * src, byte * buf)
 {
+   const int hires = 2;
    int  offset;
    int  length;
    int  s;
@@ -1032,9 +1033,13 @@ void DrawNormalPost (byte * src, byte * buf)
             for (s=0;s<length;s++) {
                 // Spaced out a little for tracking a bug. Should be equivalent.
                 byte *saddr = src+s;
-                byte *daddr = buf + ylookup[offset + s];
+                byte *daddr = buf + ylookup[(offset + s) * hires];
                 byte val = *saddr;
-                *daddr = val;
+                memset(daddr, val, hires);
+                for (int h = 1; h < hires; h++)
+                {
+                  memcpy(daddr + linewidth, daddr, hires);
+                }
 //                *(buf+ylookup[offset+s])=*(src+s);
             }
             src+=length;
@@ -1052,6 +1057,7 @@ void DrawNormalPost (byte * src, byte * buf)
 
 void DrawNormalSprite (int x, int y, int shapenum)
 {
+   const int hires = 2;
    byte *buffer;
    int cnt;
    byte *shape;
@@ -1060,22 +1066,22 @@ void DrawNormalSprite (int x, int y, int shapenum)
    int startx;
 
    whereami=41;
-
+   
    shape = W_CacheLumpNum (shapenum, PU_CACHE, Cvt_patch_t, 1);
    p = (patch_t *)shape;
 
-   if (((x-p->leftoffset)<0) || ((x-p->leftoffset+p->width)>iGLOBAL_SCREENWIDTH))
+   if (((x-p->leftoffset)<0) || ((x-p->leftoffset+p->width)>ORIGWIDTH))
       Error ("DrawNormalSprite: x is out of range x=%d\n",x-p->leftoffset+p->width);
-   if (((y-p->topoffset)<0) || ((y-p->topoffset+p->height)>iGLOBAL_SCREENHEIGHT))
+   if (((y-p->topoffset)<0) || ((y-p->topoffset+p->height)>ORIGWIDTH))
       Error ("DrawNormalSprite: y is out of range y=%d\n",y-p->topoffset+p->height);
 
-   startx=x-p->leftoffset;
-   buffer = (byte*)bufferofs+ylookup[y-p->topoffset];
+   startx=(x-p->leftoffset) * hires;
+   buffer = (byte*)bufferofs+ylookup[(y-p->topoffset) * hires];
 
       {
       b=buffer+startx; 
      
-      for (cnt = 0; cnt < p->width; cnt++,b++)
+      for (cnt = 0; cnt < p->width; cnt++,b+=hires)
          DrawNormalPost ((byte *)(p->collumnofs[cnt]+shape), b);
       }
 }

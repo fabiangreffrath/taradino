@@ -470,9 +470,6 @@ void CheckCommandLineParameters( void )
       printf ("   AIM        - Give Aim Crosshair.\n");
       printf ("   FULLSCREEN - Start in fullscreen mode\n");
       printf ("   WINDOW     - Start in windowed mode\n");
-      printf ("   RESOLUTION - Specify the screen resolution to use\n");
-      printf ("              - next param is <widthxheight>, valid resolutions are:\n");
-      printf ("              - 320x200 and 640x480\n");
 #if (SHAREWARE==0)
       printf ("   FILERTL    - used to load Userlevels (RTL files)\n");
       printf ("              - next parameter is RTL filename\n");
@@ -1105,7 +1102,7 @@ void GameLoop (void)
          case ex_resetgame:
 
   // SetTextMode (  ); //12345678
-	    EnableScreenStretch();//bna++ shut on streech mode 
+//	    EnableScreenStretch();//bna++ shut on streech mode 
             InitCharacter();
 
             InitializeMessages();

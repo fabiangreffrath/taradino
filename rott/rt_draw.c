@@ -3224,12 +3224,11 @@ void StartupScreenSaver ( void )
    ScreenSaver=(screensaver_t *)SafeMalloc(sizeof(screensaver_t));
    ScreenSaver->phase=0;
    ScreenSaver->pausetime=PAUSETIME;
-   if (iGLOBAL_SCREENWIDTH == 320){
-		ScreenSaver->pausex=120;
-		ScreenSaver->pausey=84;
-   }else if (iGLOBAL_SCREENWIDTH == 640){
-		ScreenSaver->pausex=240;
-		ScreenSaver->pausey=201;
+	ScreenSaver->pausex=120;
+	ScreenSaver->pausey=84;
+   if (iGLOBAL_SCREENWIDTH == 640){
+		ScreenSaver->pausex*=2;
+		ScreenSaver->pausey*=2;
    }
    ScreenSaver->pausex=120;
    ScreenSaver->pausey=84;
@@ -3316,12 +3315,11 @@ void UpdateScreenSaver ( void )
    if (ScreenSaver->pausetime<=0)
    {
       ScreenSaver->pausetime=PAUSETIME;
-	  if (iGLOBAL_SCREENWIDTH == 320){
-		  ScreenSaver->pausex=RandomNumber ("pausex",0)%240;
-		  ScreenSaver->pausey=RandomNumber ("pausey",0)%168;
-      }else if (iGLOBAL_SCREENWIDTH == 640){
-		  ScreenSaver->pausex=RandomNumber ("pausex",0)%480;
-		  ScreenSaver->pausey=RandomNumber ("pausey",0)%403;
+	  ScreenSaver->pausex=RandomNumber ("pausex",0)%240;
+	  ScreenSaver->pausey=RandomNumber ("pausey",0)%168;
+      if (iGLOBAL_SCREENWIDTH == 640){
+		  ScreenSaver->pausex*=2;
+		  ScreenSaver->pausey*=2;
 	  }
    }
    DrawPauseXY (ScreenSaver->pausex, ScreenSaver->pausey);

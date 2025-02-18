@@ -162,10 +162,14 @@ void US_ClippedPrint (int x, int y, const char *string)
 
 void VW_DrawPropString (const char *string)
 {
+   const int hires = 2;
    byte  pix;
    int   width,step,height,ht;
    byte  *source, *dest, *origdest;
    int   ch;
+
+  px *= hires;
+  py *= hires;
 
    ht = CurrentFont->height;
    dest = origdest = (byte *)(bufferofs+ylookup[py]+px);
@@ -182,14 +186,20 @@ void VW_DrawPropString (const char *string)
          {
             pix = *source;
             if (pix)
-               *dest = pix;
+            {
+               memset(dest, pix, hires);
+               for (int h = 1; h < hires; h++)
+               {
+                memcpy(dest + linewidth, dest, hires);
+               }
+            }
 
             source++;
-            dest += linewidth;
+            dest += linewidth * hires;
          }
 
          px++;
-	 origdest++;
+	 origdest+=hires;
          dest = origdest;
       }
    }

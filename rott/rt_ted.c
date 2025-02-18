@@ -1122,16 +1122,9 @@ void PreCache( void )
 			    currentmem = MAXLEDS - 1;
          while (lastmem<=currentmem)
             {//SetTextMode (  );
-   			if ( iGLOBAL_SCREENWIDTH == 320) {
 				DrawNormalSprite (PRECACHEBARX+PRECACHELED1X+(lastmem<<2),
                               PRECACHEBARY+PRECACHELED1Y,
                               W_GetNumForName ("led1"));//led1 progressbar
-			}else if ( iGLOBAL_SCREENWIDTH == 640) {
-				DrawNormalSprite (72+(Gs*(lastmem<<2)),446,W_GetNumForName ("led1"));//led1 progressbar
-				DrawNormalSprite (72+(Gs*(lastmem<<2)),446+3,W_GetNumForName ("led1"));//led1 progressbar
-				DrawNormalSprite (72+3+(Gs*(lastmem<<2)),446,W_GetNumForName ("led1"));//led1 progressbar
-				DrawNormalSprite (72+3+(Gs*(lastmem<<2)),446+3,W_GetNumForName ("led1"));//led1 progressbar
-			}
 
             lastmem++;
 				VW_UpdateScreen (); // was missing, fixed
@@ -1140,18 +1133,10 @@ void PreCache( void )
          while (lastcache<=currentcache)
             {
 
-   			if ( iGLOBAL_SCREENWIDTH == 320) {
 				DrawNormalSprite (PRECACHEBARX+PRECACHELED2X+(lastcache<<2),
                               PRECACHEBARY+PRECACHELED2Y,
                               W_GetNumForName ("led2"));//led2 progressbar
-			}else if ( iGLOBAL_SCREENWIDTH == 640) {
-				DrawNormalSprite (72+(Gs*(lastcache<<2)),458,W_GetNumForName ("led2"));//led2 progressbar
-				DrawNormalSprite (72+(Gs*(lastcache<<2)),458+3,W_GetNumForName ("led2"));//led2 progressbar
-				DrawNormalSprite (72+3+(Gs*(lastcache<<2)),458,W_GetNumForName ("led2"));//led2 progressbar
-				DrawNormalSprite (72+3+(Gs*(lastcache<<2)),458+3,W_GetNumForName ("led2"));//led2 progressbar
-			
-			}
-			DisableScreenStretch();//bna++
+
 			VW_UpdateScreen ();//bna++
             lastcache++;
             ticdelay--;
@@ -1168,7 +1153,6 @@ void PreCache( void )
 				VW_UpdateScreen (); // was missing, fixed
             }
          }
-	  DisableScreenStretch();//bna++
 	  VW_UpdateScreen ();//bna++
 	  //I_Delay(200);
       bufferofs=tempbuf;
@@ -1182,7 +1166,6 @@ void PreCache( void )
 		double WHratio = (16200.0/200.0) / 100.0;
 ///	iGLOBAL_SCREENWIDTH = 640;
 //	iGLOBAL_SCREENHEIGHT = 480;
-DisableScreenStretch();
 
 	// Cache in fonts
 //	shape = W_CacheLumpNum (W_GetNumForName ("newfnt1"), PU_STATIC, Cvt_font_t, 1);
@@ -1202,7 +1185,6 @@ DisableScreenStretch();
          while (!IN_CheckAck ())
             ;
          }
- //  EnableScreenStretch();
       }
    else
       {

@@ -89,7 +89,6 @@ extern int SaveTime;
 
 void SetupPlayScreen (void);
 void SD_PreCache (void);
-void GameMemToScreen( pic_t *source, int x, int y, int bufferofsonly );
 void DrawPlayScreen (boolean bufferofsonly);
 
 void DrawKills (boolean bufferofsonly);

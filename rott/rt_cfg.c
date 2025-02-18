@@ -427,12 +427,9 @@ boolean ParseConfigFile (void)
       ReadInt("ScreenWidth", &iGLOBAL_SCREENWIDTH);
       ReadInt("ScreenHeight", &iGLOBAL_SCREENHEIGHT);
 
-	if ((iGLOBAL_SCREENWIDTH != 320 || iGLOBAL_SCREENHEIGHT != 200) &&
-		(iGLOBAL_SCREENWIDTH != 640 || iGLOBAL_SCREENHEIGHT != 480))
 		{
-			printf("WARNING: Invalid screen resolution %dx%d. Reverting to 640x480.\n", iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 			iGLOBAL_SCREENWIDTH = 640;
-			iGLOBAL_SCREENHEIGHT = 480;
+			iGLOBAL_SCREENHEIGHT = 400;
 		}
 
       // Read in ViewSize
@@ -1596,13 +1593,6 @@ void WriteConfig (void)
    SafeWriteString(file,"; 0 - Start in windowed mode\n");
    SafeWriteString(file,"; 1 - Start in fullscreen mode\n");
    WriteParameter(file,"FullScreen       ",sdl_fullscreen);
-      
-   // Write out resolution
-   SafeWriteString(file,"\n;\n");
-   SafeWriteString(file,"; Screen Resolution, supported resolutions: \n");
-   SafeWriteString(file,"; 320x200 and 640x480\n");
-   WriteParameter(file,"ScreenWidth      ",iGLOBAL_SCREENWIDTH);
-   WriteParameter(file,"ScreenHeight     ",iGLOBAL_SCREENHEIGHT);
 
    // Write out ViewSize
 

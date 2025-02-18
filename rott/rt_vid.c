@@ -62,25 +62,29 @@ boolean  screenfaded;
 
 void VL_MemToScreen (byte *source, int width, int height, int x, int y)
 {
-	/* TODO please optimize me */
-	
-	byte *ptr, *destline;
-	int plane, i, j;
-	
-	ptr = source;
-	
-	for (plane = 0; plane < 4; plane++) {
-		for (j = 0; j < height; j++) {
-			destline = (byte *)(bufferofs+ylookup[y+j]+x);
+    const int hires = 2;
 
-			for (i = 0; i < width; i++) {
-//				if (ptr < bufferofs + toplimit) { //bnafix zxcvb
-					*(destline + i*4 + plane) = *ptr++;
-//				}
-			}			
-		}
-	}
+    byte *ptr = source;
+
+    for (int plane = 0; plane < 4; plane++)
+    {
+        for (int j = 0; j < height; j++)
+        {
+            byte *destline = (byte *)(bufferofs + ylookup[hires * (y + j)] + hires * x);
+
+            for (int i = 0; i < width; i++)
+            {
+                memset(destline + hires * i * 4 + hires * plane, *ptr++, hires);
+            }
+
+            for (int h = 1; h < hires; h++)
+            {
+                memcpy(destline + h * linewidth, destline, linewidth);
+            }
+        }
+    }
 }
+
 // bna function start
 void VL_MemToScreenClipped (byte *source, int width, int height, int x, int y);
 void VL_MemToScreenClipped (byte *source, int width, int height, int x, int y)

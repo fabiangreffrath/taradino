@@ -5,6 +5,11 @@
 
 //husk at rette i winrott.c
 
+#define ORIGWIDTH 320
+#define ORIGHEIGHT 200
+#define SCREENWIDTH 640
+#define SCREENHEIGHT 400
+
 extern int iGLOBAL_SCREENWIDTH;//bna
 extern int iGLOBAL_SCREENHEIGHT;//bna
 extern int iGLOBAL_SCREENBWIDE ;
