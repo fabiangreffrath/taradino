@@ -42,8 +42,8 @@ target_link_libraries(${TARADINO_EXEC} PRIVATE SDL2::Main SDL2::Mixer)
 target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}")
 target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
 
-if(MSVC)
-	set_property(TARGET ${TARADINO_EXEC} PROPERTY C_STANDARD 17)
+set_property(TARGET ${TARADINO_EXEC} PROPERTY C_STANDARD 17)
+if (MSVC)
 	# silence warnings about POSIX functions
 	target_compile_options(${TARADINO_EXEC} PUBLIC -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_WARNINGS -Dstrcasecmp=_stricmp -Dalloca=_alloca)
 	# silence unsigned/signed and integer truncation warnings
