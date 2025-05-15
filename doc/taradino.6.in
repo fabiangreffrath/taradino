@@ -28,6 +28,15 @@ Start in windowed mode.
 Specify the screen resolution to use (next parameter is widthxheight).
 Valid resolutions are 320x200 and 640x480.
 .TP
+.BR filertl\  \fIfile\fP
+Used to load Userlevels (RTL files).
+.TP
+.BR filertc\  \fIfile\fP
+Used to load Battlelevels (RTC files).
+.TP
+.BR file\  \fIfile\fP
+Used to load WAD files.
+.TP
 .BR nojoys
 Disable check for joystick.
 .TP
@@ -72,6 +81,9 @@ Play in time limit mode (next parameter is time in seconds).
 .TP
 .BR maxtimelimit\  \fItime\fP
 Maximum time to count down from (next parameter is time in seconds).
+.TP
+.BR help
+Display help message.
 .TP
 .BR dopefish
 ?
