@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "develop.h"
 #include "rt_fixed.h"
 
@@ -286,9 +287,7 @@ typedef unsigned char           byte;
 //////////////////      GLOBAL ENUMERATED TYPES    ///////////////////////
 
 typedef unsigned char boolean;
-enum {
-  false, true
-};
+// true and false are defined by stdbool
 
 typedef enum {
 		  east,
