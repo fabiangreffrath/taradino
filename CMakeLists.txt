@@ -6,6 +6,8 @@ project(taradino
 	LANGUAGES C
 	VERSION 1.1.3
 )
+configure_file(rott/version.h.in rott/version.h @ONLY)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/rott)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 option(TARADINO_SHAREWARE "Build shareware version" OFF)

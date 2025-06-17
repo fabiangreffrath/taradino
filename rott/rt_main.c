@@ -377,16 +377,8 @@ void DrawRottTitle ( void )
       {
       SetTextMode();
       TurnOffTextCursor ();
-         strcpy (title,"Rise of the Triad Startup  Version ");
-         strcat (title,itoa(ROTTMAJORVERSION,&buf[0],10));
-         strcat (title,".");
-//MED
-#if (SHAREWARE==1)||(DOPEFISH==0)
-         strcat (title,itoa(ROTTMINORVERSION,&buf[0],10));
-#else
-         strcat (title,"DFISH");
-#endif
-         strcat (title,"\n");
+         snprintf(title, sizeof(title), "Taradino %s (Game version %u.%u)\n",
+	          CMAKE_PROJECT_VERSION, ROTTMAJORVERSION, ROTTMINORVERSION);
 
          px=(80-strlen(title))>>1;
          py=0;
