@@ -368,7 +368,6 @@ int main (int argc, char *argv[])
 void DrawRottTitle ( void )
 {
    char title[80];
-   char buf[5];
 
    SetTextMode();
    TurnOffTextCursor ();
