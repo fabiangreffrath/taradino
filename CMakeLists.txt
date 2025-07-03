@@ -17,12 +17,10 @@ set(TARADINO_SUFFIX "" CACHE STRING "Executable file name suffix")
 find_package(SDL2 REQUIRED)
 find_package(SDL2_mixer REQUIRED)
 
-file(GLOB TARADINO_SOURCES
-	${PROJECT_SOURCE_DIR}/rott/*.c
-)
+file(GLOB TARADINO_SOURCES "${PROJECT_SOURCE_DIR}/rott/*.c")
 
-if(WIN32)
-	set(TARADINO_SOURCES ${TARADINO_SOURCES} ${PROJECT_SOURCE_DIR}/misc/taradino.rc)
+if(WIN32 OR MSVC OR CMAKE_SYSTEM_NAME STREQUAL "Windows")
+	list(APPEND TARADINO_SOURCES "${PROJECT_SOURCE_DIR}/misc/taradino.rc")
 endif()
 
 string(LENGTH "${TARADINO_SUFFIX}" SUFFIX_LEN)
