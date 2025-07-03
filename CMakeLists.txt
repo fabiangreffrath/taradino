@@ -7,7 +7,6 @@ project(taradino
 	VERSION 1.1.3
 )
 configure_file(rott/version.h.in rott/version.h @ONLY)
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/rott)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 option(TARADINO_SHAREWARE "Build shareware version" OFF)
@@ -43,6 +42,7 @@ add_executable(${TARADINO_EXEC} ${TARADINO_SOURCES})
 target_link_libraries(${TARADINO_EXEC} PRIVATE SDL2::Main SDL2::Mixer)
 target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}")
 target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
+target_include_directories(${TARADINO_EXEC} PRIVATE "${PROJECT_BINARY_DIR}/rott")
 
 set_property(TARGET ${TARADINO_EXEC} PROPERTY C_STANDARD 99)
 if (MSVC)
