@@ -42,7 +42,7 @@ target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_STRING="${TARADINO_T
 target_compile_definitions(${TARADINO_EXEC} PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
 target_include_directories(${TARADINO_EXEC} PRIVATE "${PROJECT_BINARY_DIR}/rott")
 
-set_property(TARGET ${TARADINO_EXEC} PROPERTY C_STANDARD 99)
+set_target_properties(${TARADINO_EXEC} PROPERTIES C_STANDARD_REQUIRED ON C_STANDARD 99)
 if (MSVC)
 	# silence warnings about POSIX functions
 	target_compile_options(${TARADINO_EXEC} PUBLIC -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_WARNINGS -Dstrcasecmp=_stricmp -Dalloca=_alloca)
