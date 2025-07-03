@@ -11,7 +11,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/rott)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 option(TARADINO_SHAREWARE "Build shareware version" OFF)
-option(TARADINO_WERROR "Enable -Werror on build" OFF)
+option(TARADINO_WARNINGS_AS_ERRORS "Treat all compiler warnings as errors" OFF)
 set(TARADINO_DATADIR "" CACHE STRING "Game data file directory")
 set(TARADINO_SUFFIX "" CACHE STRING "Executable file name suffix")
 
@@ -56,8 +56,12 @@ if(${TARADINO_SHAREWARE})
 	target_compile_definitions(${TARADINO_EXEC} PRIVATE SHAREWARE=1)
 endif()
 
-if(${TARADINO_WERROR} AND NOT MSVC)
-	target_compile_options(${TARADINO_EXEC} PRIVATE -Werror)
+if(${TARADINO_WARNINGS_AS_ERRORS})
+	if(MSVC)
+		target_compile_options(${TARADINO_EXEC} PRIVATE /WX)
+	else()
+		target_compile_options(${TARADINO_EXEC} PRIVATE -Werror)
+	endif()
 endif()
 
 if(${TARADINO_DATADIR})
