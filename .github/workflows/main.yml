@@ -82,7 +82,7 @@ jobs:
           CFLAGS: -Wall
         run: |
           cmake -E make_directory cmake-build
-          cmake -S . -B cmake-build --fresh -DTARADINO_SHAREWARE=ON -DTARADINO_WERROR=ON -DTARADINO_SUFFIX=shareware
+          cmake -S . -B cmake-build --fresh -DTARADINO_SHAREWARE=ON -DTARADINO_WARNINGS_AS_ERRORS=ON -DTARADINO_SUFFIX=shareware
           cmake --build cmake-build --config Release
 
       - name: Build registered executable
@@ -91,7 +91,7 @@ jobs:
           CFLAGS: -Wall
         run: |
           cmake -E make_directory cmake-build
-          cmake -S . -B cmake-build --fresh -DTARADINO_SHAREWARE=OFF -DTARADINO_WERROR=ON -UTARADINO_SUFFIX
+          cmake -S . -B cmake-build --fresh -DTARADINO_SHAREWARE=OFF -DTARADINO_WARNINGS_AS_ERRORS=ON -UTARADINO_SUFFIX
           cmake --build cmake-build --config Release
 
       - name: Upload artifacts (Windows)
