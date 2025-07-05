@@ -49,6 +49,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_cfg.h"
 #include "rt_datadir.h"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 int    egacolor[16];
 byte   *  origpal;
 FILE   *  errout;
@@ -374,7 +378,11 @@ void Error(char *error, ...)
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, PACKAGE_STRING, msgbuf, NULL);
 	SDL_Quit();
 
+#ifdef __EMSCRIPTEN__
+	emscripten_force_exit(1);
+#else
 	exit (1);
+#endif
 }
 
 //#if (SOFTERROR==1)

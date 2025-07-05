@@ -77,6 +77,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <direct.h>
 #endif
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 #include "vgatext.h"
 
 volatile int    oldtime;
@@ -358,7 +362,12 @@ int main (int argc, char *argv[])
 #endif
       }
 
+#ifdef __EMSCRIPTEN__
+	emscripten_cancel_main_loop();
+	emscripten_set_main_loop(GameLoop, 0, 1);
+#else
    GameLoop();
+#endif
 
    QuitGame();
    
@@ -852,7 +861,12 @@ void PlayTurboGame
    NewGame = true;
    locplayerstate->player = DefaultPlayerCharacter;
    playstate = ex_resetgame;
+#ifdef __EMSCRIPTEN__
+   emscripten_cancel_main_loop();
+   emscripten_set_main_loop(GameLoop, 0, 1);
+#else
    GameLoop();
+#endif
    }
 
 
@@ -941,8 +955,10 @@ void GameLoop (void)
 {
    int NextLevel;
 
+#ifndef __EMSCRIPTEN__
 	while (1)
 	   {
+#endif
       if ( playstate == ex_battledone )
          {
          while( damagecount > 0 )
@@ -1133,14 +1149,22 @@ void GameLoop (void)
                         {
                         CP_CaptureTheTriadError();
                         playstate = ex_titles;
+#ifdef __EMSCRIPTEN__
+                        return;
+#else
                         continue;
+#endif
                         }
                      }
                   else if ( teams < 2 )
                      {
                      CP_TeamPlayErrorMessage();
                      playstate = ex_titles;
+#ifdef __EMSCRIPTEN__
+                     return;
+#else
                      continue;
+#endif
                      }
                   }
                }
@@ -1426,7 +1450,9 @@ void GameLoop (void)
 	 default:
 	     ;
          }
-      }
+#ifndef __EMSCRIPTEN__
+	   }
+#endif
    }
 
 boolean CheckForQuickLoad  (void )
@@ -1484,7 +1510,11 @@ void ShutDown ( void )
    Z_ShutDown();
 //   _settextcursor (0x0607);
 
+#ifdef __EMSCRIPTEN__
+   emscripten_force_exit(0);
+#else
    exit(0);
+#endif
 }
 
 //===========================================================================
@@ -1697,7 +1727,198 @@ void PauseLoop ( void )
       }
 }
 
+#ifdef __EMSCRIPTEN__
+void _PlayLoop(void)
+{
+	static boolean canquit = true;
+	static int quittime = 0;
 
+	if (playstate != ex_stillplaying)
+	{
+		emscripten_cancel_main_loop();
+		emscripten_set_main_loop(GameLoop, 0, 1);
+		return;
+	}
+
+	UpdateClientControls();
+
+	if ( GamePaused )
+	{
+		PauseLoop();
+
+		if ( RefreshPause )
+		{
+			ThreeDRefresh();
+		}
+		else
+		{
+			UpdateScreenSaver();
+		}
+	}
+	else
+	{
+		if (controlupdatestarted == 1)
+			UpdateGameObjects();
+
+		ThreeDRefresh();
+	}
+
+	SyncToServer();
+
+	// Don't allow player to quit if entering message
+	canquit = !MSG.messageon;
+
+	PollKeyboard();
+
+	MISCVARS->madenoise = false;
+
+	AnimateWalls();
+
+	UpdateClientControls();
+
+	if ( AutoDetailOn == true )
+	{
+		AdaptDetail();
+	}
+
+	UpdateClientControls();
+
+	DoSprites();
+	DoAnimatedMaskedWalls();
+
+	UpdatePlayers();
+
+	DrawTime( false );
+
+	UpdateClientControls();
+
+	if ( ( !BATTLEMODE ) && ( CP_CheckQuick( LastScan ) ) )
+	{
+		boolean escaped=false;
+
+		if (LastScan == sc_Escape)
+		{
+			MU_StoreSongPosition();
+			MU_StartSong(song_menu);
+			escaped = true;
+		}
+		TurnShakeOff();
+		StopWind();
+		SetBorderColor( 0 );
+		ShutdownClientControls();
+		if (demoplayback==true)
+		{
+			FreeDemo();
+			playstate = ex_demodone;
+			if (demoexit==true)
+			{
+				QuitGame();
+			}
+			emscripten_cancel_main_loop();
+			emscripten_set_main_loop(GameLoop, 0, 1);
+			return;
+		}
+
+		ControlPanel( LastScan );
+
+		// set detail level
+		doublestep = 2 - DetailLevel;
+
+		inmenu = false;
+
+		if ( playstate == ex_titles )
+		{
+			emscripten_cancel_main_loop();
+			emscripten_set_main_loop(GameLoop, 0, 1);
+			return;
+		}
+
+		if ( playstate == ex_stillplaying )
+		{
+			SetupScreen( false );
+		}
+
+		// man FUCK this
+#if 0
+		if ( loadedgame == true )
+		{
+			goto fromloadedgame;
+		}
+#endif
+
+		if (
+			( playstate == ex_stillplaying ) &&
+			( ( fizzlein == false ) ||
+			( GamePaused )
+			)
+		)
+		{
+			StartupClientControls();
+		}
+
+		if (
+			(playstate == ex_stillplaying) &&
+			(GamePaused == false) &&
+			(escaped == true)
+		)
+		{
+			MU_StartSong(song_level);
+			MU_RestoreSongPosition();
+		}
+	}
+
+	if ( BATTLEMODE )
+	{
+		if ( MSG.messageon == false )
+		{
+			CheckRemoteRidicule( LastScan );
+		}
+		if ( quitactive == false )
+		{
+			if ( ( LastScan == sc_Escape ) && ( canquit ) )
+			{
+				quitactive = true;
+				quittime   = GetTicCount() + QUITTIMEINTERVAL;
+
+				if ( (consoleplayer == 0) || (networkgame == false) )
+				{
+					AddMessage( "Do you want to end this game? "
+					"(\\FY\\O/\\FN\\O)", MSG_QUIT );
+				}
+				else
+				{
+					AddMessage( "Do you want to exit to DOS? "
+					"(\\FY\\O/\\EN\\O)", MSG_QUIT );
+				}
+			}
+		}
+		else
+		{
+			if ( GetTicCount() > quittime )
+			{
+				quitactive = false;
+			}
+			else if ( LastScan == sc_N )
+			{
+				DeletePriorityMessage( MSG_QUIT );
+				quitactive = false;
+			}
+			else if ( LastScan == sc_Y )
+			{
+				DeletePriorityMessage( MSG_QUIT );
+				if ( (consoleplayer == 0) || (networkgame==false) )
+				{
+					AddEndGameCommand();
+				}
+				else
+				{
+					AddQuitCommand();
+				}
+			}
+		}
+	}
+}
+#endif
 
 void PlayLoop
    (
@@ -1755,7 +1976,10 @@ fromloadedgame:
       AddMessage( "opponents.  Have fun and explore.", MSG_GAME );
       }
 
-
+#ifdef __EMSCRIPTEN__
+	emscripten_cancel_main_loop();
+	emscripten_set_main_loop(_PlayLoop, 0, 1);
+#else
 	while( playstate == ex_stillplaying )
       {
       UpdateClientControls();
@@ -1929,6 +2153,7 @@ fromloadedgame:
             }
          }
       }
+#endif
    }
 
 //******************************************************************************
