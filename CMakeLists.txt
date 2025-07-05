@@ -36,9 +36,11 @@ target_compile_definitions(taradino PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${
 target_compile_definitions(taradino PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
 target_include_directories(taradino PRIVATE "${PROJECT_BINARY_DIR}/rott")
 
-if(DEFINED TARADINO_EXEC)
-	set_target_properties(taradino PROPERTIES OUTPUT_NAME ${TARADINO_EXEC})
+if(NOT DEFINED TARADINO_EXEC)
+	set(TARADINO_EXEC taradino)
 endif()
+
+set_target_properties(taradino PROPERTIES OUTPUT_NAME ${TARADINO_EXEC})
 
 set_target_properties(taradino PROPERTIES C_STANDARD_REQUIRED ON C_STANDARD 99)
 if (MSVC)
