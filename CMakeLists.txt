@@ -14,8 +14,10 @@ option(TARADINO_WARNINGS_AS_ERRORS "Treat all compiler warnings as errors" OFF)
 set(TARADINO_DATADIR "" CACHE STRING "Game data file directory")
 set(TARADINO_SUFFIX "" CACHE STRING "Executable file name suffix")
 
-find_package(SDL2 REQUIRED)
-find_package(SDL2_mixer REQUIRED)
+if(NOT EMSCRIPTEN)
+	find_package(SDL2 REQUIRED)
+	find_package(SDL2_mixer REQUIRED)
+endif()
 
 file(GLOB TARADINO_SOURCES "${PROJECT_SOURCE_DIR}/rott/*.c")
 
@@ -31,13 +33,24 @@ endif()
 set(TARADINO_TITLE "Taradino$<$<BOOL:${TARADINO_SHAREWARE}>: (Shareware)>")
 
 add_executable(taradino ${TARADINO_SOURCES})
-target_link_libraries(taradino PRIVATE SDL2::Main SDL2::Mixer)
+if(EMSCRIPTEN)
+	target_compile_options(taradino PRIVATE -sUSE_SDL=2 -sUSE_SDL_MIXER=2)
+	target_link_options(taradino PRIVATE -sUSE_SDL=2 -sUSE_SDL_MIXER=2)
+	target_link_options(taradino PRIVATE -sALLOW_MEMORY_GROWTH=1 -sINITIAL_MEMORY=1gb -sSTACK_SIZE=10mb)
+	target_link_options(taradino PRIVATE --preload-file assets@/)
+else()
+	target_link_libraries(taradino PRIVATE SDL2::Main SDL2::Mixer)
+endif()
 target_compile_definitions(taradino PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}")
 target_compile_definitions(taradino PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
 target_include_directories(taradino PRIVATE "${PROJECT_BINARY_DIR}/rott")
 
 if(NOT DEFINED TARADINO_EXEC)
 	set(TARADINO_EXEC taradino)
+endif()
+
+if(EMSCRIPTEN)
+	file(COPY ${PROJECT_SOURCE_DIR}/misc/index.html DESTINATION ${PROJECT_BINARY_DIR})
 endif()
 
 set_target_properties(taradino PROPERTIES OUTPUT_NAME ${TARADINO_EXEC})
