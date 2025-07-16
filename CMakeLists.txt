@@ -43,8 +43,18 @@ add_executable(taradino ${TARADINO_SOURCES})
 target_link_libraries(taradino PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer)
 target_compile_definitions(taradino PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}")
 target_compile_definitions(taradino PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
+target_compile_definitions(taradino PRIVATE SPNG_USE_MINIZ)
 target_include_directories(taradino PRIVATE "${PROJECT_BINARY_DIR}/rott")
 target_link_libraries(taradino PUBLIC $<$<BOOL:${TARADINO_ASAN}>:ASAN::ASAN>)
+
+# get libm on unix-like systems
+# just for pow() in spng.c
+if(UNIX OR NOT CMAKE_SYSTEM_NAME STREQUAL "Windows")
+	find_library(libmath m)
+	if(libmath)
+		target_link_libraries(taradino PRIVATE ${libmath})
+	endif()
+endif()
 
 if(NOT DEFINED TARADINO_EXEC)
 	set(TARADINO_EXEC taradino)

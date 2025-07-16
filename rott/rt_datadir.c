@@ -375,3 +375,61 @@ char *FindFileByName(const char *name)
     return NULL;
 }
 
+//
+// rott:le kpf stuff
+//
+
+#include "miniz.h"
+
+static mz_zip_archive kpf;
+
+byte *LoadKexFile(const char *filename, size_t *len)
+{
+	size_t sz = 0;
+	void *data = mz_zip_reader_extract_file_to_heap(&kpf, filename, &sz, 0);
+	if (!data)
+	{
+		fprintf(stderr, "Couldn't load file \"%s\" from RottEX.kpf: %s\n", filename, mz_zip_get_error_string(kpf.m_last_error));
+		if (len) *len = 0;
+		return NULL;
+	}
+
+	if (len) *len = sz;
+	return data;
+}
+
+void FreeKexFile(byte *data)
+{
+	if (data)
+		mz_free(data);
+}
+
+void UnmountKexData(void)
+{
+	mz_zip_reader_end(&kpf);
+}
+
+boolean MountKexData(void)
+{
+	char *path;
+
+	path = FindFileByName("RottEX.kpf");
+	if (!path)
+		return false;
+
+	memset(&kpf, 0, sizeof(kpf));
+
+	if (!mz_zip_reader_init_file(&kpf, path, 0))
+	{
+		fprintf(stderr, "Warning: mz_zip_reader_init_file() failed on \"%s\"\n", path);
+		free(path);
+		return false;
+	}
+
+	// not sure if it's a good idea to use this
+	atexit(UnmountKexData);
+
+	// clean up
+	free(path);
+	return true;
+}

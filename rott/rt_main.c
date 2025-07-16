@@ -841,6 +841,12 @@ NoRTC:;
 	{
 		free(newargs[i]);
 	}
+
+	// erysdren: rott:le
+	if (MountKexData())
+		printf("Mounted RottEX.kpf\n");
+	else
+		printf("Couldn't mount RottEX.kpf\n");
 }
 
 void PlayTurboGame
@@ -1466,6 +1472,9 @@ void ShutDown ( void )
       {
       WriteConfig ();
       }
+
+	// erysdren: rott:le
+	UnmountKexData();
 
 //   if (
 //       (networkgame==false) &&

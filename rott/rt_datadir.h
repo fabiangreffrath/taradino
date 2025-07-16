@@ -26,4 +26,9 @@ char *GetPrefDir (void);
 char *FindFileByName(const char *name);
 const char **GetDataDirs(int *num);
 
+boolean MountKexData(void);
+void UnmountKexData(void);
+byte *LoadKexFile(const char *filename, size_t *len);
+void FreeKexFile(byte *data);
+
 #endif
