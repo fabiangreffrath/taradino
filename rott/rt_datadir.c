@@ -276,7 +276,7 @@ static void AddStorefrontDirs(void)
 	}
 #else
 	char *prefix = getenv("USERPROFILE");
-	char prefix1[1024];
+	char *prefix1 = NULL;
 
 	if (!prefix)
 	{
@@ -285,8 +285,8 @@ static void AddStorefrontDirs(void)
 
 		if (homedrive && homepath)
 		{
-			M_snprintf(prefix1, sizeof(prefix1), "%s%s", homedrive, homepath);
-			prefix = (char *)prefix1;
+			prefix1 = M_StringJoin(homedrive, homepath, NULL);
+			prefix = prefix1;
 		}
 	}
 
@@ -300,6 +300,9 @@ static void AddStorefrontDirs(void)
 				AddDataDir(M_StringDuplicate(path));
 		}
 	}
+
+	if (prefix1)
+		free(prefix1);
 
 	/* set prefix to a drive letter for the following code */
 	prefix = "C:";
