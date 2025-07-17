@@ -45,14 +45,28 @@ static const char *storefront_paths[] = {
 	/* steam - classic rott */
 	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad Dark War\\Rise of the Triad - Dark War\\",
 	/* steam - ludicrous edition */
+	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad - Ludicrous Edition\\",
+	/* steam - ludicrous edition (assets) */
 	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad - Ludicrous Edition\\assets\\",
 	/* gog - ludicrous edition */
 	"\\GOG Games\\Rise of the Triad - Ludicrous Edition\\",
+	/* gog - ludicrous edition (assets) */
+	"\\GOG Games\\Rise of the Triad - Ludicrous Edition\\assets\\",
 	/* gog - classic rott */
 	"\\GOG Games\\Rise of the Triad\\",
 	/* original ms-dos installers */
 	"\\ROTT\\"
 };
+
+/* format strings for potential data paths relative to %USERPROFILE% */
+static const char *storefront_paths_home[] = {
+	/* steam - ludicrous edition (savegames) */
+	"\\Saved Games\\Nightdive Studios\\Rise of the Triad - Ludicrous Edition\\",
+	/* steam - ludicrous edition (user mapsets) */
+	"\\Saved Games\\Nightdive Studios\\Rise of the Triad - Ludicrous Edition\\projects\\"
+};
+
+static const int num_storefront_paths_home = sizeof(storefront_paths_home) / sizeof(const char *);
 
 #else
 
@@ -62,6 +76,8 @@ static const char *storefront_paths[] = {
 	/* steam - classic rott */
 	"/.steam/steam/steamapps/common/Rise of the Triad Dark War/Rise of the Triad - Dark War/",
 	/* steam - ludicrous edition */
+	"/.steam/steam/steamapps/common/Rise of the Triad - Ludicrous Edition/",
+	/* steam - ludicrous edition (assets) */
 	"/.steam/steam/steamapps/common/Rise of the Triad - Ludicrous Edition/assets/",
 	/* steam - ludicrous edition (savegames) */
 	"/.steam/steam/steamapps/compatdata/1421490/pfx/drive_c/users/steamuser/Saved Games/Nightdive Studios/Rise of the Triad - Ludicrous Edition/",
@@ -71,8 +87,12 @@ static const char *storefront_paths[] = {
 	"/Games/Heroic/Rise of the Triad/data/",
 	/* gog - ludicrous edition (wine) */
 	"/.wine/drive_c/GOG Games/Rise of the Triad - Ludicrous Edition/",
+	/* gog - ludicrous edition (wine) (assets) */
+	"/.wine/drive_c/GOG Games/Rise of the Triad - Ludicrous Edition/assets/",
 	/* gog - ludicrous edition (native) */
 	"/GOG Games/Rise of the Triad - Ludicrous Edition/",
+	/* gog - ludicrous edition (native) (assets) */
+	"/GOG Games/Rise of the Triad - Ludicrous Edition/assets/",
 	/* gog - classic rott (wine) */
 	"/.wine/drive_c/GOG Games/Rise of the Triad/",
 	/* gog - classic rott (native) */
@@ -255,7 +275,37 @@ static void AddStorefrontDirs(void)
 		prefix = pwd->pw_dir;
 	}
 #else
-	const char prefix[] = "C:";
+	char *prefix = getenv("USERPROFILE");
+	char *prefix1 = NULL;
+
+	if (!prefix)
+	{
+		char *homedrive = getenv("HOMEDRIVE");
+		char *homepath = getenv("HOMEPATH");
+
+		if (homedrive && homepath)
+		{
+			prefix1 = M_StringJoin(homedrive, homepath, NULL);
+			prefix = prefix1;
+		}
+	}
+
+	if (prefix)
+	{
+		for (int i = 0; i < num_storefront_paths_home; i++)
+		{
+			M_snprintf(path, sizeof(path), "%s%s", prefix, storefront_paths[i]);
+
+			if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
+				AddDataDir(M_StringDuplicate(path));
+		}
+	}
+
+	if (prefix1)
+		free(prefix1);
+
+	/* set prefix to a drive letter for the following code */
+	prefix = "C:";
 #endif
 
 	for (int i = 0; i < num_storefront_paths; i++)
