@@ -47,6 +47,11 @@ target_compile_definitions(taradino PRIVATE SPNG_USE_MINIZ)
 target_include_directories(taradino PRIVATE "${PROJECT_BINARY_DIR}/rott")
 target_link_libraries(taradino PUBLIC $<$<BOOL:${TARADINO_ASAN}>:ASAN::ASAN>)
 
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
+	# no idea if this is a bad hack, but the miniz example2.c does it?
+	target_compile_definitions(taradino PRIVATE _FILE_OFFSET_BITS=64 _LARGEFILE64_SOURCE=1)
+endif()
+
 # get libm on unix-like systems
 # just for pow() in spng.c
 if(UNIX OR NOT CMAKE_SYSTEM_NAME STREQUAL "Windows")
