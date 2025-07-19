@@ -844,9 +844,14 @@ NoRTC:;
 
 	// erysdren: rott:le
 	if (MountKexData())
+	{
 		printf("Mounted RottEX.kpf\n");
+		PrecacheBetaWalls();
+	}
 	else
+	{
 		printf("Couldn't mount RottEX.kpf\n");
+	}
 }
 
 void PlayTurboGame

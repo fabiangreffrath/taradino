@@ -31,4 +31,6 @@ void UnmountKexData(void);
 byte *LoadKexFile(const char *filename, size_t *len);
 void FreeKexFile(byte *data);
 
+boolean PrecacheBetaWalls(void);
+
 #endif

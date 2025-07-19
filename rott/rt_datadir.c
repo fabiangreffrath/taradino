@@ -433,3 +433,106 @@ boolean MountKexData(void)
 	free(path);
 	return true;
 }
+
+//
+// individual rott:le asset handling
+//
+
+#include "spng.h"
+
+#ifndef countof
+#define countof(a) (sizeof(a)/sizeof(*a))
+#endif
+
+static const char *walbs[] = {
+	"WALB03",
+	"WALB04",
+	"WALB05",
+	"WALB06",
+	"WALB07",
+	"WALB08",
+	"WALB13",
+	"WALB14",
+	"WALB15",
+	"WALB16",
+	"WALB17",
+	"WALB18",
+	"WALB19",
+	"WALB20",
+	"WALB21",
+	"WALB26",
+	"WALB27",
+	"WALB28",
+	"WALB40",
+	"WALB41",
+	"WALB42",
+	"WALB44",
+	"WALB46",
+	"WALB48",
+	"WALB51",
+	"WALB58",
+	"WALB59",
+	"WALB60",
+	"WALB61",
+	"WALB69",
+	"WALB70",
+	"WALB71"
+};
+
+boolean PrecacheBetaWalls(void)
+{
+	spng_ctx *ctx = spng_ctx_new(0);
+	if (!ctx)
+	{
+		fprintf(stderr, "Failed to create spng context!\n");
+		return false;
+	}
+
+	for (int i = 0; i < countof(walbs); i++)
+	{
+		byte *png;
+		size_t len_png;
+		byte *decoded;
+		size_t len_decoded;
+		char name[256];
+		M_snprintf(name, sizeof(name), "wad/wall/%s.png", walbs[i]);
+		int err;
+
+		// load png
+		png = LoadKexFile(name, &len_png);
+		if (!png && !len_png)
+		{
+			fprintf(stderr, "Failed to load \"%s\"\n", name);
+			continue;
+		}
+
+		// parse it
+		spng_set_png_buffer(ctx, png, len_png);
+		spng_decoded_image_size(ctx, SPNG_FMT_PNG, &len_decoded);
+		spng_set_image_limits(ctx, 64, 64);
+
+		// check if the buffer size and dimensions are valid
+		// it should be an 8-bit indexed 64x64 image
+		if (len_decoded != 64 * 64)
+		{
+			fprintf(stderr, "%s: buffer size mismatch: size=%d!=%d\n", name, (int)len_decoded, 64 * 64);
+			FreeKexFile(png);
+			continue;
+		}
+
+		decoded = malloc(len_decoded);
+		err = spng_decode_image(ctx, decoded, len_decoded, SPNG_FMT_PNG, 0);
+		if (err != 0)
+		{
+			fprintf(stderr, "spng_decode_image failed: %s\n", spng_strerror(err));
+			free(decoded);
+			FreeKexFile(png);
+			continue;
+		}
+
+		free(decoded);
+		FreeKexFile(png);
+	}
+
+	spng_ctx_free(ctx);
+}
