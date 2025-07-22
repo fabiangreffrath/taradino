@@ -2807,7 +2807,7 @@ void SetupMaskedWalls( void )
 						}
                }
             else
-               Error("You have what appears to be a platform ontop\n a wall at x=%d y=%d\n",i,j);
+               SoftError("You have what appears to be a platform ontop\n a wall at x=%d y=%d\n",i,j);
             }
          }
 }
