@@ -27,7 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //***************************************************************************
 
 
-#define MAXVISIBLE              256
+#define MAXVISIBLE              2048
 
 extern byte * shadingtable;            // Shading table for DrawPost
 
