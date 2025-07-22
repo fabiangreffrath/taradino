@@ -4227,6 +4227,10 @@ int GetLumpForTile(int tile)
       {
       return (tile + wallstart - 16);
       }
+   else if ((tile >= 512))
+      {
+      return (wallstart + 1); // erysdren: HACK
+      }
    return -1;
    }
 
