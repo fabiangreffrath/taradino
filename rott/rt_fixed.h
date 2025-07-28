@@ -22,6 +22,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include <stdint.h>
 
+/* int & float to fixed */
+#define FIXED(a) ((fixed)((a) * (1 << 16)))
+
+/* fixed to int */
+#define FIXED_TO_INT(a) ((int)((a) >> 16))
+
+/* fixed to float */
+#define FIXED_TO_FLOAT(a) ((float)((a) * (1.0f / (float)(1 << 16))))
+
 typedef uint32_t ufixed;
 typedef int32_t fixed;
 

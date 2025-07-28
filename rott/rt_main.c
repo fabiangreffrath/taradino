@@ -68,6 +68,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rottnet.h"
 #include "rt_scale.h"
 #include "rt_datadir.h"
+#include "console.h"
 
 #include "music.h"
 #include "fx_man.h"
@@ -210,6 +211,11 @@ int main (int argc, char *argv[])
    // Start up Memory manager with a certain amount of reserved memory
 
    Z_Init(50000,1000000);
+
+   /* initialize console */
+   console_init();
+   cmdlib_init();
+   cvarlib_init();
 
    IN_Startup ();
 
@@ -1509,6 +1515,11 @@ void QuitGame ( void )
    PrintMapStats();
    PrintTileStats();
    SetTextMode();
+
+   /* shutdown console */
+   console_quit();
+   cmdlib_quit();
+   cvarlib_quit();
 
    ShutDown();
 }

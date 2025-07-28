@@ -31,4 +31,7 @@ int  DebugKeys (void);
 void CheckDebug (void);
 void EndDemo ( void );
 
+void DoCheatCode(int which);
+int DoCheatCodeString(char *which);
+
 #endif

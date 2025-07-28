@@ -69,6 +69,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_msg.h"
 #include "rt_net.h"
 #include "rt_scale.h"
+#include "console.h"
 
 #include "rt_battl.h"
 #include "develop.h"
@@ -702,10 +703,10 @@ CP_MenuNames ControlMMenuNames[] =
    "USER OPTIONS",
    "EXT USER OPTIONS",//bna added
    "MUSIC VOLUME",
-   "SOUND FX VOLUME"
-
+   "SOUND FX VOLUME",
+   "LUDICROUS CONSOLE"
    };
-CP_iteminfo ControlMItems = {32, 48-8, 5, 0, 32, ControlMMenuNames, mn_largefont };//bna added
+CP_iteminfo ControlMItems = {32, 48-8, 6, 0, 32, ControlMMenuNames, mn_largefont };//bna added
 //CP_iteminfo ControlMItems = {32, 48, 4, 0, 32, ControlMMenuNames, mn_largefont };
 
 CP_itemtype ControlMMenu[] =
@@ -714,7 +715,8 @@ CP_itemtype ControlMMenu[] =
 	{ 1, "uopt\0", 'U', { .vv = CP_OptionsMenu } },
 	{ 1, "euopt\0", 'E', { .vv = CP_ExtOptionsMenu } }, // bna added
 	{ 1, "muvolumn\0", 'M', { .vv = MusicVolume } },
-	{ 1, "fxvolumn\0", 'S', { .vv = FXVolume } }
+	{ 1, "fxvolumn\0", 'S', { .vv = FXVolume } },
+	{ 1, "console\0", 'L', { .vv = CP_Console } }
 };
 
 CP_MenuNames OptionsNames[] =
@@ -1652,6 +1654,7 @@ boolean CP_CheckQuick
       {
       switch ( scancode )
          {
+         case sc_Tilde:
          case sc_Escape:
          case sc_F1:
          case sc_F2:
@@ -1683,6 +1686,8 @@ void ControlPanel
    )
 
    {
+	boolean was_in_console = false;
+
    if ( scancode == sc_Escape )
       {
       CP_MainMenu();
@@ -1743,6 +1748,12 @@ void ControlPanel
          CP_Quit( -1 );
          break;
 
+	  case sc_Tilde:
+		  LastScan = 0;
+		  Keyboard[sc_Tilde] = 0;
+		  CP_Console();
+		  was_in_console = true;
+		  break;
       }
 
    CleanUpControlPanel();
@@ -1755,9 +1766,72 @@ void ControlPanel
       inmenu = false;
       }
 
+	/* check if we were in console, and player didn't warp to another map */
+	if (playstate != ex_warped && was_in_console == true)
+	{
+		fizzlein = false;
+		DisableScreenStretch();
+	}
+
    loadsavesound = false;
    }
 
+//******************************************************************************
+//
+// CP_Console
+//
+//******************************************************************************
+void CP_Console(void)
+{
+	/* console input buffer */
+	static char input[256];
+	int i;
+
+	/* set alternate menu buf for flipping */
+	if (numdone || (!ingame) || (!inmenu))
+		SetAlternateMenuBuf();
+
+	ClearMenuBuf();
+
+	/* draw console */
+	console_draw();
+
+	/* erase input line area */
+	EraseMenuBufRegion(CONSOLE_INPUT_X, CONSOLE_INPUT_Y, CONSOLE_INPUT_W, CONSOLE_INPUT_H);
+
+	/* set title */
+	SetMenuTitle("Ludicrous Console");
+
+	/* i don't really know what any of this does */
+	if ((!numdone) && ingame && inmenu)
+		RefreshMenuBuf(0);
+	else
+		FlipMenuBuf();
+
+	WaitKeyUp();
+
+	/* process user input */
+	while (US_LineInput(CONSOLE_INPUT_X, CONSOLE_INPUT_Y, input, NULL, true, sizeof(input) - 1, CONSOLE_INPUT_W, 0))
+	{
+		console_evaluate(input);
+		console_draw();
+		if (console_should_close == true)
+			break;
+	}
+
+	/* reset */
+	console_should_close = false;
+
+	/* clear key input buffer */
+	IN_ClearKeysDown();
+
+	/* return to options menu */
+	if (numdone || (!ingame) || (!inmenu))
+		DrawControlMenu();
+
+	/* what? */
+	numdone++;
+}
 
 //******************************************************************************
 //

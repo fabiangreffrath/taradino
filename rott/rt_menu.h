@@ -178,6 +178,7 @@ void FreeSavedScreenPtr (void);
 void CleanUpControlPanel (void);
 void SetUpControlPanel (void);
 void ControlPanel (byte scancode);
+void CP_Console(void);
 menuitems CP_MainMenu( void );
 int getASCII ( void );
 void DoMainMenu (void);

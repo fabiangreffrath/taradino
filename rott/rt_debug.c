@@ -1176,7 +1176,329 @@ void WeaponCheat (int weapon)
 
    }
 
+/*
+================
+=
+= DoCheatCode ()
+=
+================
+*/
 
+void DoCheatCode(int which)
+{
+	switch (which)
+	{
+		case ENABLECHEAT:
+		case ENABLECHEATALT:
+			EnableCheatCodes();
+			break;
+
+		case INVULNERABLE:
+		case INVULNERABLEALT:
+			DoGodMode();
+			break;
+
+		case WARP:
+		case WARPALT:
+			DoWarp();
+			break;
+
+		case ITEMS:
+		case ITEMSALT:
+			DoItemCheat();
+			break;
+
+		case SOMEITEMS:
+		case SOMEITEMSALT:
+			DoSomeItemCheat();
+			break;
+
+		case GODMODEPWUP:
+		case GODMODEPWUPALT:
+			DoGodModePowerup();
+			break;
+
+#if (SHAREWARE == 0)
+		case DOGMODEPWUP:
+		case DOGMODEPWUPALT:
+			DoDogModePowerup();
+			break;
+#endif
+
+		case MERCURYPWUP:
+		case MERCURYPWUPALT:
+			DoMercuryModePowerup();
+			break;
+
+		case SHROOMSPWUP:
+		case SHROOMSPWUPALT:
+			DoShroomsModePowerup();
+			break;
+
+		case ELASTOPWUP:
+		case ELASTOPWUPALT:
+			DoElastoModePowerup();
+			break;
+
+		case RESTARTGAME:
+		case RESTARTGAMEALT:
+			RestartNormal();
+			break;
+
+		case HURTPLAYER:
+		case HURTPLAYERALT:
+			HurtPlayer();
+			break;
+
+		case TOMHALLMODE:
+		case TOMHALLMODEALT:
+			gamestate.autorun = true;
+			AddMessage("Autorun enabled!", MSG_CHEAT);
+			break;
+
+		case NORMAL:
+		case NORMALALT:
+			DoNormalThing();
+			break;
+
+		case LIGHTDIMON:
+		case LIGHTDIMONALT:
+			SetLightDiminish(false);
+			break;
+
+		case LIGHTDIMOFF:
+		case LIGHTDIMOFFALT:
+			SetLightDiminish(true);
+			break;
+
+		case FOGON:
+		case FOGONALT:
+			SetFog(true);
+			break;
+
+		case FOGOFF:
+		case FOGOFFALT:
+			SetFog(false);
+			break;
+
+		case QUITGAME:
+		case QUITGAMEALT:
+			QuitGame();
+			break;
+
+		case ENDLEVEL:
+		case ENDLEVELALT:
+			EndLevel();
+			break;
+
+		case FANDCOFF:
+		case FANDCOFFALT:
+			FloorandCeiling(false);
+			break;
+
+		case FANDCON:
+		case FANDCONALT:
+			FloorandCeiling(true);
+			break;
+
+		case AIMCROSS:
+		case AIMCROSSALT:
+			if (iG_aimCross == 0)
+			{
+				iG_aimCross = 1;
+				AddMessage("Crosshair on", MSG_GAME);
+			}
+			else
+			{
+				iG_aimCross = 0;
+				AddMessage("Crosshair off", MSG_GAME);
+			}
+			break;
+
+		case BULLETARMOR:
+		case BULLETARMORALT:
+			GiveBulletProofArmor();
+			break;
+
+		case FIREARMOR:
+		case FIREARMORALT:
+			GiveAsbestoArmor();
+			break;
+
+		case GASMASK:
+		case GASMASKALT:
+			GiveGasMask();
+			break;
+
+		case OUTFIT:
+		case OUTFITALT:
+			OutfitPlayer();
+			break;
+
+		case KILLPLAYER:
+		case KILLPLAYERALT:
+			KillPlayer();
+			break;
+
+		case RESTARTLEVEL:
+		case RESTARTLEVELALT:
+			RestartCurrentLevel();
+			break;
+
+		case WEAPONTWOPISTOL:
+		case WEAPONTWOPISTOLALT:
+			WeaponCheat(wp_twopistol);
+			break;
+
+		case WEAPONMP40:
+		case WEAPONMP40ALT:
+			WeaponCheat(wp_mp40);
+			break;
+
+		case WEAPONBAZOOKA:
+		case WEAPONBAZOOKAALT:
+			WeaponCheat(wp_bazooka);
+			break;
+
+		case WEAPONFIREBOMB:
+		case WEAPONFIREBOMBALT:
+			WeaponCheat(wp_firebomb);
+			break;
+
+		case WEAPONHEAT:
+		case WEAPONHEATALT:
+			WeaponCheat(wp_heatseeker);
+			break;
+
+		case WEAPONDRUNK:
+		case WEAPONDRUNKALT:
+			WeaponCheat(wp_drunk);
+			break;
+
+		case WEAPONFIREWALL:
+		case WEAPONFIREWALLALT:
+			WeaponCheat(wp_firewall);
+			break;
+
+		case WEAPONGOD:
+		case WEAPONGODALT:
+			WeaponCheat(wp_godhand);
+			break;
+
+#if (SHAREWARE == 0)
+		case WEAPONSPLIT:
+		case WEAPONSPLITALT:
+			WeaponCheat(wp_split);
+			break;
+
+		case WEAPONKES:
+		case WEAPONKESALT:
+			WeaponCheat(wp_kes);
+			break;
+
+		case WEAPONBAT:
+		case WEAPONBATALT:
+			WeaponCheat(wp_bat);
+			break;
+
+		case WEAPONDOG:
+		case WEAPONDOGALT:
+			WeaponCheat(wp_dog);
+			break;
+#endif
+
+		case MISSILECAMTOGGLE:
+		case MISSILECAMTOGGLEALT:
+			ToggleMissileCam();
+			break;
+
+		case HUDTOGGLE:
+		case HUDTOGGLEALT:
+			ToggleHUD();
+			break;
+
+		case ROTATIONFUN:
+			ShutdownClientControls();
+			RotationFun();
+			StartupClientControls();
+			SetupScreen(true);
+			break;
+
+		case DEMORECORD:
+			RecordDemoQuery();
+			break;
+
+		case DEMOEND:
+			EndDemo();
+			break;
+
+		case DEMOPLAYBACK:
+			PlaybackDemoQuery();
+			break;
+
+		case CRAZYGIBS:
+			if (gamestate.violence == vl_excessive)
+			{
+				ludicrousgibs ^= 1;
+				if (ludicrousgibs == true)
+					AddMessage("EKG mode on!", MSG_GAME);
+				else
+					AddMessage("EKG mode off!", MSG_GAME);
+			}
+			break;
+
+		case JUKEBOX:
+		case JUKEBOXALT:
+			DoJukeBox();
+			break;
+
+		case MAPCHEAT:
+		case MAPCHEATALT:
+			DoMapCheat();
+			break;
+	}
+}
+
+/*
+================
+=
+= DoCheatCodeString ()
+=
+================
+*/
+
+int DoCheatCodeString(char *which)
+{
+	int i, l, c;
+	char code[15];
+
+	/* reverse string into temp buffer */
+	c = 0;
+	for (l = strlen(which) - 1; l >= 0; l--)
+	{
+		if (l >= 15 || c >= 15)
+			return 0;
+
+		code[c++] = toupper(which[l]);
+	}
+
+	/* iterate over all codes */
+	for (i = 0; i < MAXCODES; i++)
+	{
+		/* only check the first four, if we're not in debug mode */
+		if (DebugOk == false && i >= 4)
+			return 0;
+
+		/* check string */
+		if (strncasecmp(code, Codes[i].code, 15) == 0)
+		{
+			DoCheatCode(i);
+			return 1;
+		}
+	}
+
+	return 0;
+}
 
 /*
 ================
@@ -1186,299 +1508,30 @@ void WeaponCheat (int weapon)
 ================
 */
 
-
-
-void CheckCode (int which)
+void CheckCode(int which)
 {
-   int pos = (LastLetter-1)&(MAXLETTERS-1);
-   int num = 0;
-   int start;
+	int pos = (LastLetter - 1) & (MAXLETTERS - 1);
+	int num = 0;
+	int start;
 
-   start = pos;
+	start = pos;
 
-   while ((toupper(LetterQueue[pos]) == Codes[which].code[num]) &&
-          (num < Codes[which].length))
-   {
-      pos = (pos-1)&(MAXLETTERS-1);
-      num++;
-   }
+	while ((toupper(LetterQueue[pos]) == Codes[which].code[num]) &&
+		   (num < Codes[which].length))
+	{
+		pos = (pos - 1) & (MAXLETTERS - 1);
+		num++;
+	}
 
 	if (num == Codes[which].length)
-   {
-      // Kill last letter so the debug rtn will not keep triggering
-      LetterQueue[start] = 0;
+	{
+		// Kill last letter so the debug rtn will not keep triggering
+		LetterQueue[start] = 0;
 
-      switch (which)
-      {
-         case ENABLECHEAT:
-         case ENABLECHEATALT:
-            EnableCheatCodes ();
-         break;
-
-         case INVULNERABLE:
-         case INVULNERABLEALT:
-            DoGodMode ();
-         break;
-
-         case WARP:
-         case WARPALT:
-            DoWarp ();
-         break;
-
-         case ITEMS:
-         case ITEMSALT:
-            DoItemCheat ();
-         break;
-
-         case SOMEITEMS:
-         case SOMEITEMSALT:
-            DoSomeItemCheat ();
-         break;
-
-			case GODMODEPWUP:
-			case GODMODEPWUPALT:
-            DoGodModePowerup ();
-         break;
-
-#if (SHAREWARE == 0)
-         case DOGMODEPWUP:
-         case DOGMODEPWUPALT:
-            DoDogModePowerup ();
-         break;
-#endif
-
-         case MERCURYPWUP:
-         case MERCURYPWUPALT:
-            DoMercuryModePowerup ();
-         break;
-
-         case SHROOMSPWUP:
-			case SHROOMSPWUPALT:
-            DoShroomsModePowerup ();
-         break;
-
-         case ELASTOPWUP:
-         case ELASTOPWUPALT:
-            DoElastoModePowerup ();
-         break;
-
-         case RESTARTGAME:
-         case RESTARTGAMEALT:
-            RestartNormal ();
-         break;
-
-         case HURTPLAYER:
-         case HURTPLAYERALT:
-               HurtPlayer ();
-         break;
-
-         case TOMHALLMODE:
-         case TOMHALLMODEALT:
-            gamestate.autorun = true;
-            AddMessage("Autorun enabled!",MSG_CHEAT);
-         break;
-
-         case NORMAL:
-         case NORMALALT:
-            DoNormalThing ();
-         break;
-
-         case LIGHTDIMON:
-         case LIGHTDIMONALT:
-            SetLightDiminish (false);
-         break;
-
-         case LIGHTDIMOFF:
-         case LIGHTDIMOFFALT:
-            SetLightDiminish (true);
-         break;
-
-         case FOGON:
-         case FOGONALT:
-            SetFog (true);
-         break;
-
-			case FOGOFF:
-         case FOGOFFALT:
-            SetFog (false);
-         break;
-
-         case QUITGAME:
-         case QUITGAMEALT:
-            QuitGame ();
-         break;
-
-         case ENDLEVEL:
-         case ENDLEVELALT:
-				EndLevel ();
-         break;
-
-         case FANDCOFF:
-         case FANDCOFFALT:
-            FloorandCeiling (false);
-         break;
-
-         case FANDCON:
-         case FANDCONALT:
-            FloorandCeiling (true);
-         break;
-
-
-         case AIMCROSS:
-         case AIMCROSSALT:
-            if (iG_aimCross == 0) {
-			    iG_aimCross = 1;
-				AddMessage("Crosshair on",MSG_GAME);
-			}else{
-				iG_aimCross = 0;
-				AddMessage("Crosshair off",MSG_GAME);
-			}
-         break;
-
-
-         case BULLETARMOR:
-         case BULLETARMORALT:
-            GiveBulletProofArmor ();
-         break;
-
-         case FIREARMOR:
-         case FIREARMORALT:
-            GiveAsbestoArmor ();
-			break;
-
-         case GASMASK:
-         case GASMASKALT:
-            GiveGasMask ();
-         break;
-
-         case OUTFIT:
-         case OUTFITALT:
-            OutfitPlayer ();
-         break;
-
-         case KILLPLAYER:
-         case KILLPLAYERALT:
-            KillPlayer ();
-         break;
-
-         case RESTARTLEVEL:
-         case RESTARTLEVELALT:
-				RestartCurrentLevel ();
-			break;
-
-
-         case WEAPONTWOPISTOL:
-         case WEAPONTWOPISTOLALT:
-             WeaponCheat(wp_twopistol);
-             break;
-
-         case WEAPONMP40:
-         case WEAPONMP40ALT:
-             WeaponCheat(wp_mp40);
-             break;
-
-         case WEAPONBAZOOKA:
-         case WEAPONBAZOOKAALT:
-             WeaponCheat(wp_bazooka);
-             break;
-         case WEAPONFIREBOMB:
-         case WEAPONFIREBOMBALT:
-             WeaponCheat(wp_firebomb);
-             break;
-
-         case WEAPONHEAT:
-         case WEAPONHEATALT:
-             WeaponCheat(wp_heatseeker);
-             break;
-
-         case WEAPONDRUNK:
-         case WEAPONDRUNKALT:
-             WeaponCheat(wp_drunk);
-             break;
-
-         case WEAPONFIREWALL:
-         case WEAPONFIREWALLALT:
-             WeaponCheat(wp_firewall);
-             break;
-
-         case WEAPONGOD:
-         case WEAPONGODALT:
-             WeaponCheat(wp_godhand);
-             break;
-
-
-#if (SHAREWARE == 0)
-
-         case WEAPONSPLIT:
-         case WEAPONSPLITALT:
-             WeaponCheat(wp_split);
-             break;
-
-         case WEAPONKES:
-         case WEAPONKESALT:
-             WeaponCheat(wp_kes);
-             break;
-
-         case WEAPONBAT:
-         case WEAPONBATALT:
-             WeaponCheat(wp_bat);
-             break;
-
-         case WEAPONDOG:
-         case WEAPONDOGALT:
-             WeaponCheat(wp_dog);
-             break;
-#endif
-
-         case MISSILECAMTOGGLE:
-         case MISSILECAMTOGGLEALT:
-             ToggleMissileCam();
-             break;
-
-         case HUDTOGGLE:
-         case HUDTOGGLEALT:
-             ToggleHUD();
-             break;
-
-         case ROTATIONFUN:
-            ShutdownClientControls();
-            RotationFun();
-            StartupClientControls();
-            SetupScreen( true );
-            break;
-         case DEMORECORD:
-            RecordDemoQuery();
-            break;
-         case DEMOEND:
-            EndDemo();
-            break;
-         case DEMOPLAYBACK:
-            PlaybackDemoQuery();
-            break;
-         case CRAZYGIBS:
-            if (gamestate.violence == vl_excessive)
-               {
-
-               ludicrousgibs ^= 1;
-               if (ludicrousgibs == true)
-                  AddMessage("EKG mode on!",MSG_GAME);
-               else
-                  AddMessage("EKG mode off!",MSG_GAME);
-               }
-            break;
-
-         case JUKEBOX:
-         case JUKEBOXALT:
-            DoJukeBox();
-         break;
-         case MAPCHEAT:
-         case MAPCHEATALT:
-            DoMapCheat();
-         break;
-      }
-   }
+		// run code
+		DoCheatCode(which);
+	}
 }
-
 
 /*
 ================

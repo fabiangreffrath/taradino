@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_main.h"
 #include "rt_net.h"
 #include "rt_com.h"
+#include "console.h"
 
 #include <stdlib.h>
 
@@ -409,6 +410,8 @@ int AddMessage
 
    new = GetFreeMessage();
    SetMessage( new, text, flags );
+
+   console_printf(text);
 
    return( new );
    }
