@@ -1032,36 +1032,6 @@ void VL_FillPalette (int red, int green, int blue)
 /*
 =================
 =
-= VL_SetColor
-=
-=================
-*/
-
-void VL_SetColor  (int color, int red, int green, int blue)
-{
-	STUB_FUNCTION;
-}
-
-//===========================================================================
-
-/*
-=================
-=
-= VL_GetColor
-=
-=================
-*/
-
-void VL_GetColor  (int color, int *red, int *green, int *blue)
-{
-	STUB_FUNCTION;
-}
-
-//===========================================================================
-
-/*
-=================
-=
 = VL_NormalizePalette
 =
 =================
@@ -1102,7 +1072,6 @@ void VL_SetPalette (byte *palette)
    SDL_SetPaletteColors (VL_GetVideoSurface()->format->palette, cmap, 0, 256);
 }
 
-
 //===========================================================================
 
 /*
@@ -1129,22 +1098,6 @@ void VL_GetPalette (byte *palette)
 		palette += 3;
 	}
 }
-
-
-/*
-=================
-=
-= UL_DisplayMemoryError ()
-=
-=================
-*/
-
-void UL_DisplayMemoryError ( int memneeded )
-{
-	STUB_FUNCTION;
-   exit (0);
-}
-
 
 /*
 =================
@@ -1324,32 +1277,6 @@ boolean UL_ChangeDirectory (char *path)
 	
 	return true;
 }
-
-
-
-//******************************************************************************
-//
-// UL_ChangeDrive ()
-//
-// Purpose
-//    To change drives.
-//
-// Parms
-//    drive - The drive to change to.
-//
-// Returns
-//    TRUE  - If drive change successful.
-//    FALSE - If drive change unsuccessful.
-//
-//******************************************************************************
-
-boolean UL_ChangeDrive (char *drive)
-{
-	STUB_FUNCTION;
-	
-	return false;
-}
-
 
 /*
 =============

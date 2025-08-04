@@ -434,7 +434,6 @@ void CheckCommandLineParameters( void )
    MAPSTATS=false;
    TILESTATS=false;
    IS8250 = false;
-   vrenabled = false;
    demoexit = false;
 
    modemgame=false;
@@ -480,7 +479,6 @@ void CheckCommandLineParameters( void )
       printf ("   MONO       - Enable mono-monitor support.\n");
       printf ("   SCREENSHOTS- Clean screen capture for shots.\n");
       printf ("   PAUSE      - Pauses startup screen information.\n");
-      printf ("   ENABLEVR   - Enable VR helmet input devices\n");
       printf ("   NOECHO     - Turn off sound reverb\n");
       printf ("   DEMOEXIT   - Exit program when demo is terminated\n");
       printf ("   WARP       - Warp to specific ROTT level\n");
@@ -624,9 +622,7 @@ void CheckCommandLineParameters( void )
           IS8250 = true;
           break;
        case 16:
-          vrenabled = true;
-          if (!quiet)
-             printf("Virtual Reality Mode enabled\n");
+          // erysdren - removed. was "vr" stuff
           break;
        case 17:
           timelimitenabled = true;
@@ -1993,18 +1989,6 @@ void CheckRemoteRidicule ( int scancode )
 
 //******************************************************************************
 //
-// DoBossKey ()
-//
-//******************************************************************************
-
-void DoBossKey ( void )
-{
-	STUB_FUNCTION;
-}
-
-
-//******************************************************************************
-//
 // PollKeyboard ()
 //
 //******************************************************************************
@@ -2208,7 +2192,6 @@ void PollKeyboard
          {
          Keyboard[ sc_F12 ] = false;
          LastScan = 0;
-         DoBossKey();
          }
 //#endif
 
