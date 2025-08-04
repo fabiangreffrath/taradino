@@ -72,7 +72,7 @@ char *itoa(int value, char *string, int radix)
 			sprintf(string, "%x", value);
 			break;
 		default:
-			STUB_FUNCTION;
+			fprintf(stderr, "itoa: unsupported radix %d", radix);
 			break;
 	}
 	
@@ -89,7 +89,7 @@ char *ltoa(long value, char *string, int radix)
 			sprintf(string, "%lx", value);
 			break;
 		default:
-			STUB_FUNCTION;
+			fprintf(stderr, "ltoa: unsupported radix %d", radix);
 			break;
 	}
 	
@@ -106,7 +106,7 @@ char *ultoa(unsigned long value, char *string, int radix)
 			sprintf(string, "%lux", value);
 			break;
 		default:
-			STUB_FUNCTION;
+			fprintf(stderr, "ultoa: unsupported radix %d", radix);
 			break;
 	}
 	
