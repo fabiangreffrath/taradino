@@ -20,10 +20,18 @@ library named SDL_mixer.
 Building Taradino requires GCC, CMake, the development packages for SDL2 and SDL2_Mixer.
 After installing, you can run the following commands to build:
 
+Registered:
+
+```sh
+cmake -Bcmake-build-registered -DCMAKE_BUILD_TYPE=Release -S.
+cmake --build cmake-build-registered
 ```
-mkdir cmake-build && cd cmake-build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-make
+
+Shareware:
+
+```sh
+cmake -Bcmake-build-shareware -DCMAKE_BUILD_TYPE=Release -S. -DTARADINO_SHAREWARE=ON -DTARADINO_SUFFIX=shareware
+cmake --build cmake-build-shareware
 ```
 
 ## License
