@@ -1127,10 +1127,10 @@ void PreCache( void )
                               PRECACHEBARY+PRECACHELED1Y,
                               W_GetNumForName ("led1"));//led1 progressbar
 			}else if ( iGLOBAL_SCREENWIDTH == 640) {
-				DrawNormalSprite (72+(Gs*(lastmem<<2)),446,W_GetNumForName ("led1"));//led1 progressbar
-				DrawNormalSprite (72+(Gs*(lastmem<<2)),446+3,W_GetNumForName ("led1"));//led1 progressbar
-				DrawNormalSprite (72+3+(Gs*(lastmem<<2)),446,W_GetNumForName ("led1"));//led1 progressbar
-				DrawNormalSprite (72+3+(Gs*(lastmem<<2)),446+3,W_GetNumForName ("led1"));//led1 progressbar
+				DrawNormalSprite (72+(Gs*(lastmem<<2)),356,W_GetNumForName ("led1"));//led1 progressbar
+				DrawNormalSprite (72+(Gs*(lastmem<<2)),356+3,W_GetNumForName ("led1"));//led1 progressbar
+				DrawNormalSprite (72+3+(Gs*(lastmem<<2)),356,W_GetNumForName ("led1"));//led1 progressbar
+				DrawNormalSprite (72+3+(Gs*(lastmem<<2)),356+3,W_GetNumForName ("led1"));//led1 progressbar
 			}
 
             lastmem++;
@@ -1145,10 +1145,10 @@ void PreCache( void )
                               PRECACHEBARY+PRECACHELED2Y,
                               W_GetNumForName ("led2"));//led2 progressbar
 			}else if ( iGLOBAL_SCREENWIDTH == 640) {
-				DrawNormalSprite (72+(Gs*(lastcache<<2)),458,W_GetNumForName ("led2"));//led2 progressbar
-				DrawNormalSprite (72+(Gs*(lastcache<<2)),458+3,W_GetNumForName ("led2"));//led2 progressbar
-				DrawNormalSprite (72+3+(Gs*(lastcache<<2)),458,W_GetNumForName ("led2"));//led2 progressbar
-				DrawNormalSprite (72+3+(Gs*(lastcache<<2)),458+3,W_GetNumForName ("led2"));//led2 progressbar
+				DrawNormalSprite (72+(Gs*(lastcache<<2)),356,W_GetNumForName ("led2"));//led2 progressbar
+				DrawNormalSprite (72+(Gs*(lastcache<<2)),356+3,W_GetNumForName ("led2"));//led2 progressbar
+				DrawNormalSprite (72+3+(Gs*(lastcache<<2)),356,W_GetNumForName ("led2"));//led2 progressbar
+				DrawNormalSprite (72+3+(Gs*(lastcache<<2)),356+3,W_GetNumForName ("led2"));//led2 progressbar
 			
 			}
 			DisableScreenStretch();//bna++

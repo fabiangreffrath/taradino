@@ -7,7 +7,7 @@
 //typedef unsigned char byte;
 
 int iGLOBAL_SCREENWIDTH  = 640;//bna
-int iGLOBAL_SCREENHEIGHT = 480;//bna
+int iGLOBAL_SCREENHEIGHT = 400;//bna
 int iGLOBAL_SCREENBWIDE ;
 int iG_SCREENWIDTH;// default screen width in bytes
 
@@ -56,7 +56,7 @@ void SetRottScreenRes (int Width, int Height)
 		iGLOBAL_HEALTH_X = 40;//20*2;
 		iGLOBAL_HEALTH_Y = 466;//(185*2)+16;
 		iGLOBAL_AMMO_X = 600;//300*2;
-		iGLOBAL_AMMO_Y = 464;//480-16;
+		iGLOBAL_AMMO_Y = 384;//400-16;
 
 		YZANGLELIMIT = (60*FINEANGLES/360);
 	}

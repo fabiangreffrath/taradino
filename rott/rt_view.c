@@ -267,17 +267,17 @@ void SetViewSize
 
 	if ( iGLOBAL_SCREENWIDTH == 640) {
 		height = 0;//we use height as dummy cnt
-		viewsizes[height++]= 380; viewsizes[height++]= 336;
-        viewsizes[height++]= 428; viewsizes[height++]= 352;
-        viewsizes[height++]= 460; viewsizes[height++]= 368;
-        viewsizes[height++]= 492; viewsizes[height++]= 384;
-        viewsizes[height++]= 524; viewsizes[height++]= 400;
-        viewsizes[height++]= 556; viewsizes[height++]= 416;
-        viewsizes[height++]= 588; viewsizes[height++]= 432;
-        viewsizes[height++]= 640; viewsizes[height++]= 448;
-        viewsizes[height++]= 640; viewsizes[height++]= 464;
-        viewsizes[height++]= 640; viewsizes[height++]= 480;
-        viewsizes[height++]= 640; viewsizes[height++]= 480;
+		viewsizes[height++]= 380; viewsizes[height++]= 336-80;
+        viewsizes[height++]= 428; viewsizes[height++]= 352-80;
+        viewsizes[height++]= 460; viewsizes[height++]= 368-80;
+        viewsizes[height++]= 492; viewsizes[height++]= 384-80;
+        viewsizes[height++]= 524; viewsizes[height++]= 400-80;
+        viewsizes[height++]= 556; viewsizes[height++]= 416-80;
+        viewsizes[height++]= 588; viewsizes[height++]= 432-80;
+        viewsizes[height++]= 640; viewsizes[height++]= 448-80;
+        viewsizes[height++]= 640; viewsizes[height++]= 464-80;
+        viewsizes[height++]= 640; viewsizes[height++]= 480-80;
+        viewsizes[height++]= 640; viewsizes[height++]= 480-80;
 	}
 
 	if ((size<0) || (size>=MAXVIEWSIZES)){//bna added
