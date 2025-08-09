@@ -776,19 +776,19 @@ NoRTC:;
    arg = CheckParm ("file");
    if (arg!=0)
       {
-      newargs [argnum++] = _argv[arg+1];
+      newargs [argnum++] = M_StringDuplicate(_argv[arg+1]);
       }
 
    arg = CheckParm ("file1");
    if (arg!=0)
       {
-      newargs [argnum++] = _argv[arg+1];
+      newargs [argnum++] = M_StringDuplicate(_argv[arg+1]);
       }
 
    arg = CheckParm ("file2");
    if (arg!=0)
       {
-      newargs [argnum++] = _argv[arg+1];
+      newargs [argnum++] = M_StringDuplicate(_argv[arg+1]);
       }
 
 #else
