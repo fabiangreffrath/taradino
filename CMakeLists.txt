@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 project(taradino
 	DESCRIPTION "SDL2 port of Rise of the Triad"
 	HOMEPAGE_URL "https://github.com/fabiangreffrath/taradino/"
@@ -7,15 +7,15 @@ project(taradino
 	VERSION 1.1.3
 )
 configure_file(rott/version.h.in rott/version.h @ONLY)
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 option(TARADINO_SHAREWARE "Build shareware version" OFF)
 option(TARADINO_WARNINGS_AS_ERRORS "Treat all compiler warnings as errors" OFF)
 set(TARADINO_DATADIR "" CACHE STRING "Game data file directory")
 set(TARADINO_SUFFIX "" CACHE STRING "Executable file name suffix")
 
-find_package(SDL2 REQUIRED)
-find_package(SDL2_mixer REQUIRED)
+find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
+find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
+find_package(SDL2_mixer REQUIRED CONFIG REQUIRED COMPONENTS SDL2_mixer)
 
 file(GLOB TARADINO_SOURCES "${PROJECT_SOURCE_DIR}/rott/*.c")
 
@@ -31,7 +31,7 @@ endif()
 set(TARADINO_TITLE "Taradino$<$<BOOL:${TARADINO_SHAREWARE}>: (Shareware)>")
 
 add_executable(taradino ${TARADINO_SOURCES})
-target_link_libraries(taradino PRIVATE SDL2::Main SDL2::Mixer)
+target_link_libraries(taradino PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer)
 target_compile_definitions(taradino PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}")
 target_compile_definitions(taradino PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
 target_include_directories(taradino PRIVATE "${PROJECT_BINARY_DIR}/rott")
