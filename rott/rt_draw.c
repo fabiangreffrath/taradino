@@ -2860,11 +2860,8 @@ void DrawRotatedScreen(int cx, int cy, byte *destscreen, int angle, int scale, i
    int     y;
 
    byte    * screen;
-   //int Xres = 320;//old value
-   //int Yres = 200;//old val
-
-   int Xr = iGLOBAL_SCREENWIDTH;//640;
-   int Yr = (iGLOBAL_SCREENHEIGHT);//400; //bna aaaa fix
+   int Xres = 320;
+   int Yres = 200;
 
 //	   SetTextMode (  );
    c = FixedMulShift(scale,costable[angle],11);
@@ -2873,14 +2870,11 @@ void DrawRotatedScreen(int cx, int cy, byte *destscreen, int angle, int scale, i
 //   c = c/2; //these values are to rotate degres or?
 //   s = s/2;
 //   xst & xct= start center values ;
-   if ((iGLOBAL_SCREENWIDTH == 320 )||(masked == true)) {
+   if (masked == true)
+   {
 	   xst = (((-cx)*s)+(128<<16))-(cy*c);
 	   xct = (((-cx)*c)+(256<<16)+(1<<18)-(1<<16))+(cy*s);
    }
-   else if ((iGLOBAL_SCREENWIDTH == 640 )&&(masked == false)) {
-	   xst = (((-cx)*s)+((268)<<16))-(cy*c);
-	   xct = (((-cx)*c)+((317)<<16)+(1<<18)-(1<<16))+(cy*s);
-   }//y=268;x=317
 
    mr_xstep=s;
    mr_ystep=c;
@@ -2893,8 +2887,8 @@ void DrawRotatedScreen(int cx, int cy, byte *destscreen, int angle, int scale, i
          mr_yfrac=xct;
          mr_xfrac=xst;
          VGAWRITEMAP(plane);
-         for (y=0; y<Yr; y++,mr_xfrac+=c,mr_yfrac-=s)
-            DrawRotRow(Xr,screen+ylookup[y],RotatedImage);
+         for (y=0; y<Yres; y++,mr_xfrac+=c,mr_yfrac-=s)
+            DrawRotRow(Xres,screen+ylookup[y],RotatedImage);
          }
       }
    else
@@ -2903,8 +2897,8 @@ void DrawRotatedScreen(int cx, int cy, byte *destscreen, int angle, int scale, i
          mr_yfrac=xct;
          mr_xfrac=xst;
          VGAWRITEMAP(plane);
-         for (y=0; y<Yr; y++,mr_xfrac+=c,mr_yfrac-=s)
-            DrawMaskedRotRow(Xr,screen+ylookup[y],RotatedImage);
+         for (y=0; y<Yres; y++,mr_xfrac+=c,mr_yfrac-=s)
+            DrawMaskedRotRow(Xres,screen+ylookup[y],RotatedImage);
          }
       }
 

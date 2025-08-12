@@ -70,10 +70,10 @@ SDL_Surface *unstretch_sdl_surface = NULL;
 static SDL_Surface *unstretch_sdl_argbbuffer = NULL;
 static SDL_Texture *unstretch_sdl_texture = NULL;
 
-static SDL_Window *screen;
-static SDL_Renderer *renderer;
-static SDL_Surface *argbbuffer;
-static SDL_Texture *texture;
+static SDL_Window *screen = NULL;
+static SDL_Renderer *renderer = NULL;
+static SDL_Surface *argbbuffer = NULL;
+static SDL_Texture *texture = NULL;
 
 SDL_Window *VL_GetVideoWindow (void)
 {
@@ -143,8 +143,8 @@ void GraphicsMode ( void )
 
 	unstretch_sdl_surface = SDL_CreateRGBSurface(0, 320, 200, 8, 0, 0, 0, 0);
 	SDL_SetColorKey(unstretch_sdl_surface, SDL_TRUE, 0);
-	unstretch_sdl_texture = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(screen), SDL_TEXTUREACCESS_STREAMING, 320, 200);
-	unstretch_sdl_argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, 320, 200, 0, 0, SDL_GetWindowPixelFormat(screen));
+	unstretch_sdl_texture = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(screen), SDL_TEXTUREACCESS_STREAMING, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+	unstretch_sdl_argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 0, 0, SDL_GetWindowPixelFormat(screen));
 
 	SetShowCursor(!sdl_fullscreen);
 }
@@ -317,7 +317,8 @@ void VL_CopyPlanarPageToMemory ( byte * src, byte * dest )
 
 void VL_ClearBuffer (byte *buf, byte color)
 {
-  memset((byte *)buf,color,screensize);
+	SDL_FillRect(unstretch_sdl_surface, NULL, 0);
+	SDL_FillRect(sdl_surface, NULL, color);
 }
 
 /*
@@ -332,7 +333,8 @@ void VL_ClearBuffer (byte *buf, byte color)
 
 void VL_ClearVideo (byte color)
 {
-  memset (sdl_surface->pixels, color, iGLOBAL_SCREENWIDTH*iGLOBAL_SCREENHEIGHT);
+	SDL_FillRect(unstretch_sdl_surface, NULL, 0);
+	SDL_FillRect(sdl_surface, NULL, color);
 }
 
 /* C version of rt_vh_a.asm */
