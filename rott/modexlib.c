@@ -141,6 +141,11 @@ void GraphicsMode ( void )
 	                            SDL_TEXTUREACCESS_STREAMING,
 	                            iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 
+	unstretch_sdl_surface = SDL_CreateRGBSurface(0, 320, 200, 8, 0, 0, 0, 0);
+	SDL_SetColorKey(unstretch_sdl_surface, SDL_TRUE, 0);
+	unstretch_sdl_texture = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(screen), SDL_TEXTUREACCESS_STREAMING, 320, 200);
+	unstretch_sdl_argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, 320, 200, 0, 0, SDL_GetWindowPixelFormat(screen));
+
 	SetShowCursor(!sdl_fullscreen);
 }
 
@@ -386,14 +391,6 @@ void XFlipPage ( void )
 void EnableScreenStretch(void)
 {
    if (iGLOBAL_SCREENWIDTH <= 320 || StretchScreen) return;
-   
-   if (unstretch_sdl_surface == NULL)
-   {
-      unstretch_sdl_surface = SDL_CreateRGBSurface(0, 320, 200, 8, 0, 0, 0, 0);
-	  SDL_SetColorKey(unstretch_sdl_surface, SDL_TRUE, 0);
-	  unstretch_sdl_texture = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(screen), SDL_TEXTUREACCESS_STREAMING, 320, 200);
-	  unstretch_sdl_argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, 320, 200, 0, 0, SDL_GetWindowPixelFormat(screen));
-   }
 	
    displayofs = (byte *)unstretch_sdl_surface->pixels +
 	(displayofs - (byte *)sdl_surface->pixels);
@@ -417,7 +414,7 @@ static void StretchMemPicture ()
 {
 	if (SDL_LockTexture(unstretch_sdl_texture, NULL, &unstretch_sdl_argbbuffer->pixels, &unstretch_sdl_argbbuffer->pitch) == 0)
 	{
-		SDL_LowerBlit(unstretch_sdl_surface, NULL, unstretch_sdl_argbbuffer, NULL);
+		SDL_BlitSurface(unstretch_sdl_surface, NULL, unstretch_sdl_argbbuffer, NULL);
 		SDL_UnlockTexture(unstretch_sdl_texture);
 	}
 }

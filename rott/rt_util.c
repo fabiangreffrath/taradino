@@ -1028,8 +1028,7 @@ void VL_FillPalette (int red, int green, int blue)
 	}
 
 	SDL_SetPaletteColors (sdl_surface->format->palette, cmap, 0, 256);
-	if (unstretch_sdl_surface)
-		SDL_SetPaletteColors (unstretch_sdl_surface->format->palette, cmap, 0, 256);
+	SDL_SetPaletteColors (unstretch_sdl_surface->format->palette, cmap, 0, 256);
 }
 
 //===========================================================================
@@ -1078,8 +1077,7 @@ void VL_SetPalette (byte *palette)
 	}
 
 	SDL_SetPaletteColors (sdl_surface->format->palette, cmap, 0, 256);
-	if (unstretch_sdl_surface)
-		SDL_SetPaletteColors (unstretch_sdl_surface->format->palette, cmap, 0, 256);
+	SDL_SetPaletteColors (unstretch_sdl_surface->format->palette, cmap, 0, 256);
 }
 
 //===========================================================================
