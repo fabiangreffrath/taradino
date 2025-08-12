@@ -28,7 +28,11 @@ if(TARADINO_SUFFIX_LEN GREATER 0)
 	string(CONCAT TARADINO_EXEC "${CMAKE_PROJECT_NAME}" "-" "${TARADINO_SUFFIX}")
 endif()
 
-set(TARADINO_TITLE "Taradino$<$<BOOL:${TARADINO_SHAREWARE}>: (Shareware)>")
+if(${TARADINO_SHAREWARE})
+	set(TARADINO_TITLE "Taradino (Shareware)")
+else()
+	set(TARADINO_TITLE "Taradino")
+endif()
 
 add_executable(taradino ${TARADINO_SOURCES})
 target_link_libraries(taradino PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer)
