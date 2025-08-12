@@ -65,14 +65,13 @@ void DrawCenterAim ();
 =
 ====================
 */
-static SDL_Surface *sdl_surface = NULL;
-static SDL_Surface *unstretch_sdl_surface = NULL;
+SDL_Surface *sdl_surface = NULL;
+SDL_Surface *unstretch_sdl_surface = NULL;
 
 static SDL_Window *screen;
 static SDL_Renderer *renderer;
 static SDL_Surface *argbbuffer;
 static SDL_Texture *texture;
-static SDL_Rect blit_rect = {0};
 
 SDL_Window *VL_GetVideoWindow (void)
 {
@@ -116,6 +115,7 @@ void GraphicsMode ( void )
 	SDL_SetWindowMinimumSize(screen, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 	SDL_SetWindowTitle(screen, PACKAGE_STRING);
 
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 	renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_PRESENTVSYNC);
 	if (!renderer)
 	{
@@ -132,16 +132,12 @@ void GraphicsMode ( void )
 	                                   0, 0, 0, 0);
 	SDL_FillRect(sdl_surface, NULL, 0);
 
-	argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 0, 0, SDL_PIXELFORMAT_ARGB8888);
+	argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 0, 0, SDL_GetWindowPixelFormat(screen));
 
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 	texture = SDL_CreateTexture(renderer,
-	                            SDL_PIXELFORMAT_ARGB8888,
+	                            SDL_GetWindowPixelFormat(screen),
 	                            SDL_TEXTUREACCESS_STREAMING,
 	                            iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
-
-	blit_rect.w = iGLOBAL_SCREENWIDTH;
-	blit_rect.h = iGLOBAL_SCREENHEIGHT;
 
 	SetShowCursor(!sdl_fullscreen);
 }
@@ -372,7 +368,7 @@ void VH_UpdateScreen (void)
 
 	if (SDL_LockTexture(texture, NULL, &argbbuffer->pixels, &argbbuffer->pitch) == 0)
 	{
-		SDL_LowerBlit(VL_GetVideoSurface(), &blit_rect, argbbuffer, &blit_rect);
+		SDL_BlitSurface(sdl_surface, NULL, argbbuffer, NULL);
 		SDL_UnlockTexture(texture);
 	}
 
@@ -400,7 +396,7 @@ void XFlipPage ( void )
 
 	if (SDL_LockTexture(texture, NULL, &argbbuffer->pixels, &argbbuffer->pitch) == 0)
 	{
-		SDL_LowerBlit(sdl_surface, &blit_rect, argbbuffer, &blit_rect);
+		SDL_BlitSurface(sdl_surface, NULL, argbbuffer, NULL);
 		SDL_UnlockTexture(texture);
 	}
 
@@ -453,7 +449,7 @@ static void StretchMemPicture ()
   dest.y = 0;
   dest.w = iGLOBAL_SCREENWIDTH;
   dest.h = iGLOBAL_SCREENHEIGHT;
-  SDL_SoftStretch(unstretch_sdl_surface, &src, sdl_surface, &dest);
+  SDL_BlitScaled(unstretch_sdl_surface, &src, sdl_surface, &dest);
 }
 
 // bna function added start

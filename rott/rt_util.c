@@ -1014,17 +1014,22 @@ int US_CheckParm (char *parm, char **strings)
 
 void VL_FillPalette (int red, int green, int blue)
 {
-   SDL_Color cmap[256];
-   int i;
+	extern SDL_Surface *sdl_surface;
+	extern SDL_Surface *unstretch_sdl_surface;
+	SDL_Color cmap[256];
+	int i;
 
-   for (i = 0; i < 256; i++)
-   {
-           cmap[i].r = red << 2;
-           cmap[i].g = green << 2;
-           cmap[i].b = blue << 2;
-   }
+	for (i = 0; i < 256; i++)
+	{
+			cmap[i].r = red << 2;
+			cmap[i].g = green << 2;
+			cmap[i].b = blue << 2;
+			cmap[i].a = 255;
+	}
 
-   SDL_SetPaletteColors (VL_GetVideoSurface()->format->palette, cmap, 0, 256);
+	SDL_SetPaletteColors (sdl_surface->format->palette, cmap, 0, 256);
+	if (unstretch_sdl_surface)
+		SDL_SetPaletteColors (unstretch_sdl_surface->format->palette, cmap, 0, 256);
 }
 
 //===========================================================================
@@ -1059,17 +1064,22 @@ void VL_NormalizePalette (byte *palette)
 
 void VL_SetPalette (byte *palette)
 {
-   SDL_Color cmap[256];
-   int i;
+	extern SDL_Surface *sdl_surface;
+	extern SDL_Surface *unstretch_sdl_surface;
+	SDL_Color cmap[256];
+	int i;
 
-   for (i = 0; i < 256; i++)
-   {
-	   cmap[i].r = gammatable[(gammaindex<<6)+(*palette++)] << 2;
-	   cmap[i].g = gammatable[(gammaindex<<6)+(*palette++)] << 2;
-	   cmap[i].b = gammatable[(gammaindex<<6)+(*palette++)] << 2;
-   }
+	for (i = 0; i < 256; i++)
+	{
+		cmap[i].r = gammatable[(gammaindex<<6)+(*palette++)] << 2;
+		cmap[i].g = gammatable[(gammaindex<<6)+(*palette++)] << 2;
+		cmap[i].b = gammatable[(gammaindex<<6)+(*palette++)] << 2;
+		cmap[i].a = 255;
+	}
 
-   SDL_SetPaletteColors (VL_GetVideoSurface()->format->palette, cmap, 0, 256);
+	SDL_SetPaletteColors (sdl_surface->format->palette, cmap, 0, 256);
+	if (unstretch_sdl_surface)
+		SDL_SetPaletteColors (unstretch_sdl_surface->format->palette, cmap, 0, 256);
 }
 
 //===========================================================================
