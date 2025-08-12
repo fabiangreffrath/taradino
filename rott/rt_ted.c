@@ -1110,7 +1110,7 @@ void PreCache( void )
       total=0;
 
       tempbuf=bufferofs;
-      bufferofs=page1start; // fixed, was displayofs
+      bufferofs=SCREEN_BUFFER; // fixed, was displayofs
       ticdelay=CACHETICDELAY;
       for (size_t i=1;i<cacheindex;i++)
 			{

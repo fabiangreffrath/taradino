@@ -1046,7 +1046,7 @@ void DrawGameString (int x, int y, const char * str, boolean bufferofsonly)
    else
       {
       tempbuf=bufferofs;
-      bufferofs=page1start;
+      bufferofs=SCREEN_BUFFER;
       VW_DrawPropString (str);
       bufferofs=tempbuf;
       }
@@ -1600,9 +1600,7 @@ void DrawMPPic (int xpos, int ypos, int width, int height, int heightmod, byte *
                   *(dest+bufferofs) = pixel;
                else
                {
-                  *(dest+page1start) = pixel;
-                  *(dest+page2start) = pixel;
-                  *(dest+page3start) = pixel;
+                  *(dest+SCREEN_BUFFER) = pixel;
                }
             }
 
@@ -1671,9 +1669,7 @@ void DrawColoredMPPic (int xpos, int ypos, int width, int height, int heightmod,
                   *(dest+bufferofs) = pixel;
                else
                {
-                  *(dest+page1start) = pixel;
-                  *(dest+page2start) = pixel;
-                  *(dest+page3start) = pixel;
+                  *(dest+SCREEN_BUFFER) = pixel;
                }
             }
 
@@ -1832,9 +1828,7 @@ void DrawPPic (int xpos, int ypos, int width, int height, byte *src, int num, bo
                      *(dest+bufferofs+(amt*k)) = pixel;
                   else
                   {
-                     *(dest+page1start+(amt*k)) = pixel;
-                     *(dest+page2start+(amt*k)) = pixel;
-                     *(dest+page3start+(amt*k)) = pixel;
+                     *(dest+SCREEN_BUFFER+(amt*k)) = pixel;
                   }
                }
             }
@@ -2590,30 +2584,22 @@ void  DrawEpisodeLevel (int x, int y)
 
 void GM_MemToScreen (byte *source, int width, int height, int x, int y)
 {
-   int dest;
-   byte *dest1, *dest2, *dest3;
-   byte *screen1, *screen2, *screen3;
+   int destofs;
+   byte *dest;
+   byte *screen;
    int  plane;
 
-   dest = ylookup[y]+x;
+   destofs = ylookup[y]+x;
 
-   dest1 = (byte *)(dest+page1start);
-   dest2 = (byte *)(dest+page2start);
-   dest3 = (byte *)(dest+page3start);
+   dest = (byte *)(destofs+SCREEN_BUFFER);
 
    for (plane = 0; plane<4; plane++)
    {
-      screen1 = dest1;
-      screen2 = dest2;
-      screen3 = dest3;
-      for (y = 0; y < height; y++, screen1 += linewidth,
-                                   screen2 += linewidth,
-                                   screen3 += linewidth, source+=width)
+      screen = dest;
+      for (y = 0; y < height; y++, screen += linewidth, source+=width)
       {
 	for (x = 0; x < width; x++) {
-		screen1[x*4+plane] = source[x];
-		screen2[x*4+plane] = source[x];
-		screen3[x*4+plane] = source[x];
+		screen[x*4+plane] = source[x];
 	}
       }
    }

@@ -40,9 +40,7 @@ extern  boolean StretchScreen;
 //extern  int      ylookup[MAXSCREENHEIGHT];      // Table of row offsets
 extern  int      ylookup[600];      // just set to max res
 extern  int      linewidth;
-extern  byte    *page1start;
-extern  byte    *page2start;
-extern  byte    *page3start;
+extern  byte    *SCREEN_BUFFER;
 extern  int      screensize;
 extern  byte    *bufferofs;
 extern  byte    *displayofs;
