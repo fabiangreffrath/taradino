@@ -2693,58 +2693,22 @@ byte * RotatedImage;
 boolean RotateBufferStarted = false;
 void StartupRotateBuffer ( int masked)
 {
-	int k;////zxcv
-   int a,b;
+	int a,b;
 
-   iG_masked = masked;
+	iG_masked = masked;
 
-   if (RotateBufferStarted == true)
-      return;
+	if (RotateBufferStarted == true)
+		return;
 
-   RotateBufferStarted = true;
+	RotateBufferStarted = true;
 
-   //   RotatedImage=SafeMalloc(131072);org
-   //RotatedImage=SafeMalloc(131072*8);
-   if (iGLOBAL_SCREENWIDTH == 320) {
-		RotatedImage=SafeMalloc(131072);
-   }else if (iGLOBAL_SCREENWIDTH == 640) { 
-		RotatedImage=SafeMalloc(131072*4);
-   }
-//SetupScreen(false);//used these 2 to test screen size
-//VW_UpdateScreen ();
-   if (masked==0) {
-	   if (iGLOBAL_SCREENWIDTH == 320) {
-		  memset(RotatedImage,0,131072);
-	   }else if (iGLOBAL_SCREENWIDTH == 640) { 
-		  memset(RotatedImage,0,131072*4);
-	   }
-   } else {
-	   if (iGLOBAL_SCREENWIDTH == 320) {
-		  memset(RotatedImage,0xff,131072);
-	   }else if (iGLOBAL_SCREENWIDTH == 640) { 
-		  memset(RotatedImage,0xff,131072*4);
-	   }
-   }
-      //memset(RotatedImage,0xff,131072);//org
-      //memset(RotatedImage,0xff,131072*8);
+	RotatedImage=SafeMalloc(131072);
 
-      if ((masked == false)&&(iGLOBAL_SCREENWIDTH == 640)) {
-		DisableScreenStretch();
-		k=(28*512);//14336;
-		   for (a=0;a<iGLOBAL_SCREENHEIGHT;a++){
-			   for (b=0;b<iGLOBAL_SCREENWIDTH;b++){
-					k = ((a+28)<<10);
-					*(RotatedImage+(k)+b)   =   *((byte *)bufferofs+(a*linewidth)+b);
-			   }
-		   }
+	memset(RotatedImage,0xff,131072);
 
-	  }else if ((masked == true)||(iGLOBAL_SCREENWIDTH == 320)) {
-		  for (a=0;a<200;a++){
-			 for (b=0;b<320;b++)
-				*(RotatedImage+99+((a+28)<<9)+b)=*((byte *)bufferofs+(a*linewidth)+b);
-		  }
-	  }
-
+	for (a=0;a<200;a++)
+		for (b=0;b<320;b++)
+			*(RotatedImage+99+((a+28)<<9)+b)=*((byte *)bufferofs+(a*linewidth)+b);
 }
 /* copier liner af 1024 bredde
 a=0=14436 a=1=14848 a=2=15360 a=3=15872  -> 512 i difference
@@ -2786,8 +2750,8 @@ void ScaleAndRotateBuffer (int startangle, int endangle, int startscale, int end
 //   int Xh = 160;//org
 //   int Yh = 100;//org
 
-   int Xh = iGLOBAL_SCREENWIDTH/2;
-   int Yh = iGLOBAL_SCREENHEIGHT/2;
+   int Xh = 320/2;
+   int Yh = 200/2;
 
 	DisableScreenStretch();//bna++
 
@@ -2822,7 +2786,7 @@ void ScaleAndRotateBuffer (int startangle, int endangle, int startscale, int end
   if ( playstate == ex_stillplaying )	  {//bna++
 	   pic_t *shape;
 	   shape =  ( pic_t * )W_CacheLumpName( "backtile", PU_CACHE, Cvt_pic_t, 1 );
-	   DrawTiledRegion( 0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32, 0, 16, shape );//bna++
+	   DrawTiledRegion( 0, 16, 320, 200 - 32, 0, 16, shape );//bna++
 	   DisableScreenStretch();//dont strech when we go BACK TO GAME
 	   DrawPlayScreen(true);//repaint ammo and life stat
   }
