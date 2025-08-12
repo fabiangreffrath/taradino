@@ -167,12 +167,20 @@ void ToggleFullScreen (void)
 void SetTextMode ( void )
 {
 	if (SDL_WasInit(SDL_INIT_VIDEO) == SDL_INIT_VIDEO) {
-		if (sdl_surface != NULL) {
-			SDL_FreeSurface(sdl_surface);
-	
-			sdl_surface = NULL;
-		}
-		
+		if (sdl_surface) SDL_FreeSurface(sdl_surface);
+		if (unstretch_sdl_surface) SDL_FreeSurface(unstretch_sdl_surface);
+		if (argbbuffer) SDL_FreeSurface(argbbuffer);
+		if (texture) SDL_DestroyTexture(texture);
+		if (renderer) SDL_DestroyRenderer(renderer);
+		if (screen) SDL_DestroyWindow(screen);
+
+		sdl_surface = NULL;
+		unstretch_sdl_surface = NULL;
+		argbbuffer = NULL;
+		texture = NULL;
+		renderer = NULL;
+		screen = NULL;
+
 		SDL_QuitSubSystem (SDL_INIT_VIDEO);
 	}
 }
