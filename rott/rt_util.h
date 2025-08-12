@@ -141,8 +141,4 @@ void  DebugError (char *error, ...) __attribute__((format(printf,1,2)));
 
 void Square (void);
 
-#define my_outp(a,b)
-
-#define OUTP                              my_outp
-
 #endif

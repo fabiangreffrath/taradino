@@ -2571,12 +2571,6 @@ void TurnShakeOff
    )
 
    {
-//   _disable();
-   OUTP (CRTC_INDEX, CRTC_STARTHIGH );
-   OUTP (CRTC_DATA, ( ( displayofs & 0x0000ffff ) >> 8 ) );
-   OUTP (CRTC_INDEX, CRTC_STARTLOW);
-   OUTP (CRTC_DATA, (displayofs&0x000000FF));
-//   _enable();
    SHAKETICS = 0xFFFF;
    }
 
