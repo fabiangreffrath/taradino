@@ -73,7 +73,6 @@ void SetPlayerLightLevel (void)
    int intercept;
    int height;
 
-   whereami=23;
 	if (MISCVARS->GASON==1)
       {
 		shadingtable=greenmap+(MISCVARS->gasindex<<8);
@@ -126,7 +125,6 @@ void SetLightLevel (int height)
 {
    int i;
 
-   whereami=24;
 	if (MISCVARS->GASON==1)
 		{
 		shadingtable=greenmap+(MISCVARS->gasindex<<8);
@@ -168,8 +166,6 @@ void ScaleTransparentPost (byte * src, byte * buf, int level)
    byte * oldlevel;
    byte * seelevel;
 
-   whereami=25;
-
    seelevel=colormap+(((level+64)>>2)<<8);
    oldlevel=shadingtable;
    offset=*(src++);
@@ -204,8 +200,6 @@ void ScaleTransparentPost (byte * src, byte * buf, int level)
          offset=*(src++);
          }
       }
-
-   whereami=-2;
 }
 
 
@@ -216,7 +210,6 @@ void ScaleMaskedPost (byte * src, byte * buf)
    int  topscreen;
    int  bottomscreen;
 
-   whereami=26;
    offset=*(src++);
    for (;offset!=255;)
       {
@@ -246,7 +239,6 @@ void ScaleClippedPost (byte * src, byte * buf)
    int  topscreen;
    int  bottomscreen;
 
-   whereami=27;
    offset=*(src++);
    for (;offset!=255;)
       {
@@ -276,7 +268,6 @@ void ScaleSolidMaskedPost (int color, byte * src, byte * buf)
    int  topscreen;
    int  bottomscreen;
 
-   whereami=28;
    offset=*(src++);
    for (;offset!=255;)
       {
@@ -309,8 +300,6 @@ void ScaleTransparentClippedPost (byte * src, byte * buf, int level)
    int  bottomscreen;
    byte * oldlevel;
    byte * seelevel;
-
-   whereami=29;
 
    seelevel=colormap+(((level+64)>>2)<<8);
    oldlevel=shadingtable;
@@ -388,7 +377,6 @@ void ScaleShape (visobj_t * sprite)
    int      tx;
    int      size;
 
-   whereami=32;
    shape=W_CacheLumpNum(sprite->shapenum,PU_CACHE, Cvt_patch_t, 1);
    p=(patch_t *)shape;
    size=p->origsize>>7;
@@ -538,7 +526,6 @@ void ScaleTransparentShape (visobj_t * sprite)
    int    startfrac;
    int    startx;
 
-   whereami=33;
    shape=W_CacheLumpNum(sprite->shapenum,PU_CACHE, Cvt_transpatch_t, 1);
    p=(transpatch_t *)shape;
    size=p->origsize>>7;
@@ -612,7 +599,6 @@ void ScaleSolidShape (visobj_t * sprite)
    int    startfrac;
    int    startx;
 
-   whereami=34;
    shape=W_CacheLumpNum(sprite->shapenum,PU_CACHE, Cvt_patch_t, 1);
    p=(patch_t *)shape;
    size=p->origsize>>7;
@@ -688,7 +674,6 @@ void ScaleWeapon (int xoff, int y, int shapenum)
 	int    startfrac;
 	int    startx;
 
-   whereami=35;
    SetPlayerLightLevel();
    shape=W_CacheLumpNum(shapenum,PU_CACHE, Cvt_patch_t, 1);
    p=(patch_t *)shape;
@@ -761,7 +746,6 @@ void DrawUnScaledSprite (int x, int y, int shapenum, int shade)
    int    startfrac;
    int    startx;
         
-   whereami=36;
    shadingtable=colormap+(shade<<8);
    centeryclipped=y;
    xcent=x;
@@ -823,7 +807,6 @@ void DrawUnScaledSprite (int x, int y, int shapenum, int shade)
 
 void DrawScreenSprite (int x, int y, int shapenum)
 {
-   whereami=37;
 	ScaleWeapon (x-160, y-200, shapenum);
 }
 
@@ -849,7 +832,6 @@ void DrawPositionedScaledSprite (int x, int y, int shapenum, int height, int typ
 	int    startx;
 	int    size;
 
-   whereami=38;
    shadingtable=colormap+(1<<12);
 	centeryclipped=y;
 	xcent=x;
@@ -935,7 +917,6 @@ void DrawScreenSizedSprite (int lump)
    byte  *cnt,*Ycnt;
 
   // SetTextMode (  );
-   whereami=39;
    shadingtable=colormap+(1<<12);
    shape=W_CacheLumpNum(lump,PU_CACHE, Cvt_patch_t, 1);
    p=(patch_t *)shape;
@@ -1019,8 +1000,6 @@ void DrawNormalPost (byte * src, byte * buf)
    int  length;
    int  s;
 
-   whereami=40;
-
    while (1)
       {
       offset=*(src++);
@@ -1058,8 +1037,6 @@ void DrawNormalSprite (int x, int y, int shapenum)
    patch_t *p;
    byte * b;
    int startx;
-
-   whereami=41;
 
    shape = W_CacheLumpNum (shapenum, PU_CACHE, Cvt_patch_t, 1);
    p = (patch_t *)shape;
