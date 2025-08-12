@@ -139,6 +139,8 @@ void GraphicsMode ( void )
 	                            SDL_TEXTUREACCESS_STREAMING,
 	                            iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 
+	unstretch_sdl_surface = SDL_CreateRGBSurface(0, 320, 200, 8, 0, 0, 0, 0);
+
 	SetShowCursor(!sdl_fullscreen);
 }
 
@@ -381,14 +383,6 @@ void EnableScreenStretch(void)
 {
    if (iGLOBAL_SCREENWIDTH <= 320 || StretchScreen) return;
    
-   if (unstretch_sdl_surface == NULL)
-   {
-      /* should really be just 320x200, but there is code all over the
-         places which crashes then */
-      unstretch_sdl_surface = SDL_CreateRGBSurface(0,
-         iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 8, 0, 0, 0, 0);
-   }
-	
    displayofs = (byte *)unstretch_sdl_surface->pixels +
 	(displayofs - (byte *)sdl_surface->pixels);
    SCREEN_BUFFER = bufferofs = unstretch_sdl_surface->pixels;
