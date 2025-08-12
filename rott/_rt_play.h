@@ -92,26 +92,6 @@ extern int YZANGLELIMIT;
 #define TURBOTURNAMOUNT    (0x1e000)
 #define TURNAROUNDSPEED   ((ANG180<<16)/15)
 
-#define VR_INPUT_SERVICE (0x30)
-#define VR_FEEDBACK_SERVICE (0x31)
-
-#define VR_RUNBUTTON         (0)
-#define VR_STRAFELEFTBUTTON  (1)
-#define VR_STRAFERIGHTBUTTON (2)
-#define VR_ATTACKBUTTON      (3)
-#define VR_LOOKUPBUTTON      (4)
-#define VR_LOOKDOWNBUTTON    (5)
-#define VR_SWAPWEAPONBUTTON  (6)
-#define VR_USEBUTTON         (7)
-#define VR_HORIZONUPBUTTON   (8)
-#define VR_HORIZONDOWNBUTTON (9)
-#define VR_MAPBUTTON         (10)
-#define VR_PISTOLBUTTON      (11)
-#define VR_DUALPISTOLBUTTON  (12)
-#define VR_MP40BUTTON        (13)
-#define VR_MISSILEWEAPONBUTTON (14)
-#define VR_RECORDBUTTON      (15)
-
 #define STEPADJUST 3
 void BatAttack(objtype*ob);
 void  T_DogLick (objtype *ob);
