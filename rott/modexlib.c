@@ -67,6 +67,8 @@ void DrawCenterAim ();
 */
 SDL_Surface *sdl_surface = NULL;
 SDL_Surface *unstretch_sdl_surface = NULL;
+static SDL_Surface *unstretch_sdl_argbbuffer = NULL;
+static SDL_Texture *unstretch_sdl_texture = NULL;
 
 static SDL_Window *screen;
 static SDL_Renderer *renderer;
@@ -346,6 +348,8 @@ void VH_UpdateScreen (void)
 
 	SDL_RenderClear(renderer);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
+	if (StretchScreen)
+		SDL_RenderCopy(renderer, unstretch_sdl_texture, NULL, NULL);
 	SDL_RenderPresent(renderer);
 }
 
@@ -374,6 +378,8 @@ void XFlipPage ( void )
 
    SDL_RenderClear(renderer);
    SDL_RenderCopy(renderer, texture, NULL, NULL);
+   if (StretchScreen)
+       SDL_RenderCopy(renderer, unstretch_sdl_texture, NULL, NULL);
    SDL_RenderPresent(renderer);
 }
 
@@ -383,10 +389,10 @@ void EnableScreenStretch(void)
    
    if (unstretch_sdl_surface == NULL)
    {
-      /* should really be just 320x200, but there is code all over the
-         places which crashes then */
-      unstretch_sdl_surface = SDL_CreateRGBSurface(0,
-         iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 8, 0, 0, 0, 0);
+      unstretch_sdl_surface = SDL_CreateRGBSurface(0, 320, 200, 8, 0, 0, 0, 0);
+	  SDL_SetColorKey(unstretch_sdl_surface, SDL_TRUE, 0);
+	  unstretch_sdl_texture = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(screen), SDL_TEXTUREACCESS_STREAMING, 320, 200);
+	  unstretch_sdl_argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, 320, 200, 0, 0, SDL_GetWindowPixelFormat(screen));
    }
 	
    displayofs = (byte *)unstretch_sdl_surface->pixels +
@@ -409,19 +415,11 @@ void DisableScreenStretch(void)
 // bna section -------------------------------------------
 static void StretchMemPicture ()
 {
-  SDL_Rect src;
-  SDL_Rect dest;
-	
-  src.x = 0;
-  src.y = 0;
-  src.w = 320;
-  src.h = 200;
-  
-  dest.x = 0;
-  dest.y = 0;
-  dest.w = iGLOBAL_SCREENWIDTH;
-  dest.h = iGLOBAL_SCREENHEIGHT;
-  SDL_BlitScaled(unstretch_sdl_surface, &src, sdl_surface, &dest);
+	if (SDL_LockTexture(unstretch_sdl_texture, NULL, &unstretch_sdl_argbbuffer->pixels, &unstretch_sdl_argbbuffer->pitch) == 0)
+	{
+		SDL_LowerBlit(unstretch_sdl_surface, NULL, unstretch_sdl_argbbuffer, NULL);
+		SDL_UnlockTexture(unstretch_sdl_texture);
+	}
 }
 
 // bna function added start
