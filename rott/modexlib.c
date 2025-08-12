@@ -299,29 +299,6 @@ void VL_CopyPlanarPageToMemory ( byte * src, byte * dest )
 }
 
 /*
-=======================
-=
-= VL_CopyBufferToAll
-=
-=======================
-*/
-void VL_CopyBufferToAll ( byte *buffer )
-{
-}
-
-/*
-=======================
-=
-= VL_CopyDisplayToHidden
-=
-=======================
-*/
-void VL_CopyDisplayToHidden ( void )
-{
-   VL_CopyBufferToAll ( displayofs );
-}
-
-/*
 =================
 =
 = VL_ClearBuffer
@@ -350,19 +327,6 @@ void VL_ClearVideo (byte color)
 {
   memset (sdl_surface->pixels, color, iGLOBAL_SCREENWIDTH*iGLOBAL_SCREENHEIGHT);
 }
-
-/*
-=================
-=
-= VL_DePlaneVGA
-=
-=================
-*/
-
-void VL_DePlaneVGA (void)
-{
-}
-
 
 /* C version of rt_vh_a.asm */
 
