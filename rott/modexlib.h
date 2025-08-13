@@ -40,9 +40,7 @@ extern  boolean StretchScreen;
 //extern  int      ylookup[MAXSCREENHEIGHT];      // Table of row offsets
 extern  int      ylookup[600];      // just set to max res
 extern  int      linewidth;
-extern  byte    *page1start;
-extern  byte    *page2start;
-extern  byte    *page3start;
+extern  byte    *SCREEN_BUFFER;
 extern  int      screensize;
 extern  byte    *bufferofs;
 extern  byte    *displayofs;
@@ -54,9 +52,6 @@ void  SetTextMode ( void );
 void  VL_SetVGAPlaneMode ( void );
 void  VL_ClearBuffer (byte *buf, byte color);
 void  VL_ClearVideo (byte color);
-void  VL_DePlaneVGA (void);
-void  VL_CopyDisplayToHidden ( void );
-void  VL_CopyBufferToAll ( byte *buffer );
 void  VL_CopyPlanarPage ( byte * src, byte * dest );
 void  VL_CopyPlanarPageToMemory ( byte * src, byte * dest );
 void  XFlipPage ( void );

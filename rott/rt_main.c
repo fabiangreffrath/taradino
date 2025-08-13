@@ -1032,7 +1032,7 @@ void GameLoop (void)
                   I_Delay(30);
                   SD_Play (SD_ACTORSQUISHSND);
                   tempbuf=bufferofs;
-                  bufferofs=page1start; // fixed, was displayofs
+                  bufferofs=SCREEN_BUFFER; // fixed, was displayofs
                   DrawNormalSprite(320-94,200-41,W_GetNumForName("rsac"));
 						VW_UpdateScreen(); // fixed, was missing
                   bufferofs=tempbuf;

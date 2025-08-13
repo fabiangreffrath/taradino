@@ -431,10 +431,7 @@ void SetupScreen ( boolean flip )
 
    DrawPlayScreen (true);
    if (flip==true)
-      {
       ThreeDRefresh();
-      VL_CopyDisplayToHidden();
-      }
 }
 
 

@@ -46,9 +46,7 @@ byte  *iG_buf_center;
 int    linewidth;
 //int    ylookup[MAXSCREENHEIGHT];
 int    ylookup[600];//just set to max res
-byte  *page1start;
-byte  *page2start;
-byte  *page3start;
+byte  *SCREEN_BUFFER;
 int    screensize;
 byte  *bufferofs;
 byte  *displayofs;
@@ -67,14 +65,13 @@ void DrawCenterAim ();
 =
 ====================
 */
-static SDL_Surface *sdl_surface = NULL;
-static SDL_Surface *unstretch_sdl_surface = NULL;
+SDL_Surface *sdl_surface = NULL;
+SDL_Surface *unstretch_sdl_surface = NULL;
 
 static SDL_Window *screen;
 static SDL_Renderer *renderer;
 static SDL_Surface *argbbuffer;
 static SDL_Texture *texture;
-static SDL_Rect blit_rect = {0};
 
 SDL_Window *VL_GetVideoWindow (void)
 {
@@ -118,6 +115,7 @@ void GraphicsMode ( void )
 	SDL_SetWindowMinimumSize(screen, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 	SDL_SetWindowTitle(screen, PACKAGE_STRING);
 
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 	renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_PRESENTVSYNC);
 	if (!renderer)
 	{
@@ -134,16 +132,12 @@ void GraphicsMode ( void )
 	                                   0, 0, 0, 0);
 	SDL_FillRect(sdl_surface, NULL, 0);
 
-	argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 0, 0, SDL_PIXELFORMAT_ARGB8888);
+	argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 0, 0, SDL_GetWindowPixelFormat(screen));
 
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 	texture = SDL_CreateTexture(renderer,
-	                            SDL_PIXELFORMAT_ARGB8888,
+	                            SDL_GetWindowPixelFormat(screen),
 	                            SDL_TEXTUREACCESS_STREAMING,
 	                            iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
-
-	blit_rect.w = iGLOBAL_SCREENWIDTH;
-	blit_rect.h = iGLOBAL_SCREENHEIGHT;
 
 	SetShowCursor(!sdl_fullscreen);
 }
@@ -173,12 +167,20 @@ void ToggleFullScreen (void)
 void SetTextMode ( void )
 {
 	if (SDL_WasInit(SDL_INIT_VIDEO) == SDL_INIT_VIDEO) {
-		if (sdl_surface != NULL) {
-			SDL_FreeSurface(sdl_surface);
-	
-			sdl_surface = NULL;
-		}
-		
+		if (sdl_surface) SDL_FreeSurface(sdl_surface);
+		if (unstretch_sdl_surface) SDL_FreeSurface(unstretch_sdl_surface);
+		if (argbbuffer) SDL_FreeSurface(argbbuffer);
+		if (texture) SDL_DestroyTexture(texture);
+		if (renderer) SDL_DestroyRenderer(renderer);
+		if (screen) SDL_DestroyWindow(screen);
+
+		sdl_surface = NULL;
+		unstretch_sdl_surface = NULL;
+		argbbuffer = NULL;
+		texture = NULL;
+		renderer = NULL;
+		screen = NULL;
+
 		SDL_QuitSubSystem (SDL_INIT_VIDEO);
 	}
 }
@@ -257,13 +259,7 @@ void VL_SetVGAPlaneMode ( void )
 //    screensize=MAXSCREENHEIGHT*MAXSCREENWIDTH;
     screensize=iGLOBAL_SCREENHEIGHT*iGLOBAL_SCREENWIDTH;
 
-
-
-    page1start=sdl_surface->pixels;
-    page2start=sdl_surface->pixels;
-    page3start=sdl_surface->pixels;
-    displayofs = page1start;
-    bufferofs = page2start;
+    SCREEN_BUFFER = displayofs = bufferofs = sdl_surface->pixels;
 
 	iG_X_center = iGLOBAL_SCREENWIDTH / 2;
 	iG_Y_center = (iGLOBAL_SCREENHEIGHT / 2)+10 ;//+10 = move aim down a bit
@@ -303,29 +299,6 @@ void VL_CopyPlanarPageToMemory ( byte * src, byte * dest )
 }
 
 /*
-=======================
-=
-= VL_CopyBufferToAll
-=
-=======================
-*/
-void VL_CopyBufferToAll ( byte *buffer )
-{
-}
-
-/*
-=======================
-=
-= VL_CopyDisplayToHidden
-=
-=======================
-*/
-void VL_CopyDisplayToHidden ( void )
-{
-   VL_CopyBufferToAll ( displayofs );
-}
-
-/*
 =================
 =
 = VL_ClearBuffer
@@ -355,19 +328,6 @@ void VL_ClearVideo (byte color)
   memset (sdl_surface->pixels, color, iGLOBAL_SCREENWIDTH*iGLOBAL_SCREENHEIGHT);
 }
 
-/*
-=================
-=
-= VL_DePlaneVGA
-=
-=================
-*/
-
-void VL_DePlaneVGA (void)
-{
-}
-
-
 /* C version of rt_vh_a.asm */
 
 void VH_UpdateScreen (void)
@@ -380,7 +340,7 @@ void VH_UpdateScreen (void)
 
 	if (SDL_LockTexture(texture, NULL, &argbbuffer->pixels, &argbbuffer->pitch) == 0)
 	{
-		SDL_LowerBlit(VL_GetVideoSurface(), &blit_rect, argbbuffer, &blit_rect);
+		SDL_BlitSurface(sdl_surface, NULL, argbbuffer, NULL);
 		SDL_UnlockTexture(texture);
 	}
 
@@ -408,7 +368,7 @@ void XFlipPage ( void )
 
 	if (SDL_LockTexture(texture, NULL, &argbbuffer->pixels, &argbbuffer->pitch) == 0)
 	{
-		SDL_LowerBlit(sdl_surface, &blit_rect, argbbuffer, &blit_rect);
+		SDL_BlitSurface(sdl_surface, NULL, argbbuffer, NULL);
 		SDL_UnlockTexture(texture);
 	}
 
@@ -431,10 +391,7 @@ void EnableScreenStretch(void)
 	
    displayofs = (byte *)unstretch_sdl_surface->pixels +
 	(displayofs - (byte *)sdl_surface->pixels);
-   bufferofs  = unstretch_sdl_surface->pixels;
-   page1start = unstretch_sdl_surface->pixels;
-   page2start = unstretch_sdl_surface->pixels;
-   page3start = unstretch_sdl_surface->pixels;
+   SCREEN_BUFFER = bufferofs = unstretch_sdl_surface->pixels;
    StretchScreen = 1;	
 }
 
@@ -444,10 +401,7 @@ void DisableScreenStretch(void)
 	
    displayofs = (byte *)sdl_surface->pixels +
 	(displayofs - (byte *)unstretch_sdl_surface->pixels);
-   bufferofs  = sdl_surface->pixels;
-   page1start = sdl_surface->pixels;
-   page2start = sdl_surface->pixels;
-   page3start = sdl_surface->pixels;
+   SCREEN_BUFFER = bufferofs = sdl_surface->pixels;
    StretchScreen = 0;
 }
 
@@ -467,7 +421,7 @@ static void StretchMemPicture ()
   dest.y = 0;
   dest.w = iGLOBAL_SCREENWIDTH;
   dest.h = iGLOBAL_SCREENHEIGHT;
-  SDL_SoftStretch(unstretch_sdl_surface, &src, sdl_surface, &dest);
+  SDL_BlitScaled(unstretch_sdl_surface, &src, sdl_surface, &dest);
 }
 
 // bna function added start
