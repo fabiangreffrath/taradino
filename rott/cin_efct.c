@@ -633,7 +633,7 @@ void DrawBlankScreen ( void )
 */
 void DrawClearBuffer ( void )
 {
-  memset((byte *)bufferofs,0,iGLOBAL_SCREENWIDTH*iGLOBAL_SCREENHEIGHT);
+  memset((byte *)bufferofs,0,screensize);
 }
 
 /*

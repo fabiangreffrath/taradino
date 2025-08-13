@@ -73,6 +73,18 @@ static SDL_Renderer *renderer;
 static SDL_Surface *argbbuffer;
 static SDL_Texture *texture;
 
+static void Initialize_YLookup(int w, int h)
+{
+	int i;
+	int offset = 0;
+
+	for (i = 0; i < h; i++)
+	{
+		ylookup[i] = offset;
+		offset += w;
+	}
+}
+
 SDL_Window *VL_GetVideoWindow (void)
 {
 	return screen;
@@ -240,28 +252,13 @@ void WaitVBL( void )
 
 void VL_SetVGAPlaneMode ( void )
 {
-   int i,offset;
+	GraphicsMode();
 
-    GraphicsMode();
+	Initialize_YLookup(iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 
-//
-// set up lookup tables
-//
-//bna--   linewidth = 320;
-   linewidth = iGLOBAL_SCREENWIDTH;
+	screensize=iGLOBAL_SCREENHEIGHT*iGLOBAL_SCREENWIDTH;
 
-   offset = 0;
-
-   for (i=0;i<iGLOBAL_SCREENHEIGHT;i++)
-      {
-      ylookup[i]=offset;
-      offset += linewidth;
-      }
-
-//    screensize=MAXSCREENHEIGHT*MAXSCREENWIDTH;
-    screensize=iGLOBAL_SCREENHEIGHT*iGLOBAL_SCREENWIDTH;
-
-    SCREEN_BUFFER = displayofs = bufferofs = sdl_surface->pixels;
+	SCREEN_BUFFER = displayofs = bufferofs = sdl_surface->pixels;
 
 	iG_X_center = iGLOBAL_SCREENWIDTH / 2;
 	iG_Y_center = (iGLOBAL_SCREENHEIGHT / 2)+10 ;//+10 = move aim down a bit
@@ -271,9 +268,9 @@ void VL_SetVGAPlaneMode ( void )
 	bufofsTopLimit =  bufferofs + screensize - iGLOBAL_SCREENWIDTH;
 	bufofsBottomLimit = bufferofs + iGLOBAL_SCREENWIDTH;
 
-    // start stretched
-    EnableScreenStretch();
-    XFlipPage ();
+	// start stretched
+	EnableScreenStretch();
+	XFlipPage ();
 }
 
 /*
@@ -381,22 +378,26 @@ void XFlipPage ( void )
 
 void EnableScreenStretch(void)
 {
-   if (iGLOBAL_SCREENWIDTH <= 320 || StretchScreen) return;
-   
-   displayofs = (byte *)unstretch_sdl_surface->pixels +
-	(displayofs - (byte *)sdl_surface->pixels);
-   SCREEN_BUFFER = bufferofs = unstretch_sdl_surface->pixels;
-   StretchScreen = 1;	
+	if (iGLOBAL_SCREENWIDTH <= 320 || StretchScreen)
+		return;
+
+	displayofs = (byte *)unstretch_sdl_surface->pixels + (displayofs - (byte *)sdl_surface->pixels);
+	SCREEN_BUFFER = bufferofs = unstretch_sdl_surface->pixels;
+	StretchScreen = 1;
+	Initialize_YLookup(320, 200);
+	screensize = 320 * 200;
 }
 
 void DisableScreenStretch(void)
 {
-   if (iGLOBAL_SCREENWIDTH <= 320 || !StretchScreen) return;
-	
-   displayofs = (byte *)sdl_surface->pixels +
-	(displayofs - (byte *)unstretch_sdl_surface->pixels);
-   SCREEN_BUFFER = bufferofs = sdl_surface->pixels;
-   StretchScreen = 0;
+	if (iGLOBAL_SCREENWIDTH <= 320 || !StretchScreen)
+		return;
+
+	displayofs = (byte *)sdl_surface->pixels + (displayofs - (byte *)unstretch_sdl_surface->pixels);
+	SCREEN_BUFFER = bufferofs = sdl_surface->pixels;
+	StretchScreen = 0;
+	Initialize_YLookup(iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+	screensize = iGLOBAL_SCREENWIDTH * iGLOBAL_SCREENHEIGHT;
 }
 
 

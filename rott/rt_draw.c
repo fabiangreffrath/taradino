@@ -2753,7 +2753,7 @@ void ScaleAndRotateBuffer (int startangle, int endangle, int startscale, int end
    int Xh = 320/2;
    int Yh = 200/2;
 
-	DisableScreenStretch();//bna++
+	EnableScreenStretch();//bna++
 
 
    anglestep=((endangle-startangle)<<16)/time;
