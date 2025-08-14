@@ -218,7 +218,13 @@ int FX_StopSound(int handle)
 
 // Calculate slice size, the result must be a power of two.
 
+#ifdef __PSP__
+static int snd_samplerate = 11025;
+static int snd_format = AUDIO_U8;
+#else
 static int snd_samplerate = 44100;
+static int snd_format = AUDIO_S16SYS;
+#endif
 
 static int GetSliceSize(void)
 {
@@ -255,9 +261,8 @@ int FX_SetupCard(int SoundCard, fx_device *device)
         return FX_Error;
     }
 
-    if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, GetSliceSize(),
-                            NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE)
-        < 0)
+    if (Mix_OpenAudioDevice(snd_samplerate, snd_format, 2, GetSliceSize(),
+                            NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
     {
         fprintf(stderr, "\n Couldn't open audio with desired format.");
         return FX_Error;
@@ -298,10 +303,18 @@ int FX_Shutdown(void)
 
 extern int SoundNumber(int x);
 
+#ifdef __PSP__
+#include <pspsdk.h>
+#endif
+
 int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
             unsigned int mixrate)
 {
     int i;
+
+#ifdef __PSP__
+	printf("\nFREE MEMORY: %zu\n\n", pspSdkTotalFreeUserMemSize());
+#endif
 
     printf("\n Precaching all sound effects... ");
     for (i = 0; i < SD_LASTSOUND; i++)
@@ -329,6 +342,10 @@ int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
         }
     }
     printf("done.");
+
+#ifdef __PSP__
+	printf("\nFREE MEMORY: %zu\n\n", pspSdkTotalFreeUserMemSize());
+#endif
 
     printf("\n Calculating stereo panning... ");
     MV_CalcPanTable();

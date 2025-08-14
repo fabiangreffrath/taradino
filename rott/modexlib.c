@@ -108,11 +108,12 @@ void GraphicsMode ( void )
 		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 	}
 
-	screen = SDL_CreateWindow(NULL,
-	                          SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-	                          iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT,
-	                          flags);
+#ifdef __PSP__
+	screen = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 480, 272, flags);
+#else
+	screen = SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, flags);
 	SDL_SetWindowMinimumSize(screen, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+#endif
 	SDL_SetWindowTitle(screen, PACKAGE_STRING);
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
@@ -121,7 +122,9 @@ void GraphicsMode ( void )
 	{
 		renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_SOFTWARE);
 	}
+#ifndef __PSP__
 	SDL_RenderSetLogicalSize(renderer, 640, 480);
+#endif
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
