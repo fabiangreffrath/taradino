@@ -294,7 +294,7 @@ static void AddStorefrontDirs(void)
 	{
 		for (int i = 0; i < num_storefront_paths_home; i++)
 		{
-			M_snprintf(path, sizeof(path), "%s%s", prefix, storefront_paths[i]);
+			M_snprintf(path, sizeof(path), "%s%s", prefix, storefront_paths_home[i]);
 
 			if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
 				AddDataDir(M_StringDuplicate(path));
