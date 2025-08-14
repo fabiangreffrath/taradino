@@ -67,17 +67,17 @@ void DrawCenterAim ();
 */
 SDL_Surface *sdl_surface = NULL;
 SDL_Surface *unstretch_sdl_surface = NULL;
-static SDL_Surface *unstretch_sdl_argbbuffer = NULL;
+static SDL_Surface *unstretch_sdl_window_surface = NULL;
 static SDL_Texture *unstretch_sdl_texture = NULL;
 
-static SDL_Window *screen = NULL;
+static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
-static SDL_Surface *argbbuffer = NULL;
+static SDL_Surface *window_surface = NULL;
 static SDL_Texture *texture = NULL;
 
 SDL_Window *VL_GetVideoWindow (void)
 {
-	return screen;
+	return window;
 }
 
 SDL_Surface *VL_GetVideoSurface (void)
@@ -110,18 +110,18 @@ void GraphicsMode ( void )
 		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 	}
 
-	screen = SDL_CreateWindow(NULL,
+	window = SDL_CreateWindow(NULL,
 	                          SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 	                          iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT,
 	                          flags);
-	SDL_SetWindowMinimumSize(screen, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
-	SDL_SetWindowTitle(screen, PACKAGE_STRING);
+	SDL_SetWindowMinimumSize(window, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+	SDL_SetWindowTitle(window, PACKAGE_STRING);
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
-	renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_PRESENTVSYNC);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 	if (!renderer)
 	{
-		renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_SOFTWARE);
+		renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 	}
 	SDL_RenderSetLogicalSize(renderer, 640, 480);
 
@@ -134,17 +134,17 @@ void GraphicsMode ( void )
 	                                   0, 0, 0, 0);
 	SDL_FillRect(sdl_surface, NULL, 0);
 
-	argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 0, 0, SDL_GetWindowPixelFormat(screen));
+	window_surface = SDL_CreateRGBSurfaceWithFormatFrom(NULL, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 0, 0, SDL_GetWindowPixelFormat(window));
 
 	texture = SDL_CreateTexture(renderer,
-	                            SDL_GetWindowPixelFormat(screen),
+	                            SDL_GetWindowPixelFormat(window),
 	                            SDL_TEXTUREACCESS_STREAMING,
 	                            iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 
 	unstretch_sdl_surface = SDL_CreateRGBSurface(0, 320, 200, 8, 0, 0, 0, 0);
 	SDL_SetColorKey(unstretch_sdl_surface, SDL_TRUE, 0);
-	unstretch_sdl_texture = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(screen), SDL_TEXTUREACCESS_STREAMING, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
-	unstretch_sdl_argbbuffer = SDL_CreateRGBSurfaceWithFormatFrom(NULL, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 0, 0, SDL_GetWindowPixelFormat(screen));
+	unstretch_sdl_texture = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(window), SDL_TEXTUREACCESS_STREAMING, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+	unstretch_sdl_window_surface = SDL_CreateRGBSurfaceWithFormatFrom(NULL, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, 0, 0, SDL_GetWindowPixelFormat(window));
 
 	SetShowCursor(!sdl_fullscreen);
 }
@@ -160,7 +160,7 @@ void ToggleFullScreen (void)
 		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 	}
 
-	SDL_SetWindowFullscreen(screen, flags);
+	SDL_SetWindowFullscreen(window, flags);
 	SetShowCursor(!sdl_fullscreen);
 }
 
@@ -176,17 +176,17 @@ void SetTextMode ( void )
 	if (SDL_WasInit(SDL_INIT_VIDEO) == SDL_INIT_VIDEO) {
 		if (sdl_surface) SDL_FreeSurface(sdl_surface);
 		if (unstretch_sdl_surface) SDL_FreeSurface(unstretch_sdl_surface);
-		if (argbbuffer) SDL_FreeSurface(argbbuffer);
+		if (window_surface) SDL_FreeSurface(window_surface);
 		if (texture) SDL_DestroyTexture(texture);
 		if (renderer) SDL_DestroyRenderer(renderer);
-		if (screen) SDL_DestroyWindow(screen);
+		if (window) SDL_DestroyWindow(window);
 
 		sdl_surface = NULL;
 		unstretch_sdl_surface = NULL;
-		argbbuffer = NULL;
+		window_surface = NULL;
 		texture = NULL;
 		renderer = NULL;
-		screen = NULL;
+		window = NULL;
 
 		SDL_QuitSubSystem (SDL_INIT_VIDEO);
 	}
@@ -347,9 +347,9 @@ void VH_UpdateScreen (void)
 		DrawCenterAim ();
 	}
 
-	if (SDL_LockTexture(texture, NULL, &argbbuffer->pixels, &argbbuffer->pitch) == 0)
+	if (SDL_LockTexture(texture, NULL, &window_surface->pixels, &window_surface->pitch) == 0)
 	{
-		SDL_BlitSurface(sdl_surface, NULL, argbbuffer, NULL);
+		SDL_BlitSurface(sdl_surface, NULL, window_surface, NULL);
 		SDL_UnlockTexture(texture);
 	}
 
@@ -377,9 +377,9 @@ void XFlipPage ( void )
 		DrawCenterAim ();
 	}
 
-	if (SDL_LockTexture(texture, NULL, &argbbuffer->pixels, &argbbuffer->pitch) == 0)
+	if (SDL_LockTexture(texture, NULL, &window_surface->pixels, &window_surface->pitch) == 0)
 	{
-		SDL_BlitSurface(sdl_surface, NULL, argbbuffer, NULL);
+		SDL_BlitSurface(sdl_surface, NULL, window_surface, NULL);
 		SDL_UnlockTexture(texture);
 	}
 
@@ -414,9 +414,9 @@ void DisableScreenStretch(void)
 // bna section -------------------------------------------
 static void StretchMemPicture ()
 {
-	if (SDL_LockTexture(unstretch_sdl_texture, NULL, &unstretch_sdl_argbbuffer->pixels, &unstretch_sdl_argbbuffer->pitch) == 0)
+	if (SDL_LockTexture(unstretch_sdl_texture, NULL, &unstretch_sdl_window_surface->pixels, &unstretch_sdl_window_surface->pitch) == 0)
 	{
-		SDL_BlitSurface(unstretch_sdl_surface, NULL, unstretch_sdl_argbbuffer, NULL);
+		SDL_BlitSurface(unstretch_sdl_surface, NULL, unstretch_sdl_window_surface, NULL);
 		SDL_UnlockTexture(unstretch_sdl_texture);
 	}
 }
