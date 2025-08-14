@@ -57,8 +57,6 @@ int IgnoreMouse = 0;
 // configuration variables
 //
 boolean  MousePresent;
-boolean  JoysPresent[MaxJoys];
-boolean  JoyPadPresent     = 0;
 
 //    Global variables
 //
@@ -79,12 +77,13 @@ char LetterQueue[MAXLETTERS];
 ModemMessage MSG;
 
 
-static SDL_Joystick* sdl_joysticks[MaxJoys];
+static SDL_GameController *sdl_gamepads[MaxJoys];
+static int sdl_total_gamepads = 0;
+static SDL_Joystick *sdl_jotsticks[MaxJoys];
+static int sdl_total_joysticks = 0;
 static int sdl_mouse_delta_x = 0;
 static int sdl_mouse_delta_y = 0;
 static unsigned short sdl_mouse_button_mask = 0;
-static int sdl_total_sticks = 0;
-static unsigned short sdl_stick_button_state[MaxJoys];
 static int sdl_mouse_grabbed = 0;
 extern boolean sdl_fullscreen;
 
@@ -179,7 +178,6 @@ static int GetScancode(const int scancode)
 static KeyboardDef KbdDefs = {0x1d,0x38,0x47,0x48,0x49,0x4b,0x4d,0x4f,0x50,0x51};
 static JoystickDef JoyDefs[MaxJoys];
 static ControlType Controls[MAXPLAYERS];
-
 
 static boolean  IN_Started;
 
@@ -377,7 +375,7 @@ static int sdl_key_filter(const SDL_Event *event)
 
 static int sdl_joystick_button_filter(const SDL_Event *event)
 {
-	if (event->jbutton.which >= sdl_total_sticks)
+	if (event->jbutton.which >= sdl_total_gamepads)
 		return 0;
 
 	if (event->jbutton.button >= 16)
@@ -395,41 +393,6 @@ static int sdl_joystick_button_filter(const SDL_Event *event)
 	return 0;
 }
 
-static int root_sdl_event_filter(const SDL_Event *event)
-{
-    switch (event->type)
-    {
-        case SDL_KEYUP:
-        case SDL_KEYDOWN:
-            return(sdl_key_filter(event));
-        case SDL_JOYBALLMOTION:
-        case SDL_MOUSEMOTION:
-            return(sdl_mouse_motion_filter(event));
-        case SDL_MOUSEBUTTONUP:
-        case SDL_MOUSEBUTTONDOWN:
-            return(sdl_mouse_button_filter(event));
-        case SDL_JOYBUTTONUP:
-        case SDL_JOYBUTTONDOWN:
-            return(sdl_joystick_button_filter(event));
-        case SDL_QUIT:
-            /* !!! rcg TEMP */
-            fprintf(stderr, "\n\n\nSDL_QUIT!\n\n\n");
-            SDL_Quit();
-            exit(42);
-    } /* switch */
-
-    return(1);
-} /* root_sdl_event_filter */
-
-
-static void sdl_handle_events(void)
-{
-    SDL_Event event;
-    while (SDL_PollEvent(&event))
-        root_sdl_event_filter(&event);
-} /* sdl_handle_events */
-
-
 //******************************************************************************
 //
 // IN_PumpEvents () - Let platform process an event queue.
@@ -437,7 +400,34 @@ static void sdl_handle_events(void)
 //******************************************************************************
 void IN_PumpEvents(void)
 {
-   sdl_handle_events();
+	SDL_Event event;
+	while (SDL_PollEvent(&event))
+	{
+		switch (event.type)
+		{
+			case SDL_KEYUP:
+			case SDL_KEYDOWN:
+				sdl_key_filter(&event);
+				break;
+			case SDL_JOYBALLMOTION:
+			case SDL_MOUSEMOTION:
+				sdl_mouse_motion_filter(&event);
+				break;
+			case SDL_MOUSEBUTTONUP:
+			case SDL_MOUSEBUTTONDOWN:
+				sdl_mouse_button_filter(&event);
+				break;
+			case SDL_JOYBUTTONUP:
+			case SDL_JOYBUTTONDOWN:
+				sdl_joystick_button_filter(&event);
+				break;
+			case SDL_QUIT:
+				/* !!! rcg TEMP */
+				fprintf(stderr, "\n\n\nSDL_QUIT!\n\n\n");
+				SDL_Quit();
+				exit(42);
+		}
+	}
 }
 
 
@@ -523,7 +513,7 @@ void IN_GetJoyAbs (unsigned short joy, unsigned short *xp, unsigned short *yp)
    Joy_ys = joy? 3 : 1;       // Do the same for y axis
    Joy_yb = 1 << Joy_ys;
 
-   if (joy < sdl_total_sticks)
+   if (joy < sdl_total_gamepads)
    {
 	   Sint32 jx, jy;
 
@@ -620,7 +610,7 @@ unsigned short INL_GetJoyButtons (unsigned short joy)
 {
    unsigned short  result = 0;
 
-   if (joy < sdl_total_sticks)
+   if (joy < sdl_total_gamepads)
        result = sdl_stick_button_state[joy];
 
    return result;
@@ -706,32 +696,47 @@ void IN_SetupJoy (unsigned short joy, unsigned short minx, unsigned short maxx, 
 
 boolean INL_StartJoy (unsigned short joy)
 {
-   unsigned short x,y;
+	int i, n;
+	unsigned short x,y;
 
-   if (!SDL_WasInit(SDL_INIT_JOYSTICK))
-   {
-       SDL_Init(SDL_INIT_JOYSTICK);
-       sdl_total_sticks = SDL_NumJoysticks();
-       if (sdl_total_sticks > MaxJoys) sdl_total_sticks = MaxJoys;
-       SDL_JoystickEventState(SDL_ENABLE);
-   }
+	if (!SDL_WasInit(SDL_INIT_GAMECONTROLLER))
+	{
+		SDL_Init(SDL_INIT_GAMECONTROLLER);
+		n = SDL_NumJoysticks();
+		for (i = 0; i < n; i++)
+		{
+			if (sdl_total_gamepads >= MaxJoys)
+				break;
 
-   if (joy >= sdl_total_sticks) return (false);
-   sdl_joysticks[joy] = SDL_JoystickOpen (joy);
+			if (SDL_IsGameController(i))
+			{
+				sdl_gamepads[sdl_total_gamepads] = SDL_GameControllerOpen(i);
 
-   IN_GetJoyAbs (joy, &x, &y);
+				if (!sdl_gamepads[sdl_total_gamepads])
+				{
+					fprintf(stderr, "Failed to open game controller: %s\n", SDL_GetError());
+					continue;
+				}
 
-   if
-   (
-      ((x == 0) || (x > MaxJoyValue - 10))
-   || ((y == 0) || (y > MaxJoyValue - 10))
-   )
-      return(false);
-   else
-   {
-      IN_SetupJoy (joy, 0, x * 2, 0, y * 2);
-      return (true);
-   }
+				sdl_total_gamepads++;
+			}
+		}
+	}
+
+	if (joy >= sdl_total_gamepads)
+		return (false);
+
+	IN_GetJoyAbs (joy, &x, &y);
+
+	if (((x == 0) || (x > MaxJoyValue - 10)) || ((y == 0) || (y > MaxJoyValue - 10)))
+	{
+		return(false);
+	}
+	else
+	{
+		IN_SetupJoy (joy, 0, x * 2, 0, y * 2);
+		return (true);
+	}
 }
 
 
@@ -745,7 +750,7 @@ boolean INL_StartJoy (unsigned short joy)
 void INL_ShutJoy (unsigned short joy)
 {
    JoysPresent[joy] = false;
-   if (joy < sdl_total_sticks) SDL_JoystickClose (sdl_joysticks[joy]);
+   if (joy < sdl_total_gamepads) SDL_GameControllerClose (sdl_gamepads[joy]);
 }
 
 
