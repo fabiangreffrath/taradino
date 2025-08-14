@@ -8,10 +8,15 @@ project(taradino
 )
 configure_file(rott/version.h.in rott/version.h @ONLY)
 
+option(TARADINO_ASAN "Use Address Sanitizer" OFF)
 option(TARADINO_SHAREWARE "Build shareware version" OFF)
 option(TARADINO_WARNINGS_AS_ERRORS "Treat all compiler warnings as errors" OFF)
 set(TARADINO_DATADIR "" CACHE STRING "Game data file directory")
 set(TARADINO_SUFFIX "" CACHE STRING "Executable file name suffix")
+
+add_library(ASAN::ASAN IMPORTED INTERFACE)
+target_compile_options(ASAN::ASAN INTERFACE -fsanitize=address $<$<NOT:$<COMPILE_LANG_AND_ID:C,MSVC>>:-fno-omit-frame-pointer>)
+target_link_options(ASAN::ASAN INTERFACE -fsanitize=address)
 
 find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
 find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
@@ -39,6 +44,7 @@ target_link_libraries(taradino PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> S
 target_compile_definitions(taradino PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}")
 target_compile_definitions(taradino PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
 target_include_directories(taradino PRIVATE "${PROJECT_BINARY_DIR}/rott")
+target_link_libraries(taradino PUBLIC $<$<BOOL:${TARADINO_ASAN}>:ASAN::ASAN>)
 
 if(NOT DEFINED TARADINO_EXEC)
 	set(TARADINO_EXEC taradino)
