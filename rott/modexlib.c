@@ -54,6 +54,9 @@ boolean graphicsmode=false;
 byte  *bufofsTopLimit;
 byte  *bufofsBottomLimit;
 
+static int iGLOBAL_REAL_SCREENWIDTH  = 640;
+static int iGLOBAL_REAL_SCREENHEIGHT = 480;
+
 void DrawCenterAim ();
 
 #include "SDL.h"
@@ -381,17 +384,26 @@ void EnableScreenStretch(void)
 	if (iGLOBAL_SCREENWIDTH <= 320 || StretchScreen)
 		return;
 
+	iGLOBAL_REAL_SCREENWIDTH = iGLOBAL_SCREENWIDTH;
+	iGLOBAL_REAL_SCREENHEIGHT = iGLOBAL_SCREENHEIGHT;
+
+	iGLOBAL_SCREENWIDTH = 320;
+	iGLOBAL_SCREENHEIGHT = 200;
+
 	displayofs = (byte *)unstretch_sdl_surface->pixels + (displayofs - (byte *)sdl_surface->pixels);
 	SCREEN_BUFFER = bufferofs = unstretch_sdl_surface->pixels;
 	StretchScreen = 1;
-	Initialize_YLookup(320, 200);
-	screensize = 320 * 200;
+	Initialize_YLookup(iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+	screensize = iGLOBAL_SCREENWIDTH * iGLOBAL_SCREENHEIGHT;
 }
 
 void DisableScreenStretch(void)
 {
 	if (iGLOBAL_SCREENWIDTH <= 320 || !StretchScreen)
 		return;
+
+	iGLOBAL_SCREENWIDTH = iGLOBAL_REAL_SCREENWIDTH;
+	iGLOBAL_SCREENHEIGHT = iGLOBAL_REAL_SCREENHEIGHT;
 
 	displayofs = (byte *)sdl_surface->pixels + (displayofs - (byte *)unstretch_sdl_surface->pixels);
 	SCREEN_BUFFER = bufferofs = sdl_surface->pixels;
@@ -414,8 +426,8 @@ static void StretchMemPicture ()
   
   dest.x = 0;
   dest.y = 0;
-  dest.w = iGLOBAL_SCREENWIDTH;
-  dest.h = iGLOBAL_SCREENHEIGHT;
+  dest.w = iGLOBAL_REAL_SCREENWIDTH;
+  dest.h = iGLOBAL_REAL_SCREENHEIGHT;
   SDL_BlitScaled(unstretch_sdl_surface, &src, sdl_surface, &dest);
 }
 
