@@ -169,7 +169,7 @@ static int GetScancode(const int scancode)
     }
 }
 
-static KeyboardDef KbdDef = {0x1d,0x38,0x47,0x48,0x49,0x4b,0x4d,0x4f,0x50,0x51};
+static KeyboardDef KbdDef = {sc_Control,sc_Alt,sc_Home,sc_UpArrow,sc_PgUp,sc_LeftArrow,sc_RightArrow,sc_End,sc_DownArrow,sc_PgDn};
 static JoystickDef JoyDef;
 static ControlType Controls[MAXPLAYERS];
 
