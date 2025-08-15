@@ -421,7 +421,7 @@ static void StretchMemPicture ()
   dest.y = 0;
   dest.w = iGLOBAL_SCREENWIDTH;
   dest.h = iGLOBAL_SCREENHEIGHT;
-  SDL_BlitScaled(unstretch_sdl_surface, &src, sdl_surface, &dest);
+  SDL_SoftStretch(unstretch_sdl_surface, &src, sdl_surface, &dest);
 }
 
 // bna function added start
