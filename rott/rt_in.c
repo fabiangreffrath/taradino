@@ -534,57 +534,57 @@ void IN_GetJoyAbs (unsigned short joy, unsigned short *xp, unsigned short *yp)
 //
 //******************************************************************************
 
-void INL_GetJoyDelta (unsigned short joy, int *dx, int *dy)
+void INL_GetJoyDelta(int *dx, int *dy)
 {
-   unsigned short        x, y;
+	unsigned short x, y;
 
-   IN_GetJoyAbs (joy, &x, &y);
+	IN_GetJoyAbs (joy, &x, &y);
 
-   if (x < JoyDef.threshMinX)
-   {
-      if (x < JoyDef.joyMinX)
-         x = JoyDef.joyMinX;
+	if (x < JoyDef.threshMinX)
+	{
+		if (x < JoyDef.joyMinX)
+			x = JoyDef.joyMinX;
 
-      x = -(x - JoyDef.threshMinX);
-      x *= JoyDef.joyMultXL;
-      x >>= JoyScaleShift;
-      *dx = (x > 127)? -127 : -x;
-   }
-   else if (x > JoyDef.threshMaxX)
-   {
-      if (x > JoyDef.joyMaxX)
-         x = JoyDef.joyMaxX;
+		x = -(x - JoyDef.threshMinX);
+		x *= JoyDef.joyMultXL;
+		x >>= JoyScaleShift;
+		*dx = (x > 127)? -127 : -x;
+	}
+	else if (x > JoyDef.threshMaxX)
+	{
+		if (x > JoyDef.joyMaxX)
+			x = JoyDef.joyMaxX;
 
-      x = x - JoyDef.threshMaxX;
-      x *= JoyDef.joyMultXH;
-      x >>= JoyScaleShift;
-      *dx = (x > 127)? 127 : x;
-   }
-   else
-      *dx = 0;
+		x = x - JoyDef.threshMaxX;
+		x *= JoyDef.joyMultXH;
+		x >>= JoyScaleShift;
+		*dx = (x > 127)? 127 : x;
+	}
+	else
+		*dx = 0;
 
-   if (y < JoyDef.threshMinY)
-   {
-      if (y < JoyDef.joyMinY)
-         y = JoyDef.joyMinY;
+	if (y < JoyDef.threshMinY)
+	{
+		if (y < JoyDef.joyMinY)
+			y = JoyDef.joyMinY;
 
-      y = -(y - JoyDef.threshMinY);
-      y *= JoyDef.joyMultYL;
-      y >>= JoyScaleShift;
-      *dy = (y > 127)? -127 : -y;
-   }
-   else if (y > JoyDef.threshMaxY)
-   {
-      if (y > JoyDef.joyMaxY)
-         y = JoyDef.joyMaxY;
+		y = -(y - JoyDef.threshMinY);
+		y *= JoyDef.joyMultYL;
+		y >>= JoyScaleShift;
+		*dy = (y > 127)? -127 : -y;
+	}
+	else if (y > JoyDef.threshMaxY)
+	{
+		if (y > JoyDef.joyMaxY)
+			y = JoyDef.joyMaxY;
 
-      y = y - JoyDef.threshMaxY;
-      y *= JoyDef.joyMultYH;
-      y >>= JoyScaleShift;
-      *dy = (y > 127)? 127 : y;
-   }
-   else
-      *dy = 0;
+		y = y - JoyDef.threshMaxY;
+		y *= JoyDef.joyMultYH;
+		y >>= JoyScaleShift;
+		*dy = (y > 127)? 127 : y;
+	}
+	else
+		*dy = 0;
 }
 
 //******************************************************************************
@@ -601,8 +601,6 @@ void INL_SetJoyScale (void)
 	JoyDef.joyMultYH = JoyScaleMax / (JoyDef.joyMaxY - JoyDef.threshMaxY);
 }
 
-
-
 //******************************************************************************
 //
 // IN_SetupJoy () - Sets up thresholding values and calls INL_SetJoyScale()
@@ -612,23 +610,23 @@ void INL_SetJoyScale (void)
 
 void IN_SetupGamepad (unsigned short minx, unsigned short maxx, unsigned short miny, unsigned short maxy)
 {
-   unsigned short     d,r;
+	unsigned short     d,r;
 
-   JoyDef.joyMinX = minx;
-   JoyDef.joyMaxX = maxx;
-   r = maxx - minx;
-   d = r / 3;
-   JoyDef.threshMinX = ((r / 2) - d) + minx;
-   JoyDef.threshMaxX = ((r / 2) + d) + minx;
+	JoyDef.joyMinX = minx;
+	JoyDef.joyMaxX = maxx;
+	r = maxx - minx;
+	d = r / 3;
+	JoyDef.threshMinX = ((r / 2) - d) + minx;
+	JoyDef.threshMaxX = ((r / 2) + d) + minx;
 
-   JoyDef.joyMinY = miny;
-   JoyDef.joyMaxY = maxy;
-   r = maxy - miny;
-   d = r / 3;
-   JoyDef.threshMinY = ((r / 2) - d) + miny;
-   JoyDef.threshMaxY = ((r / 2) + d) + miny;
+	JoyDef.joyMinY = miny;
+	JoyDef.joyMaxY = maxy;
+	r = maxy - miny;
+	d = r / 3;
+	JoyDef.threshMinY = ((r / 2) - d) + miny;
+	JoyDef.threshMaxY = ((r / 2) + d) + miny;
 
-   INL_SetJoyScale();
+	INL_SetJoyScale();
 }
 
 
