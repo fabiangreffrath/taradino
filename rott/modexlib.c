@@ -94,6 +94,12 @@ void SetShowCursor(int show)
 	SDL_GetRelativeMouseState(NULL, NULL);
 }
 
+static int (*StretchFunc)(SDL_Surface *src, const SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) = SDL_BlitScaled;
+static inline int SDL_SoftStretchWrapper(SDL_Surface *src, const SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect)
+{
+	return SDL_SoftStretch(src, srcrect, dst, dstrect);
+}
+
 void GraphicsMode ( void )
 {
 	uint32_t flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
@@ -140,6 +146,18 @@ void GraphicsMode ( void )
 	                            iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
 
 	SetShowCursor(!sdl_fullscreen);
+
+	const char *driver = SDL_GetCurrentVideoDriver();
+#ifndef _WIN32
+	if (driver && strcmp(driver, "x11") == 0)
+	{
+		StretchFunc = SDL_SoftStretchWrapper;
+	}
+	else
+#endif
+	{
+		StretchFunc = SDL_BlitScaled;
+	}
 }
 
 void ToggleFullScreen (void)
@@ -421,7 +439,7 @@ static void StretchMemPicture ()
   dest.y = 0;
   dest.w = iGLOBAL_SCREENWIDTH;
   dest.h = iGLOBAL_SCREENHEIGHT;
-  SDL_SoftStretch(unstretch_sdl_surface, &src, sdl_surface, &dest);
+  StretchFunc(unstretch_sdl_surface, &src, sdl_surface, &dest);
 }
 
 // bna function added start
