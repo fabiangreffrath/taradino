@@ -79,8 +79,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "vgatext.h"
 
-volatile int    oldtime;
-volatile int    gametime;
+int    oldtime;
+int    gametime;
 
 boolean         tedlevel;
 int             tedlevelnum;

@@ -146,9 +146,6 @@ char getch(void);
 long filelength(int handle);
 #endif
 
-#define far
-#define cdecl
-
 //***************************************************************************
 //
 //    Screen Constants
