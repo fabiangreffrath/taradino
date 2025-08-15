@@ -192,9 +192,6 @@ static   Direction   DirTable[] =      // Quick lookup for total direction
 
 static char *ParmStrings[] = {"nojoys","nomouse",NULL};
 
-
-#define sdldebug printf
-
 static int sdl_mouse_button_filter(SDL_Event const *event)
 {
         /*
