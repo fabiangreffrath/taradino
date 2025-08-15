@@ -190,8 +190,6 @@ static   Direction   DirTable[] =      // Quick lookup for total direction
    dir_SouthWest, dir_South,  dir_SouthEast
 };
 
-int (far *function_ptr)();
-
 static char *ParmStrings[] = {"nojoys","nomouse",NULL};
 
 
