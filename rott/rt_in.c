@@ -64,7 +64,7 @@ boolean  JoyPadPresent     = 0;
 //
 boolean  Paused;
 char LastASCII;
-volatile int LastScan;
+int LastScan;
 
 byte Joy_xb,
      Joy_yb,

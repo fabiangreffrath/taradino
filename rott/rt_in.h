@@ -146,13 +146,13 @@ extern int     mouseadjustment;
 extern int     threshold;
 
 extern boolean  Paused;
-extern volatile int LastScan;
+extern int LastScan;
 /* extern KeyboardDef KbdDefs;
 extern JoystickDef JoyDefs[];
 extern ControlType Controls[MAXPLAYERS]; */
 
 extern char LastASCII;
-extern volatile int LastScan;
+extern int LastScan;
 
 extern byte Joy_xb,
             Joy_yb,

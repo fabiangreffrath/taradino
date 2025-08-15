@@ -44,19 +44,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define num_lock     1
 #define caps_lock    2
 
-extern volatile int KeyboardQueue[KEYQMAX];
-extern volatile int Keyhead;
-extern volatile int Keytail;
+extern int KeyboardQueue[KEYQMAX];
+extern int Keyhead;
+extern int Keytail;
 
-extern volatile int Keyboard[MAXKEYBOARDSCAN];   // Keyboard status array
-extern volatile int Keystate[MAXKEYBOARDSCAN];   // Keyboard state array
+extern int Keyboard[MAXKEYBOARDSCAN];   // Keyboard status array
+extern int Keystate[MAXKEYBOARDSCAN];   // Keyboard state array
 
 int GetTicCount(void);
 
 extern const int ASCIINames[];   // Ascii -> scan code conversion
 extern const int ShiftNames[];   // Shifted Ascii->scancode conversion
-extern volatile boolean PausePressed;  //Game paused variable
-extern volatile boolean PanicPressed;  //Panic key variable
+extern boolean PausePressed;  //Game paused variable
+extern boolean PanicPressed;  //Panic key variable
 
 void I_Delay(int delay);
 void ISR_SetTime(int settime);
