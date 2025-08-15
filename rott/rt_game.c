@@ -453,14 +453,14 @@ void DrawPlayScreen (boolean bufferofsonly)
 				  //bna fix - not to good? but no one has 286 any more
 				  //statusbar dosent cover hole screen, because its a lump picture width max 320
 				  //first write dummy shape and next over it
-				 GameMemToScreen( shape, 320, (224*2)+16-ShowKillsYoffset, bufferofsonly );
+				 GameMemToScreen( shape, 320, (184*2)+16-ShowKillsYoffset, bufferofsonly );
 				 //copy next shape to mem
-				 GameMemToScreen( shape, 0, (224*2)+16-ShowKillsYoffset, bufferofsonly );
+				 GameMemToScreen( shape, 0, (184*2)+16-ShowKillsYoffset, bufferofsonly );
 				 // delete bullet in middle of shape picture
-				 DrawPPic( 310, (224*2)+17-ShowKillsYoffset, 8 >> 2, 16,
+				 DrawPPic( 310, (184*2)+17-ShowKillsYoffset, 8 >> 2, 16,
 					 ( byte * )&erase->data, 2, true, bufferofsonly );
 				 // delete hart in middle of shape picture
-				 DrawPPic( 324, (224*2)+17-ShowKillsYoffset, 8 >> 2, 16,
+				 DrawPPic( 324, (184*2)+17-ShowKillsYoffset, 8 >> 2, 16,
 					 ( byte * )&erase->data, 2, true, bufferofsonly );
 
 			} else {

@@ -267,17 +267,17 @@ void SetViewSize
 
 	if ( iGLOBAL_SCREENWIDTH == 640) {
 		height = 0;//we use height as dummy cnt
-		viewsizes[height++]= 380; viewsizes[height++]= 336;
-        viewsizes[height++]= 428; viewsizes[height++]= 352;
-        viewsizes[height++]= 460; viewsizes[height++]= 368;
-        viewsizes[height++]= 492; viewsizes[height++]= 384;
-        viewsizes[height++]= 524; viewsizes[height++]= 400;
-        viewsizes[height++]= 556; viewsizes[height++]= 416;
-        viewsizes[height++]= 588; viewsizes[height++]= 432;
-        viewsizes[height++]= 640; viewsizes[height++]= 448;
-        viewsizes[height++]= 640; viewsizes[height++]= 464;
-        viewsizes[height++]= 640; viewsizes[height++]= 480;
-        viewsizes[height++]= 640; viewsizes[height++]= 480;
+		viewsizes[height++]= 380; viewsizes[height++]= 178;
+		viewsizes[height++]= 428; viewsizes[height++]= 202;
+		viewsizes[height++]= 460; viewsizes[height++]= 226;
+		viewsizes[height++]= 492; viewsizes[height++]= 250;
+		viewsizes[height++]= 524; viewsizes[height++]= 274;
+		viewsizes[height++]= 556; viewsizes[height++]= 298;
+		viewsizes[height++]= 588; viewsizes[height++]= 322;
+		viewsizes[height++]= 640; viewsizes[height++]= 384;
+		viewsizes[height++]= 640; viewsizes[height++]= 384;
+		viewsizes[height++]= 640; viewsizes[height++]= 400;
+		viewsizes[height++]= 640; viewsizes[height++]= 400;
 	}
 
 	if ((size<0) || (size>=MAXVIEWSIZES)){//bna added
@@ -394,12 +394,12 @@ void DrawCPUJape
    {
    int width;
    int height;
+   int ofs = viewsizes[1] / 2 + 2;
 
    CurrentFont = tinyfont;
    VW_MeasurePropString( YourComputerSucksString, &width, &height );
 
-   DrawGameString( 160 - width / 2, 100 + 48 / 2 + 2,
-      YourComputerSucksString, true );
+   DrawGameString((iGLOBAL_SCREENWIDTH/2) - width / 2, (iGLOBAL_SCREENHEIGHT/2) + ofs, YourComputerSucksString, true);
    }
 
 
