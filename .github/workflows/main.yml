@@ -111,7 +111,7 @@ jobs:
         if: runner.os == 'Windows'
         with:
           name: taradino-${{ github.sha }}-win64
-          path: cmake-build/_CPack_Packages/*/ZIP/*
+          path: cmake-build/_CPack_Packages/win64/ZIP/*/*
 
   cppcheck:
     name: Cppcheck
