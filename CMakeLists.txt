@@ -77,16 +77,28 @@ if(${TARADINO_DATADIR})
 endif()
 
 include(GNUInstallDirs)
-if(UNIX)
+if(WIN32)
+	if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.21 AND NOT VCPKG_TOOLCHAIN)
+		install(
+			TARGETS taradino
+			RUNTIME_DEPENDENCIES
+			PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-"
+			POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
+			DIRECTORIES $<TARGET_FILE_DIR:taradino> $ENV{PATH}
+			RUNTIME DESTINATION .
+		)
+	else()
+		install(TARGETS taradino RUNTIME DESTINATION .)
+	endif()
+else()
 	configure_file(${PROJECT_SOURCE_DIR}/misc/taradino.desktop.in ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.desktop @ONLY)
 	configure_file(${PROJECT_SOURCE_DIR}/doc/taradino.6.in ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.6 @ONLY)
 	install(FILES ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 	install(FILES ${PROJECT_SOURCE_DIR}/misc/taradino.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps RENAME ${TARADINO_EXEC}.svg)
 	install(FILES ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.6 DESTINATION ${CMAKE_INSTALL_MANDIR}/man6)
+	install(TARGETS taradino DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
-install(TARGETS taradino DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-include(InstallRequiredSystemLibraries)
 set(CPACK_GENERATOR ZIP)
 set(CPACK_PACKAGE_NAME ${TARADINO_EXEC})
 set(CPACK_SOURCE_GENERATOR TGZ ZIP)
