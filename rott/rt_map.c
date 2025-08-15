@@ -825,7 +825,7 @@ void ShutdownMapper ( void )
 
    if (sky!=0)
       SafeFree(skytile);
-   if (mouseenabled && MousePresent)
+   if (mouseenabled)
       PollMouseMove();
 }
 

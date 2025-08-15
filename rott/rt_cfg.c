@@ -815,9 +815,7 @@ void SetConfigDefaultValues (void)
    //
    //  no config file, so select default values
    //
-   if (MousePresent)
-      mouseenabled = true;
-
+   mouseenabled    = true;
    joystickenabled = false;
    joypadenabled   = false;
    joystickport    = 0;

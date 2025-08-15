@@ -139,9 +139,6 @@ typedef struct
 //
 //***************************************************************************
 
-extern boolean MousePresent;
-extern boolean JoysPresent[MaxJoys];
-extern boolean JoyPadPresent;
 extern int     mouseadjustment;
 extern int     threshold;
 

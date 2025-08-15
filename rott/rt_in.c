@@ -54,10 +54,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 int IgnoreMouse = 0;
 
-// configuration variables
-//
-boolean  MousePresent;
-
 //    Global variables
 //
 boolean  Paused;
@@ -77,10 +73,7 @@ char LetterQueue[MAXLETTERS];
 ModemMessage MSG;
 
 
-static SDL_GameController *sdl_gamepads[MaxJoys];
-static int sdl_total_gamepads = 0;
-static SDL_Joystick *sdl_jotsticks[MaxJoys];
-static int sdl_total_joysticks = 0;
+static SDL_GameController *sdl_gamepad = NULL;
 static int sdl_mouse_delta_x = 0;
 static int sdl_mouse_delta_y = 0;
 static unsigned short sdl_mouse_button_mask = 0;
@@ -175,8 +168,8 @@ static int GetScancode(const int scancode)
     }
 }
 
-static KeyboardDef KbdDefs = {0x1d,0x38,0x47,0x48,0x49,0x4b,0x4d,0x4f,0x50,0x51};
-static JoystickDef JoyDefs[MaxJoys];
+static KeyboardDef KbdDef = {0x1d,0x38,0x47,0x48,0x49,0x4b,0x4d,0x4f,0x50,0x51};
+static JoystickDef JoyDef;
 static ControlType Controls[MAXPLAYERS];
 
 static boolean  IN_Started;
@@ -187,8 +180,6 @@ static   Direction   DirTable[] =      // Quick lookup for total direction
    dir_West,      dir_None,   dir_East,
    dir_SouthWest, dir_South,  dir_SouthEast
 };
-
-static char *ParmStrings[] = {"nojoys","nomouse",NULL};
 
 static int sdl_mouse_button_filter(SDL_Event const *event)
 {
@@ -618,25 +609,6 @@ unsigned short INL_GetJoyButtons (unsigned short joy)
 
 //******************************************************************************
 //
-// INL_StartMouse () - Detects and sets up the mouse
-//
-//******************************************************************************
-
-boolean INL_StartMouse (void)
-{
-
-   boolean retval = false;
-
-   /* no-op. */
-   retval = true;
-
-   return (retval);
-}
-
-
-
-//******************************************************************************
-//
 // INL_SetJoyScale () - Sets up scaling values for the specified joystick
 //
 //******************************************************************************
@@ -661,7 +633,7 @@ void INL_SetJoyScale (unsigned short joy)
 //
 //******************************************************************************
 
-void IN_SetupJoy (unsigned short joy, unsigned short minx, unsigned short maxx, unsigned short miny, unsigned short maxy)
+void IN_SetupGamepad (unsigned short minx, unsigned short maxx, unsigned short miny, unsigned short maxy)
 {
    unsigned short     d,r;
    JoystickDef *def;
@@ -682,19 +654,18 @@ void IN_SetupJoy (unsigned short joy, unsigned short minx, unsigned short maxx, 
    def->threshMinY = ((r / 2) - d) + miny;
    def->threshMaxY = ((r / 2) + d) + miny;
 
-   INL_SetJoyScale (joy);
+   INL_SetJoyScale();
 }
 
 
 //******************************************************************************
 //
-// INL_StartJoy () - Detects & auto-configures the specified joystick
-//                   The auto-config assumes the joystick is centered
+// INL_StartGamepad () - Detects & auto-configures the gamepad
+//                       The auto-config assumes the joysticks are centered
 //
 //******************************************************************************
 
-
-boolean INL_StartJoy (unsigned short joy)
+boolean INL_StartGamepad(void)
 {
 	int i, n;
 	unsigned short x,y;
@@ -705,28 +676,24 @@ boolean INL_StartJoy (unsigned short joy)
 		n = SDL_NumJoysticks();
 		for (i = 0; i < n; i++)
 		{
-			if (sdl_total_gamepads >= MaxJoys)
-				break;
-
 			if (SDL_IsGameController(i))
 			{
-				sdl_gamepads[sdl_total_gamepads] = SDL_GameControllerOpen(i);
+				sdl_gamepad = SDL_GameControllerOpen(i);
 
-				if (!sdl_gamepads[sdl_total_gamepads])
+				if (!sdl_gamepad)
 				{
-					fprintf(stderr, "Failed to open game controller: %s\n", SDL_GetError());
+					fprintf(stderr, "Failed to open gamepad: %s\n", SDL_GetError());
 					continue;
 				}
 
-				sdl_total_gamepads++;
+				printf("Added gamepad \"%s\"\n", SDL_GameControllerNameForIndex(i));
+
+				break;
 			}
 		}
 	}
 
-	if (joy >= sdl_total_gamepads)
-		return (false);
-
-	IN_GetJoyAbs (joy, &x, &y);
+	IN_GetJoyAbs(&x, &y);
 
 	if (((x == 0) || (x > MaxJoyValue - 10)) || ((y == 0) || (y > MaxJoyValue - 10)))
 	{
@@ -739,82 +706,55 @@ boolean INL_StartJoy (unsigned short joy)
 	}
 }
 
-
-
-//******************************************************************************
-//
-// INL_ShutJoy() - Cleans up the joystick stuff
-//
-//******************************************************************************
-
-void INL_ShutJoy (unsigned short joy)
-{
-   JoysPresent[joy] = false;
-   if (joy < sdl_total_gamepads) SDL_GameControllerClose (sdl_gamepads[joy]);
-}
-
-
-
 //******************************************************************************
 //
 // IN_Startup() - Starts up the Input Mgr
 //
 //******************************************************************************
 
-
 void IN_Startup (void)
 {
-   boolean checkjoys,
-           checkmouse;
+	const char *ParmStrings[] = {"nojoys","nogamepad","nomouse",NULL};
+	boolean checkgamepad, checkmouse;
+	int i;
 
-   unsigned short    i;
-
-   if (IN_Started==true)
-      return;
+	if (IN_Started)
+		return;
 
 #ifdef _WIN32
-// fixme: remove this.
-sdl_mouse_grabbed = 1;
+	// fixme: remove this.
+	sdl_mouse_grabbed = 1;
 #endif
 
-   checkjoys        = true;
-   checkmouse       = true;
+	checkgamepad = true;
+	checkmouse = true;
 
-   for (i = 1; i < _argc; i++)
-   {
-      switch (US_CheckParm (_argv[i], ParmStrings))
-      {
-      case 0:
-         checkjoys = false;
-      break;
+	for (i = 1; i < _argc; i++)
+	{
+		switch (US_CheckParm(_argv[i], ParmStrings))
+		{
+			case 0: // nojoys
+			case 1: // nogamepad
+				checkgamepad = false;
+				break;
 
-      case 1:
-         checkmouse = false;
-      break;
-      }
-   }
+			case 2: // nomouse
+				checkmouse = false;
+				break;
+		}
+	}
 
-   MousePresent = checkmouse ? INL_StartMouse() : false;
+	if (checkmouse)
+		if (INL_StartMouse())
+			if (!quiet)
+				printf("IN_Startup: Mouse Present\n");
 
-   if (!MousePresent)
-      mouseenabled = false;
-   else
-      {
-      if (!quiet)
-         printf("IN_Startup: Mouse Present\n");
-      }
+	if (checkgamepad)
+		if (INL_StartGamepad())
+			if (!quiet)
+				printf("IN_Startup: Gamepad Present\n");
 
-   for (i = 0;i < MaxJoys;i++)
-      {
-      JoysPresent[i] = checkjoys ? INL_StartJoy(i) : false;
-      if (INL_StartJoy(i))
-         {
-         if (!quiet)
-            printf("IN_Startup: Joystick Present\n");
-         }
-      }
-
-   IN_Started = true;
+	IN_Started = true;
 }
 
 //******************************************************************************
@@ -825,17 +765,14 @@ sdl_mouse_grabbed = 1;
 
 void IN_Shutdown (void)
 {
-   unsigned short  i;
+	if (!IN_Started)
+		return;
 
-   if (IN_Started==false)
-      return;
+	if (sdl_gamepad)
+		SDL_GameControllerClose(sdl_gamepad);
 
-//   INL_ShutMouse();
-
-   for (i = 0;i < MaxJoys;i++)
-      INL_ShutJoy(i);
-
-   IN_Started = false;
+	sdl_gamepad = NULL;
+	IN_Started = false;
 }
 
 
@@ -867,8 +804,6 @@ void IN_ReadControl (int player, ControlInfo *info)
    Motion      mx,my;
    ControlType type;
 
-   KeyboardDef *def;
-
    dx = dy = 0;
    mx = my = motion_None;
    buttons = 0;
@@ -877,7 +812,6 @@ void IN_ReadControl (int player, ControlInfo *info)
    switch (type = Controls[player])
    {
       case ctrl_Keyboard:
-         def = &KbdDefs;
 
          if (Keyboard[sc_UpArrow])
             my = motion_Up;
@@ -889,9 +823,9 @@ void IN_ReadControl (int player, ControlInfo *info)
          else if (Keyboard[sc_RightArrow])
             mx = motion_Right;
 
-         if (Keyboard[def->button0])
+         if (Keyboard[KbdDef.button0])
             buttons += 1 << 0;
-         if (Keyboard[def->button1])
+         if (Keyboard[KbdDef.button1])
             buttons += 1 << 1;
          realdelta = false;
       break;
