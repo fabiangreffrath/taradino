@@ -85,6 +85,14 @@ jobs:
           cmake -S . -B cmake-build --fresh -DTARADINO_SHAREWARE=ON -DTARADINO_WARNINGS_AS_ERRORS=ON -DTARADINO_SUFFIX=shareware
           cmake --build cmake-build --config Release
 
+      - name: Install shareware executable
+        if: runner.os == 'Windows'
+        run: |
+          cd cmake-build
+          cpack
+          mkdir -p cache
+          cp -af _CPack_Packages/win64/ZIP/*/* cache
+
       - name: Build registered executable
         env:
           CC: ${{ matrix.config.compiler }}
@@ -94,32 +102,20 @@ jobs:
           cmake -S . -B cmake-build --fresh -DTARADINO_SHAREWARE=OFF -DTARADINO_WARNINGS_AS_ERRORS=ON -UTARADINO_SUFFIX
           cmake --build cmake-build --config Release
 
-      - name: Upload artifacts (Windows)
+      - name: Install registered executable
+        if: runner.os == 'Windows'
+        run: |
+          cd cmake-build
+          cpack
+          mkdir -p cache
+          cp -af _CPack_Packages/win64/ZIP/*/* cache
+
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         if: runner.os == 'Windows'
         with:
           name: taradino-${{ github.sha }}-win64
-          path: |
-            cmake-build/taradino.exe
-            cmake-build/taradino-shareware.exe
-
-      - name: Upload artifacts (Linux)
-        uses: actions/upload-artifact@v4
-        if: runner.os == 'Linux'
-        with:
-          name: taradino-${{ github.sha }}-Linux
-          path: |
-            cmake-build/taradino
-            cmake-build/taradino-shareware
-
-      - name: Upload artifacts (macOS)
-        uses: actions/upload-artifact@v4
-        if: runner.os == 'macOS'
-        with:
-          name: taradino-${{ github.sha }}-macOS
-          path: |
-            cmake-build/taradino
-            cmake-build/taradino-shareware
+          path: cmake-build/cache/*
 
   cppcheck:
     name: Cppcheck
