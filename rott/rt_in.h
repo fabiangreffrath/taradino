@@ -190,8 +190,6 @@ void IN_Ack (void);
 boolean IN_UserInput (long delay);
 void IN_GetJoyAbs (unsigned short joy, unsigned short *xp, unsigned short *yp);
 void INL_GetJoyDelta (unsigned short joy, int *dx, int *dy);
-unsigned short INL_GetJoyButtons (unsigned short joy);
-//unsigned short IN_GetJoyButtonsDB (unsigned short joy);
 void INL_SetJoyScale (unsigned short joy);
 void IN_SetupJoy (unsigned short joy, unsigned short minx, unsigned short maxx, unsigned short miny, unsigned short maxy);
 boolean INL_StartJoy (unsigned short joy);

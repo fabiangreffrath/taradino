@@ -74,6 +74,7 @@ ModemMessage MSG;
 
 
 static SDL_GameController *sdl_gamepad = NULL;
+static unsigned short sdl_gamepad_button_state = 0;
 static int sdl_mouse_delta_x = 0;
 static int sdl_mouse_delta_y = 0;
 static unsigned short sdl_mouse_button_mask = 0;
@@ -364,13 +365,13 @@ static int sdl_key_filter(const SDL_Event *event)
     return(0);
 } /* sdl_key_filter */
 
-static int sdl_joystick_button_filter(const SDL_Event *event)
+static void sdl_gamepad_button_filter(const SDL_Event *event)
 {
-	if (event->jbutton.which >= sdl_total_gamepads)
-		return 0;
+	if (!sdl_gamepad)
+		return;
 
-	if (event->jbutton.button >= 16)
-		return 0;
+	if (sdl_gamepad != SDL_GameControllerFromInstanceID(event->cbutton.which))
+		return;
 
 	if (event->type == SDL_JOYBUTTONDOWN)
 	{
@@ -381,7 +382,7 @@ static int sdl_joystick_button_filter(const SDL_Event *event)
 		sdl_stick_button_state[event->jbutton.which] &= ~(1 << event->jbutton.button);
 	}
 
-	return 0;
+	return;
 }
 
 //******************************************************************************
@@ -408,9 +409,9 @@ void IN_PumpEvents(void)
 			case SDL_MOUSEBUTTONDOWN:
 				sdl_mouse_button_filter(&event);
 				break;
-			case SDL_JOYBUTTONUP:
-			case SDL_JOYBUTTONDOWN:
-				sdl_joystick_button_filter(&event);
+			case SDL_CONTROLLERBUTTONUP:
+			case SDL_CONTROLLERBUTTONDOWN:
+				sdl_gamepad_button_filter(&event);
 				break;
 			case SDL_QUIT:
 				/* !!! rcg TEMP */
@@ -536,75 +537,54 @@ void IN_GetJoyAbs (unsigned short joy, unsigned short *xp, unsigned short *yp)
 void INL_GetJoyDelta (unsigned short joy, int *dx, int *dy)
 {
    unsigned short        x, y;
-   JoystickDef *def;
 
    IN_GetJoyAbs (joy, &x, &y);
-   def = JoyDefs + joy;
 
-   if (x < def->threshMinX)
+   if (x < JoyDef.threshMinX)
    {
-      if (x < def->joyMinX)
-         x = def->joyMinX;
+      if (x < JoyDef.joyMinX)
+         x = JoyDef.joyMinX;
 
-      x = -(x - def->threshMinX);
-      x *= def->joyMultXL;
+      x = -(x - JoyDef.threshMinX);
+      x *= JoyDef.joyMultXL;
       x >>= JoyScaleShift;
       *dx = (x > 127)? -127 : -x;
    }
-   else if (x > def->threshMaxX)
+   else if (x > JoyDef.threshMaxX)
    {
-      if (x > def->joyMaxX)
-         x = def->joyMaxX;
+      if (x > JoyDef.joyMaxX)
+         x = JoyDef.joyMaxX;
 
-      x = x - def->threshMaxX;
-      x *= def->joyMultXH;
+      x = x - JoyDef.threshMaxX;
+      x *= JoyDef.joyMultXH;
       x >>= JoyScaleShift;
       *dx = (x > 127)? 127 : x;
    }
    else
       *dx = 0;
 
-   if (y < def->threshMinY)
+   if (y < JoyDef.threshMinY)
    {
-      if (y < def->joyMinY)
-         y = def->joyMinY;
+      if (y < JoyDef.joyMinY)
+         y = JoyDef.joyMinY;
 
-      y = -(y - def->threshMinY);
-      y *= def->joyMultYL;
+      y = -(y - JoyDef.threshMinY);
+      y *= JoyDef.joyMultYL;
       y >>= JoyScaleShift;
       *dy = (y > 127)? -127 : -y;
    }
-   else if (y > def->threshMaxY)
+   else if (y > JoyDef.threshMaxY)
    {
-      if (y > def->joyMaxY)
-         y = def->joyMaxY;
+      if (y > JoyDef.joyMaxY)
+         y = JoyDef.joyMaxY;
 
-      y = y - def->threshMaxY;
-      y *= def->joyMultYH;
+      y = y - JoyDef.threshMaxY;
+      y *= JoyDef.joyMultYH;
       y >>= JoyScaleShift;
       *dy = (y > 127)? 127 : y;
    }
    else
       *dy = 0;
-}
-
-
-
-//******************************************************************************
-//
-// INL_GetJoyButtons () - Returns the button status of the specified
-//                        joystick
-//
-//******************************************************************************
-
-unsigned short INL_GetJoyButtons (unsigned short joy)
-{
-   unsigned short  result = 0;
-
-   if (joy < sdl_total_gamepads)
-       result = sdl_stick_button_state[joy];
-
-   return result;
 }
 
 //******************************************************************************
@@ -613,15 +593,12 @@ unsigned short INL_GetJoyButtons (unsigned short joy)
 //
 //******************************************************************************
 
-void INL_SetJoyScale (unsigned short joy)
+void INL_SetJoyScale (void)
 {
-   JoystickDef *def;
-
-   def = &JoyDefs[joy];
-   def->joyMultXL = JoyScaleMax / (def->threshMinX - def->joyMinX);
-   def->joyMultXH = JoyScaleMax / (def->joyMaxX - def->threshMaxX);
-   def->joyMultYL = JoyScaleMax / (def->threshMinY - def->joyMinY);
-   def->joyMultYH = JoyScaleMax / (def->joyMaxY - def->threshMaxY);
+	JoyDef.joyMultXL = JoyScaleMax / (JoyDef.threshMinX - JoyDef.joyMinX);
+	JoyDef.joyMultXH = JoyScaleMax / (JoyDef.joyMaxX - JoyDef.threshMaxX);
+	JoyDef.joyMultYL = JoyScaleMax / (JoyDef.threshMinY - JoyDef.joyMinY);
+	JoyDef.joyMultYH = JoyScaleMax / (JoyDef.joyMaxY - JoyDef.threshMaxY);
 }
 
 
@@ -636,23 +613,20 @@ void INL_SetJoyScale (unsigned short joy)
 void IN_SetupGamepad (unsigned short minx, unsigned short maxx, unsigned short miny, unsigned short maxy)
 {
    unsigned short     d,r;
-   JoystickDef *def;
 
-   def = &JoyDefs[joy];
-
-   def->joyMinX = minx;
-   def->joyMaxX = maxx;
+   JoyDef.joyMinX = minx;
+   JoyDef.joyMaxX = maxx;
    r = maxx - minx;
    d = r / 3;
-   def->threshMinX = ((r / 2) - d) + minx;
-   def->threshMaxX = ((r / 2) + d) + minx;
+   JoyDef.threshMinX = ((r / 2) - d) + minx;
+   JoyDef.threshMaxX = ((r / 2) + d) + minx;
 
-   def->joyMinY = miny;
-   def->joyMaxY = maxy;
+   JoyDef.joyMinY = miny;
+   JoyDef.joyMaxY = maxy;
    r = maxy - miny;
    d = r / 3;
-   def->threshMinY = ((r / 2) - d) + miny;
-   def->threshMaxY = ((r / 2) + d) + miny;
+   JoyDef.threshMinY = ((r / 2) - d) + miny;
+   JoyDef.threshMaxY = ((r / 2) + d) + miny;
 
    INL_SetJoyScale();
 }
@@ -686,7 +660,7 @@ boolean INL_StartGamepad(void)
 					continue;
 				}
 
-				printf("Added gamepad \"%s\"\n", SDL_GameControllerNameForIndex(i));
+				printf("Added gamepad \"%s\" (joystick index %d)\n", SDL_GameControllerNameForIndex(i), i);
 
 				break;
 			}
