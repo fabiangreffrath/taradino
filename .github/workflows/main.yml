@@ -90,6 +90,8 @@ jobs:
         run: |
           cd cmake-build
           cpack
+          mkdir -p cache
+          cp -af _CPack_Packages/win64/ZIP/*/* cache
 
       - name: Build registered executable
         env:
@@ -105,13 +107,15 @@ jobs:
         run: |
           cd cmake-build
           cpack
+          mkdir -p cache
+          cp -af _CPack_Packages/win64/ZIP/*/* cache
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         if: runner.os == 'Windows'
         with:
           name: taradino-${{ github.sha }}-win64
-          path: cmake-build/_CPack_Packages/win64/ZIP/*/*
+          path: cmake-build/cache/*
 
   cppcheck:
     name: Cppcheck
