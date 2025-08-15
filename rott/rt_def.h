@@ -147,7 +147,6 @@ long filelength(int handle);
 #endif
 
 #define far
-#define cdecl
 
 //***************************************************************************
 //
