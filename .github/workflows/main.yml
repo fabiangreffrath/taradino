@@ -101,7 +101,7 @@ jobs:
           name: taradino-${{ github.sha }}-win64
           path: |
             cmake-build/taradino.exe
-            cmake-build/taradino_shareware.exe
+            cmake-build/taradino-shareware.exe
 
       - name: Upload artifacts (Linux)
         uses: actions/upload-artifact@v4
@@ -110,7 +110,7 @@ jobs:
           name: taradino-${{ github.sha }}-Linux
           path: |
             cmake-build/taradino
-            cmake-build/taradino_shareware
+            cmake-build/taradino-shareware
 
       - name: Upload artifacts (macOS)
         uses: actions/upload-artifact@v4
@@ -119,7 +119,7 @@ jobs:
           name: taradino-${{ github.sha }}-macOS
           path: |
             cmake-build/taradino
-            cmake-build/taradino_shareware
+            cmake-build/taradino-shareware
 
   cppcheck:
     name: Cppcheck
