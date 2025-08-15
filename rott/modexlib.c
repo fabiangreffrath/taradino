@@ -147,8 +147,8 @@ void GraphicsMode ( void )
 
 	SetShowCursor(!sdl_fullscreen);
 
-	const char *driver = SDL_GetCurrentVideoDriver();
 #ifndef _WIN32
+	const char *driver = SDL_GetCurrentVideoDriver();
 	if (driver && strcmp(driver, "x11") == 0)
 	{
 		StretchFunc = SDL_SoftStretchWrapper;
