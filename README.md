@@ -41,7 +41,7 @@ GNU GPL v2
 Copyright (C) 1994-1995 Apogee Software, Ltd.  
 Copyright (C) 2002-2015 Steven Fuller, Ryan C. Gordon, John Hall, Dan Olson  
 Copyright (C) 2006-2025 Fabian Greffrath  
-Copyright (C) 2023-2025 erysdren
+Copyright (C) 2023-2025 erysdren  
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
