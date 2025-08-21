@@ -4,14 +4,19 @@ project(taradino
 	DESCRIPTION "SDL2 port of Rise of the Triad"
 	HOMEPAGE_URL "https://github.com/fabiangreffrath/taradino/"
 	LANGUAGES C
-	VERSION 1.1.3
+	VERSION 2025.08.16
 )
 configure_file(rott/version.h.in rott/version.h @ONLY)
 
+option(TARADINO_ASAN "Use Address Sanitizer" OFF)
 option(TARADINO_SHAREWARE "Build shareware version" OFF)
 option(TARADINO_WARNINGS_AS_ERRORS "Treat all compiler warnings as errors" OFF)
 set(TARADINO_DATADIR "" CACHE STRING "Game data file directory")
 set(TARADINO_SUFFIX "" CACHE STRING "Executable file name suffix")
+
+add_library(ASAN::ASAN IMPORTED INTERFACE)
+target_compile_options(ASAN::ASAN INTERFACE -fsanitize=address $<$<NOT:$<COMPILE_LANG_AND_ID:C,MSVC>>:-fno-omit-frame-pointer>)
+target_link_options(ASAN::ASAN INTERFACE -fsanitize=address)
 
 find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
 find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
@@ -40,6 +45,7 @@ target_link_libraries(taradino PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> S
 target_compile_definitions(taradino PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}")
 target_compile_definitions(taradino PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
 target_include_directories(taradino PRIVATE "${PROJECT_BINARY_DIR}/rott")
+target_link_libraries(taradino PUBLIC $<$<BOOL:${TARADINO_ASAN}>:ASAN::ASAN>)
 
 if(NOT DEFINED TARADINO_EXEC)
 	set(TARADINO_EXEC taradino)
@@ -72,14 +78,31 @@ if(${TARADINO_DATADIR})
 endif()
 
 include(GNUInstallDirs)
-if(UNIX)
+if(WIN32)
+	if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.21 AND NOT VCPKG_TOOLCHAIN)
+		install(
+			TARGETS taradino
+			RUNTIME_DEPENDENCIES
+			PRE_EXCLUDE_REGEXES "api-ms-" "ext-ms-"
+			POST_EXCLUDE_REGEXES ".*system32/.*\\.dll"
+			DIRECTORIES $<TARGET_FILE_DIR:taradino> $ENV{PATH}
+			RUNTIME DESTINATION .
+		)
+	else()
+		install(TARGETS taradino RUNTIME DESTINATION .)
+	endif()
+	install(FILES ${PROJECT_SOURCE_DIR}/COPYING DESTINATION .)
+	install(FILES ${PROJECT_SOURCE_DIR}/README.md DESTINATION .)
+else()
 	configure_file(${PROJECT_SOURCE_DIR}/misc/taradino.desktop.in ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.desktop @ONLY)
 	configure_file(${PROJECT_SOURCE_DIR}/doc/taradino.6.in ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.6 @ONLY)
 	install(FILES ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 	install(FILES ${PROJECT_SOURCE_DIR}/misc/taradino.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps RENAME ${TARADINO_EXEC}.svg)
 	install(FILES ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.6 DESTINATION ${CMAKE_INSTALL_MANDIR}/man6)
+	install(FILES ${PROJECT_SOURCE_DIR}/COPYING DESTINATION ${CMAKE_INSTALL_DOCDIR})
+	install(FILES ${PROJECT_SOURCE_DIR}/README.md DESTINATION ${CMAKE_INSTALL_DOCDIR})
+	install(TARGETS taradino DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
-install(TARGETS taradino DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 find_program(CLANGFORMAT_EXECUTABLE clang-format)
 if(CLANGFORMAT_EXECUTABLE)
@@ -88,3 +111,10 @@ if(CLANGFORMAT_EXECUTABLE)
 		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 	)
 endif()
+
+set(CPACK_GENERATOR ZIP)
+set(CPACK_PACKAGE_NAME ${TARADINO_EXEC})
+set(CPACK_SOURCE_GENERATOR TGZ ZIP)
+set(CPACK_SOURCE_IGNORE_FILES "/.git/;/cmake-build/;/build/;/.vs/;/out/;CMakeSettings.json")
+set(CPACK_STRIP_FILES TRUE)
+include(CPack)

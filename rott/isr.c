@@ -41,14 +41,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // Global Variables
 
-volatile int Keyboard[MAXKEYBOARDSCAN];
-volatile int KeyboardQueue[KEYQMAX];
-volatile int Keystate[MAXKEYBOARDSCAN];
-volatile int Keyhead;
-volatile int Keytail;
+int Keyboard[MAXKEYBOARDSCAN];
+int KeyboardQueue[KEYQMAX];
+int Keystate[MAXKEYBOARDSCAN];
+int Keyhead;
+int Keytail;
 
-volatile boolean PausePressed = false;
-volatile boolean PanicPressed = false;
+boolean PausePressed = false;
+boolean PanicPressed = false;
 
 const int ASCIINames[] =          // Unshifted ASCII for scan codes
 {

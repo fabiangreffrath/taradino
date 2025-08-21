@@ -148,7 +148,7 @@ void UpdateGameObjects ( void );
 
 extern  int polltime;
 extern  int oldpolltime;
-extern  volatile int oldtime;
+extern  int oldtime;
 void PauseLoop ( void );
 void SaveScreen (boolean inhmenu);
 void SetupWads( void );

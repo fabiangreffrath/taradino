@@ -1881,7 +1881,7 @@ int HandleMenu (CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w))
                numactive,
                count;
    int         newpos;
-   volatile int timer;
+   int timer;
    ControlInfo ci;
    boolean     playsnd = false;
 

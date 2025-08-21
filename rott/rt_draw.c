@@ -1354,7 +1354,7 @@ void CalcTics (void)
    oldtime=GetTicCount();
    return;
 #else
-   volatile int tc;
+   int tc;
 
 //   SoftError("InCalcTics\n");
 //   SoftError("CT GetTicCount()=%ld\n",GetTicCount());
