@@ -26,19 +26,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //***************************************************************************
 
-extern int		mr_xstep;
-extern int		mr_ystep;
-extern int		mr_xfrac;
-extern int		mr_yfrac;
+extern int mr_xstep;
+extern int mr_ystep;
+extern int mr_xfrac;
+extern int mr_yfrac;
 
-extern int     sky;      //Whether Parallax is on or off
-void DrawPlanes (void);
-void SetPlaneViewSize( void );
-void MakeSkyTile (byte * tile);
-void DrawFullSky( void );
-boolean SkyExists (void);
+extern int sky; // Whether Parallax is on or off
+void DrawPlanes(void);
+void SetPlaneViewSize(void);
+void MakeSkyTile(byte *tile);
+void DrawFullSky(void);
+boolean SkyExists(void);
 
 #endif
-
-
-

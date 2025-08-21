@@ -31,127 +31,126 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rottnet.h"
 #include "rt_battl.h"
 
-#if (SHAREWARE==0)
-   #define  STANDARDGAMEWAD   "DARKWAR.WAD"
-   #define  STANDARDGAMELEVELS   "DARKWAR.RTL"
-   #define  STANDARDBATTLELEVELS "DARKWAR.RTC"
-   #define  SUPERROTTBATTLELEVELS "ROTTCD.RTC"
-   #define  SITELICENSEBATTLELEVELS "ROTTSITE.RTC"
+#if (SHAREWARE == 0)
+#define STANDARDGAMEWAD "DARKWAR.WAD"
+#define STANDARDGAMELEVELS "DARKWAR.RTL"
+#define STANDARDBATTLELEVELS "DARKWAR.RTC"
+#define SUPERROTTBATTLELEVELS "ROTTCD.RTC"
+#define SITELICENSEBATTLELEVELS "ROTTSITE.RTC"
 #else
-   #define  STANDARDGAMEWAD   "HUNTBGIN.WAD"
-   #define  STANDARDGAMELEVELS   "HUNTBGIN.RTL"
-   #define  STANDARDBATTLELEVELS "HUNTBGIN.RTC"
+#define STANDARDGAMEWAD "HUNTBGIN.WAD"
+#define STANDARDGAMELEVELS "HUNTBGIN.RTL"
+#define STANDARDBATTLELEVELS "HUNTBGIN.RTC"
 #endif
 
 enum
-{vl_low,
- vl_medium,
- vl_high,
- vl_excessive
+{
+	vl_low,
+	vl_medium,
+	vl_high,
+	vl_excessive
 };
 
 // Enum for each version of the game
 typedef enum
-   {
-   ROTT_SHAREWARE,
-   ROTT_REGISTERED,
-   ROTT_SUPERCD,
-   ROTT_SITELICENSE
-   } version_type;
+{
+	ROTT_SHAREWARE,
+	ROTT_REGISTERED,
+	ROTT_SUPERCD,
+	ROTT_SITELICENSE
+} version_type;
 
 typedef struct
-   {
-   int GodModeTime;
-   int DogModeTime;
-   int ShroomsModeTime;
-   int ElastoModeTime;
-   int AsbestosVestTime;
-   int BulletProofVestTime;
-   int GasMaskTime;
-   int MercuryModeTime;
+{
+	int GodModeTime;
+	int DogModeTime;
+	int ShroomsModeTime;
+	int ElastoModeTime;
+	int AsbestosVestTime;
+	int BulletProofVestTime;
+	int GasMaskTime;
+	int MercuryModeTime;
 
-   int GodModeRespawnTime;
-   int DogModeRespawnTime;
-   int ShroomsModeRespawnTime;
-   int ElastoModeRespawnTime;
-   int AsbestosVestRespawnTime;
-   int BulletProofVestRespawnTime;
-   int GasMaskRespawnTime;
-   int MercuryModeRespawnTime;
+	int GodModeRespawnTime;
+	int DogModeRespawnTime;
+	int ShroomsModeRespawnTime;
+	int ElastoModeRespawnTime;
+	int AsbestosVestRespawnTime;
+	int BulletProofVestRespawnTime;
+	int GasMaskRespawnTime;
+	int MercuryModeRespawnTime;
 
-   }specials;
-
+} specials;
 
 typedef struct
-   {
-   unsigned int Version;
-   // Variable for which version of the game can be played
-   version_type Product;
+{
+	unsigned int Version;
+	// Variable for which version of the game can be played
+	version_type Product;
 
-   int     TimeCount;
-   int     frame;
-   int     secrettotal,treasuretotal,killtotal;
-   int     secretcount,treasurecount,killcount;
-   int     supertotal,healthtotal,missiletotal;
-   int     supercount,healthcount,missilecount;
-   int     democratictotal,planttotal;
-   int     democraticcount,plantcount;
-   int     dipballs;
-   int     difficulty;
-   int     violence;
-	int     mapon;
-	int     score;
-	int     episode;
-	int     battlemode;
-	int     battleoption;
-	int     randomseed;
-   boolean teamplay;
+	int TimeCount;
+	int frame;
+	int secrettotal, treasuretotal, killtotal;
+	int secretcount, treasurecount, killcount;
+	int supertotal, healthtotal, missiletotal;
+	int supercount, healthcount, missilecount;
+	int democratictotal, planttotal;
+	int democraticcount, plantcount;
+	int dipballs;
+	int difficulty;
+	int violence;
+	int mapon;
+	int score;
+	int episode;
+	int battlemode;
+	int battleoption;
+	int randomseed;
+	boolean teamplay;
 	boolean DODEMOCRATICBONUS1;
 	boolean DOGROUNDZEROBONUS;
-	int     autorun;
+	int autorun;
 
 	// Battle Options
-   battle_type BattleOptions;
+	battle_type BattleOptions;
 
-   boolean SpawnCollectItems;
+	boolean SpawnCollectItems;
 	boolean SpawnEluder;
 	boolean SpawnDeluder;
-   boolean ShowScores;
-	boolean PlayerHasGun[ MAXPLAYERS ];
-   specials SpecialsTimes;
-   } gametype;
+	boolean ShowScores;
+	boolean PlayerHasGun[MAXPLAYERS];
+	specials SpecialsTimes;
+} gametype;
 
+extern int doublestep;
+extern boolean tedlevel;
+extern int tedlevelnum;
+extern int tedx;
+extern int tedy;
+extern boolean fizzlein;
+extern int pheight;
+extern int NoSound;
+extern int timelimit;
+extern boolean timelimitenabled;
+extern boolean noecho;
+extern boolean demoexit;
+extern boolean quiet;
 
-extern  int      doublestep;
-extern  boolean  tedlevel;
-extern  int      tedlevelnum;
-extern  int      tedx;
-extern  int      tedy;
-extern  boolean  fizzlein;
-extern  int      pheight;
-extern  int      NoSound;
-extern  int      timelimit;
-extern  boolean  timelimitenabled;
-extern  boolean  noecho;
-extern  boolean  demoexit;
-extern  boolean  quiet;
-
-extern gametype  gamestate;
+extern gametype gamestate;
 extern boolean DebugOk;
-extern  boolean newlevel;
+extern boolean newlevel;
 
-void QuitGame( void );
-void PlayCinematic (void);
+void QuitGame(void);
+void PlayCinematic(void);
 void InitCharacter(void);
-void ShutDown ( void );
-void UpdateGameObjects ( void );
+void ShutDown(void);
+void UpdateGameObjects(void);
 
-extern  int polltime;
-extern  int oldpolltime;
-extern  int oldtime;
-void PauseLoop ( void );
-void SaveScreen (boolean inhmenu);
-void SetupWads( void );
+extern int polltime;
+extern int oldpolltime;
+extern int oldtime;
+void PauseLoop(void);
+void SaveScreen(boolean inhmenu);
+void SetupWads(void);
 
 extern boolean SCREENSHOTS;
 extern boolean COMPUTELEVELSIZE;

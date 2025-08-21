@@ -15,12 +15,12 @@
 #include "rt_def.h"
 
 #include "SDL.h"
-              
-/* 
+
+/*
   Copied over from Wolf3D Linux: http://www.icculus.org/wolf3d/
   Modified for ROTT.
  */
- 
+
 int _argc;
 char **_argv;
 
@@ -28,24 +28,26 @@ char **_argv;
 long filelength(int handle)
 {
 	struct stat buf;
-	
-	if (fstat(handle, &buf) == -1) {
+
+	if (fstat(handle, &buf) == -1)
+	{
 		perror("filelength");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	return buf.st_size;
 }
 
 char *strlwr(char *s)
 {
 	char *p = s;
-	
-	while (*p) {
+
+	while (*p)
+	{
 		*p = tolower(*p);
 		p++;
 	}
-	
+
 	return s;
 }
 #endif
@@ -53,18 +55,20 @@ char *strlwr(char *s)
 char *strupr(char *s)
 {
 	char *p = s;
-	
-	while (*p) {
+
+	while (*p)
+	{
 		*p = toupper(*p);
 		p++;
 	}
-	
+
 	return s;
 }
-	
+
 char *itoa(int value, char *string, int radix)
 {
-	switch (radix) {
+	switch (radix)
+	{
 		case 10:
 			sprintf(string, "%d", value);
 			break;
@@ -75,13 +79,14 @@ char *itoa(int value, char *string, int radix)
 			fprintf(stderr, "itoa: unsupported radix %d", radix);
 			break;
 	}
-	
+
 	return string;
 }
 
 char *ltoa(long value, char *string, int radix)
 {
-	switch (radix) {
+	switch (radix)
+	{
 		case 10:
 			sprintf(string, "%ld", value);
 			break;
@@ -92,13 +97,14 @@ char *ltoa(long value, char *string, int radix)
 			fprintf(stderr, "ltoa: unsupported radix %d", radix);
 			break;
 	}
-	
+
 	return string;
 }
 
 char *ultoa(unsigned long value, char *string, int radix)
 {
-	switch (radix) {
+	switch (radix)
+	{
 		case 10:
 			sprintf(string, "%lu", value);
 			break;
@@ -109,7 +115,7 @@ char *ultoa(unsigned long value, char *string, int radix)
 			fprintf(stderr, "ultoa: unsupported radix %d", radix);
 			break;
 	}
-	
+
 	return string;
 }
 
@@ -122,43 +128,44 @@ char getch(void)
 /* from Dan Olson */
 void put_dos2ansi(byte attrib)
 {
-	int lookup[] = {30,34,32,36,31,35,33,37};
-	byte fore,back,blink=0,intens=0;
-	
-	fore = attrib&15;	/* bits 0-3 */
-	back = attrib&112; /* bits 4-6 */
-       	blink = attrib&128; /* bit 7 */
-	
+	int lookup[] = { 30, 34, 32, 36, 31, 35, 33, 37 };
+	byte fore, back, blink = 0, intens = 0;
+
+	fore = attrib & 15;	  /* bits 0-3 */
+	back = attrib & 112;  /* bits 4-6 */
+	blink = attrib & 128; /* bit 7 */
+
 	/* Fix background, blink is either on or off. */
-	back = back>>4;
- 
+	back = back >> 4;
+
 	/* Fix foreground */
-	if (fore > 7) {
+	if (fore > 7)
+	{
 		intens = 1;
-		fore-=8;
+		fore -= 8;
 	}
 
 	/* Convert fore/back */
 	fore = lookup[fore];
-	back = lookup[back]+10;
+	back = lookup[back] + 10;
 
 	// 'Render"
 	if (blink)
-		printf ("\033[%d;5;%dm\033[%dm", intens, fore, back);
+		printf("\033[%d;5;%dm\033[%dm", intens, fore, back);
 	else
-		printf ("\033[%d;25;%dm\033[%dm", intens, fore, back);
+		printf("\033[%d;25;%dm\033[%dm", intens, fore, back);
 }
 
 void DisplayTextSplash(byte *text, int l)
 {
 	int i;
-	int bound = 80*l*2;
+	int bound = 80 * l * 2;
 
-	for (i=0;i<bound;i+=2)
+	for (i = 0; i < bound; i += 2)
 	{
-		put_dos2ansi(text[i+1]);
-		putchar (text[i]);
+		put_dos2ansi(text[i + 1]);
+		putchar(text[i]);
 	}
 
-	printf ("\033[m");
+	printf("\033[m");
 }

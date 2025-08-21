@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 extern boolean DivisionError;
 
-void UL_ErrorStartup ( void );
-void UL_ErrorShutdown ( void );
+void UL_ErrorStartup(void);
+void UL_ErrorShutdown(void);
 
 #endif

@@ -23,50 +23,50 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "develop.h"
 
-#define	MAXNETNODES		14			// max computers in a game
+#define MAXNETNODES 14 // max computers in a game
 
-#if ( SHAREWARE == 1 )
-   #define  MAXPLAYERS     5        // 5 players max + drones
+#if (SHAREWARE == 1)
+#define MAXPLAYERS 5 // 5 players max + drones
 #else
-   #define	MAXPLAYERS		11			// 11 players max + drones
+#define MAXPLAYERS 11 // 11 players max + drones
 #endif
 
-#define	CMD_SEND	   1
-#define	CMD_GET		2
-#define  CMD_OUTQUEBUFFERSIZE 3
-#define  CMD_INQUEBUFFERSIZE  4
+#define CMD_SEND 1
+#define CMD_GET 2
+#define CMD_OUTQUEBUFFERSIZE 3
+#define CMD_INQUEBUFFERSIZE 4
 
-#define	ROTTCOM_ID		0x12345678l
+#define ROTTCOM_ID 0x12345678l
 
-#define  MAXPACKETSIZE 2048
-#define	MAXCOMBUFFERSIZE 2048
+#define MAXPACKETSIZE 2048
+#define MAXCOMBUFFERSIZE 2048
 
 typedef struct
 {
-	short	intnum;			// ROTT executes an int to send commands
+	short intnum; // ROTT executes an int to send commands
 
-// communication between ROTT and the driver
-	short	command;	    	// CMD_SEND or CMD_GET
-	short	remotenode;		// dest for send, set by get (-1 = no packet)
-	short	datalength;		// bytes in rottdata to be sent / bytes read
+	// communication between ROTT and the driver
+	short command;	  // CMD_SEND or CMD_GET
+	short remotenode; // dest for send, set by get (-1 = no packet)
+	short datalength; // bytes in rottdata to be sent / bytes read
 
-// info specific to this node
-	short	consoleplayer;	// 0-3 = player number
-	short	numplayers;		// 1-4
-   short   client;         // 0 = server 1 = client
-   short   gametype;       // 0 = modem  1 = network
-   short   ticstep;        // 1 for every tic 2 for every other tic ...
-   short   remoteridicule; // 0 = remote ridicule is off 1= rr is on
+	// info specific to this node
+	short consoleplayer;  // 0-3 = player number
+	short numplayers;	  // 1-4
+	short client;		  // 0 = server 1 = client
+	short gametype;		  // 0 = modem  1 = network
+	short ticstep;		  // 1 for every tic 2 for every other tic ...
+	short remoteridicule; // 0 = remote ridicule is off 1= rr is on
 
-// packet data to be sent
-	char	data[MAXPACKETSIZE];
+	// packet data to be sent
+	char data[MAXPACKETSIZE];
 } rottcom_t;
 
-#define  MODEM_GAME   0
-#define	NETWORK_GAME 1
+#define MODEM_GAME 0
+#define NETWORK_GAME 1
 
-#define	ROTTLAUNCHER ("ROTT.EXE")
+#define ROTTLAUNCHER ("ROTT.EXE")
 
-extern   rottcom_t   * rottcom;
+extern rottcom_t *rottcom;
 
 #endif

@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_def_public
 #define _rt_def_public
 
-
 // RT_DEF.H Zee big one
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,15 +46,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdint.h>
 
 #ifdef _WIN32
-  #define PATH_SEP_CHAR '\\'
-  #define PATH_SEP_STR  "\\"
-  #define LIST_SEP_CHAR ';'
+#define PATH_SEP_CHAR '\\'
+#define PATH_SEP_STR "\\"
+#define LIST_SEP_CHAR ';'
 #else
-  #define PATH_SEP_CHAR '/'
-  #define PATH_SEP_STR  "/"
-  #define LIST_SEP_CHAR ':'
-  #define ROOTDIR       "/"
-  #define CURDIR        "./"
+#define PATH_SEP_CHAR '/'
+#define PATH_SEP_STR "/"
+#define LIST_SEP_CHAR ':'
+#define ROOTDIR "/"
+#define CURDIR "./"
 #endif
 
 #ifdef _MSC_VER
@@ -63,23 +62,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 #if defined(__GNUC__) || defined(__clang__)
- #define PRINTF_ATTR(fmt, first) __attribute__((format(printf, fmt, first)))
- #define PRINTF_ARG_ATTR(x) __attribute__((format_arg(x)))
- #define NORETURN __attribute__((noreturn))
+#define PRINTF_ATTR(fmt, first) __attribute__((format(printf, fmt, first)))
+#define PRINTF_ARG_ATTR(x) __attribute__((format_arg(x)))
+#define NORETURN __attribute__((noreturn))
 #else
- #define PRINTF_ATTR(fmt, first)
- #define PRINTF_ARG_ATTR(x)
- #define NORETURN
+#define PRINTF_ATTR(fmt, first)
+#define PRINTF_ARG_ATTR(x)
+#define NORETURN
 #endif
 
 #if (!defined MAX_PATH)
-  #if (defined MAXPATHLEN)
-    #define MAX_PATH MAXPATHLEN
-  #elif (defined PATH_MAX)
-    #define MAX_PATH PATH_MAX
-  #else
-    #define MAX_PATH 256
-  #endif
+#if (defined MAXPATHLEN)
+#define MAX_PATH MAXPATHLEN
+#elif (defined PATH_MAX)
+#define MAX_PATH PATH_MAX
+#else
+#define MAX_PATH 256
+#endif
 #endif
 
 //
@@ -95,12 +94,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #undef M_PI
 
 #ifndef NULL
-#define NULL       0
+#define NULL 0
 #endif
 
-#define PI      3.141592657
+#define PI 3.141592657
 #define LONG(a) ((int)a)
-#define M_PI            3.14159
+#define M_PI 3.14159
 
 #ifndef O_BINARY
 #define O_BINARY 0
@@ -111,28 +110,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 #ifndef min
-#define min(a, b)  (((a) < (b)) ? (a) : (b))
+#define min(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
 #ifndef max
-#define max(a, b)  (((a) > (b)) ? (a) : (b))
+#define max(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 
 #ifdef _WIN32
-  #define strcmpi(x, y) stricmp(x, y)
-  #define _fstricmp(x, y) stricmp(x, y)
+#define strcmpi(x, y) stricmp(x, y)
+#define _fstricmp(x, y) stricmp(x, y)
 #else
-  #ifndef strcmpi
-   #define strcmpi(x, y) strcasecmp(x, y)
-  #endif
+#ifndef strcmpi
+#define strcmpi(x, y) strcasecmp(x, y)
+#endif
 
-  #ifndef stricmp
-    #define stricmp(x, y) strcasecmp(x, y)
-  #endif
+#ifndef stricmp
+#define stricmp(x, y) strcasecmp(x, y)
+#endif
 
-  #ifndef _fstricmp
-    #define _fstricmp(x, y) strcasecmp(x, y)
-  #endif
+#ifndef _fstricmp
+#define _fstricmp(x, y) strcasecmp(x, y)
+#endif
 #endif
 
 #define arrlen(array) (sizeof(array) / sizeof(*array))
@@ -151,17 +150,16 @@ long filelength(int handle);
 //    Screen Constants
 //
 //***************************************************************************
-#define VIEWGLOBAL              0x10000         // globals visable flush to wall
+#define VIEWGLOBAL 0x10000 // globals visable flush to wall
 /*
-#define VIEWWIDTH               MAXSCREENWIDTH//320*2             // size of view window
-#define VIEWHEIGHT              MAXSCREENHEIGHT//200*2
-#define MAXSCANLINES            MAXSCREENHEIGHT//200*2             // size of ylookup table
+#define VIEWWIDTH               MAXSCREENWIDTH//320*2             // size of
+view window #define VIEWHEIGHT              MAXSCREENHEIGHT//200*2 #define
+MAXSCANLINES            MAXSCREENHEIGHT//200*2             // size of ylookup
+table
 */
-#define CHARWIDTH               2
-#define TILEWIDTH               4
-#define STATUSLINES             16
-
-
+#define CHARWIDTH 2
+#define TILEWIDTH 4
+#define STATUSLINES 16
 
 //***************************************************************************
 //
@@ -169,23 +167,23 @@ long filelength(int handle);
 //
 //***************************************************************************
 
-#define ANGLES                            2048 // must be divisible by 4
-#define ANGLEQUAD                         (ANGLES/4)
-#define FINEANGLES                        2048
-#define FINEANGLEQUAD                     (FINEANGLES/4)
-#define ANG90                             (FINEANGLES/4)
-#define ANG180                            (ANG90*2)
-#define ANG270                            (ANG90*3)
-#define ANG360                            (ANG90*4)
-#define VANG90                            (ANGLES/4)
-#define VANG180                           (VANG90*2)
-#define VANG270                           (VANG90*3)
-#define VANG360                           (VANG90*4)
-#define ANGLESDIV8                        (ANGLES/8)
-#define MINDIST                           (0x5800l)
-#define PIXRADIUS                         512
-#define FOCALLENGTH                       (0x5700l)             // in global coordinates
-#define MAXTICS                           10
+#define ANGLES 2048 // must be divisible by 4
+#define ANGLEQUAD (ANGLES / 4)
+#define FINEANGLES 2048
+#define FINEANGLEQUAD (FINEANGLES / 4)
+#define ANG90 (FINEANGLES / 4)
+#define ANG180 (ANG90 * 2)
+#define ANG270 (ANG90 * 3)
+#define ANG360 (ANG90 * 4)
+#define VANG90 (ANGLES / 4)
+#define VANG180 (VANG90 * 2)
+#define VANG270 (VANG90 * 3)
+#define VANG360 (VANG90 * 4)
+#define ANGLESDIV8 (ANGLES / 8)
+#define MINDIST (0x5800l)
+#define PIXRADIUS 512
+#define FOCALLENGTH (0x5700l) // in global coordinates
+#define MAXTICS 10
 
 //***************************************************************************
 //
@@ -193,24 +191,23 @@ long filelength(int handle);
 //
 //***************************************************************************
 
+#define GLOBAL1 (1l << 16)
+#define TILEGLOBAL GLOBAL1
+#define PIXGLOBAL (GLOBAL1 / 64)
+#define TILESHIFT 16l
+#define UNSIGNEDSHIFT 8
+#define PLAYERSIZE 0x5700l // player radius
+#define MAPSIZE 128		   // maps are 64*64 max
+#define NUMAREAS 47
+#define MAPSPOT(x, y, plane) (mapplanes[plane][MAPSIZE * (y) + (x)])
+#define AREATILE 107
+#define ICONARROWS 72
+#define PUSHABLETILE 80
+#define ELEVATORTILE 72
+#define ALTELEVATORTILE 106
+#define LASTLEVELVALUE 459
 
-#define GLOBAL1                           (1l<<16)
-#define TILEGLOBAL                        GLOBAL1
-#define PIXGLOBAL                         (GLOBAL1/64)
-#define TILESHIFT                         16l
-#define UNSIGNEDSHIFT                     8
-#define PLAYERSIZE                        0x5700l                       // player radius
-#define MAPSIZE                           128                         // maps are 64*64 max
-#define NUMAREAS                          47
-#define MAPSPOT(x,y,plane)                (mapplanes[plane][MAPSIZE*(y)+(x)])
-#define AREATILE                          107
-#define ICONARROWS                        72
-#define PUSHABLETILE                      80
-#define ELEVATORTILE                      72
-#define ALTELEVATORTILE                   106
-#define LASTLEVELVALUE                    459
-
-#define AREANUMBER(x,y)                   (MAPSPOT((x),(y),0)-AREATILE)
+#define AREANUMBER(x, y) (MAPSPOT((x), (y), 0) - AREATILE)
 
 //***************************************************************************
 //
@@ -228,16 +225,16 @@ long filelength(int handle);
 //
 //***************************************************************************
 
-#define RUNSPEED                6000
-#define MINACTORDIST            0x9000l
-#define MAXSTATS                400                           // max number of lamps, bonus, etc
+#define RUNSPEED 6000
+#define MINACTORDIST 0x9000l
+#define MAXSTATS 400 // max number of lamps, bonus, etc
 
-#define MAXWALLTILES            105          // max number of wall tiles
-#define MAXACTORS               600
-#define NORTH                   0
-#define EAST                    1
-#define SOUTH                   2
-#define WEST                    3
+#define MAXWALLTILES 105 // max number of wall tiles
+#define MAXACTORS 600
+#define NORTH 0
+#define EAST 1
+#define SOUTH 2
+#define WEST 3
 
 //***************************************************************************
 //
@@ -245,24 +242,24 @@ long filelength(int handle);
 //
 //***************************************************************************
 
-#define MaxJoys            2
-#define MaxKbds            2
-#define MaxJoys            2
-#define NumCodes           128
+#define MaxJoys 2
+#define MaxKbds 2
+#define MaxJoys 2
+#define NumCodes 128
 
 // Key definitions
 
-#define  key_None    0
-#define  key_Return     0x0d
-#define  key_Enter      key_Return
-#define  key_Escape     0x1b
-#define  key_Space      0x20
-#define  key_BackSpace  0x08
-#define  key_Tab        0x09
-#define  key_Delete     0x7f
+#define key_None 0
+#define key_Return 0x0d
+#define key_Enter key_Return
+#define key_Escape 0x1b
+#define key_Space 0x20
+#define key_BackSpace 0x08
+#define key_Tab 0x09
+#define key_Delete 0x7f
 
-#define  ANGLEBITS      16
-#define  ANGLEFRACMAX   (FINEANGLES<<ANGLEBITS)
+#define ANGLEBITS 16
+#define ANGLEFRACMAX (FINEANGLES << ANGLEBITS)
 
 //***************************************************************************
 //
@@ -272,134 +269,133 @@ long filelength(int handle);
 
 ///////////////////      GLOBAL DATA TYPES ///////////////////////////////
 
-
-typedef unsigned char           byte;
-
+typedef unsigned char byte;
 
 //////////////////////////////////////////////////////////////////////////
-
 
 //////////////////      GLOBAL ENUMERATED TYPES    ///////////////////////
 
 typedef unsigned char boolean;
 // true and false are defined by stdbool
 
-typedef enum {
-		  east,
-		  northeast,
-		  north,
-		  northwest,
-		  west,
-		  southwest,
-		  south,
-		  southeast,
-		  nodir
+typedef enum
+{
+	east,
+	northeast,
+	north,
+	northwest,
+	west,
+	southwest,
+	south,
+	southeast,
+	nodir
 } dirtype;
 
 typedef enum
- {SPRITE,
-  WALL,
-  ACTOR,
-  DOOR,
-  PWALL,
-  MWALL
- }
- thingtype;
+{
+	SPRITE,
+	WALL,
+	ACTOR,
+	DOOR,
+	PWALL,
+	MWALL
+} thingtype;
 
-#define NUMTXBUTTONS    16
-enum    {
-		  bt_nobutton=-1,
-		  bt_attack=0,
-		  bt_strafe=1,
-		  bt_run=2,
-		  bt_use=3,
-		  bt_lookup=4,
-		  bt_lookdown=5,
-		  bt_swapweapon=6,
-		  bt_dropweapon=7,
-		  bt_horizonup=8,
-        bt_horizondown=9,
-        bt_pistol=10,
-        bt_dualpistol=11,
-        bt_mp40=12,
-        bt_missileweapon=13,
-        bt_autorun=14,
-		  bt_recordsound=15,
-		  bt_strafeleft=16,
-		  bt_straferight=17,
-        bt_turnaround=18,
-        bt_aimbutton=19,
-        di_north=20,
-        di_east=21,
-        di_south=22,
-        di_west=23,
-        bt_map=24,
-        bt_message=25,
-        bt_directmsg=26,
-        NUMBUTTONS
+#define NUMTXBUTTONS 16
+enum
+{
+	bt_nobutton = -1,
+	bt_attack = 0,
+	bt_strafe = 1,
+	bt_run = 2,
+	bt_use = 3,
+	bt_lookup = 4,
+	bt_lookdown = 5,
+	bt_swapweapon = 6,
+	bt_dropweapon = 7,
+	bt_horizonup = 8,
+	bt_horizondown = 9,
+	bt_pistol = 10,
+	bt_dualpistol = 11,
+	bt_mp40 = 12,
+	bt_missileweapon = 13,
+	bt_autorun = 14,
+	bt_recordsound = 15,
+	bt_strafeleft = 16,
+	bt_straferight = 17,
+	bt_turnaround = 18,
+	bt_aimbutton = 19,
+	di_north = 20,
+	di_east = 21,
+	di_south = 22,
+	di_west = 23,
+	bt_map = 24,
+	bt_message = 25,
+	bt_directmsg = 26,
+	NUMBUTTONS
 };
 
-
 #if (SHAREWARE == 0)
- #define MAXWEAPONS  13
+#define MAXWEAPONS 13
 #else
- #define MAXWEAPONS  9
+#define MAXWEAPONS 9
 #endif
 
-
-typedef enum    { wp_pistol,
-						wp_twopistol,
-						wp_mp40,
-						wp_bazooka,
-						wp_heatseeker,
-                  wp_drunk,
-                  wp_firebomb,
-                  wp_firewall,
-						wp_godhand,
+typedef enum
+{
+	wp_pistol,
+	wp_twopistol,
+	wp_mp40,
+	wp_bazooka,
+	wp_heatseeker,
+	wp_drunk,
+	wp_firebomb,
+	wp_firewall,
+	wp_godhand,
 
 #if (SHAREWARE == 0)
-                  wp_split,
-						wp_kes,
-						wp_bat,
-                  wp_dog
+	wp_split,
+	wp_kes,
+	wp_bat,
+	wp_dog
 #endif
 
-                } weapontype;
+} weapontype;
 
-
-
-enum    {
-						gd_baby,
-						gd_easy,
-						gd_medium,
-						gd_hard
+enum
+{
+	gd_baby,
+	gd_easy,
+	gd_medium,
+	gd_hard
 };
 
+typedef enum
+{
+	ex_stillplaying,
+	ex_completed,
+	ex_died,
+	ex_warped,
+	ex_resetgame,
+	ex_loadedgame,
+	ex_victorious,
+	ex_abort,
+	ex_demodone,
+	ex_skiplevel,
+	ex_secretlevel,
+	ex_secretdone,
+	ex_titles,
+	ex_demorecord,
+	ex_demoplayback,
 
-typedef enum    {
-		  ex_stillplaying,
-		  ex_completed,
-		  ex_died,
-		  ex_warped,
-		  ex_resetgame,
-		  ex_loadedgame,
-		  ex_victorious,
-		  ex_abort,
-		  ex_demodone,
-		  ex_skiplevel,
-		  ex_secretlevel,
-        ex_secretdone,
-        ex_titles,
-		  ex_demorecord,
-		  ex_demoplayback,
-
-		  ex_bossdied,
-		  ex_gameover,
-		  ex_battledone
+	ex_bossdied,
+	ex_gameover,
+	ex_battledone
 } exit_t;
 
 // Types for cache lumps (for endian converters)
-enum    {
+enum
+{
 	cache_other,
 	cache_pic_t,
 	cache_lpic_t,
@@ -414,81 +410,79 @@ enum    {
 
 /////////////////      GLOBAL STRUCTURE TYPES     //////////////////////////
 
-
 //=================== SHARED FLAGS =====================================//
 
-#define FL_SHOOTABLE            0x01
-#define FL_ACTIVE               0x02
-#define FL_VISIBLE              0x08
-#define FL_NOFRICTION           0x100 //
-#define FL_DYING                0x1000
-#define FL_ALTERNATE            0x20000
-#define FL_GODSTRUCK            0x80000
-#define FL_ABP                  0x400000
-#define FL_BLOCK                0x800000
-#define FL_HBM                  0x1000000
-#define FL_RIDING               0x2000000
-#define FL_SOLIDCOLOR           0x4000000
-#define FL_SEEN                 0x8000000
-#define FL_COLORED              0x10000000
-#define FL_FULLLIGHT       0x80000000
+#define FL_SHOOTABLE 0x01
+#define FL_ACTIVE 0x02
+#define FL_VISIBLE 0x08
+#define FL_NOFRICTION 0x100 //
+#define FL_DYING 0x1000
+#define FL_ALTERNATE 0x20000
+#define FL_GODSTRUCK 0x80000
+#define FL_ABP 0x400000
+#define FL_BLOCK 0x800000
+#define FL_HBM 0x1000000
+#define FL_RIDING 0x2000000
+#define FL_SOLIDCOLOR 0x4000000
+#define FL_SEEN 0x8000000
+#define FL_COLORED 0x10000000
+#define FL_FULLLIGHT 0x80000000
 
 //=================== ACTOR FLAGS =====================================//
 
-#define FL_NEVERMARK            4
-#define FL_ATTACKMODE           0x10
-#define FL_FIRSTATTACK          0x20
-#define FL_ISFIRE               0x20
-#define FL_AMBUSH               0x40
-#define FL_NONMARK              0x80
-#define FL_DONE                 0x200 // used by push column
-#define FL_DODGE                0x400 // "
-#define FL_STUCK                0x800 //
-#define FL_HASAUTO              0x2000
-#define FL_FALLINGOBJECT        0x4000
-#define FL_KEYACTOR             0x8000
-#define FL_HEAD                 0x40000
-#define FL_TARGET               0x200000
-#define FL_FLIPPED              0x40000000
-#define FL_CRAZY                0x40000000
-
+#define FL_NEVERMARK 4
+#define FL_ATTACKMODE 0x10
+#define FL_FIRSTATTACK 0x20
+#define FL_ISFIRE 0x20
+#define FL_AMBUSH 0x40
+#define FL_NONMARK 0x80
+#define FL_DONE 0x200  // used by push column
+#define FL_DODGE 0x400 // "
+#define FL_STUCK 0x800 //
+#define FL_HASAUTO 0x2000
+#define FL_FALLINGOBJECT 0x4000
+#define FL_KEYACTOR 0x8000
+#define FL_HEAD 0x40000
+#define FL_TARGET 0x200000
+#define FL_FLIPPED 0x40000000
+#define FL_CRAZY 0x40000000
 
 //================== PLAYER FLAGS ======================================//
 
-#define FL_BPV                  0x10
-#define FL_SHROOMS              0x20
-#define FL_AV                   0x40
-#define FL_ELASTO               0x200
-#define FL_FLEET                0x400
-#define FL_PUSHED               0x2000
-#define FL_PAIN                 0x4000
-#define FL_GODMODE              0x8000
-#define FL_DOGMODE              0x10000
-#define FL_GASMASK              0x100000
-#define FL_DESIGNATED           0x20000000
-#define FL_DIDTAG               0x40000000
+#define FL_BPV 0x10
+#define FL_SHROOMS 0x20
+#define FL_AV 0x40
+#define FL_ELASTO 0x200
+#define FL_FLEET 0x400
+#define FL_PUSHED 0x2000
+#define FL_PAIN 0x4000
+#define FL_GODMODE 0x8000
+#define FL_DOGMODE 0x10000
+#define FL_GASMASK 0x100000
+#define FL_DESIGNATED 0x20000000
+#define FL_DIDTAG 0x40000000
 
 //================== SPRITE FLAGS ======================================//
 
-#define NOTHING                 -1
-#define FL_BONUS                0x04
-#define FL_LIGHT                0x20
-#define FL_CHANGES              0x40
-#define FL_BACKWARDS            0x100
-#define FL_BANDF                0x200
-#define FL_HEAT                 0x400
-#define FL_LIGHTOFF             0x800
-#define FL_ACTOR                0x1000
-#define FL_ROTATING             0x2000
-#define FL_RESPAWN              0x4000
-#define FL_WOODEN               0x8000
-#define FL_METALLIC             0x10000
-#define FL_EARTHEN              0x20000
-#define FL_LIGHTON              0x40000
-#define FL_FADING               0x80000
-#define FL_DEADBODY             0x100000
-#define FL_WEAPON               0x200000
-#define FL_TRANSLUCENT          0x2000000
-#define FL_HEIGHTFLIPPABLE      0x40000000
+#define NOTHING -1
+#define FL_BONUS 0x04
+#define FL_LIGHT 0x20
+#define FL_CHANGES 0x40
+#define FL_BACKWARDS 0x100
+#define FL_BANDF 0x200
+#define FL_HEAT 0x400
+#define FL_LIGHTOFF 0x800
+#define FL_ACTOR 0x1000
+#define FL_ROTATING 0x2000
+#define FL_RESPAWN 0x4000
+#define FL_WOODEN 0x8000
+#define FL_METALLIC 0x10000
+#define FL_EARTHEN 0x20000
+#define FL_LIGHTON 0x40000
+#define FL_FADING 0x80000
+#define FL_DEADBODY 0x100000
+#define FL_WEAPON 0x200000
+#define FL_TRANSLUCENT 0x2000000
+#define FL_HEIGHTFLIPPABLE 0x40000000
 
 #endif

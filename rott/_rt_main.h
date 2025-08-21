@@ -22,14 +22,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "develop.h"
 
-void GameLoop (void);
-void PlayLoop (void);
+void GameLoop(void);
+void PlayLoop(void);
 void PollKeyboard(void);
-void FixColorMap( void );
+void FixColorMap(void);
 
-#define QUITTIMEINTERVAL ((35*6)-5)
-boolean CheckForQuickLoad ( void );
+#define QUITTIMEINTERVAL ((35 * 6) - 5)
+boolean CheckForQuickLoad(void);
 
-void DrawRottTitle ( void );
+void DrawRottTitle(void);
 
 #endif

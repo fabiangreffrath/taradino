@@ -44,239 +44,232 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <ctype.h>
 #include "w_wad.h"
 
-extern int		iDemoNames;
+extern int iDemoNames;
 extern boolean iG_aimCross;
 
+extern void DisplayMessage(int num, int position);
 
-extern void DisplayMessage   (int num,int position);
-
-
-typedef struct {
-   char code[15];
-   byte length;
+typedef struct
+{
+	char code[15];
+	byte length;
 } CodeStruct;
 
 enum
 {
-   ENABLECHEAT,               // enable cheats
-   ENABLECHEATALT,            // enable cheats
-   SOMEITEMS,                 // three keys, more health
-   SOMEITEMSALT,              // three keys, more health
-   INVULNERABLE,              // normal god mode
-   INVULNERABLEALT,           // normal god mode
-   WARP,                      // warp
-   WARPALT,                   // warp
-   ITEMS,                     // all keys, armor, 100% health
-   ITEMSALT,                  // all keys, armor, 100% health
-   GODMODEPWUP,               // god mode powerup
-	GODMODEPWUPALT,            // god mode powerup
+	ENABLECHEAT,	 // enable cheats
+	ENABLECHEATALT,	 // enable cheats
+	SOMEITEMS,		 // three keys, more health
+	SOMEITEMSALT,	 // three keys, more health
+	INVULNERABLE,	 // normal god mode
+	INVULNERABLEALT, // normal god mode
+	WARP,			 // warp
+	WARPALT,		 // warp
+	ITEMS,			 // all keys, armor, 100% health
+	ITEMSALT,		 // all keys, armor, 100% health
+	GODMODEPWUP,	 // god mode powerup
+	GODMODEPWUPALT,	 // god mode powerup
 #if (SHAREWARE == 0)
-   DOGMODEPWUP,               // dog mode powerup
-   DOGMODEPWUPALT,            // dog mode powerup
+	DOGMODEPWUP,	// dog mode powerup
+	DOGMODEPWUPALT, // dog mode powerup
 #endif
-	MERCURYPWUP,               // mercury mode powerup
-   MERCURYPWUPALT,            // mercury mode powerup
-   SHROOMSPWUP,               // shrooms mode powerup
-   SHROOMSPWUPALT,            // shrooms mode powerup
-   ELASTOPWUP,                // elasto mode powerup
-   ELASTOPWUPALT,             // elasto mode powerup
-   RESTARTGAME,               // warp to level 1, start with pistol
-   RESTARTGAMEALT,            // warp to level 1, start with pistol
-   HURTPLAYER,                // hurt player 10%
-   HURTPLAYERALT,             // hurt player 10%
-   TOMHALLMODE,               // run fast all the time
-	TOMHALLMODEALT,            // run fast all the time
-   NORMAL,                    // back to normal
-   NORMALALT,                 // back to normal
-   LIGHTDIMON,                // light diminishing on
-   LIGHTDIMONALT,             // light diminishing on
-   LIGHTDIMOFF,               // light diminishing off
-   LIGHTDIMOFFALT,            // light diminishing off
-   FOGON,                     // fog on (0x00 - 0x80 minmax)
-   FOGONALT,                  // fog on (0x00 - 0x80 minmax)
-   FOGOFF,                    // fog off (0x80 - 0xFF minmax)
-   FOGOFFALT,                 // fog off (0x80 - 0xFF minmax)
-   QUITGAME,                  // blow out of game
-   QUITGAMEALT,               // blow out of game
-   ENDLEVEL,                  // end the current level
-   ENDLEVELALT,               // end the current level
-   FANDCOFF,                  // floor and ceiling off
-   FANDCOFFALT,               // floor and ceiling off
-   FANDCON,                   // floor and ceiling on
-   FANDCONALT,                // floor and ceiling on
-   BULLETARMOR,               // bullet proof armor
-   BULLETARMORALT,            // bullet proof armor
-   FIREARMOR,                 // fire proof armor
-   FIREARMORALT,              // fire proof armor
-   GASMASK,                   // gas mask
-   GASMASKALT,                // gas mask
-   OUTFIT,                    // all keys, armor, 100% health, MP40, heatseek
-   OUTFITALT,                 // all keys, armor, 100% health, MP40, heatseek
-   KILLPLAYER,                // kill player
-	KILLPLAYERALT,             // kill player
-	RESTARTLEVEL,              // re-enter level
-	RESTARTLEVELALT,           // re-enter level
-   WEAPONTWOPISTOL,           // give double pistol
-   WEAPONTWOPISTOLALT,        // give double pistol
-   WEAPONMP40,                // give mp40
-   WEAPONMP40ALT,             // give mp40
-   WEAPONBAZOOKA,             // give bazooka
-   WEAPONBAZOOKAALT,          // give bazooka
-   WEAPONHEAT,                // give heatseeker
-   WEAPONHEATALT,             // give heatseeker
-   WEAPONDRUNK,               // give drunk missile
-   WEAPONDRUNKALT,            // give drunk missile
-   WEAPONFIREBOMB,            // give firebomb
-   WEAPONFIREBOMBALT,         // give firebomb
-   WEAPONFIREWALL,            // give firewall
-   WEAPONFIREWALLALT,         // give firewall
-	WEAPONGOD,                 // give godhand
-	WEAPONGODALT,              // give godhand
-	AIMCROSS,                 // bna++
-	AIMCROSSALT,              // give bna++
+	MERCURYPWUP,		// mercury mode powerup
+	MERCURYPWUPALT,		// mercury mode powerup
+	SHROOMSPWUP,		// shrooms mode powerup
+	SHROOMSPWUPALT,		// shrooms mode powerup
+	ELASTOPWUP,			// elasto mode powerup
+	ELASTOPWUPALT,		// elasto mode powerup
+	RESTARTGAME,		// warp to level 1, start with pistol
+	RESTARTGAMEALT,		// warp to level 1, start with pistol
+	HURTPLAYER,			// hurt player 10%
+	HURTPLAYERALT,		// hurt player 10%
+	TOMHALLMODE,		// run fast all the time
+	TOMHALLMODEALT,		// run fast all the time
+	NORMAL,				// back to normal
+	NORMALALT,			// back to normal
+	LIGHTDIMON,			// light diminishing on
+	LIGHTDIMONALT,		// light diminishing on
+	LIGHTDIMOFF,		// light diminishing off
+	LIGHTDIMOFFALT,		// light diminishing off
+	FOGON,				// fog on (0x00 - 0x80 minmax)
+	FOGONALT,			// fog on (0x00 - 0x80 minmax)
+	FOGOFF,				// fog off (0x80 - 0xFF minmax)
+	FOGOFFALT,			// fog off (0x80 - 0xFF minmax)
+	QUITGAME,			// blow out of game
+	QUITGAMEALT,		// blow out of game
+	ENDLEVEL,			// end the current level
+	ENDLEVELALT,		// end the current level
+	FANDCOFF,			// floor and ceiling off
+	FANDCOFFALT,		// floor and ceiling off
+	FANDCON,			// floor and ceiling on
+	FANDCONALT,			// floor and ceiling on
+	BULLETARMOR,		// bullet proof armor
+	BULLETARMORALT,		// bullet proof armor
+	FIREARMOR,			// fire proof armor
+	FIREARMORALT,		// fire proof armor
+	GASMASK,			// gas mask
+	GASMASKALT,			// gas mask
+	OUTFIT,				// all keys, armor, 100% health, MP40, heatseek
+	OUTFITALT,			// all keys, armor, 100% health, MP40, heatseek
+	KILLPLAYER,			// kill player
+	KILLPLAYERALT,		// kill player
+	RESTARTLEVEL,		// re-enter level
+	RESTARTLEVELALT,	// re-enter level
+	WEAPONTWOPISTOL,	// give double pistol
+	WEAPONTWOPISTOLALT, // give double pistol
+	WEAPONMP40,			// give mp40
+	WEAPONMP40ALT,		// give mp40
+	WEAPONBAZOOKA,		// give bazooka
+	WEAPONBAZOOKAALT,	// give bazooka
+	WEAPONHEAT,			// give heatseeker
+	WEAPONHEATALT,		// give heatseeker
+	WEAPONDRUNK,		// give drunk missile
+	WEAPONDRUNKALT,		// give drunk missile
+	WEAPONFIREBOMB,		// give firebomb
+	WEAPONFIREBOMBALT,	// give firebomb
+	WEAPONFIREWALL,		// give firewall
+	WEAPONFIREWALLALT,	// give firewall
+	WEAPONGOD,			// give godhand
+	WEAPONGODALT,		// give godhand
+	AIMCROSS,			// bna++
+	AIMCROSSALT,		// give bna++
 
 #if (SHAREWARE == 0)
 
-   WEAPONSPLIT,               // give split missile
-   WEAPONSPLITALT,            // give split missile
-   WEAPONKES,                 // give kes
-   WEAPONKESALT,              // give kes
-   WEAPONBAT,                 // give bat
-   WEAPONBATALT,              // give bat
-   WEAPONDOG,                 // give dogmode
-   WEAPONDOGALT,              // give dogmode
+	WEAPONSPLIT,	// give split missile
+	WEAPONSPLITALT, // give split missile
+	WEAPONKES,		// give kes
+	WEAPONKESALT,	// give kes
+	WEAPONBAT,		// give bat
+	WEAPONBATALT,	// give bat
+	WEAPONDOG,		// give dogmode
+	WEAPONDOGALT,	// give dogmode
 #endif
 
-   MISSILECAMTOGGLE,          // Turn missile cam on/off
-   MISSILECAMTOGGLEALT,       // Turn missile cam on/off
-   HUDTOGGLE,                 // Turn HUD on/off
-   HUDTOGGLEALT,              // Turn HUD on/off
-   ROTATIONFUN,               // Rotation fun
-   DEMORECORD,                // Start recording demo
-   DEMOEND,                   // End recording demo
-   DEMOPLAYBACK,              // Playback demo
-   CRAZYGIBS,                 // Engine Killing Gibs
-   JUKEBOX,                   // JukeBox
-   JUKEBOXALT,                // JukeBox
-   MAPCHEAT,                  // Map Cheat
-   MAPCHEATALT,               // Map Cheat Alt
-   MAXCODES
+	MISSILECAMTOGGLE,	 // Turn missile cam on/off
+	MISSILECAMTOGGLEALT, // Turn missile cam on/off
+	HUDTOGGLE,			 // Turn HUD on/off
+	HUDTOGGLEALT,		 // Turn HUD on/off
+	ROTATIONFUN,		 // Rotation fun
+	DEMORECORD,			 // Start recording demo
+	DEMOEND,			 // End recording demo
+	DEMOPLAYBACK,		 // Playback demo
+	CRAZYGIBS,			 // Engine Killing Gibs
+	JUKEBOX,			 // JukeBox
+	JUKEBOXALT,			 // JukeBox
+	MAPCHEAT,			 // Map Cheat
+	MAPCHEATALT,		 // Map Cheat Alt
+	MAXCODES
 };
 
-CodeStruct Codes[MAXCODES + 6] =
-{
-	{"KCITSPID",    8},        // enable cheats
-	{"CCE\\",       4},        // enable cheats
-   {"REKCALS",     7},        // three keys, more health
-   {"MUB\\",       4},        // three keys, more health
-   {"NIJOHC",      6},        // normal god mode
-	{"WWW\\",       4},        // normal god mode
-	{"OTOG",        4},        // warp
-	{"LTG\\",       4},        // warp
-	{"SYOTXIS",     7},        // all keys, armor, 100% health
-	{"IAG\\",       4},        // all keys, armor, 100% health
-   {"DASOOT",      6},        // god mode powerup
-   {"DOG\\",       4},        // god mode powerup
+CodeStruct Codes[MAXCODES + 6] = {
+	{ "KCITSPID", 8 }, // enable cheats
+	{ "CCE\\", 4 },	   // enable cheats
+	{ "REKCALS", 7 },  // three keys, more health
+	{ "MUB\\", 4 },	   // three keys, more health
+	{ "NIJOHC", 6 },   // normal god mode
+	{ "WWW\\", 4 },	   // normal god mode
+	{ "OTOG", 4 },	   // warp
+	{ "LTG\\", 4 },	   // warp
+	{ "SYOTXIS", 7 },  // all keys, armor, 100% health
+	{ "IAG\\", 4 },	   // all keys, armor, 100% health
+	{ "DASOOT", 6 },   // god mode powerup
+	{ "DOG\\", 4 },	   // god mode powerup
 #if (SHAREWARE == 0)
-   {"FOOW",        4},        // dog mode powerup
-	{"GOD\\",       4},        // dog mode powerup
+	{ "FOOW", 4 },	// dog mode powerup
+	{ "GOD\\", 4 }, // dog mode powerup
 #endif
-	{"YOBYLF",      6},        // mercury mode powerup
-	{"REM\\",       4},        // mercury mode powerup
-	{"PIRTDAB",     7},        // shrooms mode powerup
-	{"RHS\\",       4},        // shrooms mode powerup
-	{"GNIOB",       5},        // elasto mode powerup
-	{"ALE\\",       4},        // elasto mode powerup
-	{"SREBOOG",     7},        // warp to level 1, start with pistol
-	{"OOG\\",       4},        // warp to level 1, start with pistol
-	{"KCAHW",       5},        // hurt player 10%
-	{"FOO\\",       4},        // hurt player 10%
-	{"DEEPS",       5},        // run fast all the time
-	{"AFR\\",       4},        // run fast all the time
-	{"CINAP",       5},        // back to normal
-	{"NAP\\",       4},        // back to normal
-	{"NOMID",       5},        // light diminishing on
-	{"NOD\\",       4},        // light diminishing on
-	{"FFOMID",      6},        // light diminishing off
-	{"FOD\\",       4},        // light diminishing off
-	{"NODNOL",      6},        // fog on (0x00 - 0x80 minmax)
-	{"NOF\\",       4},        // fog on (0x00 - 0x80 minmax)
-	{"LONDON",      6},        // fog off (0x80 - 0xFF minmax)
-	{"FOF\\",       4},        // fog off (0x80 - 0xFF minmax)
-	{"SETAGOG",     7},        // blow out of game
-	{"R8L\\",       4},        // blow out of game
-	{"HCRAOG",      6},        // end the current level
-	{"LCE\\",       4},        // end the current level
-	{"683ATOG",     7},        // floor and ceiling off
-	{"NOC\\",       4},        // floor and ceiling off
-	{"684ATOG",     7},        // floor and ceiling on
-	{"FOC\\",       4},        // floor and ceiling on
-	{"EMTOOHS",     7},        // bullet proof armor
-	{"RAB\\",       4},        // bullet proof armor
-	{"EMNRUB",      6},        // fire proof armor
-	{"RAF\\",       4},        // fire proof armor
-	{"GNUDGNUL",    8},        // gas mask
-	{"RAG\\",       4},        // gas mask
-	{"KCAPTNUH",    8},        // all keys, armor, 100% health, MP40, heatseek
-	{"PFO\\",       4},        // all keys, armor, 100% health, MP40, heatseek
-	{"EM68",        4},        // kill player
-	{"EID\\",       4},        // kill player
-	{"REEN",        4},        // re-enter level
-	{"LER\\",       4},        // re-enter level
-   {"OOWNHOJ",     7},        // give double pistol
-	{"2WG\\",       4},        // give double pistol
-	{"EMGULP",      6},        // give mp40
-	{"3WG\\",       4},        // give mp40
-	{"ALLINAV",     7},        // give bazooka
-	{"4WG\\",       4},        // give bazooka
-	{"SEMITTOH",    8},        // give heatseeker
-   {"5WG\\",       4},        // give heatseeker
-   {"EZOOB",       5},        // give drunk missile
-   {"6WG\\",       4},        // give drunk missile
-   {"BMOBERIF",    8},        // give firebomb
-   {"7WG\\",       4},        // give firebomb
-	{"SENOB",       5},        // give firewall
-	{"8WG\\",       4},        // give firewall
-	{"AYEES",       5},        // give god hand
-   {"9WG\\",       4},        // give god hand
-	{"MIA",       3},        // give aim bna++
-   {"MIA\\",       4},        // give aim bna++
-
-
+	{ "YOBYLF", 6 },   // mercury mode powerup
+	{ "REM\\", 4 },	   // mercury mode powerup
+	{ "PIRTDAB", 7 },  // shrooms mode powerup
+	{ "RHS\\", 4 },	   // shrooms mode powerup
+	{ "GNIOB", 5 },	   // elasto mode powerup
+	{ "ALE\\", 4 },	   // elasto mode powerup
+	{ "SREBOOG", 7 },  // warp to level 1, start with pistol
+	{ "OOG\\", 4 },	   // warp to level 1, start with pistol
+	{ "KCAHW", 5 },	   // hurt player 10%
+	{ "FOO\\", 4 },	   // hurt player 10%
+	{ "DEEPS", 5 },	   // run fast all the time
+	{ "AFR\\", 4 },	   // run fast all the time
+	{ "CINAP", 5 },	   // back to normal
+	{ "NAP\\", 4 },	   // back to normal
+	{ "NOMID", 5 },	   // light diminishing on
+	{ "NOD\\", 4 },	   // light diminishing on
+	{ "FFOMID", 6 },   // light diminishing off
+	{ "FOD\\", 4 },	   // light diminishing off
+	{ "NODNOL", 6 },   // fog on (0x00 - 0x80 minmax)
+	{ "NOF\\", 4 },	   // fog on (0x00 - 0x80 minmax)
+	{ "LONDON", 6 },   // fog off (0x80 - 0xFF minmax)
+	{ "FOF\\", 4 },	   // fog off (0x80 - 0xFF minmax)
+	{ "SETAGOG", 7 },  // blow out of game
+	{ "R8L\\", 4 },	   // blow out of game
+	{ "HCRAOG", 6 },   // end the current level
+	{ "LCE\\", 4 },	   // end the current level
+	{ "683ATOG", 7 },  // floor and ceiling off
+	{ "NOC\\", 4 },	   // floor and ceiling off
+	{ "684ATOG", 7 },  // floor and ceiling on
+	{ "FOC\\", 4 },	   // floor and ceiling on
+	{ "EMTOOHS", 7 },  // bullet proof armor
+	{ "RAB\\", 4 },	   // bullet proof armor
+	{ "EMNRUB", 6 },   // fire proof armor
+	{ "RAF\\", 4 },	   // fire proof armor
+	{ "GNUDGNUL", 8 }, // gas mask
+	{ "RAG\\", 4 },	   // gas mask
+	{ "KCAPTNUH", 8 }, // all keys, armor, 100% health, MP40, heatseek
+	{ "PFO\\", 4 },	   // all keys, armor, 100% health, MP40, heatseek
+	{ "EM68", 4 },	   // kill player
+	{ "EID\\", 4 },	   // kill player
+	{ "REEN", 4 },	   // re-enter level
+	{ "LER\\", 4 },	   // re-enter level
+	{ "OOWNHOJ", 7 },  // give double pistol
+	{ "2WG\\", 4 },	   // give double pistol
+	{ "EMGULP", 6 },   // give mp40
+	{ "3WG\\", 4 },	   // give mp40
+	{ "ALLINAV", 7 },  // give bazooka
+	{ "4WG\\", 4 },	   // give bazooka
+	{ "SEMITTOH", 8 }, // give heatseeker
+	{ "5WG\\", 4 },	   // give heatseeker
+	{ "EZOOB", 5 },	   // give drunk missile
+	{ "6WG\\", 4 },	   // give drunk missile
+	{ "BMOBERIF", 8 }, // give firebomb
+	{ "7WG\\", 4 },	   // give firebomb
+	{ "SENOB", 5 },	   // give firewall
+	{ "8WG\\", 4 },	   // give firewall
+	{ "AYEES", 5 },	   // give god hand
+	{ "9WG\\", 4 },	   // give god hand
+	{ "MIA", 3 },	   // give aim bna++
+	{ "MIA\\", 4 },	   // give aim bna++
 
 #if (SHAREWARE == 0)
 
-   {"TILPS",       5},        // give split missile
-   {"AWG\\",       4},        // give split missile
-	{"HTAEDFOSEK", 10},        // give kes
-   {"BWG\\",       4},        // give kes
-	{"NUREMOH",     8},        // give bat
-   {"CWG\\",       4},        // give bat
-   {"OJUC",        4},        // give dog weapon
-   {"DWG\\",       4},        // give dog weapon
+	{ "TILPS", 5 },		  // give split missile
+	{ "AWG\\", 4 },		  // give split missile
+	{ "HTAEDFOSEK", 10 }, // give kes
+	{ "BWG\\", 4 },		  // give kes
+	{ "NUREMOH", 8 },	  // give bat
+	{ "CWG\\", 4 },		  // give bat
+	{ "OJUC", 4 },		  // give dog weapon
+	{ "DWG\\", 4 },		  // give dog weapon
 #endif
-   {"EDIR",        4},        // give MISSILE CAM
-   {"MAC\\",       4},        // give Missile Cam
-   {"EREHW",       5},        // turn where am i on/off
-   {"DUH\\",       4},        // give hud
-   {"NUF\\",       4},        // Rotation fun
-   {"DROCER",      6},        // Demo RECORD
-   {"POTS",        4},        // Demo stop recording
-   {"YALP",        4},        // Demo Playback
-   {"GKE\\",       4},        // Engine Killing Gibs
-   {"ORTSEAM",     7},        // JukeBox
-   {"EEL\\",       4},        // JukeBox
-   {"REITRAC",     7},        // Map Cheat
-   {"PAM\\",       4},        // Map Cheat
-   {"UOY\\",       4},        // Secret Message
-   {"EVAH",        4},        // Secret Message
-   {"ON\\",        3},        // Secret Message
-   {"EFIL",        4},        // Secret Message
+	{ "EDIR", 4 },	  // give MISSILE CAM
+	{ "MAC\\", 4 },	  // give Missile Cam
+	{ "EREHW", 5 },	  // turn where am i on/off
+	{ "DUH\\", 4 },	  // give hud
+	{ "NUF\\", 4 },	  // Rotation fun
+	{ "DROCER", 6 },  // Demo RECORD
+	{ "POTS", 4 },	  // Demo stop recording
+	{ "YALP", 4 },	  // Demo Playback
+	{ "GKE\\", 4 },	  // Engine Killing Gibs
+	{ "ORTSEAM", 7 }, // JukeBox
+	{ "EEL\\", 4 },	  // JukeBox
+	{ "REITRAC", 7 }, // Map Cheat
+	{ "PAM\\", 4 },	  // Map Cheat
+	{ "UOY\\", 4 },	  // Secret Message
+	{ "EVAH", 4 },	  // Secret Message
+	{ "ON\\", 3 },	  // Secret Message
+	{ "EFIL", 4 },	  // Secret Message
 
 };
-
-
-
 
 /*
 ================
@@ -286,14 +279,13 @@ CodeStruct Codes[MAXCODES + 6] =
 ================
 */
 
-void CheatSpawnItem (int item)
-   {
-   SpawnStatic(player->tilex, player->tiley, item,-1);
-   LASTSTAT->z = player->z;
+void CheatSpawnItem(int item)
+{
+	SpawnStatic(player->tilex, player->tiley, item, -1);
+	LASTSTAT->z = player->z;
 	MakeStatActive(LASTSTAT);
-	LASTSTAT->flags|=FL_ABP;
-   }
-
+	LASTSTAT->flags |= FL_ABP;
+}
 
 /*
 ================
@@ -303,11 +295,10 @@ void CheatSpawnItem (int item)
 ================
 */
 
-void FixupPowerupsY (void)
+void FixupPowerupsY(void)
 {
-	player->z   = nominalheight;
+	player->z = nominalheight;
 }
-
 
 /*
 ================
@@ -317,16 +308,15 @@ void FixupPowerupsY (void)
 ================
 */
 
-void EnableCheatCodes (void)
+void EnableCheatCodes(void)
 {
 	DebugOk ^= 1;
 
 	if (DebugOk)
-      AddMessage ("Cheat Codes \\cENABLED!", MSG_CHEAT);
+		AddMessage("Cheat Codes \\cENABLED!", MSG_CHEAT);
 	else
-      AddMessage ("Cheat Codes \\cDISABLED!", MSG_CHEAT);
+		AddMessage("Cheat Codes \\cDISABLED!", MSG_CHEAT);
 }
-
 
 /*
 ================
@@ -336,9 +326,9 @@ void EnableCheatCodes (void)
 ================
 */
 
-void ResetCheatCodes (void)
+void ResetCheatCodes(void)
 {
-//	godmode = false;
+	//	godmode = false;
 }
 
 /*
@@ -349,10 +339,10 @@ void ResetCheatCodes (void)
 ================
 */
 
-void DoMapCheat (void)
+void DoMapCheat(void)
 {
-   AddMessage ("Entire Map Revealed!", MSG_CHEAT);
-   CheatMap ();
+	AddMessage("Entire Map Revealed!", MSG_CHEAT);
+	CheatMap();
 }
 
 /*
@@ -363,16 +353,15 @@ void DoMapCheat (void)
 ================
 */
 
-void DoGodMode (void)
+void DoGodMode(void)
 {
 	if (godmode)
-      AddMessage ("Woundless With Weapons \\cOFF", MSG_CHEAT);
+		AddMessage("Woundless With Weapons \\cOFF", MSG_CHEAT);
 	else
-      AddMessage ("Woundless With Weapons \\cON", MSG_CHEAT);
+		AddMessage("Woundless With Weapons \\cON", MSG_CHEAT);
 
 	godmode ^= 1;
 }
-
 
 /*
 ================
@@ -381,104 +370,104 @@ void DoGodMode (void)
 =
 ================
 */
-#include "byteordr.h"//bna++
-void DoWarp (void)
+#include "byteordr.h" //bna++
+void DoWarp(void)
 {
-/*
-	char str[10];
-	boolean esc;
+	/*
+		char str[10];
+		boolean esc;
+		int level;
+
+	   CurrentFont = smallfont;
+
+	   US_CenterWindow(26,3);
+		PrintY+=6;
+
+	   US_Print(" Warp to level(1-99):");
+
+	   VW_UpdateScreen();
+
+	   ShutdownClientControls();
+
+	   esc = !US_LineInput (px, py, str, NULL, true, 2, 25, 13);
+
+	   if (!esc)
+	   {
+		  level = ParseNum (str);
+		  if (level>0 && level<=99)
+		  {
+			 gamestate.mapon = level-1;
+			 playstate = ex_warped;
+			 gamestate.episode = GetEpisode (gamestate.mapon);
+		  }
+	   }
+
+	   while (Keyboard[sc_Escape])
+			IN_UpdateKeyboard ();
+	   IN_ClearKeyboardQueue ();
+
+	*/
+
 	int level;
 
-   CurrentFont = smallfont;
+	EnableScreenStretch(); // bna++ shut on streech mode
 
-   US_CenterWindow(26,3);
-	PrintY+=6;
+	MU_StoreSongPosition();
+	MU_StartSong(song_secretmenu);
+	StopWind();
+	ShutdownClientControls();
 
-   US_Print(" Warp to level(1-99):");
+	SetupMenuBuf();
+	SetUpControlPanel();
 
-   VW_UpdateScreen();
+	level = CP_LevelSelectionMenu();
 
-   ShutdownClientControls();
+	CleanUpControlPanel();
+	ShutdownMenuBuf();
 
-   esc = !US_LineInput (px, py, str, NULL, true, 2, 25, 13);
-
-   if (!esc)
-   {
-      level = ParseNum (str);
-      if (level>0 && level<=99)
-      {
-         gamestate.mapon = level-1;
-         playstate = ex_warped;
-         gamestate.episode = GetEpisode (gamestate.mapon);
-      }
-   }
-
-   while (Keyboard[sc_Escape])
-		IN_UpdateKeyboard ();
-   IN_ClearKeyboardQueue ();
-
-*/
-
-   int level;
-
-
-	EnableScreenStretch();//bna++ shut on streech mode
-
-
-   MU_StoreSongPosition();
-   MU_StartSong( song_secretmenu);
-   StopWind();
-   ShutdownClientControls();
-
-   SetupMenuBuf();
-   SetUpControlPanel ();
-
-   level = CP_LevelSelectionMenu();
-
-   CleanUpControlPanel();
-   ShutdownMenuBuf();
-
-   	//bna++ section
-  if (( playstate == ex_stillplaying )&&(iGLOBAL_SCREENWIDTH > 320)){
+	// bna++ section
+	if ((playstate == ex_stillplaying) && (iGLOBAL_SCREENWIDTH > 320))
+	{
 		pic_t *shape;
-		shape =  ( pic_t * )W_CacheLumpName( "backtile", PU_CACHE, Cvt_pic_t, 1 );
-		DrawTiledRegion( 0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32, 0, 16, shape );
-		DisableScreenStretch();//dont strech when we go BACK TO GAME
-		DrawPlayScreen(true);//repaint ammo and life stat
-		VW_UpdateScreen ();//update screen
-  }
-   //bna section end
+		shape = (pic_t *)W_CacheLumpName("backtile", PU_CACHE, Cvt_pic_t, 1);
+		DrawTiledRegion(0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32,
+						0, 16, shape);
+		DisableScreenStretch(); // dont strech when we go BACK TO GAME
+		DrawPlayScreen(true);	// repaint ammo and life stat
+		VW_UpdateScreen();		// update screen
+	}
+	// bna section end
 
-	EnableScreenStretch();//bna++ shut on streech mode
-   while( Keyboard[ sc_Escape ] )
-      {
+	EnableScreenStretch(); // bna++ shut on streech mode
+	while (Keyboard[sc_Escape])
+	{
 		IN_UpdateKeyboard();
-      }
-   IN_ClearKeyboardQueue();
+	}
+	IN_ClearKeyboardQueue();
 
-   if ((level == -1) || (level == gamestate.mapon))
-      {
-      MU_StartSong(song_level);
-      MU_RestoreSongPosition();
-      }
+	if ((level == -1) || (level == gamestate.mapon))
+	{
+		MU_StartSong(song_level);
+		MU_RestoreSongPosition();
+	}
 
-   if ( level >= 0 )
-      {
-      playstate = ex_warped;
-      gamestate.mapon   = level;
-      
-      GetEpisode( gamestate.mapon );
+	if (level >= 0)
+	{
+		playstate = ex_warped;
+		gamestate.mapon = level;
 
-      VL_FadeOut (0, 255, 0, 0, 0, 20);
-      }
-   else
-      {
-	   DisableScreenStretch();//dont strech when we go BACK TO GAME
-      SetupScreen(true);
-      }
+		GetEpisode(gamestate.mapon);
 
-   StartupClientControls();
-   }
+		VL_FadeOut(0, 255, 0, 0, 0, 20);
+	}
+	else
+	{
+		DisableScreenStretch(); // dont strech when we go BACK TO GAME
+		SetupScreen(true);
+	}
+
+	StartupClientControls();
+}
 
 /*
 ================
@@ -488,46 +477,47 @@ void DoWarp (void)
 ================
 */
 
-void DoJukeBox  (void)
+void DoJukeBox(void)
 
-   {
-	if (iGLOBAL_SCREENWIDTH > 320) {
-		EnableScreenStretch();//bna++ shut on streech mode
+{
+	if (iGLOBAL_SCREENWIDTH > 320)
+	{
+		EnableScreenStretch(); // bna++ shut on streech mode
 	}
-   StopWind();
-   ShutdownClientControls();
+	StopWind();
+	ShutdownClientControls();
 
-   SetupMenuBuf();
-   SetUpControlPanel ();
+	SetupMenuBuf();
+	SetUpControlPanel();
 
-   MU_JukeBoxMenu();
+	MU_JukeBoxMenu();
 
-   CleanUpControlPanel();
-   ShutdownMenuBuf();
+	CleanUpControlPanel();
+	ShutdownMenuBuf();
 
-   	//bna++ section
-  if (( playstate == ex_stillplaying )&&(iGLOBAL_SCREENWIDTH > 320)){
+	// bna++ section
+	if ((playstate == ex_stillplaying) && (iGLOBAL_SCREENWIDTH > 320))
+	{
 		pic_t *shape;
-		shape =  ( pic_t * )W_CacheLumpName( "backtile", PU_CACHE, Cvt_pic_t, 1 );
-		DrawTiledRegion( 0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32, 0, 16, shape );
-		DisableScreenStretch();//dont strech when we go BACK TO GAME
-		DrawPlayScreen(true);//repaint ammo and life stat
-		VW_UpdateScreen ();//update screen
-  }
-   //bna section end
+		shape = (pic_t *)W_CacheLumpName("backtile", PU_CACHE, Cvt_pic_t, 1);
+		DrawTiledRegion(0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32,
+						0, 16, shape);
+		DisableScreenStretch(); // dont strech when we go BACK TO GAME
+		DrawPlayScreen(true);	// repaint ammo and life stat
+		VW_UpdateScreen();		// update screen
+	}
+	// bna section end
 
-   SetupScreen(true);
+	SetupScreen(true);
 
-   while( Keyboard[ sc_Escape ] )
-      {
+	while (Keyboard[sc_Escape])
+	{
 		IN_UpdateKeyboard();
-      }
-   IN_ClearKeyboardQueue();
+	}
+	IN_ClearKeyboardQueue();
 
-   StartupClientControls();
-   }
-
-
+	StartupClientControls();
+}
 
 /*
 ================
@@ -537,25 +527,23 @@ void DoJukeBox  (void)
 ================
 */
 
-void DoNormalThing (void)
+void DoNormalThing(void)
 {
-   AddMessage ("BACK TO NORMAL.  AH.", MSG_CHEAT);
+	AddMessage("BACK TO NORMAL.  AH.", MSG_CHEAT);
 
-	player->flags &= ~(FL_BPV|FL_AV|FL_GASMASK);
+	player->flags &= ~(FL_BPV | FL_AV | FL_GASMASK);
 	locplayerstate->protectiontime = 0;
 
-   if (player->flags & FL_ELASTO)
-      player->flags &= ~FL_NOFRICTION;
-   player->flags &= ~(FL_SHROOMS|FL_ELASTO|FL_FLEET);
+	if (player->flags & FL_ELASTO)
+		player->flags &= ~FL_NOFRICTION;
+	player->flags &= ~(FL_SHROOMS | FL_ELASTO | FL_FLEET);
 	locplayerstate->poweruptime = 0;
 
 	InitializeWeapons(locplayerstate);
 	locplayerstate->keys = 0;
 
-   DrawPlayScreen (false);
+	DrawPlayScreen(false);
 }
-
-
 
 /*
 ================
@@ -565,25 +553,25 @@ void DoNormalThing (void)
 ================
 */
 
-void DoItemCheat (void)
+void DoItemCheat(void)
 {
-   AddMessage ("Items Aplenty!", MSG_CHEAT);
+	AddMessage("Items Aplenty!", MSG_CHEAT);
 
-	GivePoints (100000);
-	HealPlayer (99, player);
+	GivePoints(100000);
+	HealPlayer(99, player);
 
 	locplayerstate->keys = 0xF;
-	DrawKeys (false);
+	DrawKeys(false);
 
-   player->flags &= ~(FL_GASMASK|FL_BPV|FL_AV);
-   CheatSpawnItem(stat_bulletproof);
+	player->flags &= ~(FL_GASMASK | FL_BPV | FL_AV);
+	CheatSpawnItem(stat_bulletproof);
 
-   /*
-   player->flags |= FL_BPV;
-	player->flags &= ~(FL_GASMASK|FL_AV);
-	locplayerstate->protectiontime = POWERUPTICS;
-   GM_DrawBonus (stat_bulletproof);
-   */
+	/*
+	player->flags |= FL_BPV;
+	 player->flags &= ~(FL_GASMASK|FL_AV);
+	 locplayerstate->protectiontime = POWERUPTICS;
+	GM_DrawBonus (stat_bulletproof);
+	*/
 }
 
 /*
@@ -594,16 +582,15 @@ void DoItemCheat (void)
 ================
 */
 
-void DoSomeItemCheat (void)
+void DoSomeItemCheat(void)
 {
-   AddMessage ("Slacker pack!", MSG_CHEAT);
+	AddMessage("Slacker pack!", MSG_CHEAT);
 
-   HealPlayer (40, player);
+	HealPlayer(40, player);
 
-   locplayerstate->keys = 0x7;
-	DrawKeys (false);
+	locplayerstate->keys = 0x7;
+	DrawKeys(false);
 }
-
 
 /*
 ================
@@ -613,15 +600,14 @@ void DoSomeItemCheat (void)
 ================
 */
 
-void DoGodModePowerup (void)
-   {
+void DoGodModePowerup(void)
+{
 
-   if (PLAYER[0]->flags & FL_GODMODE)
-	  return;
+	if (PLAYER[0]->flags & FL_GODMODE)
+		return;
 
-   CheatSpawnItem(stat_godmode);
-   }
-
+	CheatSpawnItem(stat_godmode);
+}
 
 /*
 ================
@@ -631,15 +617,14 @@ void DoGodModePowerup (void)
 ================
 */
 
-void DoDogModePowerup (void)
-   {
+void DoDogModePowerup(void)
+{
 
-   if (PLAYER[0]->flags & FL_DOGMODE)
-	  return;
+	if (PLAYER[0]->flags & FL_DOGMODE)
+		return;
 
-   CheatSpawnItem(stat_dogmode);
-   }
-
+	CheatSpawnItem(stat_dogmode);
+}
 
 /*
 ================
@@ -649,15 +634,14 @@ void DoDogModePowerup (void)
 ================
 */
 
-void DoMercuryModePowerup (void)
-   {
+void DoMercuryModePowerup(void)
+{
 
-   if (PLAYER[0]->flags & FL_FLEET)
-	  return;
+	if (PLAYER[0]->flags & FL_FLEET)
+		return;
 
-   CheatSpawnItem(stat_fleetfeet);
-   }
-
+	CheatSpawnItem(stat_fleetfeet);
+}
 
 /*
 ================
@@ -667,14 +651,13 @@ void DoMercuryModePowerup (void)
 ================
 */
 
-void DoElastoModePowerup (void)
-   {
-   if (PLAYER[0]->flags & FL_ELASTO)
-	  return;
+void DoElastoModePowerup(void)
+{
+	if (PLAYER[0]->flags & FL_ELASTO)
+		return;
 
-   CheatSpawnItem(stat_elastic);
-   }
-
+	CheatSpawnItem(stat_elastic);
+}
 
 /*
 ================
@@ -684,16 +667,15 @@ void DoElastoModePowerup (void)
 ================
 */
 
-void DoShroomsModePowerup (void)
-   {
-   if (PLAYER[0]->flags & FL_SHROOMS)
-	  return;
+void DoShroomsModePowerup(void)
+{
+	if (PLAYER[0]->flags & FL_SHROOMS)
+		return;
 
-   AddMessage ("SHROOMS MODE POWERDOWN!", MSG_CHEAT);
+	AddMessage("SHROOMS MODE POWERDOWN!", MSG_CHEAT);
 
-   CheatSpawnItem(stat_mushroom);
-   }
-
+	CheatSpawnItem(stat_mushroom);
+}
 
 /*
 ================
@@ -703,18 +685,17 @@ void DoShroomsModePowerup (void)
 ================
 */
 
-void RestartNormal (void)
+void RestartNormal(void)
 {
-	EnableScreenStretch();//bna
-	DoNormalThing ();
+	EnableScreenStretch(); // bna
+	DoNormalThing();
 
-   AddMessage ("Restart to level 1", MSG_CHEAT);
-	gamestate.mapon   = 0;
-	playstate         = ex_warped;
-	
-	GetEpisode (gamestate.mapon);
+	AddMessage("Restart to level 1", MSG_CHEAT);
+	gamestate.mapon = 0;
+	playstate = ex_warped;
+
+	GetEpisode(gamestate.mapon);
 }
-
 
 /*
 ================
@@ -724,18 +705,17 @@ void RestartNormal (void)
 ================
 */
 
-void HurtPlayer (void)
+void HurtPlayer(void)
 {
-   int oldhitpoints;
+	int oldhitpoints;
 
-   oldhitpoints = player->hitpoints;
-	DamageThing (player, MaxHitpointsForCharacter(locplayerstate) / 10);
-   if (player->hitpoints < oldhitpoints)
-      AddMessage ("OUCH!!!!", MSG_CHEAT);
+	oldhitpoints = player->hitpoints;
+	DamageThing(player, MaxHitpointsForCharacter(locplayerstate) / 10);
+	if (player->hitpoints < oldhitpoints)
+		AddMessage("OUCH!!!!", MSG_CHEAT);
 
-   Collision(player,player,0,0);
+	Collision(player, player, 0, 0);
 }
-
 
 /*
 ================
@@ -745,20 +725,19 @@ void HurtPlayer (void)
 ================
 */
 
-void SetLightDiminish (boolean off)
+void SetLightDiminish(boolean off)
 {
 	if (off)
 	{
-      AddMessage ("Light Diminishing \\cOff", MSG_CHEAT);
+		AddMessage("Light Diminishing \\cOff", MSG_CHEAT);
 		fulllight = 1;
 	}
 	else
 	{
-      AddMessage ("Light Diminishing \\cOn", MSG_CHEAT);
+		AddMessage("Light Diminishing \\cOn", MSG_CHEAT);
 		fulllight = 0;
 	}
 }
-
 
 /*
 ================
@@ -768,25 +747,22 @@ void SetLightDiminish (boolean off)
 ================
 */
 
-void SetFog (boolean on)
+void SetFog(boolean on)
 {
 	if (on)
 	{
-      AddMessage ("Fog \\cOn", MSG_CHEAT);
-		MAPSPOT(2,0,1)=105;
-		MAPSPOT(3,0,1)=0;
-		SetupLightLevels ();
-
+		AddMessage("Fog \\cOn", MSG_CHEAT);
+		MAPSPOT(2, 0, 1) = 105;
+		MAPSPOT(3, 0, 1) = 0;
+		SetupLightLevels();
 	}
 	else
 	{
-      AddMessage ("Fog \\cOff", MSG_CHEAT);
-		MAPSPOT(2,0,1)=104;
-		SetupLightLevels ();
+		AddMessage("Fog \\cOff", MSG_CHEAT);
+		MAPSPOT(2, 0, 1) = 104;
+		SetupLightLevels();
 	}
 }
-
-
 
 /*
 ================
@@ -796,18 +772,18 @@ void SetFog (boolean on)
 ================
 */
 
-void ToggleMissileCam (void)
+void ToggleMissileCam(void)
 {
-   if (missilecam==false)
-      {
-      missilecam=true;
-      AddMessage ("Missile Cam \\cOn", MSG_CHEAT);
-      }
-   else
-      {
-      missilecam=false;
-      AddMessage ("Missile Cam \\cOff", MSG_CHEAT);
-      }
+	if (missilecam == false)
+	{
+		missilecam = true;
+		AddMessage("Missile Cam \\cOn", MSG_CHEAT);
+	}
+	else
+	{
+		missilecam = false;
+		AddMessage("Missile Cam \\cOff", MSG_CHEAT);
+	}
 }
 
 /*
@@ -818,21 +794,19 @@ void ToggleMissileCam (void)
 ================
 */
 
-void ToggleHUD (void)
+void ToggleHUD(void)
 {
-   if (HUD==false)
-      {
-      HUD=true;
-      AddMessage ("HUD \\cOn", MSG_CHEAT);
-      }
-   else
-      {
-      HUD=false;
-      AddMessage ("HUD \\cOff", MSG_CHEAT);
-      }
+	if (HUD == false)
+	{
+		HUD = true;
+		AddMessage("HUD \\cOn", MSG_CHEAT);
+	}
+	else
+	{
+		HUD = false;
+		AddMessage("HUD \\cOff", MSG_CHEAT);
+	}
 }
-
-
 
 /*
 ================
@@ -842,12 +816,11 @@ void ToggleHUD (void)
 ================
 */
 
-void EndLevel (void)
+void EndLevel(void)
 {
-   AddMessage ("End Level", MSG_CHEAT);
-   playstate = ex_skiplevel;
+	AddMessage("End Level", MSG_CHEAT);
+	playstate = ex_skiplevel;
 }
-
 
 /*
 ================
@@ -857,20 +830,19 @@ void EndLevel (void)
 ================
 */
 
-void FloorandCeiling (boolean off)
+void FloorandCeiling(boolean off)
 {
 	if (off)
 	{
-      AddMessage ("Floor and Ceiling \\cON", MSG_CHEAT);
+		AddMessage("Floor and Ceiling \\cON", MSG_CHEAT);
 		fandc = 1;
 	}
 	else
 	{
-      AddMessage ("Floor and Ceiling \\cOFF", MSG_CHEAT);
+		AddMessage("Floor and Ceiling \\cOFF", MSG_CHEAT);
 		fandc = 0;
 	}
 }
-
 
 /*
 ================
@@ -880,14 +852,14 @@ void FloorandCeiling (boolean off)
 ================
 */
 
-void GiveGasMask ()
-   {
+void GiveGasMask()
+{
 
 	if (PLAYER[0]->flags & FL_GASMASK)
-     return;
+		return;
 
-   CheatSpawnItem(stat_gasmask);
-   }
+	CheatSpawnItem(stat_gasmask);
+}
 
 /*
 ================
@@ -897,14 +869,13 @@ void GiveGasMask ()
 ================
 */
 
-void GiveBulletProofArmor ()
-   {
+void GiveBulletProofArmor()
+{
 	if (PLAYER[0]->flags & FL_BPV)
-     return;
+		return;
 
-
-   CheatSpawnItem(stat_bulletproof);
-   }
+	CheatSpawnItem(stat_bulletproof);
+}
 
 /*
 ================
@@ -914,14 +885,13 @@ void GiveBulletProofArmor ()
 ================
 */
 
-void GiveAsbestoArmor ()
-   {
+void GiveAsbestoArmor()
+{
 	if (PLAYER[0]->flags & FL_AV)
-     return;
+		return;
 
-   CheatSpawnItem(stat_asbesto);
-   }
-
+	CheatSpawnItem(stat_asbesto);
+}
 
 /*
 ================
@@ -930,30 +900,28 @@ void GiveAsbestoArmor ()
 =
 ================
 */
-void OutfitPlayer ()
+void OutfitPlayer()
 {
-   AddMessage ("Outfit Player!", MSG_CHEAT);
+	AddMessage("Outfit Player!", MSG_CHEAT);
 
 	locplayerstate->keys = 0xF;
-	DrawKeys (false);
-	HealPlayer (99, player);
+	DrawKeys(false);
+	HealPlayer(99, player);
 
-   /*
-   player->flags |= FL_BPV;
-	player->flags &= ~(FL_GASMASK|FL_AV);
-	locplayerstate->protectiontime = POWERUPTICS;
-   GM_DrawBonus (stat_bulletproof);
+	/*
+	player->flags |= FL_BPV;
+	 player->flags &= ~(FL_GASMASK|FL_AV);
+	 locplayerstate->protectiontime = POWERUPTICS;
+	GM_DrawBonus (stat_bulletproof);
 
-	GiveWeapon (player,wp_mp40);
-   */
+	 GiveWeapon (player,wp_mp40);
+	*/
 
 #if (SHAREWARE == 0)
-   CheatSpawnItem(stat_splitmissile);
+	CheatSpawnItem(stat_splitmissile);
 #else
-   CheatSpawnItem(stat_heatseeker);
+	CheatSpawnItem(stat_heatseeker);
 #endif
-
-
 }
 
 /*
@@ -964,13 +932,11 @@ void OutfitPlayer ()
 ================
 */
 
-void KillPlayer ()
+void KillPlayer()
 {
-   AddMessage ("Say Goodnight.", MSG_CHEAT);
+	AddMessage("Say Goodnight.", MSG_CHEAT);
 	playstate = ex_died;
 }
-
-
 
 /*
 ================
@@ -980,11 +946,11 @@ void KillPlayer ()
 ================
 */
 
-void RestartCurrentLevel (void)
+void RestartCurrentLevel(void)
 {
-	playstate         = ex_warped;
-	
-	GetEpisode (gamestate.mapon);
+	playstate = ex_warped;
+
+	GetEpisode(gamestate.mapon);
 }
 
 /*
@@ -994,50 +960,49 @@ void RestartCurrentLevel (void)
 =
 ================
 */
-void EndDemo ( void )
+void EndDemo(void)
 {
 	char str[10];
 	boolean esc;
 	int demonumber;
 
-   if (demorecord==false)
-      return;
+	if (demorecord == false)
+		return;
 
-   ShutdownClientControls();
+	ShutdownClientControls();
 
-   CurrentFont = smallfont;
+	CurrentFont = smallfont;
 
-   demorecord = false;
-   US_CenterWindow (26, 4);
-   US_CPrint ("Save demo as:");
-   US_Print  ("\n");
-	US_CPrint ("Demo Number (1-4):");
+	demorecord = false;
+	US_CenterWindow(26, 4);
+	US_CPrint("Save demo as:");
+	US_Print("\n");
+	US_CPrint("Demo Number (1-4):");
 
-   VW_UpdateScreen();
+	VW_UpdateScreen();
 
-   esc = !US_LineInput (px, py, str, NULL, true, 1, 25, 13);
+	esc = !US_LineInput(px, py, str, NULL, true, 1, 25, 13);
 
-   if (!esc)
-   {
-      demonumber = ParseNum (str);
-      if ((demonumber > 0) && (demonumber < 5))
-      {
-         SaveDemo (demonumber);
-      }
-   }
+	if (!esc)
+	{
+		demonumber = ParseNum(str);
+		if ((demonumber > 0) && (demonumber < 5))
+		{
+			SaveDemo(demonumber);
+		}
+	}
 
-   IN_ClearKeysDown ();
+	IN_ClearKeysDown();
 
-   while (Keyboard[sc_Enter])
-      IN_UpdateKeyboard ();
-   while (Keyboard[sc_Escape])
-      IN_UpdateKeyboard ();
-	IN_ClearKeyboardQueue ();
+	while (Keyboard[sc_Enter])
+		IN_UpdateKeyboard();
+	while (Keyboard[sc_Escape])
+		IN_UpdateKeyboard();
+	IN_ClearKeyboardQueue();
 
-   StartupClientControls();
-   DisableScreenStretch();
+	StartupClientControls();
+	DisableScreenStretch();
 }
-
 
 /*
 ================
@@ -1046,53 +1011,53 @@ void EndDemo ( void )
 =
 ================
 */
-void RecordDemoQuery ( void )
+void RecordDemoQuery(void)
 {
-   char str[10];
+	char str[10];
 	boolean esc;
 	int level;
 
-   ShutdownClientControls();
+	ShutdownClientControls();
 
-   CurrentFont = smallfont;
+	CurrentFont = smallfont;
 
-   US_CenterWindow (26, 5);
-   PrintY += 6;
+	US_CenterWindow(26, 5);
+	PrintY += 6;
 
-   US_CPrint ("Record Demo");
-   US_Print  ("\n");
-#if (SHAREWARE==0)
-   US_CPrint ("Which level (1-36):");
+	US_CPrint("Record Demo");
+	US_Print("\n");
+#if (SHAREWARE == 0)
+	US_CPrint("Which level (1-36):");
 #else
-   US_CPrint ("Which level (1-8):");
+	US_CPrint("Which level (1-8):");
 #endif
 
-   VW_UpdateScreen();
+	VW_UpdateScreen();
 
-   esc = !US_LineInput (px, py, str, NULL, true, 2, 25, 13);
+	esc = !US_LineInput(px, py, str, NULL, true, 2, 25, 13);
 
-   if (!esc)
-      {
-      level = ParseNum (str);
-#if (SHAREWARE==0)
-      if ((level > 0) && (level < 37))
+	if (!esc)
+	{
+		level = ParseNum(str);
+#if (SHAREWARE == 0)
+		if ((level > 0) && (level < 37))
 #else
-      if ((level > 0) && (level < 9))
+		if ((level > 0) && (level < 9))
 #endif
-         {
-			EnableScreenStretch();//bna
-			 gamestate.mapon = level-1;
-			 playstate = ex_demorecord;
-         }
-      }
+		{
+			EnableScreenStretch(); // bna
+			gamestate.mapon = level - 1;
+			playstate = ex_demorecord;
+		}
+	}
 
-   while (Keyboard[sc_Enter])
-      IN_UpdateKeyboard ();
-   while (Keyboard[sc_Escape])
-      IN_UpdateKeyboard ();
-   IN_ClearKeyboardQueue ();
+	while (Keyboard[sc_Enter])
+		IN_UpdateKeyboard();
+	while (Keyboard[sc_Escape])
+		IN_UpdateKeyboard();
+	IN_ClearKeyboardQueue();
 
-   StartupClientControls();
+	StartupClientControls();
 }
 
 /*
@@ -1102,43 +1067,43 @@ void RecordDemoQuery ( void )
 =
 ================
 */
-void PlaybackDemoQuery ( void )
+void PlaybackDemoQuery(void)
 {
-   char str[10];
+	char str[10];
 	boolean esc;
 	int level;
 
-   ShutdownClientControls();
+	ShutdownClientControls();
 
-   CurrentFont = smallfont;
-   US_CenterWindow (33, 4);
-   US_CPrint ("Playback demo");
-   US_Print ("\n");
-   US_CPrint ("Enter demo number (1-4):");
+	CurrentFont = smallfont;
+	US_CenterWindow(33, 4);
+	US_CPrint("Playback demo");
+	US_Print("\n");
+	US_CPrint("Enter demo number (1-4):");
 
-   VW_UpdateScreen ();
+	VW_UpdateScreen();
 
-   esc = !US_LineInput (px, py, str, NULL, true, 1, 25, 13);
+	esc = !US_LineInput(px, py, str, NULL, true, 1, 25, 13);
 
-   if (!esc)
-   {
-      level = ParseNum (str);
-      if ((level > 0) && (level < 5))
-         {
-         if (DemoExists (level) == true)
-            LoadDemo (level);
-         }
-   }
+	if (!esc)
+	{
+		level = ParseNum(str);
+		if ((level > 0) && (level < 5))
+		{
+			if (DemoExists(level) == true)
+				LoadDemo(level);
+		}
+	}
 
-   while (Keyboard[sc_Enter])
-      IN_UpdateKeyboard ();
-   while (Keyboard[sc_Escape])
-      IN_UpdateKeyboard ();
-   IN_ClearKeyboardQueue ();
+	while (Keyboard[sc_Enter])
+		IN_UpdateKeyboard();
+	while (Keyboard[sc_Escape])
+		IN_UpdateKeyboard();
+	IN_ClearKeyboardQueue();
 
-   StartupClientControls();
+	StartupClientControls();
 
-   EnableScreenStretch();
+	EnableScreenStretch();
 }
 
 /*
@@ -1149,12 +1114,11 @@ void PlaybackDemoQuery ( void )
 ================
 */
 
-int DebugKeys (void)
+int DebugKeys(void)
 {
-  //TODO: Remove function.
-   return (0);
+	// TODO: Remove function.
+	return (0);
 }
-
 
 /*
 ================
@@ -1164,19 +1128,16 @@ int DebugKeys (void)
 ================
 */
 
-void WeaponCheat (int weapon)
-   {
-   if ((player->flags & FL_GODMODE) || (player->flags & FL_DOGMODE))
-      return;
+void WeaponCheat(int weapon)
+{
+	if ((player->flags & FL_GODMODE) || (player->flags & FL_DOGMODE))
+		return;
 
-   if ((weapon <= wp_mp40) && (PLAYERSTATE[0].HASBULLETWEAPON[weapon]))
-      return;
+	if ((weapon <= wp_mp40) && (PLAYERSTATE[0].HASBULLETWEAPON[weapon]))
+		return;
 
-   CheatSpawnItem(GetItemForWeapon(weapon));
-
-   }
-
-
+	CheatSpawnItem(GetItemForWeapon(weapon));
+}
 
 /*
 ================
@@ -1186,299 +1147,295 @@ void WeaponCheat (int weapon)
 ================
 */
 
-
-
-void CheckCode (int which)
+void CheckCode(int which)
 {
-   int pos = (LastLetter-1)&(MAXLETTERS-1);
-   int num = 0;
-   int start;
+	int pos = (LastLetter - 1) & (MAXLETTERS - 1);
+	int num = 0;
+	int start;
 
-   start = pos;
+	start = pos;
 
-   while ((toupper(LetterQueue[pos]) == Codes[which].code[num]) &&
-          (num < Codes[which].length))
-   {
-      pos = (pos-1)&(MAXLETTERS-1);
-      num++;
-   }
+	while ((toupper(LetterQueue[pos]) == Codes[which].code[num]) &&
+		   (num < Codes[which].length))
+	{
+		pos = (pos - 1) & (MAXLETTERS - 1);
+		num++;
+	}
 
 	if (num == Codes[which].length)
-   {
-      // Kill last letter so the debug rtn will not keep triggering
-      LetterQueue[start] = 0;
+	{
+		// Kill last letter so the debug rtn will not keep triggering
+		LetterQueue[start] = 0;
 
-      switch (which)
-      {
-         case ENABLECHEAT:
-         case ENABLECHEATALT:
-            EnableCheatCodes ();
-         break;
+		switch (which)
+		{
+			case ENABLECHEAT:
+			case ENABLECHEATALT:
+				EnableCheatCodes();
+				break;
 
-         case INVULNERABLE:
-         case INVULNERABLEALT:
-            DoGodMode ();
-         break;
+			case INVULNERABLE:
+			case INVULNERABLEALT:
+				DoGodMode();
+				break;
 
-         case WARP:
-         case WARPALT:
-            DoWarp ();
-         break;
+			case WARP:
+			case WARPALT:
+				DoWarp();
+				break;
 
-         case ITEMS:
-         case ITEMSALT:
-            DoItemCheat ();
-         break;
+			case ITEMS:
+			case ITEMSALT:
+				DoItemCheat();
+				break;
 
-         case SOMEITEMS:
-         case SOMEITEMSALT:
-            DoSomeItemCheat ();
-         break;
+			case SOMEITEMS:
+			case SOMEITEMSALT:
+				DoSomeItemCheat();
+				break;
 
 			case GODMODEPWUP:
 			case GODMODEPWUPALT:
-            DoGodModePowerup ();
-         break;
+				DoGodModePowerup();
+				break;
 
 #if (SHAREWARE == 0)
-         case DOGMODEPWUP:
-         case DOGMODEPWUPALT:
-            DoDogModePowerup ();
-         break;
+			case DOGMODEPWUP:
+			case DOGMODEPWUPALT:
+				DoDogModePowerup();
+				break;
 #endif
 
-         case MERCURYPWUP:
-         case MERCURYPWUPALT:
-            DoMercuryModePowerup ();
-         break;
+			case MERCURYPWUP:
+			case MERCURYPWUPALT:
+				DoMercuryModePowerup();
+				break;
 
-         case SHROOMSPWUP:
+			case SHROOMSPWUP:
 			case SHROOMSPWUPALT:
-            DoShroomsModePowerup ();
-         break;
+				DoShroomsModePowerup();
+				break;
 
-         case ELASTOPWUP:
-         case ELASTOPWUPALT:
-            DoElastoModePowerup ();
-         break;
+			case ELASTOPWUP:
+			case ELASTOPWUPALT:
+				DoElastoModePowerup();
+				break;
 
-         case RESTARTGAME:
-         case RESTARTGAMEALT:
-            RestartNormal ();
-         break;
+			case RESTARTGAME:
+			case RESTARTGAMEALT:
+				RestartNormal();
+				break;
 
-         case HURTPLAYER:
-         case HURTPLAYERALT:
-               HurtPlayer ();
-         break;
+			case HURTPLAYER:
+			case HURTPLAYERALT:
+				HurtPlayer();
+				break;
 
-         case TOMHALLMODE:
-         case TOMHALLMODEALT:
-            gamestate.autorun = true;
-            AddMessage("Autorun enabled!",MSG_CHEAT);
-         break;
+			case TOMHALLMODE:
+			case TOMHALLMODEALT:
+				gamestate.autorun = true;
+				AddMessage("Autorun enabled!", MSG_CHEAT);
+				break;
 
-         case NORMAL:
-         case NORMALALT:
-            DoNormalThing ();
-         break;
+			case NORMAL:
+			case NORMALALT:
+				DoNormalThing();
+				break;
 
-         case LIGHTDIMON:
-         case LIGHTDIMONALT:
-            SetLightDiminish (false);
-         break;
+			case LIGHTDIMON:
+			case LIGHTDIMONALT:
+				SetLightDiminish(false);
+				break;
 
-         case LIGHTDIMOFF:
-         case LIGHTDIMOFFALT:
-            SetLightDiminish (true);
-         break;
+			case LIGHTDIMOFF:
+			case LIGHTDIMOFFALT:
+				SetLightDiminish(true);
+				break;
 
-         case FOGON:
-         case FOGONALT:
-            SetFog (true);
-         break;
+			case FOGON:
+			case FOGONALT:
+				SetFog(true);
+				break;
 
 			case FOGOFF:
-         case FOGOFFALT:
-            SetFog (false);
-         break;
+			case FOGOFFALT:
+				SetFog(false);
+				break;
 
-         case QUITGAME:
-         case QUITGAMEALT:
-            QuitGame ();
-         break;
+			case QUITGAME:
+			case QUITGAMEALT:
+				QuitGame();
+				break;
 
-         case ENDLEVEL:
-         case ENDLEVELALT:
-				EndLevel ();
-         break;
+			case ENDLEVEL:
+			case ENDLEVELALT:
+				EndLevel();
+				break;
 
-         case FANDCOFF:
-         case FANDCOFFALT:
-            FloorandCeiling (false);
-         break;
+			case FANDCOFF:
+			case FANDCOFFALT:
+				FloorandCeiling(false);
+				break;
 
-         case FANDCON:
-         case FANDCONALT:
-            FloorandCeiling (true);
-         break;
+			case FANDCON:
+			case FANDCONALT:
+				FloorandCeiling(true);
+				break;
 
+			case AIMCROSS:
+			case AIMCROSSALT:
+				if (iG_aimCross == 0)
+				{
+					iG_aimCross = 1;
+					AddMessage("Crosshair on", MSG_GAME);
+				}
+				else
+				{
+					iG_aimCross = 0;
+					AddMessage("Crosshair off", MSG_GAME);
+				}
+				break;
 
-         case AIMCROSS:
-         case AIMCROSSALT:
-            if (iG_aimCross == 0) {
-			    iG_aimCross = 1;
-				AddMessage("Crosshair on",MSG_GAME);
-			}else{
-				iG_aimCross = 0;
-				AddMessage("Crosshair off",MSG_GAME);
-			}
-         break;
+			case BULLETARMOR:
+			case BULLETARMORALT:
+				GiveBulletProofArmor();
+				break;
 
+			case FIREARMOR:
+			case FIREARMORALT:
+				GiveAsbestoArmor();
+				break;
 
-         case BULLETARMOR:
-         case BULLETARMORALT:
-            GiveBulletProofArmor ();
-         break;
+			case GASMASK:
+			case GASMASKALT:
+				GiveGasMask();
+				break;
 
-         case FIREARMOR:
-         case FIREARMORALT:
-            GiveAsbestoArmor ();
-			break;
+			case OUTFIT:
+			case OUTFITALT:
+				OutfitPlayer();
+				break;
 
-         case GASMASK:
-         case GASMASKALT:
-            GiveGasMask ();
-         break;
+			case KILLPLAYER:
+			case KILLPLAYERALT:
+				KillPlayer();
+				break;
 
-         case OUTFIT:
-         case OUTFITALT:
-            OutfitPlayer ();
-         break;
+			case RESTARTLEVEL:
+			case RESTARTLEVELALT:
+				RestartCurrentLevel();
+				break;
 
-         case KILLPLAYER:
-         case KILLPLAYERALT:
-            KillPlayer ();
-         break;
+			case WEAPONTWOPISTOL:
+			case WEAPONTWOPISTOLALT:
+				WeaponCheat(wp_twopistol);
+				break;
 
-         case RESTARTLEVEL:
-         case RESTARTLEVELALT:
-				RestartCurrentLevel ();
-			break;
+			case WEAPONMP40:
+			case WEAPONMP40ALT:
+				WeaponCheat(wp_mp40);
+				break;
 
+			case WEAPONBAZOOKA:
+			case WEAPONBAZOOKAALT:
+				WeaponCheat(wp_bazooka);
+				break;
+			case WEAPONFIREBOMB:
+			case WEAPONFIREBOMBALT:
+				WeaponCheat(wp_firebomb);
+				break;
 
-         case WEAPONTWOPISTOL:
-         case WEAPONTWOPISTOLALT:
-             WeaponCheat(wp_twopistol);
-             break;
+			case WEAPONHEAT:
+			case WEAPONHEATALT:
+				WeaponCheat(wp_heatseeker);
+				break;
 
-         case WEAPONMP40:
-         case WEAPONMP40ALT:
-             WeaponCheat(wp_mp40);
-             break;
+			case WEAPONDRUNK:
+			case WEAPONDRUNKALT:
+				WeaponCheat(wp_drunk);
+				break;
 
-         case WEAPONBAZOOKA:
-         case WEAPONBAZOOKAALT:
-             WeaponCheat(wp_bazooka);
-             break;
-         case WEAPONFIREBOMB:
-         case WEAPONFIREBOMBALT:
-             WeaponCheat(wp_firebomb);
-             break;
+			case WEAPONFIREWALL:
+			case WEAPONFIREWALLALT:
+				WeaponCheat(wp_firewall);
+				break;
 
-         case WEAPONHEAT:
-         case WEAPONHEATALT:
-             WeaponCheat(wp_heatseeker);
-             break;
-
-         case WEAPONDRUNK:
-         case WEAPONDRUNKALT:
-             WeaponCheat(wp_drunk);
-             break;
-
-         case WEAPONFIREWALL:
-         case WEAPONFIREWALLALT:
-             WeaponCheat(wp_firewall);
-             break;
-
-         case WEAPONGOD:
-         case WEAPONGODALT:
-             WeaponCheat(wp_godhand);
-             break;
-
+			case WEAPONGOD:
+			case WEAPONGODALT:
+				WeaponCheat(wp_godhand);
+				break;
 
 #if (SHAREWARE == 0)
 
-         case WEAPONSPLIT:
-         case WEAPONSPLITALT:
-             WeaponCheat(wp_split);
-             break;
+			case WEAPONSPLIT:
+			case WEAPONSPLITALT:
+				WeaponCheat(wp_split);
+				break;
 
-         case WEAPONKES:
-         case WEAPONKESALT:
-             WeaponCheat(wp_kes);
-             break;
+			case WEAPONKES:
+			case WEAPONKESALT:
+				WeaponCheat(wp_kes);
+				break;
 
-         case WEAPONBAT:
-         case WEAPONBATALT:
-             WeaponCheat(wp_bat);
-             break;
+			case WEAPONBAT:
+			case WEAPONBATALT:
+				WeaponCheat(wp_bat);
+				break;
 
-         case WEAPONDOG:
-         case WEAPONDOGALT:
-             WeaponCheat(wp_dog);
-             break;
+			case WEAPONDOG:
+			case WEAPONDOGALT:
+				WeaponCheat(wp_dog);
+				break;
 #endif
 
-         case MISSILECAMTOGGLE:
-         case MISSILECAMTOGGLEALT:
-             ToggleMissileCam();
-             break;
+			case MISSILECAMTOGGLE:
+			case MISSILECAMTOGGLEALT:
+				ToggleMissileCam();
+				break;
 
-         case HUDTOGGLE:
-         case HUDTOGGLEALT:
-             ToggleHUD();
-             break;
+			case HUDTOGGLE:
+			case HUDTOGGLEALT:
+				ToggleHUD();
+				break;
 
-         case ROTATIONFUN:
-            ShutdownClientControls();
-            RotationFun();
-            StartupClientControls();
-            SetupScreen( true );
-            break;
-         case DEMORECORD:
-            RecordDemoQuery();
-            break;
-         case DEMOEND:
-            EndDemo();
-            break;
-         case DEMOPLAYBACK:
-            PlaybackDemoQuery();
-            break;
-         case CRAZYGIBS:
-            if (gamestate.violence == vl_excessive)
-               {
+			case ROTATIONFUN:
+				ShutdownClientControls();
+				RotationFun();
+				StartupClientControls();
+				SetupScreen(true);
+				break;
+			case DEMORECORD:
+				RecordDemoQuery();
+				break;
+			case DEMOEND:
+				EndDemo();
+				break;
+			case DEMOPLAYBACK:
+				PlaybackDemoQuery();
+				break;
+			case CRAZYGIBS:
+				if (gamestate.violence == vl_excessive)
+				{
 
-               ludicrousgibs ^= 1;
-               if (ludicrousgibs == true)
-                  AddMessage("EKG mode on!",MSG_GAME);
-               else
-                  AddMessage("EKG mode off!",MSG_GAME);
-               }
-            break;
+					ludicrousgibs ^= 1;
+					if (ludicrousgibs == true)
+						AddMessage("EKG mode on!", MSG_GAME);
+					else
+						AddMessage("EKG mode off!", MSG_GAME);
+				}
+				break;
 
-         case JUKEBOX:
-         case JUKEBOXALT:
-            DoJukeBox();
-         break;
-         case MAPCHEAT:
-         case MAPCHEATALT:
-            DoMapCheat();
-         break;
-      }
-   }
+			case JUKEBOX:
+			case JUKEBOXALT:
+				DoJukeBox();
+				break;
+			case MAPCHEAT:
+			case MAPCHEATALT:
+				DoMapCheat();
+				break;
+		}
+	}
 }
-
 
 /*
 ================
@@ -1488,31 +1445,31 @@ void CheckCode (int which)
 ================
 */
 
-void CheckDebug (void)
+void CheckDebug(void)
 {
 	int which;
 	if (DebugOk == false)
-		{
-      CheckCode (0);      // Check for Debug switch only
-      CheckCode (1);      // Check for Debug switch only
-      CheckCode (2);      // Check for Slacker pack
-      CheckCode (3);      // Check for Slacker pack
-      }
+	{
+		CheckCode(0); // Check for Debug switch only
+		CheckCode(1); // Check for Debug switch only
+		CheckCode(2); // Check for Slacker pack
+		CheckCode(3); // Check for Slacker pack
+	}
 	else
-      {
-      if (demoplayback==true)
-         {
-         return;
-         }
-      else if (demorecord==true)
-         {
-         CheckCode (DEMORECORD);
-         CheckCode (DEMOEND);
-         }
-      else
-         {
-         for (which = 0; which < MAXCODES; which++) // Check all debug codes
-            CheckCode (which);
-         }
-      }
+	{
+		if (demoplayback == true)
+		{
+			return;
+		}
+		else if (demorecord == true)
+		{
+			CheckCode(DEMORECORD);
+			CheckCode(DEMOEND);
+		}
+		else
+		{
+			for (which = 0; which < MAXCODES; which++) // Check all debug codes
+				CheckCode(which);
+		}
+	}
 }

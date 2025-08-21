@@ -22,53 +22,54 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "develop.h"
 
-#define MINZ                            0x2700
-#define MAXBOB                          0x9000
+#define MINZ 0x2700
+#define MAXBOB 0x9000
 
-#define GOLOWER  0x38000
+#define GOLOWER 0x38000
 #define GOHIGHER 0x20000
 
 #define MAXVISIBLEDOORS 30
 
 #define DHEIGHTFRACTION 8
 
-#define MINZ                            0x2700
-#define MAXDRAWNTICS                    40
+#define MINZ 0x2700
+#define MAXDRAWNTICS 40
 
-#define W_CHANGE  (WEAPONUPTICS || WEAPONDOWNTICS)
+#define W_CHANGE (WEAPONUPTICS || WEAPONDOWNTICS)
 
 #if (SHAREWARE == 0)
- #define NUMWEAPGRAPHICS 16
+#define NUMWEAPGRAPHICS 16
 #else
- #define NUMWEAPGRAPHICS 9
+#define NUMWEAPGRAPHICS 9
 #endif
 
-#define HFRACTION (6+HEIGHTFRACTION)
+#define HFRACTION (6 + HEIGHTFRACTION)
 
 #define FIXEDTRANSLEVEL (30)
 
 typedef struct
 {
-   int x;
-   int y;
-   int angle;
-   int scale;
-   int dx;
-   int dy;
-   int dangle;
-   int dscale;
-   int phase;
-   int time;
-   int pausetime;
-   int pausex;
-   int pausey;
+	int x;
+	int y;
+	int angle;
+	int scale;
+	int dx;
+	int dy;
+	int dangle;
+	int dscale;
+	int phase;
+	int time;
+	int pausetime;
+	int pausex;
+	int pausey;
 } screensaver_t;
 
-void  DrawPlayerWeapon(void);
-boolean TransformPlane (int x1, int y1, int x2, int y2, visobj_t * plane);
-int   CalcRotate (objtype *ob);
-void  DrawScaleds (void);
-void  FixOfs (void);
-void SetSpriteLightLevel (int x, int y, visobj_t * sprite, int dir, int fullbright);
+void DrawPlayerWeapon(void);
+boolean TransformPlane(int x1, int y1, int x2, int y2, visobj_t *plane);
+int CalcRotate(objtype *ob);
+void DrawScaleds(void);
+void FixOfs(void);
+void SetSpriteLightLevel(int x, int y, visobj_t *sprite, int dir,
+						 int fullbright);
 
 #endif

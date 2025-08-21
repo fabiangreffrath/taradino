@@ -20,9 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_floor_private
 #define _rt_floor_private
 
-//#define	MAXVIEWHEIGHT MAXSCREENHEIGHT	
-#define MAXSKYSEGS    2048
-#define MAXSKYDATA    8
-#define MINSKYHEIGHT  148
+// #define	MAXVIEWHEIGHT MAXSCREENHEIGHT
+#define MAXSKYSEGS 2048
+#define MAXSKYDATA 8
+#define MINSKYHEIGHT 148
 
 #endif

@@ -20,20 +20,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_door_private
 #define _rt_door_private
 
-#define OPENTICS	165
+#define OPENTICS 165
 
 typedef struct tp
- {
-  signed char actionindex;
-  signed char swapactionindex;
-  int         whichobj;
-  byte        tictime;
-  byte        ticcount;
-  byte        triggered;
-  byte        complete;
-  byte        done;
- } saved_touch_type;
-
+{
+	signed char actionindex;
+	signed char swapactionindex;
+	int whichobj;
+	byte tictime;
+	byte ticcount;
+	byte triggered;
+	byte complete;
+	byte done;
+} saved_touch_type;
 
 #define NUMTOUCHPLATEACTIONS 8
 
@@ -43,6 +42,6 @@ typedef struct tp
 #define PUSHWALLSPEED 10
 
 #define AMW_NUMFRAMES 9
-#define AMW_TICCOUNT  3
+#define AMW_TICCOUNT 3
 
 #endif

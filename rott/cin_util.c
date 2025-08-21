@@ -20,7 +20,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "cin_glob.h"
 #include "modexlib.h"
 
-
 /*
 ==============
 =
@@ -31,7 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ==============
 */
 
-void CinematicGetPalette (byte *pal)
+void CinematicGetPalette(byte *pal)
 {
 }
 
@@ -45,6 +44,6 @@ void CinematicGetPalette (byte *pal)
 ==============
 */
 
-void CinematicSetPalette (byte *pal)
+void CinematicSetPalette(byte *pal)
 {
 }

@@ -27,39 +27,39 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //***************************************************************************
 
 extern int Menuflipspeed;
-extern byte * intensitytable;
+extern byte *intensitytable;
 
-void SetupMenuBuf ( void );
-void ShutdownMenuBuf ( void );
+void SetupMenuBuf(void);
+void ShutdownMenuBuf(void);
 
-void ClearMenuBuf ( void );
-void SetAlternateMenuBuf ( void );
-void SetMenuTitle ( const char * menutitle );
+void ClearMenuBuf(void);
+void SetAlternateMenuBuf(void);
+void SetMenuTitle(const char *menutitle);
 
-void PositionMenuBuf( int angle, int distance, boolean drawbackground );
-void RefreshMenuBuf( int time );
-void FlipMenuBuf ( void );
+void PositionMenuBuf(int angle, int distance, boolean drawbackground);
+void RefreshMenuBuf(int time);
+void FlipMenuBuf(void);
 
-void DrawMenuBufItem (int x, int y, int shapenum);
-void DrawMenuBufIString (int px, int py, const char *string, int color);
-void DrawTMenuBufItem (int x, int y, int shapenum);
-void DrawIMenuBufItem (int x, int y, int shapenum, int color);
-void DrawColoredMenuBufItem (int x, int y, int shapenum, int color);
-void DrawMenuBufPic (int x, int y, int shapenum);
-void DrawTMenuBufPic (int x, int y, int shapenum);
-void EraseMenuBufRegion (int x, int y, int width, int height);
+void DrawMenuBufItem(int x, int y, int shapenum);
+void DrawMenuBufIString(int px, int py, const char *string, int color);
+void DrawTMenuBufItem(int x, int y, int shapenum);
+void DrawIMenuBufItem(int x, int y, int shapenum, int color);
+void DrawColoredMenuBufItem(int x, int y, int shapenum, int color);
+void DrawMenuBufPic(int x, int y, int shapenum);
+void DrawTMenuBufPic(int x, int y, int shapenum);
+void EraseMenuBufRegion(int x, int y, int width, int height);
 
-void DrawMenuBufPropString (int px, int py, const char *string);
-void DrawTMenuBufPropString (int px, int py, const char *string);
+void DrawMenuBufPropString(int px, int py, const char *string);
+void DrawTMenuBufPropString(int px, int py, const char *string);
 
-void DrawTMenuBufBox (int x, int y, int width, int height);
-void DrawTMenuBufHLine (int x, int y, int width, boolean up);
-void DrawTMenuBufVLine (int x, int y, int height, boolean up);
-void MenuBufCPrintLine (const char *s);
-void MenuBufCPrint (const char *s);
-void MenuBufPrint (const char *s);
-void MenuTBufPrintLine (const char *s, int shade);
+void DrawTMenuBufBox(int x, int y, int width, int height);
+void DrawTMenuBufHLine(int x, int y, int width, boolean up);
+void DrawTMenuBufVLine(int x, int y, int height, boolean up);
+void MenuBufCPrintLine(const char *s);
+void MenuBufCPrint(const char *s);
+void MenuBufPrint(const char *s);
+void MenuTBufPrintLine(const char *s, int shade);
 
-void DrawMenuBufPicture (int x, int y, const byte * pic, int w, int h);
+void DrawMenuBufPicture(int x, int y, const byte *pic, int w, int h);
 
 #endif

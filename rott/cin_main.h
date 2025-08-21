@@ -27,9 +27,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //***************************************************************************
 #include "cin_glob.h"
 
-void GrabMovieScript (char const *basename, boolean uselumpy);
-void PlayMovie (char * name, boolean uselumpy);
-void GetCinematicTics ( void );
+void GrabMovieScript(char const *basename, boolean uselumpy);
+void PlayMovie(char *name, boolean uselumpy);
+void GetCinematicTics(void);
 
 extern boolean cinematicdone;
 

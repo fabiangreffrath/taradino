@@ -20,29 +20,28 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _rt_build_private
 #define _rt_build_private
 
-#define MAX(x,y)               ((x>y) ? (x) : (y))
+#define MAX(x, y) ((x > y) ? (x) : (y))
 #define MAXPLANES 10
 
 // Should be 10 with titles
-#define MENUOFFY     (10)
+#define MENUOFFY (10)
 #define MENUBACKNAME ("plane")
 #define MENUTITLEY 10
-#define TEXTUREW     (288)
-#define TEXTUREWIDTH ((TEXTUREW*1024)-1)
+#define TEXTUREW (288)
+#define TEXTUREWIDTH ((TEXTUREW * 1024) - 1)
 #define TEXTUREHEIGHT (158)
-#define NORMALVIEW   (0x40400L)
-#define NORMALHEIGHTDIVISOR   (156000000)
+#define NORMALVIEW (0x40400L)
+#define NORMALHEIGHTDIVISOR (156000000)
 #define NORMALWIDTHMULTIPLIER (241)
-#define FLIPTIME     20//60
-
+#define FLIPTIME 20 // 60
 
 typedef struct
 {
-   int   x1, y1;
-   int   x2, y2;
-   int   texturewidth;
-   int   texture;
-   int   origheight;
+	int x1, y1;
+	int x2, y2;
+	int texturewidth;
+	int texture;
+	int origheight;
 } plane_t;
 
 #endif

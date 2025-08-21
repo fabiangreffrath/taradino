@@ -29,9 +29,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define CLOCKSPEED (VBLCOUNTER)
 
-void CinematicDelay( void );
-int GetCinematicTime( void );
-boolean CinematicAbort( void );
-void ClearCinematicAbort( void );
+void CinematicDelay(void);
+int GetCinematicTime(void);
+boolean CinematicAbort(void);
+void ClearCinematicAbort(void);
 
 #endif

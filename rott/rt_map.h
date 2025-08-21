@@ -27,6 +27,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_map_public
 
 void DoMap(int x, int y);
-void CheatMap( void );
+void CheatMap(void);
 
 #endif

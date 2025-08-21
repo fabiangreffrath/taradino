@@ -35,30 +35,29 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //***************************************************************************
 
-extern  boolean StretchScreen;
+extern boolean StretchScreen;
 
-//extern  int      ylookup[MAXSCREENHEIGHT];      // Table of row offsets
-extern  int      ylookup[600];      // just set to max res
-extern  int      linewidth;
-extern  byte    *SCREEN_BUFFER;
-extern  int      screensize;
-extern  byte    *bufferofs;
-extern  byte    *displayofs;
-extern  boolean  graphicsmode;
+// extern  int      ylookup[MAXSCREENHEIGHT];      // Table of row offsets
+extern int ylookup[600]; // just set to max res
+extern int linewidth;
+extern byte *SCREEN_BUFFER;
+extern int screensize;
+extern byte *bufferofs;
+extern byte *displayofs;
+extern boolean graphicsmode;
 
-
-void  GraphicsMode ( void );
-void  SetTextMode ( void );
-void  VL_SetVGAPlaneMode ( void );
-void  VL_ClearBuffer (byte *buf, byte color);
-void  VL_ClearVideo (byte color);
-void  VL_CopyPlanarPage ( byte * src, byte * dest );
-void  VL_CopyPlanarPageToMemory ( byte * src, byte * dest );
-void  XFlipPage ( void );
-void  WaitVBL( void );
-void  TurnOffTextCursor ( void );
-void  ToggleFullScreen (void);
-void  SetShowCursor (int);
+void GraphicsMode(void);
+void SetTextMode(void);
+void VL_SetVGAPlaneMode(void);
+void VL_ClearBuffer(byte *buf, byte color);
+void VL_ClearVideo(byte color);
+void VL_CopyPlanarPage(byte *src, byte *dest);
+void VL_CopyPlanarPageToMemory(byte *src, byte *dest);
+void XFlipPage(void);
+void WaitVBL(void);
+void TurnOffTextCursor(void);
+void ToggleFullScreen(void);
+void SetShowCursor(int);
 
 #define VGAMAPMASK(a)
 #define VGAREADMAP(a)

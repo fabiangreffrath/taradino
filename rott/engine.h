@@ -29,24 +29,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 typedef struct
 {
-  int      offset;
-  int      wallheight;
-  int      ceilingclip;
-  int      floorclip;
-  int      texture;
-  int      lump;
-  int      posttype;
-  int      alttile;
+	int offset;
+	int wallheight;
+	int ceilingclip;
+	int floorclip;
+	int texture;
+	int lump;
+	int posttype;
+	int alttile;
 } wallcast_t;
-extern wallcast_t posts[800+2];//bna++ JUST MAKE IT MAX RES
-//extern wallcast_t posts[642];//bna++
-//extern wallcast_t posts[321];
+extern wallcast_t posts[800 + 2]; // bna++ JUST MAKE IT MAX RES
+// extern wallcast_t posts[642];//bna++
+// extern wallcast_t posts[321];
 
 extern int lasttilex;
 extern int lasttiley;
 
-void Refresh ( void );
+void Refresh(void);
 
-#define IsWindow(x,y)       (MAPSPOT((x),(y),2)==13)
+#define IsWindow(x, y) (MAPSPOT((x), (y), 2) == 13)
 
 #endif

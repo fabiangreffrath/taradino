@@ -34,13 +34,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //***************************************************************************
 
-#define PORTTILESWIDE      20       // all drawing takes place inside a
-#define PORTTILESHIGH      13       // non displayed port of this size
+#define PORTTILESWIDE 20 // all drawing takes place inside a
+#define PORTTILESHIGH 13 // non displayed port of this size
 
-#define UPDATEWIDE         PORTTILESWIDE
-#define UPDATEHIGH         PORTTILESHIGH
-#define UPDATESIZE         (UPDATEWIDE*UPDATEHIGH)
-
+#define UPDATEWIDE PORTTILESWIDE
+#define UPDATEHIGH PORTTILESHIGH
+#define UPDATESIZE (UPDATEWIDE * UPDATEHIGH)
 
 //***************************************************************************
 //
@@ -48,49 +47,49 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //***************************************************************************
 
-extern byte     *updateptr;
+extern byte *updateptr;
 extern unsigned int mapwidthtable[64];
 extern unsigned int uwidthtable[UPDATEHIGH];
-extern unsigned int blockstarts[UPDATEWIDE*UPDATEHIGH];
-extern byte     update[UPDATESIZE];
-extern boolean  screenfaded;
-
+extern unsigned int blockstarts[UPDATEWIDE * UPDATEHIGH];
+extern byte update[UPDATESIZE];
+extern boolean screenfaded;
 
 //***************************************************************************
 //
 // PROTOTYPES
 //
 //***************************************************************************
-void VL_MemStrechedToScreen (byte *source, int width, int height, int x, int y);
-void VL_MemToScreen (byte *source, int width, int height, int x, int y);
-void DrawTiledRegion( int x, int y, int width, int height, int offx, int offy, pic_t *tile );
-void VWB_DrawPic (int x, int y, pic_t *pic);
-void VL_Bar (int x, int y, int width, int height, int color);
-void VWB_Bar (int x, int y, int width, int height, int color);
-void VWB_Hlin (int x1, int x2, int y, int color);
-void VWB_Vlin (int y1, int y2, int x, int color);
-void VWB_THlin (int x1, int x2, int y, boolean up);
-void VWB_TVlin (int y1, int y2, int x, boolean up);
-int VW_MarkUpdateBlock (int x1, int y1, int x2, int y2);
-void VW_UpdateScreen (void);
+void VL_MemStrechedToScreen(byte *source, int width, int height, int x, int y);
+void VL_MemToScreen(byte *source, int width, int height, int x, int y);
+void DrawTiledRegion(int x, int y, int width, int height, int offx, int offy,
+					 pic_t *tile);
+void VWB_DrawPic(int x, int y, pic_t *pic);
+void VL_Bar(int x, int y, int width, int height, int color);
+void VWB_Bar(int x, int y, int width, int height, int color);
+void VWB_Hlin(int x1, int x2, int y, int color);
+void VWB_Vlin(int y1, int y2, int x, int color);
+void VWB_THlin(int x1, int x2, int y, boolean up);
+void VWB_TVlin(int y1, int y2, int x, boolean up);
+int VW_MarkUpdateBlock(int x1, int y1, int x2, int y2);
+void VW_UpdateScreen(void);
 
-void VH_UpdateScreen (void);
+void VH_UpdateScreen(void);
 
-void VL_FadeOut (int start, int end, int red, int green, int blue, int steps);
-void VL_FadeIn (int start, int end, byte *palette, int steps);
-void VL_DecompressLBM (lbm_t *lbminfo, boolean flip);
-void VL_FadeToColor (int time, int red, int green, int blue);
-void VWB_TBar (int x, int y, int width, int height);
+void VL_FadeOut(int start, int end, int red, int green, int blue, int steps);
+void VL_FadeIn(int start, int end, byte *palette, int steps);
+void VL_DecompressLBM(lbm_t *lbminfo, boolean flip);
+void VL_FadeToColor(int time, int red, int green, int blue);
+void VWB_TBar(int x, int y, int width, int height);
 
-void SwitchPalette (byte * newpal, int steps);
-void SetBorderColor (int color);
+void SwitchPalette(byte *newpal, int steps);
+void SetBorderColor(int color);
 
-void VL_DrawPostPic (int lumpnum);
-void VL_DrawLine (int x1, int y1, int x2, int y2, byte color);
+void VL_DrawPostPic(int lumpnum);
+void VL_DrawLine(int x1, int y1, int x2, int y2, byte color);
 
-#define MenuFadeOut()	VL_FadeOut (0, 255, 0, 0, 0, 10)
-#define MenuFadeIn()	   VL_FadeIn (0, 255, origpal, 10)
+#define MenuFadeOut() VL_FadeOut(0, 255, 0, 0, 0, 10)
+#define MenuFadeIn() VL_FadeIn(0, 255, origpal, 10)
 
-void DrawXYPic (int x, int y, int shapenum);
+void DrawXYPic(int x, int y, int shapenum);
 
 #endif

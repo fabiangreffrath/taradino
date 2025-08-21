@@ -20,8 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _develop_public
 #define _develop_public
 
-#define BNACRASHPREVENT  1 //bna added 
-// Flavor selection (shareware, registered, cd version, site license) has moved to the Makefile
+#define BNACRASHPREVENT 1 // bna added
+// Flavor selection (shareware, registered, cd version, site license) has moved
+// to the Makefile
 #ifndef SHAREWARE
 #define SHAREWARE 0
 #endif
@@ -31,6 +32,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 // okay?
 
-#define SOFTERROR   0
+#define SOFTERROR 0
 
 #endif

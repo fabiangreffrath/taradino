@@ -34,9 +34,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static int cin_sprtopoffset;
 static int cin_invscale;
 
-void DrawFadeout ( void );
-void DrawBlankScreen ( void );
-void DrawClearBuffer ( void );
+void DrawFadeout(void);
+void DrawBlankScreen(void);
+void DrawClearBuffer(void);
 
 /*
 ===============
@@ -46,21 +46,21 @@ void DrawClearBuffer ( void );
 ===============
 */
 
-flicevent * SpawnCinematicFlic ( char * name, boolean loop, boolean usefile )
+flicevent *SpawnCinematicFlic(char *name, boolean loop, boolean usefile)
 {
-   flicevent * flic;
+	flicevent *flic;
 
-   flic = SafeMalloc ( sizeof(flicevent) );
+	flic = SafeMalloc(sizeof(flicevent));
 
-   // copy name of flic
+	// copy name of flic
 
-   strcpy ( flic->name, name );
+	strcpy(flic->name, name);
 
-   flic->loop=loop;
+	flic->loop = loop;
 
-   flic->usefile=usefile;
+	flic->usefile = usefile;
 
-   return flic;
+	return flic;
 }
 
 /*
@@ -71,47 +71,39 @@ flicevent * SpawnCinematicFlic ( char * name, boolean loop, boolean usefile )
 ===============
 */
 
-spriteevent * SpawnCinematicSprite ( char * name,
-                                     int duration,
-                                     int numframes,
-                                     int framedelay,
-                                     int x,
-                                     int y,
-                                     int scale,
-                                     int endx,
-                                     int endy,
-                                     int endscale
-                                   )
+spriteevent *SpawnCinematicSprite(char *name, int duration, int numframes,
+								  int framedelay, int x, int y, int scale,
+								  int endx, int endy, int endscale)
 {
-   spriteevent * sprite;
+	spriteevent *sprite;
 
-   sprite = SafeMalloc ( sizeof (spriteevent) );
+	sprite = SafeMalloc(sizeof(spriteevent));
 
-   // copy name of sprite
+	// copy name of sprite
 
-   strcpy ( sprite->name, name );
+	strcpy(sprite->name, name);
 
-   // copy rest of sprite information
+	// copy rest of sprite information
 
-   sprite->duration = duration;
-   sprite->numframes = numframes;
-   sprite->framedelay = framedelay;
-   sprite->frame=0;
-   sprite->frametime=framedelay;
+	sprite->duration = duration;
+	sprite->numframes = numframes;
+	sprite->framedelay = framedelay;
+	sprite->frame = 0;
+	sprite->frametime = framedelay;
 
-   W_CacheLumpNum( W_GetNumForName(sprite->name), PU_CACHE, Cvt_patch_t, 1);
+	W_CacheLumpNum(W_GetNumForName(sprite->name), PU_CACHE, Cvt_patch_t, 1);
 
-   sprite->x=x << FRACTIONBITS;
-   sprite->y=y << FRACTIONBITS;
+	sprite->x = x << FRACTIONBITS;
+	sprite->y = y << FRACTIONBITS;
 
-//   sprite->y+=(p->width-p->height)<<(FRACTIONBITS-1);
+	//   sprite->y+=(p->width-p->height)<<(FRACTIONBITS-1);
 
-   sprite->scale=scale << FRACTIONBITS;
-   sprite->dx= ( (endx-x) << FRACTIONBITS ) / duration;
-   sprite->dy= ( (endy-y) << FRACTIONBITS ) / duration;
-   sprite->dscale= ( (endscale-scale) << FRACTIONBITS ) / duration;
+	sprite->scale = scale << FRACTIONBITS;
+	sprite->dx = ((endx - x) << FRACTIONBITS) / duration;
+	sprite->dy = ((endy - y) << FRACTIONBITS) / duration;
+	sprite->dscale = ((endscale - scale) << FRACTIONBITS) / duration;
 
-   return sprite;
+	return sprite;
 }
 
 /*
@@ -122,31 +114,26 @@ spriteevent * SpawnCinematicSprite ( char * name,
 ===============
 */
 
-backevent * SpawnCinematicBack ( char * name,
-                                 int duration,
-                                 int width,
-                                 int startx,
-                                 int endx,
-                                 int yoffset
-                               )
+backevent *SpawnCinematicBack(char *name, int duration, int width, int startx,
+							  int endx, int yoffset)
 {
-   backevent * back;
+	backevent *back;
 
-   back = SafeMalloc ( sizeof (backevent) );
+	back = SafeMalloc(sizeof(backevent));
 
-   // copy name of back
+	// copy name of back
 
-   strcpy ( back->name, name );
+	strcpy(back->name, name);
 
-   // copy rest of back information
+	// copy rest of back information
 
-   back->duration = duration;
-   back->backdropwidth = width;
-   back->dx = ((endx-startx) << FRACTIONBITS)/duration;
-   back->currentoffset = startx << FRACTIONBITS;
-   back->yoffset=yoffset;
+	back->duration = duration;
+	back->backdropwidth = width;
+	back->dx = ((endx - startx) << FRACTIONBITS) / duration;
+	back->currentoffset = startx << FRACTIONBITS;
+	back->yoffset = yoffset;
 
-   return back;
+	return back;
 }
 
 /*
@@ -157,47 +144,41 @@ backevent * SpawnCinematicBack ( char * name,
 ===============
 */
 
-backevent * SpawnCinematicMultiBack ( char * name,
-                                      char * name2,
-                                      int duration,
-                                      int startx,
-                                      int endx,
-                                      int yoffset
-                                    )
+backevent *SpawnCinematicMultiBack(char *name, char *name2, int duration,
+								   int startx, int endx, int yoffset)
 {
-   backevent * back;
-   lpic_t * pic1;
-   lpic_t * pic2;
+	backevent *back;
+	lpic_t *pic1;
+	lpic_t *pic2;
 
-   pic1=(lpic_t *)W_CacheLumpName(name,PU_CACHE, Cvt_lpic_t, 1);
-   pic2=(lpic_t *)W_CacheLumpName(name2,PU_CACHE, Cvt_lpic_t, 1);
+	pic1 = (lpic_t *)W_CacheLumpName(name, PU_CACHE, Cvt_lpic_t, 1);
+	pic2 = (lpic_t *)W_CacheLumpName(name2, PU_CACHE, Cvt_lpic_t, 1);
 
-   back = SafeMalloc ( sizeof (backevent) );
+	back = SafeMalloc(sizeof(backevent));
 
-   // copy name of back
+	// copy name of back
 
-   strcpy ( back->name, name );
+	strcpy(back->name, name);
 
-   // copy rest of back information
+	// copy rest of back information
 
-   back->duration = duration;
-   back->dx = ((endx-startx) << FRACTIONBITS)/duration;
-   back->currentoffset = startx << FRACTIONBITS;
-   back->yoffset=yoffset;
-   if (pic1->height != pic2->height)
-      {
-      Error("SpawnCinematicMultiBack: heights are not the same\n"
-            "                         name1=%s name2=%s\n",name,name2);
-      }
-   back->backdropwidth=pic1->width+pic2->width;
-   back->height=pic1->height;
-   back->data=SafeMalloc (back->backdropwidth*back->height);
-   memcpy( back->data, &(pic1->data), pic1->width*pic1->height);
-   memcpy( back->data+(pic1->width*pic1->height),
-           &(pic2->data),
-           pic2->width*pic2->height
-         );
-   return back;
+	back->duration = duration;
+	back->dx = ((endx - startx) << FRACTIONBITS) / duration;
+	back->currentoffset = startx << FRACTIONBITS;
+	back->yoffset = yoffset;
+	if (pic1->height != pic2->height)
+	{
+		Error("SpawnCinematicMultiBack: heights are not the same\n"
+			  "                         name1=%s name2=%s\n",
+			  name, name2);
+	}
+	back->backdropwidth = pic1->width + pic2->width;
+	back->height = pic1->height;
+	back->data = SafeMalloc(back->backdropwidth * back->height);
+	memcpy(back->data, &(pic1->data), pic1->width * pic1->height);
+	memcpy(back->data + (pic1->width * pic1->height), &(pic2->data),
+		   pic2->width * pic2->height);
+	return back;
 }
 
 /*
@@ -208,19 +189,18 @@ backevent * SpawnCinematicMultiBack ( char * name,
 ===============
 */
 
-paletteevent * SpawnCinematicPalette ( char * name )
+paletteevent *SpawnCinematicPalette(char *name)
 {
-   paletteevent * palette;
+	paletteevent *palette;
 
-   palette = SafeMalloc ( sizeof (paletteevent) );
+	palette = SafeMalloc(sizeof(paletteevent));
 
-   // copy name of palette
+	// copy name of palette
 
-   strcpy ( palette->name, name );
+	strcpy(palette->name, name);
 
-   return palette;
+	return palette;
 }
-
 
 /*
 =================
@@ -229,35 +209,33 @@ paletteevent * SpawnCinematicPalette ( char * name )
 =
 =================
 */
-void ScaleFilmPost (byte * src, byte * buf)
+void ScaleFilmPost(byte *src, byte *buf)
 {
-   int  offset;
-   int  length;
-   int  topscreen;
-   int  bottomscreen;
+	int offset;
+	int length;
+	int topscreen;
+	int bottomscreen;
 
-
-   offset=*(src++);
-   for (;offset!=255;)
-      {
-      length=*(src++);
-      topscreen = cin_sprtopoffset + (cin_invscale*offset);
-      bottomscreen = topscreen + (cin_invscale*length);
-      cin_yl = (topscreen+FRACTIONUNIT-1)>>FRACTIONBITS;
-      cin_yh = (bottomscreen-FRACTIONUNIT)>>FRACTIONBITS;
-      if (cin_yh >= iGLOBAL_SCREENHEIGHT)
-         cin_yh = iGLOBAL_SCREENHEIGHT-1;
-      if (cin_yl < 0)
-         cin_yl = 0;
-      if (cin_yl <= cin_yh)
-         {
-         cin_source=src-offset;
-         R_DrawFilmColumn (buf);
-         }
-      src+=length;
-      offset=*(src++);
-      }
-
+	offset = *(src++);
+	for (; offset != 255;)
+	{
+		length = *(src++);
+		topscreen = cin_sprtopoffset + (cin_invscale * offset);
+		bottomscreen = topscreen + (cin_invscale * length);
+		cin_yl = (topscreen + FRACTIONUNIT - 1) >> FRACTIONBITS;
+		cin_yh = (bottomscreen - FRACTIONUNIT) >> FRACTIONBITS;
+		if (cin_yh >= iGLOBAL_SCREENHEIGHT)
+			cin_yh = iGLOBAL_SCREENHEIGHT - 1;
+		if (cin_yl < 0)
+			cin_yl = 0;
+		if (cin_yl <= cin_yh)
+		{
+			cin_source = src - offset;
+			R_DrawFilmColumn(buf);
+		}
+		src += length;
+		offset = *(src++);
+	}
 }
 
 /*
@@ -267,43 +245,43 @@ void ScaleFilmPost (byte * src, byte * buf)
 =
 =================
 */
-void DrawFlic ( flicevent * flic )
+void DrawFlic(flicevent *flic)
 {
-   byte * curpal;
-   char flicname[40];
+	byte *curpal;
+	char flicname[40];
 
-   curpal = SafeMalloc (768);
+	curpal = SafeMalloc(768);
 
-   CinematicGetPalette (curpal);
+	CinematicGetPalette(curpal);
 
-   DrawFadeout ( );
+	DrawFadeout();
 
-   if (flic->usefile==false)
-      {
-      W_CacheLumpName(flic->name,PU_CACHE, CvtNull, 1);
-      strcpy(flicname,flic->name);
-      }
-   else
-      {
-      strcpy(flicname,flic->name);
-      strcat(flicname,".fli");
-      }
+	if (flic->usefile == false)
+	{
+		W_CacheLumpName(flic->name, PU_CACHE, CvtNull, 1);
+		strcpy(flicname, flic->name);
+	}
+	else
+	{
+		strcpy(flicname, flic->name);
+		strcat(flicname, ".fli");
+	}
 
-// med
-//   PlayFlic ( flicname, buf, flic->usefile, flic->loop);
+	// med
+	//   PlayFlic ( flicname, buf, flic->usefile, flic->loop);
 
-   if (flic->loop==true)
-      ClearCinematicAbort();
+	if (flic->loop == true)
+		ClearCinematicAbort();
 
-   DrawFadeout ( );
+	DrawFadeout();
 
-   DrawBlankScreen ( );
+	DrawBlankScreen();
 
-   CinematicSetPalette (curpal);
+	CinematicSetPalette(curpal);
 
-   SafeFree (curpal);
-   GetCinematicTics ();
-   GetCinematicTics ();
+	SafeFree(curpal);
+	GetCinematicTics();
+	GetCinematicTics();
 }
 
 /*
@@ -314,12 +292,12 @@ void DrawFlic ( flicevent * flic )
 =================
 */
 
-void PrecacheFlic (flicevent * flic)
+void PrecacheFlic(flicevent *flic)
 {
-   if (flic->usefile==false)
-      {
-      W_CacheLumpName(flic->name,PU_CACHE, CvtNull, 1);
-      }
+	if (flic->usefile == false)
+	{
+		W_CacheLumpName(flic->name, PU_CACHE, CvtNull, 1);
+	}
 }
 
 /*
@@ -330,39 +308,41 @@ void PrecacheFlic (flicevent * flic)
 ===============
 */
 
-void DrawCinematicBackground ( backevent * back )
+void DrawCinematicBackground(backevent *back)
 {
-   byte * src;
-   byte * buf;
-   lpic_t * pic;
-   int i;
-   int offset;
-   int height;
+	byte *src;
+	byte *buf;
+	lpic_t *pic;
+	int i;
+	int offset;
+	int height;
 
-   pic=(lpic_t *)W_CacheLumpName(back->name,PU_CACHE, Cvt_lpic_t, 1);
+	pic = (lpic_t *)W_CacheLumpName(back->name, PU_CACHE, Cvt_lpic_t, 1);
 
-   height = pic->height;
-   if (height+back->yoffset>iGLOBAL_SCREENHEIGHT)
-      height=iGLOBAL_SCREENHEIGHT-back->yoffset;
+	height = pic->height;
+	if (height + back->yoffset > iGLOBAL_SCREENHEIGHT)
+		height = iGLOBAL_SCREENHEIGHT - back->yoffset;
 
-   if (height!=iGLOBAL_SCREENHEIGHT)
-      DrawClearBuffer ();
+	if (height != iGLOBAL_SCREENHEIGHT)
+		DrawClearBuffer();
 
-   {
-      buf=(byte *)bufferofs+ylookup[back->yoffset];
-      offset=(back->currentoffset>>FRACTIONBITS);
+	{
+		buf = (byte *)bufferofs + ylookup[back->yoffset];
+		offset = (back->currentoffset >> FRACTIONBITS);
 
-      for (i=0;i<iGLOBAL_SCREENWIDTH;i++,offset++,buf++)
-         {
-         if (offset>=back->backdropwidth)
-            src=&(pic->data) + ( (offset - back->backdropwidth) * (pic->height) );
-         else if (offset<0)
-            src=&(pic->data) + ( (offset + back->backdropwidth) * (pic->height) );
-         else
-            src=&(pic->data) + ( offset * (pic->height) );
-         DrawFilmPost(buf,src,height);
-         }
-   }
+		for (i = 0; i < iGLOBAL_SCREENWIDTH; i++, offset++, buf++)
+		{
+			if (offset >= back->backdropwidth)
+				src = &(pic->data) +
+					  ((offset - back->backdropwidth) * (pic->height));
+			else if (offset < 0)
+				src = &(pic->data) +
+					  ((offset + back->backdropwidth) * (pic->height));
+			else
+				src = &(pic->data) + (offset * (pic->height));
+			DrawFilmPost(buf, src, height);
+		}
+	}
 }
 
 /*
@@ -373,36 +353,38 @@ void DrawCinematicBackground ( backevent * back )
 ===============
 */
 
-void DrawCinematicMultiBackground ( backevent * back )
+void DrawCinematicMultiBackground(backevent *back)
 {
-   byte * src;
-   byte * buf;
-   int i;
-   int offset;
-   int height;
+	byte *src;
+	byte *buf;
+	int i;
+	int offset;
+	int height;
 
-   height = back->height;
-   if (height+back->yoffset>iGLOBAL_SCREENHEIGHT)
-      height=iGLOBAL_SCREENHEIGHT-back->yoffset;
+	height = back->height;
+	if (height + back->yoffset > iGLOBAL_SCREENHEIGHT)
+		height = iGLOBAL_SCREENHEIGHT - back->yoffset;
 
-   if (height!=iGLOBAL_SCREENHEIGHT)
-      DrawClearBuffer ();
+	if (height != iGLOBAL_SCREENHEIGHT)
+		DrawClearBuffer();
 
-   {
-      buf=(byte *)bufferofs+ylookup[back->yoffset];
-      offset=(back->currentoffset>>FRACTIONBITS);
+	{
+		buf = (byte *)bufferofs + ylookup[back->yoffset];
+		offset = (back->currentoffset >> FRACTIONBITS);
 
-      for (i=0;i<iGLOBAL_SCREENWIDTH;i++,offset++,buf++)
-         {
-         if (offset>=back->backdropwidth)
-            src=back->data + ( (offset - back->backdropwidth) * (back->height) );
-         else if (offset<0)
-            src=back->data + ( (offset + back->backdropwidth) * (back->height) );
-         else
-            src=back->data + ( offset * (back->height) );
-         DrawFilmPost(buf,src,height);
-         }
-   }
+		for (i = 0; i < iGLOBAL_SCREENWIDTH; i++, offset++, buf++)
+		{
+			if (offset >= back->backdropwidth)
+				src = back->data +
+					  ((offset - back->backdropwidth) * (back->height));
+			else if (offset < 0)
+				src = back->data +
+					  ((offset + back->backdropwidth) * (back->height));
+			else
+				src = back->data + (offset * (back->height));
+			DrawFilmPost(buf, src, height);
+		}
+	}
 }
 
 /*
@@ -413,46 +395,47 @@ void DrawCinematicMultiBackground ( backevent * back )
 ===============
 */
 
-void DrawCinematicBackdrop ( backevent * back )
+void DrawCinematicBackdrop(backevent *back)
 {
-   byte * src;
-   byte * shape;
-   byte * buf;
-   patch_t * p;
-   int i;
-   int offset;
-   int postoffset;
-   int postlength;
-   int toppost;
+	byte *src;
+	byte *shape;
+	byte *buf;
+	patch_t *p;
+	int i;
+	int offset;
+	int postoffset;
+	int postlength;
+	int toppost;
 
-   shape=W_CacheLumpName(back->name,PU_CACHE, Cvt_patch_t, 1);
-   p=(patch_t *)shape;
+	shape = W_CacheLumpName(back->name, PU_CACHE, Cvt_patch_t, 1);
+	p = (patch_t *)shape;
 
-   toppost=-p->topoffset+back->yoffset;
+	toppost = -p->topoffset + back->yoffset;
 
-      {
-      buf=(byte *)bufferofs;
-      offset=(back->currentoffset>>FRACTIONBITS);
+	{
+		buf = (byte *)bufferofs;
+		offset = (back->currentoffset >> FRACTIONBITS);
 
-      for (i=0;i<iGLOBAL_SCREENWIDTH;i++,offset++,buf++)
-         {
-         if (offset>=back->backdropwidth)
-            src = shape + p->collumnofs[offset - back->backdropwidth];
-         else if (offset<0)
-            src=shape + p->collumnofs[offset + back->backdropwidth];
-         else
-            src = shape + p->collumnofs[offset];
+		for (i = 0; i < iGLOBAL_SCREENWIDTH; i++, offset++, buf++)
+		{
+			if (offset >= back->backdropwidth)
+				src = shape + p->collumnofs[offset - back->backdropwidth];
+			else if (offset < 0)
+				src = shape + p->collumnofs[offset + back->backdropwidth];
+			else
+				src = shape + p->collumnofs[offset];
 
-         postoffset=*(src++);
-         for (;postoffset!=255;)
-            {
-            postlength=*(src++);
-            DrawFilmPost(buf + ylookup[toppost+postoffset],src,postlength);
-            src+=postlength;
-            postoffset=*(src++);
-            }
-         }
-      }
+			postoffset = *(src++);
+			for (; postoffset != 255;)
+			{
+				postlength = *(src++);
+				DrawFilmPost(buf + ylookup[toppost + postoffset], src,
+							 postlength);
+				src += postlength;
+				postoffset = *(src++);
+			}
+		}
+	}
 }
 
 /*
@@ -462,11 +445,10 @@ void DrawCinematicBackdrop ( backevent * back )
 =
 =================
 */
-void PrecacheBack ( backevent * back )
+void PrecacheBack(backevent *back)
 {
-   W_CacheLumpName( back->name, PU_CACHE, CvtNull, 1);
+	W_CacheLumpName(back->name, PU_CACHE, CvtNull, 1);
 }
-
 
 /*
 =================
@@ -475,61 +457,65 @@ void PrecacheBack ( backevent * back )
 =
 =================
 */
-void DrawCinematicSprite ( spriteevent * sprite )
+void DrawCinematicSprite(spriteevent *sprite)
 {
-   byte   *shape;
-   int    frac;
-   patch_t *p;
-   int    x1,x2;
-   int    tx;
-   int    xcent;
-   byte * buf;
-   int    height;
+	byte *shape;
+	int frac;
+	patch_t *p;
+	int x1, x2;
+	int tx;
+	int xcent;
+	byte *buf;
+	int height;
 
-   height = sprite->scale >> FRACTIONBITS;
+	height = sprite->scale >> FRACTIONBITS;
 
-   if (height<2)
-      return;
+	if (height < 2)
+		return;
 
-   shape=W_CacheLumpNum( W_GetNumForName(sprite->name)+sprite->frame, PU_CACHE, Cvt_patch_t, 1);
-   p=(patch_t *)shape;
-   
+	shape = W_CacheLumpNum(W_GetNumForName(sprite->name) + sprite->frame,
+						   PU_CACHE, Cvt_patch_t, 1);
+	p = (patch_t *)shape;
 
-   cin_ycenter=sprite->y >> FRACTIONBITS;
-   cin_invscale = (height<<FRACTIONBITS)/p->origsize;
-   buf=(byte *)bufferofs;
-   tx=-p->leftoffset;
-   xcent=(sprite->x & 0xffff0000)-(height<<(FRACTIONBITS-1))+(FRACTIONUNIT>>1);
+	cin_ycenter = sprite->y >> FRACTIONBITS;
+	cin_invscale = (height << FRACTIONBITS) / p->origsize;
+	buf = (byte *)bufferofs;
+	tx = -p->leftoffset;
+	xcent = (sprite->x & 0xffff0000) - (height << (FRACTIONBITS - 1)) +
+			(FRACTIONUNIT >> 1);
 
-//
-// calculate edges of the shape
-//
-   x1 = (xcent+(tx*cin_invscale))>>FRACTIONBITS;
-   if (x1 >= iGLOBAL_SCREENWIDTH)
-      return;               // off the right side
-   tx+=p->width;
-   x2 = ((xcent+(tx*cin_invscale)) >>FRACTIONBITS) - 1 ;
-   if (x2 < 0)
-      return;         // off the left side
+	//
+	// calculate edges of the shape
+	//
+	x1 = (xcent + (tx * cin_invscale)) >> FRACTIONBITS;
+	if (x1 >= iGLOBAL_SCREENWIDTH)
+		return; // off the right side
+	tx += p->width;
+	x2 = ((xcent + (tx * cin_invscale)) >> FRACTIONBITS) - 1;
+	if (x2 < 0)
+		return; // off the left side
 
-   cin_iscale=(p->origsize<<FRACTIONBITS)/height;
+	cin_iscale = (p->origsize << FRACTIONBITS) / height;
 
-   if (x1<0)
-      {
-      frac=cin_iscale*(-x1);
-      x1=0;
-      }
-   else
-      frac=0;
-   x2 = x2 >= iGLOBAL_SCREENWIDTH ? (iGLOBAL_SCREENWIDTH-1) : x2;
+	if (x1 < 0)
+	{
+		frac = cin_iscale * (-x1);
+		x1 = 0;
+	}
+	else
+		frac = 0;
+	x2 = x2 >= iGLOBAL_SCREENWIDTH ? (iGLOBAL_SCREENWIDTH - 1) : x2;
 
-   cin_texturemid = (((p->origsize>>1)+p->topoffset)<<FRACTIONBITS)+(FRACTIONUNIT>>1);
-   cin_sprtopoffset = (cin_ycenter<<16) - FixedMul(cin_texturemid,cin_invscale);
+	cin_texturemid = (((p->origsize >> 1) + p->topoffset) << FRACTIONBITS) +
+					 (FRACTIONUNIT >> 1);
+	cin_sprtopoffset =
+		(cin_ycenter << 16) - FixedMul(cin_texturemid, cin_invscale);
 
-   for (; x1<=x2 ; x1++, frac += cin_iscale)
-     {
-     ScaleFilmPost(((p->collumnofs[frac>>FRACTIONBITS])+shape),buf+x1);
-     }
+	for (; x1 <= x2; x1++, frac += cin_iscale)
+	{
+		ScaleFilmPost(((p->collumnofs[frac >> FRACTIONBITS]) + shape),
+					  buf + x1);
+	}
 }
 
 /*
@@ -539,16 +525,16 @@ void DrawCinematicSprite ( spriteevent * sprite )
 =
 =================
 */
-void PrecacheCinematicSprite ( spriteevent * sprite )
+void PrecacheCinematicSprite(spriteevent *sprite)
 {
-   int i;
+	int i;
 
-   for (i=0;i<sprite->numframes;i++)
-      {
-      W_CacheLumpNum( W_GetNumForName(sprite->name)+i, PU_CACHE, Cvt_patch_t, 1);
-      }
+	for (i = 0; i < sprite->numframes; i++)
+	{
+		W_CacheLumpNum(W_GetNumForName(sprite->name) + i, PU_CACHE, Cvt_patch_t,
+					   1);
+	}
 }
-
 
 /*
 =================
@@ -558,13 +544,13 @@ void PrecacheCinematicSprite ( spriteevent * sprite )
 =================
 */
 
-void DrawPalette (paletteevent * event)
+void DrawPalette(paletteevent *event)
 {
-   byte * pal;
+	byte *pal;
 
-   pal=W_CacheLumpName(event->name,PU_CACHE, CvtNull, 1);
-   XFlipPage ();
-   CinematicSetPalette (pal);
+	pal = W_CacheLumpName(event->name, PU_CACHE, CvtNull, 1);
+	XFlipPage();
+	CinematicSetPalette(pal);
 }
 
 /*
@@ -575,11 +561,10 @@ void DrawPalette (paletteevent * event)
 =================
 */
 
-void PrecachePalette (paletteevent * event)
+void PrecachePalette(paletteevent *event)
 {
-   W_CacheLumpName(event->name,PU_CACHE, CvtNull, 1);
+	W_CacheLumpName(event->name, PU_CACHE, CvtNull, 1);
 }
-
 
 /*
 =================
@@ -590,26 +575,26 @@ void PrecachePalette (paletteevent * event)
 */
 #define FADEOUTTIME 20
 
-void DrawFadeout ( void )
+void DrawFadeout(void)
 {
-   byte origpal[768];
-   byte newpal[768];
-   int      i,j;
+	byte origpal[768];
+	byte newpal[768];
+	int i, j;
 
-   CinematicGetPalette (&origpal[0]);
-   for (j = 0; j < FADEOUTTIME; j++)
-      {
-      for (i = 0; i < 768; i++)
-         {
-         newpal[i] = ( origpal[i] * (FADEOUTTIME - j - 1) ) / FADEOUTTIME;
-         }
-      WaitVBL();
-      CinematicSetPalette (&newpal[0]);
-      CinematicDelay();
-      }
-   VL_ClearVideo (0);
-   GetCinematicTics ();
-   GetCinematicTics ();
+	CinematicGetPalette(&origpal[0]);
+	for (j = 0; j < FADEOUTTIME; j++)
+	{
+		for (i = 0; i < 768; i++)
+		{
+			newpal[i] = (origpal[i] * (FADEOUTTIME - j - 1)) / FADEOUTTIME;
+		}
+		WaitVBL();
+		CinematicSetPalette(&newpal[0]);
+		CinematicDelay();
+	}
+	VL_ClearVideo(0);
+	GetCinematicTics();
+	GetCinematicTics();
 }
 
 /*
@@ -619,9 +604,9 @@ void DrawFadeout ( void )
 =
 =================
 */
-void DrawBlankScreen ( void )
+void DrawBlankScreen(void)
 {
-   VL_ClearVideo (0);
+	VL_ClearVideo(0);
 }
 
 /*
@@ -631,9 +616,9 @@ void DrawBlankScreen ( void )
 =
 =================
 */
-void DrawClearBuffer ( void )
+void DrawClearBuffer(void)
 {
-  memset((byte *)bufferofs,0,iGLOBAL_SCREENWIDTH*iGLOBAL_SCREENHEIGHT);
+	memset((byte *)bufferofs, 0, iGLOBAL_SCREENWIDTH * iGLOBAL_SCREENHEIGHT);
 }
 
 /*
@@ -644,16 +629,16 @@ void DrawClearBuffer ( void )
 ===============
 */
 
-boolean UpdateCinematicBack ( backevent * back )
+boolean UpdateCinematicBack(backevent *back)
 {
-   back->duration--;
+	back->duration--;
 
-   if (back->duration<0)
-      return false;
+	if (back->duration < 0)
+		return false;
 
-   back->currentoffset += back->dx;
+	back->currentoffset += back->dx;
 
-   return true;
+	return true;
 }
 
 /*
@@ -663,28 +648,28 @@ boolean UpdateCinematicBack ( backevent * back )
 =
 =================
 */
-boolean UpdateCinematicSprite ( spriteevent * sprite )
+boolean UpdateCinematicSprite(spriteevent *sprite)
 {
-   sprite->duration--;
+	sprite->duration--;
 
-   if (sprite->duration<0)
-      return false;
+	if (sprite->duration < 0)
+		return false;
 
-   sprite->framedelay--;
+	sprite->framedelay--;
 
-   if (sprite->framedelay==0)
-      {
-      sprite->frame++;
-      if (sprite->frame==sprite->numframes)
-         sprite->frame=0;
-      sprite->framedelay=sprite->frametime;
-      }
+	if (sprite->framedelay == 0)
+	{
+		sprite->frame++;
+		if (sprite->frame == sprite->numframes)
+			sprite->frame = 0;
+		sprite->framedelay = sprite->frametime;
+	}
 
-   sprite->x+=sprite->dx;
-   sprite->y+=sprite->dy;
-   sprite->scale+=sprite->dscale;
+	sprite->x += sprite->dx;
+	sprite->y += sprite->dy;
+	sprite->scale += sprite->dscale;
 
-   return true;
+	return true;
 }
 
 /*
@@ -694,36 +679,36 @@ boolean UpdateCinematicSprite ( spriteevent * sprite )
 =
 =================
 */
-boolean UpdateCinematicEffect ( enum_eventtype type, void * effect )
+boolean UpdateCinematicEffect(enum_eventtype type, void *effect)
 {
-   switch (type)
-      {
-      case background_noscrolling:
-      case background_scrolling:
-      case backdrop_scrolling:
-      case backdrop_noscrolling:
-      case background_multi:
-         return UpdateCinematicBack ( (backevent *) effect );
-         break;
-      case sprite_background:
-      case sprite_foreground:
-         return UpdateCinematicSprite ( (spriteevent *) effect );
-         break;
-      case flic:
-         return true;
-         break;
-      case palette:
-      case fadeout:
-      case blankscreen:
-      case clearbuffer:
-         return true;
-         break;
-      case cinematicend:
-         cinematicdone=true;
-         return true;
-         break;
-      }
-   return true;
+	switch (type)
+	{
+		case background_noscrolling:
+		case background_scrolling:
+		case backdrop_scrolling:
+		case backdrop_noscrolling:
+		case background_multi:
+			return UpdateCinematicBack((backevent *)effect);
+			break;
+		case sprite_background:
+		case sprite_foreground:
+			return UpdateCinematicSprite((spriteevent *)effect);
+			break;
+		case flic:
+			return true;
+			break;
+		case palette:
+		case fadeout:
+		case blankscreen:
+		case clearbuffer:
+			return true;
+			break;
+		case cinematicend:
+			cinematicdone = true;
+			return true;
+			break;
+	}
+	return true;
 }
 /*
 =================
@@ -732,54 +717,54 @@ boolean UpdateCinematicEffect ( enum_eventtype type, void * effect )
 =
 =================
 */
-boolean DrawCinematicEffect ( enum_eventtype type, void * effect )
+boolean DrawCinematicEffect(enum_eventtype type, void *effect)
 {
-   switch (type)
-      {
-      case background_noscrolling:
-      case background_scrolling:
-         DrawCinematicBackground ( (backevent *) effect );
-         return true;
-         break;
-      case background_multi:
-         DrawCinematicMultiBackground ( (backevent *) effect );
-         return true;
-         break;
-      case backdrop_scrolling:
-      case backdrop_noscrolling:
-         DrawCinematicBackdrop ( (backevent *) effect );
-         return true;
-         break;
-      case sprite_background:
-      case sprite_foreground:
-         DrawCinematicSprite ( (spriteevent *) effect );
-         return true;
-         break;
-      case flic:
-         DrawFlic ( (flicevent *) effect );
-         return false;
-         break;
-      case palette:
-         DrawPalette ( (paletteevent *) effect );
-         return false;
-         break;
-      case fadeout:
-         DrawFadeout ();
-         return false;
-         break;
-      case blankscreen:
-         DrawBlankScreen ();
-         return false;
-         break;
-      case clearbuffer:
-         DrawClearBuffer ();
-         return false;
-         break;
-      case cinematicend:
-         return true;
-         break;
-      }
-   return true;
+	switch (type)
+	{
+		case background_noscrolling:
+		case background_scrolling:
+			DrawCinematicBackground((backevent *)effect);
+			return true;
+			break;
+		case background_multi:
+			DrawCinematicMultiBackground((backevent *)effect);
+			return true;
+			break;
+		case backdrop_scrolling:
+		case backdrop_noscrolling:
+			DrawCinematicBackdrop((backevent *)effect);
+			return true;
+			break;
+		case sprite_background:
+		case sprite_foreground:
+			DrawCinematicSprite((spriteevent *)effect);
+			return true;
+			break;
+		case flic:
+			DrawFlic((flicevent *)effect);
+			return false;
+			break;
+		case palette:
+			DrawPalette((paletteevent *)effect);
+			return false;
+			break;
+		case fadeout:
+			DrawFadeout();
+			return false;
+			break;
+		case blankscreen:
+			DrawBlankScreen();
+			return false;
+			break;
+		case clearbuffer:
+			DrawClearBuffer();
+			return false;
+			break;
+		case cinematicend:
+			return true;
+			break;
+	}
+	return true;
 }
 
 /*
@@ -789,29 +774,28 @@ boolean DrawCinematicEffect ( enum_eventtype type, void * effect )
 =
 =================
 */
-void PrecacheCinematicEffect ( enum_eventtype type, void * effect )
+void PrecacheCinematicEffect(enum_eventtype type, void *effect)
 {
-   switch (type)
-      {
-      case background_noscrolling:
-      case background_scrolling:
-      case backdrop_scrolling:
-      case backdrop_noscrolling:
-         PrecacheBack ( (backevent *) effect );
-         break;
-      case sprite_background:
-      case sprite_foreground:
-         PrecacheCinematicSprite ( (spriteevent *) effect );
-         break;
-      case palette:
-         PrecachePalette ( (paletteevent *) effect );
-         break;
-      case flic:
-         PrecacheFlic ( (flicevent *) effect );
-         break;
-      default:
-	  ;
-      }
+	switch (type)
+	{
+		case background_noscrolling:
+		case background_scrolling:
+		case backdrop_scrolling:
+		case backdrop_noscrolling:
+			PrecacheBack((backevent *)effect);
+			break;
+		case sprite_background:
+		case sprite_foreground:
+			PrecacheCinematicSprite((spriteevent *)effect);
+			break;
+		case palette:
+			PrecachePalette((paletteevent *)effect);
+			break;
+		case flic:
+			PrecacheFlic((flicevent *)effect);
+			break;
+		default:;
+	}
 }
 
 /*
@@ -822,23 +806,23 @@ void PrecacheCinematicEffect ( enum_eventtype type, void * effect )
 ===============
 */
 
-void ProfileDisplay ( void )
+void ProfileDisplay(void)
 {
-   byte * buf;
-   int i;
-   byte src[200];
-   int width = StretchScreen? 320:iGLOBAL_SCREENWIDTH;
+	byte *buf;
+	int i;
+	byte src[200];
+	int width = StretchScreen ? 320 : iGLOBAL_SCREENWIDTH;
 
-   DrawClearBuffer ();
+	DrawClearBuffer();
 
-      {
-      buf=(byte *)bufferofs;
+	{
+		buf = (byte *)bufferofs;
 
-      for (i=0;i<width;i++,buf++)
-         {
-         DrawFilmPost(buf,&src[0],200);
-         }
-      }
+		for (i = 0; i < width; i++, buf++)
+		{
+			DrawFilmPost(buf, &src[0], 200);
+		}
+	}
 }
 
 /*
@@ -849,27 +833,27 @@ void ProfileDisplay ( void )
 ===============
 */
 
-void DrawPostPic ( int lumpnum )
+void DrawPostPic(int lumpnum)
 {
-   byte * src;
-   byte * buf;
-   lpic_t * pic;
-   int i;
-   int height;
-   int width = StretchScreen? 320:iGLOBAL_SCREENWIDTH;
+	byte *src;
+	byte *buf;
+	lpic_t *pic;
+	int i;
+	int height;
+	int width = StretchScreen ? 320 : iGLOBAL_SCREENWIDTH;
 
-   pic=(lpic_t *)W_CacheLumpNum(lumpnum,PU_CACHE, Cvt_lpic_t, 1);
+	pic = (lpic_t *)W_CacheLumpNum(lumpnum, PU_CACHE, Cvt_lpic_t, 1);
 
-   height = pic->height;
+	height = pic->height;
 
-      {
-      buf=(byte *)bufferofs;
+	{
+		buf = (byte *)bufferofs;
 
-      src=&(pic->data);
+		src = &(pic->data);
 
-      for (i=0;i<width;i++,src+=pic->height,buf++)
-         {
-         DrawFilmPost(buf,src,height);
-         }
-      }
+		for (i = 0; i < width; i++, src += pic->height, buf++)
+		{
+			DrawFilmPost(buf, src, height);
+		}
+	}
 }

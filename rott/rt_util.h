@@ -34,111 +34,131 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "develop.h"
 
 enum COLORS
-   {
-   BLACK, BLUE, GREEN, CYAN, RED, MAGENTA, BROWN, LIGHTGRAY, DARKGRAY,
-   LIGHTBLUE, LIGHTGREEN, LIGHTCYAN, LIGHTRED, LIGHTMAGENTA, YELLOW, WHITE
-   };
+{
+	BLACK,
+	BLUE,
+	GREEN,
+	CYAN,
+	RED,
+	MAGENTA,
+	BROWN,
+	LIGHTGRAY,
+	DARKGRAY,
+	LIGHTBLUE,
+	LIGHTGREEN,
+	LIGHTCYAN,
+	LIGHTRED,
+	LIGHTMAGENTA,
+	YELLOW,
+	WHITE
+};
 
-extern  int    egacolor[16];
-extern  byte   *  origpal;
-extern  int      _argc;
-extern  char **  _argv;
+extern int egacolor[16];
+extern byte *origpal;
+extern int _argc;
+extern char **_argv;
 
-void  markgetch( void );
-boolean StringsNotEqual (char * s1, char * s2, int length);
-void  GetPalette(char * pal);
-void  ClearGraphicsScreen( void );
-void  ClearBuffer( char * buf, int size );
-void  Error (char *error, ...) __attribute__((noreturn,format(printf,1,2)));
-void  FileNotFoundError(const char *name) __attribute__((noreturn));
-void  StartupSoftError ( void );
-void  ShutdownSoftError ( void );
-int   CheckParm (char *check);
-int   SafeOpenWrite (char *filename);
-int   SafeOpenAppend (char *filename);
-int   SafeOpenRead (char *filename);
-void  SafeRead (int handle, void *buffer, long count);
-void  SafeWrite (int handle, void *buffer, long count);
-void  SafeWriteString (int handle, char * buffer);
-void  *SafeMalloc (long size);
-void  *SafeLevelMalloc (long size);
-void  SafeFree (void * ptr);
-long  LoadFile (char *filename, void **bufferptr);
-void  SaveFile (char *filename, void *buffer, long count);
-void  DefaultExtension (char *path, char *extension);
-void  DefaultPath (char *path, char *basepath);
-void  ExtractFileBase (char *path, char *dest);
-long  ParseHex (char *hex);
-long  ParseNum (char *str);
-short MotoShort (short l);
-short IntelShort (short l);
-int   MotoLong (int l);
-int   IntelLong (int l);
-void  SwapIntelLong (int *l);
-void  SwapIntelShort(short *s);
-void  SwapIntelLongArray (int *l, int num);
-void  SwapIntelShortArray (short *s, int num);
-int   US_CheckParm (char *parm, char **strings);
-byte  BestColor (int r, int g, int b, byte *palette);
-int   atan2_appx(int,int);
-int   FindDistance(int ix, int iy);
-int   Find_3D_Distance(int ix, int iy, int iz);
-void  SetPalette ( byte * pal );
-void  SetaPalette ( byte * pal );
-void  FindEGAColors ( void );
-void  VL_FillPalette (int red, int green, int blue);
-void  VL_SetColor  (int color, int red, int green, int blue);
-void  VL_GetColor  (int color, int *red, int *green, int *blue);
-void  VL_SetPalette (byte *palette);
-void  VL_GetPalette (byte *palette);
-void  UL_printf (char *str);
-void  VL_NormalizePalette (byte *palette);
-void  MapDebug (char *error, ...) __attribute__((format(printf,1,2)));
-void  OpenMapDebug ( void );
-void  UL_ColorBox (int x, int y, int w, int h, int color);
+void markgetch(void);
+boolean StringsNotEqual(char *s1, char *s2, int length);
+void GetPalette(char *pal);
+void ClearGraphicsScreen(void);
+void ClearBuffer(char *buf, int size);
+void Error(char *error, ...) __attribute__((noreturn, format(printf, 1, 2)));
+void FileNotFoundError(const char *name) __attribute__((noreturn));
+void StartupSoftError(void);
+void ShutdownSoftError(void);
+int CheckParm(char *check);
+int SafeOpenWrite(char *filename);
+int SafeOpenAppend(char *filename);
+int SafeOpenRead(char *filename);
+void SafeRead(int handle, void *buffer, long count);
+void SafeWrite(int handle, void *buffer, long count);
+void SafeWriteString(int handle, char *buffer);
+void *SafeMalloc(long size);
+void *SafeLevelMalloc(long size);
+void SafeFree(void *ptr);
+long LoadFile(char *filename, void **bufferptr);
+void SaveFile(char *filename, void *buffer, long count);
+void DefaultExtension(char *path, char *extension);
+void DefaultPath(char *path, char *basepath);
+void ExtractFileBase(char *path, char *dest);
+long ParseHex(char *hex);
+long ParseNum(char *str);
+short MotoShort(short l);
+short IntelShort(short l);
+int MotoLong(int l);
+int IntelLong(int l);
+void SwapIntelLong(int *l);
+void SwapIntelShort(short *s);
+void SwapIntelLongArray(int *l, int num);
+void SwapIntelShortArray(short *s, int num);
+int US_CheckParm(char *parm, char **strings);
+byte BestColor(int r, int g, int b, byte *palette);
+int atan2_appx(int, int);
+int FindDistance(int ix, int iy);
+int Find_3D_Distance(int ix, int iy, int iz);
+void SetPalette(byte *pal);
+void SetaPalette(byte *pal);
+void FindEGAColors(void);
+void VL_FillPalette(int red, int green, int blue);
+void VL_SetColor(int color, int red, int green, int blue);
+void VL_GetColor(int color, int *red, int *green, int *blue);
+void VL_SetPalette(byte *palette);
+void VL_GetPalette(byte *palette);
+void UL_printf(char *str);
+void VL_NormalizePalette(byte *palette);
+void MapDebug(char *error, ...) __attribute__((format(printf, 1, 2)));
+void OpenMapDebug(void);
+void UL_ColorBox(int x, int y, int w, int h, int color);
 
-void UL_DisplayMemoryError ( int memneeded );
+void UL_DisplayMemoryError(int memneeded);
 
-int   SideOfLine(int x1, int y1, int x2, int y2, int x3, int y3);
+int SideOfLine(int x1, int y1, int x2, int y2, int x3, int y3);
 
-void hsort(char * base, int nel, int width, int (*compare)(void *, void*), void (*switcher)(void *, void*));
+void hsort(char *base, int nel, int width, int (*compare)(void *, void *),
+		   void (*switcher)(void *, void *));
 
-char * UL_GetPath (char * path, char *dir);
-boolean UL_ChangeDirectory (char *path);
-boolean UL_ChangeDrive (char *drive);
-void AbortCheck (char * abortstring);
+char *UL_GetPath(char *path, char *dir);
+boolean UL_ChangeDirectory(char *path);
+boolean UL_ChangeDrive(char *drive);
+void AbortCheck(char *abortstring);
 
 struct dosdate_t
 {
-    unsigned char day;
-    unsigned char month;
-    unsigned int year;
-    unsigned char dayofweek;
+	unsigned char day;
+	unsigned char month;
+	unsigned int year;
+	unsigned char dayofweek;
 };
 
 void _dos_getdate(struct dosdate_t *date);
 
-void *safe_realloc (void *ptr, size_t size);
+void *safe_realloc(void *ptr, size_t size);
 
-#if (SOFTERROR==1)
+#if (SOFTERROR == 1)
 
-void  SoftwareError (char *error, ...) __attribute__((format(printf,1,2)));
-#define SoftError  SoftwareError
+void SoftwareError(char *error, ...) __attribute__((format(printf, 1, 2)));
+#define SoftError SoftwareError
 
 #else
-void  SoftwareError (char *error, ...) __attribute__((format(printf,1,2)));
-//#define SoftError  SoftwareError
+void SoftwareError(char *error, ...) __attribute__((format(printf, 1, 2)));
+// #define SoftError  SoftwareError
 
-#define SoftError  if (1) {} else SoftwareError
+#define SoftError \
+	if (1) \
+	{ \
+	} \
+	else \
+		SoftwareError
 
-//#define SoftError
+// #define SoftError
 
 #endif
 
-void  DebugError (char *error, ...) __attribute__((format(printf,1,2)));
-#define Debug  DebugError
-//#define Debug
+void DebugError(char *error, ...) __attribute__((format(printf, 1, 2)));
+#define Debug DebugError
+// #define Debug
 
-void Square (void);
+void Square(void);
 
 #endif

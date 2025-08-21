@@ -23,48 +23,29 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "cin_glob.h"
 #include "cin_def.h"
 
-flicevent * SpawnCinematicFlic ( char * name, boolean loop, boolean usefile );
-spriteevent * SpawnCinematicSprite ( char * name,
-                                     int duration,
-                                     int numframes,
-                                     int framedelay,
-                                     int x,
-                                     int y,
-                                     int scale,
-                                     int endx,
-                                     int endy,
-                                     int endscale
-                                   );
-backevent * SpawnCinematicBack ( char * name,
-                                 int duration,
-                                 int width,
-                                 int startx,
-                                 int endx,
-                                 int yoffset
-                               );
+flicevent *SpawnCinematicFlic(char *name, boolean loop, boolean usefile);
+spriteevent *SpawnCinematicSprite(char *name, int duration, int numframes,
+								  int framedelay, int x, int y, int scale,
+								  int endx, int endy, int endscale);
+backevent *SpawnCinematicBack(char *name, int duration, int width, int startx,
+							  int endx, int yoffset);
 
-backevent * SpawnCinematicMultiBack ( char * name,
-                                      char * name2,
-                                      int duration,
-                                      int startx,
-                                      int endx,
-                                      int yoffset
-                                    );
-paletteevent * SpawnCinematicPalette ( char * name );
-void DrawFlic ( flicevent * flic );
-void DrawCinematicBackdrop ( backevent * back );
-void DrawCinematicBackground ( backevent * back );
-void DrawPalette (paletteevent * event);
-void DrawCinematicSprite ( spriteevent * sprite );
-void DrawClearBuffer ( void );
-void DrawBlankScreen ( void );
-boolean DrawCinematicEffect ( enum_eventtype type, void * effect );
-boolean UpdateCinematicBack ( backevent * back );
-boolean UpdateCinematicSprite ( spriteevent * sprite );
-boolean UpdateCinematicEffect ( enum_eventtype type, void * effect );
-void PrecacheCinematicEffect ( enum_eventtype type, void * effect );
-void ProfileDisplay ( void );
-void DrawPostPic ( int lumpnum );
+backevent *SpawnCinematicMultiBack(char *name, char *name2, int duration,
+								   int startx, int endx, int yoffset);
+paletteevent *SpawnCinematicPalette(char *name);
+void DrawFlic(flicevent *flic);
+void DrawCinematicBackdrop(backevent *back);
+void DrawCinematicBackground(backevent *back);
+void DrawPalette(paletteevent *event);
+void DrawCinematicSprite(spriteevent *sprite);
+void DrawClearBuffer(void);
+void DrawBlankScreen(void);
+boolean DrawCinematicEffect(enum_eventtype type, void *effect);
+boolean UpdateCinematicBack(backevent *back);
+boolean UpdateCinematicSprite(spriteevent *sprite);
+boolean UpdateCinematicEffect(enum_eventtype type, void *effect);
+void PrecacheCinematicEffect(enum_eventtype type, void *effect);
+void ProfileDisplay(void);
+void DrawPostPic(int lumpnum);
 
 #endif
-

@@ -26,9 +26,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //***************************************************************************
 
-void ResetCheatCodes (void);
-int  DebugKeys (void);
-void CheckDebug (void);
-void EndDemo ( void );
+void ResetCheatCodes(void);
+int DebugKeys(void);
+void CheckDebug(void);
+void EndDemo(void);
 
 #endif

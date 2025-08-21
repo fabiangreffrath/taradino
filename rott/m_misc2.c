@@ -35,9 +35,9 @@
 void M_MakeDirectory(const char *path)
 {
 #ifdef _WIN32
-    mkdir(path);
+	mkdir(path);
 #else
-    mkdir(path, 0755);
+	mkdir(path, 0755);
 #endif
 }
 
@@ -45,22 +45,22 @@ void M_MakeDirectory(const char *path)
 
 boolean M_FileExists(const char *filename)
 {
-    FILE *fstream;
+	FILE *fstream;
 
-    fstream = fopen(filename, "r");
+	fstream = fopen(filename, "r");
 
-    if (fstream != NULL)
-    {
-        fclose(fstream);
-        return true;
-    }
-    else
-    {
-        // If we can't open because the file is a directory, the
-        // "file" exists at least!
+	if (fstream != NULL)
+	{
+		fclose(fstream);
+		return true;
+	}
+	else
+	{
+		// If we can't open because the file is a directory, the
+		// "file" exists at least!
 
-        return errno == EISDIR;
-    }
+		return errno == EISDIR;
+	}
 }
 
 // Returns the path to a temporary file of the given name, stored
@@ -70,25 +70,25 @@ boolean M_FileExists(const char *filename)
 
 char *M_TempFile(const char *s)
 {
-    const char *tempdir;
+	const char *tempdir;
 
 #ifdef _WIN32
 
-    // Check the TEMP environment variable to find the location.
+	// Check the TEMP environment variable to find the location.
 
-    tempdir = getenv("TEMP");
+	tempdir = getenv("TEMP");
 
-    if (tempdir == NULL)
-    {
-        tempdir = ".";
-    }
+	if (tempdir == NULL)
+	{
+		tempdir = ".";
+	}
 #else
-    // In Unix, just use /tmp.
+	// In Unix, just use /tmp.
 
-    tempdir = "/tmp";
+	tempdir = "/tmp";
 #endif
 
-    return M_StringJoin(tempdir, PATH_SEP_STR, s, NULL);
+	return M_StringJoin(tempdir, PATH_SEP_STR, s, NULL);
 }
 
 // Check if a file exists by probing for common case variation of its filename.
@@ -96,69 +96,70 @@ char *M_TempFile(const char *s)
 
 char *M_FileCaseExists(const char *path)
 {
-    char *path_dup, *filename, *ext;
+	char *path_dup, *filename, *ext;
 
-    path_dup = M_StringDuplicate(path);
+	path_dup = M_StringDuplicate(path);
 
-    // 0: actual path
-    if (M_FileExists(path_dup))
-    {
-        return path_dup;
-    }
+	// 0: actual path
+	if (M_FileExists(path_dup))
+	{
+		return path_dup;
+	}
 
-    // cast result to (char *), because `path_dup` isn't (const char *) in the first place
-    filename = (char *) M_BaseName(path_dup);
+	// cast result to (char *), because `path_dup` isn't (const char *) in the
+	// first place
+	filename = (char *)M_BaseName(path_dup);
 
-    // 1: lowercase filename, e.g. doom2.wad
-    M_ForceLowercase(filename);
+	// 1: lowercase filename, e.g. doom2.wad
+	M_ForceLowercase(filename);
 
-    if (M_FileExists(path_dup))
-    {
-        return path_dup;
-    }
+	if (M_FileExists(path_dup))
+	{
+		return path_dup;
+	}
 
-    // 2: uppercase filename, e.g. DOOM2.WAD
-    M_ForceUppercase(filename);
+	// 2: uppercase filename, e.g. DOOM2.WAD
+	M_ForceUppercase(filename);
 
-    if (M_FileExists(path_dup))
-    {
-        return path_dup;
-    }
+	if (M_FileExists(path_dup))
+	{
+		return path_dup;
+	}
 
-    // 3. uppercase basename with lowercase extension, e.g. DOOM2.wad
-    ext = strrchr(path_dup, '.');
-    if (ext != NULL && ext > filename)
-    {
-        M_ForceLowercase(ext + 1);
+	// 3. uppercase basename with lowercase extension, e.g. DOOM2.wad
+	ext = strrchr(path_dup, '.');
+	if (ext != NULL && ext > filename)
+	{
+		M_ForceLowercase(ext + 1);
 
-        if (M_FileExists(path_dup))
-        {
-            return path_dup;
-        }
-    }
+		if (M_FileExists(path_dup))
+		{
+			return path_dup;
+		}
+	}
 
-    // 4. lowercase filename with uppercase first letter, e.g. Doom2.wad
-    if (strlen(filename) > 1)
-    {
-        M_ForceLowercase(filename + 1);
+	// 4. lowercase filename with uppercase first letter, e.g. Doom2.wad
+	if (strlen(filename) > 1)
+	{
+		M_ForceLowercase(filename + 1);
 
-        if (M_FileExists(path_dup))
-        {
-            return path_dup;
-        }
-    }
+		if (M_FileExists(path_dup))
+		{
+			return path_dup;
+		}
+	}
 
-    // 5. no luck
-    free(path_dup);
-    return NULL;
+	// 5. no luck
+	free(path_dup);
+	return NULL;
 }
 
 boolean M_StrToInt(const char *str, int *result)
 {
-    return sscanf(str, " 0x%x", (unsigned int *) result) == 1
-        || sscanf(str, " 0X%x", (unsigned int *) result) == 1
-        || sscanf(str, " 0%o", (unsigned int *) result) == 1
-        || sscanf(str, " %d", result) == 1;
+	return sscanf(str, " 0x%x", (unsigned int *)result) == 1 ||
+		   sscanf(str, " 0X%x", (unsigned int *)result) == 1 ||
+		   sscanf(str, " 0%o", (unsigned int *)result) == 1 ||
+		   sscanf(str, " %d", result) == 1;
 }
 
 // Returns the directory portion of the given path, without the trailing
@@ -168,26 +169,26 @@ boolean M_StrToInt(const char *str, int *result)
 
 char *M_DirName(const char *path)
 {
-    char *result;
-    const char *pf, *pb;
+	char *result;
+	const char *pf, *pb;
 
-    pf = strrchr(path, '/');
+	pf = strrchr(path, '/');
 #ifdef _WIN32
-    pb = strrchr(path, '\\');
+	pb = strrchr(path, '\\');
 #else
-    pb = NULL;
+	pb = NULL;
 #endif
-    if (pf == NULL && pb == NULL)
-    {
-        return M_StringDuplicate(".");
-    }
-    else
-    {
-        const char *p = max(pb, pf);
-        result = M_StringDuplicate(path);
-        result[p - path] = '\0';
-        return result;
-    }
+	if (pf == NULL && pb == NULL)
+	{
+		return M_StringDuplicate(".");
+	}
+	else
+	{
+		const char *p = max(pb, pf);
+		result = M_StringDuplicate(path);
+		result[p - path] = '\0';
+		return result;
+	}
 }
 
 // Returns the base filename described by the given path (without the
@@ -196,52 +197,52 @@ char *M_DirName(const char *path)
 
 const char *M_BaseName(const char *path)
 {
-    const char *pf, *pb;
+	const char *pf, *pb;
 
-    pf = strrchr(path, '/');
+	pf = strrchr(path, '/');
 #ifdef _WIN32
-    pb = strrchr(path, '\\');
-    // [FG] allow C:filename
-    if (pf == NULL && pb == NULL)
-    {
-        pb = strrchr(path, ':');
-    }
+	pb = strrchr(path, '\\');
+	// [FG] allow C:filename
+	if (pf == NULL && pb == NULL)
+	{
+		pb = strrchr(path, ':');
+	}
 #else
-    pb = NULL;
+	pb = NULL;
 #endif
-    if (pf == NULL && pb == NULL)
-    {
-        return path;
-    }
-    else
-    {
-        const char *p = max(pb, pf);
-        return p + 1;
-    }
+	if (pf == NULL && pb == NULL)
+	{
+		return path;
+	}
+	else
+	{
+		const char *p = max(pb, pf);
+		return p + 1;
+	}
 }
 
 // Change string to uppercase.
 
 void M_ForceUppercase(char *text)
 {
-    char *p;
+	char *p;
 
-    for (p = text; *p != '\0'; ++p)
-    {
-        *p = toupper(*p);
-    }
+	for (p = text; *p != '\0'; ++p)
+	{
+		*p = toupper(*p);
+	}
 }
 
 // Change string to lowercase.
 
 void M_ForceLowercase(char *text)
 {
-    char *p;
+	char *p;
 
-    for (p = text; *p != '\0'; ++p)
-    {
-        *p = tolower(*p);
-    }
+	for (p = text; *p != '\0'; ++p)
+	{
+		*p = tolower(*p);
+	}
 }
 
 // Safe version of strdup() that checks the string was successfully
@@ -249,78 +250,80 @@ void M_ForceLowercase(char *text)
 
 char *M_StringDuplicate(const char *orig)
 {
-    char *result;
+	char *result;
 
-    result = strdup(orig);
+	result = strdup(orig);
 
-    if (result == NULL)
-    {
-        fprintf(stderr, "Failed to duplicate string (length %ld)\n",
-                (long)strlen(orig));
-    }
+	if (result == NULL)
+	{
+		fprintf(stderr, "Failed to duplicate string (length %ld)\n",
+				(long)strlen(orig));
+	}
 
-    return result;
+	return result;
 }
 
 // String replace function.
 
 char *M_StringReplace(const char *haystack, const char *needle,
-                      const char *replacement)
+					  const char *replacement)
 {
-    char *result, *dst;
-    const char *p;
-    size_t needle_len = strlen(needle);
-    size_t result_len, dst_len;
+	char *result, *dst;
+	const char *p;
+	size_t needle_len = strlen(needle);
+	size_t result_len, dst_len;
 
-    // Iterate through occurrences of 'needle' and calculate the size of
-    // the new string.
-    result_len = strlen(haystack) + 1;
-    p = haystack;
+	// Iterate through occurrences of 'needle' and calculate the size of
+	// the new string.
+	result_len = strlen(haystack) + 1;
+	p = haystack;
 
-    for (;;)
-    {
-        p = strstr(p, needle);
-        if (p == NULL)
-        {
-            break;
-        }
+	for (;;)
+	{
+		p = strstr(p, needle);
+		if (p == NULL)
+		{
+			break;
+		}
 
-        p += needle_len;
-        result_len += strlen(replacement) - needle_len;
-    }
+		p += needle_len;
+		result_len += strlen(replacement) - needle_len;
+	}
 
-    // Construct new string.
+	// Construct new string.
 
-    result = malloc(result_len);
-    if (result == NULL)
-    {
-        fprintf(stderr, "M_StringReplace: Failed to allocate new string");
-        return NULL;
-    }
+	result = malloc(result_len);
+	if (result == NULL)
+	{
+		fprintf(stderr, "M_StringReplace: Failed to allocate new string");
+		return NULL;
+	}
 
-    dst = result; dst_len = result_len;
-    p = haystack;
+	dst = result;
+	dst_len = result_len;
+	p = haystack;
 
-    while (*p != '\0')
-    {
-        if (!strncmp(p, needle, needle_len))
-        {
-            M_StringCopy(dst, replacement, dst_len);
-            p += needle_len;
-            dst += strlen(replacement);
-            dst_len -= strlen(replacement);
-        }
-        else
-        {
-            *dst = *p;
-            ++dst; --dst_len;
-            ++p;
-        }
-    }
+	while (*p != '\0')
+	{
+		if (!strncmp(p, needle, needle_len))
+		{
+			M_StringCopy(dst, replacement, dst_len);
+			p += needle_len;
+			dst += strlen(replacement);
+			dst_len -= strlen(replacement);
+		}
+		else
+		{
+			*dst = *p;
+			++dst;
+			--dst_len;
+			++p;
+		}
+	}
 
-    *dst = '\0';
+	*dst = '\0';
 
-    return result;
+	return result;
 }
 
 // Safe string copy function that works like OpenBSD's strlcpy().
@@ -328,20 +331,20 @@ char *M_StringReplace(const char *haystack, const char *needle,
 
 boolean M_StringCopy(char *dest, const char *src, size_t dest_size)
 {
-    size_t len;
+	size_t len;
 
-    if (dest_size >= 1)
-    {
-        dest[dest_size - 1] = '\0';
-        strncpy(dest, src, dest_size - 1);
-    }
-    else
-    {
-        return false;
-    }
+	if (dest_size >= 1)
+	{
+		dest[dest_size - 1] = '\0';
+		strncpy(dest, src, dest_size - 1);
+	}
+	else
+	{
+		return false;
+	}
 
-    len = strlen(dest);
-    return src[len] == '\0';
+	len = strlen(dest);
+	return src[len] == '\0';
 }
 
 // Safe string concat function that works like OpenBSD's strlcat().
@@ -349,29 +352,29 @@ boolean M_StringCopy(char *dest, const char *src, size_t dest_size)
 
 boolean M_StringConcat(char *dest, const char *src, size_t dest_size)
 {
-    size_t offset;
+	size_t offset;
 
-    offset = strlen(dest);
-    if (offset > dest_size)
-    {
-        offset = dest_size;
-    }
+	offset = strlen(dest);
+	if (offset > dest_size)
+	{
+		offset = dest_size;
+	}
 
-    return M_StringCopy(dest + offset, src, dest_size - offset);
+	return M_StringCopy(dest + offset, src, dest_size - offset);
 }
 
 // Returns true if 's' ends with the specified suffix.
 
 boolean M_StringEndsWith(const char *s, const char *suffix)
 {
-    return strlen(s) >= strlen(suffix)
-        && strcmp(s + strlen(s) - strlen(suffix), suffix) == 0;
+	return strlen(s) >= strlen(suffix) &&
+		   strcmp(s + strlen(s) - strlen(suffix), suffix) == 0;
 }
 
 boolean M_StringCaseEndsWith(const char *s, const char *suffix)
 {
-    return strlen(s) >= strlen(suffix)
-        && strcasecmp(s + strlen(s) - strlen(suffix), suffix) == 0;
+	return strlen(s) >= strlen(suffix) &&
+		   strcasecmp(s + strlen(s) - strlen(suffix), suffix) == 0;
 }
 
 // Return a newly-malloced string with all the strings given as arguments
@@ -379,85 +382,86 @@ boolean M_StringCaseEndsWith(const char *s, const char *suffix)
 
 char *M_StringJoin(const char *s, ...)
 {
-    char *result;
-    const char *v;
-    va_list args;
-    size_t result_len;
+	char *result;
+	const char *v;
+	va_list args;
+	size_t result_len;
 
-    result_len = strlen(s) + 1;
+	result_len = strlen(s) + 1;
 
-    va_start(args, s);
-    for (;;)
-    {
-        v = va_arg(args, const char *);
-        if (v == NULL)
-        {
-            break;
-        }
+	va_start(args, s);
+	for (;;)
+	{
+		v = va_arg(args, const char *);
+		if (v == NULL)
+		{
+			break;
+		}
 
-        result_len += strlen(v);
-    }
-    va_end(args);
+		result_len += strlen(v);
+	}
+	va_end(args);
 
-    result = malloc(result_len);
+	result = malloc(result_len);
 
-    if (result == NULL)
-    {
-        fprintf(stderr, "M_StringJoin: Failed to allocate new string.");
-        return NULL;
-    }
+	if (result == NULL)
+	{
+		fprintf(stderr, "M_StringJoin: Failed to allocate new string.");
+		return NULL;
+	}
 
-    M_StringCopy(result, s, result_len);
+	M_StringCopy(result, s, result_len);
 
-    va_start(args, s);
-    for (;;)
-    {
-        v = va_arg(args, const char *);
-        if (v == NULL)
-        {
-            break;
-        }
+	va_start(args, s);
+	for (;;)
+	{
+		v = va_arg(args, const char *);
+		if (v == NULL)
+		{
+			break;
+		}
 
-        M_StringConcat(result, v, result_len);
-    }
-    va_end(args);
+		M_StringConcat(result, v, result_len);
+	}
+	va_end(args);
 
-    return result;
+	return result;
 }
 
 // Safe, portable vsnprintf().
-static int PRINTF_ATTR(3, 0) M_vsnprintf(char *buf, size_t buf_len, const char *s, va_list args)
+static int PRINTF_ATTR(3, 0)
+	M_vsnprintf(char *buf, size_t buf_len, const char *s, va_list args)
 {
-    int result;
+	int result;
 
-    if (buf_len < 1)
-    {
-        return 0;
-    }
+	if (buf_len < 1)
+	{
+		return 0;
+	}
 
-    // Windows (and other OSes?) has a vsnprintf() that doesn't always
-    // append a trailing \0. So we must do it, and write into a buffer
-    // that is one byte shorter; otherwise this function is unsafe.
-    result = vsnprintf(buf, buf_len, s, args);
+	// Windows (and other OSes?) has a vsnprintf() that doesn't always
+	// append a trailing \0. So we must do it, and write into a buffer
+	// that is one byte shorter; otherwise this function is unsafe.
+	result = vsnprintf(buf, buf_len, s, args);
 
-    // If truncated, change the final char in the buffer to a \0.
-    // A negative result indicates a truncated buffer on Windows.
-    if (result < 0 || result >= buf_len)
-    {
-        buf[buf_len - 1] = '\0';
-        result = buf_len - 1;
-    }
+	// If truncated, change the final char in the buffer to a \0.
+	// A negative result indicates a truncated buffer on Windows.
+	if (result < 0 || result >= buf_len)
+	{
+		buf[buf_len - 1] = '\0';
+		result = buf_len - 1;
+	}
 
-    return result;
+	return result;
 }
 
 // Safe, portable snprintf().
 int M_snprintf(char *buf, size_t buf_len, const char *s, ...)
 {
-    va_list args;
-    int result;
-    va_start(args, s);
-    result = M_vsnprintf(buf, buf_len, s, args);
-    va_end(args);
-    return result;
+	va_list args;
+	int result;
+	va_start(args, s);
+	result = M_vsnprintf(buf, buf_len, s, args);
+	va_end(args);
+	return result;
 }

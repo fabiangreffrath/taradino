@@ -22,77 +22,79 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "rt_fixed.h"
 
-#define YZTILTSPEED   20
+#define YZTILTSPEED 20
 #define SNAPBACKSPEED 10
 #define YZHORIZONSPEED 4
-#define HORIZONYZOFFSET (FINEANGLES/4)
+#define HORIZONYZOFFSET (FINEANGLES / 4)
 
 extern int YZANGLELIMIT;
 
-#define SetPlayerHorizon(ps,hlevel)    \
-    {                                  \
-    if ((hlevel)>YZANGLELIMIT)           \
-       (ps)->horizon=HORIZONYZOFFSET+YZANGLELIMIT;\
-    else if ((hlevel)<-YZANGLELIMIT)     \
-       (ps)->horizon=HORIZONYZOFFSET-YZANGLELIMIT;\
-    else                                  \
-       (ps)->horizon=HORIZONYZOFFSET+(hlevel);\
-	 }
+#define SetPlayerHorizon(ps, hlevel) \
+	{ \
+		if ((hlevel) > YZANGLELIMIT) \
+			(ps)->horizon = HORIZONYZOFFSET + YZANGLELIMIT; \
+		else if ((hlevel) < -YZANGLELIMIT) \
+			(ps)->horizon = HORIZONYZOFFSET - YZANGLELIMIT; \
+		else \
+			(ps)->horizon = HORIZONYZOFFSET + (hlevel); \
+	}
 
 #define StartWeaponChange \
-{\
- SD_PlaySoundRTP(SD_SELECTWPNSND,ob->x,ob->y);\
- pstate->weapondowntics = WEAPONS[pstate->weapon].screenheight/GMOVE;\
- if ((ob==player) && SHOW_BOTTOM_STATUS_BAR() )\
-	 DrawBarAmmo (false);            \
-}
-
+	{ \
+		SD_PlaySoundRTP(SD_SELECTWPNSND, ob->x, ob->y); \
+		pstate->weapondowntics = WEAPONS[pstate->weapon].screenheight / GMOVE; \
+		if ((ob == player) && SHOW_BOTTOM_STATUS_BAR()) \
+			DrawBarAmmo(false); \
+	}
 
 #define BULLETHOLEOFFSET 0x700
 
-#define M_DIST(x1,x2,y1,y2)   (((x1-x2)*(x1-x2))+((y1-y2)*(y1-y2)))
+#define M_DIST(x1, x2, y1, y2) \
+	(((x1 - x2) * (x1 - x2)) + ((y1 - y2) * (y1 - y2)))
 
-#define W_CHANGE(x)   ((x->weapondowntics) || (x->weaponuptics))
-#define NOMOM         ((!ob->momentumx) && (!ob->momentumy))
-#define DISTOK(p1,p2,d)    (abs((p1)-(p2)) <= d)
-#define Fix(a)        (a &= (FINEANGLES-1))
-#define REMOTEPKTSIZE    (sizeof(MoveType))
-#define BJRUNSPEED   2048
-#define BJJUMPSPEED  680
+#define W_CHANGE(x) ((x->weapondowntics) || (x->weaponuptics))
+#define NOMOM ((!ob->momentumx) && (!ob->momentumy))
+#define DISTOK(p1, p2, d) (abs((p1) - (p2)) <= d)
+#define Fix(a) (a &= (FINEANGLES - 1))
+#define REMOTEPKTSIZE (sizeof(MoveType))
+#define BJRUNSPEED 2048
+#define BJJUMPSPEED 680
 #define PROJECTILESIZE 0xc000l
 
-#define MOVESCALE       150l
-#define BACKMOVESCALE   100l
-#define EXTRAPOINTS     40000
+#define MOVESCALE 150l
+#define BACKMOVESCALE 100l
+#define EXTRAPOINTS 40000
 #define JETPACKTHRUST (64)
 
-#define RUNMOVE      0xa00
-#define BASEMOVE     0x600
-#define ANGLEMOVE    0x100000
+#define RUNMOVE 0xa00
+#define BASEMOVE 0x600
+#define ANGLEMOVE 0x100000
 
-#define SGN(x)                 (x>0 ? 1 : -1)
-#define NETMOM    (BASEMOVE+0x10000)
+#define SGN(x) (x > 0 ? 1 : -1)
+#define NETMOM (BASEMOVE + 0x10000)
 
-#define DISTANCE(x1,x2,y1,y2)   (FixedMulShift((x1-x2),(x1-x2),16)+FixedMulShift((y1-y2),(y1-y2),16))
+#define DISTANCE(x1, x2, y1, y2) \
+	(FixedMulShift((x1 - x2), (x1 - x2), 16) + \
+	 FixedMulShift((y1 - y2), (y1 - y2), 16))
 
-#define TILTLIMIT     95
+#define TILTLIMIT 95
 #define PLAYERSTEPTIME 0xf000
 
-#define HITWALLSPEED  0x2800
-#define GODVIEWANGLE  FINEANGLES/150
-#define GODOFFSET     10
-#define DOGOFFSET     46
-#define KESTICS       70
-#define BBTIME        105
+#define HITWALLSPEED 0x2800
+#define GODVIEWANGLE FINEANGLES / 150
+#define GODOFFSET 10
+#define DOGOFFSET 46
+#define KESTICS 70
+#define BBTIME 105
 
 #define KEYBOARDNORMALTURNAMOUNT (0x160000)
-//#define KEYBOARDPREAMBLETURNAMOUNT (0xe0000)
+// #define KEYBOARDPREAMBLETURNAMOUNT (0xe0000)
 #define KEYBOARDPREAMBLETURNAMOUNT (0xa0000)
-#define TURBOTURNTIME      (5)
-#define TURBOTURNAMOUNT    (0x1e000)
-#define TURNAROUNDSPEED   ((ANG180<<16)/15)
+#define TURBOTURNTIME (5)
+#define TURBOTURNAMOUNT (0x1e000)
+#define TURNAROUNDSPEED ((ANG180 << 16) / 15)
 
 #define STEPADJUST 3
-void BatAttack(objtype*ob);
-void  T_DogLick (objtype *ob);
+void BatAttack(objtype *ob);
+void T_DogLick(objtype *ob);
 #endif

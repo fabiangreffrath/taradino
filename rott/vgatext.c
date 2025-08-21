@@ -30,10 +30,12 @@ SOFTWARE.
 
 // ega 16-color palette
 static const Uint8 palette[16][3] = {
-	{0x00, 0x00, 0x00}, {0x00, 0x00, 0xab}, {0x00, 0xab, 0x00}, {0x00, 0xab, 0xab},
-	{0xab, 0x00, 0x00}, {0xab, 0x00, 0xab}, {0xab, 0x57, 0x00}, {0xab, 0xab, 0xab},
-	{0x57, 0x57, 0x57}, {0x57, 0x57, 0xff}, {0x57, 0xff, 0x57}, {0x57, 0xff, 0xff},
-	{0xff, 0x57, 0x57}, {0xff, 0x57, 0xff}, {0xff, 0xff, 0x57}, {0xff, 0xff, 0xff}
+	{ 0x00, 0x00, 0x00 }, { 0x00, 0x00, 0xab }, { 0x00, 0xab, 0x00 },
+	{ 0x00, 0xab, 0xab }, { 0xab, 0x00, 0x00 }, { 0xab, 0x00, 0xab },
+	{ 0xab, 0x57, 0x00 }, { 0xab, 0xab, 0xab }, { 0x57, 0x57, 0x57 },
+	{ 0x57, 0x57, 0xff }, { 0x57, 0xff, 0x57 }, { 0x57, 0xff, 0xff },
+	{ 0xff, 0x57, 0x57 }, { 0xff, 0x57, 0xff }, { 0xff, 0xff, 0x57 },
+	{ 0xff, 0xff, 0xff }
 };
 
 static void render_cell(Uint8 *image, int pitch, Uint16 cell, SDL_bool noblink)
@@ -113,13 +115,16 @@ int vgatext_main(SDL_Window *window, Uint16 *screen)
 	// setup display surfaces
 	format = SDL_GetWindowPixelFormat(window);
 	SDL_PixelFormatEnumToMasks(format, &bpp, &rmask, &gmask, &bmask, &amask);
-	windowsurface0 = SDL_CreateRGBSurface(0, 640, 400, bpp, rmask, gmask, bmask, amask);
-	windowsurface1 = SDL_CreateRGBSurface(0, 640, 400, bpp, rmask, gmask, bmask, amask);
+	windowsurface0 =
+		SDL_CreateRGBSurface(0, 640, 400, bpp, rmask, gmask, bmask, amask);
+	windowsurface1 =
+		SDL_CreateRGBSurface(0, 640, 400, bpp, rmask, gmask, bmask, amask);
 	if (!windowsurface0 || !windowsurface1)
 		return -1;
 
 	// setup render texture
-	texture = SDL_CreateTexture(renderer, format, SDL_TEXTUREACCESS_STREAMING, 640, 400);
+	texture = SDL_CreateTexture(renderer, format, SDL_TEXTUREACCESS_STREAMING,
+								640, 400);
 	if (!texture)
 		return -1;
 
@@ -145,12 +150,14 @@ int vgatext_main(SDL_Window *window, Uint16 *screen)
 
 	// create rgb image0
 	for (int y = 0; y < 400; y++)
-		SDL_memcpy(&((Uint8 *)surface8->pixels)[y * surface8->pitch], &image0[y][0], 640);
+		SDL_memcpy(&((Uint8 *)surface8->pixels)[y * surface8->pitch],
+				   &image0[y][0], 640);
 	SDL_BlitSurface(surface8, &rect, windowsurface0, &rect);
 
 	// create rgb image1
 	for (int y = 0; y < 400; y++)
-		SDL_memcpy(&((Uint8 *)surface8->pixels)[y * surface8->pitch], &image1[y][0], 640);
+		SDL_memcpy(&((Uint8 *)surface8->pixels)[y * surface8->pitch],
+				   &image1[y][0], 640);
 	SDL_BlitSurface(surface8, &rect, windowsurface1, &rect);
 
 	// save windowsurface ptr
@@ -180,7 +187,8 @@ int vgatext_main(SDL_Window *window, Uint16 *screen)
 			next += BLINK_HZ;
 		}
 
-		SDL_UpdateTexture(texture, NULL, (*windowsurface)->pixels, (*windowsurface)->pitch);
+		SDL_UpdateTexture(texture, NULL, (*windowsurface)->pixels,
+						  (*windowsurface)->pitch);
 		SDL_RenderClear(renderer);
 		SDL_RenderCopy(renderer, texture, NULL, NULL);
 		SDL_RenderPresent(renderer);

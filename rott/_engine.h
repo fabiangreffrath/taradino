@@ -20,8 +20,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef _engine_private
 #define _engine_private
 
-#define NOTSAMETILE(x1,x2)     ( (posts[(x1)].posttype!=posts[(x2)].posttype) || \
-                                 (posts[(x1)].offset!=posts[(x2)].offset))
-#define SGN(x)                 (x>0 ? 1 : -1)
+#define NOTSAMETILE(x1, x2) \
+	((posts[(x1)].posttype != posts[(x2)].posttype) || \
+	 (posts[(x1)].offset != posts[(x2)].offset))
+#define SGN(x) (x > 0 ? 1 : -1)
 
 #endif

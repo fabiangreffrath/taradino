@@ -30,21 +30,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_sound.h"
 
 #if (SHAREWARE == 0)
-#  include "snd_reg.h"
+#include "snd_reg.h"
 #else
-#  include "snd_shar.h"
+#include "snd_shar.h"
 #endif
 
 #define MAX_CHANNELS 8
 
-#define CHECK_HANDLE(handle)                      \
-    if ((handle) < 0 || (handle) >= MAX_CHANNELS) \
-        return (FX_Error);
+#define CHECK_HANDLE(handle) \
+	if ((handle) < 0 || (handle) >= MAX_CHANNELS) \
+		return (FX_Error);
 
 static struct
 {
-    sound_t *sfx;
-    int x, y;
+	sound_t *sfx;
+	int x, y;
 } channels[MAX_CHANNELS];
 
 static int FX_Installed = 0;
@@ -61,16 +61,16 @@ static int FX_Installed = 0;
    (c) Copyright 1993 James R. Dose.  All Rights Reserved.
 **********************************************************************/
 
-#define MV_MaxPanPosition  31
+#define MV_MaxPanPosition 31
 #define MV_NumPanPositions (MV_MaxPanPosition + 1)
 
 #define MIX_VOLUME(volume) \
-    ((max(0, min((volume), 255)) * (MV_MaxVolume + 1)) >> 8)
+	((max(0, min((volume), 255)) * (MV_MaxVolume + 1)) >> 8)
 
 typedef struct
 {
-    unsigned char left;
-    unsigned char right;
+	unsigned char left;
+	unsigned char right;
 } Pan;
 
 static Pan MV_PanTable[MV_NumPanPositions][63 + 1];
@@ -85,32 +85,32 @@ static int MV_MaxVolume = 63;
 
 static void MV_CalcPanTable(void)
 {
-    int level;
-    int angle;
-    int distance;
-    int HalfAngle;
-    int ramp;
+	int level;
+	int angle;
+	int distance;
+	int HalfAngle;
+	int ramp;
 
-    HalfAngle = (MV_NumPanPositions / 2);
+	HalfAngle = (MV_NumPanPositions / 2);
 
-    for (distance = 0; distance <= MV_MaxVolume; distance++)
-    {
-        level = (255 * (MV_MaxVolume - distance)) / MV_MaxVolume;
-        for (angle = 0; angle <= HalfAngle / 2; angle++)
-        {
-            ramp = level - ((level * angle) / (MV_NumPanPositions / 4));
+	for (distance = 0; distance <= MV_MaxVolume; distance++)
+	{
+		level = (255 * (MV_MaxVolume - distance)) / MV_MaxVolume;
+		for (angle = 0; angle <= HalfAngle / 2; angle++)
+		{
+			ramp = level - ((level * angle) / (MV_NumPanPositions / 4));
 
-            MV_PanTable[angle][distance].left = ramp;
-            MV_PanTable[HalfAngle - angle][distance].left = ramp;
-            MV_PanTable[HalfAngle + angle][distance].left = level;
-            MV_PanTable[MV_MaxPanPosition - angle][distance].left = level;
+			MV_PanTable[angle][distance].left = ramp;
+			MV_PanTable[HalfAngle - angle][distance].left = ramp;
+			MV_PanTable[HalfAngle + angle][distance].left = level;
+			MV_PanTable[MV_MaxPanPosition - angle][distance].left = level;
 
-            MV_PanTable[angle][distance].right = level;
-            MV_PanTable[HalfAngle - angle][distance].right = level;
-            MV_PanTable[HalfAngle + angle][distance].right = ramp;
-            MV_PanTable[MV_MaxPanPosition - angle][distance].right = ramp;
-        }
-    }
+			MV_PanTable[angle][distance].right = level;
+			MV_PanTable[HalfAngle - angle][distance].right = level;
+			MV_PanTable[HalfAngle + angle][distance].right = ramp;
+			MV_PanTable[MV_MaxPanPosition - angle][distance].right = ramp;
+		}
+	}
 }
 
 /*---------------------------------------------------------------------
@@ -122,11 +122,11 @@ static void MV_CalcPanTable(void)
 
 static int MV_SetPan(int handle, int vol, int left, int right)
 {
-    CHECK_HANDLE(handle);
+	CHECK_HANDLE(handle);
 
-    Mix_SetPanning(handle, left, right);
+	Mix_SetPanning(handle, left, right);
 
-    return FX_Ok;
+	return FX_Ok;
 }
 
 /*---------------------------------------------------------------------
@@ -138,29 +138,29 @@ static int MV_SetPan(int handle, int vol, int left, int right)
 
 static int MV_Pan3D(int handle, int angle, int distance)
 {
-    int left;
-    int right;
-    int mid;
-    int volume;
+	int left;
+	int right;
+	int mid;
+	int volume;
 
-    CHECK_HANDLE(handle);
+	CHECK_HANDLE(handle);
 
-    if (distance < 0)
-    {
-        distance = -distance;
-        angle += MV_NumPanPositions / 2;
-    }
+	if (distance < 0)
+	{
+		distance = -distance;
+		angle += MV_NumPanPositions / 2;
+	}
 
-    volume = MIX_VOLUME(distance);
+	volume = MIX_VOLUME(distance);
 
-    // Ensure angle is within 0 - 31
-    angle &= MV_MaxPanPosition;
+	// Ensure angle is within 0 - 31
+	angle &= MV_MaxPanPosition;
 
-    left = MV_PanTable[angle][volume].left;
-    right = MV_PanTable[angle][volume].right;
-    mid = max(0, 255 - distance);
+	left = MV_PanTable[angle][volume].left;
+	right = MV_PanTable[angle][volume].right;
+	mid = max(0, 255 - distance);
 
-    return MV_SetPan(handle, mid, left, right);
+	return MV_SetPan(handle, mid, left, right);
 }
 
 /**********************************************************************
@@ -181,39 +181,39 @@ void FX_SetReverb(int reverb)
 void FX_SetVolume(int volume)
 {
 #if SDL_MIXER_VERSION_ATLEAST(2, 6, 0)
-    Mix_MasterVolume(volume >> 1);
+	Mix_MasterVolume(volume >> 1);
 #else
-    int i;
+	int i;
 
-    for (i = 0; i < MAX_CHANNELS; i++)
-    {
-        Mix_Volume(i, volume >> 1);
-    }
+	for (i = 0; i < MAX_CHANNELS; i++)
+	{
+		Mix_Volume(i, volume >> 1);
+	}
 #endif
 }
 
 char *FX_ErrorString(int ErrorNumber)
 {
-    return (char *)SDL_GetError();
+	return (char *)SDL_GetError();
 }
 
 int FX_StopSound(int handle)
 {
-    CHECK_HANDLE(handle);
+	CHECK_HANDLE(handle);
 
-    if (channels[handle].sfx)
-    {
-        Mix_HaltChannel(handle);
+	if (channels[handle].sfx)
+	{
+		Mix_HaltChannel(handle);
 
-        if (channels[handle].sfx->count)
-        {
-            channels[handle].sfx->count--;
-        }
+		if (channels[handle].sfx->count)
+		{
+			channels[handle].sfx->count--;
+		}
 
-        memset(&channels[handle], 0, sizeof(channels[handle]));
-    }
+		memset(&channels[handle], 0, sizeof(channels[handle]));
+	}
 
-    return FX_Ok;
+	return FX_Ok;
 }
 
 // Calculate slice size, the result must be a power of two.
@@ -222,248 +222,247 @@ static int snd_samplerate = 44100;
 
 static int GetSliceSize(void)
 {
-    int limit;
-    int n;
+	int limit;
+	int n;
 
-    limit = snd_samplerate / 35; // VBLCOUNTER
+	limit = snd_samplerate / 35; // VBLCOUNTER
 
-    // Try all powers of two, not exceeding the limit.
+	// Try all powers of two, not exceeding the limit.
 
-    for (n = 0;; ++n)
-    {
-        // 2^n <= limit < 2^n+1 ?
+	for (n = 0;; ++n)
+	{
+		// 2^n <= limit < 2^n+1 ?
 
-        if ((1 << (n + 1)) > limit)
-        {
-            return (1 << n);
-        }
-    }
+		if ((1 << (n + 1)) > limit)
+		{
+			return (1 << n);
+		}
+	}
 
-    // Should never happen?
+	// Should never happen?
 
-    return 1024;
+	return 1024;
 }
 
 int FX_SetupCard(int SoundCard, fx_device *device)
 {
-    Uint16 mix_format;
-    int mix_channels;
+	Uint16 mix_format;
+	int mix_channels;
 
-    if (SDL_Init(SDL_INIT_AUDIO) < 0)
-    {
-        fprintf(stderr, "\n Couldn't initialize SDL audio: %s", SDL_GetError());
-        return FX_Error;
-    }
+	if (SDL_Init(SDL_INIT_AUDIO) < 0)
+	{
+		fprintf(stderr, "\n Couldn't initialize SDL audio: %s", SDL_GetError());
+		return FX_Error;
+	}
 
-    if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, GetSliceSize(),
-                            NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE)
-        < 0)
-    {
-        fprintf(stderr, "\n Couldn't open audio with desired format.");
-        return FX_Error;
-    }
+	if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, GetSliceSize(),
+							NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
+	{
+		fprintf(stderr, "\n Couldn't open audio with desired format.");
+		return FX_Error;
+	}
 
-    // [FG] feed actual sample frequency back into config variable
-    Mix_QuerySpec(&snd_samplerate, &mix_format, &mix_channels);
+	// [FG] feed actual sample frequency back into config variable
+	Mix_QuerySpec(&snd_samplerate, &mix_format, &mix_channels);
 
-    printf("\n Configured audio device with %.1f kHz (%s%d%s), %d channels.",
-           (float)snd_samplerate / 1000,
-           SDL_AUDIO_ISFLOAT(mix_format)    ? "F"
-           : SDL_AUDIO_ISSIGNED(mix_format) ? "S"
-                                            : "U",
-           (int)SDL_AUDIO_BITSIZE(mix_format),
-           SDL_AUDIO_BITSIZE(mix_format) > 8
-               ? (SDL_AUDIO_ISBIGENDIAN(mix_format) ? "MSB" : "LSB")
-               : "",
-           mix_channels);
+	printf("\n Configured audio device with %.1f kHz (%s%d%s), %d channels.",
+		   (float)snd_samplerate / 1000,
+		   SDL_AUDIO_ISFLOAT(mix_format)	? "F"
+		   : SDL_AUDIO_ISSIGNED(mix_format) ? "S"
+											: "U",
+		   (int)SDL_AUDIO_BITSIZE(mix_format),
+		   SDL_AUDIO_BITSIZE(mix_format) > 8
+			   ? (SDL_AUDIO_ISBIGENDIAN(mix_format) ? "MSB" : "LSB")
+			   : "",
+		   mix_channels);
 
-    // [FG] let SDL_Mixer do the actual sound mixing
-    Mix_AllocateChannels(MAX_CHANNELS);
+	// [FG] let SDL_Mixer do the actual sound mixing
+	Mix_AllocateChannels(MAX_CHANNELS);
 
-    FX_Installed = true;
+	FX_Installed = true;
 
-    return FX_Ok;
+	return FX_Ok;
 }
 
 int FX_Shutdown(void)
 {
-    if (FX_Installed)
-    {
-        Mix_CloseAudio();
-        FX_Installed = 0;
-    }
+	if (FX_Installed)
+	{
+		Mix_CloseAudio();
+		FX_Installed = 0;
+	}
 
-    return FX_Ok;
+	return FX_Ok;
 }
 
 extern int SoundNumber(int x);
 
 int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
-            unsigned int mixrate)
+			unsigned int mixrate)
 {
-    int i;
+	int i;
 
-    printf("\n Precaching all sound effects... ");
-    for (i = 0; i < SD_LASTSOUND; i++)
-    {
-        int snd = SoundNumber(i);
+	printf("\n Precaching all sound effects... ");
+	for (i = 0; i < SD_LASTSOUND; i++)
+	{
+		int snd = SoundNumber(i);
 
-        if (snd >= 0)
-        {
-            char *data;
-            int size;
-            SDL_RWops *rw;
+		if (snd >= 0)
+		{
+			char *data;
+			int size;
+			SDL_RWops *rw;
 
-            data = W_CacheLumpNum(snd, PU_STATIC, CvtNull, 1);
-            size = W_LumpLength(snd);
+			data = W_CacheLumpNum(snd, PU_STATIC, CvtNull, 1);
+			size = W_LumpLength(snd);
 
-            rw = SDL_RWFromMem(data, size);
+			rw = SDL_RWFromMem(data, size);
 
-            if (!(sounds[i].chunk = Mix_LoadWAV_RW(rw, 1)))
-            {
-                fprintf(stderr, "FX_Init: %s (%s)\n", SDL_GetError(),
-                        W_GetNameForNum(snd));
-            }
+			if (!(sounds[i].chunk = Mix_LoadWAV_RW(rw, 1)))
+			{
+				fprintf(stderr, "FX_Init: %s (%s)\n", SDL_GetError(),
+						W_GetNameForNum(snd));
+			}
 
-            Z_Free(data);
-        }
-    }
-    printf("done.");
+			Z_Free(data);
+		}
+	}
+	printf("done.");
 
-    printf("\n Calculating stereo panning... ");
-    MV_CalcPanTable();
-    printf("done.");
+	printf("\n Calculating stereo panning... ");
+	MV_CalcPanTable();
+	printf("done.");
 
-    return FX_Ok;
+	return FX_Ok;
 }
 
 int FX_SetCallBack(void (*function)(unsigned long))
 {
-    return FX_Ok;
+	return FX_Ok;
 }
 
 static int reverse_stereo;
 
 void FX_SetReverseStereo(int setting)
 {
-    reverse_stereo = setting;
+	reverse_stereo = setting;
 }
 
 int FX_GetReverseStereo(void)
 {
-    return reverse_stereo;
+	return reverse_stereo;
 }
 
 int FX_SoundActive(int handle)
 {
-    CHECK_HANDLE(handle);
+	CHECK_HANDLE(handle);
 
-    return Mix_Playing(handle);
+	return Mix_Playing(handle);
 }
 
 int FX_VoiceAvailable(int priority)
 {
-    int i;
-    int min_prio = 255, min_chan = -1;
+	int i;
+	int min_prio = 255, min_chan = -1;
 
-    for (i = 0; i < MAX_CHANNELS; i++)
-    {
-        if (!channels[i].sfx || !FX_SoundActive(i))
-        {
-            return i;
-        }
+	for (i = 0; i < MAX_CHANNELS; i++)
+	{
+		if (!channels[i].sfx || !FX_SoundActive(i))
+		{
+			return i;
+		}
 
-        if (channels[i].sfx->priority < min_prio)
-        {
-            min_prio = channels[i].sfx->priority;
-            min_chan = i;
-        }
-    }
+		if (channels[i].sfx->priority < min_prio)
+		{
+			min_prio = channels[i].sfx->priority;
+			min_chan = i;
+		}
+	}
 
-    if (priority > min_prio)
-    {
-        return min_chan;
-    }
+	if (priority > min_prio)
+	{
+		return min_chan;
+	}
 
-    return -1;
+	return -1;
 }
 
 int FX_Play(int handle, int sndnum, int pitchoffset, int angle, int distance,
-            int priority)
+			int priority)
 {
-    CHECK_HANDLE(handle);
+	CHECK_HANDLE(handle);
 
-    FX_StopSound(handle);
+	FX_StopSound(handle);
 
-    if (sounds[sndnum].chunk)
-    {
-        sounds[sndnum].count++;
-        channels[handle].sfx = &sounds[sndnum];
+	if (sounds[sndnum].chunk)
+	{
+		sounds[sndnum].count++;
+		channels[handle].sfx = &sounds[sndnum];
 
-        Mix_PlayChannelTimed(handle, sounds[sndnum].chunk, 0, -1);
-        FX_Pan3D(handle, angle, distance);
+		Mix_PlayChannelTimed(handle, sounds[sndnum].chunk, 0, -1);
+		FX_Pan3D(handle, angle, distance);
 
-        return handle;
-    }
+		return handle;
+	}
 
-    return -1;
+	return -1;
 }
 
 int FX_SetXY(int handle, int x, int y)
 {
-    CHECK_HANDLE(handle);
+	CHECK_HANDLE(handle);
 
-    channels[handle].x = x;
-    channels[handle].y = y;
+	channels[handle].x = x;
+	channels[handle].y = y;
 
-    return FX_Ok;
+	return FX_Ok;
 }
 
 int FX_SetPitch(int handle, int pitchoffset)
 {
-    return FX_Ok;
+	return FX_Ok;
 }
 
 int FX_Pan3D(int handle, int angle, int distance)
 {
-    return MV_Pan3D(handle, angle, distance);
+	return MV_Pan3D(handle, angle, distance);
 }
 
 int FX_SetPan(int handle, int vol, int left, int right)
 {
-    return MV_SetPan(handle, vol, left, right);
+	return MV_SetPan(handle, vol, left, right);
 }
 
 int FX_StopAllSounds(void)
 {
-    int i;
+	int i;
 
-    for (i = 0; i < MAX_CHANNELS; i++)
-    {
-        FX_StopSound(i);
-    }
+	for (i = 0; i < MAX_CHANNELS; i++)
+	{
+		FX_StopSound(i);
+	}
 
-    return FX_Ok;
+	return FX_Ok;
 }
 
 int FX_AllSoundsRTP(void)
 {
-    int i;
+	int i;
 
-    for (i = 0; i < MAX_CHANNELS; i++)
-    {
-        if (FX_SoundActive(i))
-        {
-            if (channels[i].x | channels[i].y)
-            {
-                SD_PanRTP(i, channels[i].x, channels[i].y);
-            }
-        }
-        else
-        {
-            FX_StopSound(i);
-        }
-    }
+	for (i = 0; i < MAX_CHANNELS; i++)
+	{
+		if (FX_SoundActive(i))
+		{
+			if (channels[i].x | channels[i].y)
+			{
+				SD_PanRTP(i, channels[i].x, channels[i].y);
+			}
+		}
+		else
+		{
+			FX_StopSound(i);
+		}
+	}
 
-    return FX_Ok;
+	return FX_Ok;
 }

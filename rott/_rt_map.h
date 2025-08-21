@@ -21,13 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _rt_map_private
 
 #if defined(__WATCOM__)
-#pragma aux FastFill =  \
-        "rep stosb"       \
-        parm    [edi] [eax] [ecx] \
-        modify exact [ecx]
+#pragma aux FastFill = "rep stosb" parm[edi][eax][ecx] modify exact[ecx]
 #endif
-void FastFill(byte * buf, int color, int count);
-
+void FastFill(byte *buf, int color, int count);
 
 #define MAP_PLAYERCOLOR 4
 #define MAP_MWALLCOLOR 13

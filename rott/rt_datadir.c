@@ -1,18 +1,18 @@
 /*
-    Copyright (C) 1994-1995 Apogee Software, Ltd.
-    Copyright (C) 2005-2014 Simon Howard
-    Copyright (C) 2023 Fabian Greffrath
+	Copyright (C) 1994-1995 Apogee Software, Ltd.
+	Copyright (C) 2005-2014 Simon Howard
+	Copyright (C) 2023 Fabian Greffrath
 
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-    See the GNU General Public License for more details.
+	See the GNU General Public License for more details.
 */
 
 #include <sys/stat.h>
@@ -43,11 +43,14 @@
 /* TODO: use the registry to query some of these */
 static const char *storefront_paths[] = {
 	/* steam - classic rott */
-	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad Dark War\\Rise of the Triad - Dark War\\",
+	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad Dark "
+	"War\\Rise of the Triad - Dark War\\",
 	/* steam - ludicrous edition */
-	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad - Ludicrous Edition\\",
+	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad - "
+	"Ludicrous Edition\\",
 	/* steam - ludicrous edition (assets) */
-	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad - Ludicrous Edition\\assets\\",
+	"\\Program Files (x86)\\Steam\\steamapps\\common\\Rise of the Triad - "
+	"Ludicrous Edition\\assets\\",
 	/* gog - ludicrous edition */
 	"\\GOG Games\\Rise of the Triad - Ludicrous Edition\\",
 	/* gog - ludicrous edition (assets) */
@@ -63,26 +66,34 @@ static const char *storefront_paths_home[] = {
 	/* steam - ludicrous edition (savegames) */
 	"\\Saved Games\\Nightdive Studios\\Rise of the Triad - Ludicrous Edition\\",
 	/* steam - ludicrous edition (user mapsets) */
-	"\\Saved Games\\Nightdive Studios\\Rise of the Triad - Ludicrous Edition\\projects\\"
+	"\\Saved Games\\Nightdive Studios\\Rise of the Triad - Ludicrous "
+	"Edition\\projects\\"
 };
 
-static const int num_storefront_paths_home = sizeof(storefront_paths_home) / sizeof(const char *);
+static const int num_storefront_paths_home =
+	sizeof(storefront_paths_home) / sizeof(const char *);
 
 #else
 
 /* format strings for potential data paths relative to $HOME */
-/* these are all the default or expected paths, if the user customized it, oh well... */
+/* these are all the default or expected paths, if the user customized it, oh
+ * well... */
 static const char *storefront_paths[] = {
 	/* steam - classic rott */
-	"/.steam/steam/steamapps/common/Rise of the Triad Dark War/Rise of the Triad - Dark War/",
+	"/.steam/steam/steamapps/common/Rise of the Triad Dark War/Rise of the "
+	"Triad - Dark War/",
 	/* steam - ludicrous edition */
 	"/.steam/steam/steamapps/common/Rise of the Triad - Ludicrous Edition/",
 	/* steam - ludicrous edition (assets) */
-	"/.steam/steam/steamapps/common/Rise of the Triad - Ludicrous Edition/assets/",
+	"/.steam/steam/steamapps/common/Rise of the Triad - Ludicrous "
+	"Edition/assets/",
 	/* steam - ludicrous edition (savegames) */
-	"/.steam/steam/steamapps/compatdata/1421490/pfx/drive_c/users/steamuser/Saved Games/Nightdive Studios/Rise of the Triad - Ludicrous Edition/",
+	"/.steam/steam/steamapps/compatdata/1421490/pfx/drive_c/users/steamuser/"
+	"Saved Games/Nightdive Studios/Rise of the Triad - Ludicrous Edition/",
 	/* steam - ludicrous edition (user mapsets) */
-	"/.steam/steam/steamapps/compatdata/1421490/pfx/drive_c/users/steamuser/Saved Games/Nightdive Studios/Rise of the Triad - Ludicrous Edition/projects/",
+	"/.steam/steam/steamapps/compatdata/1421490/pfx/drive_c/users/steamuser/"
+	"Saved Games/Nightdive Studios/Rise of the Triad - Ludicrous "
+	"Edition/projects/",
 	/* heroic - classic rott */
 	"/Games/Heroic/Rise of the Triad/data/",
 	/* gog - ludicrous edition (wine) */
@@ -101,7 +112,8 @@ static const char *storefront_paths[] = {
 
 #endif
 
-static const int num_storefront_paths = sizeof(storefront_paths) / sizeof(const char *);
+static const int num_storefront_paths =
+	sizeof(storefront_paths) / sizeof(const char *);
 
 /*
  *
@@ -109,148 +121,149 @@ static const int num_storefront_paths = sizeof(storefront_paths) / sizeof(const 
  *
  */
 
-static char *GetExeDir (void)
+static char *GetExeDir(void)
 {
-    static char *dir;
+	static char *dir;
 
-    if (dir == NULL)
-    {
-        char *result;
+	if (dir == NULL)
+	{
+		char *result;
 
-        result = SDL_GetBasePath();
-        if (result != NULL)
-        {
-            dir = M_StringDuplicate(result);
-            SDL_free(result);
-        }
-        else
-        {
-            result = M_DirName(_argv[0]);
-            dir = M_StringDuplicate(result);
-        }
-    }
+		result = SDL_GetBasePath();
+		if (result != NULL)
+		{
+			dir = M_StringDuplicate(result);
+			SDL_free(result);
+		}
+		else
+		{
+			result = M_DirName(_argv[0]);
+			dir = M_StringDuplicate(result);
+		}
+	}
 
-    return dir;
+	return dir;
 }
 
-char *GetPrefDir (void)
+char *GetPrefDir(void)
 {
-    static char *dir;
+	static char *dir;
 
-    if (dir == NULL)
-    {
-        char *result;
+	if (dir == NULL)
+	{
+		char *result;
 
 #ifndef _WIN32
-        result = SDL_GetPrefPath("", PACKAGE_TARNAME);
-        if (result != NULL)
-        {
-            dir = M_StringDuplicate(result);
-            SDL_free(result);
-        }
-        else
+		result = SDL_GetPrefPath("", PACKAGE_TARNAME);
+		if (result != NULL)
+		{
+			dir = M_StringDuplicate(result);
+			SDL_free(result);
+		}
+		else
 #endif
-        {
-            result = GetExeDir();
-            dir = M_StringDuplicate(result);
-        }
+		{
+			result = GetExeDir();
+			dir = M_StringDuplicate(result);
+		}
 
-        M_MakeDirectory(dir);
+		M_MakeDirectory(dir);
 
-        result = dir;
+		result = dir;
 #if !(SHAREWARE == 1)
-        dir = M_StringJoin(result, "darkwar", PATH_SEP_STR, NULL);
+		dir = M_StringJoin(result, "darkwar", PATH_SEP_STR, NULL);
 #else
-        dir = M_StringJoin(result, "huntbgin", PATH_SEP_STR, NULL);
+		dir = M_StringJoin(result, "huntbgin", PATH_SEP_STR, NULL);
 #endif
-        free(result);
+		free(result);
 
-        M_MakeDirectory(dir);
-    }
+		M_MakeDirectory(dir);
+	}
 
-    return dir;
+	return dir;
 }
 
 char *datadir = NULL;
 
 #define MAX_DATADIRS 16
-static char *datadirs[MAX_DATADIRS] = {0};
+static char *datadirs[MAX_DATADIRS] = { 0 };
 static int num_datadirs = 0;
 
 const char **GetDataDirs(int *num)
 {
-	if (num) *num = num_datadirs;
+	if (num)
+		*num = num_datadirs;
 	return (const char **)datadirs;
 }
 
 static void AddDataDir(char *dir)
 {
-    if (num_datadirs < MAX_DATADIRS)
-    {
-        datadirs[num_datadirs++] = dir;
-    }
+	if (num_datadirs < MAX_DATADIRS)
+	{
+		datadirs[num_datadirs++] = dir;
+	}
 }
 
 #ifndef _WIN32
 static void AddDataPath(const char *path, const char *suffix)
 {
-    char *left, *p, *dup_path;
+	char *left, *p, *dup_path;
 
-    dup_path = M_StringDuplicate(path);
+	dup_path = M_StringDuplicate(path);
 
-    // Split into individual dirs within the list.
-    left = dup_path;
+	// Split into individual dirs within the list.
+	left = dup_path;
 
-    for (;;)
-    {
-        p = strchr(left, LIST_SEP_CHAR);
-        if (p != NULL)
-        {
-            *p = '\0';
+	for (;;)
+	{
+		p = strchr(left, LIST_SEP_CHAR);
+		if (p != NULL)
+		{
+			*p = '\0';
 
-            AddDataDir(M_StringJoin(left, suffix, NULL));
-            left = p + 1;
-        }
-        else
-        {
-            break;
-        }
-    }
+			AddDataDir(M_StringJoin(left, suffix, NULL));
+			left = p + 1;
+		}
+		else
+		{
+			break;
+		}
+	}
 
-    AddDataDir(M_StringJoin(left, suffix, NULL));
+	AddDataDir(M_StringJoin(left, suffix, NULL));
 
-    free(dup_path);
+	free(dup_path);
 }
 
 static void AddXdgDirs(void)
 {
-    char *env, *tmp_env;
+	char *env, *tmp_env;
 
-    env = getenv("XDG_DATA_HOME");
-    tmp_env = NULL;
+	env = getenv("XDG_DATA_HOME");
+	tmp_env = NULL;
 
-    if (env == NULL)
-    {
-        char *homedir = getenv("HOME");
-        if (homedir == NULL)
-        {
-            homedir = "/";
-        }
+	if (env == NULL)
+	{
+		char *homedir = getenv("HOME");
+		if (homedir == NULL)
+		{
+			homedir = "/";
+		}
 
-        tmp_env = M_StringJoin(homedir, "/.local/share", NULL);
-        env = tmp_env;
-    }
+		tmp_env = M_StringJoin(homedir, "/.local/share", NULL);
+		env = tmp_env;
+	}
 
-    AddDataDir(M_StringJoin(env, "/games/rott", NULL));
-    free(tmp_env);
+	AddDataDir(M_StringJoin(env, "/games/rott", NULL));
+	free(tmp_env);
 
-    env = getenv("XDG_DATA_DIRS");
-    if (env == NULL)
-    {
-        env = "/usr/local/share:/usr/share";
-    }
+	env = getenv("XDG_DATA_DIRS");
+	if (env == NULL)
+	{
+		env = "/usr/local/share:/usr/share";
+	}
 
-    AddDataPath(env, "/games/rott");
+	AddDataPath(env, "/games/rott");
 }
 #endif
 
@@ -294,7 +307,8 @@ static void AddStorefrontDirs(void)
 	{
 		for (int i = 0; i < num_storefront_paths_home; i++)
 		{
-			M_snprintf(path, sizeof(path), "%s%s", prefix, storefront_paths_home[i]);
+			M_snprintf(path, sizeof(path), "%s%s", prefix,
+					   storefront_paths_home[i]);
 
 			if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
 				AddDataDir(M_StringDuplicate(path));
@@ -319,24 +333,24 @@ static void AddStorefrontDirs(void)
 
 static void BuildDataDirList(void)
 {
-    if (datadirs[0])
-    {
-        return;
-    }
+	if (datadirs[0])
+	{
+		return;
+	}
 
-    // current directory
-    AddDataDir(".");
+	// current directory
+	AddDataDir(".");
 
-    // executable directory
-    AddDataDir(GetExeDir());
+	// executable directory
+	AddDataDir(GetExeDir());
 
 #ifdef DATADIR
-    // build-time data directory
-    AddDataDir(DATADIR);
+	// build-time data directory
+	AddDataDir(DATADIR);
 #endif
 
 #ifndef _WIN32
-    AddXdgDirs();
+	AddXdgDirs();
 #endif
 
 	AddStorefrontDirs();
@@ -344,34 +358,33 @@ static void BuildDataDirList(void)
 
 char *FindFileByName(const char *name)
 {
-    char *path;
-    char *probe;
-    int i;
+	char *path;
+	char *probe;
+	int i;
 
-    // Absolute path?
+	// Absolute path?
 
-    probe = M_FileCaseExists(name);
-    if (probe != NULL)
-    {
-        return probe;
-    }
+	probe = M_FileCaseExists(name);
+	if (probe != NULL)
+	{
+		return probe;
+	}
 
-    BuildDataDirList();
+	BuildDataDirList();
 
-    for (i = 0; i < num_datadirs; i++)
-    {
-        path = M_StringJoin(datadirs[i], PATH_SEP_STR, name, NULL);
+	for (i = 0; i < num_datadirs; i++)
+	{
+		path = M_StringJoin(datadirs[i], PATH_SEP_STR, name, NULL);
 
-        probe = M_FileCaseExists(path);
-        free(path);
-        if (probe != NULL)
-        {
-            return probe;
-        }
-    }
+		probe = M_FileCaseExists(path);
+		free(path);
+		if (probe != NULL)
+		{
+			return probe;
+		}
+	}
 
-    // File not found
+	// File not found
 
-    return NULL;
+	return NULL;
 }
-
