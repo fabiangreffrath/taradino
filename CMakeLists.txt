@@ -73,7 +73,7 @@ if(${TARADINO_WARNINGS_AS_ERRORS})
 	endif()
 endif()
 
-if(${TARADINO_DATADIR})
+if(NOT TARADINO_DATADIR STREQUAL "")
 	target_compile_definitions(taradino PRIVATE DATADIR="${TARADINO_DATADIR}")
 endif()
 
