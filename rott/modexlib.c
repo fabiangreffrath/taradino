@@ -149,16 +149,14 @@ void GraphicsMode(void)
 
 	SetShowCursor(!sdl_fullscreen);
 
-#ifndef _WIN32
 	const char *driver = SDL_GetCurrentVideoDriver();
-	if (driver && strcmp(driver, "x11") == 0)
-	{
-		StretchFunc = SDL_SoftStretchWrapper;
-	}
-	else
-#endif
+	if (driver && strcmp(driver, "wayland") == 0)
 	{
 		StretchFunc = SDL_BlitScaled;
+	}
+	else
+	{
+		StretchFunc = SDL_SoftStretchWrapper;
 	}
 }
 
