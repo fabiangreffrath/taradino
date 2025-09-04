@@ -74,8 +74,6 @@ char LetterQueue[MAXLETTERS];
 ModemMessage MSG;
 
 static SDL_Joystick *sdl_joysticks[MaxJoys];
-static int sdl_mouse_delta_x = 0;
-static int sdl_mouse_delta_y = 0;
 static unsigned short sdl_mouse_button_mask = 0;
 static int sdl_total_sticks = 0;
 static unsigned short sdl_stick_button_state[MaxJoys];
@@ -317,10 +315,6 @@ static int sdl_mouse_motion_filter(SDL_Event const *event)
 		} /* else */
 	} /* else */
 
-	/* set static vars... */
-	sdl_mouse_delta_x += mouse_relative_x;
-	sdl_mouse_delta_y += mouse_relative_y;
-
 	return (0);
 } /* sdl_mouse_motion_filter */
 
@@ -522,11 +516,8 @@ void IN_PumpEvents(void)
 void INL_GetMouseDelta(int *x, int *y)
 {
 	IN_PumpEvents();
-
-	*x = sdl_mouse_delta_x;
-	*y = sdl_mouse_delta_y;
-
-	sdl_mouse_delta_x = sdl_mouse_delta_y = 0;
+	
+	SDL_GetRelativeMouseState(x, y);
 }
 
 //******************************************************************************
