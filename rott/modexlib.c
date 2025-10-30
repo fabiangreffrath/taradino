@@ -18,6 +18,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#else
+#include <dlfcn.h>
+#endif
+
 #include <stdarg.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -57,13 +64,6 @@ byte *bufofsBottomLimit;
 void DrawCenterAim();
 
 #include "SDL.h"
-
-#if defined(_WIN32)
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#else
-#include <dlfcn.h>
-#endif
 
 static int sdl2_compat_or_sdl3(void)
 {
