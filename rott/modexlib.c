@@ -18,27 +18,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#if defined(_WIN32)
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#else
-#include <dlfcn.h>
-#endif
-
-#include <stdarg.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <string.h>
-#include <stdio.h>
-#include <ctype.h>
-
-#include <stdlib.h>
-#include <sys/stat.h>
 #include "modexlib.h"
 #include "rt_util.h"
 #include "rt_net.h" // for GamePaused
-
-#include "isr.h" // for VBLCOUNTER
+#include "isr.h"	// for VBLCOUNTER
 
 static void StretchMemPicture();
 // GLOBAL VARIABLES
@@ -65,26 +48,11 @@ void DrawCenterAim();
 
 #include "SDL.h"
 
-static int sdl2_compat_or_sdl3(void)
+static int sdl3_or_sdl2_compat(void)
 {
-	// SDL_GetWindowProperties() is an SDL3 function that doesn’t exist in SDL2,
-	// so if it’s found in the process, we’re almost certainly running under
-	// SDL2-compat.
-	const char *const sdl3_only_symbol = "SDL_GetWindowProperties";
-#if defined(_WIN32)
-	HMODULE hModule = GetModuleHandle(NULL);
-	if (!hModule)
-		return 0;
-	FARPROC sym = GetProcAddress(hModule, sdl3_only_symbol);
-	return (sym != NULL);
-#else
-	void *handle = dlopen(NULL, RTLD_NOW);
-	if (!handle)
-		return 0;
-	void *sym = dlsym(handle, sdl3_only_symbol);
-	dlclose(handle);
-	return (sym != NULL);
-#endif
+	SDL_version v;
+	SDL_GetVersion(&v);
+	return (v.major == 3 || (v.major == 2 && v.minor >= 30));
 }
 
 /*
@@ -176,7 +144,7 @@ void GraphicsMode(void)
 
 	SetShowCursor(!sdl_fullscreen);
 
-	if (sdl2_compat_or_sdl3())
+	if (sdl3_or_sdl2_compat())
 	{
 		StretchFunc.BlitScaled = SDL_BlitScaled;
 	}
