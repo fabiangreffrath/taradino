@@ -58,6 +58,34 @@ void DrawCenterAim();
 
 #include "SDL.h"
 
+#if defined(_WIN32)
+#include <windows.h>
+#else
+#include <dlfcn.h>
+#endif
+
+static int sdl2_compat_or_sdl3(void)
+{
+	// SDL_GetWindowProperties() is an SDL3 function that doesn’t exist in SDL2,
+	// so if it’s found in the process, we’re almost certainly running under
+	// SDL2-compat.
+	const char *const sdl3_only_symbol = "SDL_GetWindowProperties";
+#if defined(_WIN32)
+	HMODULE hModule = GetModuleHandle(NULL);
+	if (!hModule)
+		return 0;
+	FARPROC sym = GetProcAddress(hModule, sdl3_only_symbol);
+	return (sym != NULL);
+#else
+	void *handle = dlopen(NULL, RTLD_NOW);
+	if (!handle)
+		return 0;
+	void *sym = dlsym(handle, sdl3_only_symbol);
+	dlclose(handle);
+	return (sym != NULL);
+#endif
+}
+
 /*
 ====================
 =
@@ -94,14 +122,12 @@ void SetShowCursor(int show)
 	SDL_GetRelativeMouseState(NULL, NULL);
 }
 
-static int (*StretchFunc)(SDL_Surface *src, const SDL_Rect *srcrect,
-						  SDL_Surface *dst, SDL_Rect *dstrect) = SDL_BlitScaled;
-static inline int SDL_SoftStretchWrapper(SDL_Surface *src,
-										 const SDL_Rect *srcrect,
-										 SDL_Surface *dst, SDL_Rect *dstrect)
-{
-	return SDL_SoftStretch(src, srcrect, dst, dstrect);
-}
+static union {
+	int (*BlitScaled)(SDL_Surface *src, const SDL_Rect *srcrect,
+					  SDL_Surface *dst, SDL_Rect *dstrect);
+	int (*SoftStretch)(SDL_Surface *src, const SDL_Rect *srcrect,
+					   SDL_Surface *dst, const SDL_Rect *dstrect);
+} StretchFunc;
 
 void GraphicsMode(void)
 {
@@ -149,14 +175,13 @@ void GraphicsMode(void)
 
 	SetShowCursor(!sdl_fullscreen);
 
-	const char *driver = SDL_GetCurrentVideoDriver();
-	if (driver && strcmp(driver, "wayland") == 0)
+	if (sdl2_compat_or_sdl3())
 	{
-		StretchFunc = SDL_BlitScaled;
+		StretchFunc.BlitScaled = SDL_BlitScaled;
 	}
 	else
 	{
-		StretchFunc = SDL_SoftStretchWrapper;
+		StretchFunc.SoftStretch = SDL_SoftStretch;
 	}
 }
 
@@ -457,7 +482,7 @@ static void StretchMemPicture()
 	dest.y = 0;
 	dest.w = iGLOBAL_SCREENWIDTH;
 	dest.h = iGLOBAL_SCREENHEIGHT;
-	StretchFunc(unstretch_sdl_surface, &src, sdl_surface, &dest);
+	StretchFunc.BlitScaled(unstretch_sdl_surface, &src, sdl_surface, &dest);
 }
 
 // bna function added start
