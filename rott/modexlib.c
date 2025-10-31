@@ -48,13 +48,6 @@ void DrawCenterAim();
 
 #include "SDL.h"
 
-static int sdl3_or_sdl2_compat(void)
-{
-	SDL_version v;
-	SDL_GetVersion(&v);
-	return (v.major == 3 || (v.major == 2 && v.minor >= 30));
-}
-
 /*
 ====================
 =
@@ -144,7 +137,8 @@ void GraphicsMode(void)
 
 	SetShowCursor(!sdl_fullscreen);
 
-	if (sdl3_or_sdl2_compat())
+	const char *driver = SDL_GetCurrentVideoDriver();
+	if (driver && strcmp(driver, "wayland") == 0)
 	{
 		StretchFunc.BlitScaled = SDL_BlitScaled;
 	}
