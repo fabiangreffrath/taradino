@@ -18,20 +18,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <stdarg.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <string.h>
-#include <stdio.h>
-#include <ctype.h>
-
-#include <stdlib.h>
-#include <sys/stat.h>
 #include "modexlib.h"
 #include "rt_util.h"
 #include "rt_net.h" // for GamePaused
-
-#include "isr.h" // for VBLCOUNTER
+#include "isr.h"	// for VBLCOUNTER
 
 static void StretchMemPicture();
 // GLOBAL VARIABLES
@@ -94,14 +84,12 @@ void SetShowCursor(int show)
 	SDL_GetRelativeMouseState(NULL, NULL);
 }
 
-static int (*StretchFunc)(SDL_Surface *src, const SDL_Rect *srcrect,
-						  SDL_Surface *dst, SDL_Rect *dstrect) = SDL_BlitScaled;
-static inline int SDL_SoftStretchWrapper(SDL_Surface *src,
-										 const SDL_Rect *srcrect,
-										 SDL_Surface *dst, SDL_Rect *dstrect)
-{
-	return SDL_SoftStretch(src, srcrect, dst, dstrect);
-}
+static union {
+	int (*BlitScaled)(SDL_Surface *src, const SDL_Rect *srcrect,
+					  SDL_Surface *dst, SDL_Rect *dstrect);
+	int (*SoftStretch)(SDL_Surface *src, const SDL_Rect *srcrect,
+					   SDL_Surface *dst, const SDL_Rect *dstrect);
+} StretchFunc;
 
 void GraphicsMode(void)
 {
@@ -152,11 +140,11 @@ void GraphicsMode(void)
 	const char *driver = SDL_GetCurrentVideoDriver();
 	if (driver && strcmp(driver, "wayland") == 0)
 	{
-		StretchFunc = SDL_BlitScaled;
+		StretchFunc.BlitScaled = SDL_BlitScaled;
 	}
 	else
 	{
-		StretchFunc = SDL_SoftStretchWrapper;
+		StretchFunc.SoftStretch = SDL_SoftStretch;
 	}
 }
 
@@ -457,7 +445,7 @@ static void StretchMemPicture()
 	dest.y = 0;
 	dest.w = iGLOBAL_SCREENWIDTH;
 	dest.h = iGLOBAL_SCREENHEIGHT;
-	StretchFunc(unstretch_sdl_surface, &src, sdl_surface, &dest);
+	StretchFunc.BlitScaled(unstretch_sdl_surface, &src, sdl_surface, &dest);
 }
 
 // bna function added start
