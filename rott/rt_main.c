@@ -700,7 +700,7 @@ void SetupWads(void)
 	if (arg != 0)
 	{
 		FILE *f;
-		char *buf = malloc(32);
+		char buf[32];
 		if (_argv[arg + 1] != 0)
 		{ // are there a filename included
 			tempstr = safe_realloc(tempstr, 129 + strlen(_argv[arg + 1]));
@@ -709,33 +709,25 @@ void SetupWads(void)
 			{
 				if (access(tempstr, 0) != 0)
 				{							 // try open
-					strcat(tempstr, ".rtc"); // non exists, try add .rtc
+					strcat(tempstr, ".rtl"); // non exists, try add .rtl
 					if (access(tempstr, 0) != 0)
 					{ // try open again
 						// stil no useful filename
-						strcat(tempstr, " not found, skipping RTL file ");
-						printf("%s", tempstr);
-						goto NoRTL;
+						Error("%s not found", tempstr);
 					}
 				}
 				if ((f = fopen(tempstr, "r")) == NULL)
-				{ // try opnong file
-					strcat(tempstr,
-						   " not could not be opened, skipping RTL file ");
-					printf("%s", tempstr);
-					goto NoRTL;
+				{ // try opening file
+					Error("%s not could not be opened", tempstr);
 				}
 				else
 				{
-					fread(buf, 3, 3, f); // is the 3 first letters RTL (RTC)
-					if (((strstr(buf, "RTL") != 0) || strstr(buf, "RTC") != 0))
+					fread(buf, 3, 3, f); // is the 3 first letters RTL (RXL)
+					if (((strstr(buf, "RTL") != 0) || strstr(buf, "RXL") != 0))
 					{
 						GameLevels.file = M_StringDuplicate(tempstr);
 						GameLevels.avail++;
-						buf = safe_realloc(buf, 32 + strlen(tempstr));
-						strcpy(buf, "Adding ");
-						strcat(buf, tempstr);
-						printf("%s", buf);
+						printf("    Adding %s\n", tempstr);
 					}
 					fclose(f);
 				}
@@ -743,9 +735,8 @@ void SetupWads(void)
 		}
 		else
 		{
-			printf("Missing RTL filename");
+			Error("Missing RTL filename");
 		}
-		free(buf);
 	}
 NoRTL:;
 	// Check for rtc files
@@ -753,7 +744,7 @@ NoRTL:;
 	if (arg != 0)
 	{
 		FILE *f;
-		char *buf = malloc(32);
+		char buf[32];
 		if (_argv[arg + 1] != 0)
 		{ // are there a filename included
 			tempstr = safe_realloc(tempstr, 129 + strlen(_argv[arg + 1]));
@@ -766,29 +757,21 @@ NoRTL:;
 					if (access(tempstr, 0) != 0)
 					{ // try open again
 						// stil no useful filename
-						strcat(tempstr, " not found, skipping RTC file ");
-						printf("%s", tempstr);
-						goto NoRTC;
+						Error("%s not found", tempstr);
 					}
 				}
 				if ((f = fopen(tempstr, "r")) == NULL)
 				{ // try opening file
-					strcat(tempstr,
-						   " not could not be opened, skipping RTC file ");
-					printf("%s", tempstr);
-					goto NoRTC;
+					Error("%s not could not be opened", tempstr);
 				}
 				else
 				{
-					fread(buf, 3, 3, f); // is the 3 first letters RTL (RTC)
-					if (((strstr(buf, "RTL") != 0) || strstr(buf, "RTC") != 0))
+					fread(buf, 3, 3, f); // is the 3 first letters RTC (RXC)
+					if (((strstr(buf, "RTC") != 0) || strstr(buf, "RXC") != 0))
 					{
 						BattleLevels.file = M_StringDuplicate(tempstr);
 						BattleLevels.avail++;
-						buf = safe_realloc(buf, 32 + strlen(tempstr));
-						strcpy(buf, "Adding ");
-						strcat(buf, tempstr);
-						printf("%s", buf);
+						printf("    Adding %s\n", tempstr);
 					}
 					fclose(f);
 				}
@@ -796,9 +779,8 @@ NoRTL:;
 		}
 		else
 		{
-			printf("Missing RTC filename");
+			Error("Missing RTC filename");
 		}
-		free(buf);
 	}
 NoRTC:;
 
