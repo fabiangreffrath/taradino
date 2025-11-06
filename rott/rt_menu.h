@@ -213,4 +213,7 @@ void UndoQuickSaveGame(void);
 void CP_CaptureTheTriadError(void);
 void CP_TeamPlayErrorMessage(void);
 
+void Menu_FillEpisodes(char *datadir);
+int CP_EpisodeSelection(void);
+
 #endif

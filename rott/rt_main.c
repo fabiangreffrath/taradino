@@ -199,6 +199,8 @@ int main(int argc, char *argv[])
 		free(filename);
 	}
 
+	Menu_FillEpisodes(datadir);
+
 	DrawRottTitle();
 	gamestate.randomseed = -1;
 

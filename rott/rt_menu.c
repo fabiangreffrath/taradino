@@ -794,6 +794,85 @@ CP_itemtype MultiPageCustomMenu[] = {
 	{ 1, "", 'a', { NULL } }, { 1, "", 'a', { NULL } },
 };
 
+CP_MenuNames EpisodeNames[] = { "", "", "", "" };
+
+CP_iteminfo EpisodeItems = { 32, 40, 0, 0, 32, EpisodeNames, mn_largefont };
+
+CP_itemtype EpisodeMenu[] = { { 0, "", '\0', { NULL } },
+							  { 0, "", '\0', { NULL } },
+							  { 0, "", '\0', { NULL } },
+							  { 0, "", '\0', { NULL } } };
+
+typedef struct
+{
+	const char *file_name;
+	const char *episode_name;
+	const int skip_next;
+} episode_t;
+
+static int num_episodes;
+static char *found_episodes[4];
+static const episode_t episodes_to_find[] = {
+	{ "huntbginEX.rtlx", "The HUNT Begins", 2 },
+	{ "huntbgn2.rtl", "The HUNT Begins", 1 },
+	{ "huntbgin.rtl", "The HUNT Begins" },
+	{ "darkwarEX.rtlx", "Dark War", 1 },
+	{ "darkwar.rtl", "Dark War" },
+	{ "extremeEX.rtlx", "Extreme ROTT", 1 },
+	{ "extreme.rtl", "Extreme ROTT" },
+	{ "huntcontEX.rtlx", "The HUNT Continues" }
+};
+
+void Menu_FillEpisodes(char *datadir)
+{
+	if (datadir == NULL)
+	{
+		return;
+	}
+
+#if (SHAREWARE == 0)
+	for (int i = 0; i < arrlen(episodes_to_find); i++)
+	{
+		char *path = M_StringJoin(datadir, PATH_SEP_STR,
+								  episodes_to_find[i].file_name, NULL);
+		char *found = M_FileCaseExists(path);
+		free(path);
+
+		if (found && num_episodes < arrlen(EpisodeMenu))
+		{
+			FILE *f;
+			char buf[4];
+
+			if ((f = fopen(found, "r")) == NULL)
+			{
+				continue;
+			}
+			else
+			{
+				fread(buf, 1, 4, f);
+				fclose(f);
+				if (!(buf[0] == 'R' && (buf[1] == 'T' || buf[1] == 'X') &&
+					  buf[2] == 'L'))
+				{
+					continue;
+				}
+			}
+
+			strcpy(EpisodeNames[num_episodes],
+				   episodes_to_find[i].episode_name);
+
+			EpisodeMenu[num_episodes].active = 1;
+			EpisodeMenu[num_episodes].letter =
+				episodes_to_find[i].episode_name[0];
+
+			found_episodes[num_episodes++] = found;
+			i += episodes_to_find[i].skip_next;
+		}
+	}
+	EpisodeItems.amount = num_episodes;
+#endif
+}
+
 #define COLORX 113
 #define COLORY 43
 #define COLORW 60
@@ -2629,6 +2708,11 @@ void CP_NewGame(void)
 	else
 	{
 		handlewhich = 100;
+	}
+
+	if (CP_EpisodeSelection() == 0)
+	{
+		return;
 	}
 
 	if (CP_PlayerSelection() == 0)
@@ -6285,6 +6369,50 @@ int CP_PlayerSelection(void)
 #else
 	DefaultPlayerCharacter = which;
 	locplayerstate->player = which;
+#endif
+
+	return (1);
+}
+
+void DrawEpisodeMenu(void)
+{
+	MenuNum = 1;
+
+	SetAlternateMenuBuf();
+	ClearMenuBuf();
+	SetMenuTitle("Episode Selection");
+
+	MN_GetCursorLocation(&EpisodeItems, &EpisodeMenu[0]);
+	DrawMenu(&EpisodeItems, &EpisodeMenu[0]);
+	DisplayInfo(0);
+	FlipMenuBuf();
+}
+
+int CP_EpisodeSelection(void)
+{
+#if (SHAREWARE == 0)
+	extern char *ROTTMAPS;
+	int which;
+
+	if (num_episodes <= 1 || GameLevels.avail == true)
+	{
+		return (1);
+	}
+
+	DrawEpisodeMenu();
+
+	do
+	{
+		which = HandleMenu(&EpisodeItems, &EpisodeMenu[0], NULL);
+		if (which < 0)
+		{
+			handlewhich = 1;
+			return (0);
+		}
+	} while (EpisodeMenu[which].active == CP_SemiActive);
+
+	ROTTMAPS = found_episodes[which];
+	printf("New Game: Using ROTTMAPS = %s\n", ROTTMAPS);
 #endif
 
 	return (1);
