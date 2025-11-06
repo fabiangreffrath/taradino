@@ -825,12 +825,11 @@ static const episode_t episodes_to_find[] = {
 
 void Menu_FillEpisodes(char *datadir)
 {
-	if (datadir == NULL)
+	if (datadir == NULL || gamestate.Product == ROTT_SHAREWARE)
 	{
 		return;
 	}
 
-#if (SHAREWARE == 0)
 	for (int i = 0; i < arrlen(episodes_to_find); i++)
 	{
 		char *path = M_StringJoin(datadir, PATH_SEP_STR,
@@ -869,8 +868,8 @@ void Menu_FillEpisodes(char *datadir)
 			i += episodes_to_find[i].skip_next;
 		}
 	}
+
 	EpisodeItems.amount = num_episodes;
-#endif
 }
 
 #define COLORX 113
@@ -6390,11 +6389,11 @@ void DrawEpisodeMenu(void)
 
 int CP_EpisodeSelection(void)
 {
-#if (SHAREWARE == 0)
 	extern char *ROTTMAPS;
 	int which;
 
-	if (num_episodes <= 1 || GameLevels.avail == true)
+	if (num_episodes <= 1 || GameLevels.avail == true ||
+		gamestate.Product == ROTT_SHAREWARE)
 	{
 		return (1);
 	}
@@ -6413,7 +6412,6 @@ int CP_EpisodeSelection(void)
 
 	ROTTMAPS = found_episodes[which];
 	printf("New Game: Using ROTTMAPS = %s\n", ROTTMAPS);
-#endif
 
 	return (1);
 }
