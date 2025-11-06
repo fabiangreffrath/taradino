@@ -738,7 +738,7 @@ void SetupWads(void)
 			Error("Missing RTL filename");
 		}
 	}
-NoRTL:;
+
 	// Check for rtc files
 	arg = CheckParm("filertc");
 	if (arg != 0)
@@ -782,7 +782,6 @@ NoRTL:;
 			Error("Missing RTC filename");
 		}
 	}
-NoRTC:;
 
 	// Check for User wads
 	arg = CheckParm("file");
