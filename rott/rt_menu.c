@@ -794,25 +794,23 @@ CP_itemtype MultiPageCustomMenu[] = {
 	{ 1, "", 'a', { NULL } }, { 1, "", 'a', { NULL } },
 };
 
-CP_MenuNames EpisodeNames[] = { "", "", "", "" };
+static CP_MenuNames EpisodeNames[] = { "", "", "", "" };
 
-CP_iteminfo EpisodeItems = { 32, 40, 0, 0, 32, EpisodeNames, mn_largefont };
+static CP_iteminfo EpisodeItems = { 32, 40, 0, 0, 32, EpisodeNames, mn_largefont };
 
-CP_itemtype EpisodeMenu[] = { { 0, "", '\0', { NULL } },
+static CP_itemtype EpisodeMenu[] = { { 0, "", '\0', { NULL } },
 							  { 0, "", '\0', { NULL } },
 							  { 0, "", '\0', { NULL } },
 							  { 0, "", '\0', { NULL } } };
 
-typedef struct
+static int num_episodes;
+static char *found_episodes[4];
+static const struct
 {
 	const char *file_name;
 	const char *episode_name;
 	const int skip_next;
-} episode_t;
-
-static int num_episodes;
-static char *found_episodes[4];
-static const episode_t episodes_to_find[] = {
+} episodes_to_find[] = {
 	{ "huntbginEX.rtlx", "The HUNT Begins", 2 },
 	{ "huntbgn2.rtl", "The HUNT Begins", 1 },
 	{ "huntbgin.rtl", "The HUNT Begins" },
@@ -6373,7 +6371,7 @@ int CP_PlayerSelection(void)
 	return (1);
 }
 
-void DrawEpisodeMenu(void)
+static void DrawEpisodeMenu(void)
 {
 	MenuNum = 1;
 
