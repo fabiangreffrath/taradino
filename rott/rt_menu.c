@@ -796,12 +796,14 @@ CP_itemtype MultiPageCustomMenu[] = {
 
 static CP_MenuNames EpisodeNames[] = { "", "", "", "" };
 
-static CP_iteminfo EpisodeItems = { 32, 40, 0, 0, 32, EpisodeNames, mn_largefont };
+static CP_iteminfo EpisodeItems = {
+	32, 40, 0, 0, 32, EpisodeNames, mn_largefont
+};
 
 static CP_itemtype EpisodeMenu[] = { { 0, "", '\0', { NULL } },
-							  { 0, "", '\0', { NULL } },
-							  { 0, "", '\0', { NULL } },
-							  { 0, "", '\0', { NULL } } };
+									 { 0, "", '\0', { NULL } },
+									 { 0, "", '\0', { NULL } },
+									 { 0, "", '\0', { NULL } } };
 
 static int num_episodes;
 static char *found_episodes[4];
@@ -810,16 +812,14 @@ static const struct
 	const char *file_name;
 	const char *episode_name;
 	const int skip_next;
-} episodes_to_find[] = {
-	{ "huntbginEX.rtlx", "The HUNT Begins", 2 },
-	{ "huntbgn2.rtl", "The HUNT Begins", 1 },
-	{ "huntbgin.rtl", "The HUNT Begins" },
-	{ "darkwarEX.rtlx", "Dark War", 1 },
-	{ "darkwar.rtl", "Dark War" },
-	{ "extremeEX.rtlx", "Extreme ROTT", 1 },
-	{ "extreme.rtl", "Extreme ROTT" },
-	{ "huntcontEX.rtlx", "The HUNT Continues" }
-};
+} episodes_to_find[] = { { "huntbginEX.rtlx", "The HUNT Begins", 2 },
+						 { "huntbgn2.rtl", "The HUNT Begins", 1 },
+						 { "huntbgin.rtl", "The HUNT Begins" },
+						 { "darkwarEX.rtlx", "Dark War", 1 },
+						 { "darkwar.rtl", "Dark War" },
+						 { "extremeEX.rtlx", "Extreme ROTT", 1 },
+						 { "extreme.rtl", "Extreme ROTT" },
+						 { "huntcontEX.rtlx", "The HUNT Continues" } };
 
 void Menu_FillEpisodes(char *datadir)
 {
@@ -838,7 +838,6 @@ void Menu_FillEpisodes(char *datadir)
 		if (found && num_episodes < arrlen(EpisodeMenu))
 		{
 			FILE *f;
-			char buf[4];
 
 			if ((f = fopen(found, "r")) == NULL)
 			{
@@ -846,9 +845,11 @@ void Menu_FillEpisodes(char *datadir)
 			}
 			else
 			{
-				fread(buf, 1, 4, f);
+				char buf[4] = { 0 };
+				size_t read_bytes = fread(buf, 1, 4, f);
 				fclose(f);
-				if (!(buf[0] == 'R' && (buf[1] == 'T' || buf[1] == 'X') &&
+				if (read_bytes != 4 ||
+					!(buf[0] == 'R' && (buf[1] == 'T' || buf[1] == 'X') &&
 					  buf[2] == 'L'))
 				{
 					continue;
