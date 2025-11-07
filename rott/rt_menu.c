@@ -794,7 +794,7 @@ CP_itemtype MultiPageCustomMenu[] = {
 	{ 1, "", 'a', { NULL } }, { 1, "", 'a', { NULL } },
 };
 
-static CP_MenuNames EpisodeNames[] = { "", "", "", "" };
+static CP_MenuNames EpisodeNames[] = { "", "", "", "", "", "", "", "" };
 
 static CP_iteminfo EpisodeItems = {
 	32, 40, 0, 0, 32, EpisodeNames, mn_largefont
