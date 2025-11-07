@@ -800,13 +800,14 @@ static CP_iteminfo EpisodeItems = {
 	32, 40, 0, 0, 32, EpisodeNames, mn_largefont
 };
 
-static CP_itemtype EpisodeMenu[] = { { 0, "", '\0', { NULL } },
-									 { 0, "", '\0', { NULL } },
-									 { 0, "", '\0', { NULL } },
-									 { 0, "", '\0', { NULL } } };
+static CP_itemtype EpisodeMenu[] = {
+	{ 0, "", '\0', { NULL } }, { 0, "", '\0', { NULL } },
+	{ 0, "", '\0', { NULL } }, { 0, "", '\0', { NULL } },
+	{ 0, "", '\0', { NULL } }, { 0, "", '\0', { NULL } },
+	{ 0, "", '\0', { NULL } }, { 0, "", '\0', { NULL } }
+};
 
-static int num_episodes;
-static char *found_episodes[4];
+static char *found_episodes[8];
 static const struct
 {
 	const char *file_name;
@@ -821,7 +822,7 @@ static const struct
 						 { "extreme.rtl", "Extreme ROTT" },
 						 { "huntcontEX.rtlx", "The HUNT Continues" } };
 
-void Menu_FillEpisodes(char *datadir)
+void PopulateEpisodeMenu(char *datadir)
 {
 	if (datadir == NULL || gamestate.Product == ROTT_SHAREWARE)
 	{
@@ -835,7 +836,7 @@ void Menu_FillEpisodes(char *datadir)
 		char *found = M_FileCaseExists(path);
 		free(path);
 
-		if (found && num_episodes < arrlen(EpisodeMenu))
+		if (found && EpisodeItems.amount < arrlen(EpisodeMenu))
 		{
 			FILE *f;
 
@@ -856,19 +857,18 @@ void Menu_FillEpisodes(char *datadir)
 				}
 			}
 
-			strcpy(EpisodeNames[num_episodes],
-				   episodes_to_find[i].episode_name);
+			M_StringCopy(EpisodeNames[EpisodeItems.amount],
+						 episodes_to_find[i].episode_name,
+						 sizeof(*EpisodeNames));
 
-			EpisodeMenu[num_episodes].active = 1;
-			EpisodeMenu[num_episodes].letter =
+			EpisodeMenu[EpisodeItems.amount].active = 1;
+			EpisodeMenu[EpisodeItems.amount].letter =
 				episodes_to_find[i].episode_name[0];
 
-			found_episodes[num_episodes++] = found;
+			found_episodes[EpisodeItems.amount++] = found;
 			i += episodes_to_find[i].skip_next;
 		}
 	}
-
-	EpisodeItems.amount = num_episodes;
 }
 
 #define COLORX 113
@@ -6391,7 +6391,7 @@ int CP_EpisodeSelection(void)
 	extern char *ROTTMAPS;
 	int which;
 
-	if (num_episodes <= 1 || GameLevels.avail == true ||
+	if (EpisodeItems.amount <= 1 || GameLevels.avail == true ||
 		gamestate.Product == ROTT_SHAREWARE)
 	{
 		return (1);
