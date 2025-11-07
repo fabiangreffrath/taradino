@@ -1171,7 +1171,7 @@ void PreCache(void)
 
 			// Cache in fonts
 			//	shape = W_CacheLumpNum (W_GetNumForName ("newfnt1"), PU_STATIC,
-			//Cvt_font_t, 1); 	bigfont = (font_t *)shape;
+			// Cvt_font_t, 1); 	bigfont = (font_t *)shape;
 			CurrentFont = newfont1; // smallfont;
 
 			strcpy(buf, "Press Any Key");
@@ -1695,7 +1695,7 @@ void GetAlternateMapInfo(mapfileinfo_t *mapinfo, AlternateInformation *info)
 
 	GetMapFileInfo(mapinfo, info->file);
 
-	UL_ChangeDirectory(&CWD[0]);
+	UL_ChangeDirectory(CWD);
 }
 
 /*
@@ -1851,7 +1851,7 @@ void LoadAlternateMap(AlternateInformation *info, int mapnum)
 
 	ReadROTTMap(info->file, mapnum);
 
-	UL_ChangeDirectory(&CWD[0]);
+	UL_ChangeDirectory(CWD);
 }
 
 /*
@@ -2040,7 +2040,7 @@ unsigned short GetNearestAreaNumber(int tilex, int tiley)
 		return (MAPSPOT(tilex, tiley + 1, 0) + AREATILE);
 	//	else
 	//		Error("GetNearestAreaNumber: Couldn't fix up area at x=%ld
-	//y=%ld\n",tilex,tiley);
+	// y=%ld\n",tilex,tiley);
 	return (NUMAREAS + AREATILE - 1);
 }
 

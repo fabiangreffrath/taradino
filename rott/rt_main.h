@@ -159,6 +159,6 @@ extern boolean MAPSTATS;
 extern boolean TILESTATS;
 extern boolean HUD;
 
-extern char CWD[40];
+extern char CWD[MAX_PATH];
 
 #endif
