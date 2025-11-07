@@ -728,7 +728,7 @@ void SetupWads(void)
 					if (((strstr(buf, "RTL") != 0) || strstr(buf, "RXL") != 0))
 					{
 						GameLevels.file = M_StringDuplicate(tempstr);
-						GameLevels.avail++;
+						GameLevels.avail = true;
 						printf("    Adding %s\n", tempstr);
 					}
 					fclose(f);
@@ -772,7 +772,7 @@ void SetupWads(void)
 					if (((strstr(buf, "RTC") != 0) || strstr(buf, "RXC") != 0))
 					{
 						BattleLevels.file = M_StringDuplicate(tempstr);
-						BattleLevels.avail++;
+						BattleLevels.avail = true;
 						printf("    Adding %s\n", tempstr);
 					}
 					fclose(f);

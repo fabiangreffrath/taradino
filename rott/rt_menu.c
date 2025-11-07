@@ -836,7 +836,8 @@ void PopulateEpisodeMenu(char *datadir)
 		char *found = M_FileCaseExists(path);
 		free(path);
 
-		if (found && EpisodeItems.amount < arrlen(EpisodeMenu))
+		if (found && EpisodeItems.amount < arrlen(EpisodeMenu) &&
+			EpisodeItems.amount < arrlen(found_episodes))
 		{
 			FILE *f;
 
@@ -861,7 +862,7 @@ void PopulateEpisodeMenu(char *datadir)
 						 episodes_to_find[i].episode_name,
 						 sizeof(*EpisodeNames));
 
-			EpisodeMenu[EpisodeItems.amount].active = 1;
+			EpisodeMenu[EpisodeItems.amount].active = CP_Active;
 			EpisodeMenu[EpisodeItems.amount].letter =
 				episodes_to_find[i].episode_name[0];
 
@@ -6409,8 +6410,11 @@ int CP_EpisodeSelection(void)
 		}
 	} while (EpisodeMenu[which].active == CP_SemiActive);
 
-	ROTTMAPS = found_episodes[which];
-	printf("New Game: Using ROTTMAPS = %s\n", ROTTMAPS);
+	if (which < EpisodeItems.amount)
+	{
+		ROTTMAPS = found_episodes[which];
+		printf("New Game: Using ROTTMAPS = %s\n", ROTTMAPS);
+	}
 
 	return (1);
 }
