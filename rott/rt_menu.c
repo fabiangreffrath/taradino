@@ -822,6 +822,18 @@ static const struct
 						 { "extreme.rtl", "Extreme ROTT" },
 						 { "huntcontEX.rtlx", "The HUNT Continues" } };
 
+char *FoundEpisode(unsigned int i)
+{
+	if (i < EpisodeItems.amount)
+	{
+		return found_episodes[i];
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
 void PopulateEpisodeMenu(char *datadir)
 {
 	if (datadir == NULL || gamestate.Product == ROTT_SHAREWARE)

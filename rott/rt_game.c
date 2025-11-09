@@ -4807,6 +4807,7 @@ boolean LoadTheGame(int num, gamestorage_t *game)
 	int i;
 	unsigned short mapcrc;
 	int myticcount;
+	char *orig_ROTTMAPS = ROTTMAPS;
 
 	if (num > 15 || num < 0)
 		Error("Illegal Load game value=%d\n", num);
@@ -4868,8 +4869,22 @@ boolean LoadTheGame(int num, gamestorage_t *game)
 
 	mapcrc = GetMapCRC(gamestate.mapon);
 
+	i = 0;
+	while (mapcrc != game->mapcrc)
+	{
+		ROTTMAPS = FoundEpisode(i++);
+		if (ROTTMAPS == NULL)
+		{
+			ROTTMAPS = orig_ROTTMAPS;
+			break;
+		}
+		mapcrc = GetMapCRC(gamestate.mapon);
+	}
+
 	if (mapcrc != game->mapcrc)
 		return false;
+
+	printf("Load Game: Using ROTTMAPS = %s\n", ROTTMAPS);
 
 	/////////////////////////////////////////////////////////////////////////////
 	// Load in rest of saved game file beyond this point
