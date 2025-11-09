@@ -78,7 +78,6 @@ void W_AddFile(char *_filename)
 	filelump_t *fileinfo, singleinfo;
 
 	char filename[MAX_PATH];
-	char buf[MAX_PATH + 100]; // bna++
 
 	strncpy(filename, _filename, sizeof(filename));
 	filename[sizeof(filename) - 1] = '\0';
@@ -86,10 +85,8 @@ void W_AddFile(char *_filename)
 	// bna section start
 	if (access(filename, 0) != 0)
 	{
-		strcpy(buf, "Error, Could not find User file '");
-		strcat(buf, filename);
-		strcat(buf, "', ignoring file");
-		printf("%s", buf);
+		printf("Error, Could not find User file '%s', ignoring file\n",
+			   filename);
 	}
 	// bna section end
 
@@ -119,8 +116,8 @@ void W_AddFile(char *_filename)
 		// WAD file
 		if (!quiet)
 			printf("    Adding %s.\n", filename);
-		read(handle, &header, sizeof(header));
-		if (strncmp(header.identification, "IWAD", 4))
+		if (read(handle, &header, sizeof(header)) != sizeof(header) ||
+			strncmp(header.identification, "IWAD", 4))
 			Error("Wad file %s doesn't have IWAD id\n", filename);
 		header.numlumps = IntelLong(LONG(header.numlumps));
 		header.infotableofs = IntelLong(LONG(header.infotableofs));
@@ -129,7 +126,8 @@ void W_AddFile(char *_filename)
 		if (!fileinfo)
 			Error("Wad file could not allocate header info on stack");
 		lseek(handle, header.infotableofs, SEEK_SET);
-		read(handle, fileinfo, length);
+		if (read(handle, fileinfo, length) != length)
+			Error("Wad file could not read header info");
 
 		numlumps += header.numlumps;
 	}

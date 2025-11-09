@@ -117,7 +117,7 @@ static int NoWait;
 static int startlevel = 0;
 static int demonumber = -1;
 
-char CWD[40]; // curent working directory
+char CWD[MAX_PATH]; // curent working directory
 static boolean quitactive = false;
 
 int timelimit;
@@ -146,9 +146,11 @@ extern void RecordDemoQuery(void);
 
 SDL_Window *VL_GetVideoWindow(void);
 
+char *ROTTMAPS, *ORIG_ROTTMAPS;
+char *BATTMAPS;
+
 int main(int argc, char *argv[])
 {
-	extern char *BATTMAPS, *ROTTMAPS;
 	_argc = argc;
 	_argv = argv;
 
@@ -195,6 +197,8 @@ int main(int argc, char *argv[])
 		{
 			FileNotFoundError(filename);
 		}
+
+		ORIG_ROTTMAPS = ROTTMAPS;
 
 		free(filename);
 	}
@@ -697,12 +701,12 @@ void SetupWads(void)
 	}
 
 #if (SHAREWARE == 0)
+	FILE *f;
+	char buf[4] = { 0 };
 	// Check for rtl files
 	arg = CheckParm("filertl");
 	if (arg != 0)
 	{
-		FILE *f;
-		char buf[32];
 		if (_argv[arg + 1] != 0)
 		{ // are there a filename included
 			tempstr = safe_realloc(tempstr, 129 + strlen(_argv[arg + 1]));
@@ -724,8 +728,9 @@ void SetupWads(void)
 				}
 				else
 				{
-					fread(buf, 3, 3, f); // is the 3 first letters RTL (RXL)
-					if (((strstr(buf, "RTL") != 0) || strstr(buf, "RXL") != 0))
+					// is the 3 first letters RTL (RXL)
+					if (fread(buf, 1, 3, f) == 3 &&
+						(!memcmp(buf, "RTL", 3) || !memcmp(buf, "RXL", 3)))
 					{
 						GameLevels.file = M_StringDuplicate(tempstr);
 						GameLevels.avail = true;
@@ -745,8 +750,6 @@ void SetupWads(void)
 	arg = CheckParm("filertc");
 	if (arg != 0)
 	{
-		FILE *f;
-		char buf[32];
 		if (_argv[arg + 1] != 0)
 		{ // are there a filename included
 			tempstr = safe_realloc(tempstr, 129 + strlen(_argv[arg + 1]));
@@ -768,8 +771,9 @@ void SetupWads(void)
 				}
 				else
 				{
-					fread(buf, 3, 3, f); // is the 3 first letters RTC (RXC)
-					if (((strstr(buf, "RTC") != 0) || strstr(buf, "RXC") != 0))
+					// is the 3 first letters RTC (RXC)
+					if (fread(buf, 1, 3, f) == 3 &&
+						(!memcmp(buf, "RTC", 3) || !memcmp(buf, "RXC", 3)))
 					{
 						BattleLevels.file = M_StringDuplicate(tempstr);
 						BattleLevels.avail = true;
@@ -876,8 +880,9 @@ void Init_Tables(void)
 	unsigned int *blockstart;
 	byte *shape;
 
-	memset(&CWD[0], 0, 40);
-	getcwd(CWD, 40); // get the current directory
+	memset(CWD, 0, sizeof(CWD));
+	if (getcwd(CWD, sizeof(CWD)) == NULL) // get the current directory
+		CWD[0] = '.';
 
 	origpal = SafeMalloc(768);
 	memcpy(origpal, W_CacheLumpName("pal", PU_CACHE, CvtNull, 1), 768);
