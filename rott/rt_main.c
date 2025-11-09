@@ -146,9 +146,11 @@ extern void RecordDemoQuery(void);
 
 SDL_Window *VL_GetVideoWindow(void);
 
+char *ROTTMAPS, *ORIG_ROTTMAPS;
+char *BATTMAPS;
+
 int main(int argc, char *argv[])
 {
-	extern char *BATTMAPS, *ROTTMAPS;
 	_argc = argc;
 	_argv = argv;
 
@@ -195,6 +197,8 @@ int main(int argc, char *argv[])
 		{
 			FileNotFoundError(filename);
 		}
+
+		ORIG_ROTTMAPS = ROTTMAPS;
 
 		free(filename);
 	}

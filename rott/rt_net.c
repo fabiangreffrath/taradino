@@ -2826,6 +2826,8 @@ void SetupDemo(void)
 {
 	DemoHeaderType *DemoHeader;
 
+	ROTTMAPS = ORIG_ROTTMAPS;
+
 	demoplayback = true;
 	godmode = 0;
 

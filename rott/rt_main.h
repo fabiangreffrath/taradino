@@ -161,4 +161,6 @@ extern boolean HUD;
 
 extern char CWD[MAX_PATH];
 
+extern char *BATTMAPS, *ROTTMAPS, *ORIG_ROTTMAPS;
+
 #endif

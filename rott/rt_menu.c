@@ -2573,6 +2573,8 @@ void EndGameStuff(void)
 	ingame = false;
 
 	GamePaused = false;
+
+	ROTTMAPS = ORIG_ROTTMAPS;
 }
 
 //******************************************************************************
