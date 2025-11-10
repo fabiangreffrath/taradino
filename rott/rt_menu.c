@@ -851,17 +851,22 @@ void PopulateEpisodeMenu(char *datadir)
 		if (found && EpisodeItems.amount < arrlen(EpisodeMenu) &&
 			EpisodeItems.amount < arrlen(found_episodes))
 		{
-			FILE *f;
-			char buf[4] = { 0 };
+			FILE *f = fopen(found, "r");
 
-			if ((f = fopen(found, "r")) == NULL || fread(buf, 1, 4, f) != 4 ||
+			if (f == NULL)
+			{
+				free(found);
+				continue;
+			}
+
+			char buf[4] = { 0 };
+			size_t read_bytes = fread(buf, 1, 4, f);
+			fclose(f);
+
+			if (read_bytes != 4 ||
 				!(buf[0] == 'R' && (buf[1] == 'T' || buf[1] == 'X') &&
 				  buf[2] == 'L'))
 			{
-				if (f)
-				{
-					fclose(f);
-				}
 				free(found);
 				continue;
 			}
