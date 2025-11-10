@@ -852,22 +852,18 @@ void PopulateEpisodeMenu(char *datadir)
 			EpisodeItems.amount < arrlen(found_episodes))
 		{
 			FILE *f;
+			char buf[4] = { 0 };
 
-			if ((f = fopen(found, "r")) == NULL)
+			if ((f = fopen(found, "r")) == NULL || fread(buf, 1, 4, f) != 4 ||
+				!(buf[0] == 'R' && (buf[1] == 'T' || buf[1] == 'X') &&
+				  buf[2] == 'L'))
 			{
-				continue;
-			}
-			else
-			{
-				char buf[4] = { 0 };
-				size_t read_bytes = fread(buf, 1, 4, f);
-				fclose(f);
-				if (read_bytes != 4 ||
-					!(buf[0] == 'R' && (buf[1] == 'T' || buf[1] == 'X') &&
-					  buf[2] == 'L'))
+				if (f)
 				{
-					continue;
+					fclose(f);
 				}
+				free(found);
+				continue;
 			}
 
 			M_StringCopy(EpisodeNames[EpisodeItems.amount],
