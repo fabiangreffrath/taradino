@@ -203,6 +203,8 @@ int main(int argc, char *argv[])
 		free(filename);
 	}
 
+	PopulateEpisodeMenu(datadir);
+
 	DrawRottTitle();
 	gamestate.randomseed = -1;
 
@@ -731,7 +733,7 @@ void SetupWads(void)
 						(!memcmp(buf, "RTL", 3) || !memcmp(buf, "RXL", 3)))
 					{
 						GameLevels.file = M_StringDuplicate(tempstr);
-						GameLevels.avail++;
+						GameLevels.avail = true;
 						printf("    Adding %s\n", tempstr);
 					}
 					fclose(f);
@@ -774,7 +776,7 @@ void SetupWads(void)
 						(!memcmp(buf, "RTC", 3) || !memcmp(buf, "RXC", 3)))
 					{
 						BattleLevels.file = M_StringDuplicate(tempstr);
-						BattleLevels.avail++;
+						BattleLevels.avail = true;
 						printf("    Adding %s\n", tempstr);
 					}
 					fclose(f);

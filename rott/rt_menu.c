@@ -794,6 +794,96 @@ CP_itemtype MultiPageCustomMenu[] = {
 	{ 1, "", 'a', { NULL } }, { 1, "", 'a', { NULL } },
 };
 
+static CP_MenuNames EpisodeNames[] = { "", "", "", "", "", "", "", "" };
+
+static CP_iteminfo EpisodeItems = {
+	32, 40, 0, 0, 32, EpisodeNames, mn_largefont
+};
+
+static CP_itemtype EpisodeMenu[] = {
+	{ 0, "", '\0', { NULL } }, { 0, "", '\0', { NULL } },
+	{ 0, "", '\0', { NULL } }, { 0, "", '\0', { NULL } },
+	{ 0, "", '\0', { NULL } }, { 0, "", '\0', { NULL } },
+	{ 0, "", '\0', { NULL } }, { 0, "", '\0', { NULL } }
+};
+
+static char *found_episodes[8];
+static const struct
+{
+	const char *file_name;
+	const char *episode_name;
+	const int skip_next;
+} episodes_to_find[] = { { "huntbginEX.rtlx", "The HUNT Begins", 2 },
+						 { "huntbgn2.rtl", "The HUNT Begins", 1 },
+						 { "huntbgin.rtl", "The HUNT Begins" },
+						 { "darkwarEX.rtlx", "Dark War", 1 },
+						 { "darkwar.rtl", "Dark War" },
+						 { "extremeEX.rtlx", "Extreme ROTT", 1 },
+						 { "extreme.rtl", "Extreme ROTT" },
+						 { "huntcontEX.rtlx", "The HUNT Continues" } };
+
+char *FoundEpisode(unsigned int i)
+{
+	if (i < EpisodeItems.amount)
+	{
+		return found_episodes[i];
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+void PopulateEpisodeMenu(char *datadir)
+{
+	if (datadir == NULL || gamestate.Product == ROTT_SHAREWARE)
+	{
+		return;
+	}
+
+	for (int i = 0; i < arrlen(episodes_to_find); i++)
+	{
+		char *path = M_StringJoin(datadir, PATH_SEP_STR,
+								  episodes_to_find[i].file_name, NULL);
+		char *found = M_FileCaseExists(path);
+		free(path);
+
+		if (found && EpisodeItems.amount < arrlen(EpisodeMenu) &&
+			EpisodeItems.amount < arrlen(found_episodes))
+		{
+			FILE *f;
+
+			if ((f = fopen(found, "r")) == NULL)
+			{
+				continue;
+			}
+			else
+			{
+				char buf[4] = { 0 };
+				size_t read_bytes = fread(buf, 1, 4, f);
+				fclose(f);
+				if (read_bytes != 4 ||
+					!(buf[0] == 'R' && (buf[1] == 'T' || buf[1] == 'X') &&
+					  buf[2] == 'L'))
+				{
+					continue;
+				}
+			}
+
+			M_StringCopy(EpisodeNames[EpisodeItems.amount],
+						 episodes_to_find[i].episode_name,
+						 sizeof(*EpisodeNames));
+
+			EpisodeMenu[EpisodeItems.amount].active = CP_Active;
+			EpisodeMenu[EpisodeItems.amount].letter =
+				episodes_to_find[i].episode_name[0];
+
+			found_episodes[EpisodeItems.amount++] = found;
+			i += episodes_to_find[i].skip_next;
+		}
+	}
+}
+
 #define COLORX 113
 #define COLORY 43
 #define COLORW 60
@@ -2631,6 +2721,11 @@ void CP_NewGame(void)
 	else
 	{
 		handlewhich = 100;
+	}
+
+	if (CP_EpisodeSelection() == 0)
+	{
+		return;
 	}
 
 	if (CP_PlayerSelection() == 0)
@@ -6288,6 +6383,52 @@ int CP_PlayerSelection(void)
 	DefaultPlayerCharacter = which;
 	locplayerstate->player = which;
 #endif
+
+	return (1);
+}
+
+static void DrawEpisodeMenu(void)
+{
+	MenuNum = 1;
+
+	SetAlternateMenuBuf();
+	ClearMenuBuf();
+	SetMenuTitle("Episode Selection");
+
+	MN_GetCursorLocation(&EpisodeItems, &EpisodeMenu[0]);
+	DrawMenu(&EpisodeItems, &EpisodeMenu[0]);
+	DisplayInfo(0);
+	FlipMenuBuf();
+}
+
+int CP_EpisodeSelection(void)
+{
+	extern char *ROTTMAPS;
+	int which;
+
+	if (EpisodeItems.amount <= 1 || GameLevels.avail == true ||
+		gamestate.Product == ROTT_SHAREWARE)
+	{
+		return (1);
+	}
+
+	DrawEpisodeMenu();
+
+	do
+	{
+		which = HandleMenu(&EpisodeItems, &EpisodeMenu[0], NULL);
+		if (which < 0)
+		{
+			handlewhich = 1;
+			return (0);
+		}
+	} while (EpisodeMenu[which].active == CP_SemiActive);
+
+	if (which < EpisodeItems.amount)
+	{
+		ROTTMAPS = found_episodes[which];
+		printf("New Game: Using ROTTMAPS = %s\n", ROTTMAPS);
+	}
 
 	return (1);
 }
