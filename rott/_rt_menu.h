@@ -307,6 +307,29 @@ void MCERROR(void);
 
 void DrawKeyboardMenu(void);
 void CP_KeyboardMenu(void);
+
+typedef struct
+{
+	int *number;
+	int upperbound;
+	int lowerbound;
+	int erasex;
+	int erasey;
+	int erasew;
+	int numadjust;
+	char *blockname;
+	void (*routine)(int w);
+	char *left;
+	char *right;
+
+	int block;
+	int blkx;
+	int eraseh;
+	unsigned long scale;
+	int range;
+} menuslider_t;
+
+boolean MultipleSliderMenu(char *title, int numsliders, menuslider_t *sliders);
 boolean SliderMenu(int *number, int upperbound, int lowerbound, int erasex,
 				   int erasey, int erasew, int numadjust, char *blockname,
 				   void (*routine)(int w), char *title, char *left,

@@ -41,6 +41,8 @@ extern boolean joystickenabled;
 extern boolean joypadenabled;
 extern int joystickport;
 extern int mouseadjustment;
+extern int mouseadjustment_y;
+extern int mouseadjustment_y2;
 extern int threshold;
 extern int NumVoices;
 extern int NumChannels;

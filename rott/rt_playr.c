@@ -129,19 +129,12 @@ boolean missilecam = false;
 objtype *missobj = NULL;
 // Player control variables
 
-int KX = 0;
-int KY = 0;
-int MX = 0;
-int MY = 0;
-int JX = 0;
-int JY = 0;
-int CX = 0;
-int CY = 0;
-
-int oldcyberx = 0;
-int oldcybery = 0;
-int CYBERDEADRANGE = 6000;
-boolean CYBERLOOKUP, CYBERLOOKDOWN;
+static int KX = 0;
+static int KY = 0;
+static int MX = 0;
+static int MY = 0;
+static int JX = 0;
+static int JY = 0;
 
 int leftmom = 0;
 int rightmom = 0;
@@ -1905,6 +1898,7 @@ void PollKeyboardButtons(void)
 //
 //******************************************************************************
 extern boolean usemouselook;
+static boolean centering;
 void PollMouseButtons(void)
 {
 	int i;
@@ -1933,7 +1927,7 @@ void PollMouseButtons(void)
 					playertype *pstate;
 					pstate = &PLAYERSTATE[consoleplayer];
 					pstate->horizon = 512;
-					// SetNormalHorizon(PLAYER[0]);
+					centering = true;
 				}
 				// bna added
 			}
@@ -2175,112 +2169,31 @@ void PollKeyboardMove(void)
 //
 //******************************************************************************
 
-// #define MOUSE_RY_SHIFT 12
-// #define MOUSE_TZ_SHIFT 3
-#define MOUSE_TZ_SENSITIVITY_SCALE 65535
-#define MOUSE_RY_SENSITIVITY_SCALE 18725 * 2
-// #define MOUSE_RY_INPUT_SCALE 6000
-#define MOUSE_TZ_INPUT_SCALE 20
-int mouse_ry_input_scale = 5000;
-
-int sensitivity_scalar[15] = { 0,  1,  2,  3,  4,  5,  6, 8,
-							   11, 13, 15, 18, 12, 13, 14 };
-// #define MOUSE_RY_SCALE 65535
-// #define MOUSE_TZ_SCALE 65535
-#define MAXMOUSETURN 7000000
-
-/* use SDL mouse */
-#define USESDLMOUSE 1
-
 extern int inverse_mouse;
-double Y_MouseSpeed = 70;
 
 void PollMouseMove(void)
 {
 	int mousexmove, mouseymove;
-	double Ys;
-	// SetTextMode();
-
-	Ys = (Y_MouseSpeed / 100);
-	//
 
 	// const long inverse_mouse  = 1; //set  to -1 to invert mouse
 	// inverse_mouse def moved to RT_CFG.C
 
-#ifdef USESDLMOUSE
 	INL_GetMouseDelta(&mousexmove, &mouseymove);
-#else
-	PollMouse(); // Uses DirectInput mouse in DInput.cpp
-	mousexmove = MX;
-	mouseymove = MY;
-#endif
 
-	if (abs(mousexmove) > abs(mouseymove))
-		mouseymove /= 2;
-	else
-		mousexmove /= 2;
-	MX = 0;
-	MY = 0;
+	MX = -KEYBOARDPREAMBLETURNAMOUNT * mousexmove * mouseadjustment / 16;
 
-	if ((abs(mouseymove)) >= threshold)
-	{ //
-		MY = MOUSE_TZ_INPUT_SCALE * mouseymove;
-		MY *= inverse_mouse;
-		if (usemouselook == true)
-		{
-			if (MY > 0)
-			{
-				playertype *pstate;
-				pstate = &PLAYERSTATE[consoleplayer];
-				// if (pstate->horizon > 512){
-				pstate->horizon -=
-					Ys * (2 * sensitivity_scalar[mouseadjustment]);
-				//}
-			}
-			else if (MY < 0)
-			{
-				playertype *pstate;
-				pstate = &PLAYERSTATE[consoleplayer];
-				// SetTextMode (  );
-				pstate->horizon +=
-					Ys * (2 * sensitivity_scalar[mouseadjustment]);
-				// buttonpoll[ bt_horizonup ] = true;
-			}
-			MY = 0;
-		}
-		else
-		{
-			// MY += FixedMul(MY,mouseadjustment*MOUSE_TZ_SENSITIVITY_SCALE);
-			if (abs(mouseymove) > 200)
-			{
-				buttonpoll[bt_run] = true;
-				// buttonpoll[ bt_lookup ] = true;
-			}
-		}
-	}
-
-	if ((abs(mousexmove)) >= threshold)
+	if (usemouselook == true)
 	{
-		// MX = -MOUSE_RY_INPUT_SCALE*mousexmove;
-		MX = -mouse_ry_input_scale * mousexmove;
-		MX += FixedMul(MX, sensitivity_scalar[mouseadjustment] *
-							   MOUSE_RY_SENSITIVITY_SCALE);
-		//   if (abs(MX) > MAXMOUSETURN)
-		//   MX = MAXMOUSETURN*SGN(MX);
-		if (usemouselook == true)
-		{
-			if (abs(mouseymove) > 10)
-			{
-				buttonpoll[bt_run] = true;
-				// buttonpoll[ bt_lookdown ] = true;
-			}
-		}
+		playertype *const pstate = &PLAYERSTATE[consoleplayer];
+		pstate->horizon -= inverse_mouse * mouseymove * mouseadjustment_y2 / 16;
+		MY = 0;
 	}
-	//   if (MY > 0)
-	//      MX -= (MX/2);
-
-	//   MX=0;
-	//   MY=0;
+	else
+	{
+		MY = BASEMOVE * mouseymove * mouseadjustment_y / 16;
+	}
+	fprintf(stderr, "%d %d %d %d %d\n", mousexmove, MX, mouseymove, MY,
+			PLAYERSTATE[consoleplayer].horizon);
 }
 
 //******************************************************************************
@@ -2349,8 +2262,8 @@ void PollMove(void)
 	int angle;
 	int x, y;
 
-	x = KX + MX + JX + CX;
-	y = KY + MY + JY + CY;
+	x = KX + MX + JX;
+	y = KY + MY + JY;
 
 	if (buttonpoll[bt_aimbutton])
 	{
@@ -2503,7 +2416,6 @@ void PollControls(void)
 	memset(buttonpoll, 0, sizeof(buttonpoll));
 
 	controlbuf[0] = controlbuf[1] = controlbuf[2] = 0;
-	CYBERLOOKUP = CYBERLOOKDOWN = false;
 
 	if (gamestate.autorun == 1)
 		buttonpoll[bt_run] = true;
@@ -3434,8 +3346,8 @@ void Thrust(objtype *ob)
 #if (BNACRASHPREVENT == 1)
 			if (touchplate[index - 1] != 0)
 			{ //	CRASH IN SHAREWARE 'ride em cowboy' BNA FIX
-				// SetTextMode (  ); qwert  // DONT ALLOW BAD touchplate ( == 0
-				// ) see rt_door.c
+			  // SetTextMode (  ); qwert  // DONT ALLOW BAD touchplate ( == 0
+			  // ) see rt_door.c
 #endif
 				if (touchplate[index - 1]->complete)
 					SD_PlaySoundRTP(SD_BADTOUCHSND, ob->x, ob->y);
@@ -3780,12 +3692,12 @@ void PlayerTiltHead(objtype *ob)
 										  YZHORIZONSPEED));
 			}
 		}
-		if (pstate->buttonstate[bt_lookup] || CYBERLOOKUP)
+		if (pstate->buttonstate[bt_lookup])
 		{
 			if (!(ob->flags & FL_FLEET))
 			{
 				dyz = YZTILTSPEED;
-				if (pstate->buttonstate[bt_lookdown] || CYBERLOOKDOWN)
+				if (pstate->buttonstate[bt_lookdown])
 				{
 					dyz = 0;
 				}
@@ -3793,12 +3705,12 @@ void PlayerTiltHead(objtype *ob)
 				SetNormalHorizon(ob);
 			}
 		}
-		if (pstate->buttonstate[bt_lookdown] || CYBERLOOKDOWN)
+		if (pstate->buttonstate[bt_lookdown])
 		{
 			if (!(ob->flags & FL_FLEET))
 			{
 				dyz = -YZTILTSPEED;
-				if (pstate->buttonstate[bt_lookup] || CYBERLOOKUP)
+				if (pstate->buttonstate[bt_lookup])
 				{
 					dyz = 0;
 				}
@@ -3824,7 +3736,15 @@ void PlayerTiltHead(objtype *ob)
 		else
 			yzangle -= speed;
 		if ((abs(yzangle - pstate->horizon)) < SNAPBACKSPEED)
+		{
 			yzangle = pstate->horizon;
+			centering = false;
+		}
+	}
+
+	if (usemouselook && !centering)
+	{
+		yzangle = pstate->horizon;
 	}
 
 	yzangle += dyz;
@@ -3834,6 +3754,11 @@ void PlayerTiltHead(objtype *ob)
 		yzangle = HORIZONYZOFFSET - YZANGLELIMIT;
 	ob->yzangle = yzangle - HORIZONYZOFFSET;
 	Fix(ob->yzangle);
+
+	if (usemouselook && !centering)
+	{
+		pstate->horizon = yzangle;
+	}
 }
 
 /*
@@ -4965,11 +4890,11 @@ void CheckProtectionsAndPowerups(objtype *ob, playertype *pstate)
 void CheckFlying(objtype *ob, playertype *pstate)
 {
 
-	if (pstate->buttonstate[bt_lookup] || CYBERLOOKUP)
+	if (pstate->buttonstate[bt_lookup])
 	{
 		ob->momentumz = -FLYINGZMOM;
 	}
-	if (pstate->buttonstate[bt_lookdown] || CYBERLOOKDOWN)
+	if (pstate->buttonstate[bt_lookdown])
 	{
 		ob->momentumz = FLYINGZMOM;
 	}

@@ -516,7 +516,7 @@ void IN_PumpEvents(void)
 void INL_GetMouseDelta(int *x, int *y)
 {
 	IN_PumpEvents();
-	
+
 	SDL_GetRelativeMouseState(x, y);
 }
 
