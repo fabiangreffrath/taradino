@@ -468,16 +468,16 @@ void CheckCommandLineParameters(void)
 		printf("   FULLSCREEN - Start in fullscreen mode\n");
 		printf("   WINDOW     - Start in windowed mode\n");
 		printf("   RESOLUTION - Specify the screen resolution to use\n");
-		printf("              - next param is <widthxheight>, valid "
-			   "resolutions are:\n");
-		printf("              - 320x200 and 640x480\n");
+		printf("                next param is <WIDTHxHEIGHT>\n");
+		printf("                valid resolutions are:\n");
+		printf("                320x200 and 640x480\n");
 #if (SHAREWARE == 0)
-		printf("   FILERTL    - used to load Userlevels (RTL files)\n");
-		printf("              - next parameter is RTL filename\n");
-		printf("   FILERTC    - used to load Battlelevels (RTC files)\n");
-		printf("              - next parameter is RTC filename\n");
-		printf("   FILE       - used to load Extern WAD files\n");
-		printf("              - next parameter is WAD filename\n");
+		printf("   FILERTL    - Load user levels (RTL files)\n");
+		printf("                next parameter is RTL file name\n");
+		printf("   FILERTC    - Load battle levels (RTC files)\n");
+		printf("                next parameter is RTC file name\n");
+		printf("   FILE       - Load extern WAD files\n");
+		printf("                next parameter is WAD file name\n");
 #endif
 		printf("   NOJOYS     - Disable check for joystick.\n");
 		printf("   NOMOUSE    - Disable check for mouse.\n");
@@ -734,7 +734,7 @@ void SetupWads(void)
 					{
 						GameLevels.file = M_StringDuplicate(tempstr);
 						GameLevels.avail = true;
-						printf("    Adding %s\n", tempstr);
+						printf(" Using %s\n", tempstr);
 					}
 					fclose(f);
 				}
@@ -777,7 +777,7 @@ void SetupWads(void)
 					{
 						BattleLevels.file = M_StringDuplicate(tempstr);
 						BattleLevels.avail = true;
-						printf("    Adding %s\n", tempstr);
+						printf(" Using %s\n", tempstr);
 					}
 					fclose(f);
 				}

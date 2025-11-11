@@ -2827,6 +2827,7 @@ void SetupDemo(void)
 	DemoHeaderType *DemoHeader;
 
 	ROTTMAPS = ORIG_ROTTMAPS;
+	printf("Play Demo: Using ROTTMAPS = %s\n", ROTTMAPS);
 
 	demoplayback = true;
 	godmode = 0;

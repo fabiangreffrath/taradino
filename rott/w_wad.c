@@ -104,7 +104,7 @@ void W_AddFile(char *_filename)
 	{
 		// single lump file
 		if (!quiet)
-			printf("    Adding single file %s.\n", filename);
+			printf(" Adding single file %s.\n", filename);
 		fileinfo = &singleinfo;
 		singleinfo.filepos = 0;
 		singleinfo.size = LONG(filelength(handle));
@@ -115,7 +115,7 @@ void W_AddFile(char *_filename)
 	{
 		// WAD file
 		if (!quiet)
-			printf("    Adding %s.\n", filename);
+			printf(" Adding %s.\n", filename);
 		if (read(handle, &header, sizeof(header)) != sizeof(header) ||
 			strncmp(header.identification, "IWAD", 4))
 			Error("Wad file %s doesn't have IWAD id\n", filename);
