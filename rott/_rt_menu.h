@@ -329,11 +329,12 @@ typedef struct
 	int range;
 } menuslider_t;
 
-boolean MultipleSliderMenu(char *title, int numsliders, menuslider_t *sliders);
-boolean SliderMenu(int *number, int upperbound, int lowerbound, int erasex,
-				   int erasey, int erasew, int numadjust, char *blockname,
-				   void (*routine)(int w), char *title, char *left,
-				   char *right);
+static boolean MultipleSliderMenu(char *title, int numsliders,
+								  menuslider_t *sliders);
+static boolean SliderMenu(int *number, int upperbound, int lowerbound,
+						  int erasex, int erasey, int erasew, int numadjust,
+						  char *blockname, void (*routine)(int w), char *title,
+						  char *left, char *right);
 
 void DrawF1Help(void);
 void CP_F1Help(void);

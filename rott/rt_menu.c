@@ -5224,7 +5224,8 @@ void MN_PlayMenuSnd(int which)
 //
 //******************************************************************************
 
-boolean MultipleSliderMenu(char *title, int numsliders, menuslider_t *sliders)
+static boolean MultipleSliderMenu(char *title, int numsliders,
+								  menuslider_t *sliders)
 {
 	int slidernum = 0;
 	menuslider_t *slider;
@@ -5314,8 +5315,11 @@ boolean MultipleSliderMenu(char *title, int numsliders, menuslider_t *sliders)
 					{
 						slidernum = numsliders - 1;
 					}
-					moved = true;
-					break;
+					if (numsliders > 1)
+					{
+						moved = true;
+						break;
+					}
 				case dir_West:
 					if (*slider->number > slider->lowerbound)
 					{
@@ -5336,8 +5340,11 @@ boolean MultipleSliderMenu(char *title, int numsliders, menuslider_t *sliders)
 					{
 						slidernum = 0;
 					}
-					moved = true;
-					break;
+					if (numsliders > 1)
+					{
+						moved = true;
+						break;
+					}
 				case dir_East:
 					if (*slider->number < slider->upperbound)
 					{
@@ -5410,9 +5417,10 @@ boolean MultipleSliderMenu(char *title, int numsliders, menuslider_t *sliders)
 	return (returnval);
 }
 
-boolean SliderMenu(int *number, int upperbound, int lowerbound, int erasex,
-				   int erasey, int erasew, int numadjust, char *blockname,
-				   void (*routine)(int w), char *title, char *left, char *right)
+static boolean SliderMenu(int *number, int upperbound, int lowerbound,
+						  int erasex, int erasey, int erasew, int numadjust,
+						  char *blockname, void (*routine)(int w), char *title,
+						  char *left, char *right)
 {
 	menuslider_t slider = { number,	 upperbound, lowerbound, erasex,
 							erasey,	 erasew,	 numadjust,	 blockname,
