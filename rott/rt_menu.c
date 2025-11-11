@@ -5425,7 +5425,7 @@ static boolean SliderMenu(int *number, int upperbound, int lowerbound,
 	menuslider_t slider = { number,	 upperbound, lowerbound, erasex,
 							erasey,	 erasew,	 numadjust,	 blockname,
 							routine, left,		 right };
-	MultipleSliderMenu(title, 1, &slider);
+	return MultipleSliderMenu(title, 1, &slider);
 }
 
 //******************************************************************************
