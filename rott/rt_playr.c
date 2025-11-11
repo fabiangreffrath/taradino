@@ -2192,8 +2192,6 @@ void PollMouseMove(void)
 	{
 		MY = BASEMOVE * mouseymove * mouseadjustment_y / 16;
 	}
-	fprintf(stderr, "%d %d %d %d %d\n", mousexmove, MX, mouseymove, MY,
-			PLAYERSTATE[consoleplayer].horizon);
 }
 
 //******************************************************************************
