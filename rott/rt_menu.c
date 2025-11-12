@@ -1975,6 +1975,18 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w))
 			}
 		}
 
+		if ((items + handlewhich)->routine.v == DefineKey &&
+			Keyboard[sc_Delete])
+		{
+			buttonscan[(unsigned int)order[handlewhich]] = -1;
+			strcpy(&NormalKeyNames[handlewhich][KEYNAMEINDEX],
+				   IN_GetScanName(-1));
+
+			ClearMenuBuf();
+			DrawMenu(&NormalKeyItems, &NormalKeyMenu[0]);
+			DisplayInfo(0);
+		}
+
 		if (Keyboard[sc_CapsLock] && Keyboard[sc_X])
 		{
 			SaveScreen(true);
@@ -3410,6 +3422,7 @@ void DefineKey(void)
 	int timer;
 	int x;
 	int y;
+	int key = -1;
 
 	tick = false;
 	picked = false;
@@ -3462,8 +3475,6 @@ void DefineKey(void)
 
 		if (LastScan)
 		{
-			int key;
-
 			key = LastScan;
 			LastScan = 0;
 
@@ -3480,6 +3491,19 @@ void DefineKey(void)
 			IN_ClearKeysDown();
 		}
 	} while (!picked);
+
+	for (x = 0; x < NormalKeyItems.amount; x++)
+	{
+		if (x == handlewhich)
+			continue;
+
+		if (buttonscan[(unsigned int)order[x]] == key)
+		{
+			buttonscan[(unsigned int)order[x]] = -1;
+			strcpy(&NormalKeyNames[x][KEYNAMEINDEX],
+				   IN_GetScanName(-1));
+		}
+	}
 
 	ClearMenuBuf();
 	SetMenuTitle("Customize Keyboard");
@@ -4372,6 +4396,9 @@ char *IN_GetScanName(ScanCode scan)
 {
 	char **p;
 	ScanCode *s;
+
+	if (scan == (ScanCode)-1)
+		return "NONE";
 
 	for (s = ExtScanCodes, p = ExtScanNames; *s; p++, s++)
 		if (*s == scan)
