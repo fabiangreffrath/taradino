@@ -1978,9 +1978,9 @@ int HandleMenu(CP_iteminfo *item_i, CP_itemtype *items, void (*routine)(int w))
 		if ((items + handlewhich)->routine.v == DefineKey &&
 			Keyboard[sc_Delete])
 		{
-			buttonscan[(unsigned int)order[handlewhich]] = -1;
+			buttonscan[(unsigned int)order[handlewhich]] = KEY_NONE;
 			strcpy(&NormalKeyNames[handlewhich][KEYNAMEINDEX],
-				   IN_GetScanName(-1));
+				   IN_GetScanName(KEY_NONE));
 
 			ClearMenuBuf();
 			DrawMenu(&NormalKeyItems, &NormalKeyMenu[0]);
@@ -3499,9 +3499,8 @@ void DefineKey(void)
 
 		if (buttonscan[(unsigned int)order[x]] == key)
 		{
-			buttonscan[(unsigned int)order[x]] = -1;
-			strcpy(&NormalKeyNames[x][KEYNAMEINDEX],
-				   IN_GetScanName(-1));
+			buttonscan[(unsigned int)order[x]] = KEY_NONE;
+			strcpy(&NormalKeyNames[x][KEYNAMEINDEX], IN_GetScanName(KEY_NONE));
 		}
 	}
 
@@ -4396,9 +4395,6 @@ char *IN_GetScanName(ScanCode scan)
 {
 	char **p;
 	ScanCode *s;
-
-	if (scan == (ScanCode)-1)
-		return "NONE";
 
 	for (s = ExtScanCodes, p = ExtScanNames; *s; p++, s++)
 		if (*s == scan)

@@ -112,6 +112,11 @@ typedef struct
 	int length;
 } ModemMessage;
 
+enum
+{
+	KEY_NONE = 0xff
+};
+
 //***************************************************************************
 //
 // GLOBALS
