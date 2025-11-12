@@ -569,7 +569,7 @@ CP_MenuNames OptionsNames[] = {
 	"DETAIL LEVELS",	  "VIOLENCE LEVEL",		"SCREEN SIZE"
 };
 // bna added
-CP_MenuNames ExtOptionsNames[] = { "MOUSELOOK", "INVERSE MOUSE", "CROSSHAIR",
+CP_MenuNames ExtOptionsNames[] = { "MOUSE LOOK", "INVERT MOUSE", "CROSSHAIR",
 								   "FULLSCREEN" };
 CP_iteminfo ExtOptionsItems = { 20, MENU_Y,			 4,			  0,
 								43, ExtOptionsNames, mn_largefont };
@@ -4089,8 +4089,16 @@ int CalibrateJoystick(void)
 void MouseSensitivity(void)
 
 {
-	SliderMenu(&mouseadjustment, 11, 0, 21, 81, 240, 1, "block1", NULL,
-			   "Mouse Sensitivity", "Slow", "Fast");
+	menuslider_t mousesensitivities[3] = {
+		{ &mouseadjustment, 15, 0, 21, 81 - 32, 240, 1, "block2", NULL,
+		  "Horizontal:", "Turn" },
+		{ &mouseadjustment_y, 15, 0, 21, 81, 240, 1, "block2", NULL,
+		  "Vertical:", "Move" },
+		{ &mouseadjustment_y2, 15, 0, 21, 81 + 32, 240, 1, "block2", NULL,
+		  "Vertical:", "Look" }
+	};
+	MultipleSliderMenu("Mouse Sensitivity", arrlen(mousesensitivities),
+					   mousesensitivities);
 }
 
 //******************************************************************************
@@ -5216,25 +5224,20 @@ void MN_PlayMenuSnd(int which)
 //
 //******************************************************************************
 
-boolean SliderMenu(int *number, int upperbound, int lowerbound, int erasex,
-				   int erasey, int erasew, int numadjust, char *blockname,
-				   void (*routine)(int w), char *title, char *left, char *right)
-
+static boolean MultipleSliderMenu(char *title, int numsliders,
+								  menuslider_t *sliders)
 {
+	int slidernum = 0;
+	menuslider_t *slider;
+
 	ControlInfo ci;
 	Direction lastdir;
-	patch_t *shape;
 	boolean returnval;
 	boolean moved;
-	unsigned long scale;
 	int exit;
-	int range;
 	int timer;
 	int width;
 	int height;
-	int blkx;
-	int eraseh;
-	int block;
 
 	SetAlternateMenuBuf();
 	ClearMenuBuf();
@@ -5242,24 +5245,42 @@ boolean SliderMenu(int *number, int upperbound, int lowerbound, int erasex,
 
 	newfont1 = (font_t *)W_CacheLumpName("newfnt1", PU_CACHE, Cvt_font_t, 1);
 	CurrentFont = newfont1;
-	PrintX = 25;
-	PrintY = 62;
-	DrawMenuBufPropString(PrintX, PrintY, left);
 
-	VW_MeasurePropString(right, &width, &height);
-	DrawMenuBufPropString(263 - width, PrintY, right);
+	for (slidernum = 0; slidernum < numsliders; slidernum++)
+	{
+		slider = &sliders[slidernum];
+		PrintX = 40;
+		PrintY = 64 + 32 * (slidernum - numsliders / 2);
+		DrawMenuBufPropString(PrintX, PrintY, slider->left);
 
-	block = W_GetNumForName(blockname);
-	shape = (patch_t *)W_CacheLumpNum(block, PU_CACHE, Cvt_patch_t, 1);
-	blkx = erasex - shape->leftoffset;
-	eraseh = shape->height;
-	scale = (erasew + shape->leftoffset - shape->width) << 16;
-	range = upperbound - lowerbound;
+		VW_MeasurePropString(slider->right, &width, &height);
+		DrawMenuBufPropString(263 - width, PrintY, slider->right);
 
-	DrawSTMenuBuf(erasex - 1, erasey - 1, erasew + 1, eraseh + 1, false);
+		slider->block = W_GetNumForName(slider->blockname);
+		patch_t *shape =
+			(patch_t *)W_CacheLumpNum(slider->block, PU_CACHE, Cvt_patch_t, 1);
+		slider->blkx = slider->erasex - shape->leftoffset;
+		slider->eraseh = shape->height;
+		slider->scale = (slider->erasew + shape->leftoffset - shape->width)
+						<< 16;
+		slider->range = slider->upperbound - slider->lowerbound;
 
-	DrawMenuBufItem(blkx + ((((*number - lowerbound) * scale) / range) >> 16),
-					erasey, block);
+		DrawSTMenuBuf(slider->erasex - 1, slider->erasey - 1,
+					  slider->erasew + 1, slider->eraseh + 1, false);
+
+		DrawMenuBufItem(
+			slider->blkx +
+				((((*slider->number - slider->lowerbound) * slider->scale) /
+				  slider->range) >>
+				 16),
+			slider->erasey, slider->block);
+
+		if (numsliders > 1 && slidernum == 0)
+		{
+			DrawMenuBufItem(20, 62 + 32 * (slidernum - numsliders / 2),
+							W_GetNumForName(LargeCursor));
+		}
+	}
 
 	DisplayInfo(1);
 	FlipMenuBuf();
@@ -5268,10 +5289,18 @@ boolean SliderMenu(int *number, int upperbound, int lowerbound, int erasex,
 	moved = false;
 	timer = GetTicCount();
 	lastdir = dir_None;
+	slidernum = 0;
 
 	do
 	{
+		slider = &sliders[slidernum];
 		RefreshMenuBuf(0);
+
+		if (numsliders > 1)
+		{
+			EraseMenuBufRegion(20, 62 + 32 * (slidernum - numsliders / 2), 16,
+							   16);
+		}
 
 		ReadAnyControl(&ci);
 		if (((GetTicCount() - timer) > 5) || (ci.dir != lastdir))
@@ -5281,14 +5310,24 @@ boolean SliderMenu(int *number, int upperbound, int lowerbound, int erasex,
 			switch (ci.dir)
 			{
 				case dir_North:
-				case dir_West:
-					if (*number > lowerbound)
+					slidernum -= 1;
+					if (slidernum < 0)
 					{
-						*number = *number - numadjust;
+						slidernum = numsliders - 1;
+					}
+					if (numsliders > 1)
+					{
+						moved = true;
+						break;
+					}
+				case dir_West:
+					if (*slider->number > slider->lowerbound)
+					{
+						*slider->number = *slider->number - slider->numadjust;
 
-						if (*number < lowerbound)
+						if (*slider->number < slider->lowerbound)
 						{
-							*number = lowerbound;
+							*slider->number = slider->lowerbound;
 						}
 
 						moved = true;
@@ -5296,14 +5335,24 @@ boolean SliderMenu(int *number, int upperbound, int lowerbound, int erasex,
 					break;
 
 				case dir_South:
-				case dir_East:
-					if (*number < upperbound)
+					slidernum += 1;
+					if (slidernum >= numsliders)
 					{
-						*number = *number + numadjust;
+						slidernum = 0;
+					}
+					if (numsliders > 1)
+					{
+						moved = true;
+						break;
+					}
+				case dir_East:
+					if (*slider->number < slider->upperbound)
+					{
+						*slider->number = *slider->number + slider->numadjust;
 
-						if (*number > upperbound)
+						if (*slider->number > slider->upperbound)
 						{
-							*number = upperbound;
+							*slider->number = slider->upperbound;
 						}
 
 						moved = true;
@@ -5315,19 +5364,29 @@ boolean SliderMenu(int *number, int upperbound, int lowerbound, int erasex,
 			lastdir = ci.dir;
 		}
 
+		if (numsliders > 1)
+		{
+			DrawMenuBufItem(20, 62 + 32 * (slidernum - numsliders / 2),
+							W_GetNumForName(LargeCursor));
+		}
+
 		if (moved)
 		{
 			moved = false;
 
-			EraseMenuBufRegion(erasex, erasey, erasew, eraseh);
+			EraseMenuBufRegion(slider->erasex, slider->erasey, slider->erasew,
+							   slider->eraseh);
 
 			DrawMenuBufItem(
-				blkx + ((((*number - lowerbound) * scale) / range) >> 16),
-				erasey, block);
+				slider->blkx +
+					((((*slider->number - slider->lowerbound) * slider->scale) /
+					  slider->range) >>
+					 16),
+				slider->erasey, slider->block);
 
-			if (routine)
+			if (slider->routine)
 			{
-				routine(*number);
+				slider->routine(*slider->number);
 			}
 
 			MN_PlayMenuSnd(SD_MOVECURSORSND);
@@ -5356,6 +5415,17 @@ boolean SliderMenu(int *number, int upperbound, int lowerbound, int erasex,
 
 	WaitKeyUp();
 	return (returnval);
+}
+
+static boolean SliderMenu(int *number, int upperbound, int lowerbound,
+						  int erasex, int erasey, int erasew, int numadjust,
+						  char *blockname, void (*routine)(int w), char *title,
+						  char *left, char *right)
+{
+	menuslider_t slider = { number,	 upperbound, lowerbound, erasex,
+							erasey,	 erasew,	 numadjust,	 blockname,
+							routine, left,		 right };
+	return MultipleSliderMenu(title, 1, &slider);
 }
 
 //******************************************************************************

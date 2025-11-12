@@ -81,6 +81,8 @@ boolean joystickenabled = 0;
 boolean joypadenabled = 0;
 int joystickport = 0;
 int mouseadjustment = 5;
+int mouseadjustment_y = 5;
+int mouseadjustment_y2 = 5;
 int threshold = 1;
 int NumVoices = 4;
 int NumChannels = 1;
@@ -439,6 +441,8 @@ boolean ParseConfigFile(void)
 		// Read in MouseAdjustment
 
 		ReadInt("MouseAdjustment", &mouseadjustment);
+		ReadInt("MouseAdjustmentY", &mouseadjustment_y);
+		ReadInt("MouseAdjustmentY2", &mouseadjustment_y2);
 
 		// Read in threshold
 
@@ -1624,13 +1628,15 @@ void WriteConfig(void)
 
 	SafeWriteString(file, "\n;\n");
 	SafeWriteString(file, "; Sensitivity of Mouse\n");
-	SafeWriteString(file, "; (lowest) 0 - 11 (highest)\n");
+	SafeWriteString(file, "; (lowest) 0 - 15 (highest)\n");
 	WriteParameter(file, "MouseAdjustment  ", mouseadjustment);
+	WriteParameter(file, "MouseAdjustmentY ", mouseadjustment_y);
+	WriteParameter(file, "MouseAdjustmentY2 ", mouseadjustment_y2);
 
 	// Write out threshold
 
 	SafeWriteString(file, "\n;\n");
-	SafeWriteString(file, "; Threshold of Mouse and Joystick\n");
+	SafeWriteString(file, "; Threshold of Joystick\n");
 	SafeWriteString(file, "; (smallest) 1 - 15 (largest)\n");
 	WriteParameter(file, "Threshold        ", threshold);
 
