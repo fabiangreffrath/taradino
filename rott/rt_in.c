@@ -215,7 +215,9 @@ const char ShiftedScanChars[128] = // Shifted Scan code names with single chars
 	  0, \
 	  0, \
 	  0, \
-	  sc_Equals }
+	  sc_Equals, \
+	  sc_F13, \
+	  sc_F14 }
 
 static const int scancode_translate_table[] = SCANCODE_TO_KEYS_ARRAY;
 
@@ -463,10 +465,38 @@ static int sdl_joystick_button_filter(const SDL_Event *event)
 	return 0;
 }
 
-static int root_sdl_event_filter(const SDL_Event *event)
+// map mouse wheel to key presses
+static unsigned int mwheelsym = 0;
+static inline void mwheelkey(int type)
+{
+	SDL_Event event;
+
+	event.type = type;
+	event.key.keysym.scancode = mwheelsym;
+	event.key.state = SDL_RELEASED;
+	SDL_PushEvent(&event);
+
+	mwheelsym = 0;
+}
+
+static int root_sdl_event_filter(SDL_Event *event)
 {
 	switch (event->type)
 	{
+		// map mouse wheel to fake F12/F14 key presses
+		case SDL_MOUSEWHEEL: {
+			if (event->wheel.y > 0)
+			{
+				mwheelsym = SDL_SCANCODE_F13;
+			}
+			else
+			{
+				mwheelsym = SDL_SCANCODE_F14;
+			}
+			// fake key press event
+			event->key.keysym.scancode = mwheelsym;
+			event->key.state = SDL_PRESSED;
+		} // fall through
 		case SDL_KEYUP:
 		case SDL_KEYDOWN:
 			return (sdl_key_filter(event));
@@ -494,6 +524,11 @@ static void sdl_handle_events(void)
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 		root_sdl_event_filter(&event);
+
+	// fake key release event
+	if (mwheelsym)
+		mwheelkey(SDL_KEYUP);
+
 } /* sdl_handle_events */
 
 //******************************************************************************
