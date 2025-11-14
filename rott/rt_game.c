@@ -4862,7 +4862,8 @@ boolean LoadTheGame(int num, gamestorage_t *game)
 	if (game->version != ROTTVERSION)
 		return false;
 
-	memcpy(&GameLevels, &game->info, sizeof(GameLevels));
+//	Do not override GameLevels from savegame, contains invalid pointers
+//	memcpy(&GameLevels, &game->info, sizeof(GameLevels));
 
 	gamestate.episode = game->episode;
 	gamestate.mapon = game->area;
