@@ -483,7 +483,7 @@ static int root_sdl_event_filter(SDL_Event *event)
 {
 	switch (event->type)
 	{
-		// map mouse wheel to fake F12/F14 key presses
+		// map mouse wheel to fake F13/F14 key presses
 		case SDL_MOUSEWHEEL: {
 			if (event->wheel.y > 0)
 			{

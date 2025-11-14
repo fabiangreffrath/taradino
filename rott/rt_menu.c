@@ -3423,7 +3423,7 @@ void DefineKey(void)
 	int timer;
 	int x;
 	int y;
-	int key = -1;
+	int key = sc_Bad;
 
 	tick = false;
 	picked = false;
