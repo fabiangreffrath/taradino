@@ -1575,6 +1575,7 @@ void DrawMainMenu(void)
 		MainMenu[backtodemo].texture[7] = '1';
 		MainMenu[backtodemo].texture[8] = '\0';
 		strcpy(MainMenuNames[backtodemo], "BACK TO GAME");
+		MN_MakeActive(&MainItems, &MainMenu[0], backtodemo);
 	}
 	else
 	{
