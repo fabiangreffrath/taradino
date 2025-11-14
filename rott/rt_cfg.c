@@ -1628,7 +1628,7 @@ void WriteConfig(void)
 
 	SafeWriteString(file, "\n;\n");
 	SafeWriteString(file, "; Sensitivity of Mouse\n");
-	SafeWriteString(file, "; (lowest) 0 - 15 (highest)\n");
+	SafeWriteString(file, "; (lowest) 0 - 16 (highest)\n");
 	WriteParameter(file, "MouseAdjustment  ", mouseadjustment);
 	WriteParameter(file, "MouseAdjustmentY ", mouseadjustment_y);
 	WriteParameter(file, "MouseAdjustmentY2 ", mouseadjustment_y2);

@@ -4116,11 +4116,11 @@ void MouseSensitivity(void)
 
 {
 	menuslider_t mousesensitivities[3] = {
-		{ &mouseadjustment, 15, 0, 21, 81 - 32, 240, 1, "block2", NULL,
+		{ &mouseadjustment, 16, 0, 21, 81 - 32, 240, 1, "block2", NULL,
 		  "Horizontal:", "Turn" },
-		{ &mouseadjustment_y, 15, 0, 21, 81, 240, 1, "block2", NULL,
+		{ &mouseadjustment_y, 16, 0, 21, 81, 240, 1, "block2", NULL,
 		  "Vertical:", "Move" },
-		{ &mouseadjustment_y2, 15, 0, 21, 81 + 32, 240, 1, "block2", NULL,
+		{ &mouseadjustment_y2, 16, 0, 21, 81 + 32, 240, 1, "block2", NULL,
 		  "Vertical:", "Look" }
 	};
 	MultipleSliderMenu("Mouse Sensitivity", arrlen(mousesensitivities),

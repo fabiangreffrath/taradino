@@ -2185,7 +2185,7 @@ void PollMouseMove(void)
 	if (usemouselook == true)
 	{
 		playertype *const pstate = &PLAYERSTATE[consoleplayer];
-		pstate->horizon -= inverse_mouse * mouseymove * mouseadjustment_y2 / 16;
+		pstate->horizon -= inverse_mouse * mouseymove * mouseadjustment_y2 / 8;
 		MY = 0;
 	}
 	else
