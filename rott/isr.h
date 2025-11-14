@@ -37,7 +37,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define VBLCOUNTER 35
 
 #define KEYQMAX 256
-#define MAXKEYBOARDSCAN 128
+#define MAXKEYBOARDSCAN 256
 
 #define scroll_lock 0
 #define num_lock 1
