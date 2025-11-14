@@ -3495,7 +3495,9 @@ void DefineKey(void)
 	for (x = 0; x < NormalKeyItems.amount; x++)
 	{
 		if (x == handlewhich)
+		{
 			continue;
+		}
 
 		if (buttonscan[(unsigned int)order[x]] == key)
 		{
@@ -4400,7 +4402,12 @@ char *IN_GetScanName(ScanCode scan)
 		if (*s == scan)
 			return (*p);
 
-	return (ScanNames[scan]);
+	if (scan < arrlen(ScanNames))
+	{
+		return (ScanNames[scan]);
+	}
+
+	return "NONE";
 }
 
 //******************************************************************************

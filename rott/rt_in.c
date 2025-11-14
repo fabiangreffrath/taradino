@@ -527,7 +527,9 @@ static void sdl_handle_events(void)
 
 	// fake key release event
 	if (mwheelsym)
+	{
 		mwheelkey(SDL_KEYUP);
+	}
 
 } /* sdl_handle_events */
 
