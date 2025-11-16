@@ -287,7 +287,7 @@ char *M_getenv(const char *name)
 		env = NULL;
 	}
 
-	env_vars = I_Realloc(env_vars, (num_vars + 1) * sizeof(*env_vars));
+	env_vars = safe_realloc(env_vars, (num_vars + 1) * sizeof(*env_vars));
 	env_vars[num_vars].var = env;
 	env_vars[num_vars].name = M_StringDuplicate(name);
 	++num_vars;
@@ -702,7 +702,7 @@ char *M_StringDuplicate(const char *orig)
 
 	if (result == NULL)
 	{
-		Error("Failed to duplicate string (length %zu)\n", strlen(orig));
+		Error("Failed to duplicate string (length %ld)\n", (long)strlen(orig));
 	}
 
 	return result;
