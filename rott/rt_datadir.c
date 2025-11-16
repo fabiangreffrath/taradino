@@ -19,7 +19,7 @@
 
 #include "SDL.h"
 
-#include "m_misc2.h"
+#include "m_misc.h"
 #include "rt_util.h"
 
 #ifndef _WIN32

@@ -18,7 +18,7 @@
 #ifndef RT_DATADIR_H
 #define RT_DATADIR_H
 
-#include "m_misc2.h"
+#include "m_misc.h"
 
 extern char *datadir;
 

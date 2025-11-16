@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ERRORVERSIONCOL 67
 
 #include "rt_def.h"
-#include "m_misc2.h"
+#include "m_misc.h"
 #include "develop.h"
 
 enum COLORS
