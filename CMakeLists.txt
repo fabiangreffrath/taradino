@@ -53,12 +53,6 @@ if (HAVE_DIRENT_H)
 	target_compile_definitions(taradino PRIVATE HAVE_DIRENT_H)
 endif()
 
-include(CheckSymbolExists)
-check_symbol_exists(getpwuid "unistd.h;sys/types.h;pwd.h" HAVE_GETPWUID)
-if (HAVE_GETPWUID)
-	target_compile_definitions(taradino PRIVATE HAVE_GETPWUID)
-endif()
-
 if(NOT DEFINED TARADINO_EXEC)
 	set(TARADINO_EXEC taradino)
 endif()

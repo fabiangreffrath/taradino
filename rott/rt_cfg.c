@@ -1521,10 +1521,7 @@ void WriteSoundConfig(void)
 	SafeWriteString(file, "\n;\n");
 	SafeWriteString(file, "; Soundfont path\n");
 	SafeWriteString(file, "Soundfont      ");
-	if (soundfont_cfg)
-	{
-		SafeWriteString(file, soundfont_cfg);
-	}
+	SafeWriteString(file, soundfont_cfg);
 	SafeWriteString(file, "\n");
 
 	close(file);

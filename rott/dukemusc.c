@@ -15,11 +15,6 @@
 #include "SDL.h"
 #include "SDL_mixer.h"
 
-#ifdef HAVE_GETPWUID
-#include <unistd.h>
-#include <sys/types.h>
-#include <pwd.h>
-#endif
 #include "i_glob.h"
 
 #include "rt_def.h"	 // ROTT music hack
@@ -167,13 +162,7 @@ char *UserHomeDir(void)
 
 		if (home_dir == NULL)
 		{
-#ifdef HAVE_GETPWUID
-			struct passwd *user_info = getpwuid(getuid());
-			if (user_info != NULL)
-				home_dir = user_info->pw_dir;
-			else
-#endif
-				home_dir = "/";
+			home_dir = "/";
 		}
 	}
 
