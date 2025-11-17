@@ -15,6 +15,8 @@
 #include "SDL.h"
 #include "SDL_mixer.h"
 
+#include "i_glob.h"
+
 #include "rt_def.h"	 // ROTT music hack
 #include "rt_cfg.h"	 // ROTT music hack
 #include "rt_util.h" // ROTT music hack
@@ -147,6 +149,109 @@ static unsigned char *music_songdata = NULL;
 static Mix_Music *music_musicchunk = NULL;
 static size_t music_songdatasize = 0;
 
+char *soundfont_cfg = "soundfont.sf2";
+
+#if !defined(_WIN32)
+char *UserHomeDir(void)
+{
+	static char *home_dir;
+
+	if (home_dir == NULL)
+	{
+		home_dir = M_getenv("HOME");
+
+		if (home_dir == NULL)
+		{
+			home_dir = "/";
+		}
+	}
+
+	return home_dir;
+}
+
+char *UserDataDir(void)
+{
+	static char *data_dir;
+
+	if (data_dir == NULL)
+	{
+		data_dir = M_getenv("XDG_DATA_HOME");
+
+		if (data_dir == NULL || *data_dir == '\0')
+		{
+			const char *home_dir = UserHomeDir();
+			data_dir = M_StringJoin(home_dir, "/.local/share", NULL);
+		}
+	}
+
+	return data_dir;
+}
+
+static const char *ScanDir(const char *dir)
+{
+	const char *ret = NULL;
+
+	glob_t *glob = I_StartMultiGlob(dir, GLOB_FLAG_NOCASE | GLOB_FLAG_SORTED,
+									"*.sf2", "*.sf3", NULL);
+
+	const char *filename = I_NextGlob(glob);
+	if (filename)
+	{
+		ret = M_StringDuplicate(filename);
+	}
+
+	I_EndGlob(glob);
+
+	return ret;
+}
+
+static const char *GetSoundFont(void)
+{
+	const char *ret = NULL;
+
+	const struct
+	{
+		char *(*func)(void);
+		const char *dir;
+	} dirs[] = {
+		// RedHat/Fedora/Arch
+		{ NULL, "/usr/share/soundfonts" },
+		{ UserDataDir, "soundfonts" },
+		// Debian/Ubuntu/OpenSUSE
+		{ NULL, "/usr/share/sounds/sf2" },
+		{ UserDataDir, "sounds/sf2" },
+		{ NULL, "/usr/share/sounds/sf3" },
+		{ UserDataDir, "sounds/sf3" },
+	};
+
+	for (int i = 0; i < arrlen(dirs); ++i)
+	{
+		if (dirs[i].func && dirs[i].dir)
+		{
+			char *dir = M_StringJoin(dirs[i].func(), DIR_SEPARATOR_S,
+									 dirs[i].dir, NULL);
+			ret = ScanDir(dir);
+			free(dir);
+		}
+		else if (dirs[i].func)
+		{
+			ret = ScanDir(dirs[i].func());
+		}
+		else if (dirs[i].dir)
+		{
+			ret = ScanDir(dirs[i].dir);
+		}
+
+		if (ret)
+		{
+			break;
+		}
+	}
+
+	return ret;
+}
+#endif
+
 int MUSIC_Init(int SoundCard, int Address)
 {
 	init_debugging();
@@ -165,6 +270,29 @@ int MUSIC_Init(int SoundCard, int Address)
 		musdebug("We pretend to be an Ensoniq SoundScape only.");
 		return (MUSIC_Error);
 	} // if
+
+	const char *soundfont = M_FileCaseExists(soundfont_cfg);
+	if (soundfont == NULL)
+	{
+		soundfont = Mix_GetSoundFonts();
+	}
+
+#if !defined(_WIN32)
+	if (soundfont == NULL)
+	{
+		soundfont = GetSoundFont();
+	}
+#endif
+
+	if (soundfont)
+	{
+		printf("\n Soundfont: %s", soundfont);
+		Mix_SetSoundFonts(soundfont);
+	}
+	else
+	{
+		printf("\n No Soundfont found!");
+	}
 
 	music_initialized = 1;
 	return (MUSIC_Ok);
