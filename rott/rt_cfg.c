@@ -253,7 +253,6 @@ boolean ParseSoundFile(void)
 			GetTokenEOL(false);
 			soundfont_cfg = M_StringDuplicate(name);
 		}
-		fprintf(stderr, "soundfont: %s.\n", soundfont_cfg);
 	}
 	else
 		retval = false;

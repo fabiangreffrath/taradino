@@ -265,6 +265,8 @@ static const char *GetSoundFont(void)
 
 int MUSIC_Init(int SoundCard, int Address)
 {
+	init_debugging();
+
 	musdebug("INIT! card=>%d, address=>%d...", SoundCard, Address);
 
 	if (music_initialized)
