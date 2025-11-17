@@ -47,6 +47,18 @@ target_compile_definitions(taradino PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAM
 target_include_directories(taradino PRIVATE "${PROJECT_BINARY_DIR}/rott")
 target_link_libraries(taradino PUBLIC $<$<BOOL:${TARADINO_ASAN}>:ASAN::ASAN>)
 
+include(CheckIncludeFile)
+check_include_file("dirent.h" HAVE_DIRENT_H)
+if (HAVE_DIRENT_H)
+	target_compile_definitions(taradino PRIVATE HAVE_DIRENT_H)
+endif()
+
+include(CheckSymbolExists)
+check_symbol_exists(getpwuid "unistd.h;sys/types.h;pwd.h" HAVE_GETPWUID)
+if (HAVE_GETPWUID)
+	target_compile_definitions(taradino PRIVATE HAVE_GETPWUID)
+endif()
+
 if(NOT DEFINED TARADINO_EXEC)
 	set(TARADINO_EXEC taradino)
 endif()

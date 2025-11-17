@@ -244,6 +244,16 @@ boolean ParseSoundFile(void)
 		// Read in stereo reversal
 
 		ReadBoolean("StereoReverse", &stereoreversed);
+
+		// Read in Soundfont path
+
+		GetToken(true);
+		if (!stricmp(token, "Soundfont"))
+		{
+			GetTokenEOL(false);
+			soundfont_cfg = M_StringDuplicate(name);
+		}
+		fprintf(stderr, "soundfont: %s.\n", soundfont_cfg);
 	}
 	else
 		retval = false;
@@ -1506,6 +1516,17 @@ void WriteSoundConfig(void)
 	SafeWriteString(file, "; 0 no reversal\n");
 	SafeWriteString(file, "; 1 reverse stereo\n");
 	WriteParameter(file, "StereoReverse      ", stereoreversed);
+
+	// Write out Soundfont path
+
+	SafeWriteString(file, "\n;\n");
+	SafeWriteString(file, "; Soundfont path\n");
+	SafeWriteString(file, "Soundfont      ");
+	if (soundfont_cfg)
+	{
+		SafeWriteString(file, soundfont_cfg);
+	}
+	SafeWriteString(file, "\n");
 
 	close(file);
 }
