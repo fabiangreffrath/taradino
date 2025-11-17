@@ -26,14 +26,6 @@
 #if defined(HAVE_DIRENT_H)
 #include <dirent.h>
 #include <sys/stat.h>
-#elif defined(_WIN32)
-#include "win_opendir.h"
-#ifndef S_ISDIR
-#define S_ISDIR(m) (((m) & S_IFMT) == S_IFDIR)
-#endif
-#elif defined(__WATCOMC__)
-// Watcom has the same API in a different header.
-#include <direct.h>
 #else
 #define NO_DIRENT_IMPLEMENTATION
 #endif
