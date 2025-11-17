@@ -24,7 +24,7 @@
 #include "m_misc.h"
 
 #if defined(_WIN32)
-#include <win_opendir.h>
+#include "win_opendir.h"
 #ifndef S_ISDIR
 #define S_ISDIR(m) (((m) & S_IFMT) == S_IFDIR)
 #endif
