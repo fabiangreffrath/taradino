@@ -34,7 +34,6 @@ MAXTIMELIMIT the max time to count down from so if you keep killing
 ENABLEVR     enable Virtual Reality support for HMD's (Head mounted disp)
 WARP         warp to a specific level 1 based level 1 is 1
 NET          Used by ROTTSER and ROTTIPX
-IS8250       Used by ROTTSER whether you have an 8250 or not
 TEDLEVEL     Ted stuff
 (DEV ONLY) MONO         enable mono-monitor support (Development only)
 (DEV ONLY) TRANSPORT    Warp to any x,y,angle in level (Development only)

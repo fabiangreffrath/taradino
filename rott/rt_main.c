@@ -101,7 +101,6 @@ boolean MONOPRESENT = false;
 boolean MAPSTATS = false;
 boolean TILESTATS = false;
 boolean HUD = false;
-boolean IS8250 = false;
 
 boolean dopefish;
 
@@ -246,27 +245,13 @@ int main(int argc, char *argv[])
 	{
 		int status2 = 0;
 
-		if (!NoSound && !IS8250)
+		if (!NoSound)
 		{
 			if (!quiet)
 				printf("MU_Startup: ");
 			MU_Startup(false);
 			if (!quiet)
 				printf("%s\n", MUSIC_ErrorString(MUSIC_Error));
-		}
-		else if (IS8250)
-		{
-			printf("==========================================================="
-				   "===================\n");
-			printf("WARNING: 8250 detected.\n");
-			printf("Music has been disabled.  This is necessary to maintain "
-				   "high interrupt\n");
-			printf("rates with the 8250 UART which will improve overall game "
-				   "performance.\n");
-			printf("                      < Press any key to continue >\n");
-			printf("==========================================================="
-				   "===================\n");
-			getch();
 		}
 
 		if (!NoSound)
@@ -446,7 +431,6 @@ void CheckCommandLineParameters(void)
 	MONOPRESENT = false;
 	MAPSTATS = false;
 	TILESTATS = false;
-	IS8250 = false;
 	demoexit = false;
 
 	modemgame = false;
@@ -627,7 +611,7 @@ void CheckCommandLineParameters(void)
 				startlevel = (ParseNum(_argv[i + 1]) - 1);
 				break;
 			case 15:
-				IS8250 = true;
+				// [FG] removed, was "IS8250" stuff
 				break;
 			case 16:
 				// erysdren - removed. was "vr" stuff
