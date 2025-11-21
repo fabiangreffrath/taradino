@@ -247,15 +247,6 @@ int main(int argc, char *argv[])
 
 		if (!NoSound)
 		{
-			if (!quiet)
-				printf("MU_Startup: ");
-			MU_Startup(false);
-			if (!quiet)
-				printf("%s\n", MUSIC_ErrorString(MUSIC_Error));
-		}
-
-		if (!NoSound)
-		{
 			int nv, nb, nc;
 
 			if (!quiet)
@@ -277,6 +268,15 @@ int main(int argc, char *argv[])
 		{
 			if (!quiet)
 				printf("Sound FX disabled.\n");
+		}
+
+		if (!NoSound)
+		{
+			if (!quiet)
+				printf("MU_Startup: ");
+			MU_Startup(false);
+			if (!quiet)
+				printf("%s\n", MUSIC_ErrorString(MUSIC_Error));
 		}
 
 		Init_Tables();
