@@ -15,6 +15,10 @@
 #include "SDL.h"
 #include "SDL_mixer.h"
 
+#if defined(HAVE_ADLMIDI)
+#include <adlmidi.h>
+#endif
+
 #include "i_glob.h"
 
 #include "rt_def.h"	 // ROTT music hack
@@ -252,6 +256,31 @@ static const char *GetSoundFont(void)
 }
 #endif
 
+static Uint32 is_playing = 0;
+#if defined(HAVE_ADLMIDI)
+static struct ADL_MIDIPlayer *midi_player = NULL;
+
+void adlmidi_callback(void *dummy, Uint8 *stream, int len)
+{
+	if (!is_playing)
+	{
+		return;
+	}
+
+	/* Convert bytes length into total count of samples in all channels */
+	int samples_count = len / sizeof(short);
+
+	/* Take some samples from the ADLMIDI */
+	samples_count = adl_play(midi_player, samples_count, (short *)stream);
+
+	if (samples_count <= 0)
+	{
+		is_playing = 0;
+		SDL_memset(stream, 0, len);
+	}
+}
+#endif
+
 int MUSIC_Init(int SoundCard, int Address)
 {
 	init_debugging();
@@ -271,6 +300,7 @@ int MUSIC_Init(int SoundCard, int Address)
 		return (MUSIC_Error);
 	} // if
 
+#if !defined(HAVE_ADLMIDI)
 	const char *soundfont = M_FileCaseExists(soundfont_cfg);
 	if (soundfont == NULL)
 	{
@@ -293,6 +323,22 @@ int MUSIC_Init(int SoundCard, int Address)
 	{
 		printf("\n No Soundfont found!");
 	}
+#else
+	int snd_samplerate;
+	if (Mix_QuerySpec(&snd_samplerate, NULL, NULL) == 0)
+	{
+		fprintf(stderr, "SDL_Mixerneeds to be initialized first!\n");
+		return (MUSIC_Error);
+	}
+
+	midi_player = adl_init(snd_samplerate);
+	if (!midi_player)
+	{
+		fprintf(stderr, "Couldn't initialize ADLMIDI: %s\n", adl_errorString());
+		return (MUSIC_Error);
+	}
+	Mix_HookMusic(adlmidi_callback, NULL);
+#endif
 
 	music_initialized = 1;
 	return (MUSIC_Ok);
@@ -312,6 +358,7 @@ int MUSIC_Shutdown(void)
 	music_context = 0;
 	music_initialized = 0;
 	music_loopflag = MUSIC_PlayOnce;
+	is_playing = 0;
 
 	return (MUSIC_Ok);
 } // MUSIC_Shutdown
@@ -381,6 +428,8 @@ int MUSIC_StopSong(void)
 	music_songdata = NULL;
 	music_musicchunk = NULL;
 	music_songdatasize = 0;
+	is_playing = 0;
+
 	return (MUSIC_Ok);
 } // MUSIC_StopSong
 
@@ -393,6 +442,14 @@ int MUSIC_PlaySong(unsigned char *song, int size, int loopflag)
 		return MUSIC_Error;
 	}
 
+#if defined(HAVE_ADLMIDI)
+	if (adl_openData(midi_player, song, size) < 0)
+	{
+		fprintf(stderr, "Couldn't open music file: %s\n",
+				adl_errorInfo(midi_player));
+		return MUSIC_Error;
+	}
+#else
 	// create rw
 	SDL_RWops *rw = SDL_RWFromConstMem(song, size);
 	if (rw == NULL)
@@ -407,10 +464,13 @@ int MUSIC_PlaySong(unsigned char *song, int size, int loopflag)
 		return MUSIC_Error;
 	}
 
+	Mix_PlayMusic(music_musicchunk, (loopflag == MUSIC_PlayOnce) ? 0 : -1);
+#endif
+
 	music_songdata = song;
 	music_songdatasize = size;
 
-	Mix_PlayMusic(music_musicchunk, (loopflag == MUSIC_PlayOnce) ? 0 : -1);
+	is_playing = 1;
 
 	return (MUSIC_Ok);
 } // MUSIC_PlaySong
@@ -459,7 +519,11 @@ int MUSIC_FadeVolume(int tovolume, int milliseconds)
 
 int MUSIC_FadeActive(void)
 {
+#if defined(HAVE_ADLMIDI)
+	return __FX_FALSE;
+#else
 	return ((Mix_FadingMusic() == MIX_FADING_OUT) ? __FX_TRUE : __FX_FALSE);
+#endif
 } // MUSIC_FadeActive
 
 void MUSIC_StopFade(void)
