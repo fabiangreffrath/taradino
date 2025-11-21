@@ -275,8 +275,15 @@ void adlmidi_callback(void *dummy, Uint8 *stream, int len)
 
 	if (samples_count <= 0)
 	{
-		is_playing = 0;
-		SDL_memset(stream, 0, len);
+		if (music_loopflag == MUSIC_PlayOnce)
+		{
+			is_playing = 0;
+			SDL_memset(stream, 0, len);
+		}
+		else
+		{
+			adl_positionRewind(midi_player);
+		}
 	}
 }
 #endif
@@ -395,7 +402,11 @@ void MUSIC_SetLoopFlag(int loopflag)
 
 int MUSIC_SongPlaying(void)
 {
+#if defined(HAVE_ADLMIDI)
+	return is_playing;
+#else
 	return ((Mix_PlayingMusic()) ? __FX_TRUE : __FX_FALSE);
+#endif
 } // MUSIC_SongPlaying
 
 void MUSIC_Continue(void)
@@ -469,6 +480,7 @@ int MUSIC_PlaySong(unsigned char *song, int size, int loopflag)
 
 	music_songdata = song;
 	music_songdatasize = size;
+	music_loopflag = loopflag;
 
 	is_playing = 1;
 
