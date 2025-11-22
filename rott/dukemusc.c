@@ -271,10 +271,10 @@ int MUSIC_Init(int SoundCard, int Address)
 		return (MUSIC_Error);
 	} // if
 
-	const char *soundfont = M_FileCaseExists(soundfont_cfg);
+	const char *soundfont = Mix_GetSoundFonts();
 	if (soundfont == NULL)
 	{
-		soundfont = Mix_GetSoundFonts();
+		soundfont = M_FileCaseExists(soundfont_cfg);
 	}
 
 #if !defined(_WIN32)
