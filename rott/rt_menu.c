@@ -570,15 +570,20 @@ CP_MenuNames OptionsNames[] = {
 };
 // bna added
 CP_MenuNames ExtOptionsNames[] = { "MOUSE LOOK", "INVERT MOUSE", "CROSSHAIR",
-								   "FULLSCREEN" };
-CP_iteminfo ExtOptionsItems = { 20, MENU_Y,			 4,			  0,
-								43, ExtOptionsNames, mn_largefont };
+								   "FULLSCREEN", "ADLIB MUSIC" };
+CP_iteminfo ExtOptionsItems = { 20, MENU_Y,
+#if defined(HAVE_ADLMIDI)
+								5,
+#else
+								4,
+#endif
+								0,	43,		ExtOptionsNames, mn_largefont };
 
-CP_itemtype ExtOptionsMenu[] = { { 1, "", 'M', { NULL } },
-								 { 1, "", 'I', { NULL } },
-								 { 1, "", 'C', { NULL } },
-								 { 1, "", 'J', { NULL } },
-								 { 1, "", 'F', { NULL } } };
+CP_itemtype ExtOptionsMenu[] = {
+	{ 1, "", 'M', { NULL } }, { 1, "", 'I', { NULL } },
+	{ 1, "", 'C', { NULL } }, { 1, "", 'J', { NULL } },
+	{ 1, "", 'F', { NULL } }, { 1, "", 'A', { NULL } }
+};
 
 // bna added end
 
@@ -4765,11 +4770,14 @@ void CP_ExtOptionsMenu(void)
 				iG_aimCross ^= 1;
 				DrawExtOptionsButtons();
 				break;
-			case 3: {
+			case 3:
 				ToggleFullScreen();
 				DrawExtOptionsButtons();
-			}
-			break;
+				break;
+			case 4:
+				ToggleFullScreen();
+				DrawExtOptionsButtons();
+				break;
 		}
 
 	} while (which >= 0);
@@ -4810,6 +4818,10 @@ void DrawExtOptionsButtons(void)
 					break;
 				case 3:
 					if (sdl_fullscreen == 1)
+						on = 1;
+					break;
+				case 4:
+					if (MusicMode == 2)
 						on = 1;
 					break;
 			}

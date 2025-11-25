@@ -33,7 +33,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef __FX_MAN_H
 #define __FX_MAN_H
 
-#include "sndcards.h"
 
 typedef struct
 {

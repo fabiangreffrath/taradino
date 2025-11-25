@@ -276,7 +276,7 @@ int main(int argc, char *argv[])
 				printf("MU_Startup: ");
 			MU_Startup(false);
 			if (!quiet)
-				printf("%s\n", MUSIC_ErrorString(MUSIC_Error));
+				printf("Could not initialize music.\n");
 		}
 
 		Init_Tables();
