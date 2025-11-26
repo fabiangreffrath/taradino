@@ -28,36 +28,26 @@ static Mix_Music *music_musicchunk = NULL;
 char *soundfont_cfg = "soundfont.sf2";
 
 #if !defined(_WIN32)
-char *UserHomeDir(void)
+static const char *UserHomeDir(void)
 {
-	static char *home_dir;
+	const char *home_dir = M_getenv("HOME");
 
 	if (home_dir == NULL)
 	{
-		home_dir = M_getenv("HOME");
-
-		if (home_dir == NULL)
-		{
-			home_dir = "/";
-		}
+		home_dir = "/";
 	}
 
 	return home_dir;
 }
 
-char *UserDataDir(void)
+static const char *UserDataDir(void)
 {
-	static char *data_dir;
+	const char *data_dir = M_getenv("XDG_DATA_HOME");
 
-	if (data_dir == NULL)
+	if (data_dir == NULL || *data_dir == '\0')
 	{
-		data_dir = M_getenv("XDG_DATA_HOME");
-
-		if (data_dir == NULL || *data_dir == '\0')
-		{
-			const char *home_dir = UserHomeDir();
-			data_dir = M_StringJoin(home_dir, "/.local/share", NULL);
-		}
+		const char *home_dir = UserHomeDir();
+		data_dir = M_StringJoin(home_dir, "/.local/share", NULL);
 	}
 
 	return data_dir;
@@ -87,7 +77,7 @@ static const char *GetSoundFont(void)
 
 	const struct
 	{
-		char *(*func)(void);
+		const char *(*func)(void);
 		const char *dir;
 	} dirs[] = {
 		// RedHat/Fedora/Arch
