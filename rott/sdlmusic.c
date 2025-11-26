@@ -42,12 +42,17 @@ static const char *UserHomeDir(void)
 
 static const char *UserDataDir(void)
 {
-	const char *data_dir = M_getenv("XDG_DATA_HOME");
+	static char *data_dir;
 
-	if (data_dir == NULL || *data_dir == '\0')
+	if (data_dir == NULL)
 	{
-		const char *home_dir = UserHomeDir();
-		data_dir = M_StringJoin(home_dir, "/.local/share", NULL);
+		data_dir = M_getenv("XDG_DATA_HOME");
+
+		if (data_dir == NULL || *data_dir == '\0')
+		{
+			const char *home_dir = UserHomeDir();
+			data_dir = M_StringJoin(home_dir, "/.local/share", NULL);
+		}
 	}
 
 	return data_dir;
