@@ -40,7 +40,7 @@ int MUSIC_Init(int mode)
 
 	music_module = music_modules[mode];
 
-	return music_module->Init(snd_samplerate);
+	return music_module ? music_module->Init(snd_samplerate) : MUSIC_Ok;
 }
 
 int MUSIC_Shutdown(void)
