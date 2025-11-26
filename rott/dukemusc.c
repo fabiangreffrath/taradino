@@ -24,7 +24,7 @@ const int num_music_modules = arrlen(music_modules);
 unsigned char *music_songdata = NULL;
 size_t music_songdatasize = 0;
 int music_loopflag = MUSIC_PlayOnce;
-float float_music_volume;
+double float_music_volume;
 
 int MUSIC_Init(int mode)
 {
@@ -50,7 +50,7 @@ int MUSIC_Shutdown(void)
 
 void MUSIC_SetVolume(int volume)
 {
-	float_music_volume = 4.0 * volume / 255.0;
+	float_music_volume = 10.0 * pow(volume / 255.0, 2.0);
 	Mix_VolumeMusic(volume >> 1); // convert 0-255 to 0-128.
 }
 

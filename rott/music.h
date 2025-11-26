@@ -90,7 +90,7 @@ extern const int num_music_modules;
 extern unsigned char *music_songdata;
 extern size_t music_songdatasize;
 extern int music_loopflag;
-extern float float_music_volume;
+extern double float_music_volume;
 
 extern char *soundfont_cfg;
 

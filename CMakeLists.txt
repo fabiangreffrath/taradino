@@ -48,6 +48,12 @@ target_compile_definitions(taradino PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAM
 target_include_directories(taradino PRIVATE "${PROJECT_BINARY_DIR}/rott")
 target_link_libraries(taradino PUBLIC $<$<BOOL:${TARADINO_ASAN}>:ASAN::ASAN>)
 
+include(CheckLibraryExists)
+check_library_exists(m pow "" HAVE_LIBM)
+if(HAVE_LIBM)
+	target_link_libraries(taradino PRIVATE m)
+endif()
+
 if(libADLMIDI_FOUND)
 	target_compile_definitions(taradino PRIVATE HAVE_ADLMIDI)
 	if(NOT TARGET libADLMIDI::ADLMIDI)

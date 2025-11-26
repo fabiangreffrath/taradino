@@ -43,7 +43,7 @@ static void adlmidi_callback(void *dummy, Uint8 *stream, int len)
 
 	for (int i = 0; i < samples_count; i++)
 	{
-		int32_t sample = (int32_t)(stream16[i] * float_music_volume);
+		double sample = (double)stream16[i] * float_music_volume;
 
 		if (sample > SHRT_MAX)
 			sample = SHRT_MAX;
@@ -136,6 +136,7 @@ static int ADL_FadeVolume(int tovolume, int milliseconds)
 {
 	(void)tovolume;
 	(void)milliseconds;
+
 	return MUSIC_Ok;
 }
 
