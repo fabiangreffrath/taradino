@@ -4719,9 +4719,13 @@ void DrawExtOptionsMenu(void)
 	MenuNum = 1;
 
 	if (MusicMode == 0)
+	{
 		ExtOptionsMenu[4].active = CP_Inactive;
+	}
 	if (num_music_modules < 3)
+	{
 		ExtOptionsItems.amount = 4;
+	}
 
 	SetAlternateMenuBuf();
 	ClearMenuBuf();

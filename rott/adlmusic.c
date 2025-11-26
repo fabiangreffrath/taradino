@@ -129,7 +129,9 @@ static int ADL_PlaySong(unsigned char *song, int size, int loopflag)
 static void ADL_Continue(void)
 {
 	if (music_songdata)
+	{
 		ADL_PlaySong(music_songdata, music_songdatasize, MUSIC_PlayOnce);
+	}
 }
 
 static int ADL_FadeVolume(int tovolume, int milliseconds)

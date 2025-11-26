@@ -180,10 +180,14 @@ static void SDLmusic_Pause(void)
 static int SDLmusic_StopSong(void)
 {
 	if (Mix_PlayingMusic() || Mix_PausedMusic())
+	{
 		Mix_HaltMusic();
+	}
 
 	if (music_musicchunk)
+	{
 		Mix_FreeMusic(music_musicchunk);
+	}
 
 	music_musicchunk = NULL;
 
@@ -221,9 +225,13 @@ static int SDLmusic_PlaySong(unsigned char *song, int size, int loopflag)
 static void SDLmusic_Continue(void)
 {
 	if (Mix_PausedMusic())
+	{
 		Mix_ResumeMusic();
+	}
 	else if (music_songdata)
+	{
 		SDLmusic_PlaySong(music_songdata, music_songdatasize, MUSIC_PlayOnce);
+	}
 }
 
 static int SDLmusic_FadeVolume(int tovolume, int milliseconds)
