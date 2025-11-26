@@ -52,7 +52,7 @@ int MUSIC_Shutdown(void)
 
 void MUSIC_SetVolume(int volume)
 {
-	float_music_volume = 10.0 * pow(volume / 255.0, 2.0);
+	float_music_volume = 8.0 * pow(volume / 255.0, 1.4);
 	Mix_VolumeMusic(volume >> 1); // convert 0-255 to 0-128.
 }
 
