@@ -82,7 +82,6 @@ typedef struct
 	int (*FadeActive)(void);
 } music_module_t;
 
-extern music_module_t dummy_music_module;
 extern music_module_t sdl_music_module;
 extern music_module_t adl_music_module;
 extern const int num_music_modules;

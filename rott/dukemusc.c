@@ -11,14 +11,13 @@
 #include "rt_util.h"
 #include "music.h"
 
-static music_module_t *music_modules[] = { &dummy_music_module,
-										   &sdl_music_module,
+static music_module_t *music_modules[] = { &sdl_music_module,
 #if defined(HAVE_ADLMIDI)
 										   &adl_music_module
 #endif
 };
 
-static music_module_t *music_module = &dummy_music_module;
+static music_module_t *music_module;
 const int num_music_modules = arrlen(music_modules);
 
 unsigned char *music_songdata = NULL;
@@ -34,7 +33,10 @@ int MUSIC_Init(int mode)
 		Error("SDL2_Mixer needs to be initialized first!\n");
 	}
 
-	music_module->Shutdown();
+	if (music_module)
+	{
+		music_module->Shutdown();
+	}
 
 	music_module = music_modules[mode];
 
@@ -45,7 +47,7 @@ int MUSIC_Shutdown(void)
 {
 	music_loopflag = MUSIC_PlayOnce;
 
-	return music_module->Shutdown();
+	return music_module ? music_module->Shutdown() : MUSIC_Ok;
 }
 
 void MUSIC_SetVolume(int volume)
@@ -56,17 +58,23 @@ void MUSIC_SetVolume(int volume)
 
 int MUSIC_SongPlaying(void)
 {
-	return music_module->SongPlaying();
+	return music_module ? music_module->SongPlaying() : __FX_FALSE;
 }
 
 void MUSIC_Continue(void)
 {
-	music_module->Continue();
+	if (music_module)
+	{
+		music_module->Continue();
+	}
 }
 
 void MUSIC_Pause(void)
 {
-	music_module->Pause();
+	if (music_module)
+	{
+		music_module->Pause();
+	}
 }
 
 int MUSIC_StopSong(void)
@@ -74,7 +82,7 @@ int MUSIC_StopSong(void)
 	music_songdata = NULL;
 	music_songdatasize = 0;
 
-	return music_module->StopSong();
+	return music_module ? music_module->StopSong() : MUSIC_Ok;
 }
 
 int MUSIC_PlaySong(unsigned char *song, int size, int loopflag)
@@ -90,7 +98,8 @@ int MUSIC_PlaySong(unsigned char *song, int size, int loopflag)
 	music_songdatasize = size;
 	music_loopflag = loopflag;
 
-	return music_module->PlaySong(song, size, loopflag);
+	return music_module ? music_module->PlaySong(song, size, loopflag)
+						: MUSIC_Ok;
 }
 
 void MUSIC_SetSongTime(unsigned long milliseconds)
@@ -105,10 +114,11 @@ void MUSIC_GetSongPosition(songposition *pos)
 
 int MUSIC_FadeVolume(int tovolume, int milliseconds)
 {
-	return music_module->FadeVolume(tovolume, milliseconds);
+	return music_module ? music_module->FadeVolume(tovolume, milliseconds)
+						: MUSIC_Ok;
 }
 
 int MUSIC_FadeActive(void)
 {
-	return music_module->FadeActive();
+	return music_module ? music_module->FadeActive() : __FX_FALSE;
 }
