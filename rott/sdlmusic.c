@@ -155,8 +155,7 @@ int SDLmusic_Init(int dummy)
 		{
 			if (!mix_soundfont)
 			{
-				mix_soundfont = M_StringDuplicate(soundfont);
-				Mix_SetSoundFonts(mix_soundfont);
+				Mix_SetSoundFonts(soundfont);
 			}
 			printf(" Using Soundfont %s\n", soundfont);
 		}
