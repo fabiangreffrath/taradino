@@ -31,6 +31,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #ifndef __MUSIC_H
 #define __MUSIC_H
 
+#include <stddef.h>
+
+enum
+{
+	__FX_FALSE,
+	__FX_TRUE
+};
+
 enum MUSIC_ERRORS
 {
 	MUSIC_Warning = -2,
@@ -55,15 +63,40 @@ typedef struct
 	unsigned int tick;
 } songposition;
 
-#define MUSIC_LoopSong (1 == 1)
-#define MUSIC_PlayOnce (!MUSIC_LoopSong)
+enum
+{
+	MUSIC_PlayOnce,
+	MUSIC_LoopSong
+};
+
+typedef struct
+{
+	int (*Init)(int samplerate);
+	int (*Shutdown)(void);
+	int (*SongPlaying)(void);
+	void (*Continue)(void);
+	void (*Pause)(void);
+	int (*StopSong)(void);
+	int (*PlaySong)(unsigned char *song, int size, int loopflag);
+	int (*FadeVolume)(int tovolume, int milliseconds);
+	int (*FadeActive)(void);
+} music_module_t;
+
+extern music_module_t dummy_music_module;
+extern music_module_t sdl_music_module;
+extern music_module_t adl_music_module;
+extern const int num_music_modules;
+
+extern unsigned char *music_songdata;
+extern size_t music_songdatasize;
+extern int music_loopflag;
+extern float float_music_volume;
 
 extern char *soundfont_cfg;
 
-int MUSIC_Init(int SoundCard, int Address);
+int MUSIC_Init(int mode);
 int MUSIC_Shutdown(void);
 void MUSIC_SetVolume(int volume);
-int MUSIC_GetVolume(void);
 int MUSIC_SongPlaying(void);
 void MUSIC_Continue(void);
 void MUSIC_Pause(void);

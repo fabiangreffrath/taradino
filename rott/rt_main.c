@@ -273,10 +273,8 @@ int main(int argc, char *argv[])
 		if (!NoSound)
 		{
 			if (!quiet)
-				printf("MU_Startup: ");
+				printf("MU_Startup: \n");
 			MU_Startup(false);
-			if (!quiet)
-				printf("Could not initialize music.\n");
 		}
 
 		Init_Tables();

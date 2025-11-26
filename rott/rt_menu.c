@@ -571,18 +571,13 @@ CP_MenuNames OptionsNames[] = {
 // bna added
 CP_MenuNames ExtOptionsNames[] = { "MOUSE LOOK", "INVERT MOUSE", "CROSSHAIR",
 								   "FULLSCREEN", "ADLIB MUSIC" };
-CP_iteminfo ExtOptionsItems = { 20, MENU_Y,
-#if defined(HAVE_ADLMIDI)
-								5,
-#else
-								4,
-#endif
-								0,	43,		ExtOptionsNames, mn_largefont };
+CP_iteminfo ExtOptionsItems = { 20, MENU_Y,			 5,			  0,
+								43, ExtOptionsNames, mn_largefont };
 
 CP_itemtype ExtOptionsMenu[] = {
 	{ 1, "", 'M', { NULL } }, { 1, "", 'I', { NULL } },
-	{ 1, "", 'C', { NULL } }, { 1, "", 'J', { NULL } },
-	{ 1, "", 'F', { NULL } }, { 1, "", 'A', { NULL } }
+	{ 1, "", 'C', { NULL } }, { 1, "", 'F', { NULL } },
+	{ 1, "", 'A', { NULL } },
 };
 
 // bna added end
@@ -4723,6 +4718,11 @@ void DrawExtOptionsMenu(void)
 {
 	MenuNum = 1;
 
+	if (MusicMode == 0)
+		ExtOptionsMenu[4].active = CP_Inactive;
+	if (num_music_modules < 3)
+		ExtOptionsItems.amount = 4;
+
 	SetAlternateMenuBuf();
 	ClearMenuBuf();
 	SetMenuTitle("Extended User Options");
@@ -4775,7 +4775,12 @@ void CP_ExtOptionsMenu(void)
 				DrawExtOptionsButtons();
 				break;
 			case 4:
-				ToggleFullScreen();
+				if (MusicMode > 0)
+				{
+					MusicMode = 3 - MusicMode;
+					MUSIC_Init(MusicMode);
+					MUSIC_Continue();
+				}
 				DrawExtOptionsButtons();
 				break;
 		}

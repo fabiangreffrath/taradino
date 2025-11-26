@@ -838,18 +838,13 @@ boolean MusicStarted(void)
 int MU_Startup(boolean bombonerror)
 {
 	int status;
-	int card;
 
 	if (MU_Started == true)
 	{
 		MU_StopSong();
 		MU_Shutdown();
 	}
-#if defined(HAVE_ADLMIDI)
-	if (MusicMode < 0 || MusicMode > 2)
-#else
-	if (MusicMode < 0 || MusicMode > 1)
-#endif
+	if (MusicMode < 0 || MusicMode >= num_music_modules)
 	{
 		MusicMode = 1;
 	}
@@ -858,8 +853,7 @@ int MU_Startup(boolean bombonerror)
 		return (0);
 	}
 
-	/* Not DOS, no address config needed */
-	status = MUSIC_Init(MusicMode, 0);
+	status = MUSIC_Init(MusicMode);
 
 	if (status != MUSIC_Ok)
 	{
