@@ -11,7 +11,7 @@
 #include "rt_util.h"
 #include "music.h"
 
-static music_module_t *music_modules[] = { &sdl_music_module,
+static music_module_t *music_modules[] = { NULL, &sdl_music_module,
 #if defined(HAVE_ADLMIDI)
 										   &adl_music_module
 #endif
