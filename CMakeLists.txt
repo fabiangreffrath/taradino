@@ -41,8 +41,12 @@ else()
 	set(TARADINO_TITLE "Taradino")
 endif()
 
+if(NOT TARGET SDL2_mixer::SDL2_mixer)
+    add_library(SDL2_mixer::SDL2_mixer ALIAS SDL2_mixer::SDL2_mixer-static)
+endif()
+
 add_executable(taradino ${TARADINO_SOURCES})
-target_link_libraries(taradino PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer)
+target_link_libraries(taradino PRIVATE ${SDL2_LIBRARIES} SDL2_mixer::SDL2_mixer)
 target_compile_definitions(taradino PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}")
 target_compile_definitions(taradino PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
 target_include_directories(taradino PRIVATE "${PROJECT_BINARY_DIR}/rott")

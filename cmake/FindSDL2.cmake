@@ -26,8 +26,8 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 # Currently works with the following generators:
-# - Unix Makefiles (Linux, MSYS2, Linux MinGW)
-# - Ninja (Linux, MSYS2, Linux MinGW)
+# - Unix Makefiles (Linux, MSYS2)
+# - Ninja (Linux, MSYS2)
 # - Visual Studio
 
 # Cache variable that allows you to point CMake at a directory containing
@@ -41,21 +41,8 @@ if(PKG_CONFIG_FOUND)
 endif()
 
 # Find the include directory.
-if(CMAKE_SIZEOF_VOID_P STREQUAL 8)
-    find_path(SDL2_INCLUDE_DIR "SDL_version.h"
-        HINTS
-        "${SDL2_DIR}/include"
-        "${SDL2_DIR}/include/SDL2"
-        "${SDL2_DIR}/x86_64-w64-mingw32/include/SDL2"
-        ${PC_SDL2_INCLUDE_DIRS})
-else()
-    find_path(SDL2_INCLUDE_DIR "SDL_version.h"
-        HINTS
-        "${SDL2_DIR}/include"
-        "${SDL2_DIR}/include/SDL2"
-        "${SDL2_DIR}/i686-w64-mingw32/include/SDL2"
-        ${PC_SDL2_INCLUDE_DIRS})
-endif()
+find_path(SDL2_INCLUDE_DIR "SDL_version.h"
+    HINTS "${SDL2_DIR}/include" ${PC_SDL2_INCLUDE_DIRS})
 
 # Find the version.  Taken and modified from CMake's FindSDL.cmake.
 if(SDL2_INCLUDE_DIR AND EXISTS "${SDL2_INCLUDE_DIR}/SDL_version.h")
@@ -77,30 +64,14 @@ endif()
 # Find the SDL2 and SDL2main libraries
 if(CMAKE_SIZEOF_VOID_P STREQUAL 8)
     find_library(SDL2_LIBRARY "SDL2"
-        HINTS
-        "${SDL2_DIR}/lib"
-        "${SDL2_DIR}/lib/x64"
-        "${SDL2_DIR}/x86_64-w64-mingw32/lib"
-        ${PC_SDL2_LIBRARY_DIRS})
+        HINTS "${SDL2_DIR}/lib/x64" ${PC_SDL2_LIBRARY_DIRS})
     find_library(SDL2_MAIN_LIBRARY "SDL2main"
-        HINTS
-        "${SDL2_DIR}/lib"
-        "${SDL2_DIR}/lib/x64"
-        "${SDL2_DIR}/x86_64-w64-mingw32/lib"
-        ${PC_SDL2_LIBRARY_DIRS})
+        HINTS "${SDL2_DIR}/lib/x64" ${PC_SDL2_LIBRARY_DIRS})
 else()
     find_library(SDL2_LIBRARY "SDL2"
-        HINTS
-        "${SDL2_DIR}/lib"
-        "${SDL2_DIR}/lib/x86"
-        "${SDL2_DIR}/i686-w64-mingw32/lib"
-        ${PC_SDL2_LIBRARY_DIRS})
+        HINTS "${SDL2_DIR}/lib/x86" ${PC_SDL2_LIBRARY_DIRS})
     find_library(SDL2_MAIN_LIBRARY "SDL2main"
-        HINTS
-        "${SDL2_DIR}/lib"
-        "${SDL2_DIR}/lib/x86"
-        "${SDL2_DIR}/i686-w64-mingw32/lib"
-        ${PC_SDL2_LIBRARY_DIRS})
+        HINTS "${SDL2_DIR}/lib/x86" ${PC_SDL2_LIBRARY_DIRS})
 endif()
 set(SDL2_LIBRARIES "${SDL2_MAIN_LIBRARY}" "${SDL2_LIBRARY}")
 
