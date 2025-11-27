@@ -22,7 +22,7 @@ jobs:
             os: windows-latest
             arch: x64
             toolchain: ${env:VCPKG_INSTALLATION_ROOT}
-            triplet: x64-windows
+            triplet: x64-windows-static
             artifact-name: Win-64
             artifact-path: build/*.zip
             extra-options: >-
