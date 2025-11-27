@@ -55,10 +55,6 @@ static boolean PositionStored = false;
 static int remotestart;
 static boolean SoundsRemapped = false;
 
-int musicnums[11] = { -1, -1, -1, -1, -1, -1, SoundScape, -1, -1, -1, -1 };
-
-int fxnums[11] = { -1, -1, -1, -1, -1, -1, SoundScape, -1, -1, -1, -1 };
-
 int MUSIC_GetPosition(void)
 {
 	songposition pos;
@@ -131,25 +127,22 @@ int SD_SetupFXCard(int *numvoices, int *numbits, int *numchannels)
 {
 	fx_device device;
 	int status;
-	int card;
 
 	if (SD_Started == true)
 	{
 		SD_Shutdown();
 	}
 
-	if ((FXMode < 0) || (FXMode >= 11))
+	if (FXMode < 0 || FXMode > 1)
+	{
+		FXMode = 1;
+	}
+	if (FXMode == 0)
 	{
 		return (0);
 	}
 
-	card = fxnums[FXMode];
-	if (card == -1) // Check if it is off
-	{
-		return (0);
-	}
-
-	status = FX_SetupCard(card, &device);
+	status = FX_SetupCard(FXMode, &device);
 	if (status == FX_Ok)
 	{
 		*numvoices = device.MaxVoices;
@@ -169,7 +162,6 @@ int SD_SetupFXCard(int *numvoices, int *numbits, int *numchannels)
 int SD_Startup(boolean bombonerror)
 {
 	int status;
-	int card;
 	int voices;
 	int channels;
 	int bits;
@@ -180,46 +172,33 @@ int SD_Startup(boolean bombonerror)
 		SD_Shutdown();
 	}
 
-	if ((FXMode < 0) || (FXMode >= 11))
+	if (FXMode < 0 || FXMode > 1)
 	{
-		return (0);
+		FXMode = 1;
 	}
-	card = fxnums[FXMode];
-	if (card == -1) // Check if it is off
+	if (FXMode == 0)
 	{
 		return (0);
 	}
 
-	switch (card)
+	soundstart = W_GetNumForName("digistrt") + 1;
+	soundtype = fx_digital;
+	if (SoundsRemapped == false)
 	{
-		case SoundScape:
-			soundstart = W_GetNumForName("digistrt") + 1;
-			soundtype = fx_digital;
-			break;
-		default:
-			Error("FX: Unsupported Card number %d", FXMode);
-			break;
-	}
-
-	if (soundtype == fx_digital)
-	{
-		if (SoundsRemapped == false)
+		for (i = 0; i < SD_LASTSOUND; i++)
 		{
-			for (i = 0; i < SD_LASTSOUND; i++)
-			{
-				int snd;
+			int snd;
 
-				snd = sounds[i].snds[fx_digital];
-				if (snd >= 0)
-				{
-					sounds[i].snds[fx_digital] =
-						W_GetNumForName(W_GetNameForNum(snd + soundstart));
-				}
+			snd = sounds[i].snds[fx_digital];
+			if (snd >= 0)
+			{
+				sounds[i].snds[fx_digital] =
+					W_GetNumForName(W_GetNameForNum(snd + soundstart));
 			}
-			SoundsRemapped = true;
 		}
-		soundstart = 0;
+		SoundsRemapped = true;
 	}
+	soundstart = 0;
 
 	voices = NumVoices;
 	channels = NumChannels;
@@ -227,7 +206,7 @@ int SD_Startup(boolean bombonerror)
 
 	remotestart = W_GetNumForName("remostrt") + 1;
 
-	status = FX_Init(card, voices, channels, bits, 11025);
+	status = FX_Init(FXMode, voices, channels, bits, 11025);
 
 	if (status != FX_Ok)
 	{
@@ -859,32 +838,29 @@ boolean MusicStarted(void)
 int MU_Startup(boolean bombonerror)
 {
 	int status;
-	int card;
 
 	if (MU_Started == true)
 	{
 		MU_StopSong();
 		MU_Shutdown();
 	}
-	if ((MusicMode < 0) || (MusicMode >= 11))
+	if (MusicMode < 0 || MusicMode >= num_music_modules)
 	{
-		return (0);
+		MusicMode = 1;
 	}
-	card = musicnums[MusicMode];
-	if (card == -1) // Check if it is off
+	if (MusicMode == 0)
 	{
 		return (0);
 	}
 
-	/* Not DOS, no address config needed */
-	status = MUSIC_Init(card, 0);
+	status = MUSIC_Init(MusicMode);
 
 	if (status != MUSIC_Ok)
 	{
 		if (bombonerror)
 		{
 			DeleteSoundFile();
-			Error("%s\n", MUSIC_ErrorString(status));
+			Error("Could not initialize music.\n");
 		}
 		else
 		{

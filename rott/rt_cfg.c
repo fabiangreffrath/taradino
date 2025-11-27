@@ -271,9 +271,8 @@ void SetSoundDefaultValues(void)
 	//
 	//  no config file, so select default values
 	//
-	// icculus' SDL_mixer driver looks like a soundscape to us
-	MusicMode = 6;
-	FXMode = 6;
+	MusicMode = 1; // SDL2_Mixer
+	FXMode = 1;
 	NumVoices = 8;
 	NumChannels = 2;
 	NumBits = 16;
@@ -1460,7 +1459,8 @@ void WriteSoundConfig(void)
 	SafeWriteString(file, "\n;\n");
 	SafeWriteString(file, "; Music Modes\n");
 	SafeWriteString(file, "; 0  -  Off\n");
-	SafeWriteString(file, "; 6  -  On\n");
+	SafeWriteString(file, "; 1  -  SDL2_Mixer\n");
+	SafeWriteString(file, "; 2  -  libADLMIDI\n");
 	WriteParameter(file, "MusicMode        ", MusicMode);
 
 	// Write out FX Mode
