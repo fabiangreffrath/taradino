@@ -9,6 +9,7 @@ Portability fixes include support for 64-bit and big-endian systems.
 
 This port makes use of the Simple Direct Media Layer, or SDL, and an additional
 library named SDL_mixer.
+Optional OPL3/AdLib music synthesis is supported by using libADLMIDI.
 
 ## Known Issues
 
@@ -17,7 +18,7 @@ library named SDL_mixer.
 
 ## Building
 
-Building Taradino requires GCC, CMake, the development packages for SDL2 and SDL2_Mixer.
+Building Taradino requires GCC, CMake, the development packages for SDL2 and SDL2_Mixer (and libADLMIDI, if you like).
 After installing, you can run the following commands to build:
 
 Registered:
