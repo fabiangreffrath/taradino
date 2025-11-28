@@ -66,8 +66,8 @@ byte *mr_src;
 ==================
 */
 
-static byte *floor;
-static byte *ceiling;
+static byte *rtfloor;
+static byte *rtceiling;
 // static int xstarts[MAXVIEWHEIGHT];
 static int xstarts[600]; // set to max hight res
 static byte *skysegs[MAXSKYSEGS];
@@ -375,18 +375,18 @@ void SetPlaneViewSize(void)
 	floornum = GetFloorCeilingLump(floornum);
 	// ceilingnum = GetFloorCeilingLump ( ceilingnum );
 
-	floor = W_CacheLumpNum(floornum, PU_LEVELSTRUCT, Cvt_patch_t, 1);
-	floor += 8;
+	rtfloor = W_CacheLumpNum(floornum, PU_LEVELSTRUCT, Cvt_patch_t, 1);
+	rtfloor += 8;
 
 	if (sky == 0) // Don't cache in if not used
 	{
 		ceilingnum = GetFloorCeilingLump(ceilingnum);
-		ceiling = W_CacheLumpNum(ceilingnum, PU_LEVELSTRUCT, Cvt_patch_t, 1);
-		ceiling += 8;
+		rtceiling = W_CacheLumpNum(ceilingnum, PU_LEVELSTRUCT, Cvt_patch_t, 1);
+		rtceiling += 8;
 	}
 	else
 	{
-		ceiling = NULL;
+		rtceiling = NULL;
 	}
 
 	s = W_GetNumForName("SKYSTART");
@@ -491,7 +491,7 @@ void DrawHLine(int xleft, int xright, int yp)
 	{
 		int hd;
 
-		buf = floor;
+		buf = rtfloor;
 		hd = yp - centery;
 		height = (hd << 13) / (maxheight - pheight + 32);
 
@@ -503,10 +503,10 @@ void DrawHLine(int xleft, int xright, int yp)
 		int hd;
 
 		/* ROTT bug? It'd draw when there was no ceiling. - SBF */
-		if (ceiling == NULL)
+		if (rtceiling == NULL)
 			return;
 
-		buf = ceiling;
+		buf = rtceiling;
 
 		hd = centery - yp;
 		height = (hd << 13) / pheight;
