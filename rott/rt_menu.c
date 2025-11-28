@@ -822,9 +822,9 @@ static const struct
 						 { "extreme.rtl", "Extreme ROTT" },
 						 { "huntcontEX.rtlx", "The HUNT Continues" } };
 
-char *FoundEpisode(unsigned int i)
+char *FoundEpisode(int i)
 {
-	if (i < EpisodeItems.amount)
+	if (i >= 0 && i < EpisodeItems.amount)
 	{
 		return found_episodes[i];
 	}

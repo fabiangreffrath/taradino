@@ -215,6 +215,6 @@ void CP_TeamPlayErrorMessage(void);
 
 void PopulateEpisodeMenu(char *datadir);
 int CP_EpisodeSelection(void);
-char *FoundEpisode(unsigned int i);
+char *FoundEpisode(int i);
 
 #endif
