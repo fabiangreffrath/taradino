@@ -1,5 +1,8 @@
-
 cmake_minimum_required(VERSION 3.10)
+
+# Automatically installs dependencies.
+set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
+
 project(taradino
 	DESCRIPTION "SDL2 port of Rise of the Triad"
 	HOMEPAGE_URL "https://github.com/fabiangreffrath/taradino/"

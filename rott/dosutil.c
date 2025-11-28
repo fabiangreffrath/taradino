@@ -50,7 +50,6 @@ char *strlwr(char *s)
 
 	return s;
 }
-#endif
 
 char *strupr(char *s)
 {
@@ -118,6 +117,7 @@ char *ultoa(unsigned long value, char *string, int radix)
 
 	return string;
 }
+#endif
 
 char getch(void)
 {

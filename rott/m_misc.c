@@ -665,40 +665,6 @@ void M_ForceLowercase(char *text)
 }
 
 //
-// M_StrCaseStr
-//
-// Case-insensitive version of strstr()
-//
-
-const char *M_StrCaseStr(const char *haystack, const char *needle)
-{
-	unsigned int haystack_len;
-	unsigned int needle_len;
-	unsigned int len;
-	unsigned int i;
-
-	haystack_len = strlen(haystack);
-	needle_len = strlen(needle);
-
-	if (haystack_len < needle_len)
-	{
-		return NULL;
-	}
-
-	len = haystack_len - needle_len;
-
-	for (i = 0; i <= len; ++i)
-	{
-		if (!strncasecmp(haystack + i, needle, needle_len))
-		{
-			return haystack + i;
-		}
-	}
-
-	return NULL;
-}
-
-//
 // Safe version of strdup() that checks the string was successfully
 // allocated.
 //

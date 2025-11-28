@@ -9,6 +9,9 @@ on:
     branches: [ "main" ]
     paths-ignore: ['**.md']
 
+env:
+  VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}/vcpkg_cache,readwrite"
+
 jobs:
   build:
     name: ${{ matrix.config.name }}
@@ -20,26 +23,33 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {
-              name: Linux GCC,
-              os: ubuntu-latest,
-              compiler: gcc,
-              shell: bash,
-            }
-          - {
-              name: macOS Clang,
-              os: macos-latest,
-              compiler: clang,
-              shell: bash,
-            }
-          - {
-              name: MSYS2 UCRT64,
-              os: windows-latest,
-              compiler: gcc,
-              shell: 'msys2 {0}',
-              msystem: ucrt64,
-              msys-env: mingw-w64-ucrt-x86_64,
-            }
+          - name: Linux GCC
+            os: ubuntu-latest
+            compiler: gcc
+            shell: bash
+
+          - name: macOS Clang
+            os: macos-latest
+            compiler: clang
+            shell: bash
+
+          - name: MSYS2 UCRT64
+            os: windows-latest
+            compiler: gcc
+            shell: 'msys2 {0}'
+            msystem: ucrt64
+            msys-env: mingw-w64-ucrt-x86_64
+
+          - name: MSVC x64
+            os: windows-latest
+            compiler: cl
+            shell: pwsh
+            extra-options: >-
+              -A x64
+              -DCMAKE_TOOLCHAIN_FILE="${env:VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake"
+              -DVCPKG_TARGET_TRIPLET=x64-windows-static-release
+              -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
+              -DCMAKE_IGNORE_PATH="C:/Strawberry/perl/bin;C:/Strawberry/c/lib"
 
     steps:
       - name: Install dependencies (Linux)
@@ -53,11 +63,7 @@ jobs:
 
       - name: Install dependencies (macOS)
         if: runner.os == 'macOS'
-        env:
-          HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
         run: |
-          brew update || true
-          brew list cmake || brew install cmake
           brew install \
             sdl2 \
             sdl2_mixer
@@ -74,48 +80,77 @@ jobs:
             ${{ matrix.config.msys-env }}-SDL2
             ${{ matrix.config.msys-env }}-SDL2_mixer
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      - name: Restore vcpkg cache
+        if: ${{ matrix.config.name == 'MSVC x64' }}
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ github.workspace }}/vcpkg_cache
+          key: vcpkg-x64-windows-static-release
+
+      - name: Configure shareware executable
+        env:
+          CC: ${{ matrix.config.compiler }}
+        run: >-
+          cmake -B build-shareware
+          -DTARADINO_SHAREWARE=ON
+          -DTARADINO_WARNINGS_AS_ERRORS=ON
+          -DTARADINO_SUFFIX=shareware
+          ${{ matrix.config.extra-options }}
+
+      - name: Configure registered executable
+        env:
+          CC: ${{ matrix.config.compiler }}
+        run: >-
+          cmake -B build-registered
+          -DTARADINO_SHAREWARE=OFF
+          -DTARADINO_WARNINGS_AS_ERRORS=ON
+          ${{ matrix.config.extra-options }}
+
+      # Delete the old cache on hit to emulate a cache update.
+      - name: Delete old cache
+        if: ${{ matrix.config.name == 'MSVC x64' }}
+        continue-on-error: true
+        if: steps.cache.outputs.cache-hit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh cache delete --repo ${{ github.repository }} ${{ steps.cache.outputs.cache-primary-key }}
+
+      - name: Save cache
+        if: ${{ matrix.config.name == 'MSVC x64' }}
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ github.workspace }}/vcpkg_cache
+          key: ${{ steps.cache.outputs.cache-primary-key }}
 
       - name: Build shareware executable
-        env:
-          CC: ${{ matrix.config.compiler }}
-          CFLAGS: -Wall
-        run: |
-          cmake -E make_directory cmake-build
-          cmake -S . -B cmake-build --fresh -DTARADINO_SHAREWARE=ON -DTARADINO_WARNINGS_AS_ERRORS=ON -DTARADINO_SUFFIX=shareware
-          cmake --build cmake-build --config Release
+        run: cmake --build build-shareware --config Release
 
       - name: Install shareware executable
-        if: runner.os == 'Windows'
+        if: ${{ matrix.config.name == 'MSVC x64' }}
         run: |
-          cd cmake-build
+          cd build-shareware
           cpack
-          mkdir -p cache
-          cp -af _CPack_Packages/win64/ZIP/*/* cache
 
       - name: Build registered executable
-        env:
-          CC: ${{ matrix.config.compiler }}
-          CFLAGS: -Wall
-        run: |
-          cmake -E make_directory cmake-build
-          cmake -S . -B cmake-build --fresh -DTARADINO_SHAREWARE=OFF -DTARADINO_WARNINGS_AS_ERRORS=ON -UTARADINO_SUFFIX
-          cmake --build cmake-build --config Release
+        run: cmake --build build-registered --config Release
 
       - name: Install registered executable
-        if: runner.os == 'Windows'
+        if: ${{ matrix.config.name == 'MSVC x64' }}
         run: |
-          cd cmake-build
+          cd build-registered
           cpack
-          mkdir -p cache
-          cp -af _CPack_Packages/win64/ZIP/*/* cache
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
-        if: runner.os == 'Windows'
+        if: ${{ matrix.config.name == 'MSVC x64' }}
         with:
           name: taradino-${{ github.sha }}-win64
-          path: cmake-build/cache/*
+          path: |
+            build-shareware/*.zip
+            build-registered/*.zip
 
   cppcheck:
     name: Cppcheck
@@ -127,7 +162,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install cppcheck
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Run cppcheck
         shell: bash
