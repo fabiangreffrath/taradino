@@ -37,7 +37,7 @@ cmake --build cmake-build-shareware
 
 ## Legalese
 
-Files: *  
+Files: `*`  
 Copyright:  
  © 1991-1992, FORTE  
  © 1992-1994, Creative Technology Ltd.  
@@ -53,14 +53,12 @@ Copyright:
  © 2023-2025, erysdren  
 License: [GPL-2.0+](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 
-Files:  
- rott/vgatext.*  
+Files: `rott/vgatext.*`  
 Copyright:  
  © 2024, erysdren  
 License: [MIT](https://opensource.org/licenses/MIT)
 
-Files:  
- rott/vgafont.h  
+Files: `rott/vgafont.h`  
 Copyright:  
  © Joseph Gil  
 License: public-domain
