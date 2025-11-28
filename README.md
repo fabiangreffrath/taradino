@@ -39,14 +39,10 @@ cmake --build cmake-build-shareware
 
 Files: `*`  
 Copyright:  
- © 1991-1992, FORTE  
- © 1992-1994, Creative Technology Ltd.  
- © 1992, Jim Kent  
  © 1993-1994, James R. Dose  
  © 1993-1996, Id Software, Inc.  
  © 1993-2008, Raven Software  
  © 1994-1995, Apogee Software, Ltd.  
- © 1995, Spacetec IMC Corporation  
  © 2002-2015, Steven Fuller, Ryan C. Gordon, John Hall, Dan Olson  
  © 2005-2018, Simon Howard  
  © 2006-2025, Fabian Greffrath  
