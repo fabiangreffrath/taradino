@@ -950,7 +950,7 @@ void CheckBounds(objtype *ob)
 
 void DoActor(objtype *ob)
 {
-	void (*think)();
+	void (*think)(objtype *);
 	int door;
 
 	//  for(i=0;i<tics;i++)
