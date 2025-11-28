@@ -28,11 +28,13 @@ jobs:
             os: ubuntu-latest
             compiler: gcc
             shell: bash
+            extra-options: -DTARADINO_WARNINGS_AS_ERRORS=ON
 
           - name: macOS Clang
             os: macos-latest
             compiler: clang
             shell: bash
+            extra-options: -DTARADINO_WARNINGS_AS_ERRORS=ON
 
           - name: MSYS2 UCRT64
             os: windows-latest
@@ -40,6 +42,7 @@ jobs:
             shell: 'msys2 {0}'
             msystem: ucrt64
             msys-env: mingw-w64-ucrt-x86_64
+            extra-options: -DTARADINO_WARNINGS_AS_ERRORS=ON
 
           - name: MSVC x64
             os: windows-latest

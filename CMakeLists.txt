@@ -85,11 +85,13 @@ endif()
 set_target_properties(taradino PROPERTIES OUTPUT_NAME ${TARADINO_EXEC})
 
 set_target_properties(taradino PROPERTIES C_STANDARD_REQUIRED ON C_STANDARD 99)
-if (MSVC)
+if(MSVC)
 	# silence warnings about POSIX functions
 	target_compile_options(taradino PUBLIC -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_WARNINGS -Dstrcasecmp=_stricmp -Dalloca=_alloca)
 	# silence unsigned/signed and integer truncation warnings
 	target_compile_options(taradino PRIVATE /wd4267 /wd4244)
+else()
+	target_compile_options(taradino PRIVATE -Wall)
 endif()
 
 if(${TARADINO_SHAREWARE})
