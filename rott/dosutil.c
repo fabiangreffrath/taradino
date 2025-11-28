@@ -38,19 +38,6 @@ long filelength(int handle)
 	return buf.st_size;
 }
 
-char *strlwr(char *s)
-{
-	char *p = s;
-
-	while (*p)
-	{
-		*p = tolower(*p);
-		p++;
-	}
-
-	return s;
-}
-
 char *strupr(char *s)
 {
 	char *p = s;
@@ -123,49 +110,4 @@ char getch(void)
 {
 	getchar();
 	return 0;
-}
-
-/* from Dan Olson */
-void put_dos2ansi(byte attrib)
-{
-	int lookup[] = { 30, 34, 32, 36, 31, 35, 33, 37 };
-	byte fore, back, blink = 0, intens = 0;
-
-	fore = attrib & 15;	  /* bits 0-3 */
-	back = attrib & 112;  /* bits 4-6 */
-	blink = attrib & 128; /* bit 7 */
-
-	/* Fix background, blink is either on or off. */
-	back = back >> 4;
-
-	/* Fix foreground */
-	if (fore > 7)
-	{
-		intens = 1;
-		fore -= 8;
-	}
-
-	/* Convert fore/back */
-	fore = lookup[fore];
-	back = lookup[back] + 10;
-
-	// 'Render"
-	if (blink)
-		printf("\033[%d;5;%dm\033[%dm", intens, fore, back);
-	else
-		printf("\033[%d;25;%dm\033[%dm", intens, fore, back);
-}
-
-void DisplayTextSplash(byte *text, int l)
-{
-	int i;
-	int bound = 80 * l * 2;
-
-	for (i = 0; i < bound; i += 2)
-	{
-		put_dos2ansi(text[i + 1]);
-		putchar(text[i]);
-	}
-
-	printf("\033[m");
 }
