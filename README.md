@@ -35,25 +35,32 @@ cmake -Bcmake-build-shareware -DCMAKE_BUILD_TYPE=Release -S. -DTARADINO_SHAREWAR
 cmake --build cmake-build-shareware
 ```
 
-## License
+## Legalese
 
-GNU GPL v2
+Files: *  
+Copyright:  
+ © 1991-1992, FORTE  
+ © 1992-1994, Creative Technology Ltd.  
+ © 1992, Jim Kent  
+ © 1993-1994, James R. Dose  
+ © 1993-1996, Id Software, Inc.  
+ © 1993-2008, Raven Software  
+ © 1994-1995, Apogee Software, Ltd.  
+ © 1995, Spacetec IMC Corporation  
+ © 2002-2015, Steven Fuller, Ryan C. Gordon, John Hall, Dan Olson  
+ © 2005-2018, Simon Howard  
+ © 2006-2025, Fabian Greffrath  
+ © 2023-2025, erysdren  
+License: [GPL-2.0+](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 
-Copyright (C) 1994-1995 Apogee Software, Ltd.  
-Copyright (C) 2002-2015 Steven Fuller, Ryan C. Gordon, John Hall, Dan Olson  
-Copyright (C) 2006-2025 Fabian Greffrath  
-Copyright (C) 2023-2025 erysdren  
+Files:  
+ rott/vgatext.*  
+Copyright:  
+ © 2024, erysdren  
+License: [MIT](https://opensource.org/licenses/MIT)
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+Files:  
+ rott/vgafont.h  
+Copyright:  
+ © Joseph Gil  
+License: public-domain
