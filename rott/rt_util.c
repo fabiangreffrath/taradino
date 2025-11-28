@@ -1270,7 +1270,11 @@ boolean UL_ChangeDirectory(char *path)
 		return true;
 	}
 
+#ifndef _MSC_VER
 	if (chdir(path) == -1)
+#else
+	if (_chdir(path) == -1)
+#endif
 	{
 		return (false);
 	}
