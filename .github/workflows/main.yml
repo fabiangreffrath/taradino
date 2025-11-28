@@ -8,6 +8,7 @@ on:
   pull_request:
     branches: [ "main" ]
     paths-ignore: ['**.md']
+  workflow_dispatch:
 
 env:
   VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}/vcpkg_cache,readwrite"
