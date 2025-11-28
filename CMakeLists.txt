@@ -1,5 +1,8 @@
-
 cmake_minimum_required(VERSION 3.10)
+
+# Automatically installs dependencies.
+set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
+
 project(taradino
 	DESCRIPTION "SDL2 port of Rise of the Triad"
 	HOMEPAGE_URL "https://github.com/fabiangreffrath/taradino/"
@@ -18,9 +21,8 @@ add_library(ASAN::ASAN IMPORTED INTERFACE)
 target_compile_options(ASAN::ASAN INTERFACE -fsanitize=address $<$<NOT:$<COMPILE_LANG_AND_ID:C,MSVC>>:-fno-omit-frame-pointer>)
 target_link_options(ASAN::ASAN INTERFACE -fsanitize=address)
 
-find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
-find_package(SDL2 REQUIRED CONFIG COMPONENTS SDL2main)
-find_package(SDL2_mixer REQUIRED CONFIG REQUIRED COMPONENTS SDL2_mixer)
+find_package(SDL2 REQUIRED CONFIG)
+find_package(SDL2_mixer REQUIRED CONFIG)
 find_package(libADLMIDI CONFIG)
 
 file(GLOB TARADINO_SOURCES "${PROJECT_SOURCE_DIR}/rott/*.c")
@@ -42,7 +44,11 @@ else()
 endif()
 
 add_executable(taradino ${TARADINO_SOURCES})
-target_link_libraries(taradino PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main> SDL2::SDL2 SDL2_mixer::SDL2_mixer)
+target_link_libraries(taradino PRIVATE
+	$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+	$<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+	$<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>
+)
 target_compile_definitions(taradino PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}")
 target_compile_definitions(taradino PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
 target_include_directories(taradino PRIVATE "${PROJECT_BINARY_DIR}/rott")
@@ -79,11 +85,13 @@ endif()
 set_target_properties(taradino PROPERTIES OUTPUT_NAME ${TARADINO_EXEC})
 
 set_target_properties(taradino PROPERTIES C_STANDARD_REQUIRED ON C_STANDARD 99)
-if (MSVC)
+if(MSVC)
 	# silence warnings about POSIX functions
 	target_compile_options(taradino PUBLIC -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_WARNINGS -Dstrcasecmp=_stricmp -Dalloca=_alloca)
 	# silence unsigned/signed and integer truncation warnings
 	target_compile_options(taradino PRIVATE /wd4267 /wd4244)
+else()
+	target_compile_options(taradino PRIVATE -Wall)
 endif()
 
 if(${TARADINO_SHAREWARE})
