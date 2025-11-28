@@ -111,9 +111,8 @@ jobs:
 
       # Delete the old cache on hit to emulate a cache update.
       - name: Delete old cache
-        if: ${{ matrix.config.name == 'MSVC x64' }}
-        continue-on-error: true
         if: steps.cache.outputs.cache-hit
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh cache delete --repo ${{ github.repository }} ${{ steps.cache.outputs.cache-primary-key }}
