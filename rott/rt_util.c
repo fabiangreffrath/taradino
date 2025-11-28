@@ -22,6 +22,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "SDL.h"
 
+#ifdef _MSC_VER
+#include <direct.h>
+#endif
 #include <stdarg.h>
 #include <fcntl.h>
 #include <errno.h>
