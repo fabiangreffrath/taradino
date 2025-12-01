@@ -2171,6 +2171,10 @@ void PollKeyboardMove(void)
 
 extern int inverse_mouse;
 
+const int MOUSE_TOFRAC = -0x10000;
+
+#define MOUSE_SENSITIVITY_SCALAR 2048
+
 void PollMouseMove(void)
 {
 	int mousexmove, mouseymove;
@@ -2180,17 +2184,17 @@ void PollMouseMove(void)
 
 	INL_GetMouseDelta(&mousexmove, &mouseymove);
 
-	MX = -KEYBOARDPREAMBLETURNAMOUNT * mousexmove * mouseadjustment / 16;
+	MX = FixedMul(mousexmove * MOUSE_TOFRAC, mouseadjustment * MOUSE_SENSITIVITY_SCALAR);
 
-	if (usemouselook == true)
+	if (usemouselook)
 	{
 		playertype *const pstate = &PLAYERSTATE[consoleplayer];
-		pstate->horizon -= inverse_mouse * mouseymove * mouseadjustment_y2 / 8;
+		pstate->horizon -= FixedMul(mouseymove * inverse_mouse, mouseadjustment_y2 * MOUSE_SENSITIVITY_SCALAR);
 		MY = 0;
 	}
 	else
 	{
-		MY = BASEMOVE * mouseymove * mouseadjustment_y / 16;
+		MY = FixedMul(BASEMOVE * mouseymove, mouseadjustment_y * MOUSE_SENSITIVITY_SCALAR);
 	}
 }
 
