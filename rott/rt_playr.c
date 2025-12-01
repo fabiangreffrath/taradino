@@ -2184,17 +2184,21 @@ void PollMouseMove(void)
 
 	INL_GetMouseDelta(&mousexmove, &mouseymove);
 
-	MX = FixedMul(mousexmove * MOUSE_TOFRAC, mouseadjustment * MOUSE_SENSITIVITY_SCALAR);
+	MX = FixedMul(mousexmove * MOUSE_TOFRAC,
+				  mouseadjustment * MOUSE_SENSITIVITY_SCALAR);
 
 	if (usemouselook)
 	{
 		playertype *const pstate = &PLAYERSTATE[consoleplayer];
-		pstate->horizon -= FixedMul(mouseymove * inverse_mouse, mouseadjustment_y2 * MOUSE_SENSITIVITY_SCALAR);
+		pstate->horizon -=
+			FixedMul(mouseymove * inverse_mouse,
+					 mouseadjustment_y2 * MOUSE_SENSITIVITY_SCALAR);
 		MY = 0;
 	}
 	else
 	{
-		MY = FixedMul(BASEMOVE * mouseymove, mouseadjustment_y * MOUSE_SENSITIVITY_SCALAR);
+		MY = FixedMul(BASEMOVE * mouseymove,
+					  mouseadjustment_y * MOUSE_SENSITIVITY_SCALAR);
 	}
 }
 
@@ -3625,7 +3629,8 @@ void PlayerTiltHead(objtype *ob)
 	yzangle = ob->yzangle + HORIZONYZOFFSET;
 	Fix(yzangle);
 
-	if ((pstate->lastmomz != ob->momentumz) && (ob->momentumz == 0) &&
+	if (!usemouselook && (pstate->lastmomz != ob->momentumz) &&
+		(ob->momentumz == 0) &&
 		((!(ob->flags & FL_FLEET)) ||
 		 ((ob->flags & FL_FLEET) && (ob->z == nominalheight))))
 		SetNormalHorizon(ob);
@@ -3639,7 +3644,7 @@ void PlayerTiltHead(objtype *ob)
 		Fix(ob->yzangle);
 		return;
 	}
-	else if (pstate->guntarget)
+	else if (!usemouselook && pstate->guntarget)
 	{
 		int dx, dy, dz;
 		int xydist;
@@ -3719,8 +3724,9 @@ void PlayerTiltHead(objtype *ob)
 				SetNormalHorizon(ob);
 			}
 		}
-		if (!(ob->flags & FL_DOGMODE) && !(ob->flags & FL_GODMODE) &&
-			!(ob->flags & FL_FLEET) && !(ob->flags & FL_RIDING) &&
+		if (!usemouselook && !(ob->flags & FL_DOGMODE) &&
+			!(ob->flags & FL_GODMODE) && !(ob->flags & FL_FLEET) &&
+			!(ob->flags & FL_RIDING) &&
 			(ob->momentumz > (GRAVITY << 1)) //(ob->momentumz>0x1000)
 		)
 		{
