@@ -2173,7 +2173,7 @@ extern int inverse_mouse;
 
 const int MOUSE_TOFRAC = -0x10000;
 
-#define MOUSE_SENSITIVITY_SCALAR 2048
+#define MOUSE_SENSITIVITY_SCALAR (1024*4)
 
 void PollMouseMove(void)
 {
