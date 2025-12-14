@@ -1468,7 +1468,7 @@ void WriteSoundConfig(void)
 	SafeWriteString(file, "\n;\n");
 	SafeWriteString(file, "; FX Modes\n");
 	SafeWriteString(file, "; 0  -  Off\n");
-	SafeWriteString(file, "; 6  -  On\n");
+	SafeWriteString(file, "; 1  -  On\n");
 	WriteParameter(file, "FXMode           ", FXMode);
 
 	// Write in Music Volume

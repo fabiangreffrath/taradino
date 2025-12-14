@@ -123,9 +123,8 @@ void SD_MakeCacheable(unsigned long sndnum)
 //
 //***************************************************************************
 
-int SD_SetupFXCard(int *numvoices, int *numbits, int *numchannels)
+int SD_SetupFXCard(void)
 {
-	fx_device device;
 	int status;
 
 	if (SD_Started == true)
@@ -133,22 +132,7 @@ int SD_SetupFXCard(int *numvoices, int *numbits, int *numchannels)
 		SD_Shutdown();
 	}
 
-	if (FXMode < 0 || FXMode > 1)
-	{
-		FXMode = 1;
-	}
-	if (FXMode == 0)
-	{
-		return (0);
-	}
-
-	status = FX_SetupCard(FXMode, &device);
-	if (status == FX_Ok)
-	{
-		*numvoices = device.MaxVoices;
-		*numbits = device.MaxSampleBits;
-		*numchannels = device.MaxChannels;
-	}
+	status = FX_SetupCard();
 
 	return (status);
 }
@@ -162,9 +146,6 @@ int SD_SetupFXCard(int *numvoices, int *numbits, int *numchannels)
 int SD_Startup(boolean bombonerror)
 {
 	int status;
-	int voices;
-	int channels;
-	int bits;
 	int i;
 
 	if (SD_Started == true)
@@ -172,10 +153,7 @@ int SD_Startup(boolean bombonerror)
 		SD_Shutdown();
 	}
 
-	if (FXMode < 0 || FXMode > 1)
-	{
-		FXMode = 1;
-	}
+	FXMode = CLAMP(FXMode, 0, 1);
 	if (FXMode == 0)
 	{
 		return (0);
@@ -200,13 +178,9 @@ int SD_Startup(boolean bombonerror)
 	}
 	soundstart = 0;
 
-	voices = NumVoices;
-	channels = NumChannels;
-	bits = NumBits;
-
 	remotestart = W_GetNumForName("remostrt") + 1;
 
-	status = FX_Init(FXMode, voices, channels, bits, 11025);
+	status = FX_Init();
 
 	if (status != FX_Ok)
 	{
@@ -844,10 +818,8 @@ int MU_Startup(boolean bombonerror)
 		MU_StopSong();
 		MU_Shutdown();
 	}
-	if (MusicMode < 0 || MusicMode >= num_music_modules)
-	{
-		MusicMode = 1;
-	}
+
+	MusicMode = CLAMP(MusicMode, 0, num_music_modules);
 	if (MusicMode == 0)
 	{
 		return (0);

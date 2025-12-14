@@ -244,7 +244,7 @@ static int GetSliceSize(void)
 	return 1024;
 }
 
-int FX_SetupCard(int SoundCard, fx_device *device)
+int FX_SetupCard(void)
 {
 	Uint16 mix_format;
 	int mix_channels;
@@ -297,8 +297,7 @@ int FX_Shutdown(void)
 
 extern int SoundNumber(int x);
 
-int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
-			unsigned int mixrate)
+int FX_Init(void)
 {
 	int i;
 

@@ -247,34 +247,41 @@ int main(int argc, char *argv[])
 
 		if (!NoSound)
 		{
-			int nv, nb, nc;
-
 			if (!quiet)
+			{
 				printf("SD_SetupFXCard: ");
-			status2 = SD_SetupFXCard(&nv, &nb, &nc);
+			}
+			status2 = SD_SetupFXCard();
 			if (!quiet)
+			{
 				printf("%s\n", FX_ErrorString(FX_Error));
+			}
 
 			if (!status2)
 			{
 				if (!quiet)
+				{
 					printf("SD_Startup: ");
+				}
 				SD_Startup(false);
 				if (!quiet)
+				{
 					printf("%s\n", FX_ErrorString(FX_Error));
+				}
+
+				if (!quiet)
+				{
+					printf("MU_Startup: \n");
+				}
+				MU_Startup(false);
 			}
 		}
 		else
 		{
 			if (!quiet)
-				printf("Sound FX disabled.\n");
-		}
-
-		if (!NoSound)
-		{
-			if (!quiet)
-				printf("MU_Startup: \n");
-			MU_Startup(false);
+			{
+				printf("Sound and Music disabled.\n");
+			}
 		}
 
 		Init_Tables();

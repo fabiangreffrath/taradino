@@ -34,13 +34,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define __FX_MAN_H
 
 
-typedef struct
-{
-	int MaxVoices;
-	int MaxSampleBits;
-	int MaxChannels;
-} fx_device;
-
 #define MonoFx 1
 #define StereoFx 2
 
@@ -58,9 +51,8 @@ enum FX_ERRORS
 };
 
 char *FX_ErrorString(int ErrorNumber);
-int FX_SetupCard(int SoundCard, fx_device *device);
-int FX_Init(int SoundCard, int numvoices, int numchannels, int samplebits,
-			unsigned int mixrate);
+int FX_SetupCard(void);
+int FX_Init(void);
 int FX_Shutdown(void);
 int FX_SetCallBack(void (*function)(unsigned long));
 void FX_SetVolume(int volume);

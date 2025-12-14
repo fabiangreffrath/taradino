@@ -117,6 +117,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 
+#define CLAMP(x, min, max) ((min) > (x) ? (min) : (x) > (max) ? (max) : (x))
+
 #ifdef _WIN32
 #define strcmpi(x, y) stricmp(x, y)
 #define _fstricmp(x, y) stricmp(x, y)

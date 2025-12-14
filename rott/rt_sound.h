@@ -497,7 +497,7 @@ typedef enum
 
 extern int SD_Started;
 
-int SD_SetupFXCard(int *numvoices, int *numbits, int *numchannels);
+int SD_SetupFXCard(void);
 int SD_Startup(boolean bombonerror);
 int SD_Play(int sndnum);
 void SD_Shutdown(void);
