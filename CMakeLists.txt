@@ -7,7 +7,7 @@ project(taradino
 	DESCRIPTION "SDL2 port of Rise of the Triad"
 	HOMEPAGE_URL "https://github.com/fabiangreffrath/taradino/"
 	LANGUAGES C
-	VERSION 2025.10.31
+	VERSION 2025.12.16
 )
 configure_file(rott/version.h.in rott/version.h @ONLY)
 
