@@ -153,7 +153,10 @@ int SD_Startup(boolean bombonerror)
 		SD_Shutdown();
 	}
 
-	FXMode = CLAMP(FXMode, 0, 1);
+	if (FXMode < 0 || FXMode > 1)
+	{
+		FXMode = 1;
+	}
 	if (FXMode == 0)
 	{
 		return (0);
