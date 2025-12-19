@@ -53,10 +53,13 @@ static const char *storefront_paths[] = {
 	"Ludicrous Edition\\assets\\",
 	/* gog - ludicrous edition */
 	"\\GOG Games\\Rise of the Triad - Ludicrous Edition\\",
+	"\\Program Files (x86)\\GOG Galaxy\\Games\\Rise of the Triad - Ludicrous Edition",
 	/* gog - ludicrous edition (assets) */
 	"\\GOG Games\\Rise of the Triad - Ludicrous Edition\\assets\\",
+	"\\Program Files (x86)\\GOG Galaxy\\Games\\Rise of the Triad - Ludicrous Edition\\assets",
 	/* gog - classic rott */
 	"\\GOG Games\\Rise of the Triad\\",
+	"\\Program Files (x86)\\GOG Galaxy\\Games\\Rise of the Triad",
 	/* original ms-dos installers */
 	"\\ROTT\\"
 };
