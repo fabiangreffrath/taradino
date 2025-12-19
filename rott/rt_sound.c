@@ -819,7 +819,10 @@ int MU_Startup(boolean bombonerror)
 		MU_Shutdown();
 	}
 
-	MusicMode = CLAMP(MusicMode, 0, num_music_modules - 1);
+	if (MusicMode < 0 || MusicMode >= num_music_modules)
+	{
+		MusicMode = 1;
+	}
 	if (MusicMode == 0)
 	{
 		return (0);
