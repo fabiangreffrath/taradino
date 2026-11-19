@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 		type *recs = (type *)lmp; \
 		for (i = 0; i < num; i++, recs++) \
 		{ \
+			(void)recs; \
 			CONVERT_ENDIAN_##type(recs); \
 		} \
 	}
