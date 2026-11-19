@@ -1288,6 +1288,7 @@ void BatBlast(objtype *ob)
 #if (SHAREWARE == 0)
 	SpawnMissile(ob, p_bazookaobj, 0x6000, angle, &s_batblast1, 0xa000);
 #endif
+	(void)angle;
 }
 
 void BatAttack(objtype *ob)
