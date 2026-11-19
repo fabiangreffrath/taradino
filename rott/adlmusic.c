@@ -84,6 +84,11 @@ static int ADL_Init(int samplerate)
 		}
 		printf(" Using libADLMIDI %s\n", adl_linkedLibraryVersion());
 
+		adl_switchEmulator(midi_player, ADLMIDI_EMU_DOSBOX);
+		adl_setNumChips(midi_player, 2);
+		adl_setBank(midi_player, 72); // DMXOPL
+		adl_setVolumeRangeModel(midi_player, ADLMIDI_VolumeModel_AUTO);
+
 		adl_inited = 1;
 	}
 
