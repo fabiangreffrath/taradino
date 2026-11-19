@@ -1,5 +1,6 @@
-
 # Taradino
+
+[![Taradino Icon](https://raw.githubusercontent.com/fabiangreffrath/taradino/main/misc/taradino.png)](https://github.com/fabiangreffrath/taradino)
 
 This is a port of Apogee's 3D action title Rise of the Triad, originally
 released in 1994. This port duplicates the functionality of the original
