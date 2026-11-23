@@ -61,24 +61,15 @@ boolean screenfaded;
 
 void VL_MemToScreen(byte *source, int width, int height, int x, int y)
 {
-	/* TODO please optimize me */
+	byte *ptr = source;
 
-	byte *ptr, *destline;
-	int plane, i, j;
-
-	ptr = source;
-
-	for (plane = 0; plane < 4; plane++)
+	for (int plane = 0; plane < 4; plane++)
 	{
-		for (j = 0; j < height; j++)
+		for (int j = 0; j < height; j++)
 		{
-			destline = (byte *)(bufferofs + ylookup[y + j] + x);
-
-			for (i = 0; i < width; i++)
+			for (int i = 0; i < width; i++)
 			{
-				//				if (ptr < bufferofs + toplimit) { //bnafix zxcvb
-				*(destline + i * 4 + plane) = *ptr++;
-				//				}
+				PutScaledPixel(bufferofs, x + i * 4 + plane, y + j, *ptr++);
 			}
 		}
 	}
@@ -87,23 +78,17 @@ void VL_MemToScreen(byte *source, int width, int height, int x, int y)
 void VL_MemToScreenClipped(byte *source, int width, int height, int x, int y);
 void VL_MemToScreenClipped(byte *source, int width, int height, int x, int y)
 {
-	byte *ptr, *destline;
-	int plane, i, j; //,toplimit;
-	ptr = source;
-	for (plane = 0; plane < 4; plane++)
+	byte *ptr = source;
+
+	for (int plane = 0; plane < 4; plane++)
 	{
-		for (j = 0; j < height; j++)
+		for (int j = 0; j < height; j++)
 		{
-			destline = (byte *)(bufferofs + ylookup[y + j] + x);
-			for (i = 0; i < width; i++)
+			for (int i = 0; i < width; i++, ptr++)
 			{
 				if (*ptr != 255)
 				{
-					*(destline + i * 4 + plane) = *ptr++;
-				}
-				else
-				{
-					ptr++;
+					PutScaledPixel(bufferofs, x + i * 4 + plane, y + j, *ptr);
 				}
 			}
 		}

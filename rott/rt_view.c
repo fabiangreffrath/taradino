@@ -239,33 +239,6 @@ void SetViewSize(int size)
 	}
  */
 
-	if (iGLOBAL_SCREENWIDTH == 640)
-	{
-		height = 0; // we use height as dummy cnt
-		viewsizes[height++] = 380;
-		viewsizes[height++] = 336;
-		viewsizes[height++] = 428;
-		viewsizes[height++] = 352;
-		viewsizes[height++] = 460;
-		viewsizes[height++] = 368;
-		viewsizes[height++] = 492;
-		viewsizes[height++] = 384;
-		viewsizes[height++] = 524;
-		viewsizes[height++] = 400;
-		viewsizes[height++] = 556;
-		viewsizes[height++] = 416;
-		viewsizes[height++] = 588;
-		viewsizes[height++] = 432;
-		viewsizes[height++] = 640;
-		viewsizes[height++] = 448;
-		viewsizes[height++] = 640;
-		viewsizes[height++] = 464;
-		viewsizes[height++] = 640;
-		viewsizes[height++] = 480;
-		viewsizes[height++] = 640;
-		viewsizes[height++] = 480;
-	}
-
 	if ((size < 0) || (size >= MAXVIEWSIZES))
 	{ // bna added
 		printf("Illegal screen size = %d\n", size);
@@ -276,8 +249,10 @@ void SetViewSize(int size)
 	// if ((size<0) || (size>=MAXVIEWSIZES))
 	//    Error("Illegal screen size = %ld\n",size);
 
-	viewwidth = viewsizes[size << 1];		 // must be divisable by 16
-	viewheight = viewsizes[(size << 1) + 1]; // must be even
+	const int scale = GetScreenScale();
+
+	viewwidth = viewsizes[size << 1] * scale;		 // must be divisable by 16
+	viewheight = viewsizes[(size << 1) + 1] * scale; // must be even
 
 	maxheight = iGLOBAL_SCREENHEIGHT;
 	topy = 0;
@@ -288,7 +263,7 @@ void SetViewSize(int size)
 	if (SHOW_KILLS())
 	{
 		// Account for height of kill boxes
-		maxheight -= 24;
+		maxheight -= 24 * scale;
 	}
 
 	if (size < 9)
@@ -296,8 +271,8 @@ void SetViewSize(int size)
 		StatusBar |= TOP_STATUS_BAR;
 
 		// Account for height of top status bar
-		maxheight -= 16;
-		topy += 16;
+		maxheight -= 16 * scale;
+		topy += 16 * scale;
 	}
 
 	//   if ( size == 7 ){maxheight -= 16;}//bna++
@@ -308,7 +283,7 @@ void SetViewSize(int size)
 		// Turn on health and ammo bar
 		StatusBar |= BOTTOM_STATUS_BAR;
 
-		maxheight -= 16;
+		maxheight -= 16 * scale;
 	}
 	else if (size < 10)
 	{
@@ -397,8 +372,11 @@ void SetupScreen(boolean flip)
 	{
 		shape = (pic_t *)W_CacheLumpName("backtile", PU_CACHE, Cvt_pic_t, 1);
 		// DrawTiledRegion( 0, 16, 320, 200 - 32, 0, 16, shape );
-		DrawTiledRegion(0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32,
-						0, 16, shape); // bna++
+		const int scale = GetScreenScale();
+
+		DrawTiledRegion(0, 16 * scale, iGLOBAL_SCREENWIDTH,
+						iGLOBAL_SCREENHEIGHT - 32 * scale, 0, 16 * scale,
+						shape); // bna++
 	}
 
 	if (viewsize == 0)

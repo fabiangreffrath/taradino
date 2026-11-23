@@ -384,30 +384,8 @@ void DrawPlayScreen(boolean bufferofsonly)
 
 	if (SHOW_TOP_STATUS_BAR())
 	{
-		if (iGLOBAL_SCREENWIDTH == 640)
-		{
-			// use this as dummy pic to fill out missing bar
-			shape = (pic_t *)W_CacheLumpName("bottbar", PU_CACHE, Cvt_pic_t, 1);
-			// GameMemToScreen( shape, 0, 0, bufferofsonly );
-			GameMemToScreen(shape, 320, 0, bufferofsonly);
-			// delete hart in middle of topbar
-			DrawPPic(323, 1, 8 >> 2, 16, (byte *)&erase->data, 2, true,
-					 bufferofsonly);
-			// delete bullet in end of topbar
-			DrawPPic(620, 1, 8 >> 2, 16, (byte *)&erase->data, 2, true,
-					 bufferofsonly);
-			shape =
-				(pic_t *)W_CacheLumpName("stat_bar", PU_CACHE, Cvt_pic_t, 1);
-			GameMemToScreen(shape, 0, 0, bufferofsonly);
-		}
-		else if (iGLOBAL_SCREENWIDTH == 320)
-		{
-
-			// SetTextMode (  );
-			shape =
-				(pic_t *)W_CacheLumpName("stat_bar", PU_CACHE, Cvt_pic_t, 1);
-			GameMemToScreen(shape, 0, 0, bufferofsonly);
-		}
+		shape = (pic_t *)W_CacheLumpName("stat_bar", PU_CACHE, Cvt_pic_t, 1);
+		GameMemToScreen(shape, 0, 0, bufferofsonly);
 	}
 
 	if (BATTLEMODE)
@@ -435,32 +413,7 @@ void DrawPlayScreen(boolean bufferofsonly)
 
 			// GameMemToScreen( shape, 0, 160, bufferofsonly );bna++
 		}
-		// else
-		{
-
-			if (iGLOBAL_SCREENWIDTH == 640)
-			{
-				// bna fix - not to good? but no one has 286 any more
-				// statusbar dosent cover hole screen, because its a lump
-				// picture width max 320 first write dummy shape and next over
-				// it
-				GameMemToScreen(shape, 320, (224 * 2) + 16 - ShowKillsYoffset,
-								bufferofsonly);
-				// copy next shape to mem
-				GameMemToScreen(shape, 0, (224 * 2) + 16 - ShowKillsYoffset,
-								bufferofsonly);
-				// delete bullet in middle of shape picture
-				DrawPPic(310, (224 * 2) + 17 - ShowKillsYoffset, 8 >> 2, 16,
-						 (byte *)&erase->data, 2, true, bufferofsonly);
-				// delete hart in middle of shape picture
-				DrawPPic(324, (224 * 2) + 17 - ShowKillsYoffset, 8 >> 2, 16,
-						 (byte *)&erase->data, 2, true, bufferofsonly);
-			}
-			else
-			{
-				GameMemToScreen(shape, 0, 184, bufferofsonly);
-			}
-		}
+		GameMemToScreen(shape, 0, 184 - ShowKillsYoffset, bufferofsonly);
 
 		DrawBarAmmo(bufferofsonly);
 		DrawBarHealth(bufferofsonly);
@@ -468,18 +421,8 @@ void DrawPlayScreen(boolean bufferofsonly)
 		if (demoplayback)
 		{
 			shape = (pic_t *)W_CacheLumpName("demo", PU_CACHE, Cvt_pic_t, 1);
-			if (iGLOBAL_SCREENWIDTH == 640)
-			{
-				// DrawPPic( 148, 185, shape->width, shape->height,
-				//    ( byte * )&shape->data, 1, true, bufferofsonly );bna
-				DrawPPic(148 * 2, 465, shape->width, shape->height,
-						 (byte *)&shape->data, 1, true, bufferofsonly);
-			}
-			else
-			{
-				DrawPPic(148, 185, shape->width, shape->height,
-						 (byte *)&shape->data, 1, true, bufferofsonly);
-			}
+			DrawPPic(148, 185, shape->width, shape->height,
+					 (byte *)&shape->data, 1, true, bufferofsonly);
 		}
 	}
 
@@ -776,10 +719,10 @@ void DrawKills(boolean bufferofsonly)
 	//	 SetTextMode (  );
 	// Draw all the other losers
 	// #define KILLS_Y      176
-	iKILLS_Y = iGLOBAL_SCREENHEIGHT - 24;
+	iKILLS_Y = BASEHEIGHT - 24;
 	// draw blank status  pic->width = 8;pic->height = 24
 	pic = blankfragpic;
-	for (temp = iGLOBAL_SCREENWIDTH - pic->width - 24; temp > pic->width;
+	for (temp = BASEWIDTH - pic->width - 24; temp > pic->width;
 		 temp -= pic->width)
 	{
 		DrawPPic(temp, iKILLS_Y, pic->width, pic->height, (byte *)&pic->data, 1,
@@ -861,7 +804,7 @@ void DrawKills(boolean bufferofsonly)
 		// Advance to next position
 		xpos += KILLS_WIDTH;
 
-		if (xpos >= iGLOBAL_SCREENWIDTH)
+		if (xpos >= BASEWIDTH)
 		{
 			break;
 		}
@@ -869,7 +812,7 @@ void DrawKills(boolean bufferofsonly)
 
 	for (rank = BATTLE_NumberOfTeams; rank <= MAXKILLBOXES; rank++)
 	{
-		if (xpos >= iGLOBAL_SCREENWIDTH)
+		if (xpos >= BASEWIDTH)
 		{
 			break;
 		}
@@ -913,8 +856,7 @@ void DrawPlayers(void)
 	// Draw all the losers
 	CurrentFont = tinyfont;
 
-	xpos =
-		(iGLOBAL_SCREENWIDTH - min(numplayers, MAXKILLBOXES) * KILLS_WIDTH) / 2;
+	xpos = (BASEWIDTH - min(numplayers, MAXKILLBOXES) * KILLS_WIDTH) / 2;
 	// SetTextMode (  );//PLAYERSTATE
 	for (team = 0; team < BATTLE_NumberOfTeams; team++)
 	{
@@ -974,12 +916,12 @@ void DrawPlayers(void)
 					xpos += KILLS_WIDTH;
 				}
 			}
-			if (xpos >= iGLOBAL_SCREENWIDTH)
+			if (xpos >= BASEWIDTH)
 			{
 				break;
 			}
 		}
-		if (xpos >= iGLOBAL_SCREENWIDTH)
+		if (xpos >= BASEWIDTH)
 		{
 			break;
 		}
@@ -1012,6 +954,33 @@ void StatusDrawColoredPic(unsigned int x, unsigned int y, pic_t *nums,
 					 bufferofsonly, color);
 }
 
+// Draws the string at px, py in base coordinates, like VW_DrawPropString.
+static void DrawScaledPropString(const char *string, byte *base)
+{
+	const int height = CurrentFont->height;
+
+	while (*string)
+	{
+		const int ch = (unsigned char)*string++ - 31;
+		const int width = CurrentFont->width[ch];
+		const byte *source = (byte *)CurrentFont + CurrentFont->charofs[ch];
+
+		for (int i = 0; i < width; i++, px++)
+		{
+			for (int j = 0; j < height; j++, source++)
+			{
+				if (*source)
+				{
+					PutScaledPixel(base, px, py + j, *source);
+				}
+			}
+		}
+	}
+
+	bufferheight = height;
+	bufferwidth = 1;
+}
+
 //******************************************************************************
 //
 // DrawGameString ()
@@ -1022,20 +991,10 @@ void StatusDrawColoredPic(unsigned int x, unsigned int y, pic_t *nums,
 
 void DrawGameString(int x, int y, const char *str, boolean bufferofsonly)
 {
-	byte *tempbuf;
-
 	px = x;
 	py = y;
 
-	if (bufferofsonly == true)
-		VW_DrawPropString(str);
-	else
-	{
-		tempbuf = bufferofs;
-		bufferofs = SCREEN_BUFFER;
-		VW_DrawPropString(str);
-		bufferofs = tempbuf;
-	}
+	DrawScaledPropString(str, bufferofsonly ? bufferofs : SCREEN_BUFFER);
 }
 
 //******************************************************************************
@@ -1542,41 +1501,21 @@ void DrawTime(boolean bufferofsonly)
 void DrawMPPic(int xpos, int ypos, int width, int height, int heightmod,
 			   byte *src, boolean bufferofsonly)
 {
-	int olddest;
-	int dest;
-	int x;
-	int y;
-	int planes;
-	byte pixel;
+	byte *const base = bufferofsonly ? bufferofs : SCREEN_BUFFER;
 
-	olddest = ylookup[ypos] + xpos;
-
-	for (planes = 0; planes < 4; planes++)
+	for (int plane = 0; plane < 4; plane++)
 	{
-		dest = olddest;
-
-		dest += planes;
-
-		for (y = 0; y < height; y++)
+		for (int y = 0; y < height; y++)
 		{
-			for (x = 0; x < width; x++)
+			for (int x = 0; x < width; x++)
 			{
-				pixel = *src++;
+				const byte pixel = *src++;
 
 				if (pixel != 255)
 				{
-					if (bufferofsonly)
-						*(dest + bufferofs) = pixel;
-					else
-					{
-						*(dest + SCREEN_BUFFER) = pixel;
-					}
+					PutScaledPixel(base, xpos + x * 4 + plane, ypos + y, pixel);
 				}
-
-				dest += 4;
 			}
-
-			dest += (linewidth - width * 4);
 		}
 
 		if (heightmod)
@@ -1606,46 +1545,22 @@ void DrawMPPic(int xpos, int ypos, int width, int height, int heightmod,
 void DrawColoredMPPic(int xpos, int ypos, int width, int height, int heightmod,
 					  byte *src, boolean bufferofsonly, int color)
 {
-	int olddest;
-	int dest;
-	int x;
-	int y;
-	int planes;
-	byte pixel;
-	byte *cmap;
+	byte *const base = bufferofsonly ? bufferofs : SCREEN_BUFFER;
+	const byte *const cmap = playermaps[color] + (1 << 12);
 
-	cmap = playermaps[color] + (1 << 12);
-
-	olddest = ylookup[ypos] + xpos;
-
-	for (planes = 0; planes < 4; planes++)
+	for (int plane = 0; plane < 4; plane++)
 	{
-		dest = olddest;
-
-		dest += planes;
-
-		for (y = 0; y < height; y++)
+		for (int y = 0; y < height; y++)
 		{
-			for (x = 0; x < width; x++)
+			for (int x = 0; x < width; x++)
 			{
-				pixel = *src++;
-
-				pixel = *(cmap + pixel);
+				const byte pixel = cmap[*src++];
 
 				if (pixel != 255)
 				{
-					if (bufferofsonly)
-						*(dest + bufferofs) = pixel;
-					else
-					{
-						*(dest + SCREEN_BUFFER) = pixel;
-					}
+					PutScaledPixel(base, xpos + x * 4 + plane, ypos + y, pixel);
 				}
-
-				dest += 4;
 			}
-
-			dest += (linewidth - width * 4);
 		}
 
 		if (heightmod)
@@ -1756,51 +1671,26 @@ void DrawTriads(boolean bufferofsonly)
 void DrawPPic(int xpos, int ypos, int width, int height, byte *src, int num,
 			  boolean up, boolean bufferofsonly)
 {
-	int olddest;
-	int dest;
-	int x;
-	int y;
-	int planes;
-	byte pixel;
-	int k;
-	int amt;
+	byte *const base = bufferofsonly ? bufferofs : SCREEN_BUFFER;
+	const int amt = up ? 8 : -8;
 
-	if (up)
-		amt = 8;
-	else
-		amt = -8;
-
-	olddest = ylookup[ypos] + xpos;
-
-	for (planes = 0; planes < 4; planes++)
+	for (int plane = 0; plane < 4; plane++)
 	{
-		dest = olddest;
-
-		dest += planes;
-
-		for (y = 0; y < height; y++)
+		for (int y = 0; y < height; y++)
 		{
-			for (x = 0; x < width; x++)
+			for (int x = 0; x < width; x++)
 			{
-				pixel = *src++;
+				const byte pixel = *src++;
 
 				if (pixel != 255)
 				{
-					for (k = 0; k < num; k++)
+					for (int k = 0; k < num; k++)
 					{
-						if (bufferofsonly)
-							*(dest + bufferofs + (amt * k)) = pixel;
-						else
-						{
-							*(dest + SCREEN_BUFFER + (amt * k)) = pixel;
-						}
+						PutScaledPixel(base, xpos + x * 4 + plane + amt * k,
+									   ypos + y, pixel);
 					}
 				}
-
-				dest += 4;
 			}
-
-			dest += (linewidth - width * 4);
 		}
 	}
 }
@@ -1944,46 +1834,26 @@ void DrawBarAmmo(boolean bufferofsonly)
 void SingleDrawPPic(int xpos, int ypos, int width, int height, byte *src,
 					int num, boolean up)
 {
-	byte *olddest;
-	byte *dest;
-	int x;
-	int y;
-	int planes;
-	byte pixel;
-	int k;
-	int amt;
+	byte *const base = bufferofs - screenofs;
+	const int amt = up ? 8 : -8;
 
-	if (up)
-		amt = 8;
-	else
-		amt = -8;
-
-	olddest = (byte *)(bufferofs - screenofs + ylookup[ypos] + xpos);
-
-	for (planes = 0; planes < 4; planes++)
+	for (int plane = 0; plane < 4; plane++)
 	{
-		dest = olddest;
-
-		dest += planes;
-
-		for (y = 0; y < height; y++)
+		for (int y = 0; y < height; y++)
 		{
-			for (x = 0; x < width; x++)
+			for (int x = 0; x < width; x++)
 			{
-				pixel = *src++;
+				const byte pixel = *src++;
 
 				if (pixel != 255)
 				{
-					for (k = 0; k < num; k++)
+					for (int k = 0; k < num; k++)
 					{
-						*(dest + (amt * k)) = pixel;
+						PutScaledPixel(base, xpos + x * 4 + plane + amt * k,
+									   ypos + y, pixel);
 					}
 				}
-
-				dest += 4;
 			}
-
-			dest += (linewidth - width * 4);
 		}
 	}
 }
@@ -2133,9 +2003,8 @@ void DrawPause(void)
 		bufferofs = bufftemp;
 		p = (pic_t *)W_CacheLumpNum(W_GetNumForName("paused"), PU_CACHE,
 									Cvt_pic_t, 1);
-		DrawPauseXY((iGLOBAL_SCREENWIDTH - (p->width << 2)) >> 1,
-					(iGLOBAL_SCREENHEIGHT - p->height) >> 1); // bna++
-		// DrawPauseXY( (320-(p->width<<2) ) >>1, (200-p->height)>>1);
+		DrawPauseXY((BASEWIDTH - (p->width << 2)) >> 1,
+					(BASEHEIGHT - p->height) >> 1);
 		/*
 			  //buf = (byte *) SafeMalloc (64000);
 			  w = p->width;
@@ -2221,9 +2090,8 @@ void DrawPause(void)
 	{
 		p = (pic_t *)W_CacheLumpNum(W_GetNumForName("wait"), PU_CACHE,
 									Cvt_pic_t, 1);
-		DrawPauseXY((iGLOBAL_SCREENWIDTH - (p->width << 2)) >> 1,
-					(iGLOBAL_SCREENHEIGHT - p->height) >> 1); // bna++
-		// DrawPauseXY( (320-(p->width<<2) ) >>1, (200-p->height)>>1);
+		DrawPauseXY((BASEWIDTH - (p->width << 2)) >> 1,
+					(BASEHEIGHT - p->height) >> 1);
 	}
 	//   VH_UpdateScreen () ;
 
@@ -2542,23 +2410,14 @@ void DrawEpisodeLevel(int x, int y)
 
 void GM_MemToScreen(byte *source, int width, int height, int x, int y)
 {
-	int destofs;
-	byte *dest;
-	byte *screen;
-	int plane;
-
-	destofs = ylookup[y] + x;
-
-	dest = (byte *)(destofs + SCREEN_BUFFER);
-
-	for (plane = 0; plane < 4; plane++)
+	for (int plane = 0; plane < 4; plane++)
 	{
-		screen = dest;
-		for (y = 0; y < height; y++, screen += linewidth, source += width)
+		for (int j = 0; j < height; j++)
 		{
-			for (x = 0; x < width; x++)
+			for (int i = 0; i < width; i++)
 			{
-				screen[x * 4 + plane] = source[x];
+				PutScaledPixel(SCREEN_BUFFER, x + i * 4 + plane, y + j,
+							   *source++);
 			}
 		}
 	}

@@ -27,6 +27,7 @@ static void StretchMemPicture();
 // GLOBAL VARIABLES
 
 boolean StretchScreen = 0; // bna++
+int uiscale = 1;
 extern boolean iG_aimCross;
 extern boolean sdl_fullscreen;
 extern int iG_X_center;
@@ -105,10 +106,13 @@ void GraphicsMode(void)
 		flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 	}
 
+	// The frame buffer has square pixels, the display does not.
+	const int displayheight = iGLOBAL_SCREENWIDTH * 3 / 4;
+
 	screen =
 		SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-						 iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT, flags);
-	SDL_SetWindowMinimumSize(screen, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT);
+						 iGLOBAL_SCREENWIDTH, displayheight, flags);
+	SDL_SetWindowMinimumSize(screen, iGLOBAL_SCREENWIDTH, displayheight);
 	SDL_SetWindowTitle(screen, PACKAGE_STRING);
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
@@ -117,7 +121,7 @@ void GraphicsMode(void)
 	{
 		renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_SOFTWARE);
 	}
-	SDL_RenderSetLogicalSize(renderer, 640, 480);
+	SDL_RenderSetLogicalSize(renderer, iGLOBAL_SCREENWIDTH, displayheight);
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderClear(renderer);
@@ -284,6 +288,8 @@ void VL_SetVGAPlaneMode(void)
 	bufofsTopLimit = bufferofs + screensize - iGLOBAL_SCREENWIDTH;
 	bufofsBottomLimit = bufferofs + iGLOBAL_SCREENWIDTH;
 
+	uiscale = GetScreenScale();
+
 	// start stretched
 	EnableScreenStretch();
 	XFlipPage();
@@ -417,6 +423,7 @@ void EnableScreenStretch(void)
 				 (displayofs - (byte *)sdl_surface->pixels);
 	SCREEN_BUFFER = bufferofs = unstretch_sdl_surface->pixels;
 	StretchScreen = 1;
+	uiscale = 1;
 }
 
 void DisableScreenStretch(void)
@@ -428,6 +435,7 @@ void DisableScreenStretch(void)
 				 (displayofs - (byte *)unstretch_sdl_surface->pixels);
 	SCREEN_BUFFER = bufferofs = sdl_surface->pixels;
 	StretchScreen = 0;
+	uiscale = GetScreenScale();
 }
 
 // bna section -------------------------------------------
