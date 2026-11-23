@@ -1092,16 +1092,16 @@ void PreCache(void)
 				else if (iGLOBAL_SCREENWIDTH == 640)
 				{
 					DrawNormalSprite(
-						72 + (Gs * (lastmem << 2)), 446,
+						72 + (Gs * (lastmem << 2)), 372,
 						W_GetNumForName("led1")); // led1 progressbar
 					DrawNormalSprite(
-						72 + (Gs * (lastmem << 2)), 446 + 3,
+						72 + (Gs * (lastmem << 2)), 372 + 3,
 						W_GetNumForName("led1")); // led1 progressbar
 					DrawNormalSprite(
-						72 + 3 + (Gs * (lastmem << 2)), 446,
+						72 + 3 + (Gs * (lastmem << 2)), 372,
 						W_GetNumForName("led1")); // led1 progressbar
 					DrawNormalSprite(
-						72 + 3 + (Gs * (lastmem << 2)), 446 + 3,
+						72 + 3 + (Gs * (lastmem << 2)), 372 + 3,
 						W_GetNumForName("led1")); // led1 progressbar
 				}
 
@@ -1122,16 +1122,16 @@ void PreCache(void)
 				else if (iGLOBAL_SCREENWIDTH == 640)
 				{
 					DrawNormalSprite(
-						72 + (Gs * (lastcache << 2)), 458,
+						72 + (Gs * (lastcache << 2)), 380,
 						W_GetNumForName("led2")); // led2 progressbar
 					DrawNormalSprite(
-						72 + (Gs * (lastcache << 2)), 458 + 3,
+						72 + (Gs * (lastcache << 2)), 380 + 3,
 						W_GetNumForName("led2")); // led2 progressbar
 					DrawNormalSprite(
-						72 + 3 + (Gs * (lastcache << 2)), 458,
+						72 + 3 + (Gs * (lastcache << 2)), 380,
 						W_GetNumForName("led2")); // led2 progressbar
 					DrawNormalSprite(
-						72 + 3 + (Gs * (lastcache << 2)), 458 + 3,
+						72 + 3 + (Gs * (lastcache << 2)), 380 + 3,
 						W_GetNumForName("led2")); // led2 progressbar
 				}
 				DisableScreenStretch(); // bna++
