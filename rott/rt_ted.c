@@ -1034,8 +1034,6 @@ void PreCache(void)
 	int ticdelay = 0;
 	byte *tempbuf;
 
-	double Gs = (iGLOBAL_SCREENWIDTH * 100.0 / 320.0) / 100.0;
-
 	// SetTextMode (  );
 
 	/*
@@ -1082,28 +1080,9 @@ void PreCache(void)
 				currentmem = MAXLEDS - 1;
 			while (lastmem <= currentmem)
 			{ // SetTextMode (  );
-				if (iGLOBAL_SCREENWIDTH == 320)
-				{
-					DrawNormalSprite(
-						PRECACHEBARX + PRECACHELED1X + (lastmem << 2),
-						PRECACHEBARY + PRECACHELED1Y,
-						W_GetNumForName("led1")); // led1 progressbar
-				}
-				else if (iGLOBAL_SCREENWIDTH == 640)
-				{
-					DrawNormalSprite(
-						72 + (Gs * (lastmem << 2)), 372,
-						W_GetNumForName("led1")); // led1 progressbar
-					DrawNormalSprite(
-						72 + (Gs * (lastmem << 2)), 372 + 3,
-						W_GetNumForName("led1")); // led1 progressbar
-					DrawNormalSprite(
-						72 + 3 + (Gs * (lastmem << 2)), 372,
-						W_GetNumForName("led1")); // led1 progressbar
-					DrawNormalSprite(
-						72 + 3 + (Gs * (lastmem << 2)), 372 + 3,
-						W_GetNumForName("led1")); // led1 progressbar
-				}
+				DrawNormalSprite(PRECACHEBARX + PRECACHELED1X + (lastmem << 2),
+								 PRECACHEBARY + PRECACHELED1Y,
+								 W_GetNumForName("led1")); // led1 progressbar
 
 				lastmem++;
 				VW_UpdateScreen(); // was missing, fixed
@@ -1112,28 +1091,10 @@ void PreCache(void)
 			while (lastcache <= currentcache)
 			{
 
-				if (iGLOBAL_SCREENWIDTH == 320)
-				{
-					DrawNormalSprite(
-						PRECACHEBARX + PRECACHELED2X + (lastcache << 2),
-						PRECACHEBARY + PRECACHELED2Y,
-						W_GetNumForName("led2")); // led2 progressbar
-				}
-				else if (iGLOBAL_SCREENWIDTH == 640)
-				{
-					DrawNormalSprite(
-						72 + (Gs * (lastcache << 2)), 380,
-						W_GetNumForName("led2")); // led2 progressbar
-					DrawNormalSprite(
-						72 + (Gs * (lastcache << 2)), 380 + 3,
-						W_GetNumForName("led2")); // led2 progressbar
-					DrawNormalSprite(
-						72 + 3 + (Gs * (lastcache << 2)), 380,
-						W_GetNumForName("led2")); // led2 progressbar
-					DrawNormalSprite(
-						72 + 3 + (Gs * (lastcache << 2)), 380 + 3,
-						W_GetNumForName("led2")); // led2 progressbar
-				}
+				DrawNormalSprite(PRECACHEBARX + PRECACHELED2X +
+									 (lastcache << 2),
+								 PRECACHEBARY + PRECACHELED2Y,
+								 W_GetNumForName("led2")); // led2 progressbar
 				DisableScreenStretch(); // bna++
 				VW_UpdateScreen();		// bna++
 				lastcache++;

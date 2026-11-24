@@ -59,7 +59,6 @@ extern boolean screenfaded;
 // PROTOTYPES
 //
 //***************************************************************************
-void VL_MemStrechedToScreen(byte *source, int width, int height, int x, int y);
 void VL_MemToScreen(byte *source, int width, int height, int x, int y);
 void DrawTiledRegion(int x, int y, int width, int height, int offx, int offy,
 					 pic_t *tile);

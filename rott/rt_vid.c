@@ -95,43 +95,6 @@ void VL_MemToScreenClipped(byte *source, int width, int height, int x, int y)
 	}
 }
 
-// copy picture to mem (bufferofs) in doublesize
-void VL_MemStrechedToScreen(byte *source, int width, int height, int x, int y)
-{
-	byte *ptr, *destline, *tmp, *o;
-	int plane, i, j;
-
-	tmp = bufferofs;
-	ptr = source;
-
-	for (plane = 0; plane < 4; plane++)
-	{
-		for (j = 0; j < height; j++)
-		{
-			destline = (byte *)(bufferofs + (iGLOBAL_SCREENWIDTH * j) +
-								ylookup[y + j] + x);
-			o = ptr;
-			for (i = 0; i < width; i += 1)
-			{
-				*(destline + i * 4 + plane) = *ptr;
-				destline++;
-				*(destline + i * 4 + plane) = *ptr++;
-			}
-			ptr = o;
-
-			destline = (byte *)(bufferofs + iGLOBAL_SCREENWIDTH +
-								(iGLOBAL_SCREENWIDTH * j) + ylookup[y + j] + x);
-			for (i = 0; i < width; i += 1)
-			{
-				*(destline + i * 4 + plane) = *ptr;
-				destline++;
-				*(destline + i * 4 + plane) = *ptr++;
-			}
-		}
-	}
-	bufferofs = tmp;
-}
-// bna function end
 
 //*************************************************************************
 //
@@ -204,7 +167,8 @@ void VWB_Bar(int x, int y, int width, int height, int color)
 {
 	if (((iGLOBAL_SCREENWIDTH > 320) && !StretchScreen) ||
 		VW_MarkUpdateBlock(x, y, x + width, y + height - 1))
-		VL_Bar(x, y, width, height, color);
+		VL_Bar(x * uiscale, y * uiscale, width * uiscale, height * uiscale,
+			   color);
 }
 
 //******************************************************************************
@@ -247,7 +211,7 @@ void VL_TBar(int x, int y, int width, int height)
 void VWB_TBar(int x, int y, int width, int height)
 {
 	if (VW_MarkUpdateBlock(x, y, x + width, y + height - 1))
-		VL_TBar(x, y, width, height);
+		VL_TBar(x * uiscale, y * uiscale, width * uiscale, height * uiscale);
 }
 
 //******************************************************************************
@@ -291,7 +255,8 @@ void VL_Vlin(int x, int y, int height, int color)
 void VWB_Hlin(int x1, int x2, int y, int color)
 {
 	if (VW_MarkUpdateBlock(x1, y, x2, y))
-		VW_Hlin(x1, x2, y, color);
+		VL_Bar(x1 * uiscale, y * uiscale, (x2 - x1 + 1) * uiscale, uiscale,
+			   color);
 }
 
 //******************************************************************************
@@ -303,7 +268,8 @@ void VWB_Hlin(int x1, int x2, int y, int color)
 void VWB_Vlin(int y1, int y2, int x, int color)
 {
 	if (VW_MarkUpdateBlock(x, y1, x, y2))
-		VW_Vlin(y1, y2, x, color);
+		VL_Bar(x * uiscale, y1 * uiscale, uiscale, (y2 - y1 + 1) * uiscale,
+			   color);
 }
 
 //******************************************************************************
@@ -373,7 +339,11 @@ void VL_TVlin(unsigned int x, unsigned int y, unsigned int height, boolean up)
 void VWB_THlin(int x1, int x2, int y, boolean up)
 {
 	if (VW_MarkUpdateBlock(x1, y, x2, y))
-		VW_THlin(x1, x2, y, up);
+	{
+		for (int i = 0; i < uiscale; i++)
+			VL_THlin(x1 * uiscale, y * uiscale + i, (x2 - x1 + 1) * uiscale,
+					 up);
+	}
 }
 
 //******************************************************************************
@@ -385,7 +355,11 @@ void VWB_THlin(int x1, int x2, int y, boolean up)
 void VWB_TVlin(int y1, int y2, int x, boolean up)
 {
 	if (VW_MarkUpdateBlock(x, y1, x, y2))
-		VW_TVlin(y1, y2, x, up);
+	{
+		for (int i = 0; i < uiscale; i++)
+			VL_TVlin(x * uiscale + i, y1 * uiscale, (y2 - y1 + 1) * uiscale,
+					 up);
+	}
 }
 
 /*
@@ -854,32 +828,23 @@ void VL_DrawLine(int x1, int y1, int x2, int y2, byte color)
 
 void DrawXYPic(int x, int y, int shapenum)
 {
-	byte *buffer;
-	byte *buf;
-	int xx, yy;
-	int plane;
-	byte *src;
-	pic_t *p;
+	const pic_t *const p =
+		(pic_t *)W_CacheLumpNum(shapenum, PU_CACHE, Cvt_pic_t, 1);
+	const byte *src = (byte *)&p->data;
 
-	p = (pic_t *)W_CacheLumpNum(shapenum, PU_CACHE, Cvt_pic_t, 1);
-
-	if ((x < 0) || ((x + (p->width << 2)) >= 320))
+	if ((x < 0) || ((x + (p->width << 2)) >= BASEWIDTH))
 		Error("DrawXYPic: x is out of range\n");
-	if ((y < 0) || ((y + p->height) >= 200))
+	if ((y < 0) || ((y + p->height) >= BASEHEIGHT))
 		Error("DrawXYPic: y is out of range\n");
 
-	buffer = (byte *)bufferofs + ylookup[y];
-
-	src = (byte *)&p->data;
-
-	for (plane = x; plane < x + 4; plane++)
+	for (int plane = 0; plane < 4; plane++)
 	{
-		VGAWRITEMAP((plane & 3));
-		for (yy = 0; yy < p->height; yy++)
+		for (int yy = 0; yy < p->height; yy++)
 		{
-			buf = buffer + ylookup[yy];
-			for (xx = 0; xx < p->width; xx++, buf++)
-				*(buf + plane + xx * 4) = *(src++);
+			for (int xx = 0; xx < p->width; xx++)
+			{
+				PutScaledPixel(bufferofs, x + plane + xx * 4, y + yy, *src++);
+			}
 		}
 	}
 }
