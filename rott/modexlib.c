@@ -30,9 +30,6 @@ boolean StretchScreen = 0; // bna++
 int uiscale = 1;
 extern boolean iG_aimCross;
 extern boolean sdl_fullscreen;
-extern int iG_X_center;
-extern int iG_Y_center;
-byte *iG_buf_center;
 
 int linewidth;
 // int    ylookup[MAXSCREENHEIGHT];
@@ -42,8 +39,6 @@ int screensize;
 byte *bufferofs;
 byte *displayofs;
 boolean graphicsmode = false;
-byte *bufofsTopLimit;
-byte *bufofsBottomLimit;
 
 void DrawCenterAim();
 
@@ -278,16 +273,6 @@ void VL_SetVGAPlaneMode(void)
 
 	SCREEN_BUFFER = displayofs = bufferofs = sdl_surface->pixels;
 
-	iG_X_center = iGLOBAL_SCREENWIDTH / 2;
-	iG_Y_center = (iGLOBAL_SCREENHEIGHT / 2) + 10; //+10 = move aim down a bit
-
-	iG_buf_center =
-		bufferofs +
-		(screensize / 2); //(iG_Y_center*iGLOBAL_SCREENWIDTH);//+iG_X_center;
-
-	bufofsTopLimit = bufferofs + screensize - iGLOBAL_SCREENWIDTH;
-	bufofsBottomLimit = bufferofs + iGLOBAL_SCREENWIDTH;
-
 	uiscale = GetScreenScale();
 
 	// start stretched
@@ -458,74 +443,28 @@ static void StretchMemPicture()
 
 // bna function added start
 extern boolean ingame;
-int iG_playerTilt;
 
 void DrawCenterAim()
 {
-	int x;
+	if (!iG_aimCross || GamePaused || !ingame || iGLOBAL_SCREENWIDTH <= 320)
+		return;
 
-	int percenthealth = (locplayerstate->health * 10) /
-						MaxHitpointsForCharacter(locplayerstate);
-	int color = percenthealth < 3	? egacolor[RED]
-				: percenthealth < 4 ? egacolor[YELLOW]
-									: egacolor[GREEN];
+	const int percenthealth = (locplayerstate->health * 10) /
+							  MaxHitpointsForCharacter(locplayerstate);
+	const int color = percenthealth < 3	  ? egacolor[RED]
+					  : percenthealth < 4 ? egacolor[YELLOW]
+										  : egacolor[GREEN];
 
-	if (iG_aimCross && !GamePaused)
+	// The crosshair sits slightly below the center of the screen.
+	const int centerx = BASEWIDTH / 2;
+	const int centery = BASEHEIGHT / 2 + 10;
+
+	for (int i = 4; i <= 10; i++)
 	{
-		if ((ingame == true) && (iGLOBAL_SCREENWIDTH > 320))
-		{
-			if ((iG_playerTilt < 0) ||
-				(iG_playerTilt > iGLOBAL_SCREENHEIGHT / 2))
-			{
-				iG_playerTilt = -(2048 - iG_playerTilt);
-			}
-			if (iGLOBAL_SCREENWIDTH == 640)
-			{
-				x = iG_playerTilt;
-				iG_playerTilt = x / 2;
-			}
-			iG_buf_center = bufferofs + ((iG_Y_center - iG_playerTilt) *
-										 iGLOBAL_SCREENWIDTH); //+iG_X_center;
-
-			for (x = iG_X_center - 10; x <= iG_X_center - 4; x++)
-			{
-				if ((iG_buf_center + x < bufofsTopLimit) &&
-					(iG_buf_center + x > bufofsBottomLimit))
-				{
-					*(iG_buf_center + x) = color;
-				}
-			}
-			for (x = iG_X_center + 4; x <= iG_X_center + 10; x++)
-			{
-				if ((iG_buf_center + x < bufofsTopLimit) &&
-					(iG_buf_center + x > bufofsBottomLimit))
-				{
-					*(iG_buf_center + x) = color;
-				}
-			}
-			for (x = 10; x >= 4; x--)
-			{
-				if (((iG_buf_center - (x * iGLOBAL_SCREENWIDTH) + iG_X_center) <
-					 bufofsTopLimit) &&
-					((iG_buf_center - (x * iGLOBAL_SCREENWIDTH) + iG_X_center) >
-					 bufofsBottomLimit))
-				{
-					*(iG_buf_center - (x * iGLOBAL_SCREENWIDTH) + iG_X_center) =
-						color;
-				}
-			}
-			for (x = 4; x <= 10; x++)
-			{
-				if (((iG_buf_center + (x * iGLOBAL_SCREENWIDTH) + iG_X_center) <
-					 bufofsTopLimit) &&
-					((iG_buf_center + (x * iGLOBAL_SCREENWIDTH) + iG_X_center) >
-					 bufofsBottomLimit))
-				{
-					*(iG_buf_center + (x * iGLOBAL_SCREENWIDTH) + iG_X_center) =
-						color;
-				}
-			}
-		}
+		PutScaledPixel(bufferofs, centerx - i, centery, color);
+		PutScaledPixel(bufferofs, centerx + i, centery, color);
+		PutScaledPixel(bufferofs, centerx, centery - i, color);
+		PutScaledPixel(bufferofs, centerx, centery + i, color);
 	}
 }
 // bna function added end

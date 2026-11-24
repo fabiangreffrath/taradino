@@ -968,10 +968,7 @@ void DoMap(int cx, int cy)
 
 	if (playstate == ex_stillplaying)
 	{ // bna++
-		pic_t *shape;
-		shape = (pic_t *)W_CacheLumpName("backtile", PU_CACHE, Cvt_pic_t, 1);
-		DrawTiledRegion(0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32,
-						0, 16, shape); // bna++
+		DrawViewBackground();
 		DisableScreenStretch();		   // dont strech when we go BACK TO GAME
 		VW_UpdateScreen();
 		DrawPlayScreen(true); // repaint ammo and life stat

@@ -1666,11 +1666,7 @@ void PauseLoop(void)
 			// bna++ section
 			if ((playstate == ex_stillplaying) && (iGLOBAL_SCREENWIDTH > 320))
 			{
-				pic_t *shape;
-				shape = (pic_t *)W_CacheLumpName("backtile", PU_CACHE,
-												 Cvt_pic_t, 1);
-				DrawTiledRegion(0, 16, iGLOBAL_SCREENWIDTH,
-								iGLOBAL_SCREENHEIGHT - 32, 0, 16, shape);
+				DrawViewBackground();
 				DisableScreenStretch(); // dont strech when we go BACK TO GAME
 				DrawPlayScreen(true);	// repaint ammo and life stat
 				VW_UpdateScreen();		// update screen

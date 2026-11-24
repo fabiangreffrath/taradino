@@ -2678,7 +2678,6 @@ void DoLoadGameSequence(void)
 	int time;
 	int i;
 	byte *destscreen;
-	pic_t *shape; // bna++
 
 	fizzlein = false;
 	x = (18 + SaveGamePicX) << 16;
@@ -2720,9 +2719,7 @@ void DoLoadGameSequence(void)
 	CalcTics();
 	CalcTics();
 	// bna++ section
-	shape = (pic_t *)W_CacheLumpName("backtile", PU_CACHE, Cvt_pic_t, 1);
-	DrawTiledRegion(0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32, 0,
-					16, shape); // bna++
+	DrawViewBackground();
 	DrawPlayScreen(false);
 	DisableScreenStretch();
 	SHAKETICS = 0xFFFF;
@@ -2887,10 +2884,7 @@ void ScaleAndRotateBuffer(int startangle, int endangle, int startscale,
 	// bna++ section
 	if (playstate == ex_stillplaying)
 	{ // bna++
-		pic_t *shape;
-		shape = (pic_t *)W_CacheLumpName("backtile", PU_CACHE, Cvt_pic_t, 1);
-		DrawTiledRegion(0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32,
-						0, 16, shape); // bna++
+		DrawViewBackground();
 		DisableScreenStretch();		   // dont strech when we go BACK TO GAME
 		DrawPlayScreen(true);		   // repaint ammo and life stat
 	}
@@ -2947,9 +2941,11 @@ void DrawRotatedScreen(int cx, int cy, byte *destscreen, int angle, int scale,
 	}
 	else if ((iGLOBAL_SCREENWIDTH == 640) && (masked == false))
 	{
-		xst = (((-cx) * s) + ((268) << 16)) - (cy * c);
+		// The image sits 28 rows down in the rotation buffer.
+		xst =
+			(((-cx) * s) + ((28 + iGLOBAL_SCREENHEIGHT / 2) << 16)) - (cy * c);
 		xct = (((-cx) * c) + ((317) << 16) + (1 << 18) - (1 << 16)) + (cy * s);
-	} // y=268;x=317
+	}
 
 	mr_xstep = s;
 	mr_ystep = c;
@@ -3249,16 +3245,6 @@ void StartupScreenSaver(void)
 	ScreenSaver = (screensaver_t *)SafeMalloc(sizeof(screensaver_t));
 	ScreenSaver->phase = 0;
 	ScreenSaver->pausetime = PAUSETIME;
-	if (iGLOBAL_SCREENWIDTH == 320)
-	{
-		ScreenSaver->pausex = 120;
-		ScreenSaver->pausey = 84;
-	}
-	else if (iGLOBAL_SCREENWIDTH == 640)
-	{
-		ScreenSaver->pausex = 240;
-		ScreenSaver->pausey = 201;
-	}
 	ScreenSaver->pausex = 120;
 	ScreenSaver->pausey = 84;
 	SetupScreenSaverPhase();
@@ -3345,16 +3331,8 @@ void UpdateScreenSaver(void)
 	if (ScreenSaver->pausetime <= 0)
 	{
 		ScreenSaver->pausetime = PAUSETIME;
-		if (iGLOBAL_SCREENWIDTH == 320)
-		{
-			ScreenSaver->pausex = RandomNumber("pausex", 0) % 240;
-			ScreenSaver->pausey = RandomNumber("pausey", 0) % 168;
-		}
-		else if (iGLOBAL_SCREENWIDTH == 640)
-		{
-			ScreenSaver->pausex = RandomNumber("pausex", 0) % 480;
-			ScreenSaver->pausey = RandomNumber("pausey", 0) % 403;
-		}
+		ScreenSaver->pausex = RandomNumber("pausex", 0) % 240;
+		ScreenSaver->pausey = RandomNumber("pausey", 0) % 168;
 	}
 	DrawPauseXY(ScreenSaver->pausex, ScreenSaver->pausey);
 

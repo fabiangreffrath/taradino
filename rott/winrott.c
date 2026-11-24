@@ -19,9 +19,6 @@ int iGLOBAL_AMMO_Y;
 int iGLOBAL_FOCALWIDTH;
 double dGLOBAL_FPFOCALWIDTH;
 
-int iG_X_center;
-int iG_Y_center;
-
 boolean iG_aimCross = 0;
 
 extern int viewheight;
@@ -75,10 +72,10 @@ void MoveScreenUpLeft()
 		 ((iGLOBAL_SCREENWIDTH - viewwidth) / 2);
 	if (viewsize == 8)
 	{
-		b += 8 * iGLOBAL_SCREENWIDTH;
+		b += 8 * GetScreenScale() * iGLOBAL_SCREENWIDTH;
 	}
-	startX = 3; // take 3 pixels to the right
-	startY = 3; // take 3 lines down
+	startX = 3 * GetScreenScale();
+	startY = 3 * GetScreenScale();
 	startoffset = (startY * iGLOBAL_SCREENWIDTH) + startX;
 
 	for (Ycnt = b; Ycnt < b + ((viewheight - startY) * iGLOBAL_SCREENWIDTH);
@@ -98,10 +95,10 @@ void MoveScreenDownLeft()
 		 ((iGLOBAL_SCREENWIDTH - viewwidth) / 2);
 	if (viewsize == 8)
 	{
-		b += 8 * iGLOBAL_SCREENWIDTH;
+		b += 8 * GetScreenScale() * iGLOBAL_SCREENWIDTH;
 	}
-	startX = 3;									  // take 3 pixels to the right
-	startY = 3;									  // take 3 lines down
+	startX = 3 * GetScreenScale();
+	startY = 3 * GetScreenScale();
 	startoffset = (startY * iGLOBAL_SCREENWIDTH); //+startX;
 
 	// Ycnt starts in botton of screen and copys lines upwards
@@ -123,10 +120,10 @@ void MoveScreenUpRight()
 		 ((iGLOBAL_SCREENWIDTH - viewwidth) / 2);
 	if (viewsize == 8)
 	{
-		b += 8 * iGLOBAL_SCREENWIDTH;
+		b += 8 * GetScreenScale() * iGLOBAL_SCREENWIDTH;
 	}
-	startX = 3;									  // take 3 pixels to the right
-	startY = 3;									  // take 3 lines down
+	startX = 3 * GetScreenScale();
+	startY = 3 * GetScreenScale();
 	startoffset = (startY * iGLOBAL_SCREENWIDTH); //+startX;
 
 	for (Ycnt = b; Ycnt < b + ((viewheight - startY) * iGLOBAL_SCREENWIDTH);
@@ -147,10 +144,10 @@ void MoveScreenDownRight()
 		 ((iGLOBAL_SCREENWIDTH - viewwidth) / 2);
 	if (viewsize == 8)
 	{
-		b += 8 * iGLOBAL_SCREENWIDTH;
+		b += 8 * GetScreenScale() * iGLOBAL_SCREENWIDTH;
 	}
-	startX = 3; // take 3 pixels to the right
-	startY = 3; // take 3 lines down
+	startX = 3 * GetScreenScale();
+	startY = 3 * GetScreenScale();
 	startoffset = (startY * iGLOBAL_SCREENWIDTH) + startX;
 
 	// Ycnt starts in botton of screen and copys lines upwards

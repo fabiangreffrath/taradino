@@ -339,6 +339,17 @@ void SetViewSize(int size)
 //
 // DrawCPUJape ()
 //
+// Fills the area between the status bars with the background tile.
+void DrawViewBackground(void)
+{
+	const int scale = GetScreenScale();
+	pic_t *const shape =
+		(pic_t *)W_CacheLumpName("backtile", PU_CACHE, Cvt_pic_t, 1);
+
+	DrawTiledRegion(0, 16 * scale, iGLOBAL_SCREENWIDTH,
+					iGLOBAL_SCREENHEIGHT - 32 * scale, 0, 16 * scale, shape);
+}
+
 //******************************************************************************
 
 void DrawCPUJape(void)
@@ -364,19 +375,11 @@ void DrawCPUJape(void)
 
 void SetupScreen(boolean flip)
 {
-	pic_t *shape;
-
 	SetViewSize(viewsize);
 
 	if (viewsize < 7)
 	{
-		shape = (pic_t *)W_CacheLumpName("backtile", PU_CACHE, Cvt_pic_t, 1);
-		// DrawTiledRegion( 0, 16, 320, 200 - 32, 0, 16, shape );
-		const int scale = GetScreenScale();
-
-		DrawTiledRegion(0, 16 * scale, iGLOBAL_SCREENWIDTH,
-						iGLOBAL_SCREENHEIGHT - 32 * scale, 0, 16 * scale,
-						shape); // bna++
+		DrawViewBackground();
 	}
 
 	if (viewsize == 0)

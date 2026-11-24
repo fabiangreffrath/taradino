@@ -111,6 +111,7 @@ extern int darknesslevel;
 
 void DrawCPUJape(void);
 void SetupScreen(boolean flip);
+void DrawViewBackground(void);
 void ResetFocalWidth(void);
 void ChangeFocalWidth(int amount);
 void SetViewSize(int size);

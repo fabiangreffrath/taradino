@@ -135,85 +135,30 @@ void VL_MemStrechedToScreen(byte *source, int width, int height, int x, int y)
 
 //*************************************************************************
 //
-// DrawTiledRegion () - Fills the specified region with a tiled image
+// DrawTiledRegion () - Fills the specified region with a tiled image, scaled
+// like the rest of the interface
 //
 //*************************************************************************
 void DrawTiledRegion(int x, int y, int width, int height, int offx, int offy,
 					 pic_t *tile)
-
 {
-	byte *source;
-	byte *sourceoff;
-	int sourcex;
-	int sourcey;
-	int sourcewidth;
-	int sourceheight;
-	int plane;
-	int planesize;
-	byte *start;
-	byte *origdest;
-	byte *dest;
-	int startoffset;
-	int HeightIndex;
-	int WidthIndex;
+	const int scale = GetScreenScale();
+	const byte *const source = &tile->data;
+	const int planesize = tile->width * tile->height;
 
-	start = (byte *)(bufferofs + x + ylookup[y]);
-
-	source = &tile->data;
-	sourcewidth = tile->width;
-	sourceheight = tile->height;
-	if (offx >= sourcewidth)
+	for (int j = 0; j < height; j++)
 	{
-		offx %= sourcewidth;
-	}
-	if (offy >= sourceheight)
-	{
-		offy %= sourceheight;
-	}
+		const int row = ((offy + j) / scale) % tile->height;
+		byte *const dest = bufferofs + x + ylookup[y + j];
 
-	startoffset = offy * sourcewidth;
-	planesize = sourcewidth * sourceheight;
-
-	plane = 4;
-	while (plane > 0)
-	{
-		origdest = start + (4 - plane);
-
-		sourcey = offy;
-		sourceoff = source + startoffset;
-		HeightIndex = height;
-
-		while (HeightIndex--)
+		for (int i = 0; i < width; i++)
 		{
-			dest = origdest;
-			sourcex = offx;
-			WidthIndex = width;
-			while (WidthIndex--)
-			{
-				*dest = sourceoff[sourcex];
-				dest += 4;
+			const int column = i / scale;
+			const int plane = column % 4;
+			const int tilex = (offx + column / 4) % tile->width;
 
-				sourcex++;
-				if (sourcex >= sourcewidth)
-				{
-					sourcex = 0;
-				}
-			}
-
-			origdest += iGLOBAL_SCREENWIDTH;
-
-			sourceoff += sourcewidth;
-			sourcey++;
-			if (sourcey >= sourceheight)
-			{
-				sourcey = 0;
-				sourceoff = source;
-			}
+			dest[i] = source[plane * planesize + row * tile->width + tilex];
 		}
-
-		source += planesize;
-
-		plane--;
 	}
 }
 
