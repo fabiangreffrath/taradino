@@ -426,7 +426,7 @@ void DoWarp(void)
 	ShutdownMenuBuf();
 
 	// bna++ section
-	if ((playstate == ex_stillplaying) && (iGLOBAL_SCREENWIDTH > 320))
+	if (playstate == ex_stillplaying)
 		RestoreGameScreen();
 	// bna section end
 
@@ -472,10 +472,7 @@ void DoWarp(void)
 void DoJukeBox(void)
 
 {
-	if (iGLOBAL_SCREENWIDTH > 320)
-	{
-		EnableScreenStretch(); // bna++ shut on streech mode
-	}
+	EnableScreenStretch(); // bna++ shut on streech mode
 	StopWind();
 	ShutdownClientControls();
 
@@ -488,7 +485,7 @@ void DoJukeBox(void)
 	ShutdownMenuBuf();
 
 	// bna++ section
-	if ((playstate == ex_stillplaying) && (iGLOBAL_SCREENWIDTH > 320))
+	if (playstate == ex_stillplaying)
 		RestoreGameScreen();
 	// bna section end
 

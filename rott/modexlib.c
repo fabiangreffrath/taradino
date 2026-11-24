@@ -393,7 +393,7 @@ void XFlipPage(void)
 
 void EnableScreenStretch(void)
 {
-	if (iGLOBAL_SCREENWIDTH <= 320 || StretchScreen)
+	if (GetScreenScale() == 1 || StretchScreen)
 		return;
 
 	if (unstretch_sdl_surface == NULL)
@@ -413,7 +413,7 @@ void EnableScreenStretch(void)
 
 void DisableScreenStretch(void)
 {
-	if (iGLOBAL_SCREENWIDTH <= 320 || !StretchScreen)
+	if (GetScreenScale() == 1 || !StretchScreen)
 		return;
 
 	displayofs = (byte *)sdl_surface->pixels +
@@ -446,7 +446,7 @@ extern boolean ingame;
 
 void DrawCenterAim()
 {
-	if (!iG_aimCross || GamePaused || !ingame || iGLOBAL_SCREENWIDTH <= 320)
+	if (!iG_aimCross || GamePaused || !ingame)
 		return;
 
 	const int percenthealth = (locplayerstate->health * 10) /

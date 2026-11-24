@@ -69,7 +69,8 @@ Global Variables GLOBAL VARIABLES
 =============================================================================
 */
 
-int iG_masked;
+// Whether the transition rotates the real screen instead of the 320x200 one.
+static boolean rotatehires;
 
 byte *shadingtable;
 
@@ -2738,7 +2739,7 @@ void StartupRotateBuffer(int masked)
 	int k; ////zxcv
 	int a, b;
 
-	iG_masked = masked;
+	rotatehires = !masked && GetScreenScale() > 1;
 
 	if (RotateBufferStarted == true)
 		return;
@@ -2747,42 +2748,12 @@ void StartupRotateBuffer(int masked)
 
 	//   RotatedImage=SafeMalloc(131072);org
 	// RotatedImage=SafeMalloc(131072*8);
-	if (iGLOBAL_SCREENWIDTH == 320)
-	{
-		RotatedImage = SafeMalloc(131072);
-	}
-	else if (iGLOBAL_SCREENWIDTH == 640)
-	{
-		RotatedImage = SafeMalloc(131072 * 4);
-	}
-	// SetupScreen(false);//used these 2 to test screen size
-	// VW_UpdateScreen ();
-	if (masked == 0)
-	{
-		if (iGLOBAL_SCREENWIDTH == 320)
-		{
-			memset(RotatedImage, 0, 131072);
-		}
-		else if (iGLOBAL_SCREENWIDTH == 640)
-		{
-			memset(RotatedImage, 0, 131072 * 4);
-		}
-	}
-	else
-	{
-		if (iGLOBAL_SCREENWIDTH == 320)
-		{
-			memset(RotatedImage, 0xff, 131072);
-		}
-		else if (iGLOBAL_SCREENWIDTH == 640)
-		{
-			memset(RotatedImage, 0xff, 131072 * 4);
-		}
-	}
-	// memset(RotatedImage,0xff,131072);//org
-	// memset(RotatedImage,0xff,131072*8);
+	const int imagesize = rotatehires ? 131072 * 4 : 131072;
 
-	if ((masked == false) && (iGLOBAL_SCREENWIDTH == 640))
+	RotatedImage = SafeMalloc(imagesize);
+	memset(RotatedImage, masked ? 0xff : 0, imagesize);
+
+	if (rotatehires)
 	{
 		DisableScreenStretch();
 		k = (28 * 512); // 14336;
@@ -2796,7 +2767,7 @@ void StartupRotateBuffer(int masked)
 			}
 		}
 	}
-	else if ((masked == true) || (iGLOBAL_SCREENWIDTH == 320))
+	else
 	{
 		for (a = 0; a < 200; a++)
 		{
@@ -2934,12 +2905,12 @@ void DrawRotatedScreen(int cx, int cy, byte *destscreen, int angle, int scale,
 	//   c = c/2; //these values are to rotate degres or?
 	//   s = s/2;
 	//   xst & xct= start center values ;
-	if ((iGLOBAL_SCREENWIDTH == 320) || (masked == true))
+	if (!rotatehires)
 	{
 		xst = (((-cx) * s) + (128 << 16)) - (cy * c);
 		xct = (((-cx) * c) + (256 << 16) + (1 << 18) - (1 << 16)) + (cy * s);
 	}
-	else if ((iGLOBAL_SCREENWIDTH == 640) && (masked == false))
+	else
 	{
 		// The image sits 28 rows down in the rotation buffer.
 		xst =
@@ -5033,7 +5004,7 @@ void DrawRotRow(int count, byte *dest, byte *src)
 	ecx = mr_yfrac;
 	edx = mr_xfrac;
 
-	if ((iGLOBAL_SCREENWIDTH == 320) || (iG_masked == true))
+	if (!rotatehires)
 	{
 		while (count--)
 		{
@@ -5053,7 +5024,7 @@ void DrawRotRow(int count, byte *dest, byte *src)
 			ecx += mr_ystep;
 		}
 	}
-	else if (iGLOBAL_SCREENWIDTH == 640)
+	else
 	{
 		while (count--)
 		{

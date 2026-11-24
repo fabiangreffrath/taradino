@@ -980,7 +980,7 @@ void DrawScreenSizedSprite(int lump)
 		// a new buffer (size=800x600) and slowed the game down so ?
 
 		// if its the gasmask, paint black patches at hires
-		if ((lump == G_gmasklump) && (iGLOBAL_SCREENWIDTH > 320))
+		if ((lump == G_gmasklump) && (GetScreenScale() > 1))
 		{
 			src = ((p->collumnofs[frac >> SFRACBITS]) + shape);
 			offset = *(src++);

@@ -42,20 +42,12 @@ void SetRottScreenRes(int Width, int Height)
 	iGLOBAL_AMMO_X = 300;
 	iGLOBAL_AMMO_Y = 184;
 
-	if (iGLOBAL_SCREENWIDTH == 320)
-	{
-		iGLOBAL_FOCALWIDTH = 160;
-		dGLOBAL_FPFOCALWIDTH = 160.0;
+	const int scale = GetScreenScale();
 
-		YZANGLELIMIT = (30 * FINEANGLES / 360);
-	}
-	if (iGLOBAL_SCREENWIDTH == 640)
-	{
-		iGLOBAL_FOCALWIDTH = 180;
-		dGLOBAL_FPFOCALWIDTH = 180.0;
+	iGLOBAL_FOCALWIDTH = 160 + 20 * (scale - 1);
+	dGLOBAL_FPFOCALWIDTH = iGLOBAL_FOCALWIDTH;
 
-		YZANGLELIMIT = (60 * FINEANGLES / 360);
-	}
+	YZANGLELIMIT = (30 * scale * FINEANGLES / 360);
 }
 
 //----------------------------------------------------------------------

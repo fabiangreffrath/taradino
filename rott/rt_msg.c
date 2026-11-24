@@ -307,14 +307,7 @@ void SetMessage(int num, char *text, int flags)
 	int length;
 	boolean found;
 
-	if (iGLOBAL_SCREENWIDTH >= 640)
-	{
-		CurrentFont = newfont1; // smallfont;
-	}
-	else
-	{
-		CurrentFont = smallfont;
-	}
+	CurrentFont = smallfont;
 
 	length = StringLength(text);
 

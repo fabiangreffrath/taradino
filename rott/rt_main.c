@@ -1652,7 +1652,7 @@ void PauseLoop(void)
 		if (GamePaused == false)
 		{
 			// bna++ section
-			if ((playstate == ex_stillplaying) && (iGLOBAL_SCREENWIDTH > 320))
+			if (playstate == ex_stillplaying)
 				RestoreGameScreen();
 			StartupClientControls();
 			// bna section end

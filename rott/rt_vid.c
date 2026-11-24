@@ -604,10 +604,7 @@ void VL_DecompressLBM(lbm_t *lbminfo, boolean flip)
 			count += rept;
 
 		} while (count < lbminfo->width);
-		if (iGLOBAL_SCREENWIDTH > 320)
-		{
-			buf += (iGLOBAL_SCREENWIDTH - 320); // eg 800 - 320)
-		}
+		buf += iGLOBAL_SCREENWIDTH - BASEWIDTH;
 	}
 
 	if (flip == true)
