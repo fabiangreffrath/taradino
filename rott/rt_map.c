@@ -967,12 +967,7 @@ void DoMap(int cx, int cy)
 	}
 
 	if (playstate == ex_stillplaying)
-	{ // bna++
-		DrawViewBackground();
-		DisableScreenStretch();		   // dont strech when we go BACK TO GAME
-		VW_UpdateScreen();
-		DrawPlayScreen(true); // repaint ammo and life stat
-	}
+		RestoreGameScreen();
 	while (Keyboard[quitkey])
 		IN_UpdateKeyboard();
 

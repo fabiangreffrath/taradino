@@ -427,12 +427,7 @@ void DoWarp(void)
 
 	// bna++ section
 	if ((playstate == ex_stillplaying) && (iGLOBAL_SCREENWIDTH > 320))
-	{
-		DrawViewBackground();
-		DisableScreenStretch(); // dont strech when we go BACK TO GAME
-		DrawPlayScreen(true);	// repaint ammo and life stat
-		VW_UpdateScreen();		// update screen
-	}
+		RestoreGameScreen();
 	// bna section end
 
 	EnableScreenStretch(); // bna++ shut on streech mode
@@ -494,12 +489,7 @@ void DoJukeBox(void)
 
 	// bna++ section
 	if ((playstate == ex_stillplaying) && (iGLOBAL_SCREENWIDTH > 320))
-	{
-		DrawViewBackground();
-		DisableScreenStretch(); // dont strech when we go BACK TO GAME
-		DrawPlayScreen(true);	// repaint ammo and life stat
-		VW_UpdateScreen();		// update screen
-	}
+		RestoreGameScreen();
 	// bna section end
 
 	SetupScreen(true);

@@ -175,16 +175,13 @@ void VW_DrawPropString(const char *string)
 //
 // VWB_DrawPropString ()
 //
-// Calls VW_DrawPropString then updates the mark block.
+// Same as VW_DrawPropString.
 //
 //******************************************************************************
 
 void VWB_DrawPropString(const char *string)
 {
-	int x;
-	x = px;
 	VW_DrawPropString(string);
-	VW_MarkUpdateBlock(x, py, px - 1, py + bufferheight - 1);
 }
 
 //******************************************************************************
@@ -204,16 +201,13 @@ void VW_DrawIPropString(const char *string)
 //
 // VWB_DrawIPropString ()
 //
-// Calls VW_DrawIPropString then updates the mark block.
+// Same as VW_DrawIPropString.
 //
 //******************************************************************************
 
 void VWB_DrawIPropString(const char *string)
 {
-	int x;
-	x = px;
 	VW_DrawIPropString(string);
-	VW_MarkUpdateBlock(x, py, px - 1, py + bufferheight - 1);
 }
 
 //******************************************************************************

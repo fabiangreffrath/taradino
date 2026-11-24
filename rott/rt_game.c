@@ -168,59 +168,54 @@ void V_ReDrawBkgnd(int x, int y, int width, int height, boolean shade)
 
 	origdest = (byte *)(bufferofs + ylookup[y] + x);
 
-	if (VW_MarkUpdateBlock(x, y, x + width - 1, y + height - 1))
+	for (planes = 0; planes < 4; planes++)
 	{
-		for (planes = 0; planes < 4; planes++)
+		src = (&(BkPic->data) + ((80 * 200) * m) + (80 * y) + (x >> 2));
+		dest = origdest;
+
+		dest += planes;
+
+		for (j = 0; j < height; j++)
 		{
-			src = (&(BkPic->data) + ((80 * 200) * m) + (80 * y) + (x >> 2));
-			dest = origdest;
-
-			dest += planes;
-
-			for (j = 0; j < height; j++)
+			for (k = 0; k < (width / 4); k++)
 			{
-				for (k = 0; k < (width / 4); k++)
+				if (shade)
 				{
-					if (shade)
-					{
-						*dest =
-							*(colormap + ((MENUSHADELEVEL >> 2) << 8) + *src++);
-					}
-					else
-					{
-						*dest = *src++;
-					}
-					dest += 4;
+					*dest = *(colormap + ((MENUSHADELEVEL >> 2) << 8) + *src++);
 				}
-
-				// draw the remainder.  did the DOS version even bother? - SBF
-				if ((width & 3) > planes)
+				else
 				{
-					if (shade)
-					{
-						*dest =
-							*(colormap + ((MENUSHADELEVEL >> 2) << 8) + *src);
-					}
-					else
-					{
-						*dest = *src;
-					}
+					*dest = *src++;
 				}
-
-				src += (80 - (width / 4));
-				dest += (linewidth - (width & ~3));
+				dest += 4;
 			}
 
-			m++;
-
-			mask <<= 1;
-
-			if (mask == 16)
+			// draw the remainder.  did the DOS version even bother? - SBF
+			if ((width & 3) > planes)
 			{
-				x += 4;
-				mask = 1;
-				m = 0;
+				if (shade)
+				{
+					*dest = *(colormap + ((MENUSHADELEVEL >> 2) << 8) + *src);
+				}
+				else
+				{
+					*dest = *src;
+				}
 			}
+
+			src += (80 - (width / 4));
+			dest += (linewidth - (width & ~3));
+		}
+
+		m++;
+
+		mask <<= 1;
+
+		if (mask == 16)
+		{
+			x += 4;
+			mask = 1;
+			m = 0;
 		}
 	}
 }

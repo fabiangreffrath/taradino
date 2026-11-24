@@ -865,8 +865,6 @@ void PlayTurboGame(void)
 void Init_Tables(void)
 {
 	int i;
-	int x, y;
-	unsigned int *blockstart;
 	byte *shape;
 
 	memset(CWD, 0, sizeof(CWD));
@@ -877,16 +875,6 @@ void Init_Tables(void)
 	memcpy(origpal, W_CacheLumpName("pal", PU_CACHE, CvtNull, 1), 768);
 
 	FindEGAColors();
-
-	for (i = 0; i < PORTTILESHIGH; i++)
-		uwidthtable[i] = UPDATEWIDE * i;
-
-	updateptr = &update[0];
-
-	blockstart = &blockstarts[0];
-	for (y = 0; y < UPDATEHIGH; y++)
-		for (x = 0; x < UPDATEWIDE; x++)
-			*blockstart++ = iG_SCREENWIDTH * 16 * y + x * TILEWIDTH;
 
 	for (i = 0; i < 0x300; i++)
 		*(origpal + (unsigned int)i) = (*(origpal + (unsigned int)i)) >> 2;
@@ -1665,12 +1653,7 @@ void PauseLoop(void)
 		{
 			// bna++ section
 			if ((playstate == ex_stillplaying) && (iGLOBAL_SCREENWIDTH > 320))
-			{
-				DrawViewBackground();
-				DisableScreenStretch(); // dont strech when we go BACK TO GAME
-				DrawPlayScreen(true);	// repaint ammo and life stat
-				VW_UpdateScreen();		// update screen
-			}
+				RestoreGameScreen();
 			StartupClientControls();
 			// bna section end
 			break;

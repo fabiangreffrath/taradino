@@ -339,6 +339,14 @@ void SetViewSize(int size)
 //
 // DrawCPUJape ()
 //
+// Leaves the stretched mode and repaints the status bars of the game screen.
+void RestoreGameScreen(void)
+{
+	DisableScreenStretch();
+	DrawPlayScreen(true);
+	VW_UpdateScreen();
+}
+
 // Fills the area between the status bars with the background tile.
 void DrawViewBackground(void)
 {

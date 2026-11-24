@@ -17,5 +17,7 @@ extern int iGLOBAL_AMMO_Y;
 extern int iGLOBAL_FOCALWIDTH;
 extern double dGLOBAL_FPFOCALWIDTH;
 
+// Full-screen interfaces render at 320x200 and get stretched, the game screen
+// renders at the real size. Both calls do nothing at 320x200.
 void EnableScreenStretch(void);
 void DisableScreenStretch(void);
