@@ -432,14 +432,12 @@ void UpdateMessages(void)
 
 void DisplayMessage(int num, int position)
 {
-	const int scale = GetScreenScale();
-
 	PrintX = 1;
-	PrintY = (2 + position * 9) * scale;
+	PrintY = 2 + position * 9;
 
 	if (SHOW_TOP_STATUS_BAR())
 	{
-		PrintY += 16 * scale;
+		PrintY += 16;
 	}
 	if (!MessagesEnabled)
 	{
@@ -476,14 +474,7 @@ void DisplayMessage(int num, int position)
 		case MSG_MODEM:
 			fontcolor = egacolor[LIGHTBLUE];
 			DrawIString(PrintX, PrintY, "Message>", Messages[num].flags);
-			if (iGLOBAL_SCREENWIDTH == 320)
-			{
-				PrintX += 8 * 8;
-			}
-			else if (iGLOBAL_SCREENWIDTH == 640)
-			{
-				PrintX += 8 * 8 * 2;
-			}
+			PrintX += 8 * 8;
 
 			fontcolor = egacolor[LIGHTGRAY];
 			break;

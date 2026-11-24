@@ -954,33 +954,6 @@ void StatusDrawColoredPic(unsigned int x, unsigned int y, pic_t *nums,
 					 bufferofsonly, color);
 }
 
-// Draws the string at px, py in base coordinates, like VW_DrawPropString.
-static void DrawScaledPropString(const char *string, byte *base)
-{
-	const int height = CurrentFont->height;
-
-	while (*string)
-	{
-		const int ch = (unsigned char)*string++ - 31;
-		const int width = CurrentFont->width[ch];
-		const byte *source = (byte *)CurrentFont + CurrentFont->charofs[ch];
-
-		for (int i = 0; i < width; i++, px++)
-		{
-			for (int j = 0; j < height; j++, source++)
-			{
-				if (*source)
-				{
-					PutScaledPixel(base, px, py + j, *source);
-				}
-			}
-		}
-	}
-
-	bufferheight = height;
-	bufferwidth = 1;
-}
-
 //******************************************************************************
 //
 // DrawGameString ()
@@ -991,10 +964,16 @@ static void DrawScaledPropString(const char *string, byte *base)
 
 void DrawGameString(int x, int y, const char *str, boolean bufferofsonly)
 {
+	byte *const tempbuf = bufferofs;
+
 	px = x;
 	py = y;
 
-	DrawScaledPropString(str, bufferofsonly ? bufferofs : SCREEN_BUFFER);
+	if (!bufferofsonly)
+		bufferofs = SCREEN_BUFFER;
+
+	VW_DrawPropString(str);
+	bufferofs = tempbuf;
 }
 
 //******************************************************************************

@@ -1201,6 +1201,21 @@ void ScanForSavedGames()
 		MainMenu[loadgame].active = CP_Inactive;
 }
 
+// Stores a 160x100 copy of the screen in column-major order.
+static void StoreScreenPicture(byte *dest)
+{
+	const int xstep = iGLOBAL_SCREENWIDTH / 160;
+	const int ystep = iGLOBAL_SCREENHEIGHT / 100;
+
+	for (int x = 0; x < 160; x++)
+	{
+		for (int y = 0; y < 100; y++)
+		{
+			*dest++ = bufferofs[y * ystep * iGLOBAL_SCREENWIDTH + x * xstep];
+		}
+	}
+}
+
 //******************************************************************************
 //
 // SetUpControlPanel ()
@@ -1209,14 +1224,6 @@ void ScanForSavedGames()
 
 void SetUpControlPanel(void)
 {
-	int i;
-	int j;
-	byte *b;
-	byte *s;
-
-	int Xres = 640;
-	int Yres = 400;
-
 	// Save the current game screen
 
 	// bna--savedscreen = SafeMalloc (16000);
@@ -1233,27 +1240,7 @@ void SetUpControlPanel(void)
 		GamePaused = true;
 	}
 
-	s = savedscreen;
-
-	if (iGLOBAL_SCREENWIDTH == 320)
-	{
-		for (i = 0; i < Xres; i += 2)
-		{
-			b = (byte *)bufferofs + i;
-			for (j = 0; j < 100; j++, s++, b += (iGLOBAL_SCREENWIDTH << 1))
-				*s = *b;
-		}
-	}
-	if (iGLOBAL_SCREENWIDTH >= 640)
-	{
-		for (i = 0; i < Xres; i += 4)
-		{
-			b = (byte *)bufferofs + i; // schrink screen to 1/2 size
-			for (j = 0; j < (Yres / 4);
-				 j++, s++, b += (iGLOBAL_SCREENWIDTH << 1) * 2)
-				*s = *b;
-		}
-	}
+	StoreScreenPicture(savedscreen);
 
 	ScanForSavedGames();
 
@@ -3056,10 +3043,6 @@ int CP_LoadGame(int quick, int dieload)
 
 void QuickSaveGame(void)
 {
-	int i;
-	int j;
-	byte *b;
-	byte *s;
 	int which;
 	gamestorage_t game;
 	byte *buf;
@@ -3081,13 +3064,7 @@ void QuickSaveGame(void)
 	free(filename);
 	SafeFree(buf);
 
-	s = &game.picture[0];
-	for (i = 0; i < 320; i += 2)
-	{
-		b = (byte *)bufferofs + i;
-		for (j = 0; j < 100; j++, s++, b += (iGLOBAL_SCREENWIDTH << 1))
-			*s = *b;
-	}
+	StoreScreenPicture(&game.picture[0]);
 
 	ScanForSavedGames();
 	which = quicksaveslot;

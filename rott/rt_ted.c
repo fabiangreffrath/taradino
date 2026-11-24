@@ -1123,7 +1123,6 @@ void PreCache(void)
 			int width = 0;
 			int height = 0;
 			char buf[30] = { 0 }; // byte * shape;
-			double WHratio = (16200.0 / 200.0) / 100.0;
 			///	iGLOBAL_SCREENWIDTH = 640;
 			//	iGLOBAL_SCREENHEIGHT = 480;
 			DisableScreenStretch();
@@ -1135,8 +1134,8 @@ void PreCache(void)
 
 			strcpy(buf, "Press Any Key");
 			US_MeasureStr(&width, &height, "%s", &buf[0]);
-			PrintX = (iGLOBAL_SCREENWIDTH - (width)) / 2;
-			PrintY = WHratio * iGLOBAL_SCREENHEIGHT; // 162;
+			PrintX = (BASEWIDTH - width) / 2;
+			PrintY = 162;
 			// VWB_TBar (PrintX-2, PrintY-2, width+4, height+4);
 			US_BufPrint(&buf[0]);
 

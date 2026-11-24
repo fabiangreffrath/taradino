@@ -706,6 +706,7 @@ void SetBorderColor(int color)
 	// bna section start
 
 	byte *cnt, *Ycnt, *b;
+	const int border = 5 * GetScreenScale();
 
 	b = (byte *)bufferofs;
 
@@ -714,14 +715,14 @@ void SetBorderColor(int color)
 	// paint top red line
 	for (cnt = b; cnt < b + viewwidth; cnt++)
 	{
-		for (Ycnt = cnt; Ycnt < cnt + (5 * iGLOBAL_SCREENWIDTH);
+		for (Ycnt = cnt; Ycnt < cnt + (border * iGLOBAL_SCREENWIDTH);
 			 Ycnt += iGLOBAL_SCREENWIDTH)
 		{
 			*Ycnt = color;
 		}
 	}
 	// paint left red line
-	for (cnt = b; cnt < b + 5; cnt++)
+	for (cnt = b; cnt < b + border; cnt++)
 	{
 		for (Ycnt = cnt; Ycnt < cnt + (viewheight * iGLOBAL_SCREENWIDTH);
 			 Ycnt += iGLOBAL_SCREENWIDTH)
@@ -730,7 +731,7 @@ void SetBorderColor(int color)
 		}
 	}
 	// paint right red line
-	for (cnt = b + (viewwidth - 5); cnt < b + viewwidth; cnt++)
+	for (cnt = b + (viewwidth - border); cnt < b + viewwidth; cnt++)
 	{
 		for (Ycnt = cnt; Ycnt < cnt + (viewheight * iGLOBAL_SCREENWIDTH);
 			 Ycnt += iGLOBAL_SCREENWIDTH)
@@ -739,8 +740,9 @@ void SetBorderColor(int color)
 		}
 	}
 	// paint lower red line
-	for (cnt = b + ((viewheight - 5) * iGLOBAL_SCREENWIDTH);
-		 cnt < b + ((viewheight - 5) * iGLOBAL_SCREENWIDTH) + viewwidth; cnt++)
+	for (cnt = b + ((viewheight - border) * iGLOBAL_SCREENWIDTH);
+		 cnt < b + ((viewheight - border) * iGLOBAL_SCREENWIDTH) + viewwidth;
+		 cnt++)
 	{
 		for (Ycnt = cnt; Ycnt < b + (viewheight * iGLOBAL_SCREENWIDTH);
 			 Ycnt += iGLOBAL_SCREENWIDTH)
