@@ -32,6 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_sound.h"
 #include "modexlib.h"
 #include "rt_menu.h"
+#include "rt_net.h"
 
 #include <stdlib.h>
 
@@ -223,7 +224,6 @@ void CalcProjection(void)
 */
 
 void SetViewSize(int size)
-
 {
 	int height;
 	int maxheight;
@@ -325,6 +325,44 @@ void SetViewSize(int size)
 	//   SetViewDelta();
 
 	CalcProjection();
+}
+
+extern boolean iG_aimCross;
+void DrawCenterAim()
+{
+	if (!iG_aimCross || GamePaused || !ingame)
+		return;
+
+	const int percenthealth = (locplayerstate->health * 10) /
+							  MaxHitpointsForCharacter(locplayerstate);
+	const int color = percenthealth < 3	  ? egacolor[RED]
+					  : percenthealth < 4 ? egacolor[YELLOW]
+										  : egacolor[GREEN];
+
+	const int centerx = BASEWIDTH / 2;
+
+	int topy = 0;
+	int heighty = BASEHEIGHT;
+
+	if (SHOW_KILLS())
+		heighty -= 24;
+	if (viewsize < 9)
+	{
+		heighty -= 16;
+		topy += 16;
+	}
+	if (viewsize < 8)
+		heighty -= 16;
+
+	int centery = heighty / 2 + topy;
+
+	for (int i = 2; i <= 4; i++)
+	{
+		PutScaledPixel(bufferofs, centerx - i, centery, color);
+		PutScaledPixel(bufferofs, centerx + i, centery, color);
+		PutScaledPixel(bufferofs, centerx, centery - i, color);
+		PutScaledPixel(bufferofs, centerx, centery + i, color);
+	}
 }
 
 //******************************************************************************

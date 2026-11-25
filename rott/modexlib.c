@@ -28,7 +28,6 @@ static void StretchMemPicture();
 
 boolean StretchScreen = 0; // bna++
 int uiscale = 1;
-extern boolean iG_aimCross;
 extern boolean sdl_fullscreen;
 
 int linewidth;
@@ -438,30 +437,3 @@ static void StretchMemPicture()
 	dest.h = iGLOBAL_SCREENHEIGHT;
 	StretchFunc.BlitScaled(unstretch_sdl_surface, &src, sdl_surface, &dest);
 }
-
-extern boolean ingame;
-
-void DrawCenterAim()
-{
-	if (!iG_aimCross || GamePaused || !ingame)
-		return;
-
-	const int percenthealth = (locplayerstate->health * 10) /
-							  MaxHitpointsForCharacter(locplayerstate);
-	const int color = percenthealth < 3	  ? egacolor[RED]
-					  : percenthealth < 4 ? egacolor[YELLOW]
-										  : egacolor[GREEN];
-
-	// The crosshair sits slightly below the center of the screen.
-	const int centerx = BASEWIDTH / 2;
-	const int centery = BASEHEIGHT / 2 + 10;
-
-	for (int i = 4; i <= 10; i++)
-	{
-		PutScaledPixel(bufferofs, centerx - i, centery, color);
-		PutScaledPixel(bufferofs, centerx + i, centery, color);
-		PutScaledPixel(bufferofs, centerx, centery - i, color);
-		PutScaledPixel(bufferofs, centerx, centery + i, color);
-	}
-}
-
