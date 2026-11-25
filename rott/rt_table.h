@@ -668,7 +668,6 @@ statetype *statetable[MAXSTATES] = {
 	&s_bstar2,
 	&s_bstar1,
 
-#if (SHAREWARE == 0)
 	&s_scottwander7,
 	&s_scottwander6,
 	&s_scottwander5,
@@ -1293,8 +1292,6 @@ statetype *statetable[MAXSTATES] = {
 	&s_doguse,
 	&s_doglick,
 	&s_dogwait,
-
-#endif // SHAREWARE
 
 };
 #endif
