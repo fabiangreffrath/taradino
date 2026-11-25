@@ -445,21 +445,30 @@ static int sdl_key_filter(const SDL_Event *event)
 
 static int sdl_joystick_button_filter(const SDL_Event *event)
 {
-	if (event->jbutton.which >= sdl_total_sticks)
-		return 0;
+	int joy;
 
 	if (event->jbutton.button >= 16)
 		return 0;
 
+	// jbutton.which is the joystick's instance ID, not its device index:
+	// find the opened joystick it belongs to
+	for (joy = 0; joy < sdl_total_sticks; joy++)
+	{
+		if (sdl_joysticks[joy] &&
+			SDL_JoystickInstanceID(sdl_joysticks[joy]) == event->jbutton.which)
+			break;
+	}
+
+	if (joy >= sdl_total_sticks)
+		return 0;
+
 	if (event->type == SDL_JOYBUTTONDOWN)
 	{
-		sdl_stick_button_state[event->jbutton.which] |=
-			(1 << event->jbutton.button);
+		sdl_stick_button_state[joy] |= (1 << event->jbutton.button);
 	}
 	else if (event->type == SDL_JOYBUTTONUP)
 	{
-		sdl_stick_button_state[event->jbutton.which] &=
-			~(1 << event->jbutton.button);
+		sdl_stick_button_state[joy] &= ~(1 << event->jbutton.button);
 	}
 
 	return 0;
