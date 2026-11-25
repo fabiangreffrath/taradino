@@ -230,8 +230,10 @@ boolean ReadPacket(void)
 						   rottcom->datalength - sizeof(unsigned short));
 
 		// get crc inside packet
-		sentcrc = *((unsigned short *)(&rottcom->data[rottcom->datalength -
-													  sizeof(unsigned short)]));
+		// (memcpy: the CRC follows the payload, so it can be unaligned)
+		memcpy(&sentcrc,
+			   &rottcom->data[rottcom->datalength - sizeof(unsigned short)],
+			   sizeof(unsigned short));
 
 		// are the crcs the same?
 		if (crc != sentcrc)
@@ -293,7 +295,7 @@ void WritePacket(void *buffer, int len, int destination)
 	crc = CalculateCRC(buffer, len);
 
 	// put CRC into realmode buffer packet
-	*((unsigned short *)&rottcom->data[len]) = crc;
+	memcpy(&rottcom->data[len], &crc, sizeof(unsigned short));
 
 	// set size of realmode packet including crc
 	rottcom->datalength = len + sizeof(unsigned short);
