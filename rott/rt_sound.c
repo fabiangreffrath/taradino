@@ -672,9 +672,8 @@ void SD_PreCacheSoundGroup(int lo, int hi)
 	}
 }
 
-#if (SHAREWARE == 1)
-#define MAXSONGS 18
-static song_t rottsongs[MAXSONGS] = {
+#define MAXSONGS_SHAREWARE 18
+static song_t rottsongs_shareware[MAXSONGS_SHAREWARE] = {
 	{ loop_no, song_apogee, "FANFARE2", "Apogee Fanfare" },
 	{ loop_yes, song_title, "RISE", "Rise" },
 	{ loop_yes, song_menu, "MMMENU", "MMMenu" },
@@ -694,9 +693,9 @@ static song_t rottsongs[MAXSONGS] = {
 	{ loop_yes, song_level, "SMOOTH", "Havana Smooth" },
 	{ loop_yes, song_level, "CHANT", "Chant" },
 };
-#else
+
 #define MAXSONGS 34
-static song_t rottsongs[MAXSONGS] = {
+static song_t rottsongs_registered[MAXSONGS] = {
 	{ loop_no, song_apogee, "FANFARE2", "Apogee Fanfare" },
 	{ loop_yes, song_title, "RISE", "Rise" },
 	{ loop_yes, song_menu, "MMMENU", "MMMenu" },
@@ -732,7 +731,9 @@ static song_t rottsongs[MAXSONGS] = {
 	{ loop_yes, song_youwin, "VICTORY", "Victory!" },
 	{ loop_yes, song_dogend, "HERE_BOY", "Here Boy" }
 };
-#endif
+
+#define NUMSONGS (rott_shareware ? MAXSONGS_SHAREWARE : MAXSONGS)
+#define rottsongs (rott_shareware ? rottsongs_shareware : rottsongs_registered)
 
 static byte *currentsong;
 static int MU_Started = false;
@@ -782,12 +783,12 @@ void MU_JukeBoxMenu(void)
 	char *SongNames[MAXSONGS];
 	int i;
 
-	for (i = 0; i < MAXSONGS; i++)
+	for (i = 0; i < NUMSONGS; i++)
 	{
 		SongNames[i] = rottsongs[i].songname;
 	}
 
-	HandleMultiPageCustomMenu(SongNames, MAXSONGS, lastsongnumber, "Jukebox",
+	HandleMultiPageCustomMenu(SongNames, NUMSONGS, lastsongnumber, "Jukebox",
 							  MU_PlayJukeBoxSong, MU_JukeBoxRedraw, false);
 
 	if (rottsongs[lastsongnumber].loopflag == loop_no)
@@ -880,7 +881,7 @@ int MU_GetNumForType(int type)
 {
 	int i;
 
-	for (i = 0; i < MAXSONGS; i++)
+	for (i = 0; i < NUMSONGS; i++)
 	{
 		if (rottsongs[i].songtype == type)
 		{
@@ -912,7 +913,7 @@ void MU_PlaySong(int num)
 		return;
 	}
 
-	if (num >= MAXSONGS)
+	if (num >= NUMSONGS)
 	{
 		Error("Song number out of range\n");
 	}

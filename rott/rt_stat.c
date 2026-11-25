@@ -211,11 +211,7 @@ statinfo stats[NUMSTATS] = {
 	  150, 0, 0 },
 	{ 0, BULLETHOLE, stat_bullethole, FL_TRANSLUCENT, 0, 0, 0, 0, 0 },
 // MED
-#if (SHAREWARE == 1)
-	{ 0, COLLECTOR1, stat_collector, FL_ACTIVE | FL_BONUS, 2, 8, -1, 0, 0 },
-#else
 	{ 0, DOPE1, stat_collector, FL_ACTIVE | FL_BONUS, 2, 8, -1, 0, 0 },
-#endif
 	{ 0, SPR_MINE1, stat_mine, FL_BONUS | FL_SHOOTABLE | FL_RESPAWN, 0, 0, 10,
 	  0, 0 },
 	{ 0, MISSMOKE1, stat_missmoke, FL_ACTIVE, 6, 4, 0, 0, 0 },
@@ -603,6 +599,10 @@ void InitStaticList(void)
 	lastrespawn = NULL;
 	lastemptystat = NULL;
 	firstemptystat = NULL;
+
+	// The shareware WAD uses a different sprite for the collector.
+	if (rott_shareware)
+		stats[stat_collector].picnum = COLLECTOR1;
 
 	memset(&BulletHoles[0], 0, sizeof(BulletHoles));
 	MISCVARS->BulletHoleNum = 0;
@@ -1121,28 +1121,29 @@ void SpawnStatic(int tilex, int tiley, int mtype, int zoffset)
 	statobj_t *temp;
 	boolean onetimer;
 
-#if (SHAREWARE == 1)
-	switch (mtype)
+	if (rott_shareware)
 	{
-		case stat_rlight:
-		case stat_glight:
-		case stat_ylight:
-		case stat_chandelier:
-			mtype = stat_blight;
-			break;
+		switch (mtype)
+		{
+			case stat_rlight:
+			case stat_glight:
+			case stat_ylight:
+			case stat_chandelier:
+				mtype = stat_blight;
+				break;
 
-		case stat_garb1:
-		case stat_garb2:
-		case stat_garb3:
-		case stat_shit:
-			mtype = stat_metalshards;
-			break;
+			case stat_garb1:
+			case stat_garb2:
+			case stat_garb3:
+			case stat_shit:
+				mtype = stat_metalshards;
+				break;
 
-		case stat_lamp:
-			mtype = stat_altbrazier2;
-			break;
+			case stat_lamp:
+				mtype = stat_altbrazier2;
+				break;
+		}
 	}
-#endif
 
 	if (BATTLEMODE)
 	{

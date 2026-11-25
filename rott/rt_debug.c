@@ -69,10 +69,8 @@ enum
 	ITEMSALT,		 // all keys, armor, 100% health
 	GODMODEPWUP,	 // god mode powerup
 	GODMODEPWUPALT,	 // god mode powerup
-#if (SHAREWARE == 0)
 	DOGMODEPWUP,	// dog mode powerup
 	DOGMODEPWUPALT, // dog mode powerup
-#endif
 	MERCURYPWUP,		// mercury mode powerup
 	MERCURYPWUPALT,		// mercury mode powerup
 	SHROOMSPWUP,		// shrooms mode powerup
@@ -134,7 +132,6 @@ enum
 	AIMCROSS,			// bna++
 	AIMCROSSALT,		// give bna++
 
-#if (SHAREWARE == 0)
 
 	WEAPONSPLIT,	// give split missile
 	WEAPONSPLITALT, // give split missile
@@ -144,7 +141,6 @@ enum
 	WEAPONBATALT,	// give bat
 	WEAPONDOG,		// give dogmode
 	WEAPONDOGALT,	// give dogmode
-#endif
 
 	MISSILECAMTOGGLE,	 // Turn missile cam on/off
 	MISSILECAMTOGGLEALT, // Turn missile cam on/off
@@ -175,10 +171,8 @@ CodeStruct Codes[MAXCODES + 6] = {
 	{ "IAG\\", 4 },	   // all keys, armor, 100% health
 	{ "DASOOT", 6 },   // god mode powerup
 	{ "DOG\\", 4 },	   // god mode powerup
-#if (SHAREWARE == 0)
 	{ "FOOW", 4 },	// dog mode powerup
 	{ "GOD\\", 4 }, // dog mode powerup
-#endif
 	{ "YOBYLF", 6 },   // mercury mode powerup
 	{ "REM\\", 4 },	   // mercury mode powerup
 	{ "PIRTDAB", 7 },  // shrooms mode powerup
@@ -240,7 +234,6 @@ CodeStruct Codes[MAXCODES + 6] = {
 	{ "MIA", 3 },	   // give aim bna++
 	{ "MIA\\", 4 },	   // give aim bna++
 
-#if (SHAREWARE == 0)
 
 	{ "TILPS", 5 },		  // give split missile
 	{ "AWG\\", 4 },		  // give split missile
@@ -250,7 +243,6 @@ CodeStruct Codes[MAXCODES + 6] = {
 	{ "CWG\\", 4 },		  // give bat
 	{ "OJUC", 4 },		  // give dog weapon
 	{ "DWG\\", 4 },		  // give dog weapon
-#endif
 	{ "EDIR", 4 },	  // give MISSILE CAM
 	{ "MAC\\", 4 },	  // give Missile Cam
 	{ "EREHW", 5 },	  // turn where am i on/off
@@ -852,11 +844,7 @@ void OutfitPlayer()
 	HealPlayer(99, player);
 
 
-#if (SHAREWARE == 0)
-	CheatSpawnItem(stat_splitmissile);
-#else
-	CheatSpawnItem(stat_heatseeker);
-#endif
+	CheatSpawnItem(rott_shareware ? stat_heatseeker : stat_splitmissile);
 }
 
 /*
@@ -961,11 +949,7 @@ void RecordDemoQuery(void)
 
 	US_CPrint("Record Demo");
 	US_Print("\n");
-#if (SHAREWARE == 0)
-	US_CPrint("Which level (1-36):");
-#else
-	US_CPrint("Which level (1-8):");
-#endif
+	US_CPrint(rott_shareware ? "Which level (1-8):" : "Which level (1-36):");
 
 	VW_UpdateScreen();
 
@@ -974,11 +958,7 @@ void RecordDemoQuery(void)
 	if (!esc)
 	{
 		level = ParseNum(str);
-#if (SHAREWARE == 0)
-		if ((level > 0) && (level < 37))
-#else
-		if ((level > 0) && (level < 9))
-#endif
+		if ((level > 0) && (level < (rott_shareware ? 9 : 37)))
 		{
 			EnableScreenStretch(); // bna
 			gamestate.mapon = level - 1;
@@ -1134,12 +1114,11 @@ void CheckCode(int which)
 				DoGodModePowerup();
 				break;
 
-#if (SHAREWARE == 0)
 			case DOGMODEPWUP:
 			case DOGMODEPWUPALT:
-				DoDogModePowerup();
+				if (!rott_shareware)
+					DoDogModePowerup();
 				break;
-#endif
 
 			case MERCURYPWUP:
 			case MERCURYPWUPALT:
@@ -1300,28 +1279,30 @@ void CheckCode(int which)
 				WeaponCheat(wp_godhand);
 				break;
 
-#if (SHAREWARE == 0)
 
 			case WEAPONSPLIT:
 			case WEAPONSPLITALT:
-				WeaponCheat(wp_split);
+				if (!rott_shareware)
+					WeaponCheat(wp_split);
 				break;
 
 			case WEAPONKES:
 			case WEAPONKESALT:
-				WeaponCheat(wp_kes);
+				if (!rott_shareware)
+					WeaponCheat(wp_kes);
 				break;
 
 			case WEAPONBAT:
 			case WEAPONBATALT:
-				WeaponCheat(wp_bat);
+				if (!rott_shareware)
+					WeaponCheat(wp_bat);
 				break;
 
 			case WEAPONDOG:
 			case WEAPONDOGALT:
-				WeaponCheat(wp_dog);
+				if (!rott_shareware)
+					WeaponCheat(wp_dog);
 				break;
-#endif
 
 			case MISSILECAMTOGGLE:
 			case MISSILECAMTOGGLEALT:

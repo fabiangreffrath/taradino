@@ -1217,12 +1217,8 @@ void SpawnDoor(int tilex, int tiley, int lock, int texture)
 		case 15:
 		case 16:
 		case 17:
-#if (SHAREWARE == 1)
-			lastdoorobj->sidepic = W_GetNumForName("SIDE8");
-
-#else
-			lastdoorobj->sidepic = W_GetNumForName("SIDE16");
-#endif
+			lastdoorobj->sidepic =
+				W_GetNumForName(rott_shareware ? "SIDE8" : "SIDE16");
 
 			lastdoorobj->alttexture = W_GetNumForName("ABOVEW16");
 			break;
@@ -1230,15 +1226,16 @@ void SpawnDoor(int tilex, int tiley, int lock, int texture)
 		case 18:
 		case 19:
 		case 20:
-#if (SHAREWARE == 1)
-			lastdoorobj->sidepic = W_GetNumForName("SIDE8");
-			lastdoorobj->alttexture = W_GetNumForName("ABOVEW3");
-
-#else
-			lastdoorobj->sidepic = W_GetNumForName("SIDE17");
-			lastdoorobj->alttexture = W_GetNumForName("ABOVEW17");
-
-#endif
+			if (rott_shareware)
+			{
+				lastdoorobj->sidepic = W_GetNumForName("SIDE8");
+				lastdoorobj->alttexture = W_GetNumForName("ABOVEW3");
+			}
+			else
+			{
+				lastdoorobj->sidepic = W_GetNumForName("SIDE17");
+				lastdoorobj->alttexture = W_GetNumForName("ABOVEW17");
+			}
 
 			break;
 		default:
@@ -2109,12 +2106,7 @@ void SpawnMaskedWall(int tilex, int tiley, int which, int flags)
 			side = W_GetNumForName("SIDE21");
 			above = W_GetNumForName("ABOVEM4");
 
-#if (SHAREWARE == 1)
-			middle = W_GetNumForName("ABOVEM4A");
-#else
-			middle = W_GetNumForName("ABOVEM9");
-
-#endif
+			middle = W_GetNumForName(rott_shareware ? "ABOVEM4A" : "ABOVEM9");
 			bottom = W_GetNumForName("DOGMASK");
 			break;
 
