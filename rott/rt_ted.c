@@ -1034,20 +1034,8 @@ void PreCache(void)
 	int ticdelay = 0;
 	byte *tempbuf;
 
-	double Gs = (iGLOBAL_SCREENWIDTH * 100.0 / 320.0) / 100.0;
-
 	// SetTextMode (  );
 
-	/*
-	#define  PRECACHEBARX 28
-	#define  PRECACHEBARY 178
-
-	#define  PRECACHELED1X 9
-	#define  PRECACHELED1Y 8
-
-	#define  PRECACHELED2X 9
-	#define  PRECACHELED2Y 12
-	*/
 
 	if (CachingStarted == false)
 	{
@@ -1082,28 +1070,9 @@ void PreCache(void)
 				currentmem = MAXLEDS - 1;
 			while (lastmem <= currentmem)
 			{ // SetTextMode (  );
-				if (iGLOBAL_SCREENWIDTH == 320)
-				{
-					DrawNormalSprite(
-						PRECACHEBARX + PRECACHELED1X + (lastmem << 2),
-						PRECACHEBARY + PRECACHELED1Y,
-						W_GetNumForName("led1")); // led1 progressbar
-				}
-				else if (iGLOBAL_SCREENWIDTH == 640)
-				{
-					DrawNormalSprite(
-						72 + (Gs * (lastmem << 2)), 446,
-						W_GetNumForName("led1")); // led1 progressbar
-					DrawNormalSprite(
-						72 + (Gs * (lastmem << 2)), 446 + 3,
-						W_GetNumForName("led1")); // led1 progressbar
-					DrawNormalSprite(
-						72 + 3 + (Gs * (lastmem << 2)), 446,
-						W_GetNumForName("led1")); // led1 progressbar
-					DrawNormalSprite(
-						72 + 3 + (Gs * (lastmem << 2)), 446 + 3,
-						W_GetNumForName("led1")); // led1 progressbar
-				}
+				DrawNormalSprite(PRECACHEBARX + PRECACHELED1X + (lastmem << 2),
+								 PRECACHEBARY + PRECACHELED1Y,
+								 W_GetNumForName("led1")); // led1 progressbar
 
 				lastmem++;
 				VW_UpdateScreen(); // was missing, fixed
@@ -1112,28 +1081,10 @@ void PreCache(void)
 			while (lastcache <= currentcache)
 			{
 
-				if (iGLOBAL_SCREENWIDTH == 320)
-				{
-					DrawNormalSprite(
-						PRECACHEBARX + PRECACHELED2X + (lastcache << 2),
-						PRECACHEBARY + PRECACHELED2Y,
-						W_GetNumForName("led2")); // led2 progressbar
-				}
-				else if (iGLOBAL_SCREENWIDTH == 640)
-				{
-					DrawNormalSprite(
-						72 + (Gs * (lastcache << 2)), 458,
-						W_GetNumForName("led2")); // led2 progressbar
-					DrawNormalSprite(
-						72 + (Gs * (lastcache << 2)), 458 + 3,
-						W_GetNumForName("led2")); // led2 progressbar
-					DrawNormalSprite(
-						72 + 3 + (Gs * (lastcache << 2)), 458,
-						W_GetNumForName("led2")); // led2 progressbar
-					DrawNormalSprite(
-						72 + 3 + (Gs * (lastcache << 2)), 458 + 3,
-						W_GetNumForName("led2")); // led2 progressbar
-				}
+				DrawNormalSprite(PRECACHEBARX + PRECACHELED2X +
+									 (lastcache << 2),
+								 PRECACHEBARY + PRECACHELED2Y,
+								 W_GetNumForName("led2")); // led2 progressbar
 				DisableScreenStretch(); // bna++
 				VW_UpdateScreen();		// bna++
 				lastcache++;
@@ -1162,7 +1113,6 @@ void PreCache(void)
 			int width = 0;
 			int height = 0;
 			char buf[30] = { 0 }; // byte * shape;
-			double WHratio = (16200.0 / 200.0) / 100.0;
 			///	iGLOBAL_SCREENWIDTH = 640;
 			//	iGLOBAL_SCREENHEIGHT = 480;
 			DisableScreenStretch();
@@ -1174,8 +1124,8 @@ void PreCache(void)
 
 			strcpy(buf, "Press Any Key");
 			US_MeasureStr(&width, &height, "%s", &buf[0]);
-			PrintX = (iGLOBAL_SCREENWIDTH - (width)) / 2;
-			PrintY = WHratio * iGLOBAL_SCREENHEIGHT; // 162;
+			PrintX = (BASEWIDTH - width) / 2;
+			PrintY = 162;
 			// VWB_TBar (PrintX-2, PrintY-2, width+4, height+4);
 			US_BufPrint(&buf[0]);
 
@@ -2798,56 +2748,6 @@ void SetupMaskedWalls(void)
 		}
 }
 
-/*
-int GetAreaNumber ( int tilex, int tiley, int dir );
-void RemoveDangerWalls
-   (
-   void
-   )
-
-   {
-   int   i;
-   int   j;
-   unsigned short *map;
-   unsigned short  tile;
-
-   map = mapplanes[ 1 ];
-
-   for( j = 0; j < mapheight; j++ )
-	  {
-	  for( i = 0; i < mapwidth; i++ )
-		  {
-		 tile = *map++;
-		 switch( tile )
-			  {
-			case 256:
-			  case 257:
-			  case 258:
-			  case 259:
-			   if ( MAPSPOT( i, j, 2 ) == 0 )
-				  {
-				  MAPSPOT( i, j, 0 ) = ( unsigned short )( GetAreaNumber( i, j,
-					 ( tile - 256 ) << 1 ) + AREATILE );
-				  MAPSPOT( i, j, 1 ) = 0;
-				  }
-				 break;
-
-			case 300:
-			  case 318:
-			  case 336:
-			  case 354:
-			   if ( MAPSPOT( i, j, 2 ) == 0 )
-				  {
-				  MAPSPOT( i, j, 0 ) = ( unsigned short )( GetAreaNumber( i, j,
-					 ( ( tile - 300 ) / 9 ) + AREATILE ) );
-				  MAPSPOT( i, j, 1 ) = 0;
-				  }
-				 break;
-			}
-		 }
-	  }
-   }
-*/
 
 /*
 ==================

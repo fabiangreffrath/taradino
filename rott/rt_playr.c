@@ -1921,7 +1921,6 @@ void PollMouseButtons(void)
 			if (buttonmouse[i] != bt_nobutton)
 			{
 				buttonpoll[buttonmouse[i]] = true;
-				// bna added
 				if ((i == 1) && (usemouselook == true))
 				{
 					// if rightclick set horizon to 512 (normall)
@@ -1930,7 +1929,6 @@ void PollMouseButtons(void)
 					pstate->horizon = 512;
 					centering = true;
 				}
-				// bna added
 			}
 		}
 

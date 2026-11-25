@@ -34,24 +34,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //***************************************************************************
 
-#define PORTTILESWIDE 20 // all drawing takes place inside a
-#define PORTTILESHIGH 13 // non displayed port of this size
-
-#define UPDATEWIDE PORTTILESWIDE
-#define UPDATEHIGH PORTTILESHIGH
-#define UPDATESIZE (UPDATEWIDE * UPDATEHIGH)
-
 //***************************************************************************
 //
 // GLOBALS
 //
 //***************************************************************************
 
-extern byte *updateptr;
 extern unsigned int mapwidthtable[64];
-extern unsigned int uwidthtable[UPDATEHIGH];
-extern unsigned int blockstarts[UPDATEWIDE * UPDATEHIGH];
-extern byte update[UPDATESIZE];
 extern boolean screenfaded;
 
 //***************************************************************************
@@ -59,7 +48,6 @@ extern boolean screenfaded;
 // PROTOTYPES
 //
 //***************************************************************************
-void VL_MemStrechedToScreen(byte *source, int width, int height, int x, int y);
 void VL_MemToScreen(byte *source, int width, int height, int x, int y);
 void DrawTiledRegion(int x, int y, int width, int height, int offx, int offy,
 					 pic_t *tile);
@@ -70,7 +58,6 @@ void VWB_Hlin(int x1, int x2, int y, int color);
 void VWB_Vlin(int y1, int y2, int x, int color);
 void VWB_THlin(int x1, int x2, int y, boolean up);
 void VWB_TVlin(int y1, int y2, int x, boolean up);
-int VW_MarkUpdateBlock(int x1, int y1, int x2, int y2);
 void VW_UpdateScreen(void);
 
 void VH_UpdateScreen(void);

@@ -568,7 +568,6 @@ CP_MenuNames OptionsNames[] = {
 	"FLOOR AND CEILING",  "DOUBLE-CLICK SPEED", "MENU FLIP SPEED",
 	"DETAIL LEVELS",	  "VIOLENCE LEVEL",		"SCREEN SIZE"
 };
-// bna added
 CP_MenuNames ExtOptionsNames[] = { "MOUSE LOOK", "INVERT MOUSE", "CROSSHAIR",
 								   "FULLSCREEN", "ADLIB MUSIC" };
 CP_iteminfo ExtOptionsItems = { 20, MENU_Y,			 5,			  0,
@@ -580,7 +579,6 @@ CP_itemtype ExtOptionsMenu[] = {
 	{ 1, "", 'A', { NULL } },
 };
 
-// bna added end
 
 CP_iteminfo OptionsItems = { 20, MENU_Y, 9, 0, 43, OptionsNames, mn_largefont };
 
@@ -1201,6 +1199,21 @@ void ScanForSavedGames()
 		MainMenu[loadgame].active = CP_Inactive;
 }
 
+// Stores a 160x100 copy of the screen in column-major order.
+static void StoreScreenPicture(byte *dest)
+{
+	const int xstep = iGLOBAL_SCREENWIDTH / 160;
+	const int ystep = iGLOBAL_SCREENHEIGHT / 100;
+
+	for (int x = 0; x < 160; x++)
+	{
+		for (int y = 0; y < 100; y++)
+		{
+			*dest++ = bufferofs[y * ystep * iGLOBAL_SCREENWIDTH + x * xstep];
+		}
+	}
+}
+
 //******************************************************************************
 //
 // SetUpControlPanel ()
@@ -1209,17 +1222,8 @@ void ScanForSavedGames()
 
 void SetUpControlPanel(void)
 {
-	int i;
-	int j;
-	byte *b;
-	byte *s;
-
-	int Xres = 640;
-	int Yres = 400;
-
 	// Save the current game screen
 
-	// bna--savedscreen = SafeMalloc (16000);
 	savedscreen = SafeMalloc(16000 * 8);
 
 	// Copy the current save game screen (\xBD size) to this buffer
@@ -1233,27 +1237,7 @@ void SetUpControlPanel(void)
 		GamePaused = true;
 	}
 
-	s = savedscreen;
-
-	if (iGLOBAL_SCREENWIDTH == 320)
-	{
-		for (i = 0; i < Xres; i += 2)
-		{
-			b = (byte *)bufferofs + i;
-			for (j = 0; j < 100; j++, s++, b += (iGLOBAL_SCREENWIDTH << 1))
-				*s = *b;
-		}
-	}
-	if (iGLOBAL_SCREENWIDTH >= 640)
-	{
-		for (i = 0; i < Xres; i += 4)
-		{
-			b = (byte *)bufferofs + i; // schrink screen to 1/2 size
-			for (j = 0; j < (Yres / 4);
-				 j++, s++, b += (iGLOBAL_SCREENWIDTH << 1) * 2)
-				*s = *b;
-		}
-	}
+	StoreScreenPicture(savedscreen);
 
 	ScanForSavedGames();
 
@@ -2503,18 +2487,6 @@ boolean CP_DisplayMsg(char *s, int number)
 
 	IFont = (cfont_t *)W_CacheLumpName(FontNames[mn_smallfont], PU_CACHE,
 									   Cvt_cfont_t, 1);
-	/*
-	   DrawSTMenuBuf( WindowX, L_Y, W_W, W_H, false );
-	   MenuBufCPrint( s );
-
-	   DrawSTMenuBuf( Q_b1X, Q_bY, Q_bW, Q_bH, false );
-	   DrawMenuBufIString( Q_b1X + 3, Q_Y + 46, "YES", NORMALCOLOR );
-	//   DrawIMenuBufItem (PrintX, PrintY, W_GetNumForName (YES), NORMALCOLOR);
-
-	   DrawSTMenuBuf( Q_b2X, Q_bY, Q_bW, Q_bH, true );
-	   DrawMenuBufIString( Q_b2X + 2, Q_Y + 45, "NO", ACTIVECOLOR );
-	//   DrawIMenuBufItem (PrintX, PrintY, W_GetNumForName (NO), ACTIVECOLOR);
-	*/
 	if (number != 13)
 	{
 		while (!done)
@@ -3056,10 +3028,6 @@ int CP_LoadGame(int quick, int dieload)
 
 void QuickSaveGame(void)
 {
-	int i;
-	int j;
-	byte *b;
-	byte *s;
 	int which;
 	gamestorage_t game;
 	byte *buf;
@@ -3081,13 +3049,7 @@ void QuickSaveGame(void)
 	free(filename);
 	SafeFree(buf);
 
-	s = &game.picture[0];
-	for (i = 0; i < 320; i += 2)
-	{
-		b = (byte *)bufferofs + i;
-		for (j = 0; j < 100; j++, s++, b += (iGLOBAL_SCREENWIDTH << 1))
-			*s = *b;
-	}
+	StoreScreenPicture(&game.picture[0]);
 
 	ScanForSavedGames();
 	which = quicksaveslot;

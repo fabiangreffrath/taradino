@@ -45,11 +45,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 //******************************************************************************
 
-byte *updateptr;
 unsigned int mapwidthtable[64];
-unsigned int uwidthtable[UPDATEHIGH];
-unsigned int blockstarts[UPDATEWIDE * UPDATEHIGH];
-byte update[UPDATESIZE];
 byte palette1[256][3], palette2[256][3];
 boolean screenfaded;
 
@@ -61,174 +57,66 @@ boolean screenfaded;
 
 void VL_MemToScreen(byte *source, int width, int height, int x, int y)
 {
-	/* TODO please optimize me */
+	byte *ptr = source;
 
-	byte *ptr, *destline;
-	int plane, i, j;
-
-	ptr = source;
-
-	for (plane = 0; plane < 4; plane++)
+	for (int plane = 0; plane < 4; plane++)
 	{
-		for (j = 0; j < height; j++)
+		for (int j = 0; j < height; j++)
 		{
-			destline = (byte *)(bufferofs + ylookup[y + j] + x);
-
-			for (i = 0; i < width; i++)
+			for (int i = 0; i < width; i++)
 			{
-				//				if (ptr < bufferofs + toplimit) { //bnafix zxcvb
-				*(destline + i * 4 + plane) = *ptr++;
-				//				}
+				PutScaledPixel(bufferofs, x + i * 4 + plane, y + j, *ptr++);
 			}
 		}
 	}
 }
-// bna function start
 void VL_MemToScreenClipped(byte *source, int width, int height, int x, int y);
 void VL_MemToScreenClipped(byte *source, int width, int height, int x, int y)
 {
-	byte *ptr, *destline;
-	int plane, i, j; //,toplimit;
-	ptr = source;
-	for (plane = 0; plane < 4; plane++)
+	byte *ptr = source;
+
+	for (int plane = 0; plane < 4; plane++)
 	{
-		for (j = 0; j < height; j++)
+		for (int j = 0; j < height; j++)
 		{
-			destline = (byte *)(bufferofs + ylookup[y + j] + x);
-			for (i = 0; i < width; i++)
+			for (int i = 0; i < width; i++, ptr++)
 			{
 				if (*ptr != 255)
 				{
-					*(destline + i * 4 + plane) = *ptr++;
-				}
-				else
-				{
-					ptr++;
+					PutScaledPixel(bufferofs, x + i * 4 + plane, y + j, *ptr);
 				}
 			}
 		}
 	}
 }
 
-// copy picture to mem (bufferofs) in doublesize
-void VL_MemStrechedToScreen(byte *source, int width, int height, int x, int y)
-{
-	byte *ptr, *destline, *tmp, *o;
-	int plane, i, j;
-
-	tmp = bufferofs;
-	ptr = source;
-
-	for (plane = 0; plane < 4; plane++)
-	{
-		for (j = 0; j < height; j++)
-		{
-			destline = (byte *)(bufferofs + (iGLOBAL_SCREENWIDTH * j) +
-								ylookup[y + j] + x);
-			o = ptr;
-			for (i = 0; i < width; i += 1)
-			{
-				*(destline + i * 4 + plane) = *ptr;
-				destline++;
-				*(destline + i * 4 + plane) = *ptr++;
-			}
-			ptr = o;
-
-			destline = (byte *)(bufferofs + iGLOBAL_SCREENWIDTH +
-								(iGLOBAL_SCREENWIDTH * j) + ylookup[y + j] + x);
-			for (i = 0; i < width; i += 1)
-			{
-				*(destline + i * 4 + plane) = *ptr;
-				destline++;
-				*(destline + i * 4 + plane) = *ptr++;
-			}
-		}
-	}
-	bufferofs = tmp;
-}
-// bna function end
 
 //*************************************************************************
 //
-// DrawTiledRegion () - Fills the specified region with a tiled image
+// DrawTiledRegion () - Fills the specified region with a tiled image, scaled
+// like the rest of the interface
 //
 //*************************************************************************
 void DrawTiledRegion(int x, int y, int width, int height, int offx, int offy,
 					 pic_t *tile)
-
 {
-	byte *source;
-	byte *sourceoff;
-	int sourcex;
-	int sourcey;
-	int sourcewidth;
-	int sourceheight;
-	int plane;
-	int planesize;
-	byte *start;
-	byte *origdest;
-	byte *dest;
-	int startoffset;
-	int HeightIndex;
-	int WidthIndex;
+	const int scale = GetScreenScale();
+	const byte *const source = &tile->data;
+	const int planesize = tile->width * tile->height;
 
-	start = (byte *)(bufferofs + x + ylookup[y]);
-
-	source = &tile->data;
-	sourcewidth = tile->width;
-	sourceheight = tile->height;
-	if (offx >= sourcewidth)
+	for (int j = 0; j < height; j++)
 	{
-		offx %= sourcewidth;
-	}
-	if (offy >= sourceheight)
-	{
-		offy %= sourceheight;
-	}
+		const int row = ((offy + j) / scale) % tile->height;
+		byte *const dest = bufferofs + x + ylookup[y + j];
 
-	startoffset = offy * sourcewidth;
-	planesize = sourcewidth * sourceheight;
-
-	plane = 4;
-	while (plane > 0)
-	{
-		origdest = start + (4 - plane);
-
-		sourcey = offy;
-		sourceoff = source + startoffset;
-		HeightIndex = height;
-
-		while (HeightIndex--)
+		for (int i = 0; i < width; i++)
 		{
-			dest = origdest;
-			sourcex = offx;
-			WidthIndex = width;
-			while (WidthIndex--)
-			{
-				*dest = sourceoff[sourcex];
-				dest += 4;
+			const int column = i / scale;
+			const int plane = column % 4;
+			const int tilex = (offx + column / 4) % tile->width;
 
-				sourcex++;
-				if (sourcex >= sourcewidth)
-				{
-					sourcex = 0;
-				}
-			}
-
-			origdest += iGLOBAL_SCREENWIDTH;
-
-			sourceoff += sourcewidth;
-			sourcey++;
-			if (sourcey >= sourceheight)
-			{
-				sourcey = 0;
-				sourceoff = source;
-			}
+			dest[i] = source[plane * planesize + row * tile->width + tilex];
 		}
-
-		source += planesize;
-
-		plane--;
 	}
 }
 
@@ -240,10 +128,7 @@ void DrawTiledRegion(int x, int y, int width, int height, int offx, int offy,
 
 void VWB_DrawPic(int x, int y, pic_t *pic)
 {
-	if (((iGLOBAL_SCREENWIDTH > 320) && !StretchScreen) ||
-		VW_MarkUpdateBlock(x, y, x + (pic->width << 2) - 1,
-						   y + (pic->height) - 1))
-		VL_MemToScreen((byte *)&pic->data, pic->width, pic->height, x, y);
+	VL_MemToScreen((byte *)&pic->data, pic->width, pic->height, x, y);
 }
 
 //******************************************************************************
@@ -272,9 +157,7 @@ void VL_Bar(int x, int y, int width, int height, int color)
 
 void VWB_Bar(int x, int y, int width, int height, int color)
 {
-	if (((iGLOBAL_SCREENWIDTH > 320) && !StretchScreen) ||
-		VW_MarkUpdateBlock(x, y, x + width, y + height - 1))
-		VL_Bar(x, y, width, height, color);
+	VL_Bar(x * uiscale, y * uiscale, width * uiscale, height * uiscale, color);
 }
 
 //******************************************************************************
@@ -316,8 +199,7 @@ void VL_TBar(int x, int y, int width, int height)
 
 void VWB_TBar(int x, int y, int width, int height)
 {
-	if (VW_MarkUpdateBlock(x, y, x + width, y + height - 1))
-		VL_TBar(x, y, width, height);
+	VL_TBar(x * uiscale, y * uiscale, width * uiscale, height * uiscale);
 }
 
 //******************************************************************************
@@ -360,8 +242,7 @@ void VL_Vlin(int x, int y, int height, int color)
 
 void VWB_Hlin(int x1, int x2, int y, int color)
 {
-	if (VW_MarkUpdateBlock(x1, y, x2, y))
-		VW_Hlin(x1, x2, y, color);
+	VL_Bar(x1 * uiscale, y * uiscale, (x2 - x1 + 1) * uiscale, uiscale, color);
 }
 
 //******************************************************************************
@@ -372,8 +253,7 @@ void VWB_Hlin(int x1, int x2, int y, int color)
 
 void VWB_Vlin(int y1, int y2, int x, int color)
 {
-	if (VW_MarkUpdateBlock(x, y1, x, y2))
-		VW_Vlin(y1, y2, x, color);
+	VL_Bar(x * uiscale, y1 * uiscale, uiscale, (y2 - y1 + 1) * uiscale, color);
 }
 
 //******************************************************************************
@@ -442,8 +322,8 @@ void VL_TVlin(unsigned int x, unsigned int y, unsigned int height, boolean up)
 
 void VWB_THlin(int x1, int x2, int y, boolean up)
 {
-	if (VW_MarkUpdateBlock(x1, y, x2, y))
-		VW_THlin(x1, x2, y, up);
+	for (int i = 0; i < uiscale; i++)
+		VL_THlin(x1 * uiscale, y * uiscale + i, (x2 - x1 + 1) * uiscale, up);
 }
 
 //******************************************************************************
@@ -454,8 +334,8 @@ void VWB_THlin(int x1, int x2, int y, boolean up)
 
 void VWB_TVlin(int y1, int y2, int x, boolean up)
 {
-	if (VW_MarkUpdateBlock(x, y1, x, y2))
-		VW_TVlin(y1, y2, x, up);
+	for (int i = 0; i < uiscale; i++)
+		VL_TVlin(x * uiscale + i, y1 * uiscale, (y2 - y1 + 1) * uiscale, up);
 }
 
 /*
@@ -465,60 +345,6 @@ void VWB_TVlin(int y1, int y2, int x, boolean up)
 
 ================================================================================
 */
-
-//******************************************************************************
-//
-// VW_MarkUpdateBlock
-//
-// Takes a pixel bounded block and marks the tiles in bufferblocks
-// Returns 0 if the entire block is off the buffer screen
-//
-//******************************************************************************
-
-int VW_MarkUpdateBlock(int x1, int y1, int x2, int y2)
-{
-	int x, y, xt1, yt1, xt2, yt2, nextline;
-	byte *mark;
-
-	xt1 = x1 >> PIXTOBLOCK;
-	yt1 = y1 >> PIXTOBLOCK;
-
-	xt2 = x2 >> PIXTOBLOCK;
-	yt2 = y2 >> PIXTOBLOCK;
-
-	if (xt1 < 0)
-		xt1 = 0;
-	else if (xt1 >= UPDATEWIDE)
-		return 0;
-
-	if (yt1 < 0)
-		yt1 = 0;
-	else if (yt1 > UPDATEHIGH)
-		return 0;
-
-	if (xt2 < 0)
-		return 0;
-	else if (xt2 >= UPDATEWIDE)
-		xt2 = UPDATEWIDE - 1;
-
-	if (yt2 < 0)
-		return 0;
-	else if (yt2 >= UPDATEHIGH)
-		yt2 = UPDATEHIGH - 1;
-
-	mark = updateptr + uwidthtable[yt1] + xt1;
-	nextline = UPDATEWIDE - (xt2 - xt1) - 1;
-
-	for (y = yt1; y <= yt2; y++)
-	{
-		for (x = xt1; x <= xt2; x++)
-			*mark++ = 1; // this tile will need to be updated
-
-		mark += nextline;
-	}
-
-	return 1;
-}
 
 //******************************************************************************
 //
@@ -747,8 +573,6 @@ void VL_DecompressLBM(lbm_t *lbminfo, boolean flip)
 
 	VL_NormalizePalette(&pal[0]);
 
-	VW_MarkUpdateBlock(0, 0, 320, 200);
-
 	buf = (byte *)bufferofs;
 
 	while (ht--)
@@ -779,10 +603,7 @@ void VL_DecompressLBM(lbm_t *lbminfo, boolean flip)
 			count += rept;
 
 		} while (count < lbminfo->width);
-		if (iGLOBAL_SCREENWIDTH > 320)
-		{
-			buf += (iGLOBAL_SCREENWIDTH - 320); // eg 800 - 320)
-		}
+		buf += iGLOBAL_SCREENWIDTH - BASEWIDTH;
 	}
 
 	if (flip == true)
@@ -799,9 +620,9 @@ void VL_DecompressLBM(lbm_t *lbminfo, boolean flip)
 
 void SetBorderColor(int color)
 {
-	// bna section start
 
 	byte *cnt, *Ycnt, *b;
+	const int border = 5 * GetScreenScale();
 
 	b = (byte *)bufferofs;
 
@@ -810,14 +631,14 @@ void SetBorderColor(int color)
 	// paint top red line
 	for (cnt = b; cnt < b + viewwidth; cnt++)
 	{
-		for (Ycnt = cnt; Ycnt < cnt + (5 * iGLOBAL_SCREENWIDTH);
+		for (Ycnt = cnt; Ycnt < cnt + (border * iGLOBAL_SCREENWIDTH);
 			 Ycnt += iGLOBAL_SCREENWIDTH)
 		{
 			*Ycnt = color;
 		}
 	}
 	// paint left red line
-	for (cnt = b; cnt < b + 5; cnt++)
+	for (cnt = b; cnt < b + border; cnt++)
 	{
 		for (Ycnt = cnt; Ycnt < cnt + (viewheight * iGLOBAL_SCREENWIDTH);
 			 Ycnt += iGLOBAL_SCREENWIDTH)
@@ -826,7 +647,7 @@ void SetBorderColor(int color)
 		}
 	}
 	// paint right red line
-	for (cnt = b + (viewwidth - 5); cnt < b + viewwidth; cnt++)
+	for (cnt = b + (viewwidth - border); cnt < b + viewwidth; cnt++)
 	{
 		for (Ycnt = cnt; Ycnt < cnt + (viewheight * iGLOBAL_SCREENWIDTH);
 			 Ycnt += iGLOBAL_SCREENWIDTH)
@@ -835,8 +656,9 @@ void SetBorderColor(int color)
 		}
 	}
 	// paint lower red line
-	for (cnt = b + ((viewheight - 5) * iGLOBAL_SCREENWIDTH);
-		 cnt < b + ((viewheight - 5) * iGLOBAL_SCREENWIDTH) + viewwidth; cnt++)
+	for (cnt = b + ((viewheight - border) * iGLOBAL_SCREENWIDTH);
+		 cnt < b + ((viewheight - border) * iGLOBAL_SCREENWIDTH) + viewwidth;
+		 cnt++)
 	{
 		for (Ycnt = cnt; Ycnt < b + (viewheight * iGLOBAL_SCREENWIDTH);
 			 Ycnt += iGLOBAL_SCREENWIDTH)
@@ -844,7 +666,6 @@ void SetBorderColor(int color)
 			*Ycnt = color;
 		}
 	}
-	// bna section end
 }
 
 //****************************************************************************
@@ -856,7 +677,6 @@ void SetBorderColor(int color)
 void VL_DrawPostPic(int lumpnum)
 {
 	DrawPostPic(lumpnum);
-	VW_MarkUpdateBlock(0, 0, 319, 199);
 }
 
 //****************************************************************************
@@ -924,32 +744,23 @@ void VL_DrawLine(int x1, int y1, int x2, int y2, byte color)
 
 void DrawXYPic(int x, int y, int shapenum)
 {
-	byte *buffer;
-	byte *buf;
-	int xx, yy;
-	int plane;
-	byte *src;
-	pic_t *p;
+	const pic_t *const p =
+		(pic_t *)W_CacheLumpNum(shapenum, PU_CACHE, Cvt_pic_t, 1);
+	const byte *src = (byte *)&p->data;
 
-	p = (pic_t *)W_CacheLumpNum(shapenum, PU_CACHE, Cvt_pic_t, 1);
-
-	if ((x < 0) || ((x + (p->width << 2)) >= 320))
+	if ((x < 0) || ((x + (p->width << 2)) >= BASEWIDTH))
 		Error("DrawXYPic: x is out of range\n");
-	if ((y < 0) || ((y + p->height) >= 200))
+	if ((y < 0) || ((y + p->height) >= BASEHEIGHT))
 		Error("DrawXYPic: y is out of range\n");
 
-	buffer = (byte *)bufferofs + ylookup[y];
-
-	src = (byte *)&p->data;
-
-	for (plane = x; plane < x + 4; plane++)
+	for (int plane = 0; plane < 4; plane++)
 	{
-		VGAWRITEMAP((plane & 3));
-		for (yy = 0; yy < p->height; yy++)
+		for (int yy = 0; yy < p->height; yy++)
 		{
-			buf = buffer + ylookup[yy];
-			for (xx = 0; xx < p->width; xx++, buf++)
-				*(buf + plane + xx * 4) = *(src++);
+			for (int xx = 0; xx < p->width; xx++)
+			{
+				PutScaledPixel(bufferofs, x + plane + xx * 4, y + yy, *src++);
+			}
 		}
 	}
 }

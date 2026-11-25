@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "lumpy.h"
 #include "rt_util.h"
 #include "rt_vid.h"
+#include "modexlib.h"
 #include "rt_str.h"
 #include "rt_menu.h"
 #include "_rt_msg.h"
@@ -306,14 +307,7 @@ void SetMessage(int num, char *text, int flags)
 	int length;
 	boolean found;
 
-	if (iGLOBAL_SCREENWIDTH >= 640)
-	{
-		CurrentFont = newfont1; // smallfont;
-	}
-	else
-	{
-		CurrentFont = smallfont;
-	}
+	CurrentFont = smallfont;
 
 	length = StringLength(text);
 
@@ -432,14 +426,7 @@ void UpdateMessages(void)
 void DisplayMessage(int num, int position)
 {
 	PrintX = 1;
-	if (iGLOBAL_SCREENWIDTH > 320)
-	{
-		PrintY = 2 + (position * (9 * 2));
-	}
-	else
-	{
-		PrintY = 2 + (position * (9 * 1));
-	}
+	PrintY = 2 + position * 9;
 
 	if (SHOW_TOP_STATUS_BAR())
 	{
@@ -480,14 +467,7 @@ void DisplayMessage(int num, int position)
 		case MSG_MODEM:
 			fontcolor = egacolor[LIGHTBLUE];
 			DrawIString(PrintX, PrintY, "Message>", Messages[num].flags);
-			if (iGLOBAL_SCREENWIDTH == 320)
-			{
-				PrintX += 8 * 8;
-			}
-			else if (iGLOBAL_SCREENWIDTH == 640)
-			{
-				PrintX += 8 * 8 * 2;
-			}
+			PrintX += 8 * 8;
 
 			fontcolor = egacolor[LIGHTGRAY];
 			break;
@@ -530,10 +510,11 @@ void RestoreMessageBackground(void)
 	pic_t *shape;
 	int i;
 	int y;
+	const int scale = GetScreenScale();
 
 	if (UpdateMessageBackground > 0)
 	{
-		y = 18;
+		y = 18 * scale;
 		for (i = 0; i < MAXMSGS; i++)
 		{
 			if (EraseMessage[i])
@@ -546,27 +527,27 @@ void RestoreMessageBackground(void)
 						"backtile", PU_CACHE, Cvt_pic_t, 1); // w=32 h=8
 															 // SetTextMode ( );
 					// DrawTiledRegion( 0, y, 320, 9, 0, y, shape );KILLS_HEIGHT
-					// bna--
-					DrawTiledRegion(0, y, iGLOBAL_SCREENWIDTH, 9, 0, y, shape);
-					DrawTiledRegion(0, y + 8, iGLOBAL_SCREENWIDTH, 9, 0, y,
+					DrawTiledRegion(0, y, iGLOBAL_SCREENWIDTH, 9 * scale, 0, y,
 									shape);
-					DrawTiledRegion(0, y + 16, iGLOBAL_SCREENWIDTH, 9, 0, y,
-									shape);
+					DrawTiledRegion(0, y + 8 * scale, iGLOBAL_SCREENWIDTH,
+									9 * scale, 0, y, shape);
+					DrawTiledRegion(0, y + 16 * scale, iGLOBAL_SCREENWIDTH,
+									9 * scale, 0, y, shape);
 
 					// DrawTiledRegion( 0, y, iGLOBAL_SCREENWIDTH, 212, 0, y,
 					// shape );
 				}
 				if (viewsize == 0)
 				{
-					if ((y + 9 > YOURCPUSUCKS_Y) &&
-						(y < (YOURCPUSUCKS_Y + YOURCPUSUCKS_HEIGHT)))
+					if ((y + 9 * scale > YOURCPUSUCKS_Y * scale) &&
+						(y < (YOURCPUSUCKS_Y + YOURCPUSUCKS_HEIGHT) * scale))
 					{
 						DrawCPUJape();
 					}
 				}
 			}
 
-			y += 9;
+			y += 9 * scale;
 		}
 	}
 }

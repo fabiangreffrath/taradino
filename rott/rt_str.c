@@ -79,36 +79,25 @@ static char strbuf[MaxString];
 
 void VW_DrawClippedString(int x, int y, const char *string)
 {
-	int width, height, ht;
-	byte *source;
+	const int ht = CurrentFont->height;
+	const int oy = y;
 	int ch;
-	int oy;
-
-	ht = CurrentFont->height;
-
-	oy = y;
 
 	while ((ch = (unsigned char)*string++) != 0)
 	{
 		ch -= 31;
-		width = CurrentFont->width[ch];
-		source = ((byte *)CurrentFont) + CurrentFont->charofs[ch];
+		int width = CurrentFont->width[ch];
+		const byte *source = ((byte *)CurrentFont) + CurrentFont->charofs[ch];
+
 		while (width--)
 		{
-			if ((x >= 0) && (x < iGLOBAL_SCREENWIDTH))
+			y = oy;
+			for (int i = 0; i < ht; i++, source++, y++)
 			{
-				y = oy;
-				VGAWRITEMAP(x & 3);
-				height = ht;
-				while (height--)
+				if ((x >= 0) && (x < BASEWIDTH) && (y >= 0) &&
+					(y < BASEHEIGHT) && (*source > 0))
 				{
-					if ((y >= 0) && (y < iGLOBAL_SCREENHEIGHT))
-					{
-						if (*source > 0)
-							*((byte *)(bufferofs + ylookup[y] + x)) = *source;
-					}
-					source++;
-					y++;
+					PutScaledPixel(bufferofs, x, y, *source);
 				}
 			}
 			x++;
@@ -159,55 +148,40 @@ void US_ClippedPrint(int x, int y, const char *string)
 
 void VW_DrawPropString(const char *string)
 {
-	byte pix;
-	int width, step, height, ht;
-	byte *source, *dest, *origdest;
+	const int ht = CurrentFont->height;
 	int ch;
-
-	ht = CurrentFont->height;
-	dest = origdest = (byte *)(bufferofs + ylookup[py] + px);
 
 	while ((ch = (unsigned char)*string++) != 0)
 	{
 		ch -= 31;
-		width = step = CurrentFont->width[ch];
-		source = ((byte *)CurrentFont) + CurrentFont->charofs[ch];
+		int width = CurrentFont->width[ch];
+		const byte *source = ((byte *)CurrentFont) + CurrentFont->charofs[ch];
+
 		while (width--)
 		{
-			height = ht;
-			while (height--)
+			for (int i = 0; i < ht; i++, source++)
 			{
-				pix = *source;
-				if (pix)
-					*dest = pix;
-
-				source++;
-				dest += linewidth;
+				if (*source)
+					PutScaledPixel(bufferofs, px, py + i, *source);
 			}
-
 			px++;
-			origdest++;
-			dest = origdest;
 		}
 	}
 	bufferheight = ht;
-	bufferwidth = ((dest + 1) - origdest);
+	bufferwidth = 1;
 }
 
 //******************************************************************************
 //
 // VWB_DrawPropString ()
 //
-// Calls VW_DrawPropString then updates the mark block.
+// Same as VW_DrawPropString.
 //
 //******************************************************************************
 
 void VWB_DrawPropString(const char *string)
 {
-	int x;
-	x = px;
 	VW_DrawPropString(string);
-	VW_MarkUpdateBlock(x, py, px - 1, py + bufferheight - 1);
 }
 
 //******************************************************************************
@@ -220,55 +194,20 @@ void VWB_DrawPropString(const char *string)
 
 void VW_DrawIPropString(const char *string)
 {
-	byte pix;
-	int width, step, height, ht;
-	byte *source, *dest, *origdest;
-	int ch;
-
-	ht = CurrentFont->height;
-	dest = origdest = (byte *)(bufferofs + ylookup[py] + px);
-
-	while ((ch = (unsigned char)*string++) != 0)
-	{
-		ch -= 31;
-		width = step = CurrentFont->width[ch];
-		source = ((byte *)CurrentFont) + CurrentFont->charofs[ch];
-		while (width--)
-		{
-			height = ht;
-			while (height--)
-			{
-				pix = *source;
-				if (pix)
-					*dest = pix;
-
-				source++;
-				dest += linewidth;
-			}
-
-			px++;
-			origdest++;
-			dest = origdest;
-		}
-	}
-	bufferheight = ht;
-	bufferwidth = ((dest + 1) - origdest);
+	VW_DrawPropString(string);
 }
 
 //******************************************************************************
 //
 // VWB_DrawIPropString ()
 //
-// Calls VW_DrawIPropString then updates the mark block.
+// Same as VW_DrawIPropString.
 //
 //******************************************************************************
 
 void VWB_DrawIPropString(const char *string)
 {
-	int x;
-	x = px;
 	VW_DrawIPropString(string);
-	VW_MarkUpdateBlock(x, py, px - 1, py + bufferheight - 1);
 }
 
 //******************************************************************************
@@ -1331,74 +1270,22 @@ byte GetIntensityColor(byte pix)
 
 void DrawIntensityChar(char ch)
 {
+	const int ht = IFont->height;
+	const unsigned char index = ch - 31;
+	int width = IFont->width[index];
+	const byte *source = ((byte *)IFont) + IFont->charofs[index];
 
-	byte pix;
-	int width;
-	int height;
-	int ht;
-	byte *source;
-	byte *dest;
-	byte *origdest;
-
-	ht = IFont->height;
-
-	origdest = (byte *)(bufferofs + ylookup[py] + px);
-
-	dest = origdest;
-
-	ch -= 31;
-	width = IFont->width[(unsigned char)ch];
-	source = ((byte *)IFont) + IFont->charofs[(unsigned char)ch];
-
-	if ((iGLOBAL_SCREENWIDTH <= 320) || (StretchScreen == true))
+	while (width--)
 	{
-		while (width--)
+		for (int i = 0; i < ht; i++, source++)
 		{
-			height = ht;
-			while (height--)
+			if (*source != 0xFE)
 			{
-				pix = *source;
-				if (pix != 0xFE)
-				{
-					*dest = GetIntensityColor(pix);
-				}
-
-				source++;
-				dest += linewidth;
+				PutScaledPixel(bufferofs, px, py + i,
+							   GetIntensityColor(*source));
 			}
-
-			px++;
-			origdest++;
-			dest = origdest;
 		}
-	}
-	else
-	{ // strech letter in x any direction
-		while (width--)
-		{
-			height = ht;
-			while (height--)
-			{
-				pix = *source;
-				if (pix != 0xFE)
-				{
-					*dest = GetIntensityColor(pix);
-					*(dest + iGLOBAL_SCREENWIDTH) = GetIntensityColor(pix);
-
-					*(dest + 1) = GetIntensityColor(pix);
-					*(dest + 1 + iGLOBAL_SCREENWIDTH) = GetIntensityColor(pix);
-				}
-
-				source++;
-				dest += linewidth * 2;
-			}
-
-			px++;
-			px++;
-			origdest++;
-			origdest++;
-			dest = origdest;
-		}
+		px++;
 	}
 }
 
@@ -1467,7 +1354,6 @@ void DrawIString(unsigned short x, unsigned short y, const char *string,
 						fontcolor = GetColor(temp);
 						oldfontcolor = fontcolor;
 					}
-					// bna added
 					else if (temp == 'X')
 					{
 						temp = *string;
@@ -1486,7 +1372,6 @@ void DrawIString(unsigned short x, unsigned short y, const char *string,
 						fontcolor = egacolor[GREEN];
 						oldfontcolor = fontcolor;
 					}
-					// bna added end
 					//  Restore fontcolor to a previous color
 					else if (temp == 'O')
 					{

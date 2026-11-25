@@ -373,40 +373,6 @@ void DoGodMode(void)
 #include "byteordr.h" //bna++
 void DoWarp(void)
 {
-	/*
-		char str[10];
-		boolean esc;
-		int level;
-
-	   CurrentFont = smallfont;
-
-	   US_CenterWindow(26,3);
-		PrintY+=6;
-
-	   US_Print(" Warp to level(1-99):");
-
-	   VW_UpdateScreen();
-
-	   ShutdownClientControls();
-
-	   esc = !US_LineInput (px, py, str, NULL, true, 2, 25, 13);
-
-	   if (!esc)
-	   {
-		  level = ParseNum (str);
-		  if (level>0 && level<=99)
-		  {
-			 gamestate.mapon = level-1;
-			 playstate = ex_warped;
-			 gamestate.episode = GetEpisode (gamestate.mapon);
-		  }
-	   }
-
-	   while (Keyboard[sc_Escape])
-			IN_UpdateKeyboard ();
-	   IN_ClearKeyboardQueue ();
-
-	*/
 
 	int level;
 
@@ -425,18 +391,8 @@ void DoWarp(void)
 	CleanUpControlPanel();
 	ShutdownMenuBuf();
 
-	// bna++ section
-	if ((playstate == ex_stillplaying) && (iGLOBAL_SCREENWIDTH > 320))
-	{
-		pic_t *shape;
-		shape = (pic_t *)W_CacheLumpName("backtile", PU_CACHE, Cvt_pic_t, 1);
-		DrawTiledRegion(0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32,
-						0, 16, shape);
-		DisableScreenStretch(); // dont strech when we go BACK TO GAME
-		DrawPlayScreen(true);	// repaint ammo and life stat
-		VW_UpdateScreen();		// update screen
-	}
-	// bna section end
+	if (playstate == ex_stillplaying)
+		RestoreGameScreen();
 
 	EnableScreenStretch(); // bna++ shut on streech mode
 	while (Keyboard[sc_Escape])
@@ -480,10 +436,7 @@ void DoWarp(void)
 void DoJukeBox(void)
 
 {
-	if (iGLOBAL_SCREENWIDTH > 320)
-	{
-		EnableScreenStretch(); // bna++ shut on streech mode
-	}
+	EnableScreenStretch(); // bna++ shut on streech mode
 	StopWind();
 	ShutdownClientControls();
 
@@ -495,18 +448,8 @@ void DoJukeBox(void)
 	CleanUpControlPanel();
 	ShutdownMenuBuf();
 
-	// bna++ section
-	if ((playstate == ex_stillplaying) && (iGLOBAL_SCREENWIDTH > 320))
-	{
-		pic_t *shape;
-		shape = (pic_t *)W_CacheLumpName("backtile", PU_CACHE, Cvt_pic_t, 1);
-		DrawTiledRegion(0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32,
-						0, 16, shape);
-		DisableScreenStretch(); // dont strech when we go BACK TO GAME
-		DrawPlayScreen(true);	// repaint ammo and life stat
-		VW_UpdateScreen();		// update screen
-	}
-	// bna section end
+	if (playstate == ex_stillplaying)
+		RestoreGameScreen();
 
 	SetupScreen(true);
 
@@ -908,14 +851,6 @@ void OutfitPlayer()
 	DrawKeys(false);
 	HealPlayer(99, player);
 
-	/*
-	player->flags |= FL_BPV;
-	 player->flags &= ~(FL_GASMASK|FL_AV);
-	 locplayerstate->protectiontime = POWERUPTICS;
-	GM_DrawBonus (stat_bulletproof);
-
-	 GiveWeapon (player,wp_mp40);
-	*/
 
 #if (SHAREWARE == 0)
 	CheatSpawnItem(stat_splitmissile);

@@ -146,10 +146,6 @@ extern void VL_MemToScreenClipped(byte *source, int width, int height, int x,
 								  int y);
 void DrawPPic(int xpos, int ypos, int width, int height, byte *src, int num,
 			  boolean up, boolean bufferofsonly);
-extern void MoveScreenUpLeft();
-extern void MoveScreenUpRight();
-extern void MoveScreenDownLeft();
-extern void MoveScreenDownRight();
 //******************************************************************************
 //
 // V_ReDrawBkgnd ()
@@ -168,59 +164,54 @@ void V_ReDrawBkgnd(int x, int y, int width, int height, boolean shade)
 
 	origdest = (byte *)(bufferofs + ylookup[y] + x);
 
-	if (VW_MarkUpdateBlock(x, y, x + width - 1, y + height - 1))
+	for (planes = 0; planes < 4; planes++)
 	{
-		for (planes = 0; planes < 4; planes++)
+		src = (&(BkPic->data) + ((80 * 200) * m) + (80 * y) + (x >> 2));
+		dest = origdest;
+
+		dest += planes;
+
+		for (j = 0; j < height; j++)
 		{
-			src = (&(BkPic->data) + ((80 * 200) * m) + (80 * y) + (x >> 2));
-			dest = origdest;
-
-			dest += planes;
-
-			for (j = 0; j < height; j++)
+			for (k = 0; k < (width / 4); k++)
 			{
-				for (k = 0; k < (width / 4); k++)
+				if (shade)
 				{
-					if (shade)
-					{
-						*dest =
-							*(colormap + ((MENUSHADELEVEL >> 2) << 8) + *src++);
-					}
-					else
-					{
-						*dest = *src++;
-					}
-					dest += 4;
+					*dest = *(colormap + ((MENUSHADELEVEL >> 2) << 8) + *src++);
 				}
-
-				// draw the remainder.  did the DOS version even bother? - SBF
-				if ((width & 3) > planes)
+				else
 				{
-					if (shade)
-					{
-						*dest =
-							*(colormap + ((MENUSHADELEVEL >> 2) << 8) + *src);
-					}
-					else
-					{
-						*dest = *src;
-					}
+					*dest = *src++;
 				}
-
-				src += (80 - (width / 4));
-				dest += (linewidth - (width & ~3));
+				dest += 4;
 			}
 
-			m++;
-
-			mask <<= 1;
-
-			if (mask == 16)
+			// draw the remainder.  did the DOS version even bother? - SBF
+			if ((width & 3) > planes)
 			{
-				x += 4;
-				mask = 1;
-				m = 0;
+				if (shade)
+				{
+					*dest = *(colormap + ((MENUSHADELEVEL >> 2) << 8) + *src);
+				}
+				else
+				{
+					*dest = *src;
+				}
 			}
+
+			src += (80 - (width / 4));
+			dest += (linewidth - (width & ~3));
+		}
+
+		m++;
+
+		mask <<= 1;
+
+		if (mask == 16)
+		{
+			x += 4;
+			mask = 1;
+			m = 0;
 		}
 	}
 }
@@ -384,30 +375,8 @@ void DrawPlayScreen(boolean bufferofsonly)
 
 	if (SHOW_TOP_STATUS_BAR())
 	{
-		if (iGLOBAL_SCREENWIDTH == 640)
-		{
-			// use this as dummy pic to fill out missing bar
-			shape = (pic_t *)W_CacheLumpName("bottbar", PU_CACHE, Cvt_pic_t, 1);
-			// GameMemToScreen( shape, 0, 0, bufferofsonly );
-			GameMemToScreen(shape, 320, 0, bufferofsonly);
-			// delete hart in middle of topbar
-			DrawPPic(323, 1, 8 >> 2, 16, (byte *)&erase->data, 2, true,
-					 bufferofsonly);
-			// delete bullet in end of topbar
-			DrawPPic(620, 1, 8 >> 2, 16, (byte *)&erase->data, 2, true,
-					 bufferofsonly);
-			shape =
-				(pic_t *)W_CacheLumpName("stat_bar", PU_CACHE, Cvt_pic_t, 1);
-			GameMemToScreen(shape, 0, 0, bufferofsonly);
-		}
-		else if (iGLOBAL_SCREENWIDTH == 320)
-		{
-
-			// SetTextMode (  );
-			shape =
-				(pic_t *)W_CacheLumpName("stat_bar", PU_CACHE, Cvt_pic_t, 1);
-			GameMemToScreen(shape, 0, 0, bufferofsonly);
-		}
+		shape = (pic_t *)W_CacheLumpName("stat_bar", PU_CACHE, Cvt_pic_t, 1);
+		GameMemToScreen(shape, 0, 0, bufferofsonly);
 	}
 
 	if (BATTLEMODE)
@@ -435,32 +404,7 @@ void DrawPlayScreen(boolean bufferofsonly)
 
 			// GameMemToScreen( shape, 0, 160, bufferofsonly );bna++
 		}
-		// else
-		{
-
-			if (iGLOBAL_SCREENWIDTH == 640)
-			{
-				// bna fix - not to good? but no one has 286 any more
-				// statusbar dosent cover hole screen, because its a lump
-				// picture width max 320 first write dummy shape and next over
-				// it
-				GameMemToScreen(shape, 320, (224 * 2) + 16 - ShowKillsYoffset,
-								bufferofsonly);
-				// copy next shape to mem
-				GameMemToScreen(shape, 0, (224 * 2) + 16 - ShowKillsYoffset,
-								bufferofsonly);
-				// delete bullet in middle of shape picture
-				DrawPPic(310, (224 * 2) + 17 - ShowKillsYoffset, 8 >> 2, 16,
-						 (byte *)&erase->data, 2, true, bufferofsonly);
-				// delete hart in middle of shape picture
-				DrawPPic(324, (224 * 2) + 17 - ShowKillsYoffset, 8 >> 2, 16,
-						 (byte *)&erase->data, 2, true, bufferofsonly);
-			}
-			else
-			{
-				GameMemToScreen(shape, 0, 184, bufferofsonly);
-			}
-		}
+		GameMemToScreen(shape, 0, 184 - ShowKillsYoffset, bufferofsonly);
 
 		DrawBarAmmo(bufferofsonly);
 		DrawBarHealth(bufferofsonly);
@@ -468,18 +412,8 @@ void DrawPlayScreen(boolean bufferofsonly)
 		if (demoplayback)
 		{
 			shape = (pic_t *)W_CacheLumpName("demo", PU_CACHE, Cvt_pic_t, 1);
-			if (iGLOBAL_SCREENWIDTH == 640)
-			{
-				// DrawPPic( 148, 185, shape->width, shape->height,
-				//    ( byte * )&shape->data, 1, true, bufferofsonly );bna
-				DrawPPic(148 * 2, 465, shape->width, shape->height,
-						 (byte *)&shape->data, 1, true, bufferofsonly);
-			}
-			else
-			{
-				DrawPPic(148, 185, shape->width, shape->height,
-						 (byte *)&shape->data, 1, true, bufferofsonly);
-			}
+			DrawPPic(148, 185, shape->width, shape->height,
+					 (byte *)&shape->data, 1, true, bufferofsonly);
 		}
 	}
 
@@ -776,10 +710,10 @@ void DrawKills(boolean bufferofsonly)
 	//	 SetTextMode (  );
 	// Draw all the other losers
 	// #define KILLS_Y      176
-	iKILLS_Y = iGLOBAL_SCREENHEIGHT - 24;
+	iKILLS_Y = BASEHEIGHT - 24;
 	// draw blank status  pic->width = 8;pic->height = 24
 	pic = blankfragpic;
-	for (temp = iGLOBAL_SCREENWIDTH - pic->width - 24; temp > pic->width;
+	for (temp = BASEWIDTH - pic->width - 24; temp > pic->width;
 		 temp -= pic->width)
 	{
 		DrawPPic(temp, iKILLS_Y, pic->width, pic->height, (byte *)&pic->data, 1,
@@ -861,7 +795,7 @@ void DrawKills(boolean bufferofsonly)
 		// Advance to next position
 		xpos += KILLS_WIDTH;
 
-		if (xpos >= iGLOBAL_SCREENWIDTH)
+		if (xpos >= BASEWIDTH)
 		{
 			break;
 		}
@@ -869,7 +803,7 @@ void DrawKills(boolean bufferofsonly)
 
 	for (rank = BATTLE_NumberOfTeams; rank <= MAXKILLBOXES; rank++)
 	{
-		if (xpos >= iGLOBAL_SCREENWIDTH)
+		if (xpos >= BASEWIDTH)
 		{
 			break;
 		}
@@ -913,8 +847,7 @@ void DrawPlayers(void)
 	// Draw all the losers
 	CurrentFont = tinyfont;
 
-	xpos =
-		(iGLOBAL_SCREENWIDTH - min(numplayers, MAXKILLBOXES) * KILLS_WIDTH) / 2;
+	xpos = (BASEWIDTH - min(numplayers, MAXKILLBOXES) * KILLS_WIDTH) / 2;
 	// SetTextMode (  );//PLAYERSTATE
 	for (team = 0; team < BATTLE_NumberOfTeams; team++)
 	{
@@ -974,12 +907,12 @@ void DrawPlayers(void)
 					xpos += KILLS_WIDTH;
 				}
 			}
-			if (xpos >= iGLOBAL_SCREENWIDTH)
+			if (xpos >= BASEWIDTH)
 			{
 				break;
 			}
 		}
-		if (xpos >= iGLOBAL_SCREENWIDTH)
+		if (xpos >= BASEWIDTH)
 		{
 			break;
 		}
@@ -1022,20 +955,16 @@ void StatusDrawColoredPic(unsigned int x, unsigned int y, pic_t *nums,
 
 void DrawGameString(int x, int y, const char *str, boolean bufferofsonly)
 {
-	byte *tempbuf;
+	byte *const tempbuf = bufferofs;
 
 	px = x;
 	py = y;
 
-	if (bufferofsonly == true)
-		VW_DrawPropString(str);
-	else
-	{
-		tempbuf = bufferofs;
+	if (!bufferofsonly)
 		bufferofs = SCREEN_BUFFER;
-		VW_DrawPropString(str);
-		bufferofs = tempbuf;
-	}
+
+	VW_DrawPropString(str);
+	bufferofs = tempbuf;
 }
 
 //******************************************************************************
@@ -1520,6 +1449,34 @@ void DrawTime(boolean bufferofsonly)
 	}
 }
 
+// Draws the planar picture num times at step pixels apart, skipping color 255.
+static void DrawMaskedPlanes(byte *base, int xpos, int ypos, int width,
+							 int height, int heightmod, const byte *src,
+							 const byte *cmap, int num, int step)
+{
+	for (int plane = 0; plane < 4; plane++)
+	{
+		for (int y = 0; y < height; y++)
+		{
+			for (int x = 0; x < width; x++)
+			{
+				const byte pixel = cmap ? cmap[*src++] : *src++;
+
+				if (pixel == 255)
+					continue;
+
+				for (int k = 0; k < num; k++)
+				{
+					PutScaledPixel(base, xpos + x * 4 + plane + step * k,
+								   ypos + y, pixel);
+				}
+			}
+		}
+
+		src += heightmod * width;
+	}
+}
+
 //******************************************************************************
 //
 // DrawMPPic ()
@@ -1542,46 +1499,8 @@ void DrawTime(boolean bufferofsonly)
 void DrawMPPic(int xpos, int ypos, int width, int height, int heightmod,
 			   byte *src, boolean bufferofsonly)
 {
-	int olddest;
-	int dest;
-	int x;
-	int y;
-	int planes;
-	byte pixel;
-
-	olddest = ylookup[ypos] + xpos;
-
-	for (planes = 0; planes < 4; planes++)
-	{
-		dest = olddest;
-
-		dest += planes;
-
-		for (y = 0; y < height; y++)
-		{
-			for (x = 0; x < width; x++)
-			{
-				pixel = *src++;
-
-				if (pixel != 255)
-				{
-					if (bufferofsonly)
-						*(dest + bufferofs) = pixel;
-					else
-					{
-						*(dest + SCREEN_BUFFER) = pixel;
-					}
-				}
-
-				dest += 4;
-			}
-
-			dest += (linewidth - width * 4);
-		}
-
-		if (heightmod)
-			src += (heightmod * width);
-	}
+	DrawMaskedPlanes(bufferofsonly ? bufferofs : SCREEN_BUFFER, xpos, ypos,
+					 width, height, heightmod, src, NULL, 1, 0);
 }
 
 //******************************************************************************
@@ -1606,51 +1525,9 @@ void DrawMPPic(int xpos, int ypos, int width, int height, int heightmod,
 void DrawColoredMPPic(int xpos, int ypos, int width, int height, int heightmod,
 					  byte *src, boolean bufferofsonly, int color)
 {
-	int olddest;
-	int dest;
-	int x;
-	int y;
-	int planes;
-	byte pixel;
-	byte *cmap;
-
-	cmap = playermaps[color] + (1 << 12);
-
-	olddest = ylookup[ypos] + xpos;
-
-	for (planes = 0; planes < 4; planes++)
-	{
-		dest = olddest;
-
-		dest += planes;
-
-		for (y = 0; y < height; y++)
-		{
-			for (x = 0; x < width; x++)
-			{
-				pixel = *src++;
-
-				pixel = *(cmap + pixel);
-
-				if (pixel != 255)
-				{
-					if (bufferofsonly)
-						*(dest + bufferofs) = pixel;
-					else
-					{
-						*(dest + SCREEN_BUFFER) = pixel;
-					}
-				}
-
-				dest += 4;
-			}
-
-			dest += (linewidth - width * 4);
-		}
-
-		if (heightmod)
-			src += (heightmod * width);
-	}
+	DrawMaskedPlanes(bufferofsonly ? bufferofs : SCREEN_BUFFER, xpos, ypos,
+					 width, height, heightmod, src,
+					 playermaps[color] + (1 << 12), 1, 0);
 }
 
 //******************************************************************************
@@ -1756,53 +1633,8 @@ void DrawTriads(boolean bufferofsonly)
 void DrawPPic(int xpos, int ypos, int width, int height, byte *src, int num,
 			  boolean up, boolean bufferofsonly)
 {
-	int olddest;
-	int dest;
-	int x;
-	int y;
-	int planes;
-	byte pixel;
-	int k;
-	int amt;
-
-	if (up)
-		amt = 8;
-	else
-		amt = -8;
-
-	olddest = ylookup[ypos] + xpos;
-
-	for (planes = 0; planes < 4; planes++)
-	{
-		dest = olddest;
-
-		dest += planes;
-
-		for (y = 0; y < height; y++)
-		{
-			for (x = 0; x < width; x++)
-			{
-				pixel = *src++;
-
-				if (pixel != 255)
-				{
-					for (k = 0; k < num; k++)
-					{
-						if (bufferofsonly)
-							*(dest + bufferofs + (amt * k)) = pixel;
-						else
-						{
-							*(dest + SCREEN_BUFFER + (amt * k)) = pixel;
-						}
-					}
-				}
-
-				dest += 4;
-			}
-
-			dest += (linewidth - width * 4);
-		}
-	}
+	DrawMaskedPlanes(bufferofsonly ? bufferofs : SCREEN_BUFFER, xpos, ypos,
+					 width, height, 0, src, NULL, num, up ? 8 : -8);
 }
 
 //****************************************************************************
@@ -1944,48 +1776,8 @@ void DrawBarAmmo(boolean bufferofsonly)
 void SingleDrawPPic(int xpos, int ypos, int width, int height, byte *src,
 					int num, boolean up)
 {
-	byte *olddest;
-	byte *dest;
-	int x;
-	int y;
-	int planes;
-	byte pixel;
-	int k;
-	int amt;
-
-	if (up)
-		amt = 8;
-	else
-		amt = -8;
-
-	olddest = (byte *)(bufferofs - screenofs + ylookup[ypos] + xpos);
-
-	for (planes = 0; planes < 4; planes++)
-	{
-		dest = olddest;
-
-		dest += planes;
-
-		for (y = 0; y < height; y++)
-		{
-			for (x = 0; x < width; x++)
-			{
-				pixel = *src++;
-
-				if (pixel != 255)
-				{
-					for (k = 0; k < num; k++)
-					{
-						*(dest + (amt * k)) = pixel;
-					}
-				}
-
-				dest += 4;
-			}
-
-			dest += (linewidth - width * 4);
-		}
-	}
+	DrawMaskedPlanes(bufferofs - screenofs, xpos, ypos, width, height, 0, src,
+					 NULL, num, up ? 8 : -8);
 }
 
 //****************************************************************************
@@ -2133,86 +1925,8 @@ void DrawPause(void)
 		bufferofs = bufftemp;
 		p = (pic_t *)W_CacheLumpNum(W_GetNumForName("paused"), PU_CACHE,
 									Cvt_pic_t, 1);
-		DrawPauseXY((iGLOBAL_SCREENWIDTH - (p->width << 2)) >> 1,
-					(iGLOBAL_SCREENHEIGHT - p->height) >> 1); // bna++
-		// DrawPauseXY( (320-(p->width<<2) ) >>1, (200-p->height)>>1);
-		/*
-			  //buf = (byte *) SafeMalloc (64000);
-			  w = p->width;
-			  h = p->height;
-			  x = (iGLOBAL_SCREENWIDTH-((p->width)<<2) ) >>1;
-			  y = (iGLOBAL_SCREENHEIGHT-(p->height))>>1;
-
-			  x1 = (iGLOBAL_SCREENWIDTH-((p->width*2)<<2) ) >>1;
-			  y1 = (iGLOBAL_SCREENHEIGHT-(p->height*2))>>1;
-
-			  source = bufferofs + (iGLOBAL_SCREENWIDTH*y)+x;
-			  target = bufferofs + (iGLOBAL_SCREENWIDTH*y1)+x1;
-
-			 //
-		memcpy(tmpPICbuf,bufftemp,iGLOBAL_SCREENWIDTH*iGLOBAL_SCREENHEIGHT);
-
-			  bufferofs = bufftemp;//(byte *)tmpPICbuf;//buf;//write picture in
-		tmpbuf VL_MemToScreen ((byte *)&p->data, p->width, p->height,x, y);
-			  bufferofs = bufftemp;
-			  DrawEpisodeLevel (x,y);
-
-
-			  //VL_MemStrechedToScreen ((byte *)&p->data, p->width,
-		p->height,(iGLOBAL_SCREENWIDTH-((p->width*2)<<2) ) >>1,
-		(iGLOBAL_SCREENHEIGHT-(p->height*2))>>1);
-			  //DrawEpisodeLevel (x,y);
-
-			  //VL_MemToScreen ((byte *)&p->data, p->width, p->height,0, 0);
-			  //bufferofs = bufftemp;//move ptr back
-			  //write it back to bufferofs while streching
-
-			  //buf = bufftemp;
-			  //b = tmpPICbuf ;
-
-			  source = bufferofs + (iGLOBAL_SCREENWIDTH*y)+x+(w*4);
-			  target = bufferofs + (iGLOBAL_SCREENWIDTH*y1)+x+(2*w*4);
-
-			  //first strech lines in x direction
-			  for (y=0;y<h;y++){
-				c=target;t2=source;
-				for (x=0;x<w*4;x++){
-					*target-- = *source;
-					*target-- = *source--;
-				}
-				target=c;source=t2;
-				target += iGLOBAL_SCREENWIDTH;
-				source += iGLOBAL_SCREENWIDTH;
-			  }
-			  //strech then lines in y direction
-			  source -= ((iGLOBAL_SCREENWIDTH*(y/2))+(w*4));//bufferofs +
-		(iGLOBAL_SCREENWIDTH*y)+x+(iGLOBAL_SCREENWIDTH*(y)); target =
-		(source+(iGLOBAL_SCREENWIDTH*(y))+1);//bufferofs +
-		(iGLOBAL_SCREENWIDTH*y)+x+(iGLOBAL_SCREENWIDTH*(y1));
-
-			  for (y=0;y<h;y++){
-				memcpy(target,source,(w*4*2));
-				memcpy(target+iGLOBAL_SCREENWIDTH,source,(w*4*2));
-
-				target -= iGLOBAL_SCREENWIDTH*2;
-				source -= iGLOBAL_SCREENWIDTH;
-			  }
-
-		/ *
-			  for (y=0;y<h;y++){
-				c=target;t2=source;
-				for (x=0;x<w*4;x++){
-					*target = *source;
-					*(target+++iGLOBAL_SCREENWIDTH) = *source;
-					*target = *source;
-					*(target+++iGLOBAL_SCREENWIDTH) = *source;
-					source++;
-				}
-				target=c;source=t2;
-				target += iGLOBAL_SCREENWIDTH*2;
-				source += iGLOBAL_SCREENWIDTH;
-			  }
-		*/
+		DrawPauseXY((BASEWIDTH - (p->width << 2)) >> 1,
+					(BASEHEIGHT - p->height) >> 1);
 
 		//	  memcpy(
 		//bufftemp,tmpPICbuf,iGLOBAL_SCREENWIDTH*iGLOBAL_SCREENHEIGHT);
@@ -2221,9 +1935,8 @@ void DrawPause(void)
 	{
 		p = (pic_t *)W_CacheLumpNum(W_GetNumForName("wait"), PU_CACHE,
 									Cvt_pic_t, 1);
-		DrawPauseXY((iGLOBAL_SCREENWIDTH - (p->width << 2)) >> 1,
-					(iGLOBAL_SCREENHEIGHT - p->height) >> 1); // bna++
-		// DrawPauseXY( (320-(p->width<<2) ) >>1, (200-p->height)>>1);
+		DrawPauseXY((BASEWIDTH - (p->width << 2)) >> 1,
+					(BASEHEIGHT - p->height) >> 1);
 	}
 	//   VH_UpdateScreen () ;
 
@@ -2455,7 +2168,6 @@ void DrawEpisodeLevel(int x, int y)
 	{
 		ltoa(gamestate.episode, str, 10);
 
-		// bna-- Drawpic (x+29, y+16, 8>>2, 16, (byte
 		// *)&timenums[str[0]-'0']->data);
 		VL_MemToScreenClipped((byte *)&timenums[str[0] - '0']->data, 8 >> 2, 16,
 							  x + 29, y + 16);
@@ -2542,26 +2254,11 @@ void DrawEpisodeLevel(int x, int y)
 
 void GM_MemToScreen(byte *source, int width, int height, int x, int y)
 {
-	int destofs;
-	byte *dest;
-	byte *screen;
-	int plane;
+	byte *const tempbuf = bufferofs;
 
-	destofs = ylookup[y] + x;
-
-	dest = (byte *)(destofs + SCREEN_BUFFER);
-
-	for (plane = 0; plane < 4; plane++)
-	{
-		screen = dest;
-		for (y = 0; y < height; y++, screen += linewidth, source += width)
-		{
-			for (x = 0; x < width; x++)
-			{
-				screen[x * 4 + plane] = source[x];
-			}
-		}
-	}
+	bufferofs = SCREEN_BUFFER;
+	VL_MemToScreen(source, width, height, x, y);
+	bufferofs = tempbuf;
 }
 
 //==========================================================================
@@ -2592,25 +2289,23 @@ void ScreenShake(void)
 		{
 			case 0:
 				displayofs += 1;
-				MoveScreenUpLeft();	  // SetTextMode (  );
+				MoveScreen(-1, -1);
 				DrawPlayScreen(true); // repaint ammo and life stat
 				break;
 
 			case 1:
 				displayofs -= 1;
-				MoveScreenUpRight();
+				MoveScreen(1, -1);
 				DrawPlayScreen(true); // repaint ammo and life stat
 				break;
 
 			case 2:
-				displayofs += 3 * iGLOBAL_SCREENBWIDE;
-				MoveScreenDownLeft();
+				MoveScreen(-1, 1);
 				DrawPlayScreen(true); // repaint ammo and life stat
 				break;
 
 			case 3:
-				displayofs -= 3 * iGLOBAL_SCREENBWIDE;
-				MoveScreenDownRight();
+				MoveScreen(1, 1);
 				DrawPlayScreen(true); // repaint ammo and life stat
 				break;
 		}
@@ -3049,7 +2744,6 @@ void DrawEndBonus(char *string, char *bonusstring, int type)
 
 		case 2:
 			VL_FillPalette(255, 255, 255);
-			// bna--VW_UpdateScreen();
 			VL_FadeIn(0, 255, origpal, 10);
 			EndBonusVoice = SD_Play(SD_LIGHTNINGSND);
 			break;
@@ -3057,7 +2751,6 @@ void DrawEndBonus(char *string, char *bonusstring, int type)
 
 	EndBonusStartY += 10;
 
-	// bna--VW_UpdateScreen();
 	while (SD_SoundActive(EndBonusVoice) && !EndBonusSkip)
 	{
 		if (IN_CheckAck())
@@ -3207,27 +2900,12 @@ void LevelCompleted(exit_t playstate)
 	}
 
 	DrawEOLHeader(playstate);
-	/*
-		//bna section  store picture  because its written on again
-	   // store screen first
-	   picbuf = (byte *)SafeMalloc (64000);
-	   memcpy(picbuf ,bufferofs ,64000);
-
-	   EnableScreenStretch();
-	   VW_UpdateScreen();//tmpPICbuf is destroyed here
-	   DisableScreenStretch();
-	   //copy it back
-
-	   memcpy(bufferofs ,picbuf , 64000);
-		//bna section end
-	*/
 
 	EndBonusSkip = true;
 
 	while (SD_SoundActive(EndBonusVoice) && !EndBonusSkip)
 	{
 
-		// bna--VW_UpdateScreen();
 
 		if (IN_CheckAck())
 		{
@@ -3435,11 +3113,9 @@ void LevelCompleted(exit_t playstate)
 		}
 	}
 
-	// bna section
 	//    EnableScreenStretch();//bna++
 	VW_UpdateScreen(); // bna++
 	//    DisableScreenStretch();//bna++
-	// bna section end
 
 	IN_StartAck();
 	while (!IN_CheckAck())
@@ -3509,7 +3185,6 @@ void DrawTallyHeader(int which)
 			VWB_DrawPic(8, 24, Name);
 			VWB_DrawPic(136, 24, TimesPersonKilledYou);
 			break;
-			// bna added
 		case 4:
 			VWB_DrawPic(198 + 48, 8, Blank);
 			VWB_DrawPic(8, 8, TopBar);
@@ -3521,7 +3196,6 @@ void DrawTallyHeader(int which)
 			VWB_DrawPic(198 + 48, 24, Blank);
 			VWB_DrawPic(272, 24, Score);
 			break;
-			// bna added end
 	}
 
 	DrawTimeXY(TALLYTIME_X, TALLYTIME_Y, gamestate.TimeCount / VBLCOUNTER,

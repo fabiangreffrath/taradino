@@ -82,13 +82,11 @@ void W_AddFile(char *_filename)
 	strncpy(filename, _filename, sizeof(filename));
 	filename[sizeof(filename) - 1] = '\0';
 
-	// bna section start
 	if (access(filename, 0) != 0)
 	{
 		printf("Error, Could not find User file '%s', ignoring file\n",
 			   filename);
 	}
-	// bna section end
 
 	//
 	// read the entire file in

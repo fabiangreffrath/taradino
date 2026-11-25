@@ -69,7 +69,8 @@ Global Variables GLOBAL VARIABLES
 =============================================================================
 */
 
-int iG_masked;
+// Whether the transition rotates the real screen instead of the 320x200 one.
+static boolean rotatehires;
 
 byte *shadingtable;
 
@@ -2678,7 +2679,6 @@ void DoLoadGameSequence(void)
 	int time;
 	int i;
 	byte *destscreen;
-	pic_t *shape; // bna++
 
 	fizzlein = false;
 	x = (18 + SaveGamePicX) << 16;
@@ -2719,14 +2719,10 @@ void DoLoadGameSequence(void)
 	SafeFree(destscreen);
 	CalcTics();
 	CalcTics();
-	// bna++ section
-	shape = (pic_t *)W_CacheLumpName("backtile", PU_CACHE, Cvt_pic_t, 1);
-	DrawTiledRegion(0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32, 0,
-					16, shape); // bna++
+	DrawViewBackground();
 	DrawPlayScreen(false);
 	DisableScreenStretch();
 	SHAKETICS = 0xFFFF;
-	// bna section end
 }
 
 //******************************************************************************
@@ -2741,7 +2737,7 @@ void StartupRotateBuffer(int masked)
 	int k; ////zxcv
 	int a, b;
 
-	iG_masked = masked;
+	rotatehires = !masked && GetScreenScale() > 1;
 
 	if (RotateBufferStarted == true)
 		return;
@@ -2750,42 +2746,12 @@ void StartupRotateBuffer(int masked)
 
 	//   RotatedImage=SafeMalloc(131072);org
 	// RotatedImage=SafeMalloc(131072*8);
-	if (iGLOBAL_SCREENWIDTH == 320)
-	{
-		RotatedImage = SafeMalloc(131072);
-	}
-	else if (iGLOBAL_SCREENWIDTH == 640)
-	{
-		RotatedImage = SafeMalloc(131072 * 4);
-	}
-	// SetupScreen(false);//used these 2 to test screen size
-	// VW_UpdateScreen ();
-	if (masked == 0)
-	{
-		if (iGLOBAL_SCREENWIDTH == 320)
-		{
-			memset(RotatedImage, 0, 131072);
-		}
-		else if (iGLOBAL_SCREENWIDTH == 640)
-		{
-			memset(RotatedImage, 0, 131072 * 4);
-		}
-	}
-	else
-	{
-		if (iGLOBAL_SCREENWIDTH == 320)
-		{
-			memset(RotatedImage, 0xff, 131072);
-		}
-		else if (iGLOBAL_SCREENWIDTH == 640)
-		{
-			memset(RotatedImage, 0xff, 131072 * 4);
-		}
-	}
-	// memset(RotatedImage,0xff,131072);//org
-	// memset(RotatedImage,0xff,131072*8);
+	const int imagesize = rotatehires ? 131072 * 4 : 131072;
 
-	if ((masked == false) && (iGLOBAL_SCREENWIDTH == 640))
+	RotatedImage = SafeMalloc(imagesize);
+	memset(RotatedImage, masked ? 0xff : 0, imagesize);
+
+	if (rotatehires)
 	{
 		DisableScreenStretch();
 		k = (28 * 512); // 14336;
@@ -2799,7 +2765,7 @@ void StartupRotateBuffer(int masked)
 			}
 		}
 	}
-	else if ((masked == true) || (iGLOBAL_SCREENWIDTH == 320))
+	else
 	{
 		for (a = 0; a < 200; a++)
 		{
@@ -2845,7 +2811,6 @@ void ScaleAndRotateBuffer(int startangle, int endangle, int startscale,
 	int scale;
 	int i;
 
-	// bna section
 	//    int Xh = 160;//org
 	//    int Yh = 100;//org
 
@@ -2884,18 +2849,13 @@ void ScaleAndRotateBuffer(int startangle, int endangle, int startscale,
 	CalcTics();
 	CalcTics();
 	// I_Delay (240);//bna++
-	// bna++ section
 	if (playstate == ex_stillplaying)
 	{ // bna++
-		pic_t *shape;
-		shape = (pic_t *)W_CacheLumpName("backtile", PU_CACHE, Cvt_pic_t, 1);
-		DrawTiledRegion(0, 16, iGLOBAL_SCREENWIDTH, iGLOBAL_SCREENHEIGHT - 32,
-						0, 16, shape); // bna++
+		DrawViewBackground();
 		DisableScreenStretch();		   // dont strech when we go BACK TO GAME
 		DrawPlayScreen(true);		   // repaint ammo and life stat
 	}
 }
-// bna section end
 
 //******************************************************************************
 //
@@ -2940,16 +2900,18 @@ void DrawRotatedScreen(int cx, int cy, byte *destscreen, int angle, int scale,
 	//   c = c/2; //these values are to rotate degres or?
 	//   s = s/2;
 	//   xst & xct= start center values ;
-	if ((iGLOBAL_SCREENWIDTH == 320) || (masked == true))
+	if (!rotatehires)
 	{
 		xst = (((-cx) * s) + (128 << 16)) - (cy * c);
 		xct = (((-cx) * c) + (256 << 16) + (1 << 18) - (1 << 16)) + (cy * s);
 	}
-	else if ((iGLOBAL_SCREENWIDTH == 640) && (masked == false))
+	else
 	{
-		xst = (((-cx) * s) + ((268) << 16)) - (cy * c);
+		// The image sits 28 rows down in the rotation buffer.
+		xst =
+			(((-cx) * s) + ((28 + iGLOBAL_SCREENHEIGHT / 2) << 16)) - (cy * c);
 		xct = (((-cx) * c) + ((317) << 16) + (1 << 18) - (1 << 16)) + (cy * s);
-	} // y=268;x=317
+	}
 
 	mr_xstep = s;
 	mr_ystep = c;
@@ -3249,16 +3211,6 @@ void StartupScreenSaver(void)
 	ScreenSaver = (screensaver_t *)SafeMalloc(sizeof(screensaver_t));
 	ScreenSaver->phase = 0;
 	ScreenSaver->pausetime = PAUSETIME;
-	if (iGLOBAL_SCREENWIDTH == 320)
-	{
-		ScreenSaver->pausex = 120;
-		ScreenSaver->pausey = 84;
-	}
-	else if (iGLOBAL_SCREENWIDTH == 640)
-	{
-		ScreenSaver->pausex = 240;
-		ScreenSaver->pausey = 201;
-	}
 	ScreenSaver->pausex = 120;
 	ScreenSaver->pausey = 84;
 	SetupScreenSaverPhase();
@@ -3278,7 +3230,6 @@ void ShutdownScreenSaver(void)
 
 	ShutdownRotateBuffer();
 	SafeFree(ScreenSaver);
-	// bna section
 	StartupClientControls();
 }
 
@@ -3345,16 +3296,8 @@ void UpdateScreenSaver(void)
 	if (ScreenSaver->pausetime <= 0)
 	{
 		ScreenSaver->pausetime = PAUSETIME;
-		if (iGLOBAL_SCREENWIDTH == 320)
-		{
-			ScreenSaver->pausex = RandomNumber("pausex", 0) % 240;
-			ScreenSaver->pausey = RandomNumber("pausey", 0) % 168;
-		}
-		else if (iGLOBAL_SCREENWIDTH == 640)
-		{
-			ScreenSaver->pausex = RandomNumber("pausex", 0) % 480;
-			ScreenSaver->pausey = RandomNumber("pausey", 0) % 403;
-		}
+		ScreenSaver->pausex = RandomNumber("pausex", 0) % 240;
+		ScreenSaver->pausey = RandomNumber("pausey", 0) % 168;
 	}
 	DrawPauseXY(ScreenSaver->pausex, ScreenSaver->pausey);
 
@@ -5055,7 +4998,7 @@ void DrawRotRow(int count, byte *dest, byte *src)
 	ecx = mr_yfrac;
 	edx = mr_xfrac;
 
-	if ((iGLOBAL_SCREENWIDTH == 320) || (iG_masked == true))
+	if (!rotatehires)
 	{
 		while (count--)
 		{
@@ -5075,7 +5018,7 @@ void DrawRotRow(int count, byte *dest, byte *src)
 			ecx += mr_ystep;
 		}
 	}
-	else if (iGLOBAL_SCREENWIDTH == 640)
+	else
 	{
 		while (count--)
 		{
@@ -5142,20 +5085,6 @@ void DrawSkyPost(byte *buf, byte *src, int height)
 		//
 	}
 
-	/*
-	int lw = linewidth * 2;
-	int h  = height;
-
-	while (h--) {
-		*(buf) = shadingtable[*src];
-		buf += lw;
-		*(buf) = shadingtable[*src];
-		buf += lw;
-
-		//buf += lw;
-		src++;
-
-	}*/
 }
 
 #define CEILINGCOLOR 24 // default color when no sky or floor

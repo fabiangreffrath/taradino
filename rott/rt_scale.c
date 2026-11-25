@@ -980,7 +980,7 @@ void DrawScreenSizedSprite(int lump)
 		// a new buffer (size=800x600) and slowed the game down so ?
 
 		// if its the gasmask, paint black patches at hires
-		if ((lump == G_gmasklump) && (iGLOBAL_SCREENWIDTH > 320))
+		if ((lump == G_gmasklump) && (GetScreenScale() > 1))
 		{
 			src = ((p->collumnofs[frac >> SFRACBITS]) + shape);
 			offset = *(src++);
@@ -1054,6 +1054,21 @@ void DrawNormalPost(byte *src, byte *buf)
 	}
 }
 
+// Draws one column of the patch at the base position x, y.
+static void DrawScaledPost(const byte *src, int x, int y)
+{
+	while (*src != 0xff)
+	{
+		const int offset = *src++;
+		const int length = *src++;
+
+		for (int i = 0; i < length; i++)
+			PutScaledPixel(bufferofs, x, y + offset + i, src[i]);
+
+		src += length;
+	}
+}
+
 //******************************************************************************
 //
 // DrawNormalSprite
@@ -1062,34 +1077,18 @@ void DrawNormalPost(byte *src, byte *buf)
 
 void DrawNormalSprite(int x, int y, int shapenum)
 {
-	byte *buffer;
-	int cnt;
-	byte *shape;
-	patch_t *p;
-	byte *b;
-	int startx;
+	byte *const shape = W_CacheLumpNum(shapenum, PU_CACHE, Cvt_patch_t, 1);
+	const patch_t *const p = (patch_t *)shape;
+	const int startx = x - p->leftoffset;
+	const int starty = y - p->topoffset;
 
-	shape = W_CacheLumpNum(shapenum, PU_CACHE, Cvt_patch_t, 1);
-	p = (patch_t *)shape;
+	if ((startx < 0) || ((startx + p->width) * uiscale > iGLOBAL_SCREENWIDTH))
+		Error("DrawNormalSprite: x is out of range x=%d\n", startx + p->width);
+	if ((starty < 0) || ((starty + p->height) * uiscale > iGLOBAL_SCREENHEIGHT))
+		Error("DrawNormalSprite: y is out of range y=%d\n", starty + p->height);
 
-	if (((x - p->leftoffset) < 0) ||
-		((x - p->leftoffset + p->width) > iGLOBAL_SCREENWIDTH))
-		Error("DrawNormalSprite: x is out of range x=%d\n",
-			  x - p->leftoffset + p->width);
-	if (((y - p->topoffset) < 0) ||
-		((y - p->topoffset + p->height) > iGLOBAL_SCREENHEIGHT))
-		Error("DrawNormalSprite: y is out of range y=%d\n",
-			  y - p->topoffset + p->height);
-
-	startx = x - p->leftoffset;
-	buffer = (byte *)bufferofs + ylookup[y - p->topoffset];
-
-	{
-		b = buffer + startx;
-
-		for (cnt = 0; cnt < p->width; cnt++, b++)
-			DrawNormalPost((byte *)(p->collumnofs[cnt] + shape), b);
-	}
+	for (int cnt = 0; cnt < p->width; cnt++)
+		DrawScaledPost(p->collumnofs[cnt] + shape, startx + cnt, starty);
 }
 
 void R_DrawColumn(byte *buf)

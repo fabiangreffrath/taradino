@@ -459,7 +459,7 @@ void CheckCommandLineParameters(void)
 		printf("   RESOLUTION - Specify the screen resolution to use\n");
 		printf("                next param is <WIDTHxHEIGHT>\n");
 		printf("                valid resolutions are:\n");
-		printf("                320x200 and 640x480\n");
+		printf("                320x200 and 640x400\n");
 #if (SHAREWARE == 0)
 		printf("   FILERTL    - Load user levels (RTL files)\n");
 		printf("                next parameter is RTL file name\n");
@@ -675,7 +675,7 @@ void SetupWads(void)
 					int width, height;
 					if ((sscanf(_argv[i], "%dx%d", &width, &height) == 2) &&
 						(((width == 320) && (height == 200)) ||
-						 ((width == 640) && (height == 480))))
+						 ((width == 640) && (height == 400))))
 					{
 						iGLOBAL_SCREENWIDTH = width;
 						iGLOBAL_SCREENHEIGHT = height;
@@ -865,8 +865,6 @@ void PlayTurboGame(void)
 void Init_Tables(void)
 {
 	int i;
-	int x, y;
-	unsigned int *blockstart;
 	byte *shape;
 
 	memset(CWD, 0, sizeof(CWD));
@@ -877,16 +875,6 @@ void Init_Tables(void)
 	memcpy(origpal, W_CacheLumpName("pal", PU_CACHE, CvtNull, 1), 768);
 
 	FindEGAColors();
-
-	for (i = 0; i < PORTTILESHIGH; i++)
-		uwidthtable[i] = UPDATEWIDE * i;
-
-	updateptr = &update[0];
-
-	blockstart = &blockstarts[0];
-	for (y = 0; y < UPDATEHIGH; y++)
-		for (x = 0; x < UPDATEWIDE; x++)
-			*blockstart++ = iG_SCREENWIDTH * 16 * y + x * TILEWIDTH;
 
 	for (i = 0; i < 0x300; i++)
 		*(origpal + (unsigned int)i) = (*(origpal + (unsigned int)i)) >> 2;
@@ -1663,20 +1651,9 @@ void PauseLoop(void)
 		oldpolltime++;
 		if (GamePaused == false)
 		{
-			// bna++ section
-			if ((playstate == ex_stillplaying) && (iGLOBAL_SCREENWIDTH > 320))
-			{
-				pic_t *shape;
-				shape = (pic_t *)W_CacheLumpName("backtile", PU_CACHE,
-												 Cvt_pic_t, 1);
-				DrawTiledRegion(0, 16, iGLOBAL_SCREENWIDTH,
-								iGLOBAL_SCREENHEIGHT - 32, 0, 16, shape);
-				DisableScreenStretch(); // dont strech when we go BACK TO GAME
-				DrawPlayScreen(true);	// repaint ammo and life stat
-				VW_UpdateScreen();		// update screen
-			}
+			if (playstate == ex_stillplaying)
+				RestoreGameScreen();
 			StartupClientControls();
-			// bna section end
 			break;
 		}
 	}
