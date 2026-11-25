@@ -187,6 +187,7 @@ char *GetPrefDir(void)
 }
 
 char *datadir = NULL;
+int rott_shareware = 0;
 
 #define MAX_DATADIRS 16
 static char *datadirs[MAX_DATADIRS] = { 0 };
@@ -390,4 +391,27 @@ char *FindFileByName(const char *name)
 	// File not found
 
 	return NULL;
+}
+
+// Prefers the registered assets and falls back to the shareware ones.
+void DetectGameData(void)
+{
+	char *const registered = FindFileByName("darkwar.wad");
+
+	if (registered != NULL)
+	{
+		rott_shareware = 0;
+		free(registered);
+		return;
+	}
+
+	char *const shareware = FindFileByName("huntbgin.wad");
+
+	if (shareware == NULL)
+	{
+		Error("Could not find darkwar.wad or huntbgin.wad.");
+	}
+
+	rott_shareware = 1;
+	free(shareware);
 }

@@ -27,6 +27,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define SHAREWARE 0
 #endif
 
+// Set at startup by DetectGameData() from the assets that were found.
+extern int rott_shareware;
+
 // cute little dopefish thing, only works with special patch?
 #define DOPEFISH 0
 
