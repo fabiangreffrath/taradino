@@ -153,30 +153,34 @@ int main(int argc, char *argv[])
 	_argc = argc;
 	_argv = argv;
 
+	DetectGameData();
 	ApogeePath = GetPrefDir();
 
 	// Set which release version we're on
 	gamestate.Version = ROTTVERSION;
 
-#if (SHAREWARE == 1)
-	BATTMAPS = FindFileByName(STANDARDBATTLELEVELS);
-	gamestate.Product = ROTT_SHAREWARE;
-#else
-	BATTMAPS = FindFileByName(SITELICENSEBATTLELEVELS);
-	gamestate.Product = ROTT_SITELICENSE;
-
-	if (!BATTMAPS)
-	{
-		BATTMAPS = FindFileByName(SUPERROTTBATTLELEVELS);
-		gamestate.Product = ROTT_SUPERCD;
-	}
-
-	if (!BATTMAPS)
+	if (rott_shareware)
 	{
 		BATTMAPS = FindFileByName(STANDARDBATTLELEVELS);
-		gamestate.Product = ROTT_REGISTERED;
+		gamestate.Product = ROTT_SHAREWARE;
 	}
-#endif
+	else
+	{
+		BATTMAPS = FindFileByName(SITELICENSEBATTLELEVELS);
+		gamestate.Product = ROTT_SITELICENSE;
+
+		if (!BATTMAPS)
+		{
+			BATTMAPS = FindFileByName(SUPERROTTBATTLELEVELS);
+			gamestate.Product = ROTT_SUPERCD;
+		}
+
+		if (!BATTMAPS)
+		{
+			BATTMAPS = FindFileByName(STANDARDBATTLELEVELS);
+			gamestate.Product = ROTT_REGISTERED;
+		}
+	}
 
 	if (!BATTMAPS)
 	{

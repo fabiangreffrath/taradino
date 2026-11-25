@@ -173,11 +173,8 @@ char *GetPrefDir(void)
 		M_MakeDirectory(dir);
 
 		result = dir;
-#if !(SHAREWARE == 1)
-		dir = M_StringJoin(result, "darkwar", PATH_SEP_STR, NULL);
-#else
-		dir = M_StringJoin(result, "huntbgin", PATH_SEP_STR, NULL);
-#endif
+		dir = M_StringJoin(result, rott_shareware ? "huntbgin" : "darkwar",
+						   PATH_SEP_STR, NULL);
 		free(result);
 
 		M_MakeDirectory(dir);
