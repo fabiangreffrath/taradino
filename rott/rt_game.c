@@ -57,12 +57,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_scale.h"
 #include "develop.h"
 
-#if (SHAREWARE == 1)
-#define NUMAMMOGRAPHICS 10
-#else
-#define NUMAMMOGRAPHICS 20
-#endif
-
 //******************************************************************************
 //
 // GLOBALS
@@ -1749,7 +1743,6 @@ void DrawBarAmmo(boolean bufferofsonly)
 		DrawPPic(iGLOBAL_AMMO_X - 32, ammo_y + 1, 8 >> 2, 16,
 				 (byte *)&erase->data, 2, true, bufferofsonly);
 	}
-#if (SHAREWARE == 0)
 	else if (locplayerstate->new_weapon == wp_dog)
 	{
 		DrawPPic(iGLOBAL_AMMO_X - 16, ammo_y, 24 >> 2, 16,
@@ -1758,7 +1751,6 @@ void DrawBarAmmo(boolean bufferofsonly)
 		DrawPPic(iGLOBAL_AMMO_X - 32, ammo_y + 1, 8 >> 2, 16,
 				 (byte *)&erase->data, 2, true, bufferofsonly);
 	}
-#endif
 	else
 	{
 		DrawPPic(iGLOBAL_AMMO_X, ammo_y + 1, 8 >> 2, 16,
@@ -1858,13 +1850,11 @@ void DrawStats(void)
 			SingleDrawPPic(iGLOBAL_AMMO_X - 16, ammo_y, 24 >> 2, 16,
 						   (byte *)&ammo[13]->data, 1, true);
 		}
-#if (SHAREWARE == 0)
 		else if (locplayerstate->new_weapon == wp_dog)
 		{
 			SingleDrawPPic(iGLOBAL_AMMO_X - 16, ammo_y + 1, 24 >> 2, 16,
 						   (byte *)&ammo[25]->data, 1, true);
 		}
-#endif
 		else
 		{
 			SingleDrawPPic(iGLOBAL_AMMO_X, ammo_y + 1, 8 >> 2, 16,
@@ -2350,9 +2340,7 @@ void DoBorderShifts(void)
 void DrawHighScores(void)
 {
 	char buffer[16];
-#if (SHAREWARE == 0)
 	char buffer1[5];
-#endif
 	int i, w, h;
 	HighScore *s;
 
@@ -2372,18 +2360,22 @@ void DrawHighScores(void)
 		ultoa(s->completed, buffer, 10);
 
 		PrintX = (17 * 8) - 10;
-#if (SHAREWARE == 0)
-		itoa(s->episode, buffer1, 10);
+		if (rott_shareware)
+		{
+			DrawMenuBufPropString(PrintX, PrintY, "S");
+		}
+		else
+		{
+			itoa(s->episode, buffer1, 10);
 
-		DrawMenuBufPropString(PrintX, PrintY, buffer1);
-#else
-		DrawMenuBufPropString(PrintX, PrintY, "S");
-#endif
+			DrawMenuBufPropString(PrintX, PrintY, buffer1);
+		}
 
 		DrawMenuBufPropString(PrintX, PrintY, "-");
 
-#if (SHAREWARE == 0)
-		if (s->completed == 7)
+		if (rott_shareware)
+			DrawMenuBufPropString(PrintX, PrintY, buffer);
+		else if (s->completed == 7)
 			DrawMenuBufPropString(PrintX, PrintY, "B");
 		else if (s->completed == 8)
 			DrawMenuBufPropString(PrintX, PrintY, "S");
@@ -2393,9 +2385,6 @@ void DrawHighScores(void)
 			DrawMenuBufPropString(PrintX, PrintY, "D");
 		else
 			DrawMenuBufPropString(PrintX, PrintY, buffer);
-#else
-		DrawMenuBufPropString(PrintX, PrintY, buffer);
-#endif
 
 		//
 		// score
@@ -3102,11 +3091,8 @@ void LevelCompleted(exit_t playstate)
 			EndBonusStartY = 110;
 			DrawEndBonus("You have done well.", NULL, 3);
 
-#if (SHAREWARE == 1)
-			EndBonusVoice = SD_Play(SD_RICOCHET3SND);
-#else
-			EndBonusVoice = SD_Play(SD_PERCENT100SND);
-#endif
+			EndBonusVoice =
+				SD_Play(rott_shareware ? SD_RICOCHET3SND : SD_PERCENT100SND);
 
 			EndBonusSkip = false;
 			DrawEndBonus("This level is toast.", NULL, 3);
@@ -4031,17 +4017,12 @@ void Died(void)
 
 		MU_StartSong(song_gameover);
 
-#if (SHAREWARE == 0)
-		if (gamestate.violence == vl_excessive)
+		if ((gamestate.violence == vl_excessive) || rott_shareware)
 			LBM = (lbm_t *)W_CacheLumpNum(W_GetNumForName("bootblod"), PU_CACHE,
 										  Cvt_lbm_t, 1);
 		else
 			LBM = (lbm_t *)W_CacheLumpNum(W_GetNumForName("bootnorm"), PU_CACHE,
 										  Cvt_lbm_t, 1);
-#else
-		LBM = (lbm_t *)W_CacheLumpNum(W_GetNumForName("bootblod"), PU_CACHE,
-									  Cvt_lbm_t, 1);
-#endif
 		VL_DecompressLBM(LBM, true);
 
 		StopWind();

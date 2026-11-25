@@ -168,18 +168,13 @@ static int gmasklump;
 int G_gmasklump;
 
 static const int weaponshape[NUMWEAPGRAPHICS] = {
-#if (SHAREWARE == 0)
-
 	W_KNIFE,
-#endif
 
 	W_MALEPISTOL1, W_MRIGHTPISTOL1, W_MP40,		W_BAZOOKA, W_HEATSEEKER,
 	W_DRUNK,	   W_FIREBOMB,		W_FIREWALL, W_GODHAND,
 
-#if (SHAREWARE == 0)
 	W_SPLIT,	   W_KES,			W_BAT,		W_DOG,	   W_FEMALEPISTOL1,
 	W_BMALEPISTOL1
-#endif
 };
 
 void SetColorLightLevel(int x, int y, visobj_t *sprite, int dir, int color,
@@ -272,9 +267,8 @@ void BuildTables(void)
 	costable = &(sintable[FINEANGLES / 4]);
 
 	wstart = W_GetNumForName("WALLSTRT");
-#if (SHAREWARE == 0)
-	netlump = W_GetNumForName("net1");
-#endif
+	if (!rott_shareware)
+		netlump = W_GetNumForName("net1");
 	gmasklump = W_GetNumForName("p_gmask");
 	G_gmasklump = gmasklump;
 
@@ -1099,6 +1093,26 @@ void DrawScaleds(void)
 
 //==========================================================================
 
+// Maps a registered-layout weapon sprite offset to the shareware WAD, which
+// lacks the knife, black/female pistol and last four weapon blocks.
+static int WeaponLump(const int shape)
+{
+	const int skip_a = W_MALEPISTOL1 - GUNSTART_LABEL - 1;
+	const int skip_b = W_MP40 - W_FEMALEPISTOL1;
+
+	if (!rott_shareware)
+		return shape;
+
+	if (shape >= W_MP40 && shape < W_SPLIT)
+		return shape - skip_a - skip_b;
+
+	if (shape >= W_MALEPISTOL1 && shape < W_FEMALEPISTOL1)
+		return shape - skip_a;
+
+	Error("Weapon sprite %d is not available in the shareware WAD", shape);
+	return 0;
+}
+
 /*
 ==============
 =
@@ -1137,7 +1151,8 @@ void DrawPlayerWeapon(void)
 		{
 			index = 0;
 			shapenum =
-				gunsstart + weaponshape[index] + locplayerstate->weaponframe;
+				gunsstart + WeaponLump(weaponshape[index]) +
+				locplayerstate->weaponframe;
 		}
 		else if (locplayerstate->weapon != wp_twopistol)
 		{
@@ -1148,39 +1163,29 @@ void DrawPlayerWeapon(void)
 				else if (black)
 					index = NUMWEAPGRAPHICS - 1;
 				else
-#if (SHAREWARE == 0)
 					index = 1;
-#else
-					index = 0;
-#endif
 			}
 			else
-#if (SHAREWARE == 0)
-
 				index = locplayerstate->weapon + 1;
-#else
-				index = locplayerstate->weapon;
-#endif
 
 			if ((index < 0) || (index >= NUMWEAPGRAPHICS))
 				Error("Weapon shapenum out of range\n");
 			shapenum =
-				gunsstart + weaponshape[index] + locplayerstate->weaponframe;
+				gunsstart + WeaponLump(weaponshape[index]) +
+				locplayerstate->weaponframe;
 
-#if (SHAREWARE == 0)
-			if ((shapenum < W_GetNumForName("KNIFE1")) ||
-				(shapenum > W_GetNumForName("DOGPAW4")))
-#else
-			if ((shapenum < W_GetNumForName("MPIST11")) ||
-				(shapenum > W_GetNumForName("GODHAND8")))
-#endif
+			const int first =
+				W_GetNumForName(rott_shareware ? "MPIST11" : "KNIFE1");
+			const int last =
+				W_GetNumForName(rott_shareware ? "GODHAND8" : "DOGPAW4");
+
+			if ((shapenum < first) || (shapenum > last))
 				Error("\n illegal weapon shapenum %d, index %d, weaponframe %d",
 					  shapenum, index, locplayerstate->weaponframe);
 		}
 
 		else
 		{
-#if (SHAREWARE == 0)
 			if (female)
 			{
 				altshape = W_FLEFTPISTOL1;
@@ -1192,14 +1197,13 @@ void DrawPlayerWeapon(void)
 				shapenum = W_BMRIGHTPISTOL1;
 			}
 			else
-#endif
 			{
 				altshape = W_MLEFTPISTOL1;
 				shapenum = W_MRIGHTPISTOL1;
 			}
 
-			altshape += gunsstart;
-			shapenum += gunsstart;
+			altshape = gunsstart + WeaponLump(altshape);
+			shapenum = gunsstart + WeaponLump(shapenum);
 			if (locplayerstate->weaponframe > 2)
 				altshape += (locplayerstate->weaponframe - 3);
 			else
@@ -1244,7 +1248,6 @@ void DrawPlayerWeapon(void)
 				case wp_firebomb:
 					break;
 
-#if (SHAREWARE == 0)
 
 				case wp_kes:
 					break;
@@ -1260,7 +1263,6 @@ void DrawPlayerWeapon(void)
 				case wp_dog:
 					break;
 
-#endif
 
 				default:
 					Error("Illegal weapon value = %d\n",
@@ -3061,7 +3063,6 @@ apogeeexit:
 	ShutdownRotateBuffer();
 }
 
-#if (SHAREWARE == 0)
 
 void DopefishTitle(void)
 {
@@ -3104,7 +3105,6 @@ void DopefishTitle(void)
 	FlipPage();
 }
 
-#endif
 
 //******************************************************************************
 //
@@ -3387,7 +3387,6 @@ void WarpString(int x, int y, int endx, int endy, int time, byte *back,
 	// FlipPage();
 }
 
-#if (SHAREWARE == 1)
 //******************************************************************************
 //
 // DoEndCinematic
@@ -3522,7 +3521,7 @@ char *EndCinematicText[NUMENDMESSAGES] = {
 char NextGameString1[] = "The Developers of Incredible Power";
 char NextGameString2[] = "shall return";
 
-void DoEndCinematic(void)
+static void DoSharewareEndCinematic(void)
 {
 	int trilogo;
 	int world;
@@ -3726,9 +3725,6 @@ finalfade:
 
 	SafeFree(bkgnd);
 }
-#else
-
-// REGISTERED VERSION ======================================================
 
 static char burnCastle1Msg[] = "The monastery burns.\n"
 							   "\n"
@@ -4625,6 +4621,12 @@ void DIPCredits(void)
 
 void DoEndCinematic(void)
 {
+	if (rott_shareware)
+	{
+		DoSharewareEndCinematic();
+		return;
+	}
+
 	EnableScreenStretch();
 
 	viewwidth = 320;  // MAXSCREENWIDTH;
@@ -4682,7 +4684,6 @@ void DoInBetweenCinematic(int yoffset, int lump, int delay, char *string)
 	I_Delay(delay);
 	VL_FadeOut(0, 255, 0, 0, 0, 20);
 }
-#endif
 
 //******************************************************************************
 //
@@ -4835,12 +4836,9 @@ void WarpCreditString(int time, byte *back, int num, CreditType *Credits)
 			else
 			{
 //            SD_Play ( SD_BAZOOKAFIRESND );
-#if (SHAREWARE == 0)
 				SD_Play(SD_BAZOOKAFIRESND +
-						(RandomNumber("DoCredits", 1) % 13));
-#else
-				SD_Play(SD_BAZOOKAFIRESND + (RandomNumber("DoCredits", 1) % 6));
-#endif
+						(RandomNumber("DoCredits", 1) %
+						 (rott_shareware ? 6 : 13)));
 				soundplayed = true;
 			}
 		}
