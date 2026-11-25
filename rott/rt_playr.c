@@ -278,7 +278,6 @@ williamdidthis WEAPONS[MAXWEAPONS] =
 		  { done, 3, 6 },
 		  { reset, 3, 7 } } }, // GODHAND
 
-#if (SHAREWARE == 0)
 	  { 80,
 		5,
 		7,
@@ -319,7 +318,6 @@ williamdidthis WEAPONS[MAXWEAPONS] =
 		0x10000l,
 		3,
 		{ { done, 2, 1 }, { at_pulltrigger, 2, 2 }, { reset, 2, 3 } } }
-#endif
 	};
 
 /*
@@ -349,7 +347,6 @@ void Cmd_Use(objtype *);
 statetype s_free = { false, 0, 0, T_Free, 0, &s_free };
 statetype s_inelevator = { false, 0, 420, T_Player, 0, &s_player };
 
-#if (SHAREWARE == 0)
 statetype s_dogwait = { true,	  SERIALDOG_W11, 50,
 						T_Player, SF_DOGSTATE,	 &s_serialdog };
 
@@ -357,7 +354,6 @@ statetype s_doguse = { true,	 SERIALDOG_W11, 140,
 					   T_DogUse, SF_DOGSTATE,	&s_serialdog };
 statetype s_doglick = { true,	   SERIALDOG_W11, 0,
 						T_DogLick, SF_DOGSTATE,	  &s_doglick };
-#endif
 
 statetype s_tag = { false, CASSATT_S1, 20, T_Tag, 0, &s_player };
 
@@ -415,7 +411,6 @@ int MaxHitpointsForCharacter(playertype *pstate)
 void InitializeWeapons(playertype *pstate)
 {
 
-#if (SHAREWARE == 0)
 	if (gamestate.SpawnEluder)
 	{
 		pstate->new_weapon = pstate->weapon = pstate->missileweapon = wp_dog;
@@ -426,7 +421,6 @@ void InitializeWeapons(playertype *pstate)
 		pstate->HASBULLETWEAPON[wp_mp40] = 0;
 	}
 	else
-#endif
 	{
 		if (gamestate.PlayerHasGun[pstate - &PLAYERSTATE[0]])
 		{
@@ -610,10 +604,8 @@ void RevivePlayerobj(int tilex, int tiley, int dir, objtype *ob)
 			}
 		}
 	}
-#if (SHAREWARE == 0)
 	else
 		NewState(ob, &s_serialdog);
-#endif
 	if (ob == player)
 		DrawPlayScreen(false);
 	ob->momentumx = ob->momentumy = ob->momentumz = 0;
@@ -646,10 +638,8 @@ void SpawnPlayerobj(int tilex, int tiley, int dir, int playerindex)
 
 	if (!gamestate.SpawnEluder)
 		NewState(new, &s_player);
-#if (SHAREWARE == 0)
 	else
 		NewState(new, &s_serialdog);
-#endif
 }
 
 /*
@@ -857,8 +847,6 @@ int GetWeaponForItem(int itemnumber)
 		case stat_godmode:
 			return wp_godhand;
 
-#if (SHAREWARE == 0)
-
 		case stat_splitmissile:
 			return wp_split;
 
@@ -870,7 +858,6 @@ int GetWeaponForItem(int itemnumber)
 
 		case stat_dogmode:
 			return wp_dog;
-#endif
 	}
 	return 0;
 }
@@ -904,8 +891,6 @@ int GetItemForWeapon(int weapon)
 		case wp_godhand:
 			return stat_godmode;
 
-#if (SHAREWARE == 0)
-
 		case wp_split:
 			return stat_splitmissile;
 
@@ -917,7 +902,6 @@ int GetItemForWeapon(int weapon)
 
 		case wp_dog:
 			return stat_dogmode;
-#endif
 	}
 	return -1;
 }
@@ -937,11 +921,7 @@ missile_stats PlayerMissileData[13] =
 	  { &s_p_grenade, 0x4000, p_firewallobj, 0x8000, 0 },
 	  { &s_godfire1, 0x3800, p_godballobj, 0x8000, 0 },
 	  { &s_p_bazooka1, 0x8000, p_splitmissileobj, 0x7000, MF_SINGULAR },
-#if (SHAREWARE == 0)
 	  { &s_kessphere1, 0xc000, p_kesobj, 0x5000, MF_SINGULAR },
-#else
-	  { 0, 0, 0, 0, 0 },
-#endif
 	  { 0, 0, 0, 0, 0 },
 	  { 0, 0, 0, 0, 0 }
 
@@ -1285,9 +1265,7 @@ void BatBlast(objtype *ob)
 
 	angle = ob->angle - ANGLES / 8 + ((++pstate->batblast) * ANGLES / 48);
 	Fix(angle);
-#if (SHAREWARE == 0)
 	SpawnMissile(ob, p_bazookaobj, 0x6000, angle, &s_batblast1, 0xa000);
-#endif
 	(void)angle;
 }
 
@@ -1569,7 +1547,6 @@ void Cmd_Fire(objtype *ob)
 	{
 		if (pstate->weapon <= wp_mp40)
 			NewState(ob, &s_pgunattack1);
-#if (SHAREWARE == 0)
 		else if ((pstate->weapon == wp_bat) && (pstate->batblast >= BBTIME))
 		{
 			pstate->batblast = 0;
@@ -1577,15 +1554,11 @@ void Cmd_Fire(objtype *ob)
 		}
 		else if (pstate->weapon == wp_dog)
 			NewState(ob, &s_serialdogattack);
-#endif
 		else
 			NewState(ob, &s_pmissattack1);
 
-#if (SHAREWARE == 0)
-
 		if ((pstate->weapon == wp_dog) && (!ob->momentumz))
 			ob->momentumz = -0x50000;
-#endif
 		pstate->attackcount = WEAPONS[pstate->weapon].attackinfo[0].mtics;
 		pstate->weaponframe = WEAPONS[pstate->weapon].attackinfo[0].frame;
 	}
@@ -1630,8 +1603,6 @@ void Cmd_Use(objtype *ob)
 
 	M_LINKSTATE(ob, pstate);
 
-#if (SHAREWARE == 0)
-
 	if ((pstate->weapon == wp_dog) && (ob->state != &s_doguse) &&
 		(ob->state != &s_dogwait) && (!W_CHANGE(pstate)))
 	{
@@ -1644,7 +1615,6 @@ void Cmd_Use(objtype *ob)
 	}
 
 	else
-#endif
 		if ((ob->flags & FL_DESIGNATED) && (BATTLEMODE) &&
 			(gamestate.battlemode == battle_Tag))
 	{
@@ -3099,7 +3069,6 @@ keys:
 
 			goto drw;
 
-#if (SHAREWARE == 0)
 		case stat_dogmode:
 			if (ob->flags & FL_DOGMODE)
 				return;
@@ -3140,7 +3109,6 @@ keys:
 			LocalBonusMessage("Dog Mode!");
 
 			goto drw;
-#endif
 
 drw:
 
@@ -3173,7 +3141,6 @@ drw:
 
 			SD_PlaySoundRTP(SD_GETBONUSSND, ob->x, ob->y);
 			break;
-#if (SHAREWARE == 0)
 		case stat_mine:
 			SpawnNewObj(check->tilex, check->tiley, &s_grexplosion1, inertobj);
 			new->flags |= FL_ABP;
@@ -3182,7 +3149,6 @@ drw:
 			MakeActive(new);
 			SD_PlaySoundRTP(SD_EXPLODESND, check->x, check->y);
 			break;
-#endif
 		default:
 			SD_PlaySoundRTP(SD_GETHEADSND, ob->x, ob->y);
 			break;
@@ -3269,9 +3235,7 @@ void DropWeapon(objtype *ob)
 	M_LINKSTATE(ob, pstate);
 
 	if ((pstate->missileweapon == -1) || (pstate->missileweapon == wp_godhand)
-#if (SHAREWARE == 0)
 		|| (pstate->missileweapon == wp_dog)
-#endif
 	)
 		return;
 
@@ -3402,11 +3366,9 @@ void Thrust(objtype *ob)
 				if (PLAYER_IS_SWITCHING_WEAPONS(pstate))
 				{
 					statetype *nstate;
-#if (SHAREWARE == 0)
 					if (ob->state->condition & SF_DOGSTATE)
 						nstate = &s_serialdog;
 					else
-#endif
 						nstate = &s_player;
 					pstate->attackframe = pstate->weaponframe =
 						pstate->batblast = 0;
@@ -3906,7 +3868,6 @@ void T_Tag(objtype *ob)
 	*/
 }
 
-#if (SHAREWARE == 0)
 #define GET_RESETSTATE(ob, resetstate) \
 	{ \
 		if (ob->state->condition & SF_DOGSTATE) \
@@ -3914,12 +3875,6 @@ void T_Tag(objtype *ob)
 		else \
 			resetstate = &s_player; \
 	}
-#else
-#define GET_RESETSTATE(ob, resetstate) \
-	{ \
-		resetstate = &s_player; \
-	}
-#endif
 
 /*
 ===============
@@ -3962,14 +3917,12 @@ void T_Attack(objtype *ob)
 		if (pstate->weapondowntics == 1) // change to up; during change, up and
 										 // down are never zero at the same time
 		{
-#if (SHAREWARE == 0)
 			if (pstate->weapon == wp_kes)
 			{
 				pstate->weapondowntics = 0;
 				pstate->weaponuptics = KESTICS / (2 * GMOVE);
 			}
 			else
-#endif
 			{
 				pstate->weapondowntics = 0;
 				pstate->weaponframe = pstate->attackframe = 0;
@@ -4013,11 +3966,7 @@ void T_Attack(objtype *ob)
 		}
 	}
 
-#if (SHAREWARE == 0)
 	if ((pstate->buttonstate[bt_use]) && (pstate->weapon != wp_dog))
-#else
-	if (pstate->buttonstate[bt_use])
-#endif
 		Cmd_Use(ob);
 
 	if (pstate->attackframe >= WEAPONS[pstate->weapon].numattacks)
@@ -4105,8 +4054,6 @@ void T_Attack(objtype *ob)
 			case at_pulltrigger:
 				ob->flags |= FL_FULLLIGHT;
 
-#if (SHAREWARE == 0)
-
 				if (pstate->batblast >= BBTIME)
 					DogBlast(ob);
 
@@ -4115,7 +4062,6 @@ void T_Attack(objtype *ob)
 				else if (pstate->weapon == wp_bat)
 					BatAttack(ob);
 				else
-#endif
 					GunAttack(ob);
 
 				break;
@@ -4142,10 +4088,8 @@ void T_Attack(objtype *ob)
 					if ((ob == player) && SHOW_BOTTOM_STATUS_BAR())
 						DrawBarAmmo(false);
 				}
-#if (SHAREWARE == 0)
 				if (pstate->weapon == wp_kes)
 					pstate->weapondowntics = KESTICS / (2 * GMOVE);
-#endif
 				break;
 
 			default:;
@@ -4557,19 +4501,15 @@ void CheckWeaponStates(objtype *ob)
 	if (pstate->weapondowntics)
 	{
 		pstate->weaponheight += GMOVE;
-#if (SHAREWARE == 0)
 		if ((pstate->weapon == wp_kes) && pstate->attackframe)
 			pstate->weaponheight += GMOVE;
-#endif
 		pstate->weapondowntics--;
 	}
 	else if (pstate->weaponuptics)
 	{
 		pstate->weaponheight -= GMOVE;
-#if (SHAREWARE == 0)
 		if ((pstate->weapon == wp_kes) && pstate->attackframe)
 			pstate->weaponheight -= GMOVE;
-#endif
 
 		pstate->weaponuptics--;
 	}
@@ -4640,7 +4580,6 @@ void CheckSpecialSounds(objtype *ob, playertype *pstate)
 						sound++;
 					SD_PlaySoundRTP(sound, ob->x, ob->y);
 				}
-#if (SHAREWARE == 0)
 				else if ((!pstate->batblast) && (!ob->momentumz) &&
 						 (REGDOGSTATE(ob)))
 				{
@@ -4652,7 +4591,6 @@ void CheckSpecialSounds(objtype *ob, playertype *pstate)
 						pstate->batblast = 0;
 					SD_PlaySoundRTP(sound, ob->x, ob->y);
 				}
-#endif
 			}
 		}
 	}
@@ -4742,7 +4680,6 @@ void CheckSpecialSounds(objtype *ob, playertype *pstate)
 				  sound ++;
 			   SD_PlaySoundRTP(sound,ob->x,ob->y);
 			   }
-#if (SHAREWARE == 0)
 			else if (!pstate->batblast)
 			   {
 			   sound = SD_DOGMODEPANTSND;
@@ -4753,13 +4690,9 @@ void CheckSpecialSounds(objtype *ob, playertype *pstate)
 			   pstate->batblast = 0;
 			   SD_PlaySoundRTP(sound,ob->x,ob->y);
 			   }
-#endif
 			}
 		 }
 	  }
-
-
-
 
    else if (ob->flags & FL_GASMASK)
 	  {
@@ -5208,7 +5141,6 @@ void CheckPlayerSpecials(objtype *ob)
 	CheckProtectionsAndPowerups(ob, pstate);
 }
 
-#if (SHAREWARE == 0)
 /*
 ===============
 =
@@ -5330,8 +5262,6 @@ void T_DogLick(objtype *ob)
 	//(!playerstate.buttonheld[bt_attack]) && (!W_CHANGE)) 		Cmd_Fire (ob);
 }
 
-#endif
-
 void T_DeadWait(objtype *ob)
 {
 	playertype *pstate;
@@ -5399,15 +5329,11 @@ void T_Player(objtype *ob)
 	playertype *pstate;
 	statetype *oldstate;
 
-#if (SHAREWARE == 0)
 	int eluder;
-#endif
 
 	M_LINKSTATE(ob, pstate);
 
-#if (SHAREWARE == 0)
 	eluder = ((pstate->weapon == wp_dog) && gamestate.SpawnEluder);
-#endif
 
 	oldstate = ob->state;
 
@@ -5452,10 +5378,8 @@ void T_Player(objtype *ob)
 				NewState(ob, &s_player);
 		}
 		else if (NOMOM
-#if (SHAREWARE == 0)
 
 				 && (ob->state != &s_dogwait)
-#endif
 
 		)
 
@@ -5537,15 +5461,12 @@ void T_Player(objtype *ob)
 		return;
 
 	if ((!ARMED(ob->dirchoosetime))
-#if (SHAREWARE == 0)
 		&& (pstate->weapon != wp_dog)
-#endif
 	)
 		return;
 
 	if (pstate->buttonstate[bt_attack])
 	{
-#if (SHAREWARE == 0)
 
 		if (eluder)
 			Cmd_Fire(ob);
@@ -5583,22 +5504,16 @@ void T_Player(objtype *ob)
 		}
 
 		if ((pstate->weapon != wp_split) || (!pstate->buttonheld[bt_attack]))
-#endif
 		//    if (!pstate->buttonheld[bt_attack])
 		// #endif
 		{
 
-#if (SHAREWARE == 0)
-
 			if (pstate->weapon == wp_kes)
 				SD_PlaySoundRTP(SD_GRAVBUILDSND, ob->x, ob->y);
-#endif
 
 			Cmd_Fire(ob);
 		}
 	}
-
-#if (SHAREWARE == 0)
 
 	else if (((pstate->weapon == wp_bat) ||
 			  ((pstate->weapon == wp_dog) && (!eluder))) &&
@@ -5609,7 +5524,6 @@ void T_Player(objtype *ob)
 		pstate->batblast = 0;
 		Cmd_Fire(ob);
 	}
-#endif
 
 	// [FG] update all sound pannings relative to the player
 	SD_AllSoundsRTP();
