@@ -335,11 +335,7 @@ enum
 	NUMBUTTONS
 };
 
-#if (SHAREWARE == 0)
 #define MAXWEAPONS 13
-#else
-#define MAXWEAPONS 9
-#endif
 
 typedef enum
 {
@@ -352,14 +348,10 @@ typedef enum
 	wp_firebomb,
 	wp_firewall,
 	wp_godhand,
-
-#if (SHAREWARE == 0)
 	wp_split,
 	wp_kes,
 	wp_bat,
 	wp_dog
-#endif
-
 } weapontype;
 
 enum
