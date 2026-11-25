@@ -336,8 +336,25 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-#if (SHAREWARE == 0)
-		if (dopefish == true)
+		if (rott_shareware)
+		{
+			if (NoWait == false)
+			{
+				if (W_CheckNumForName("svendor") != -1)
+				{
+					lbm_t *LBM;
+
+					LBM =
+						(lbm_t *)W_CacheLumpName("svendor", PU_CACHE, Cvt_lbm_t, 1);
+					VL_DecompressLBM(LBM, true);
+					I_Delay(40);
+					MenuFadeOut();
+				}
+				//         ParticleIntro ();
+				ApogeeTitle();
+			}
+		}
+		else if (dopefish == true)
 		{
 			DopefishTitle();
 		}
@@ -345,23 +362,6 @@ int main(int argc, char *argv[])
 		{
 			ApogeeTitle();
 		}
-#else
-		if (NoWait == false)
-		{
-			if (W_CheckNumForName("svendor") != -1)
-			{
-				lbm_t *LBM;
-
-				LBM =
-					(lbm_t *)W_CacheLumpName("svendor", PU_CACHE, Cvt_lbm_t, 1);
-				VL_DecompressLBM(LBM, true);
-				I_Delay(40);
-				MenuFadeOut();
-			}
-			//         ParticleIntro ();
-			ApogeeTitle();
-		}
-#endif
 	}
 
 	GameLoop();
@@ -464,14 +464,15 @@ void CheckCommandLineParameters(void)
 		printf("                next param is <WIDTHxHEIGHT>\n");
 		printf("                valid resolutions are:\n");
 		printf("                320x200 and 640x400\n");
-#if (SHAREWARE == 0)
-		printf("   FILERTL    - Load user levels (RTL files)\n");
-		printf("                next parameter is RTL file name\n");
-		printf("   FILERTC    - Load battle levels (RTC files)\n");
-		printf("                next parameter is RTC file name\n");
-		printf("   FILE       - Load extern WAD files\n");
-		printf("                next parameter is WAD file name\n");
-#endif
+		if (!rott_shareware)
+		{
+			printf("   FILERTL    - Load user levels (RTL files)\n");
+			printf("                next parameter is RTL file name\n");
+			printf("   FILERTC    - Load battle levels (RTC files)\n");
+			printf("                next parameter is RTC file name\n");
+			printf("   FILE       - Load extern WAD files\n");
+			printf("                next parameter is WAD file name\n");
+		}
 		printf("   NOJOYS     - Disable check for joystick.\n");
 		printf("   NOMOUSE    - Disable check for mouse.\n");
 		printf("   VER        - Version number.\n");
@@ -594,7 +595,8 @@ void CheckCommandLineParameters(void)
 			case 11:
 				InitROTTNET();
 				numplayers = rottcom->numplayers;
-				if (numplayers > MAXPLAYERS)
+				if (numplayers >
+					(rott_shareware ? MAXPLAYERS_SHAREWARE : MAXPLAYERS))
 					Error("Too many players.\n");
 				if (!quiet)
 					printf("Playing %ld player ROTT\n", (long)numplayers);
@@ -693,120 +695,122 @@ void SetupWads(void)
 		}
 	}
 
-#if (SHAREWARE == 0)
-	FILE *f;
-	char buf[4] = { 0 };
-	// Check for rtl files
-	arg = CheckParm("filertl");
-	if (arg != 0)
+	if (rott_shareware)
 	{
-		if (_argv[arg + 1] != 0)
-		{ // are there a filename included
-			tempstr = safe_realloc(tempstr, 129 + strlen(_argv[arg + 1]));
-			strcpy(tempstr, _argv[arg + 1]); // copy it to tempstr
-			if (strlen(tempstr) < MAX_PATH)
-			{
-				if (access(tempstr, 0) != 0)
-				{							 // try open
-					strcat(tempstr, ".rtl"); // non exists, try add .rtl
-					if (access(tempstr, 0) != 0)
-					{ // try open again
-						// stil no useful filename
-						Error("%s not found", tempstr);
-					}
-				}
-				if ((f = fopen(tempstr, "r")) == NULL)
-				{ // try opening file
-					Error("%s not could not be opened", tempstr);
-				}
-				else
+		if ((CheckParm("file") > 0) || (CheckParm("file1") > 0) ||
+			(CheckParm("file2") > 0))
+			printf("External wads ignored.\n");
+	}
+	else
+	{
+		FILE *f;
+		char buf[4] = { 0 };
+		// Check for rtl files
+		arg = CheckParm("filertl");
+		if (arg != 0)
+		{
+			if (_argv[arg + 1] != 0)
+			{ // are there a filename included
+				tempstr = safe_realloc(tempstr, 129 + strlen(_argv[arg + 1]));
+				strcpy(tempstr, _argv[arg + 1]); // copy it to tempstr
+				if (strlen(tempstr) < MAX_PATH)
 				{
-					// is the 3 first letters RTL (RXL)
-					if (fread(buf, 1, 3, f) == 3 &&
-						(!memcmp(buf, "RTL", 3) || !memcmp(buf, "RXL", 3)))
-					{
-						GameLevels.file = M_StringDuplicate(tempstr);
-						GameLevels.avail = true;
-						printf(" Using %s\n", tempstr);
+					if (access(tempstr, 0) != 0)
+					{							 // try open
+						strcat(tempstr, ".rtl"); // non exists, try add .rtl
+						if (access(tempstr, 0) != 0)
+						{ // try open again
+							// stil no useful filename
+							Error("%s not found", tempstr);
+						}
 					}
-					fclose(f);
+					if ((f = fopen(tempstr, "r")) == NULL)
+					{ // try opening file
+						Error("%s not could not be opened", tempstr);
+					}
+					else
+					{
+						// is the 3 first letters RTL (RXL)
+						if (fread(buf, 1, 3, f) == 3 &&
+							(!memcmp(buf, "RTL", 3) || !memcmp(buf, "RXL", 3)))
+						{
+							GameLevels.file = M_StringDuplicate(tempstr);
+							GameLevels.avail = true;
+							printf(" Using %s\n", tempstr);
+						}
+						fclose(f);
+					}
 				}
 			}
-		}
-		else
-		{
-			Error("Missing RTL filename");
-		}
-	}
-
-	// Check for rtc files
-	arg = CheckParm("filertc");
-	if (arg != 0)
-	{
-		if (_argv[arg + 1] != 0)
-		{ // are there a filename included
-			tempstr = safe_realloc(tempstr, 129 + strlen(_argv[arg + 1]));
-			strcpy(tempstr, _argv[arg + 1]); // copy it to tempstr
-			if (strlen(tempstr) < MAX_PATH)
+			else
 			{
-				if (access(tempstr, 0) != 0)
-				{							 // try open
-					strcat(tempstr, ".rtc"); // non exists, try add .rtc
-					if (access(tempstr, 0) != 0)
-					{ // try open again
-						// stil no useful filename
-						Error("%s not found", tempstr);
-					}
-				}
-				if ((f = fopen(tempstr, "r")) == NULL)
-				{ // try opening file
-					Error("%s not could not be opened", tempstr);
-				}
-				else
-				{
-					// is the 3 first letters RTC (RXC)
-					if (fread(buf, 1, 3, f) == 3 &&
-						(!memcmp(buf, "RTC", 3) || !memcmp(buf, "RXC", 3)))
-					{
-						BattleLevels.file = M_StringDuplicate(tempstr);
-						BattleLevels.avail = true;
-						printf(" Using %s\n", tempstr);
-					}
-					fclose(f);
-				}
+				Error("Missing RTL filename");
 			}
 		}
-		else
+
+		// Check for rtc files
+		arg = CheckParm("filertc");
+		if (arg != 0)
 		{
-			Error("Missing RTC filename");
+			if (_argv[arg + 1] != 0)
+			{ // are there a filename included
+				tempstr = safe_realloc(tempstr, 129 + strlen(_argv[arg + 1]));
+				strcpy(tempstr, _argv[arg + 1]); // copy it to tempstr
+				if (strlen(tempstr) < MAX_PATH)
+				{
+					if (access(tempstr, 0) != 0)
+					{							 // try open
+						strcat(tempstr, ".rtc"); // non exists, try add .rtc
+						if (access(tempstr, 0) != 0)
+						{ // try open again
+							// stil no useful filename
+							Error("%s not found", tempstr);
+						}
+					}
+					if ((f = fopen(tempstr, "r")) == NULL)
+					{ // try opening file
+						Error("%s not could not be opened", tempstr);
+					}
+					else
+					{
+						// is the 3 first letters RTC (RXC)
+						if (fread(buf, 1, 3, f) == 3 &&
+							(!memcmp(buf, "RTC", 3) || !memcmp(buf, "RXC", 3)))
+						{
+							BattleLevels.file = M_StringDuplicate(tempstr);
+							BattleLevels.avail = true;
+							printf(" Using %s\n", tempstr);
+						}
+						fclose(f);
+					}
+				}
+			}
+			else
+			{
+				Error("Missing RTC filename");
+			}
 		}
+
+		// Check for User wads
+		arg = CheckParm("file");
+		if (arg != 0)
+		{
+			newargs[argnum++] = M_StringDuplicate(_argv[arg + 1]);
+		}
+
+		arg = CheckParm("file1");
+		if (arg != 0)
+		{
+			newargs[argnum++] = M_StringDuplicate(_argv[arg + 1]);
+		}
+
+		arg = CheckParm("file2");
+		if (arg != 0)
+		{
+			newargs[argnum++] = M_StringDuplicate(_argv[arg + 1]);
+		}
+
 	}
-
-	// Check for User wads
-	arg = CheckParm("file");
-	if (arg != 0)
-	{
-		newargs[argnum++] = M_StringDuplicate(_argv[arg + 1]);
-	}
-
-	arg = CheckParm("file1");
-	if (arg != 0)
-	{
-		newargs[argnum++] = M_StringDuplicate(_argv[arg + 1]);
-	}
-
-	arg = CheckParm("file2");
-	if (arg != 0)
-	{
-		newargs[argnum++] = M_StringDuplicate(_argv[arg + 1]);
-	}
-
-#else
-	if ((CheckParm("file") > 0) || (CheckParm("file1") > 0) ||
-		(CheckParm("file2") > 0))
-		printf("External wads ignored.\n");
-
-#endif
 
 	// Normal ROTT wads
 	filename = M_StringJoin(datadir, PATH_SEP_STR, STANDARDGAMEWAD, NULL);
@@ -1036,12 +1040,11 @@ void GameLoop(void)
 						DoCreditScreen();
 						if ((!LastScan) && (!IN_GetMouseButtons()))
 							CheckHighScore(0, 0, false);
-#if (SHAREWARE == 0)
-						if ((!LastScan) && (!IN_GetMouseButtons()))
+						if (!rott_shareware && (!LastScan) &&
+							(!IN_GetMouseButtons()))
 						{
 							DoMicroStoryScreen();
 						}
-#endif
 						if ((!LastScan) && (!IN_GetMouseButtons()) &&
 							(GameLevels.avail == false))
 						{
@@ -1276,8 +1279,8 @@ void GameLoop(void)
 					gamestate.frame = 0;
 				}
 				StopWind();
-#if (SHAREWARE == 0)
-				if ((playstate == ex_bossdied) && (gamestate.mapon != 30))
+				if (!rott_shareware && (playstate == ex_bossdied) &&
+					(gamestate.mapon != 30))
 				{
 					int shape;
 					lbm_t *LBM;
@@ -1343,7 +1346,6 @@ void GameLoop(void)
 						IN_UpdateKeyboard(); // Thanks again DrLex
 					LastScan = 0;
 				}
-#endif
 				LevelCompleted(playstate);
 
 				NextLevel = GetNextMap(player->tilex, player->tiley);
@@ -1494,11 +1496,9 @@ void QuitGame(void)
 		}
 	}
 
-#if (SHAREWARE == 1)
-	Uint16 *endscreen = W_CacheLumpName("SHAREEND", PU_CACHE, CvtNull, 1);
-#else
-	Uint16 *endscreen = W_CacheLumpName("REGEND", PU_CACHE, CvtNull, 1);
-#endif
+	Uint16 *endscreen =
+		W_CacheLumpName(rott_shareware ? "SHAREEND" : "REGEND", PU_CACHE,
+						CvtNull, 1);
 
 	vgatext_main(VL_GetVideoWindow(), endscreen);
 
@@ -2334,12 +2334,11 @@ void SaveScreen(boolean inhmenu)
 void PlayCinematic(void)
 {
 
-	if ((tedlevel == true) || (turbo == true))
+	if ((tedlevel == true) || (turbo == true) || rott_shareware)
 		return;
 
 	switch (gamestate.mapon)
 	{
-#if (SHAREWARE == 0)
 		byte pal[768];
 		case 0: // Start of EPISODE 1
 
@@ -2429,6 +2428,5 @@ void PlayCinematic(void)
 			IN_UpdateKeyboard();
 			LastScan = 0;
 			break;
-#endif
 	}
 }

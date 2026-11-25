@@ -25,11 +25,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #define MAXNETNODES 14 // max computers in a game
 
-#if (SHAREWARE == 1)
-#define MAXPLAYERS 5 // 5 players max + drones
-#else
 #define MAXPLAYERS 11 // 11 players max + drones
-#endif
+#define MAXPLAYERS_SHAREWARE 5 // 5 players max + drones in shareware
 
 #define CMD_SEND 1
 #define CMD_GET 2
