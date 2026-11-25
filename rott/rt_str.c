@@ -1354,7 +1354,6 @@ void DrawIString(unsigned short x, unsigned short y, const char *string,
 						fontcolor = GetColor(temp);
 						oldfontcolor = fontcolor;
 					}
-					// bna added
 					else if (temp == 'X')
 					{
 						temp = *string;
@@ -1373,7 +1372,6 @@ void DrawIString(unsigned short x, unsigned short y, const char *string,
 						fontcolor = egacolor[GREEN];
 						oldfontcolor = fontcolor;
 					}
-					// bna added end
 					//  Restore fontcolor to a previous color
 					else if (temp == 'O')
 					{

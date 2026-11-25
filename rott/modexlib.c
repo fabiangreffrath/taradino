@@ -257,7 +257,6 @@ void VL_SetVGAPlaneMode(void)
 	//
 	// set up lookup tables
 	//
-	// bna--   linewidth = 320;
 	linewidth = iGLOBAL_SCREENWIDTH;
 
 	offset = 0;
@@ -423,7 +422,6 @@ void DisableScreenStretch(void)
 	uiscale = GetScreenScale();
 }
 
-// bna section -------------------------------------------
 static void StretchMemPicture()
 {
 	SDL_Rect src;
@@ -441,7 +439,6 @@ static void StretchMemPicture()
 	StretchFunc.BlitScaled(unstretch_sdl_surface, &src, sdl_surface, &dest);
 }
 
-// bna function added start
 extern boolean ingame;
 
 void DrawCenterAim()
@@ -467,6 +464,4 @@ void DrawCenterAim()
 		PutScaledPixel(bufferofs, centerx, centery + i, color);
 	}
 }
-// bna function added end
 
-// bna section -------------------------------------------

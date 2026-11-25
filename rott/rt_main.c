@@ -1651,11 +1651,9 @@ void PauseLoop(void)
 		oldpolltime++;
 		if (GamePaused == false)
 		{
-			// bna++ section
 			if (playstate == ex_stillplaying)
 				RestoreGameScreen();
 			StartupClientControls();
-			// bna section end
 			break;
 		}
 	}

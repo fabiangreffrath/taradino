@@ -373,40 +373,6 @@ void DoGodMode(void)
 #include "byteordr.h" //bna++
 void DoWarp(void)
 {
-	/*
-		char str[10];
-		boolean esc;
-		int level;
-
-	   CurrentFont = smallfont;
-
-	   US_CenterWindow(26,3);
-		PrintY+=6;
-
-	   US_Print(" Warp to level(1-99):");
-
-	   VW_UpdateScreen();
-
-	   ShutdownClientControls();
-
-	   esc = !US_LineInput (px, py, str, NULL, true, 2, 25, 13);
-
-	   if (!esc)
-	   {
-		  level = ParseNum (str);
-		  if (level>0 && level<=99)
-		  {
-			 gamestate.mapon = level-1;
-			 playstate = ex_warped;
-			 gamestate.episode = GetEpisode (gamestate.mapon);
-		  }
-	   }
-
-	   while (Keyboard[sc_Escape])
-			IN_UpdateKeyboard ();
-	   IN_ClearKeyboardQueue ();
-
-	*/
 
 	int level;
 
@@ -425,10 +391,8 @@ void DoWarp(void)
 	CleanUpControlPanel();
 	ShutdownMenuBuf();
 
-	// bna++ section
 	if (playstate == ex_stillplaying)
 		RestoreGameScreen();
-	// bna section end
 
 	EnableScreenStretch(); // bna++ shut on streech mode
 	while (Keyboard[sc_Escape])
@@ -484,10 +448,8 @@ void DoJukeBox(void)
 	CleanUpControlPanel();
 	ShutdownMenuBuf();
 
-	// bna++ section
 	if (playstate == ex_stillplaying)
 		RestoreGameScreen();
-	// bna section end
 
 	SetupScreen(true);
 
@@ -889,14 +851,6 @@ void OutfitPlayer()
 	DrawKeys(false);
 	HealPlayer(99, player);
 
-	/*
-	player->flags |= FL_BPV;
-	 player->flags &= ~(FL_GASMASK|FL_AV);
-	 locplayerstate->protectiontime = POWERUPTICS;
-	GM_DrawBonus (stat_bulletproof);
-
-	 GiveWeapon (player,wp_mp40);
-	*/
 
 #if (SHAREWARE == 0)
 	CheatSpawnItem(stat_splitmissile);

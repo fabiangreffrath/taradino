@@ -6,8 +6,6 @@
 
 extern int iGLOBAL_SCREENWIDTH;	 // bna
 extern int iGLOBAL_SCREENHEIGHT; // bna
-extern int iGLOBAL_SCREENBWIDE;
-extern int iG_SCREENWIDTH; // default screen width in bytes
 
 extern int iGLOBAL_HEALTH_X;
 extern int iGLOBAL_HEALTH_Y;
@@ -21,3 +19,5 @@ extern double dGLOBAL_FPFOCALWIDTH;
 // renders at the real size. Both calls do nothing at 320x200.
 void EnableScreenStretch(void);
 void DisableScreenStretch(void);
+
+void MoveScreen(int dirx, int diry);

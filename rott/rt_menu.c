@@ -568,7 +568,6 @@ CP_MenuNames OptionsNames[] = {
 	"FLOOR AND CEILING",  "DOUBLE-CLICK SPEED", "MENU FLIP SPEED",
 	"DETAIL LEVELS",	  "VIOLENCE LEVEL",		"SCREEN SIZE"
 };
-// bna added
 CP_MenuNames ExtOptionsNames[] = { "MOUSE LOOK", "INVERT MOUSE", "CROSSHAIR",
 								   "FULLSCREEN", "ADLIB MUSIC" };
 CP_iteminfo ExtOptionsItems = { 20, MENU_Y,			 5,			  0,
@@ -580,7 +579,6 @@ CP_itemtype ExtOptionsMenu[] = {
 	{ 1, "", 'A', { NULL } },
 };
 
-// bna added end
 
 CP_iteminfo OptionsItems = { 20, MENU_Y, 9, 0, 43, OptionsNames, mn_largefont };
 
@@ -1226,7 +1224,6 @@ void SetUpControlPanel(void)
 {
 	// Save the current game screen
 
-	// bna--savedscreen = SafeMalloc (16000);
 	savedscreen = SafeMalloc(16000 * 8);
 
 	// Copy the current save game screen (\xBD size) to this buffer
@@ -2490,18 +2487,6 @@ boolean CP_DisplayMsg(char *s, int number)
 
 	IFont = (cfont_t *)W_CacheLumpName(FontNames[mn_smallfont], PU_CACHE,
 									   Cvt_cfont_t, 1);
-	/*
-	   DrawSTMenuBuf( WindowX, L_Y, W_W, W_H, false );
-	   MenuBufCPrint( s );
-
-	   DrawSTMenuBuf( Q_b1X, Q_bY, Q_bW, Q_bH, false );
-	   DrawMenuBufIString( Q_b1X + 3, Q_Y + 46, "YES", NORMALCOLOR );
-	//   DrawIMenuBufItem (PrintX, PrintY, W_GetNumForName (YES), NORMALCOLOR);
-
-	   DrawSTMenuBuf( Q_b2X, Q_bY, Q_bW, Q_bH, true );
-	   DrawMenuBufIString( Q_b2X + 2, Q_Y + 45, "NO", ACTIVECOLOR );
-	//   DrawIMenuBufItem (PrintX, PrintY, W_GetNumForName (NO), ACTIVECOLOR);
-	*/
 	if (number != 13)
 	{
 		while (!done)

@@ -8,8 +8,6 @@
 
 int iGLOBAL_SCREENWIDTH = 640;	// bna
 int iGLOBAL_SCREENHEIGHT = 400; // bna
-int iGLOBAL_SCREENBWIDE;
-int iG_SCREENWIDTH; // default screen width in bytes
 
 int iGLOBAL_HEALTH_X;
 int iGLOBAL_HEALTH_Y;
@@ -33,10 +31,6 @@ void SetRottScreenRes(int Width, int Height)
 	iGLOBAL_SCREENWIDTH = Width;
 	iGLOBAL_SCREENHEIGHT = Height;
 
-	iGLOBAL_SCREENBWIDE = iGLOBAL_SCREENWIDTH * (96 / 320);
-	iG_SCREENWIDTH = iGLOBAL_SCREENWIDTH * (96 / 320);
-	; // default screen width in bytes
-
 	iGLOBAL_HEALTH_X = 20;
 	iGLOBAL_HEALTH_Y = 185;
 	iGLOBAL_AMMO_X = 300;
@@ -50,102 +44,32 @@ void SetRottScreenRes(int Width, int Height)
 	YZANGLELIMIT = (30 * scale * FINEANGLES / 360);
 }
 
-//----------------------------------------------------------------------
-// luckey for me that I am not programmin a 386 or the next
-// 4 function would never have worked. bna++
 extern int viewsize;
-void MoveScreenUpLeft()
+
+// Shifts the view by a few pixels, the signs of dirx and diry give the way.
+void MoveScreen(int dirx, int diry)
 {
-	int startX, startY, startoffset;
-	byte *Ycnt, *b;
-	//   SetTextMode (  );
-	b = (byte *)bufferofs;
-	b += (((iGLOBAL_SCREENHEIGHT - viewheight) / 2) * iGLOBAL_SCREENWIDTH) +
-		 ((iGLOBAL_SCREENWIDTH - viewwidth) / 2);
+	const int scale = GetScreenScale();
+	const int shift = 3 * scale;
+	const int rows = viewheight - shift;
+	const int width = viewwidth - shift;
+	const int dstx = dirx > 0 ? shift : 0;
+	const int srcx = dirx > 0 ? 0 : shift;
+	const int dsty = diry > 0 ? shift : 0;
+	const int srcy = diry > 0 ? 0 : shift;
+	byte *base = (byte *)bufferofs;
+
+	base += (((iGLOBAL_SCREENHEIGHT - viewheight) / 2) * iGLOBAL_SCREENWIDTH) +
+			((iGLOBAL_SCREENWIDTH - viewwidth) / 2);
 	if (viewsize == 8)
-	{
-		b += 8 * GetScreenScale() * iGLOBAL_SCREENWIDTH;
-	}
-	startX = 3 * GetScreenScale();
-	startY = 3 * GetScreenScale();
-	startoffset = (startY * iGLOBAL_SCREENWIDTH) + startX;
+		base += 8 * scale * iGLOBAL_SCREENWIDTH;
 
-	for (Ycnt = b; Ycnt < b + ((viewheight - startY) * iGLOBAL_SCREENWIDTH);
-		 Ycnt += iGLOBAL_SCREENWIDTH)
+	// Moving down copies from the bottom up so that no source is overwritten.
+	for (int i = 0; i < rows; i++)
 	{
-		memcpy(Ycnt, Ycnt + startoffset, viewwidth - startX);
-	}
-}
-//----------------------------------------------------------------------
-void MoveScreenDownLeft()
-{
-	int startX, startY, startoffset;
-	byte *Ycnt, *b;
-	//   SetTextMode (  );
-	b = (byte *)bufferofs;
-	b += (((iGLOBAL_SCREENHEIGHT - viewheight) / 2) * iGLOBAL_SCREENWIDTH) +
-		 ((iGLOBAL_SCREENWIDTH - viewwidth) / 2);
-	if (viewsize == 8)
-	{
-		b += 8 * GetScreenScale() * iGLOBAL_SCREENWIDTH;
-	}
-	startX = 3 * GetScreenScale();
-	startY = 3 * GetScreenScale();
-	startoffset = (startY * iGLOBAL_SCREENWIDTH); //+startX;
+		const int row = diry > 0 ? rows - 1 - i : i;
 
-	// Ycnt starts in botton of screen and copys lines upwards
-	for (Ycnt = b + ((viewheight - startY - 1) * iGLOBAL_SCREENWIDTH); Ycnt > b;
-		 Ycnt -= iGLOBAL_SCREENWIDTH)
-	{
-		memcpy(Ycnt + startoffset, Ycnt + startX, viewwidth - startX);
-	}
-}
-//----------------------------------------------------------------------
-void MoveScreenUpRight()
-{
-	int startX, startY, startoffset;
-	byte *Ycnt, *b;
-	//   SetTextMode (  );
-	b = (byte *)bufferofs;
-
-	b += (((iGLOBAL_SCREENHEIGHT - viewheight) / 2) * iGLOBAL_SCREENWIDTH) +
-		 ((iGLOBAL_SCREENWIDTH - viewwidth) / 2);
-	if (viewsize == 8)
-	{
-		b += 8 * GetScreenScale() * iGLOBAL_SCREENWIDTH;
-	}
-	startX = 3 * GetScreenScale();
-	startY = 3 * GetScreenScale();
-	startoffset = (startY * iGLOBAL_SCREENWIDTH); //+startX;
-
-	for (Ycnt = b; Ycnt < b + ((viewheight - startY) * iGLOBAL_SCREENWIDTH);
-		 Ycnt += iGLOBAL_SCREENWIDTH)
-	{
-		memcpy(Ycnt + startX, Ycnt + startoffset, viewwidth - startX);
-	}
-}
-//----------------------------------------------------------------------
-void MoveScreenDownRight()
-{
-	int startX, startY, startoffset;
-	byte *Ycnt, *b;
-	//   SetTextMode (  );
-	b = (byte *)bufferofs;
-
-	b += (((iGLOBAL_SCREENHEIGHT - viewheight) / 2) * iGLOBAL_SCREENWIDTH) +
-		 ((iGLOBAL_SCREENWIDTH - viewwidth) / 2);
-	if (viewsize == 8)
-	{
-		b += 8 * GetScreenScale() * iGLOBAL_SCREENWIDTH;
-	}
-	startX = 3 * GetScreenScale();
-	startY = 3 * GetScreenScale();
-	startoffset = (startY * iGLOBAL_SCREENWIDTH) + startX;
-
-	// Ycnt starts in botton of screen and copys lines upwards
-	for (Ycnt = b + ((viewheight - startY - 1) * iGLOBAL_SCREENWIDTH); Ycnt > b;
-		 Ycnt -= iGLOBAL_SCREENWIDTH)
-	{
-		memcpy(Ycnt + startoffset, Ycnt, viewwidth - startX);
+		memcpy(base + (row + dsty) * iGLOBAL_SCREENWIDTH + dstx,
+			   base + (row + srcy) * iGLOBAL_SCREENWIDTH + srcx, width);
 	}
 }

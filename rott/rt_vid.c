@@ -70,7 +70,6 @@ void VL_MemToScreen(byte *source, int width, int height, int x, int y)
 		}
 	}
 }
-// bna function start
 void VL_MemToScreenClipped(byte *source, int width, int height, int x, int y);
 void VL_MemToScreenClipped(byte *source, int width, int height, int x, int y)
 {
@@ -621,7 +620,6 @@ void VL_DecompressLBM(lbm_t *lbminfo, boolean flip)
 
 void SetBorderColor(int color)
 {
-	// bna section start
 
 	byte *cnt, *Ycnt, *b;
 	const int border = 5 * GetScreenScale();
@@ -668,7 +666,6 @@ void SetBorderColor(int color)
 			*Ycnt = color;
 		}
 	}
-	// bna section end
 }
 
 //****************************************************************************

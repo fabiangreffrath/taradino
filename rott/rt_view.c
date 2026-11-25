@@ -230,14 +230,6 @@ void SetViewSize(int size)
 	int screenx;
 	int screeny;
 	int topy;
-	/*
-   if (size>=10){
-
-		SetTextMode (  );
-		screenx=screenx;
-		return;
-	}
- */
 
 	if ((size < 0) || (size >= MAXVIEWSIZES))
 	{ // bna added

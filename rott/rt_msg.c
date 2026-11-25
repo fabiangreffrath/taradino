@@ -527,7 +527,6 @@ void RestoreMessageBackground(void)
 						"backtile", PU_CACHE, Cvt_pic_t, 1); // w=32 h=8
 															 // SetTextMode ( );
 					// DrawTiledRegion( 0, y, 320, 9, 0, y, shape );KILLS_HEIGHT
-					// bna--
 					DrawTiledRegion(0, y, iGLOBAL_SCREENWIDTH, 9 * scale, 0, y,
 									shape);
 					DrawTiledRegion(0, y + 8 * scale, iGLOBAL_SCREENWIDTH,

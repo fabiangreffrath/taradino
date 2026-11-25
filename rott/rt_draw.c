@@ -2719,12 +2719,10 @@ void DoLoadGameSequence(void)
 	SafeFree(destscreen);
 	CalcTics();
 	CalcTics();
-	// bna++ section
 	DrawViewBackground();
 	DrawPlayScreen(false);
 	DisableScreenStretch();
 	SHAKETICS = 0xFFFF;
-	// bna section end
 }
 
 //******************************************************************************
@@ -2813,7 +2811,6 @@ void ScaleAndRotateBuffer(int startangle, int endangle, int startscale,
 	int scale;
 	int i;
 
-	// bna section
 	//    int Xh = 160;//org
 	//    int Yh = 100;//org
 
@@ -2852,7 +2849,6 @@ void ScaleAndRotateBuffer(int startangle, int endangle, int startscale,
 	CalcTics();
 	CalcTics();
 	// I_Delay (240);//bna++
-	// bna++ section
 	if (playstate == ex_stillplaying)
 	{ // bna++
 		DrawViewBackground();
@@ -2860,7 +2856,6 @@ void ScaleAndRotateBuffer(int startangle, int endangle, int startscale,
 		DrawPlayScreen(true);		   // repaint ammo and life stat
 	}
 }
-// bna section end
 
 //******************************************************************************
 //
@@ -3235,7 +3230,6 @@ void ShutdownScreenSaver(void)
 
 	ShutdownRotateBuffer();
 	SafeFree(ScreenSaver);
-	// bna section
 	StartupClientControls();
 }
 
@@ -5091,20 +5085,6 @@ void DrawSkyPost(byte *buf, byte *src, int height)
 		//
 	}
 
-	/*
-	int lw = linewidth * 2;
-	int h  = height;
-
-	while (h--) {
-		*(buf) = shadingtable[*src];
-		buf += lw;
-		*(buf) = shadingtable[*src];
-		buf += lw;
-
-		//buf += lw;
-		src++;
-
-	}*/
 }
 
 #define CEILINGCOLOR 24 // default color when no sky or floor

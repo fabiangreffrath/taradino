@@ -1036,16 +1036,6 @@ void PreCache(void)
 
 	// SetTextMode (  );
 
-	/*
-	#define  PRECACHEBARX 28
-	#define  PRECACHEBARY 178
-
-	#define  PRECACHELED1X 9
-	#define  PRECACHELED1Y 8
-
-	#define  PRECACHELED2X 9
-	#define  PRECACHELED2Y 12
-	*/
 
 	if (CachingStarted == false)
 	{
@@ -2758,56 +2748,6 @@ void SetupMaskedWalls(void)
 		}
 }
 
-/*
-int GetAreaNumber ( int tilex, int tiley, int dir );
-void RemoveDangerWalls
-   (
-   void
-   )
-
-   {
-   int   i;
-   int   j;
-   unsigned short *map;
-   unsigned short  tile;
-
-   map = mapplanes[ 1 ];
-
-   for( j = 0; j < mapheight; j++ )
-	  {
-	  for( i = 0; i < mapwidth; i++ )
-		  {
-		 tile = *map++;
-		 switch( tile )
-			  {
-			case 256:
-			  case 257:
-			  case 258:
-			  case 259:
-			   if ( MAPSPOT( i, j, 2 ) == 0 )
-				  {
-				  MAPSPOT( i, j, 0 ) = ( unsigned short )( GetAreaNumber( i, j,
-					 ( tile - 256 ) << 1 ) + AREATILE );
-				  MAPSPOT( i, j, 1 ) = 0;
-				  }
-				 break;
-
-			case 300:
-			  case 318:
-			  case 336:
-			  case 354:
-			   if ( MAPSPOT( i, j, 2 ) == 0 )
-				  {
-				  MAPSPOT( i, j, 0 ) = ( unsigned short )( GetAreaNumber( i, j,
-					 ( ( tile - 300 ) / 9 ) + AREATILE ) );
-				  MAPSPOT( i, j, 1 ) = 0;
-				  }
-				 break;
-			}
-		 }
-	  }
-   }
-*/
 
 /*
 ==================
