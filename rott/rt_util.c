@@ -367,9 +367,9 @@ void Error(char *error, ...)
 		fprintf(stderr, "Area         = %ld\n", (long)level);
 	}
 
-	ShutDown();
+	ShutDown(1);
 
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, PACKAGE_STRING, msgbuf,
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, package_string, msgbuf,
 							 NULL);
 	SDL_Quit();
 

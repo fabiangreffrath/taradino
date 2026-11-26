@@ -390,6 +390,8 @@ char *FindFileByName(const char *name)
 	return NULL;
 }
 
+char *package_string = PACKAGE_STRING;
+
 // Prefers the registered assets and falls back to the shareware ones.
 void DetectGameData(void)
 {
@@ -411,4 +413,6 @@ void DetectGameData(void)
 
 	rott_shareware = 1;
 	free(shareware);
+
+	package_string = M_StringJoin(PACKAGE_STRING, " (Shareware)", NULL);
 }

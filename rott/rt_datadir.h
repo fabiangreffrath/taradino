@@ -21,6 +21,7 @@
 #include "m_misc.h"
 
 extern char *datadir;
+extern char *package_string;
 
 char *GetPrefDir(void);
 char *FindFileByName(const char *name);

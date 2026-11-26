@@ -86,6 +86,8 @@ static union {
 					   SDL_Surface *dst, const SDL_Rect *dstrect);
 } StretchFunc;
 
+extern char *package_string;
+
 void GraphicsMode(void)
 {
 	uint32_t flags = SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
@@ -107,7 +109,7 @@ void GraphicsMode(void)
 		SDL_CreateWindow(NULL, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 						 iGLOBAL_SCREENWIDTH, displayheight, flags);
 	SDL_SetWindowMinimumSize(screen, iGLOBAL_SCREENWIDTH, displayheight);
-	SDL_SetWindowTitle(screen, PACKAGE_STRING);
+	SDL_SetWindowTitle(screen, package_string);
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "nearest");
 	renderer = SDL_CreateRenderer(screen, -1, SDL_RENDERER_PRESENTVSYNC);

@@ -1456,7 +1456,7 @@ boolean CheckForQuickLoad(void)
 
 //===========================================================================
 
-void ShutDown(void)
+void ShutDown(int rc)
 {
 	if (standalone == false)
 	{
@@ -1480,7 +1480,8 @@ void ShutDown(void)
 	Z_ShutDown();
 	//   _settextcursor (0x0607);
 
-	exit(0);
+	if (rc == 0)
+		exit(0);
 }
 
 //===========================================================================
@@ -1506,7 +1507,7 @@ void QuitGame(void)
 	PrintTileStats();
 	SetTextMode();
 
-	ShutDown();
+	ShutDown(0);
 }
 
 void InitCharacter(void)

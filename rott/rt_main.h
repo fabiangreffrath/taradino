@@ -136,7 +136,7 @@ extern boolean newlevel;
 void QuitGame(void);
 void PlayCinematic(void);
 void InitCharacter(void);
-void ShutDown(void);
+void ShutDown(int rc);
 void UpdateGameObjects(void);
 
 extern int polltime;
