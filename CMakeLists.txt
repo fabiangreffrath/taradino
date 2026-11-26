@@ -80,6 +80,7 @@ if(MSVC)
 	target_compile_options(taradino PRIVATE /wd4267 /wd4244)
 else()
 	target_compile_options(taradino PRIVATE -Wall)
+	target_compile_options(taradino PRIVATE -Wundef)
 endif()
 
 if(${TARADINO_WARNINGS_AS_ERRORS})
