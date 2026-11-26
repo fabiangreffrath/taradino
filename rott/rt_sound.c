@@ -40,11 +40,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "rt_str.h"
 
-#if (SHAREWARE == 0)
-#include "snd_reg.h"
-#else
-#include "snd_shar.h"
-#endif
+#include "snd_tables.h"
 
 // Local Variables
 
