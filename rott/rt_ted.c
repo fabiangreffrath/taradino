@@ -30,7 +30,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "states.h"
 #include "rt_ted.h"
-#include "_rt_ted.h"
 #include "w_wad.h"
 #include "z_zone.h"
 #include "rt_util.h"
@@ -57,6 +56,77 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_debug.h"
 #include "rt_scale.h"
 #include "rt_net.h"
+
+#define MAXPRECACHE 3500
+
+#include "rt_actor.h"
+#include "develop.h"
+
+#define SHAREWARE_TAG 0x4d4b
+#define REGISTERED_TAG 0x4344
+#define RTL_VERSION (0x0101)
+#define RXL_VERSION (0x0200)
+#define COMMBAT_SIGNATURE ("RTC")
+#define NORMAL_SIGNATURE ("RTL")
+#define EXTENDED_COMMBAT_SIGNATURE ("RXC")
+#define EXTENDED_SIGNATURE ("RXL")
+#define RTL_HEADER_OFFSET 8
+
+typedef struct
+{
+	int lump;
+	int cachelevel;
+	int type; // To make precaching possible on big endian machines
+} cachetype;
+
+//========================================
+
+typedef struct
+{
+	short RLEWtag;
+	int headeroffsets[100];
+	byte tileinfo[1];
+} mapfiletype;
+
+typedef struct
+{
+	int planestart[3];
+	unsigned short planelength[3];
+	unsigned short width, height;
+	char name[16];
+} maptype;
+
+#define ActorIsPushWall(xx, yy) \
+	((actorat[xx][yy]) && (((objtype *)actorat[xx][yy])->which == PWALL))
+#define ActorIsWall(xx, yy) \
+	((actorat[xx][yy]) && (((objtype *)actorat[xx][yy])->which == WALL))
+#define ActorIsSpring(xx, yy) \
+	((actorat[xx][yy]) && (((objtype *)actorat[xx][yy])->which != DOOR) && \
+	 (((objtype *)actorat[xx][yy])->obclass == springobj))
+#define StaticUndefined(xx, yy) \
+	((sprites[xx][yy]) && (((statobj_t *)sprites[xx][yy])->z < -64))
+
+#define PRECACHEASTRINGX 141
+#define PRECACHEASTRINGY 8
+
+#define PRECACHEESTRINGX 16
+#define PRECACHEESTRINGY 8
+
+#define PRECACHESTRINGX 16
+#define PRECACHESTRINGY 144
+
+#define PRECACHEBARX 28
+#define PRECACHEBARY 178
+
+#define PRECACHELED1X 9
+#define PRECACHELED1Y 8
+
+#define PRECACHELED2X 9
+#define PRECACHELED2Y 12
+
+#define MAXLEDS 57
+
+#define MAXSILLYSTRINGS 32
 
 //========================================
 // GLOBAL VARIABLES

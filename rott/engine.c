@@ -19,13 +19,17 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "rt_def.h"
 #include "engine.h"
-#include "_engine.h"
 #include "rt_draw.h"
 #include "rt_door.h"
 #include "rt_stat.h"
 #include "rt_ted.h"
 #include "rt_view.h"
 #include <stdlib.h>
+
+#define NOTSAMETILE(x1, x2) \
+	((posts[(x1)].posttype != posts[(x2)].posttype) || \
+	 (posts[(x1)].offset != posts[(x2)].offset))
+#define SGN(x) (x > 0 ? 1 : -1)
 
 /*
 =============================================================================

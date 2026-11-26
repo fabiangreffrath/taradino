@@ -27,7 +27,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_actor.h"
 #include "rt_stat.h"
 #include "rt_draw.h"
-#include "_rt_draw.h"
 #include "rt_dr_a.h"
 #include "rt_fc_a.h"
 #include "rt_scale.h"
@@ -57,6 +56,52 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_rand.h"
 #include "rt_net.h"
 #include "rt_sc_a.h"
+
+#define MINZ 0x2700
+#define MAXBOB 0x9000
+
+#define GOLOWER 0x38000
+#define GOHIGHER 0x20000
+
+#define MAXVISIBLEDOORS 30
+
+#define DHEIGHTFRACTION 8
+
+#define MINZ 0x2700
+#define MAXDRAWNTICS 40
+
+#define W_CHANGE (WEAPONUPTICS || WEAPONDOWNTICS)
+
+#define NUMWEAPGRAPHICS 16
+
+#define HFRACTION (6 + HEIGHTFRACTION)
+
+#define FIXEDTRANSLEVEL (30)
+
+typedef struct
+{
+	int x;
+	int y;
+	int angle;
+	int scale;
+	int dx;
+	int dy;
+	int dangle;
+	int dscale;
+	int phase;
+	int time;
+	int pausetime;
+	int pausex;
+	int pausey;
+} screensaver_t;
+
+void DrawPlayerWeapon(void);
+boolean TransformPlane(int x1, int y1, int x2, int y2, visobj_t *plane);
+int CalcRotate(objtype *ob);
+void DrawScaleds(void);
+void FixOfs(void);
+void SetSpriteLightLevel(int x, int y, visobj_t *sprite, int dir,
+						 int fullbright);
 
 extern void VH_UpdateScreen(void);
 

@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_util.h"
 #include "rt_draw.h"
 #include "rt_scale.h"
-#include "_rt_scal.h"
 #include "rt_sc_a.h"
 #include "engine.h"
 #include "w_wad.h"
@@ -36,6 +35,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_vid.h"
 #include "rt_view.h"
 #include "rt_playr.h"
+
+#define PLAYERHEIGHT (260 << HEIGHTFRACTION)
 
 /*
 =============================================================================

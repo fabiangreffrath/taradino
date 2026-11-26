@@ -38,7 +38,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_build.h"
 #include "lumpy.h"
 #include "rt_str.h"
-#include "_rt_str.h"
 #include "isr.h"
 #include "rt_in.h"
 #include "rt_view.h"
@@ -49,6 +48,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_msg.h"
 #include "rt_playr.h"
 #include "rt_sound.h"
+
+//******************************************************************************
+//
+// PROTOTYPES
+//
+//******************************************************************************
+
+void VWB_DrawPropString(const char *string);
+void VW_MeasurePropString(const char *string, int *width, int *height);
+
+// void (*USL_MeasureString)(const char *, int *, int *, font_t *) =
+// VW_MeasurePropString,
+//      (*USL_DrawString)(const char *) = VWB_DrawPropString;
+void (*USL_MeasureString)(const char *, int *, int *,
+						  font_t *) = (void (*)(const char *, int *, int *,
+												font_t *))VW_MeasurePropString,
+								 (*USL_DrawString)(const char *) =
+									 VWB_DrawPropString;
 
 //******************************************************************************
 //

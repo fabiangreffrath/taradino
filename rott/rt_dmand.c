@@ -23,9 +23,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_sound.h"
 #include "rt_net.h"
 #include "rt_dmand.h"
-#include "_rt_dman.h"
 #include "fx_man.h"
 #include "develop.h"
+
+#define RECORDINGSAMPLERATE 7000
+#define RECORDINGBUFFERSIZE 16384
+#define PLAYBACKBUFFERSIZE 16384
+#define PLAYBACKDELTASIZE 256
 
 static boolean Recording = false;
 static boolean Feeder = false;
