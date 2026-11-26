@@ -36,7 +36,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_sound.h"
 #include "scriplib.h"
 #include "rt_main.h"
-#include "_rt_main.h"
 #include "rt_com.h"
 #include "rt_util.h"
 #include "z_zone.h"
@@ -78,6 +77,16 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 #include "vgatext.h"
+
+void GameLoop(void);
+void PlayLoop(void);
+void PollKeyboard(void);
+void FixColorMap(void);
+
+#define QUITTIMEINTERVAL ((35 * 6) - 5)
+boolean CheckForQuickLoad(void);
+
+void DrawRottTitle(void);
 
 int oldtime;
 int gametime;

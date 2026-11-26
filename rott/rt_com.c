@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdarg.h>
 
 #include "rt_def.h"
-#include "_rt_com.h"
 #include "rt_com.h"
 #include "rt_util.h"
 #include "rt_in.h"
@@ -38,6 +37,35 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_net.h"
 #include "rt_draw.h"
 // #include "rt_ser.h"
+
+#define SYNCPACKETSIZE 32
+
+#define SYNC_PHASE0 6
+#define SYNC_PHASE1 0
+#define SYNC_PHASE2 1
+#define SYNC_PHASE3 2
+#define SYNC_PHASE4 3
+#define SYNC_PHASE5 4
+#define SYNC_MEMO 99
+#define NUMSYNCPHASES 5
+
+#define SYNCTIME 15
+
+typedef struct
+{
+	byte type;
+	int phase;
+	int clocktime;
+	int delta;
+	byte data[SYNCPACKETSIZE];
+} syncpackettype;
+
+typedef struct
+{
+	int sendtime;
+	int deltatime;
+	syncpackettype pkt;
+} synctype;
 
 // GLOBAL VARIABLES
 

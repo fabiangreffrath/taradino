@@ -27,7 +27,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_main.h"
 #include "rt_def.h"
 #include "rt_in.h"
-#include "_rt_in.h"
 #include "isr.h"
 #include "rt_util.h"
 #include "rt_cfg.h"
@@ -39,6 +38,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "keyb.h"
 
 #define MAXMESSAGELENGTH (COM_MAXTEXTSTRINGLENGTH - 1)
+
+//****************************************************************************
+//
+// DEFINES
+//
+//****************************************************************************
+
+#define KeyInt 9 // The keyboard ISR number
+#define MReset 0
+#define MButtons 3
+#define MDelta 11
+#define MouseInt 0x33
+#define JoyScaleMax 32768
+#define JoyScaleShift 8
+#define MaxJoyValue 5000
+
+void Mouse(int x);
 
 //****************************************************************************
 //

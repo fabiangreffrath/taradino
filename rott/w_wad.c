@@ -26,7 +26,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "rt_def.h"
 #include "rt_util.h"
-#include "_w_wad.h"
 #include "w_wad.h"
 #include "z_zone.h"
 #include "isr.h"
@@ -34,6 +33,33 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "rt_crc.h"
 #include "rt_main.h"
+
+#define CHECKPERIOD 20
+
+//===============
+//   TYPES
+//===============
+
+typedef struct
+{
+	char name[8];
+	int handle, position, size;
+	int byteswapped;
+} lumpinfo_t;
+
+typedef struct
+{
+	char identification[4]; // should be IWAD
+	int numlumps;
+	int infotableofs;
+} wadinfo_t;
+
+typedef struct
+{
+	int filepos;
+	int size;
+	char name[8];
+} filelump_t;
 
 //=============
 // GLOBALS

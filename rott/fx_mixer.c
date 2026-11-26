@@ -25,7 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "w_wad.h"
 #include "z_zone.h"
 
-#include "_rt_soun.h"
 #include "fx_man.h"
 #include "rt_sound.h"
 

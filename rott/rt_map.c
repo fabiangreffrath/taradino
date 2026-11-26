@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "sprites.h"
 #include "rt_map.h"
 #include "rt_dr_a.h"
-#include "_rt_map.h"
 #include "isr.h"
 #include "rt_util.h"
 #include "modexlib.h"
@@ -48,6 +47,23 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rt_menu.h"
 #include "rt_net.h"
 #include "rt_str.h"
+
+#if defined(__WATCOM__)
+#pragma aux FastFill = "rep stosb" parm[edi][eax][ecx] modify exact[ecx]
+#endif
+void FastFill(byte *buf, int color, int count);
+
+#define MAP_PLAYERCOLOR 4
+#define MAP_MWALLCOLOR 13
+#define MAP_PWALLCOLOR 8
+#define MAP_AWALLCOLOR 9
+#define MAP_WALLCOLOR 7
+#define MAP_DOORCOLOR 3
+#define MAP_SPRITECOLOR 2
+#define MAP_ACTORCOLOR 15
+#define MAP_SKYCOLOR 11
+
+#define FULLMAP_SCALE 5
 
 //===========================================================================
 
