@@ -2778,6 +2778,8 @@ void CP_NewGame(void)
 			break;
 	}
 
+	printf("New Game: Using ROTTMAPS = %s\n", ROTTMAPS);
+
 	MainMenu[savegame].active = CP_Active;
 
 	gamestate.battlemode = battle_StandAloneGame;
@@ -6515,7 +6517,6 @@ int CP_EpisodeSelection(void)
 	if (which < EpisodeItems.amount)
 	{
 		ROTTMAPS = found_episodes[which];
-		printf("New Game: Using ROTTMAPS = %s\n", ROTTMAPS);
 	}
 
 	return (1);
