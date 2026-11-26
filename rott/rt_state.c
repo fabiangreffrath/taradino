@@ -1231,7 +1231,7 @@ statetype s_guts2 = { false, GUTS2, 3, T_Collide, SF_GUTS, &s_guts3 };
 statetype s_guts1 = { false, GUTS1, 3, T_Collide, SF_GUTS, &s_guts2 };
 
 // MED
-#if (SHAREWARE == 1) || (DOPEFISH == 0)
+#if (DOPEFISH == 0)
 statetype s_collectorwander8 = { false, COLLECTOR15,
 								 0,		T_CollectorWander,
 								 0,		&s_collectorwander1 };
@@ -1285,7 +1285,7 @@ statetype s_collectorwander1 = { false, DOPE1,
 #endif
 
 // MED
-#if (SHAREWARE == 1) || (DOPEFISH == 0)
+#if (DOPEFISH == 0)
 statetype s_collectorfdoor8 = { false, COLLECTOR15,
 								0,	   T_CollectorFindDoor,
 								0,	   &s_collectorfdoor1 };
@@ -1453,8 +1453,6 @@ statetype s_respawn4 = { false, VAPORIZED5, 3, NULL, 0, &s_respawn5 };
 statetype s_respawn3 = { false, VAPORIZED6, 3, NULL, 0, &s_respawn4 };
 statetype s_respawn2 = { false, VAPORIZED7, 3, NULL, 0, &s_respawn3 };
 statetype s_respawn1 = { false, VAPORIZED8, 3, NULL, 0, &s_respawn2 };
-
-#if (SHAREWARE == 0)
 
 //========================= NON-SHAREWARE STATES ============================
 
@@ -2792,7 +2790,5 @@ statetype s_serialdog = { true,		SERIALDOG_W11, 5,
 statetype s_serialdogattack = {
 	true, SERIALDOG_ATTACK1, 0, T_Attack, SF_DOGSTATE, &s_serialdogattack
 };
-
-#endif
 
 #include "rt_table.h"

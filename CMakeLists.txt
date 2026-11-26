@@ -9,13 +9,10 @@ project(taradino
 	LANGUAGES C
 	VERSION 2025.12.22
 )
-configure_file(rott/version.h.in rott/version.h @ONLY)
 
 option(TARADINO_ASAN "Use Address Sanitizer" OFF)
-option(TARADINO_SHAREWARE "Build shareware version" OFF)
 option(TARADINO_WARNINGS_AS_ERRORS "Treat all compiler warnings as errors" OFF)
 set(TARADINO_DATADIR "" CACHE STRING "Game data file directory")
-set(TARADINO_SUFFIX "" CACHE STRING "Executable file name suffix")
 
 add_library(ASAN::ASAN IMPORTED INTERFACE)
 target_compile_options(ASAN::ASAN INTERFACE -fsanitize=address $<$<NOT:$<COMPILE_LANG_AND_ID:C,MSVC>>:-fno-omit-frame-pointer>)
@@ -32,16 +29,7 @@ if(WIN32 OR MSVC OR CMAKE_SYSTEM_NAME STREQUAL "Windows")
 	list(APPEND TARADINO_SOURCES "${PROJECT_SOURCE_DIR}/misc/taradino.rc")
 endif()
 
-string(LENGTH "${TARADINO_SUFFIX}" TARADINO_SUFFIX_LEN)
-if(TARADINO_SUFFIX_LEN GREATER 0)
-	string(CONCAT TARADINO_EXEC "${CMAKE_PROJECT_NAME}" "-" "${TARADINO_SUFFIX}")
-endif()
-
-if(${TARADINO_SHAREWARE})
-	set(TARADINO_TITLE "Taradino (Shareware)")
-else()
-	set(TARADINO_TITLE "Taradino")
-endif()
+set(TARADINO_TITLE "Taradino")
 
 add_executable(taradino ${TARADINO_SOURCES})
 target_link_libraries(taradino PRIVATE
@@ -92,10 +80,7 @@ if(MSVC)
 	target_compile_options(taradino PRIVATE /wd4267 /wd4244)
 else()
 	target_compile_options(taradino PRIVATE -Wall)
-endif()
-
-if(${TARADINO_SHAREWARE})
-	target_compile_definitions(taradino PRIVATE SHAREWARE=1)
+	target_compile_options(taradino PRIVATE -Wundef)
 endif()
 
 if(${TARADINO_WARNINGS_AS_ERRORS})
@@ -127,8 +112,6 @@ if(WIN32)
 	install(FILES ${PROJECT_SOURCE_DIR}/COPYING DESTINATION .)
 	install(FILES ${PROJECT_SOURCE_DIR}/README.md DESTINATION .)
 else()
-	configure_file(${PROJECT_SOURCE_DIR}/misc/taradino.desktop.in ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.desktop @ONLY)
-	configure_file(${PROJECT_SOURCE_DIR}/doc/taradino.6.in ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.6 @ONLY)
 	install(FILES ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
 	install(FILES ${PROJECT_SOURCE_DIR}/misc/taradino.png DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/128x128/apps RENAME ${TARADINO_EXEC}.png)
 	install(FILES ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.6 DESTINATION ${CMAKE_INSTALL_MANDIR}/man6)

@@ -21,11 +21,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _develop_public
 
 #define BNACRASHPREVENT 1 // bna added
-// Flavor selection (shareware, registered, cd version, site license) has moved
-// to the Makefile
-#ifndef SHAREWARE
-#define SHAREWARE 0
-#endif
+// Set at startup by DetectGameData() from the assets that were found.
+extern int rott_shareware;
+void DetectGameData(void);
 
 // cute little dopefish thing, only works with special patch?
 #define DOPEFISH 0

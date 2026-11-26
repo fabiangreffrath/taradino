@@ -173,11 +173,8 @@ char *GetPrefDir(void)
 		M_MakeDirectory(dir);
 
 		result = dir;
-#if !(SHAREWARE == 1)
-		dir = M_StringJoin(result, "darkwar", PATH_SEP_STR, NULL);
-#else
-		dir = M_StringJoin(result, "huntbgin", PATH_SEP_STR, NULL);
-#endif
+		dir = M_StringJoin(result, rott_shareware ? "huntbgin" : "darkwar",
+						   PATH_SEP_STR, NULL);
 		free(result);
 
 		M_MakeDirectory(dir);
@@ -187,6 +184,7 @@ char *GetPrefDir(void)
 }
 
 char *datadir = NULL;
+int rott_shareware = 0;
 
 #define MAX_DATADIRS 16
 static char *datadirs[MAX_DATADIRS] = { 0 };
@@ -390,4 +388,31 @@ char *FindFileByName(const char *name)
 	// File not found
 
 	return NULL;
+}
+
+char *package_string = PACKAGE_STRING;
+
+// Prefers the registered assets and falls back to the shareware ones.
+void DetectGameData(void)
+{
+	char *const registered = FindFileByName("darkwar.wad");
+
+	if (registered != NULL)
+	{
+		rott_shareware = 0;
+		free(registered);
+		return;
+	}
+
+	char *const shareware = FindFileByName("huntbgin.wad");
+
+	if (shareware == NULL)
+	{
+		Error("Could not find darkwar.wad or huntbgin.wad.");
+	}
+
+	rott_shareware = 1;
+	free(shareware);
+
+	package_string = M_StringJoin(PACKAGE_STRING, " (Shareware)", NULL);
 }

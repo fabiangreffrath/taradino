@@ -930,13 +930,8 @@ void ReadConfig(void)
 //
 //******************************************************************************
 
-#if (SHAREWARE == 1)
-#define VENDORDOC ("VENDOR.DOC")
-#define VENDORLUMP ("VENDOR")
-#else
-#define VENDORDOC ("LICENSE.DOC")
-#define VENDORLUMP ("LICENSE")
-#endif
+#define VENDORDOC (rott_shareware ? "VENDOR.DOC" : "LICENSE.DOC")
+#define VENDORLUMP (rott_shareware ? "VENDOR" : "LICENSE")
 
 void CheckVendor(void)
 {
@@ -1876,13 +1871,16 @@ void GetAlternateFile(char *tokenstr, AlternateInformation *info)
 			GetToken(false);
 			if (stricmp(token, "~"))
 			{
-#if (SHAREWARE == 0)
-				info->avail = true;
-				info->file = M_StringDuplicate(token);
-#else
-				printf("Alternate file %s ignored.\n", token);
-				info->file = "";
-#endif
+				if (rott_shareware)
+				{
+					printf("Alternate file %s ignored.\n", token);
+					info->file = "";
+				}
+				else
+				{
+					info->avail = true;
+					info->file = M_StringDuplicate(token);
+				}
 			}
 		}
 	}

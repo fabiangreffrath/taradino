@@ -20,20 +20,11 @@ Optional OPL3/AdLib music synthesis is supported by using libADLMIDI.
 ## Building
 
 Building Taradino requires GCC, CMake, the development packages for SDL2 and SDL2_Mixer (and libADLMIDI, if you like).
-After installing, you can run the following commands to build:
-
-Registered:
+After installing, you can run the following command to build:
 
 ```sh
-cmake -Bcmake-build-registered -DCMAKE_BUILD_TYPE=Release -S.
-cmake --build cmake-build-registered
-```
-
-Shareware:
-
-```sh
-cmake -Bcmake-build-shareware -DCMAKE_BUILD_TYPE=Release -S. -DTARADINO_SHAREWARE=ON -DTARADINO_SUFFIX=shareware
-cmake --build cmake-build-shareware
+cmake -B build -DCMAKE_BUILD_TYPE=Release -S.
+cmake --build build
 ```
 
 ## Legalese

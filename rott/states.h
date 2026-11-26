@@ -22,11 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "develop.h"
 
-#if (SHAREWARE == 0)
-#define MAXSTATES 1300 + 17 + 8 + 32 + 32
-#else
-#define MAXSTATES 660 + 17 + 8 + 32 + 32
-#endif
+#define MAXSTATES (1300 + 17 + 8 + 32 + 32)
 
 #define SF_CLOSE 0x01
 #define SF_CRUSH 0x02
@@ -331,8 +327,6 @@ extern statetype s_blooddrip1;
 extern statetype s_diskmaster;
 extern statetype s_bstar1;
 
-#if (SHAREWARE == 0)
-
 extern statetype s_scottwander1;
 extern statetype s_scottwanderdoor1;
 
@@ -575,7 +569,5 @@ extern statetype s_serialdogattack;
 extern statetype s_doguse;
 extern statetype s_doglick;
 extern statetype s_dogwait;
-
-#endif
 
 #endif

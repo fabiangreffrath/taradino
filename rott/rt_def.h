@@ -98,7 +98,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 
 #define PI 3.141592657
-#define LONG(a) ((int)a)
+#define LONG(a) ((int)(a))
 #define M_PI 3.14159
 
 #ifndef O_BINARY
@@ -134,7 +134,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #endif
 #endif
 
-#define arrlen(array) (sizeof(array) / sizeof(*array))
+#define arrlen(array) (sizeof(array) / sizeof(*(array)))
 
 #ifndef _MSC_VER
 char *strupr(char *);
@@ -335,11 +335,7 @@ enum
 	NUMBUTTONS
 };
 
-#if (SHAREWARE == 0)
 #define MAXWEAPONS 13
-#else
-#define MAXWEAPONS 9
-#endif
 
 typedef enum
 {
@@ -352,14 +348,10 @@ typedef enum
 	wp_firebomb,
 	wp_firewall,
 	wp_godhand,
-
-#if (SHAREWARE == 0)
 	wp_split,
 	wp_kes,
 	wp_bat,
 	wp_dog
-#endif
-
 } weapontype;
 
 enum

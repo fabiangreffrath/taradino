@@ -662,13 +662,11 @@ void PreCacheActor(int actor, int which)
 				start = W_GetNumForName("FJUP0");
 				end = W_GetNumForName("FJUP22");
 			}
-#if (SHAREWARE == 0)
 			else
 			{
 				start = W_GetNumForName("FJDOWN0");
 				end = W_GetNumForName("FJDOWN22");
 			}
-#endif
 
 			break;
 
@@ -676,7 +674,6 @@ void PreCacheActor(int actor, int which)
 
 			SD_PreCacheSound(SD_BLADESPINSND);
 
-#if (SHAREWARE == 0)
 
 			if (which & 2)
 			{
@@ -704,10 +701,6 @@ void PreCacheActor(int actor, int which)
 					end = W_GetNumForName("DBLADE9");
 				}
 			}
-#else
-			start = W_GetNumForName("UBLADE1");
-			end = W_GetNumForName("UBLADE9");
-#endif
 
 			break;
 		case crushcolobj:
@@ -718,13 +711,11 @@ void PreCacheActor(int actor, int which)
 				start = W_GetNumForName("CRDOWN1");
 				end = W_GetNumForName("CRDOWN8");
 			}
-#if (SHAREWARE == 0)
 			else
 			{
 				start = W_GetNumForName("CRUP1");
 				end = W_GetNumForName("CRUP8");
 			}
-#endif
 			break;
 
 		case boulderobj:
@@ -744,13 +735,11 @@ void PreCacheActor(int actor, int which)
 				start = W_GetNumForName("SPEARUP1");
 				end = W_GetNumForName("SPERUP16");
 			}
-#if (SHAREWARE == 0)
 			else
 			{
 				start = W_GetNumForName("SPEARDN1");
 				end = W_GetNumForName("SPERDN16");
 			}
-#endif
 
 			break;
 
@@ -1373,17 +1362,19 @@ void ReadROTTMap(char *filename, int mapnum)
 		Error("ReadROTTMap: Tried to load a non existent map!");
 	}
 
-#if (SHAREWARE == 1)
-	if (RTLMap.RLEWtag == REGISTERED_TAG)
+	if (rott_shareware)
 	{
-		Error("Can't use maps from the registered game in shareware version.");
-	}
+		if (RTLMap.RLEWtag == REGISTERED_TAG)
+		{
+			Error("Can't use maps from the registered game in shareware "
+				  "version.");
+		}
 
-	if (RTLMap.RLEWtag != SHAREWARE_TAG)
-	{
-		Error("Can't use modified maps in shareware version.");
+		if (RTLMap.RLEWtag != SHAREWARE_TAG)
+		{
+			Error("Can't use modified maps in shareware version.");
+		}
 	}
-#endif
 
 	mapwidth = 128;
 	mapheight = 128;
@@ -1410,15 +1401,9 @@ void ReadROTTMap(char *filename, int mapnum)
 //
 // unRLEW, skipping expanded length
 //
-#if (SHAREWARE == 1)
 		CA_RLEWexpand((unsigned short *)buffer,
 					  (unsigned short *)mapplanes[plane], expanded >> 1,
-					  SHAREWARE_TAG);
-#else
-		CA_RLEWexpand((unsigned short *)buffer,
-					  (unsigned short *)mapplanes[plane], expanded >> 1,
-					  RTLMap.RLEWtag);
-#endif
+					  rott_shareware ? SHAREWARE_TAG : RTLMap.RLEWtag);
 
 		SafeFree(buffer);
 	}
@@ -5102,9 +5087,7 @@ void InitializePlayerstates(void)
 	{
 		pstate = &PLAYERSTATE[i];
 		if (pstate->missileweapon == wp_godhand
-#if (SHAREWARE == 0)
 			|| pstate->missileweapon == wp_dog
-#endif
 		)
 		{
 			pstate->weapon = pstate->new_weapon = pstate->oldweapon;
@@ -5119,7 +5102,6 @@ void InitializePlayerstates(void)
 
 void SetupSnakePath(void)
 {
-#if (SHAREWARE == 0)
 	int i, j;
 	unsigned short *map, tile;
 
@@ -5136,7 +5118,6 @@ void SetupSnakePath(void)
 				whichpath++;
 			}
 		}
-#endif
 }
 
 void SetupRandomActors(void)
@@ -5790,10 +5771,9 @@ void SetupStatics(void)
 					break;
 
 				case 46:
-#if (SHAREWARE == 1)
-					Error("\n tried to spawn excalibat at %d,%d in shareware !",
-						  i, j);
-#endif
+					if (rott_shareware)
+						Error("\n tried to spawn excalibat at %d,%d in shareware !",
+							  i, j);
 
 					SD_PreCacheSoundGroup(SD_EXCALIBOUNCESND,
 										  SD_EXCALIBLASTSND);
@@ -5901,11 +5881,10 @@ void SetupStatics(void)
 						gamestate.missiletotal++;
 					break;
 				case 55:
-#if (SHAREWARE == 1)
-					Error("\n tried to spawn split missile at %d,%d in "
-						  "shareware !",
-						  i, j);
-#endif
+					if (rott_shareware)
+						Error("\n tried to spawn split missile at %d,%d in "
+							  "shareware !",
+							  i, j);
 					SD_PreCacheSound(SD_MISSILEHITSND);
 					SD_PreCacheSound(SD_MISSILEFLYSND);
 					SD_PreCacheSound(SD_SPLITFIRESND);
@@ -5917,10 +5896,9 @@ void SetupStatics(void)
 						gamestate.missiletotal++;
 					break;
 				case 56:
-#if (SHAREWARE == 1)
-					Error("\n tried to spawn kes at %d,%d in shareware !", i,
-						  j);
-#endif
+					if (rott_shareware)
+						Error("\n tried to spawn kes at %d,%d in shareware !", i,
+							  j);
 
 					SD_PreCacheSound(SD_GRAVSND);
 					SD_PreCacheSound(SD_GRAVHITSND);
@@ -6042,9 +6020,8 @@ void SetupStatics(void)
 
 				case 253:
 
-#if (SHAREWARE == 1)
-					Error("DogMode Power up in shareware at x=%d y=%d\n", i, j);
-#endif
+					if (rott_shareware)
+						Error("DogMode Power up in shareware at x=%d y=%d\n", i, j);
 
 					SD_PreCacheSoundGroup(SD_DOGMODEPANTSND, SD_DOGMODELICKSND);
 					if ((locplayerstate->player == 1) ||

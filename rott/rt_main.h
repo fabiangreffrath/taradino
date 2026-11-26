@@ -31,17 +31,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "rottnet.h"
 #include "rt_battl.h"
 
-#if (SHAREWARE == 0)
-#define STANDARDGAMEWAD "DARKWAR.WAD"
-#define STANDARDGAMELEVELS "DARKWAR.RTL"
-#define STANDARDBATTLELEVELS "DARKWAR.RTC"
+#define STANDARDGAMEWAD (rott_shareware ? "HUNTBGIN.WAD" : "DARKWAR.WAD")
+#define STANDARDGAMELEVELS (rott_shareware ? "HUNTBGIN.RTL" : "DARKWAR.RTL")
+#define STANDARDBATTLELEVELS (rott_shareware ? "HUNTBGIN.RTC" : "DARKWAR.RTC")
 #define SUPERROTTBATTLELEVELS "ROTTCD.RTC"
 #define SITELICENSEBATTLELEVELS "ROTTSITE.RTC"
-#else
-#define STANDARDGAMEWAD "HUNTBGIN.WAD"
-#define STANDARDGAMELEVELS "HUNTBGIN.RTL"
-#define STANDARDBATTLELEVELS "HUNTBGIN.RTC"
-#endif
 
 enum
 {
@@ -142,7 +136,7 @@ extern boolean newlevel;
 void QuitGame(void);
 void PlayCinematic(void);
 void InitCharacter(void);
-void ShutDown(void);
+void ShutDown(int rc);
 void UpdateGameObjects(void);
 
 extern int polltime;

@@ -34,6 +34,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <time.h>
+
 #include "_rt_util.h"
 #include "rt_util.h"
 #include "isr.h"
@@ -367,9 +368,9 @@ void Error(char *error, ...)
 		fprintf(stderr, "Area         = %ld\n", (long)level);
 	}
 
-	ShutDown();
+	ShutDown(1);
 
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, PACKAGE_STRING, msgbuf,
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, package_string, msgbuf,
 							 NULL);
 	SDL_Quit();
 
@@ -836,7 +837,7 @@ long ParseNum(char *str)
 	return atol(str);
 }
 
-#if (BYTE_ORDER == LITTLE_ENDIAN)
+#if (SDL_BYTEORDER == SDL_LIL_ENDIAN)
 #define KeepShort IntelShort
 #define SwapShort MotoShort
 #define KeepLong IntelLong
