@@ -2086,18 +2086,9 @@ void SpawnMaskedWall(int tilex, int tiley, int which, int flags)
 	{
 		case mw_peephole:
 
-			// #if (SHAREWARE == 1)
 			side = W_GetNumForName("SIDE21");
 			middle = W_GetNumForName("ABOVEM4A");
 			above = W_GetNumForName("ABOVEM4");
-			/*
-			#else
-			   side   = W_GetNumForName("SIDE16");
-			   middle = W_GetNumForName("ABOVEM3A") ;
-			   above  = W_GetNumForName("ABOVEM2A") ;
-
-			#endif
-			*/
 			bottom = W_GetNumForName("PEEPMASK");
 			break;
 
@@ -2112,71 +2103,33 @@ void SpawnMaskedWall(int tilex, int tiley, int which, int flags)
 
 		case mw_multi1:
 
-			/*
-				#if (SHAREWARE == 1)
-				   side = W_GetNumForName("SIDE21");
-				   middle = W_GetNumForName("ABOVEM4A") ;
-				   above  = W_GetNumForName("ABOVEM4") ;
-
-				#else
-			*/
-			// side   = W_GetNumForName("SIDE23") ;
 			side = W_GetNumForName("SIDE21");
 			middle = W_GetNumForName("ABOVEM5A");
 			above = W_GetNumForName("ABOVEM5");
-
-			// #endif
 
 			bottom = W_GetNumForName("MULTI1");
 			break;
 
 		case mw_multi2:
-			/*
-			#if (SHAREWARE == 1)
-			   side = W_GetNumForName("SIDE21");
-			   middle = W_GetNumForName("ABOVEM4A");
-			   above  = W_GetNumForName("ABOVEM4") ;
-
-			#else
-			*/
-			// side   = W_GetNumForName("SIDE23") ;
 			side = W_GetNumForName("SIDE21");
 			middle = W_GetNumForName("ABOVEM5B");
 			above = W_GetNumForName("ABOVEM5");
-
-			// #endif
 
 			bottom = W_GetNumForName("MULTI2");
 			break;
 
 		case mw_multi3:
 
-			/*
-			#if (SHAREWARE == 1)
-			   side = W_GetNumForName("SIDE21");
-			   middle = W_GetNumForName("ABOVEM4A") ;
-			   above  = W_GetNumForName("ABOVEM4")  ;
-
-			#else
-			*/
-			// side   = W_GetNumForName("SIDE23") ;
 			side = W_GetNumForName("SIDE21");
 			middle = W_GetNumForName("ABOVEM5C");
 			above = W_GetNumForName("ABOVEM5");
-
-			// #endif
 
 			bottom = W_GetNumForName("MULTI3");
 			break;
 
 		case mw_singlepane:
 
-			//   #if (SHAREWARE == 1)
 			side = W_GetNumForName("SIDE21");
-
-			//   #else
-			//      side   = W_GetNumForName("SIDE22") ;
-			//   #endif
 
 			middle = W_GetNumForName("ABOVEM4A");
 			above = W_GetNumForName("ABOVEM4");
@@ -2186,15 +2139,8 @@ void SpawnMaskedWall(int tilex, int tiley, int which, int flags)
 		case mw_normal1:
 			side = W_GetNumForName("SIDE21");
 
-			// #if (SHAREWARE == 1)
 			middle = W_GetNumForName("ABOVEM4A");
 			above = W_GetNumForName("ABOVEM4");
-
-			// #else
-			//   middle = W_GetNumForName("ABOVEM1A") ;
-			//   above  = W_GetNumForName("ABOVEM1")  ;
-
-			// #endif
 
 			bottom = W_GetNumForName("MASKED1");
 			break;
@@ -2202,15 +2148,8 @@ void SpawnMaskedWall(int tilex, int tiley, int which, int flags)
 		case mw_normal2:
 			side = W_GetNumForName("SIDE21");
 
-			// #if (SHAREWARE == 1)
 			middle = W_GetNumForName("ABOVEM4A");
 			above = W_GetNumForName("ABOVEM4");
-
-			// #else
-			//    middle = W_GetNumForName("ABOVEM2A") ;
-			//    above  = W_GetNumForName("ABOVEM2")  ;
-
-			// #endif
 
 			bottom = W_GetNumForName("MASKED2");
 			break;
@@ -2218,15 +2157,8 @@ void SpawnMaskedWall(int tilex, int tiley, int which, int flags)
 		case mw_normal3:
 			side = W_GetNumForName("SIDE21");
 
-			// #if (SHAREWARE == 1)
 			middle = W_GetNumForName("ABOVEM4A");
 			above = W_GetNumForName("ABOVEM4");
-
-			// #else
-			//    middle = W_GetNumForName("ABOVEM3A") ;
-			//    above  = W_GetNumForName("ABOVEM3")  ;
-
-			// #endif
 
 			bottom = W_GetNumForName("MASKED3");
 			break;
@@ -2235,15 +2167,8 @@ void SpawnMaskedWall(int tilex, int tiley, int which, int flags)
 
 			side = W_GetNumForName("SIDE21");
 
-			// #if (SHAREWARE == 1)
 			middle = W_GetNumForName("ABOVEM4A");
 			above = W_GetNumForName("ABOVEM4");
-
-			// #else
-			//    middle = W_GetNumForName("ABOVEM6A") ;
-			//    above  = W_GetNumForName("ABOVEM6")  ;
-
-			// #endif
 
 			bottom = W_GetNumForName("EXITARCH");
 			break;
@@ -2252,15 +2177,8 @@ void SpawnMaskedWall(int tilex, int tiley, int which, int flags)
 
 			side = W_GetNumForName("SIDE21");
 
-			// #if (SHAREWARE == 1)
 			middle = W_GetNumForName("ABOVEM4A");
 			above = W_GetNumForName("ABOVEM4");
-
-			// #else
-			//    middle = W_GetNumForName("ABOVEM8A") ;
-			//    above  = W_GetNumForName("ABOVEM8")  ;
-
-			// #endif
 
 			bottom = W_GetNumForName("EXITARCA");
 			break;
@@ -2289,17 +2207,8 @@ void SpawnMaskedWall(int tilex, int tiley, int which, int flags)
 		case mw_entrygate:
 			side = W_GetNumForName("SIDE21");
 
-			// #if (SHAREWARE == 1)
-			// side = W_GetNumForName("SIDE21");
 			middle = W_GetNumForName("ABOVEM4A");
 			above = W_GetNumForName("ABOVEM4");
-
-			// #else
-			// side   = W_GetNumForName("SIDE20") ;
-			//   middle = W_GetNumForName("ABOVEM7A") ;
-			//   above  = W_GetNumForName("ABOVEM7")  ;
-
-			// #endif
 
 			bottom = W_GetNumForName("ENTRARCH");
 			break;

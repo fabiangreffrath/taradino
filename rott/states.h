@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "develop.h"
 
-#define MAXSTATES 1300 + 17 + 8 + 32 + 32
+#define MAXSTATES (1300 + 17 + 8 + 32 + 32)
 
 #define SF_CLOSE 0x01
 #define SF_CRUSH 0x02

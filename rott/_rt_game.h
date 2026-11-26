@@ -73,11 +73,11 @@ typedef struct
 #define AMMO_Y    184
 */
 //--------------------
-#define HEALTH_X 20 * 2
-#define HEALTH_Y (185 * 2) + 16
+#define HEALTH_X (20 * 2)
+#define HEALTH_Y ((185 * 2) + 16)
 
-#define AMMO_X 300 * 2
-#define AMMO_Y (184 * 2) + 16
+#define AMMO_X (300 * 2)
+#define AMMO_Y ((184 * 2) + 16)
 //--------------------
 
 #define SCORE_X 4
