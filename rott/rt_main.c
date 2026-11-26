@@ -382,8 +382,8 @@ void DrawRottTitle(void)
 	{
 		SetTextMode();
 		TurnOffTextCursor();
-		snprintf(title, sizeof(title), "Taradino %s (Game version %u.%u)\n",
-				 CMAKE_PROJECT_VERSION, ROTTMAJORVERSION, ROTTMINORVERSION);
+		snprintf(title, sizeof(title), "%s (Game version %u.%u)\n",
+				 PACKAGE_STRING, ROTTMAJORVERSION, ROTTMINORVERSION);
 
 		px = (80 - strlen(title)) >> 1;
 		py = 0;

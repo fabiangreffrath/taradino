@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=@TARADINO_TITLE@
-Comment=SDL2 port of Rise of the Triad
-Icon=@TARADINO_EXEC@
-TryExec=@TARADINO_EXEC@
-Exec=@TARADINO_EXEC@
-Categories=Game;ActionGame;
-Keywords=first;person;shooter;fps;3d;rott;rise;of;the;triad;
