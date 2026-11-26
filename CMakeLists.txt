@@ -1,26 +1,51 @@
 cmake_minimum_required(VERSION 3.10)
 
-# Automatically installs dependencies.
+# Automatically installs dependencies (vcpkg).
 set(X_VCPKG_APPLOCAL_DEPS_INSTALL ON)
 
 project(taradino
 	DESCRIPTION "SDL2 port of Rise of the Triad"
 	HOMEPAGE_URL "https://github.com/fabiangreffrath/taradino/"
 	LANGUAGES C
-	VERSION 2025.12.22
+	VERSION 2026.11.26
 )
+
+#
+# Options
+#
 
 option(TARADINO_ASAN "Use Address Sanitizer" OFF)
 option(TARADINO_WARNINGS_AS_ERRORS "Treat all compiler warnings as errors" OFF)
 set(TARADINO_DATADIR "" CACHE STRING "Game data file directory")
 
-add_library(ASAN::ASAN IMPORTED INTERFACE)
-target_compile_options(ASAN::ASAN INTERFACE -fsanitize=address $<$<NOT:$<COMPILE_LANG_AND_ID:C,MSVC>>:-fno-omit-frame-pointer>)
-target_link_options(ASAN::ASAN INTERFACE -fsanitize=address)
+set(TARADINO_TITLE "Taradino")
+if(NOT DEFINED TARADINO_EXEC)
+	set(TARADINO_EXEC taradino)
+endif()
+
+#
+# Modules
+#
+
+include(CheckIncludeFile)
+include(CheckLibraryExists)
+include(GNUInstallDirs)
+
+#
+# Dependencies
+#
 
 find_package(SDL2 REQUIRED CONFIG)
 find_package(SDL2_mixer REQUIRED CONFIG)
 find_package(libADLMIDI CONFIG)
+
+add_library(ASAN::ASAN IMPORTED INTERFACE)
+target_compile_options(ASAN::ASAN INTERFACE -fsanitize=address $<$<NOT:$<COMPILE_LANG_AND_ID:C,MSVC>>:-fno-omit-frame-pointer>)
+target_link_options(ASAN::ASAN INTERFACE -fsanitize=address)
+
+#
+# Sources
+#
 
 file(GLOB TARADINO_SOURCES "${PROJECT_SOURCE_DIR}/rott/*.c")
 file(GLOB TARADINO_HEADERS "${PROJECT_SOURCE_DIR}/rott/*.h")
@@ -29,23 +54,65 @@ if(WIN32 OR MSVC OR CMAKE_SYSTEM_NAME STREQUAL "Windows")
 	list(APPEND TARADINO_SOURCES "${PROJECT_SOURCE_DIR}/misc/taradino.rc")
 endif()
 
-set(TARADINO_TITLE "Taradino")
+#
+# Target
+#
 
 add_executable(taradino ${TARADINO_SOURCES})
+
+set_target_properties(taradino PROPERTIES
+	OUTPUT_NAME ${TARADINO_EXEC}
+	C_STANDARD 99
+	C_STANDARD_REQUIRED ON
+)
+
+target_compile_definitions(taradino PRIVATE
+	PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}"
+	PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}"
+)
+
 target_link_libraries(taradino PRIVATE
 	$<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
 	$<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 	$<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>
+	$<$<BOOL:${TARADINO_ASAN}>:ASAN::ASAN>
 )
-target_compile_definitions(taradino PRIVATE PACKAGE_STRING="${TARADINO_TITLE} ${CMAKE_PROJECT_VERSION}")
-target_compile_definitions(taradino PRIVATE PACKAGE_TARNAME="${CMAKE_PROJECT_NAME}")
-target_include_directories(taradino PRIVATE "${PROJECT_BINARY_DIR}/rott")
-target_link_libraries(taradino PUBLIC $<$<BOOL:${TARADINO_ASAN}>:ASAN::ASAN>)
 
-include(CheckLibraryExists)
+if(NOT TARADINO_DATADIR STREQUAL "")
+	target_compile_definitions(taradino PRIVATE DATADIR="${TARADINO_DATADIR}")
+endif()
+
+#
+# Compiler flags
+#
+
+if(MSVC)
+	# silence warnings about POSIX functions
+	target_compile_options(taradino PRIVATE -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_WARNINGS -Dstrcasecmp=_stricmp -Dalloca=_alloca)
+	# silence unsigned/signed and integer truncation warnings
+	target_compile_options(taradino PRIVATE /wd4267 /wd4244)
+	if(TARADINO_WARNINGS_AS_ERRORS)
+		target_compile_options(taradino PRIVATE /WX)
+	endif()
+else()
+	target_compile_options(taradino PRIVATE -Wall -Wundef)
+	if(TARADINO_WARNINGS_AS_ERRORS)
+		target_compile_options(taradino PRIVATE -Werror)
+	endif()
+endif()
+
+#
+# Optional features and platform checks
+#
+
 check_library_exists(m pow "" HAVE_LIBM)
 if(HAVE_LIBM)
 	target_link_libraries(taradino PRIVATE m)
+endif()
+
+check_include_file("dirent.h" HAVE_DIRENT_H)
+if(HAVE_DIRENT_H)
+	target_compile_definitions(taradino PRIVATE HAVE_DIRENT_H)
 endif()
 
 if(libADLMIDI_FOUND)
@@ -60,42 +127,10 @@ if(libADLMIDI_FOUND)
 	target_link_libraries(taradino PRIVATE libADLMIDI::ADLMIDI)
 endif()
 
-include(CheckIncludeFile)
-check_include_file("dirent.h" HAVE_DIRENT_H)
-if (HAVE_DIRENT_H)
-	target_compile_definitions(taradino PRIVATE HAVE_DIRENT_H)
-endif()
+#
+# Installation
+#
 
-if(NOT DEFINED TARADINO_EXEC)
-	set(TARADINO_EXEC taradino)
-endif()
-
-set_target_properties(taradino PROPERTIES OUTPUT_NAME ${TARADINO_EXEC})
-
-set_target_properties(taradino PROPERTIES C_STANDARD_REQUIRED ON C_STANDARD 99)
-if(MSVC)
-	# silence warnings about POSIX functions
-	target_compile_options(taradino PUBLIC -D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_WARNINGS -Dstrcasecmp=_stricmp -Dalloca=_alloca)
-	# silence unsigned/signed and integer truncation warnings
-	target_compile_options(taradino PRIVATE /wd4267 /wd4244)
-else()
-	target_compile_options(taradino PRIVATE -Wall)
-	target_compile_options(taradino PRIVATE -Wundef)
-endif()
-
-if(${TARADINO_WARNINGS_AS_ERRORS})
-	if(MSVC)
-		target_compile_options(taradino PRIVATE /WX)
-	else()
-		target_compile_options(taradino PRIVATE -Werror)
-	endif()
-endif()
-
-if(NOT TARADINO_DATADIR STREQUAL "")
-	target_compile_definitions(taradino PRIVATE DATADIR="${TARADINO_DATADIR}")
-endif()
-
-include(GNUInstallDirs)
 if(WIN32)
 	if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.21 AND NOT VCPKG_TOOLCHAIN)
 		install(
@@ -111,14 +146,20 @@ if(WIN32)
 	endif()
 	install(FILES ${PROJECT_SOURCE_DIR}/COPYING DESTINATION .)
 	install(FILES ${PROJECT_SOURCE_DIR}/README.md DESTINATION .)
+	install(FILES ${PROJECT_SOURCE_DIR}/CHANGELOG.md DESTINATION .)
 else()
-	install(FILES ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+	install(TARGETS taradino DESTINATION ${CMAKE_INSTALL_BINDIR})
+	install(FILES ${PROJECT_SOURCE_DIR}/misc/taradino.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications RENAME ${TARADINO_EXEC}.desktop)
 	install(FILES ${PROJECT_SOURCE_DIR}/misc/taradino.png DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/128x128/apps RENAME ${TARADINO_EXEC}.png)
-	install(FILES ${PROJECT_BINARY_DIR}/${TARADINO_EXEC}.6 DESTINATION ${CMAKE_INSTALL_MANDIR}/man6)
+	install(FILES ${PROJECT_SOURCE_DIR}/doc/taradino.6 DESTINATION ${CMAKE_INSTALL_MANDIR}/man6 RENAME ${TARADINO_EXEC}.6)
 	install(FILES ${PROJECT_SOURCE_DIR}/COPYING DESTINATION ${CMAKE_INSTALL_DOCDIR})
 	install(FILES ${PROJECT_SOURCE_DIR}/README.md DESTINATION ${CMAKE_INSTALL_DOCDIR})
-	install(TARGETS taradino DESTINATION ${CMAKE_INSTALL_BINDIR})
+	install(FILES ${PROJECT_SOURCE_DIR}/CHANGELOG.md DESTINATION ${CMAKE_INSTALL_DOCDIR})
 endif()
+
+#
+# Code formatting
+#
 
 find_program(CLANGFORMAT_EXECUTABLE clang-format)
 if(CLANGFORMAT_EXECUTABLE)
@@ -127,6 +168,10 @@ if(CLANGFORMAT_EXECUTABLE)
 		WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 	)
 endif()
+
+#
+# Packaging
+#
 
 set(CPACK_GENERATOR ZIP)
 set(CPACK_PACKAGE_NAME ${TARADINO_EXEC})

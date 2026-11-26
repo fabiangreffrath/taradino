@@ -1,7 +1,7 @@
-.TH TARADINO 6 "2024-07-03" "2025.08.15" "Taradino"
+.TH TARADINO 6 "2026-11-26" "2026.11.26" "Taradino"
 
 .SH NAME
-Taradino \- SDL2-Port of Rise of the Triad
+Taradino \- SDL2 port of Rise of the Triad
 
 .SH SYNOPSIS
 .B taradino
@@ -10,10 +10,24 @@ Taradino \- SDL2-Port of Rise of the Triad
 .SH DESCRIPTION
 .B TARADINO
 is a port of Apogee's 3D action title Rise of the Triad, originally released in 1994.
-This port duplicates the functionality of the original game on modern operating systems, including Linux, Windows, and Mac OS X.
+This port duplicates the functionality of the original game on modern operating systems, including Linux, Windows, and macOS.
 Portability fixes include support for 64-bit and big-endian systems.
+.PP
+A single executable handles both the registered and the shareware version of the game.
+The version is detected at runtime from the game data that is found:
+.I darkwar.wad
+is preferred,
+.I huntbgin.wad
+is used as a fallback.
+In the shareware version, the options
+.BR file ,
+.B filertl
+and
+.B filertc
+are ignored.
 
 .SH OPTIONS
+Options are given without a leading dash and are case-insensitive.
 .TP
 .BR aim
 Give aim crosshair.
@@ -26,7 +40,7 @@ Start in windowed mode.
 .TP
 .BR resolution\  \fIwidth\fPx\fIheight\fP
 Specify the screen resolution to use (next parameter is widthxheight).
-Valid resolutions are 320x200 and 640x480.
+Valid resolutions are 320x200 and 640x400, both with aspect ratio correction.
 .TP
 .BR filertl\  \fIfile\fP
 Used to load Userlevels (RTL files).
@@ -37,6 +51,12 @@ Used to load Battlelevels (RTC files).
 .BR file\  \fIfile\fP
 Used to load WAD files.
 .TP
+.BR nowait
+Go to the menu, skip the intro.
+.TP
+.BR now
+Go immediately into the game with the default difficulty on level 1.
+.TP
 .BR nojoys
 Disable check for joystick.
 .TP
@@ -45,6 +65,12 @@ Disable check for mouse.
 .TP
 .BR nosound
 Disable sound.
+.TP
+.BR quiet
+Get rid of all startup text except for errors.
+.TP
+.BR slowdeath
+Slow down the death rotation.
 .TP
 .BR ver
 Version number.
@@ -87,6 +113,19 @@ Display help message.
 .TP
 .BR dopefish
 ?
+
+.SH FILES
+.TP
+.IR darkwar.wad ", " huntbgin.wad
+Game data of the registered and the shareware version, respectively.
+They are searched for in the current directory, in the directory of the executable, in the directory set at build time, in
+.I $XDG_DATA_HOME/games/rott
+and
+.I $XDG_DATA_DIRS/games/rott
+(not on Windows), and in the default installation directories of the Steam, GOG and Heroic versions of the game.
+.TP
+.I darkwar/\fR, \fIhuntbgin/
+Subdirectories of the per-user data directory (or of the directory of the executable on Windows) which hold savegames, high scores, the configuration and screenshots of the registered and the shareware version, respectively.
 
 .SH AUTHORS
 Rise of the Triad was created and published as shareware by Apogee Software, Ltd. and was published commercially by FormGen, Inc.

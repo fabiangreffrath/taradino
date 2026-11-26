@@ -1,9 +1,11 @@
 [Desktop Entry]
 Type=Application
 Name=Taradino
-Comment=SDL2-Port of Rise of the Triad
+GenericName=First-Person Shooter
+Comment=SDL2 port of Rise of the Triad
 Icon=taradino
 TryExec=taradino
 Exec=taradino
+Terminal=false
 Categories=Game;ActionGame;
-Keywords=first;person;shooter;fps;3d;rott;rise;of;the;triad;
+Keywords=first-person shooter;fps;3d;rott;rise of the triad;apogee;
