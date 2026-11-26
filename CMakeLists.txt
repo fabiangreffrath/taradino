@@ -12,7 +12,6 @@ project(taradino
 configure_file(rott/version.h.in rott/version.h @ONLY)
 
 option(TARADINO_ASAN "Use Address Sanitizer" OFF)
-option(TARADINO_SHAREWARE "Build shareware version" OFF)
 option(TARADINO_WARNINGS_AS_ERRORS "Treat all compiler warnings as errors" OFF)
 set(TARADINO_DATADIR "" CACHE STRING "Game data file directory")
 set(TARADINO_SUFFIX "" CACHE STRING "Executable file name suffix")
@@ -37,11 +36,7 @@ if(TARADINO_SUFFIX_LEN GREATER 0)
 	string(CONCAT TARADINO_EXEC "${CMAKE_PROJECT_NAME}" "-" "${TARADINO_SUFFIX}")
 endif()
 
-if(${TARADINO_SHAREWARE})
-	set(TARADINO_TITLE "Taradino (Shareware)")
-else()
-	set(TARADINO_TITLE "Taradino")
-endif()
+set(TARADINO_TITLE "Taradino")
 
 add_executable(taradino ${TARADINO_SOURCES})
 target_link_libraries(taradino PRIVATE
@@ -92,10 +87,6 @@ if(MSVC)
 	target_compile_options(taradino PRIVATE /wd4267 /wd4244)
 else()
 	target_compile_options(taradino PRIVATE -Wall)
-endif()
-
-if(${TARADINO_SHAREWARE})
-	target_compile_definitions(taradino PRIVATE SHAREWARE=1)
 endif()
 
 if(${TARADINO_WARNINGS_AS_ERRORS})
