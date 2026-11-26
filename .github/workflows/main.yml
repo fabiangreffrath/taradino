@@ -94,21 +94,11 @@ jobs:
           path: ${{ github.workspace }}/vcpkg_cache
           key: vcpkg-x64-windows-static-release
 
-      - name: Configure shareware executable
+      - name: Configure
         env:
           CC: ${{ matrix.config.compiler }}
         run: >-
-          cmake -B build-shareware
-          -DTARADINO_SHAREWARE=ON
-          -DTARADINO_SUFFIX=shareware
-          ${{ matrix.config.extra-options }}
-
-      - name: Configure registered executable
-        env:
-          CC: ${{ matrix.config.compiler }}
-        run: >-
-          cmake -B build-registered
-          -DTARADINO_SHAREWARE=OFF
+          cmake -B build
           ${{ matrix.config.extra-options }}
 
       # Delete the old cache on hit to emulate a cache update.
@@ -126,22 +116,13 @@ jobs:
           path: ${{ github.workspace }}/vcpkg_cache
           key: ${{ steps.cache.outputs.cache-primary-key }}
 
-      - name: Build shareware executable
-        run: cmake --build build-shareware --config Release
+      - name: Build
+        run: cmake --build build --config Release
 
-      - name: Install shareware executable
+      - name: Install
         if: ${{ matrix.config.name == 'MSVC x64' }}
         run: |
-          cd build-shareware
-          cpack
-
-      - name: Build registered executable
-        run: cmake --build build-registered --config Release
-
-      - name: Install registered executable
-        if: ${{ matrix.config.name == 'MSVC x64' }}
-        run: |
-          cd build-registered
+          cd build
           cpack
 
       - name: Upload Artifacts
@@ -150,5 +131,4 @@ jobs:
         with:
           name: taradino-${{ github.sha }}-win64
           path: |
-            build-shareware/*.zip
-            build-registered/*.zip
+            build/*.zip
