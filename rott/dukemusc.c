@@ -50,10 +50,13 @@ int MUSIC_Shutdown(void)
 	return music_module ? music_module->Shutdown() : MUSIC_Ok;
 }
 
+/* Pre-gain matching the ADLMIDI level to the FluidSynth backend. */
+#define ADL_GAIN_SCALE 5.0
+
 void MUSIC_SetVolume(int volume)
 {
-	float_music_volume = 8.0 * pow(volume / 255.0, 1.4);
-	Mix_VolumeMusic(volume >> 1); // convert 0-255 to 0-128.
+	float_music_volume = ADL_GAIN_SCALE * (volume / 255.0);
+	Mix_VolumeMusic((volume + 1) >> 1); // convert 0-255 to 0-128.
 }
 
 int MUSIC_SongPlaying(void)

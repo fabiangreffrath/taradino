@@ -29,6 +29,23 @@ Copyright (C) 2025 Fabian Greffrath
 static int is_playing = 0;
 static struct ADL_MIDIPlayer *midi_player = NULL;
 
+/* Soft-clips samples above 75% of full scale using a cheap rational curve. */
+static short soft_clip(const double sample)
+{
+	const double knee = 0.75 * SHRT_MAX;
+	const double range = SHRT_MAX - knee;
+	const double mag = fabs(sample);
+
+	if (mag <= knee)
+	{
+		return (short)sample;
+	}
+
+	const double t = (mag - knee) / range;
+	const double out = knee + range * t / (1.0 + t);
+	return (short)(sample < 0.0 ? -out : out);
+}
+
 static void adlmidi_callback(void *dummy, Uint8 *stream, int len)
 {
 	if (!is_playing)
@@ -37,22 +54,23 @@ static void adlmidi_callback(void *dummy, Uint8 *stream, int len)
 	}
 
 	/* Convert bytes length into total count of samples in all channels */
-	int samples_count = len / sizeof(short);
+	const int total_samples = len / sizeof(short);
 
 	/* Take some samples from ADLMIDI */
 	short *const stream16 = (short *)stream;
-	samples_count = adl_play(midi_player, samples_count, stream16);
+	int samples_count = adl_play(midi_player, total_samples, stream16);
+	if (samples_count < 0)
+	{
+		samples_count = 0;
+	}
+
+	/* Silence the unfilled tail so stale buffer data is never played. */
+	SDL_memset(stream16 + samples_count, 0,
+	           (total_samples - samples_count) * sizeof(short));
 
 	for (int i = 0; i < samples_count; i++)
 	{
-		double sample = (double)stream16[i] * float_music_volume;
-
-		if (sample > SHRT_MAX)
-			sample = SHRT_MAX;
-		else if (sample < SHRT_MIN)
-			sample = SHRT_MIN;
-
-		stream16[i] = (short)sample;
+		stream16[i] = soft_clip((double)stream16[i] * float_music_volume);
 	}
 
 	if (samples_count <= 0)
